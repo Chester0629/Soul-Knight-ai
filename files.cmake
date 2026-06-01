@@ -3,6 +3,10 @@ set(SRC_FILES
 
     # Phase 2 game-layer data model
     data/GameData.cpp
+
+    # Phase 2 combat logic
+    combat/WeaponInstance.cpp
+    combat/EnemyAI.cpp
 )
 
 set(INCLUDE_FILES
@@ -10,8 +14,18 @@ set(INCLUDE_FILES
 
     # Phase 2 game-layer data model
     data/GameData.hpp
+
+    # Phase 2 combat logic
+    combat/CombatStats.hpp
+    combat/WeaponInstance.hpp
+    combat/EnemyAI.hpp
 )
 
 set(TEST_FILES
     GameDataTest.cpp
+
+    # Phase 2 combat logic
+    CombatStatsTest.cpp
+    WeaponInstanceTest.cpp
+    EnemyAITest.cpp
 )

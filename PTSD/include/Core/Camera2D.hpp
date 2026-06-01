@@ -17,7 +17,7 @@ namespace Core {
  * Screen shake uses a trauma model (see @ref AddTrauma): trauma in [0, 1]
  * decays over time and drives a bounded, deterministic positional offset
  * (offset magnitude scales with trauma squared). The shake is produced by fixed
- * oscillators — no randomness — so behaviour is reproducible and testable.
+ * oscillators - no randomness - so behaviour is reproducible and testable.
  */
 class Camera2D {
 public:
