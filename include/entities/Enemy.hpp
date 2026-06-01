@@ -1,0 +1,79 @@
+#ifndef GAME_ENEMY_HPP
+#define GAME_ENEMY_HPP
+
+#include <memory>
+#include <string>
+
+#include <glm/glm.hpp>
+
+#include "Util/Animation.hpp"
+#include "Util/Collider.hpp"
+#include "Util/GameObject.hpp"
+
+#include "combat/CombatStats.hpp"
+#include "combat/EnemyAI.hpp"
+#include "data/GameData.hpp"
+
+namespace Game {
+
+/**
+ * @class Enemy
+ * @brief The 'bat' enemy entity: animation drawable + AI brain + combat stats.
+ *
+ * The owning scene drives the enemy each step: it calls @ref Think to obtain a
+ * movement/shoot decision, then @ref ApplyMove to translate the entity. The base
+ * Util::GameObject::Update is intentionally not overridden, so the looping bat
+ * animation auto-advances when the object is drawn.
+ */
+class Enemy : public Util::GameObject {
+public:
+    /**
+     * @param def          The enemy definition (supplies the AI shoot cooldown).
+     * @param resourceRoot The Resources root (e.g. the RESOURCE_DIR macro).
+     * @param spawnPos      The world-space spawn position.
+     * @param detectRange   Distance at which the enemy notices the player.
+     * @param attackRange   Distance at which the enemy stops and shoots.
+     */
+    Enemy(const EnemyDef &def, const std::string &resourceRoot,
+          glm::vec2 spawnPos, float detectRange, float attackRange);
+
+    /**
+     * @brief Run the AI for this step and return its decision.
+     * @param dtMs     Elapsed time for this step, in milliseconds.
+     * @param playerPos The player's world-space position.
+     * @return The AI decision (desired move direction + whether to shoot).
+     */
+    EnemyAI::Decision Think(float dtMs, glm::vec2 playerPos);
+
+    /**
+     * @brief Move the enemy along @p dir scaled by its speed and the timestep.
+     * @param dir  A (typically unit) direction vector.
+     * @param dtMs Elapsed time for this step, in milliseconds.
+     */
+    void ApplyMove(glm::vec2 dir, float dtMs);
+
+    /// Apply incoming damage to this enemy's combat stats.
+    void TakeDamage(int dmg);
+
+    /// @return true once this enemy's HP has been depleted.
+    bool IsDead() const;
+
+    /// @return the enemy's current world-space position.
+    glm::vec2 Position() const;
+
+    /// @return a circle collider centered on the enemy.
+    Util::Collider GetCollider() const;
+
+    /// @return a read-only view of the enemy's combat stats.
+    const CombatStats &Stats() const;
+
+private:
+    EnemyAI m_AI;
+    CombatStats m_Stats{3, 3, 0, 0, 0, 0};
+    float m_Speed{60.0F};
+    std::shared_ptr<Util::Animation> m_Anim;
+};
+
+} // namespace Game
+
+#endif /* GAME_ENEMY_HPP */

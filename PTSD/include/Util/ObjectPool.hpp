@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -52,10 +53,21 @@ public:
      * to @c std::make_shared<T>(). The factory must return a non-null pointer.
      */
     explicit ObjectPool(std::size_t prewarm = 0, Factory factory = nullptr)
-        : m_Factory(factory ? std::move(factory) : DefaultFactory()) {
+        : m_Factory(std::move(factory)) {
+        // Fall back to default construction only when T supports it. This keeps
+        // the pool usable with non-default-constructible T (e.g. an entity whose
+        // constructor needs arguments) as long as a factory is supplied -- the
+        // make_shared<T>() default is never instantiated for such T.
+        if (!m_Factory) {
+            if constexpr (std::is_default_constructible_v<T>) {
+                m_Factory = [] { return std::make_shared<T>(); };
+            }
+        }
         m_Free.reserve(prewarm);
-        for (std::size_t i = 0; i < prewarm; ++i) {
-            m_Free.push_back(m_Factory());
+        if (m_Factory) {
+            for (std::size_t i = 0; i < prewarm; ++i) {
+                m_Free.push_back(m_Factory());
+            }
         }
     }
 
@@ -134,17 +146,6 @@ public:
     void Clear() { m_Free.clear(); }
 
 private:
-    /**
-     * @brief The fallback factory used when the constructor is given none.
-     *
-     * Provided as a named helper rather than a default-argument lambda because
-     * MSVC (C2440) rejects converting a lambda to @c std::function in a default
-     * argument. The behaviour is identical: @c std::make_shared<T>().
-     */
-    static Factory DefaultFactory() {
-        return [] { return std::make_shared<T>(); };
-    }
-
     Factory m_Factory;
     std::vector<std::shared_ptr<T>> m_Free;
     std::size_t m_ActiveCount = 0;

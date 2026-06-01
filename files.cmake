@@ -10,6 +10,10 @@ set(SRC_FILES
 
     # Phase 2 entities + scenes
     entities/Player.cpp
+    entities/Bullet.cpp
+    entities/Enemy.cpp
+    world/Room.cpp
+    ui/Hud.cpp
     scenes/GameScene.cpp
 )
 
@@ -26,6 +30,10 @@ set(INCLUDE_FILES
 
     # Phase 2 entities + scenes
     entities/Player.hpp
+    entities/Bullet.hpp
+    entities/Enemy.hpp
+    world/Room.hpp
+    ui/Hud.hpp
     scenes/GameScene.hpp
 )
 
