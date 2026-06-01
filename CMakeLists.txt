@@ -1,26 +1,36 @@
 cmake_minimum_required(VERSION 3.16)
-project(REPLACE_WITH_YOUR_PROJECT_NAME)
+project(SoulKnight)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# --- Legacy-dependency toolchain shim ---
+# CMake >= 4.0 removed compatibility with cmake_minimum_required(VERSION < 3.5).
+# Several pinned FetchContent deps still declare it (SDL2 2.26.5, glew 2.2.0,
+# glm 0.9.9.8), so configuring under a modern CMake fails without this.
+# Setting CMAKE_POLICY_VERSION_MINIMUM lets those legacy CMakeLists configure.
+# Remove once the upstream deps are bumped to >= 3.5.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0" AND NOT CMAKE_POLICY_VERSION_MINIMUM)
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING
+        "Minimum policy version for legacy FetchContent deps" FORCE)
+endif()
+
 cmake_policy(SET CMP0135 NEW)
 
-include(FetchContent)
-set(FETCHCONTENT_QUIET FALSE)
+# Enable CTest at the top level BEFORE add_subdirectory(PTSD) so the engine's
+# gtest_discover_tests() registrations are reachable via `ctest --test-dir build`.
+enable_testing()
 
-FetchContent_Declare(
-    ptsd
-
-    URL         https://github.com/ntut-open-source-club/practical-tools-for-simple-design/archive/refs/tags/v0.2.zip
-
-    # Or alternatively if you want to use a specific git commit instead of a release:
-    # GIT_REPOSITORY  https://github.com/ntut-open-source-club/practical-tools-for-simple-design.git
-    # GIT_TAG         <git_tag>
-
-    SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/PTSD
-)
-
-FetchContent_MakeAvailable(ptsd)
+# PTSD is a vendored, in-tree engine that this project extends in place
+# (plan decision #3: generic systems sink into PTSD). We add it as a subdirectory
+# rather than via FetchContent.
+#
+# WHY NOT FetchContent: declaring ptsd with URL=<pinned zip> + SOURCE_DIR=PTSD is
+# hazardous here. On a clean reconfigure (empty build/), FetchContent re-extracts
+# the pinned archive OVER ${CMAKE_CURRENT_SOURCE_DIR}/PTSD, silently wiping every
+# local engine modification (collision, datastore, etc.). add_subdirectory treats
+# PTSD as the source it now is. PTSD pulls its own deps (SDL2, glm, nlohmann_json,
+# ...) via its internal FetchContent and exports DEPENDENCY_{INCLUDE_DIRS,LINK_LIBRARIES}.
+add_subdirectory(PTSD)
 
 include(files.cmake)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)

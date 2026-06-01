@@ -1,0 +1,101 @@
+[
+  {
+    "id": "BuffArmor",
+    "is_enemy": 0,
+    "buff_time": 6.0
+  },
+  {
+    "id": "BuffChangeSpeed",
+    "is_enemy": 1,
+    "buff_time": 6.0,
+    "changeValue": -0.75
+  },
+  {
+    "id": "BuffEffectTrigger",
+    "buff": "BuffIce",
+    "probability": 0.0
+  },
+  {
+    "id": "BuffElectric",
+    "is_enemy": 1,
+    "buff_time": 2.0
+  },
+  {
+    "id": "BuffFire",
+    "is_enemy": 1,
+    "buff_time": 2.0
+  },
+  {
+    "id": "BuffIce",
+    "is_enemy": 1,
+    "buff_time": 2.75,
+    "ice_end": {
+      "_unresolved_ref": 3485854188369714355
+    },
+    "audio_clip": {
+      "_unresolved_ref": -3697264472016340514
+    }
+  },
+  {
+    "id": "BuffPoison",
+    "is_enemy": 1,
+    "buff_time": 5.0
+  },
+  {
+    "id": "BuffRandomEffectTrigger",
+    "buffs": [
+      "BuffPoison",
+      "BuffFire",
+      "BuffElectric"
+    ]
+  },
+  {
+    "id": "BuffStatue01",
+    "cd": 1.0,
+    "audio_clip": {
+      "_unresolved_ref": 1826340476550598763
+    },
+    "bullet": {
+      "_unresolved_ref": 6833897561378509306
+    },
+    "speed": 24.0,
+    "atk": 4,
+    "count": 1,
+    "angle": 12,
+    "pierced": 1
+  },
+  {
+    "id": "BuffStatue02",
+    "cd": 8.0,
+    "audio_clip": {
+      "_unresolved_ref": 2138041291659840983
+    },
+    "bullet": {
+      "_unresolved_ref": 1486050045704832511
+    },
+    "smoke_effect": {
+      "_unresolved_ref": -889557083460782702
+    }
+  },
+  {
+    "id": "BuffStatue03",
+    "cd": 12.0,
+    "audio_clip": {
+      "_unresolved_ref": -2655448754900361401
+    },
+    "bullet": {
+      "_unresolved_ref": 7314951079659796869
+    },
+    "player_parent": 0,
+    "speed_factor": 0.0
+  },
+  {
+    "id": "BuffStatue04",
+    "cd": 9.0,
+    "audio_clip": {
+      "_unresolved_ref": 2194855489963722353
+    },
+    "armor": 2,
+    "bullet": null
+  }
+]

@@ -1,0 +1,651 @@
+[
+  {
+    "id": "EnemyAI01",
+    "clip_dead": {
+      "_unresolved_ref": 6294590535489175699
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 2,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      4,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 2.0,
+    "friction": 0.6,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "need_tap": 1
+  },
+  {
+    "id": "EnemyAI02",
+    "clip_dead": null,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_orc02",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 20,
+    "reward_value": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "dead": 0,
+    "shoot_cd": 1.0,
+    "friction": 0.9,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "atk_range": 3.0
+  },
+  {
+    "id": "EnemyAI03",
+    "clip_dead": {
+      "_unresolved_ref": 5821062324418324690
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 2,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      1,
+      3,
+      3
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.7,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "shoot_time": 0.5,
+    "stand_in_shooting": 0,
+    "lock_in_shooting": 0
+  },
+  {
+    "id": "EnemyAI04",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 1,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      0,
+      8
+    ],
+    "dead": 0,
+    "shoot_cd": 1.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "damage": 4,
+    "later_time": 0.8,
+    "dead_obj": {
+      "_unresolved_ref": 8821347395401951295
+    },
+    "hit_object": {
+      "_unresolved_ref": 823895981258909257
+    }
+  },
+  {
+    "id": "EnemyAI05",
+    "clip_dead": {
+      "_unresolved_ref": 8262888682005009416
+    },
+    "awake": 1,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 40,
+    "reward_value": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.9,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "mineral_obj": {
+      "_unresolved_ref": -241303999610996773
+    },
+    "sprite_dead": {
+      "_unresolved_ref": -4360780016262973007
+    },
+    "mineral_count": 4
+  },
+  {
+    "id": "EnemyAI06",
+    "clip_dead": {
+      "_unresolved_ref": -7526106155176443709
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_succulent",
+    "ai_level": 3,
+    "consume": 3,
+    "e_size": 2,
+    "reward_rate": 30,
+    "reward_value": [
+      0,
+      0,
+      1,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 5.0,
+    "friction": 0.9,
+    "kinematic": 1,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "dead_obj": null
+  },
+  {
+    "id": "EnemyAI07",
+    "clip_dead": {
+      "_unresolved_ref": 548028787966813687
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "enemy_id": "e_hammer",
+    "ai_level": 3,
+    "consume": 4,
+    "e_size": 4,
+    "reward_rate": 40,
+    "reward_value": [
+      0,
+      4,
+      0,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 2.0,
+    "friction": 0.6,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "need_tap": 1,
+    "bullet01": {
+      "_unresolved_ref": -4639916721810376167
+    },
+    "atk1_cilp": {
+      "_unresolved_ref": -5093006080760716364
+    },
+    "atk2_clip": {
+      "_unresolved_ref": 4258533593997518355
+    }
+  },
+  {
+    "id": "EnemyAI08",
+    "clip_dead": {
+      "_unresolved_ref": -7319475116925131574
+    },
+    "awake": 0,
+    "temp_enemy": 1,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_chest1",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      5,
+      3
+    ],
+    "dead": 0,
+    "shoot_cd": 1.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "need_tap": 1,
+    "chest_level": 1
+  },
+  {
+    "id": "EnemyAI09",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_shark",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      3,
+      3
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "damage": 4,
+    "later_time": 1.5,
+    "atk1_cilp": {
+      "_unresolved_ref": -2209677309484762270
+    },
+    "dead_obj": null,
+    "hit_object": {
+      "_unresolved_ref": 823895981258909257
+    }
+  },
+  {
+    "id": "EnemyAI10",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_yeti01",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 1,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      3,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 2.0,
+    "friction": 0.9,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "later_time": 1.5,
+    "bullet01": {
+      "_unresolved_ref": 2412727153614036403
+    },
+    "bullet02": null,
+    "dead_obj": null
+  },
+  {
+    "id": "EnemyAI11",
+    "clip_dead": {
+      "_unresolved_ref": 7185150002795660318
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      0,
+      6
+    ],
+    "dead": 0,
+    "shoot_cd": 2.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "damage": 4,
+    "later_time": 1.5,
+    "atk1_cilp": {
+      "_unresolved_ref": 1420409875615434846
+    },
+    "bullet01": {
+      "_unresolved_ref": -3399276615520408896
+    },
+    "bullet02": {
+      "_unresolved_ref": 4984761072998586819
+    },
+    "dead_obj": null
+  },
+  {
+    "id": "EnemyAI12",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_tortoise",
+    "ai_level": 3,
+    "consume": 2,
+    "e_size": 2,
+    "reward_rate": 25,
+    "reward_value": [
+      0,
+      0,
+      2,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "damage": 3,
+    "later_time": 1.5,
+    "atk1_cilp": {
+      "_unresolved_ref": 5896789235608708879
+    },
+    "bullet01": {
+      "_unresolved_ref": -5379466852417718670
+    },
+    "dead_obj": null
+  },
+  {
+    "id": "EnemyAI13",
+    "clip_dead": {
+      "_unresolved_ref": 6294590535489175699
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_mummy03",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 1,
+    "reward_rate": 25,
+    "reward_value": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.9,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 0.5,
+    "is_lock": 0,
+    "buff_immune": 1.0
+  },
+  {
+    "id": "EnemyAI14",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_spider05",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 25,
+    "reward_value": [
+      0,
+      0,
+      2,
+      2
+    ],
+    "dead": 0,
+    "shoot_cd": 3.0,
+    "friction": 0.8,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "damage": 3,
+    "later_time": 1.5,
+    "atk1_cilp": {
+      "_unresolved_ref": -4349703345033038959
+    },
+    "bullet01": {
+      "_unresolved_ref": 132601163694926416
+    },
+    "dead_obj": null
+  },
+  {
+    "id": "EnemyAI15",
+    "clip_dead": {
+      "_unresolved_ref": -3535308189402168697
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 1,
+    "weapon_lock_target": 1,
+    "enemy_id": "",
+    "ai_level": 3,
+    "consume": 1,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      1,
+      3,
+      4
+    ],
+    "dead": 0,
+    "shoot_cd": 2.0,
+    "friction": 0.0,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 1.0,
+    "bullet01": {
+      "_unresolved_ref": 8639864595974338415
+    },
+    "bullet02": {
+      "_unresolved_ref": -7894834939832610804
+    },
+    "atk1_clip": {
+      "_unresolved_ref": -1448364804562760397
+    },
+    "atk2_clip": {
+      "_unresolved_ref": 1705599016201267756
+    }
+  },
+  {
+    "id": "EnemyAIShark",
+    "clip_dead": {
+      "_unresolved_ref": 8184099885297121370
+    },
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "enemy_id": "e_shark",
+    "ai_level": 3,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      5,
+      3
+    ],
+    "dead": 0,
+    "shoot_cd": 1.0,
+    "friction": 0.9,
+    "kinematic": 0,
+    "hand": null,
+    "role_attribute": null,
+    "target_obj": null,
+    "shooting": 0,
+    "fixed_angle": 0.0,
+    "scout_rate": 1.0,
+    "is_lock": 0,
+    "buff_immune": 0.5,
+    "damage": 3,
+    "later_time": 1.5,
+    "atk1_cilp": {
+      "_unresolved_ref": -2209677309484762270
+    },
+    "dead_obj": null,
+    "hit_object": {
+      "_unresolved_ref": 6473222711231311050
+    },
+    "bite_object": {
+      "_unresolved_ref": 4688947953681603918
+    },
+    "wave_bullet": {
+      "_unresolved_ref": -4639916721810376167
+    },
+    "bite_atk": 3,
+    "bite_range": 3.0
+  }
+]

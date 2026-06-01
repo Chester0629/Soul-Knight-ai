@@ -1,0 +1,5088 @@
+{
+  "_note": "frame paths are relative to Resources/ (RESOURCE_DIR macro)",
+  "entities": {
+    "bat": {
+      "frames": [
+        "sprites/bat_0.png",
+        "sprites/bat_1.png",
+        "sprites/bat_2.png",
+        "sprites/bat_3.png"
+      ],
+      "count": 4
+    },
+    "biaoqing": {
+      "frames": [
+        "sprites/biaoqing_0.png",
+        "sprites/biaoqing_1.png",
+        "sprites/biaoqing_2.png",
+        "sprites/biaoqing_3.png",
+        "sprites/biaoqing_4.png",
+        "sprites/biaoqing_5.png",
+        "sprites/biaoqing_6.png",
+        "sprites/biaoqing_7.png",
+        "sprites/biaoqing_8.png",
+        "sprites/biaoqing_9.png",
+        "sprites/biaoqing_10.png",
+        "sprites/biaoqing_11.png",
+        "sprites/biaoqing_12.png",
+        "sprites/biaoqing_13.png",
+        "sprites/biaoqing_14.png",
+        "sprites/biaoqing_15.png",
+        "sprites/biaoqing_16.png"
+      ],
+      "count": 17
+    },
+    "boss01": {
+      "frames": [
+        "sprites/boss01_0.png",
+        "sprites/boss01_1.png",
+        "sprites/boss01_2.png",
+        "sprites/boss01_3.png",
+        "sprites/boss01_4.png",
+        "sprites/boss01_5.png",
+        "sprites/boss01_6.png",
+        "sprites/boss01_7.png",
+        "sprites/boss01_8.png",
+        "sprites/boss01_9.png",
+        "sprites/boss01_10.png",
+        "sprites/boss01_11.png",
+        "sprites/boss01_12.png",
+        "sprites/boss01_13.png"
+      ],
+      "count": 14
+    },
+    "boss02": {
+      "frames": [
+        "sprites/boss02_0.png",
+        "sprites/boss02_1.png",
+        "sprites/boss02_2.png",
+        "sprites/boss02_3.png",
+        "sprites/boss02_4.png",
+        "sprites/boss02_5.png",
+        "sprites/boss02_6.png",
+        "sprites/boss02_7.png",
+        "sprites/boss02_8.png"
+      ],
+      "count": 9
+    },
+    "boss03": {
+      "frames": [
+        "sprites/boss03_0.png",
+        "sprites/boss03_1.png",
+        "sprites/boss03_2.png",
+        "sprites/boss03_3.png",
+        "sprites/boss03_4.png",
+        "sprites/boss03_5.png",
+        "sprites/boss03_6.png",
+        "sprites/boss03_7.png",
+        "sprites/boss03_8.png"
+      ],
+      "count": 9
+    },
+    "boss04": {
+      "frames": [
+        "sprites/boss04_0.png",
+        "sprites/boss04_1.png",
+        "sprites/boss04_2.png",
+        "sprites/boss04_3.png",
+        "sprites/boss04_4.png",
+        "sprites/boss04_5.png",
+        "sprites/boss04_6.png",
+        "sprites/boss04_7.png",
+        "sprites/boss04_8.png"
+      ],
+      "count": 9
+    },
+    "boss05": {
+      "frames": [
+        "sprites/boss05_0.png",
+        "sprites/boss05_1.png",
+        "sprites/boss05_2.png",
+        "sprites/boss05_3.png",
+        "sprites/boss05_4.png",
+        "sprites/boss05_5.png",
+        "sprites/boss05_6.png",
+        "sprites/boss05_7.png",
+        "sprites/boss05_8.png",
+        "sprites/boss05_9.png",
+        "sprites/boss05_10.png",
+        "sprites/boss05_11.png",
+        "sprites/boss05_12.png",
+        "sprites/boss05_13.png",
+        "sprites/boss05_14.png"
+      ],
+      "count": 15
+    },
+    "boss06": {
+      "frames": [
+        "sprites/boss06_0.png",
+        "sprites/boss06_1.png",
+        "sprites/boss06_2.png",
+        "sprites/boss06_3.png",
+        "sprites/boss06_4.png",
+        "sprites/boss06_5.png",
+        "sprites/boss06_6.png",
+        "sprites/boss06_7.png"
+      ],
+      "count": 8
+    },
+    "boss07": {
+      "frames": [
+        "sprites/boss07_0.png",
+        "sprites/boss07_1.png",
+        "sprites/boss07_2.png",
+        "sprites/boss07_3.png",
+        "sprites/boss07_4.png",
+        "sprites/boss07_5.png",
+        "sprites/boss07_6.png",
+        "sprites/boss07_7.png",
+        "sprites/boss07_8.png",
+        "sprites/boss07_9.png",
+        "sprites/boss07_10.png",
+        "sprites/boss07_11.png",
+        "sprites/boss07_12.png",
+        "sprites/boss07_13.png"
+      ],
+      "count": 14
+    },
+    "boss08": {
+      "frames": [
+        "sprites/boss08_0.png",
+        "sprites/boss08_1.png",
+        "sprites/boss08_2.png",
+        "sprites/boss08_3.png",
+        "sprites/boss08_4.png",
+        "sprites/boss08_5.png",
+        "sprites/boss08_6.png",
+        "sprites/boss08_7.png",
+        "sprites/boss08_8.png"
+      ],
+      "count": 9
+    },
+    "boss09": {
+      "frames": [
+        "sprites/boss09_0.png",
+        "sprites/boss09_1.png",
+        "sprites/boss09_2.png",
+        "sprites/boss09_3.png",
+        "sprites/boss09_4.png",
+        "sprites/boss09_5.png",
+        "sprites/boss09_6.png",
+        "sprites/boss09_7.png",
+        "sprites/boss09_8.png",
+        "sprites/boss09_9.png",
+        "sprites/boss09_10.png",
+        "sprites/boss09_11.png",
+        "sprites/boss09_12.png",
+        "sprites/boss09_13.png",
+        "sprites/boss09_14.png",
+        "sprites/boss09_15.png",
+        "sprites/boss09_16.png",
+        "sprites/boss09_17.png"
+      ],
+      "count": 18
+    },
+    "boss10": {
+      "frames": [
+        "sprites/boss10_0.png",
+        "sprites/boss10_1.png",
+        "sprites/boss10_2.png",
+        "sprites/boss10_3.png",
+        "sprites/boss10_4.png",
+        "sprites/boss10_5.png",
+        "sprites/boss10_6.png",
+        "sprites/boss10_7.png",
+        "sprites/boss10_8.png"
+      ],
+      "count": 9
+    },
+    "boss11": {
+      "frames": [
+        "sprites/boss11_0.png",
+        "sprites/boss11_1.png",
+        "sprites/boss11_2.png",
+        "sprites/boss11_3.png",
+        "sprites/boss11_4.png",
+        "sprites/boss11_5.png",
+        "sprites/boss11_6.png",
+        "sprites/boss11_7.png",
+        "sprites/boss11_8.png",
+        "sprites/boss11_9.png",
+        "sprites/boss11_10.png",
+        "sprites/boss11_11.png",
+        "sprites/boss11_12.png",
+        "sprites/boss11_13.png",
+        "sprites/boss11_14.png"
+      ],
+      "count": 15
+    },
+    "boss12_1": {
+      "frames": [
+        "sprites/boss12_1_0.png",
+        "sprites/boss12_1_1.png",
+        "sprites/boss12_1_2.png",
+        "sprites/boss12_1_3.png",
+        "sprites/boss12_1_4.png",
+        "sprites/boss12_1_5.png",
+        "sprites/boss12_1_6.png",
+        "sprites/boss12_1_7.png",
+        "sprites/boss12_1_8.png",
+        "sprites/boss12_1_9.png",
+        "sprites/boss12_1_10.png",
+        "sprites/boss12_1_11.png",
+        "sprites/boss12_1_12.png"
+      ],
+      "count": 13
+    },
+    "boss12_2": {
+      "frames": [
+        "sprites/boss12_2_0.png",
+        "sprites/boss12_2_1.png",
+        "sprites/boss12_2_2.png",
+        "sprites/boss12_2_3.png",
+        "sprites/boss12_2_4.png",
+        "sprites/boss12_2_5.png",
+        "sprites/boss12_2_6.png",
+        "sprites/boss12_2_7.png",
+        "sprites/boss12_2_8.png",
+        "sprites/boss12_2_9.png",
+        "sprites/boss12_2_10.png",
+        "sprites/boss12_2_11.png",
+        "sprites/boss12_2_12.png"
+      ],
+      "count": 13
+    },
+    "boss13": {
+      "frames": [
+        "sprites/boss13_0.png",
+        "sprites/boss13_1.png",
+        "sprites/boss13_2.png",
+        "sprites/boss13_3.png",
+        "sprites/boss13_4.png",
+        "sprites/boss13_5.png",
+        "sprites/boss13_6.png",
+        "sprites/boss13_7.png",
+        "sprites/boss13_8.png",
+        "sprites/boss13_9.png",
+        "sprites/boss13_10.png"
+      ],
+      "count": 11
+    },
+    "boss14": {
+      "frames": [
+        "sprites/boss14_0.png",
+        "sprites/boss14_1.png",
+        "sprites/boss14_2.png",
+        "sprites/boss14_3.png",
+        "sprites/boss14_4.png",
+        "sprites/boss14_5.png",
+        "sprites/boss14_6.png",
+        "sprites/boss14_7.png"
+      ],
+      "count": 8
+    },
+    "boss": {
+      "frames": [
+        "sprites/boss_01.png",
+        "sprites/boss_02.png",
+        "sprites/boss_03.png",
+        "sprites/boss_04.png",
+        "sprites/boss_05.png",
+        "sprites/boss_06.png",
+        "sprites/boss_07.png",
+        "sprites/boss_08.png",
+        "sprites/boss_09.png",
+        "sprites/boss_10.png",
+        "sprites/boss_11.png",
+        "sprites/boss_12.png",
+        "sprites/boss_13.png",
+        "sprites/boss_14.png"
+      ],
+      "count": 14
+    },
+    "bullet2": {
+      "frames": [
+        "sprites/bullet2_0.png",
+        "sprites/bullet2_1.png",
+        "sprites/bullet2_2.png",
+        "sprites/bullet2_3.png",
+        "sprites/bullet2_4.png",
+        "sprites/bullet2_5.png",
+        "sprites/bullet2_6.png",
+        "sprites/bullet2_7.png",
+        "sprites/bullet2_8.png",
+        "sprites/bullet2_9.png",
+        "sprites/bullet2_10.png",
+        "sprites/bullet2_11.png",
+        "sprites/bullet2_12.png",
+        "sprites/bullet2_13.png",
+        "sprites/bullet2_14.png",
+        "sprites/bullet2_15.png",
+        "sprites/bullet2_16.png",
+        "sprites/bullet2_17.png",
+        "sprites/bullet2_18.png",
+        "sprites/bullet2_19.png",
+        "sprites/bullet2_20.png",
+        "sprites/bullet2_21.png",
+        "sprites/bullet2_22.png"
+      ],
+      "count": 23
+    },
+    "bullet": {
+      "frames": [
+        "sprites/bullet_0.png",
+        "sprites/bullet_1.png",
+        "sprites/bullet_2.png",
+        "sprites/bullet_3.png",
+        "sprites/bullet_4.png",
+        "sprites/bullet_5.png",
+        "sprites/bullet_6.png",
+        "sprites/bullet_7.png",
+        "sprites/bullet_8.png",
+        "sprites/bullet_9.png",
+        "sprites/bullet_10.png",
+        "sprites/bullet_11.png",
+        "sprites/bullet_12.png",
+        "sprites/bullet_13.png",
+        "sprites/bullet_14.png",
+        "sprites/bullet_15.png",
+        "sprites/bullet_16.png",
+        "sprites/bullet_17.png",
+        "sprites/bullet_18.png",
+        "sprites/bullet_19.png",
+        "sprites/bullet_20.png",
+        "sprites/bullet_21.png",
+        "sprites/bullet_22.png",
+        "sprites/bullet_23.png",
+        "sprites/bullet_24.png",
+        "sprites/bullet_25.png",
+        "sprites/bullet_26.png",
+        "sprites/bullet_27.png",
+        "sprites/bullet_28.png",
+        "sprites/bullet_29.png",
+        "sprites/bullet_30.png",
+        "sprites/bullet_31.png",
+        "sprites/bullet_32.png",
+        "sprites/bullet_33.png",
+        "sprites/bullet_34.png",
+        "sprites/bullet_35.png",
+        "sprites/bullet_36.png",
+        "sprites/bullet_37.png",
+        "sprites/bullet_38.png",
+        "sprites/bullet_39.png",
+        "sprites/bullet_40.png",
+        "sprites/bullet_41.png",
+        "sprites/bullet_42.png",
+        "sprites/bullet_43.png",
+        "sprites/bullet_44.png",
+        "sprites/bullet_45.png",
+        "sprites/bullet_46.png",
+        "sprites/bullet_47.png",
+        "sprites/bullet_48.png",
+        "sprites/bullet_49.png",
+        "sprites/bullet_50.png",
+        "sprites/bullet_51.png",
+        "sprites/bullet_52.png",
+        "sprites/bullet_53.png",
+        "sprites/bullet_54.png",
+        "sprites/bullet_55.png",
+        "sprites/bullet_56.png",
+        "sprites/bullet_57.png",
+        "sprites/bullet_58.png",
+        "sprites/bullet_59.png",
+        "sprites/bullet_60.png",
+        "sprites/bullet_61.png",
+        "sprites/bullet_62.png",
+        "sprites/bullet_63.png",
+        "sprites/bullet_64.png",
+        "sprites/bullet_65.png",
+        "sprites/bullet_66.png",
+        "sprites/bullet_67.png",
+        "sprites/bullet_68.png",
+        "sprites/bullet_69.png",
+        "sprites/bullet_70.png",
+        "sprites/bullet_71.png",
+        "sprites/bullet_72.png",
+        "sprites/bullet_73.png",
+        "sprites/bullet_74.png",
+        "sprites/bullet_75.png",
+        "sprites/bullet_76.png",
+        "sprites/bullet_77.png",
+        "sprites/bullet_78.png",
+        "sprites/bullet_79.png",
+        "sprites/bullet_80.png",
+        "sprites/bullet_81.png",
+        "sprites/bullet_82.png",
+        "sprites/bullet_83.png",
+        "sprites/bullet_84.png",
+        "sprites/bullet_85.png",
+        "sprites/bullet_86.png",
+        "sprites/bullet_87.png",
+        "sprites/bullet_88.png",
+        "sprites/bullet_89.png",
+        "sprites/bullet_90.png",
+        "sprites/bullet_91.png",
+        "sprites/bullet_92.png",
+        "sprites/bullet_93.png",
+        "sprites/bullet_94.png",
+        "sprites/bullet_95.png",
+        "sprites/bullet_96.png",
+        "sprites/bullet_97.png",
+        "sprites/bullet_98.png",
+        "sprites/bullet_99.png",
+        "sprites/bullet_100.png",
+        "sprites/bullet_101.png",
+        "sprites/bullet_102.png",
+        "sprites/bullet_103.png",
+        "sprites/bullet_104.png",
+        "sprites/bullet_105.png",
+        "sprites/bullet_106.png",
+        "sprites/bullet_107.png",
+        "sprites/bullet_108.png",
+        "sprites/bullet_109.png",
+        "sprites/bullet_110.png",
+        "sprites/bullet_111.png",
+        "sprites/bullet_112.png",
+        "sprites/bullet_113.png",
+        "sprites/bullet_114.png",
+        "sprites/bullet_115.png",
+        "sprites/bullet_116.png",
+        "sprites/bullet_117.png",
+        "sprites/bullet_118.png",
+        "sprites/bullet_119.png",
+        "sprites/bullet_120.png",
+        "sprites/bullet_121.png",
+        "sprites/bullet_122.png"
+      ],
+      "count": 123
+    },
+    "c01": {
+      "frames": [
+        "sprites/c01_0.png",
+        "sprites/c01_1.png",
+        "sprites/c01_2.png",
+        "sprites/c01_3.png",
+        "sprites/c01_4.png",
+        "sprites/c01_5.png",
+        "sprites/c01_6.png",
+        "sprites/c01_7.png",
+        "sprites/c01_8.png"
+      ],
+      "count": 9
+    },
+    "c01_s1": {
+      "frames": [
+        "sprites/c01_s1_0.png",
+        "sprites/c01_s1_1.png",
+        "sprites/c01_s1_2.png",
+        "sprites/c01_s1_3.png",
+        "sprites/c01_s1_4.png",
+        "sprites/c01_s1_5.png",
+        "sprites/c01_s1_6.png",
+        "sprites/c01_s1_7.png",
+        "sprites/c01_s1_8.png",
+        "sprites/c01_s1_9.png"
+      ],
+      "count": 10
+    },
+    "c01_s2": {
+      "frames": [
+        "sprites/c01_s2_0.png",
+        "sprites/c01_s2_1.png",
+        "sprites/c01_s2_2.png",
+        "sprites/c01_s2_3.png",
+        "sprites/c01_s2_4.png",
+        "sprites/c01_s2_5.png",
+        "sprites/c01_s2_6.png",
+        "sprites/c01_s2_7.png",
+        "sprites/c01_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c01_s3": {
+      "frames": [
+        "sprites/c01_s3_0.png",
+        "sprites/c01_s3_1.png",
+        "sprites/c01_s3_2.png",
+        "sprites/c01_s3_3.png",
+        "sprites/c01_s3_4.png",
+        "sprites/c01_s3_5.png",
+        "sprites/c01_s3_6.png",
+        "sprites/c01_s3_7.png",
+        "sprites/c01_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c02": {
+      "frames": [
+        "sprites/c02_0.png",
+        "sprites/c02_1.png",
+        "sprites/c02_2.png",
+        "sprites/c02_3.png",
+        "sprites/c02_4.png",
+        "sprites/c02_5.png",
+        "sprites/c02_6.png",
+        "sprites/c02_7.png",
+        "sprites/c02_8.png",
+        "sprites/c02_9.png",
+        "sprites/c02_10.png",
+        "sprites/c02_11.png",
+        "sprites/c02_12.png"
+      ],
+      "count": 13
+    },
+    "c02_s1": {
+      "frames": [
+        "sprites/c02_s1_0.png",
+        "sprites/c02_s1_1.png",
+        "sprites/c02_s1_2.png",
+        "sprites/c02_s1_3.png",
+        "sprites/c02_s1_4.png",
+        "sprites/c02_s1_5.png",
+        "sprites/c02_s1_6.png",
+        "sprites/c02_s1_7.png",
+        "sprites/c02_s1_8.png",
+        "sprites/c02_s1_9.png",
+        "sprites/c02_s1_10.png",
+        "sprites/c02_s1_11.png",
+        "sprites/c02_s1_12.png"
+      ],
+      "count": 13
+    },
+    "c02_s2": {
+      "frames": [
+        "sprites/c02_s2_0.png",
+        "sprites/c02_s2_1.png",
+        "sprites/c02_s2_2.png",
+        "sprites/c02_s2_3.png",
+        "sprites/c02_s2_4.png",
+        "sprites/c02_s2_5.png",
+        "sprites/c02_s2_6.png",
+        "sprites/c02_s2_7.png",
+        "sprites/c02_s2_8.png",
+        "sprites/c02_s2_9.png",
+        "sprites/c02_s2_10.png",
+        "sprites/c02_s2_11.png",
+        "sprites/c02_s2_12.png"
+      ],
+      "count": 13
+    },
+    "c02_s3": {
+      "frames": [
+        "sprites/c02_s3_0.png",
+        "sprites/c02_s3_1.png",
+        "sprites/c02_s3_2.png",
+        "sprites/c02_s3_3.png",
+        "sprites/c02_s3_4.png",
+        "sprites/c02_s3_5.png",
+        "sprites/c02_s3_6.png",
+        "sprites/c02_s3_7.png",
+        "sprites/c02_s3_8.png",
+        "sprites/c02_s3_9.png",
+        "sprites/c02_s3_10.png",
+        "sprites/c02_s3_11.png",
+        "sprites/c02_s3_12.png"
+      ],
+      "count": 13
+    },
+    "c02_s4": {
+      "frames": [
+        "sprites/c02_s4_0.png",
+        "sprites/c02_s4_1.png",
+        "sprites/c02_s4_2.png",
+        "sprites/c02_s4_3.png",
+        "sprites/c02_s4_4.png",
+        "sprites/c02_s4_5.png",
+        "sprites/c02_s4_6.png",
+        "sprites/c02_s4_7.png",
+        "sprites/c02_s4_8.png",
+        "sprites/c02_s4_9.png",
+        "sprites/c02_s4_10.png",
+        "sprites/c02_s4_11.png",
+        "sprites/c02_s4_12.png"
+      ],
+      "count": 13
+    },
+    "c03": {
+      "frames": [
+        "sprites/c03_0.png",
+        "sprites/c03_1.png",
+        "sprites/c03_2.png",
+        "sprites/c03_3.png",
+        "sprites/c03_4.png",
+        "sprites/c03_5.png",
+        "sprites/c03_6.png",
+        "sprites/c03_7.png",
+        "sprites/c03_8.png"
+      ],
+      "count": 9
+    },
+    "c03_s1": {
+      "frames": [
+        "sprites/c03_s1_0.png",
+        "sprites/c03_s1_1.png",
+        "sprites/c03_s1_2.png",
+        "sprites/c03_s1_3.png",
+        "sprites/c03_s1_4.png",
+        "sprites/c03_s1_5.png",
+        "sprites/c03_s1_6.png",
+        "sprites/c03_s1_7.png",
+        "sprites/c03_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c03_s2": {
+      "frames": [
+        "sprites/c03_s2_0.png",
+        "sprites/c03_s2_1.png",
+        "sprites/c03_s2_2.png",
+        "sprites/c03_s2_3.png",
+        "sprites/c03_s2_4.png",
+        "sprites/c03_s2_5.png",
+        "sprites/c03_s2_6.png",
+        "sprites/c03_s2_7.png",
+        "sprites/c03_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c03_s3": {
+      "frames": [
+        "sprites/c03_s3_0.png",
+        "sprites/c03_s3_1.png",
+        "sprites/c03_s3_2.png",
+        "sprites/c03_s3_3.png",
+        "sprites/c03_s3_4.png",
+        "sprites/c03_s3_5.png",
+        "sprites/c03_s3_6.png",
+        "sprites/c03_s3_7.png",
+        "sprites/c03_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c03_s4": {
+      "frames": [
+        "sprites/c03_s4_0.png",
+        "sprites/c03_s4_1.png",
+        "sprites/c03_s4_2.png",
+        "sprites/c03_s4_3.png",
+        "sprites/c03_s4_4.png",
+        "sprites/c03_s4_5.png",
+        "sprites/c03_s4_6.png",
+        "sprites/c03_s4_7.png",
+        "sprites/c03_s4_8.png"
+      ],
+      "count": 9
+    },
+    "c03_s5": {
+      "frames": [
+        "sprites/c03_s5_0.png",
+        "sprites/c03_s5_1.png",
+        "sprites/c03_s5_2.png",
+        "sprites/c03_s5_3.png",
+        "sprites/c03_s5_4.png",
+        "sprites/c03_s5_5.png",
+        "sprites/c03_s5_6.png",
+        "sprites/c03_s5_7.png",
+        "sprites/c03_s5_8.png"
+      ],
+      "count": 9
+    },
+    "c04": {
+      "frames": [
+        "sprites/c04_0.png",
+        "sprites/c04_1.png",
+        "sprites/c04_2.png",
+        "sprites/c04_3.png",
+        "sprites/c04_4.png",
+        "sprites/c04_5.png",
+        "sprites/c04_6.png",
+        "sprites/c04_7.png",
+        "sprites/c04_8.png"
+      ],
+      "count": 9
+    },
+    "c04_s1": {
+      "frames": [
+        "sprites/c04_s1_0.png",
+        "sprites/c04_s1_1.png",
+        "sprites/c04_s1_2.png",
+        "sprites/c04_s1_3.png",
+        "sprites/c04_s1_4.png",
+        "sprites/c04_s1_5.png",
+        "sprites/c04_s1_6.png",
+        "sprites/c04_s1_7.png",
+        "sprites/c04_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c04_s2": {
+      "frames": [
+        "sprites/c04_s2_0.png",
+        "sprites/c04_s2_1.png",
+        "sprites/c04_s2_2.png",
+        "sprites/c04_s2_3.png",
+        "sprites/c04_s2_4.png",
+        "sprites/c04_s2_5.png",
+        "sprites/c04_s2_6.png",
+        "sprites/c04_s2_7.png",
+        "sprites/c04_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c04_s3": {
+      "frames": [
+        "sprites/c04_s3_0.png",
+        "sprites/c04_s3_1.png",
+        "sprites/c04_s3_2.png",
+        "sprites/c04_s3_3.png",
+        "sprites/c04_s3_4.png",
+        "sprites/c04_s3_5.png",
+        "sprites/c04_s3_6.png",
+        "sprites/c04_s3_7.png",
+        "sprites/c04_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c04s4": {
+      "frames": [
+        "sprites/c04s4_0.png",
+        "sprites/c04s4_1.png",
+        "sprites/c04s4_2.png",
+        "sprites/c04s4_3.png",
+        "sprites/c04s4_4.png",
+        "sprites/c04s4_5.png",
+        "sprites/c04s4_6.png",
+        "sprites/c04s4_7.png",
+        "sprites/c04s4_8.png"
+      ],
+      "count": 9
+    },
+    "c05": {
+      "frames": [
+        "sprites/c05_0.png",
+        "sprites/c05_1.png",
+        "sprites/c05_2.png",
+        "sprites/c05_3.png",
+        "sprites/c05_4.png",
+        "sprites/c05_5.png",
+        "sprites/c05_6.png",
+        "sprites/c05_7.png",
+        "sprites/c05_8.png"
+      ],
+      "count": 9
+    },
+    "c05_s1": {
+      "frames": [
+        "sprites/c05_s1_0.png",
+        "sprites/c05_s1_1.png",
+        "sprites/c05_s1_2.png",
+        "sprites/c05_s1_3.png",
+        "sprites/c05_s1_4.png",
+        "sprites/c05_s1_5.png",
+        "sprites/c05_s1_6.png",
+        "sprites/c05_s1_7.png",
+        "sprites/c05_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c05_s2": {
+      "frames": [
+        "sprites/c05_s2_0.png",
+        "sprites/c05_s2_1.png",
+        "sprites/c05_s2_2.png",
+        "sprites/c05_s2_3.png",
+        "sprites/c05_s2_4.png",
+        "sprites/c05_s2_5.png",
+        "sprites/c05_s2_6.png",
+        "sprites/c05_s2_7.png",
+        "sprites/c05_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c05_s3": {
+      "frames": [
+        "sprites/c05_s3_0.png",
+        "sprites/c05_s3_1.png",
+        "sprites/c05_s3_2.png",
+        "sprites/c05_s3_3.png",
+        "sprites/c05_s3_4.png",
+        "sprites/c05_s3_5.png",
+        "sprites/c05_s3_6.png",
+        "sprites/c05_s3_7.png",
+        "sprites/c05_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c06": {
+      "frames": [
+        "sprites/c06_0.png",
+        "sprites/c06_1.png",
+        "sprites/c06_2.png",
+        "sprites/c06_3.png",
+        "sprites/c06_4.png",
+        "sprites/c06_5.png",
+        "sprites/c06_6.png",
+        "sprites/c06_7.png",
+        "sprites/c06_8.png"
+      ],
+      "count": 9
+    },
+    "c06_s1": {
+      "frames": [
+        "sprites/c06_s1_0.png",
+        "sprites/c06_s1_1.png",
+        "sprites/c06_s1_2.png",
+        "sprites/c06_s1_3.png",
+        "sprites/c06_s1_4.png",
+        "sprites/c06_s1_5.png",
+        "sprites/c06_s1_6.png",
+        "sprites/c06_s1_7.png",
+        "sprites/c06_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c06_s2": {
+      "frames": [
+        "sprites/c06_s2_0.png",
+        "sprites/c06_s2_1.png",
+        "sprites/c06_s2_2.png",
+        "sprites/c06_s2_3.png",
+        "sprites/c06_s2_4.png",
+        "sprites/c06_s2_5.png",
+        "sprites/c06_s2_6.png",
+        "sprites/c06_s2_7.png",
+        "sprites/c06_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c06_s3": {
+      "frames": [
+        "sprites/c06_s3_0.png",
+        "sprites/c06_s3_1.png",
+        "sprites/c06_s3_2.png",
+        "sprites/c06_s3_3.png",
+        "sprites/c06_s3_4.png",
+        "sprites/c06_s3_5.png",
+        "sprites/c06_s3_6.png",
+        "sprites/c06_s3_7.png",
+        "sprites/c06_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c06_s4": {
+      "frames": [
+        "sprites/c06_s4_0.png",
+        "sprites/c06_s4_1.png",
+        "sprites/c06_s4_2.png",
+        "sprites/c06_s4_3.png",
+        "sprites/c06_s4_4.png",
+        "sprites/c06_s4_5.png",
+        "sprites/c06_s4_6.png",
+        "sprites/c06_s4_7.png",
+        "sprites/c06_s4_8.png",
+        "sprites/c06_s4_9.png"
+      ],
+      "count": 10
+    },
+    "c07": {
+      "frames": [
+        "sprites/c07_0.png",
+        "sprites/c07_1.png",
+        "sprites/c07_2.png",
+        "sprites/c07_3.png",
+        "sprites/c07_4.png",
+        "sprites/c07_5.png",
+        "sprites/c07_6.png",
+        "sprites/c07_7.png",
+        "sprites/c07_8.png"
+      ],
+      "count": 9
+    },
+    "c07_s1": {
+      "frames": [
+        "sprites/c07_s1_0.png",
+        "sprites/c07_s1_1.png",
+        "sprites/c07_s1_2.png",
+        "sprites/c07_s1_3.png",
+        "sprites/c07_s1_4.png",
+        "sprites/c07_s1_5.png",
+        "sprites/c07_s1_6.png",
+        "sprites/c07_s1_7.png",
+        "sprites/c07_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c07_s2": {
+      "frames": [
+        "sprites/c07_s2_0.png",
+        "sprites/c07_s2_1.png",
+        "sprites/c07_s2_2.png",
+        "sprites/c07_s2_3.png",
+        "sprites/c07_s2_4.png",
+        "sprites/c07_s2_5.png",
+        "sprites/c07_s2_6.png",
+        "sprites/c07_s2_7.png",
+        "sprites/c07_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c07_s3": {
+      "frames": [
+        "sprites/c07_s3_0.png",
+        "sprites/c07_s3_1.png",
+        "sprites/c07_s3_2.png",
+        "sprites/c07_s3_3.png",
+        "sprites/c07_s3_4.png",
+        "sprites/c07_s3_5.png",
+        "sprites/c07_s3_6.png",
+        "sprites/c07_s3_7.png",
+        "sprites/c07_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c07_s4": {
+      "frames": [
+        "sprites/c07_s4_0.png",
+        "sprites/c07_s4_1.png",
+        "sprites/c07_s4_2.png",
+        "sprites/c07_s4_3.png",
+        "sprites/c07_s4_4.png",
+        "sprites/c07_s4_5.png",
+        "sprites/c07_s4_6.png",
+        "sprites/c07_s4_7.png",
+        "sprites/c07_s4_8.png"
+      ],
+      "count": 9
+    },
+    "c07_s5": {
+      "frames": [
+        "sprites/c07_s5_0.png",
+        "sprites/c07_s5_1.png",
+        "sprites/c07_s5_2.png",
+        "sprites/c07_s5_3.png",
+        "sprites/c07_s5_4.png",
+        "sprites/c07_s5_5.png",
+        "sprites/c07_s5_6.png",
+        "sprites/c07_s5_7.png",
+        "sprites/c07_s5_8.png"
+      ],
+      "count": 9
+    },
+    "c08": {
+      "frames": [
+        "sprites/c08_0.png",
+        "sprites/c08_1.png",
+        "sprites/c08_2.png",
+        "sprites/c08_3.png",
+        "sprites/c08_4.png",
+        "sprites/c08_5.png",
+        "sprites/c08_6.png",
+        "sprites/c08_7.png",
+        "sprites/c08_8.png"
+      ],
+      "count": 9
+    },
+    "c08_s1": {
+      "frames": [
+        "sprites/c08_s1_0.png",
+        "sprites/c08_s1_1.png",
+        "sprites/c08_s1_2.png",
+        "sprites/c08_s1_3.png",
+        "sprites/c08_s1_4.png",
+        "sprites/c08_s1_5.png",
+        "sprites/c08_s1_6.png",
+        "sprites/c08_s1_7.png",
+        "sprites/c08_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c08_s2": {
+      "frames": [
+        "sprites/c08_s2_0.png",
+        "sprites/c08_s2_1.png",
+        "sprites/c08_s2_2.png",
+        "sprites/c08_s2_3.png",
+        "sprites/c08_s2_4.png",
+        "sprites/c08_s2_5.png",
+        "sprites/c08_s2_6.png",
+        "sprites/c08_s2_7.png",
+        "sprites/c08_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c08_s3": {
+      "frames": [
+        "sprites/c08_s3_0.png",
+        "sprites/c08_s3_1.png",
+        "sprites/c08_s3_2.png",
+        "sprites/c08_s3_3.png",
+        "sprites/c08_s3_4.png",
+        "sprites/c08_s3_5.png",
+        "sprites/c08_s3_6.png",
+        "sprites/c08_s3_7.png",
+        "sprites/c08_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c08_s4": {
+      "frames": [
+        "sprites/c08_s4_0.png",
+        "sprites/c08_s4_1.png",
+        "sprites/c08_s4_2.png",
+        "sprites/c08_s4_3.png",
+        "sprites/c08_s4_4.png",
+        "sprites/c08_s4_5.png",
+        "sprites/c08_s4_6.png",
+        "sprites/c08_s4_7.png",
+        "sprites/c08_s4_8.png"
+      ],
+      "count": 9
+    },
+    "c09": {
+      "frames": [
+        "sprites/c09_0.png",
+        "sprites/c09_1.png",
+        "sprites/c09_2.png",
+        "sprites/c09_3.png",
+        "sprites/c09_4.png",
+        "sprites/c09_5.png",
+        "sprites/c09_6.png",
+        "sprites/c09_7.png",
+        "sprites/c09_8.png",
+        "sprites/c09_9.png",
+        "sprites/c09_10.png",
+        "sprites/c09_11.png"
+      ],
+      "count": 12
+    },
+    "c09_s1": {
+      "frames": [
+        "sprites/c09_s1_0.png",
+        "sprites/c09_s1_1.png",
+        "sprites/c09_s1_2.png",
+        "sprites/c09_s1_3.png",
+        "sprites/c09_s1_4.png",
+        "sprites/c09_s1_5.png",
+        "sprites/c09_s1_6.png",
+        "sprites/c09_s1_7.png",
+        "sprites/c09_s1_8.png",
+        "sprites/c09_s1_9.png",
+        "sprites/c09_s1_10.png"
+      ],
+      "count": 11
+    },
+    "c09_s2": {
+      "frames": [
+        "sprites/c09_s2_0.png",
+        "sprites/c09_s2_1.png",
+        "sprites/c09_s2_2.png",
+        "sprites/c09_s2_3.png",
+        "sprites/c09_s2_4.png",
+        "sprites/c09_s2_5.png",
+        "sprites/c09_s2_6.png",
+        "sprites/c09_s2_7.png",
+        "sprites/c09_s2_8.png",
+        "sprites/c09_s2_9.png",
+        "sprites/c09_s2_10.png",
+        "sprites/c09_s2_12.png"
+      ],
+      "count": 12
+    },
+    "c09_s3": {
+      "frames": [
+        "sprites/c09_s3_0.png",
+        "sprites/c09_s3_1.png",
+        "sprites/c09_s3_2.png",
+        "sprites/c09_s3_3.png",
+        "sprites/c09_s3_4.png",
+        "sprites/c09_s3_5.png",
+        "sprites/c09_s3_6.png",
+        "sprites/c09_s3_7.png",
+        "sprites/c09_s3_8.png",
+        "sprites/c09_s3_9.png",
+        "sprites/c09_s3_10.png"
+      ],
+      "count": 11
+    },
+    "c10": {
+      "frames": [
+        "sprites/c10_0.png",
+        "sprites/c10_1.png",
+        "sprites/c10_2.png",
+        "sprites/c10_3.png",
+        "sprites/c10_4.png",
+        "sprites/c10_5.png",
+        "sprites/c10_6.png",
+        "sprites/c10_7.png",
+        "sprites/c10_8.png"
+      ],
+      "count": 9
+    },
+    "c10_2": {
+      "frames": [
+        "sprites/c10_2_0.png",
+        "sprites/c10_2_1.png",
+        "sprites/c10_2_2.png",
+        "sprites/c10_2_3.png",
+        "sprites/c10_2_4.png",
+        "sprites/c10_2_5.png",
+        "sprites/c10_2_6.png",
+        "sprites/c10_2_7.png",
+        "sprites/c10_2_8.png",
+        "sprites/c10_2_9.png"
+      ],
+      "count": 10
+    },
+    "c10_2_s1": {
+      "frames": [
+        "sprites/c10_2_s1_0.png",
+        "sprites/c10_2_s1_1.png",
+        "sprites/c10_2_s1_2.png",
+        "sprites/c10_2_s1_3.png",
+        "sprites/c10_2_s1_4.png",
+        "sprites/c10_2_s1_5.png",
+        "sprites/c10_2_s1_6.png",
+        "sprites/c10_2_s1_7.png",
+        "sprites/c10_2_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c10_2_s2": {
+      "frames": [
+        "sprites/c10_2_s2_0.png",
+        "sprites/c10_2_s2_1.png",
+        "sprites/c10_2_s2_2.png",
+        "sprites/c10_2_s2_3.png",
+        "sprites/c10_2_s2_4.png",
+        "sprites/c10_2_s2_5.png",
+        "sprites/c10_2_s2_6.png",
+        "sprites/c10_2_s2_7.png",
+        "sprites/c10_2_s2_8.png",
+        "sprites/c10_2_s2_9.png"
+      ],
+      "count": 10
+    },
+    "c10_2_s3": {
+      "frames": [
+        "sprites/c10_2_s3_0.png",
+        "sprites/c10_2_s3_1.png",
+        "sprites/c10_2_s3_2.png",
+        "sprites/c10_2_s3_3.png",
+        "sprites/c10_2_s3_4.png",
+        "sprites/c10_2_s3_5.png",
+        "sprites/c10_2_s3_6.png",
+        "sprites/c10_2_s3_7.png",
+        "sprites/c10_2_s3_8.png",
+        "sprites/c10_2_s3_9.png"
+      ],
+      "count": 10
+    },
+    "c10_2_s4": {
+      "frames": [
+        "sprites/c10_2_s4_0.png",
+        "sprites/c10_2_s4_1.png",
+        "sprites/c10_2_s4_2.png",
+        "sprites/c10_2_s4_3.png",
+        "sprites/c10_2_s4_4.png",
+        "sprites/c10_2_s4_5.png",
+        "sprites/c10_2_s4_6.png",
+        "sprites/c10_2_s4_7.png",
+        "sprites/c10_2_s4_8.png",
+        "sprites/c10_2_s4_9.png"
+      ],
+      "count": 10
+    },
+    "c10_2_s5": {
+      "frames": [
+        "sprites/c10_2_s5_0.png",
+        "sprites/c10_2_s5_1.png",
+        "sprites/c10_2_s5_2.png",
+        "sprites/c10_2_s5_3.png",
+        "sprites/c10_2_s5_4.png",
+        "sprites/c10_2_s5_5.png",
+        "sprites/c10_2_s5_6.png",
+        "sprites/c10_2_s5_7.png",
+        "sprites/c10_2_s5_8.png"
+      ],
+      "count": 9
+    },
+    "c10_2_s6": {
+      "frames": [
+        "sprites/c10_2_s6_0.png",
+        "sprites/c10_2_s6_1.png",
+        "sprites/c10_2_s6_2.png",
+        "sprites/c10_2_s6_3.png",
+        "sprites/c10_2_s6_4.png",
+        "sprites/c10_2_s6_5.png",
+        "sprites/c10_2_s6_6.png",
+        "sprites/c10_2_s6_7.png",
+        "sprites/c10_2_s6_8.png",
+        "sprites/c10_2_s6_9.png"
+      ],
+      "count": 10
+    },
+    "c10_s1": {
+      "frames": [
+        "sprites/c10_s1_0.png",
+        "sprites/c10_s1_1.png",
+        "sprites/c10_s1_2.png",
+        "sprites/c10_s1_3.png",
+        "sprites/c10_s1_4.png",
+        "sprites/c10_s1_5.png",
+        "sprites/c10_s1_6.png",
+        "sprites/c10_s1_7.png",
+        "sprites/c10_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c10_s2": {
+      "frames": [
+        "sprites/c10_s2_0.png",
+        "sprites/c10_s2_1.png",
+        "sprites/c10_s2_2.png",
+        "sprites/c10_s2_3.png",
+        "sprites/c10_s2_4.png",
+        "sprites/c10_s2_5.png",
+        "sprites/c10_s2_6.png",
+        "sprites/c10_s2_7.png",
+        "sprites/c10_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c10_s3": {
+      "frames": [
+        "sprites/c10_s3_0.png",
+        "sprites/c10_s3_1.png",
+        "sprites/c10_s3_2.png",
+        "sprites/c10_s3_3.png",
+        "sprites/c10_s3_4.png",
+        "sprites/c10_s3_5.png",
+        "sprites/c10_s3_6.png",
+        "sprites/c10_s3_7.png",
+        "sprites/c10_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c10_s4": {
+      "frames": [
+        "sprites/c10_s4_0.png",
+        "sprites/c10_s4_1.png",
+        "sprites/c10_s4_2.png",
+        "sprites/c10_s4_3.png",
+        "sprites/c10_s4_4.png",
+        "sprites/c10_s4_5.png",
+        "sprites/c10_s4_6.png",
+        "sprites/c10_s4_7.png",
+        "sprites/c10_s4_8.png"
+      ],
+      "count": 9
+    },
+    "c10_s5": {
+      "frames": [
+        "sprites/c10_s5_0.png",
+        "sprites/c10_s5_1.png",
+        "sprites/c10_s5_2.png",
+        "sprites/c10_s5_3.png",
+        "sprites/c10_s5_4.png",
+        "sprites/c10_s5_5.png",
+        "sprites/c10_s5_6.png",
+        "sprites/c10_s5_7.png",
+        "sprites/c10_s5_8.png"
+      ],
+      "count": 9
+    },
+    "c10_s6": {
+      "frames": [
+        "sprites/c10_s6_0.png",
+        "sprites/c10_s6_1.png",
+        "sprites/c10_s6_2.png",
+        "sprites/c10_s6_3.png",
+        "sprites/c10_s6_4.png",
+        "sprites/c10_s6_5.png",
+        "sprites/c10_s6_6.png",
+        "sprites/c10_s6_7.png",
+        "sprites/c10_s6_8.png"
+      ],
+      "count": 9
+    },
+    "c11": {
+      "frames": [
+        "sprites/c11_0.png",
+        "sprites/c11_1.png",
+        "sprites/c11_2.png",
+        "sprites/c11_3.png",
+        "sprites/c11_4.png",
+        "sprites/c11_5.png",
+        "sprites/c11_6.png",
+        "sprites/c11_7.png",
+        "sprites/c11_8.png"
+      ],
+      "count": 9
+    },
+    "c11_s1": {
+      "frames": [
+        "sprites/c11_s1_0.png",
+        "sprites/c11_s1_1.png",
+        "sprites/c11_s1_2.png",
+        "sprites/c11_s1_3.png",
+        "sprites/c11_s1_4.png",
+        "sprites/c11_s1_5.png",
+        "sprites/c11_s1_6.png",
+        "sprites/c11_s1_7.png",
+        "sprites/c11_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c11_s2": {
+      "frames": [
+        "sprites/c11_s2_0.png",
+        "sprites/c11_s2_1.png",
+        "sprites/c11_s2_2.png",
+        "sprites/c11_s2_3.png",
+        "sprites/c11_s2_4.png",
+        "sprites/c11_s2_5.png",
+        "sprites/c11_s2_6.png",
+        "sprites/c11_s2_7.png",
+        "sprites/c11_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c11_s3": {
+      "frames": [
+        "sprites/c11_s3_0.png",
+        "sprites/c11_s3_1.png",
+        "sprites/c11_s3_2.png",
+        "sprites/c11_s3_3.png",
+        "sprites/c11_s3_4.png",
+        "sprites/c11_s3_5.png",
+        "sprites/c11_s3_6.png",
+        "sprites/c11_s3_7.png",
+        "sprites/c11_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c12": {
+      "frames": [
+        "sprites/c12_0.png",
+        "sprites/c12_1.png",
+        "sprites/c12_2.png",
+        "sprites/c12_3.png",
+        "sprites/c12_4.png",
+        "sprites/c12_5.png",
+        "sprites/c12_6.png",
+        "sprites/c12_7.png",
+        "sprites/c12_8.png"
+      ],
+      "count": 9
+    },
+    "c12_s1": {
+      "frames": [
+        "sprites/c12_s1_0.png",
+        "sprites/c12_s1_1.png",
+        "sprites/c12_s1_2.png",
+        "sprites/c12_s1_3.png",
+        "sprites/c12_s1_4.png",
+        "sprites/c12_s1_5.png",
+        "sprites/c12_s1_6.png",
+        "sprites/c12_s1_7.png",
+        "sprites/c12_s1_8.png"
+      ],
+      "count": 9
+    },
+    "c12_s2": {
+      "frames": [
+        "sprites/c12_s2_0.png",
+        "sprites/c12_s2_1.png",
+        "sprites/c12_s2_2.png",
+        "sprites/c12_s2_3.png",
+        "sprites/c12_s2_4.png",
+        "sprites/c12_s2_5.png",
+        "sprites/c12_s2_6.png",
+        "sprites/c12_s2_7.png",
+        "sprites/c12_s2_8.png"
+      ],
+      "count": 9
+    },
+    "c12_s3": {
+      "frames": [
+        "sprites/c12_s3_0.png",
+        "sprites/c12_s3_1.png",
+        "sprites/c12_s3_2.png",
+        "sprites/c12_s3_3.png",
+        "sprites/c12_s3_4.png",
+        "sprites/c12_s3_5.png",
+        "sprites/c12_s3_6.png",
+        "sprites/c12_s3_7.png",
+        "sprites/c12_s3_8.png"
+      ],
+      "count": 9
+    },
+    "c12_s4": {
+      "frames": [
+        "sprites/c12_s4_0.png",
+        "sprites/c12_s4_1.png",
+        "sprites/c12_s4_2.png",
+        "sprites/c12_s4_3.png",
+        "sprites/c12_s4_4.png",
+        "sprites/c12_s4_5.png",
+        "sprites/c12_s4_6.png",
+        "sprites/c12_s4_7.png",
+        "sprites/c12_s4_8.png"
+      ],
+      "count": 9
+    },
+    "c12_s4_wolf": {
+      "frames": [
+        "sprites/c12_s4_wolf_0.png",
+        "sprites/c12_s4_wolf_1.png",
+        "sprites/c12_s4_wolf_2.png",
+        "sprites/c12_s4_wolf_3.png",
+        "sprites/c12_s4_wolf_4.png",
+        "sprites/c12_s4_wolf_5.png",
+        "sprites/c12_s4_wolf_6.png",
+        "sprites/c12_s4_wolf_7.png",
+        "sprites/c12_s4_wolf_8.png",
+        "sprites/c12_s4_wolf_9.png",
+        "sprites/c12_s4_wolf_10.png",
+        "sprites/c12_s4_wolf_11.png",
+        "sprites/c12_s4_wolf_12.png",
+        "sprites/c12_s4_wolf_13.png",
+        "sprites/c12_s4_wolf_14.png",
+        "sprites/c12_s4_wolf_15.png"
+      ],
+      "count": 16
+    },
+    "c12_wolf": {
+      "frames": [
+        "sprites/c12_wolf_0.png",
+        "sprites/c12_wolf_1.png",
+        "sprites/c12_wolf_2.png",
+        "sprites/c12_wolf_3.png",
+        "sprites/c12_wolf_4.png",
+        "sprites/c12_wolf_5.png",
+        "sprites/c12_wolf_6.png",
+        "sprites/c12_wolf_7.png",
+        "sprites/c12_wolf_8.png",
+        "sprites/c12_wolf_9.png",
+        "sprites/c12_wolf_10.png",
+        "sprites/c12_wolf_11.png"
+      ],
+      "count": 12
+    },
+    "common_room_item": {
+      "frames": [
+        "sprites/common_room_item_0.png",
+        "sprites/common_room_item_1.png",
+        "sprites/common_room_item_2.png"
+      ],
+      "count": 3
+    },
+    "effect02": {
+      "frames": [
+        "sprites/effect02_0.png",
+        "sprites/effect02_1.png",
+        "sprites/effect02_2.png",
+        "sprites/effect02_3.png"
+      ],
+      "count": 4
+    },
+    "effect02_1": {
+      "frames": [
+        "sprites/effect02_1_0.png",
+        "sprites/effect02_1_1.png",
+        "sprites/effect02_1_2.png",
+        "sprites/effect02_1_3.png"
+      ],
+      "count": 4
+    },
+    "effect03": {
+      "frames": [
+        "sprites/effect03_0.png",
+        "sprites/effect03_1.png",
+        "sprites/effect03_2.png"
+      ],
+      "count": 3
+    },
+    "effect04": {
+      "frames": [
+        "sprites/effect04_0.png",
+        "sprites/effect04_1.png",
+        "sprites/effect04_2.png",
+        "sprites/effect04_3.png",
+        "sprites/effect04_4.png",
+        "sprites/effect04_5.png",
+        "sprites/effect04_6.png",
+        "sprites/effect04_7.png",
+        "sprites/effect04_8.png",
+        "sprites/effect04_9.png",
+        "sprites/effect04_10.png",
+        "sprites/effect04_11.png",
+        "sprites/effect04_12.png",
+        "sprites/effect04_13.png",
+        "sprites/effect04_14.png",
+        "sprites/effect04_15.png",
+        "sprites/effect04_16.png",
+        "sprites/effect04_17.png",
+        "sprites/effect04_18.png",
+        "sprites/effect04_19.png",
+        "sprites/effect04_20.png",
+        "sprites/effect04_21.png",
+        "sprites/effect04_22.png"
+      ],
+      "count": 23
+    },
+    "effect07": {
+      "frames": [
+        "sprites/effect07_0.png",
+        "sprites/effect07_1.png",
+        "sprites/effect07_2.png",
+        "sprites/effect07_3.png",
+        "sprites/effect07_4.png",
+        "sprites/effect07_5.png",
+        "sprites/effect07_6.png",
+        "sprites/effect07_7.png"
+      ],
+      "count": 8
+    },
+    "effect_08": {
+      "frames": [
+        "sprites/effect_08_0.png",
+        "sprites/effect_08_1.png",
+        "sprites/effect_08_2.png",
+        "sprites/effect_08_3.png",
+        "sprites/effect_08_4.png",
+        "sprites/effect_08_5.png",
+        "sprites/effect_08_6.png",
+        "sprites/effect_08_7.png",
+        "sprites/effect_08_8.png",
+        "sprites/effect_08_9.png",
+        "sprites/effect_08_10.png",
+        "sprites/effect_08_11.png",
+        "sprites/effect_08_12.png",
+        "sprites/effect_08_13.png",
+        "sprites/effect_08_14.png",
+        "sprites/effect_08_15.png",
+        "sprites/effect_08_16.png",
+        "sprites/effect_08_17.png",
+        "sprites/effect_08_18.png",
+        "sprites/effect_08_19.png",
+        "sprites/effect_08_20.png",
+        "sprites/effect_08_21.png",
+        "sprites/effect_08_22.png",
+        "sprites/effect_08_23.png",
+        "sprites/effect_08_24.png",
+        "sprites/effect_08_25.png",
+        "sprites/effect_08_26.png",
+        "sprites/effect_08_27.png",
+        "sprites/effect_08_28.png",
+        "sprites/effect_08_29.png",
+        "sprites/effect_08_30.png",
+        "sprites/effect_08_31.png",
+        "sprites/effect_08_32.png",
+        "sprites/effect_08_33.png",
+        "sprites/effect_08_34.png",
+        "sprites/effect_08_35.png",
+        "sprites/effect_08_36.png"
+      ],
+      "count": 37
+    },
+    "effect_feng": {
+      "frames": [
+        "sprites/effect_feng_0.png",
+        "sprites/effect_feng_1.png",
+        "sprites/effect_feng_2.png",
+        "sprites/effect_feng_3.png",
+        "sprites/effect_feng_4.png",
+        "sprites/effect_feng_5.png",
+        "sprites/effect_feng_6.png",
+        "sprites/effect_feng_7.png"
+      ],
+      "count": 8
+    },
+    "effect_fireball": {
+      "frames": [
+        "sprites/effect_fireball_0.png",
+        "sprites/effect_fireball_1.png",
+        "sprites/effect_fireball_2.png",
+        "sprites/effect_fireball_3.png"
+      ],
+      "count": 4
+    },
+    "effect_shock1": {
+      "frames": [
+        "sprites/effect_shock1_0.png",
+        "sprites/effect_shock1_1.png",
+        "sprites/effect_shock1_2.png",
+        "sprites/effect_shock1_3.png",
+        "sprites/effect_shock1_4.png",
+        "sprites/effect_shock1_5.png",
+        "sprites/effect_shock1_6.png",
+        "sprites/effect_shock1_7.png"
+      ],
+      "count": 8
+    },
+    "effect_shock2": {
+      "frames": [
+        "sprites/effect_shock2_0.png",
+        "sprites/effect_shock2_1.png",
+        "sprites/effect_shock2_2.png",
+        "sprites/effect_shock2_3.png",
+        "sprites/effect_shock2_4.png",
+        "sprites/effect_shock2_5.png",
+        "sprites/effect_shock2_6.png",
+        "sprites/effect_shock2_7.png"
+      ],
+      "count": 8
+    },
+    "effect_sting": {
+      "frames": [
+        "sprites/effect_sting_0.png",
+        "sprites/effect_sting_1.png",
+        "sprites/effect_sting_2.png"
+      ],
+      "count": 3
+    },
+    "effect_sword": {
+      "frames": [
+        "sprites/effect_sword_0.png",
+        "sprites/effect_sword_1.png",
+        "sprites/effect_sword_2.png"
+      ],
+      "count": 3
+    },
+    "egg_yellow": {
+      "frames": [
+        "sprites/egg_yellow_0.png",
+        "sprites/egg_yellow_1.png",
+        "sprites/egg_yellow_2.png",
+        "sprites/egg_yellow_3.png",
+        "sprites/egg_yellow_4.png",
+        "sprites/egg_yellow_5.png",
+        "sprites/egg_yellow_6.png",
+        "sprites/egg_yellow_7.png",
+        "sprites/egg_yellow_8.png",
+        "sprites/egg_yellow_9.png",
+        "sprites/egg_yellow_10.png",
+        "sprites/egg_yellow_11.png"
+      ],
+      "count": 12
+    },
+    "enemy01": {
+      "frames": [
+        "sprites/enemy01_0.png",
+        "sprites/enemy01_1.png",
+        "sprites/enemy01_2.png",
+        "sprites/enemy01_3.png",
+        "sprites/enemy01_4.png",
+        "sprites/enemy01_5.png",
+        "sprites/enemy01_6.png"
+      ],
+      "count": 7
+    },
+    "enemy02": {
+      "frames": [
+        "sprites/enemy02_0.png",
+        "sprites/enemy02_1.png",
+        "sprites/enemy02_2.png",
+        "sprites/enemy02_3.png",
+        "sprites/enemy02_4.png",
+        "sprites/enemy02_5.png"
+      ],
+      "count": 6
+    },
+    "enemy03": {
+      "frames": [
+        "sprites/enemy03_0.png",
+        "sprites/enemy03_1.png",
+        "sprites/enemy03_2.png",
+        "sprites/enemy03_3.png",
+        "sprites/enemy03_4.png",
+        "sprites/enemy03_5.png",
+        "sprites/enemy03_6.png"
+      ],
+      "count": 7
+    },
+    "enemy04": {
+      "frames": [
+        "sprites/enemy04_0.png",
+        "sprites/enemy04_1.png",
+        "sprites/enemy04_2.png",
+        "sprites/enemy04_3.png",
+        "sprites/enemy04_4.png",
+        "sprites/enemy04_5.png",
+        "sprites/enemy04_6.png",
+        "sprites/enemy04_7.png",
+        "sprites/enemy04_8.png",
+        "sprites/enemy04_9.png",
+        "sprites/enemy04_10.png",
+        "sprites/enemy04_11.png",
+        "sprites/enemy04_12.png",
+        "sprites/enemy04_13.png"
+      ],
+      "count": 14
+    },
+    "enemy05": {
+      "frames": [
+        "sprites/enemy05_0.png",
+        "sprites/enemy05_1.png",
+        "sprites/enemy05_2.png",
+        "sprites/enemy05_3.png",
+        "sprites/enemy05_4.png",
+        "sprites/enemy05_5.png",
+        "sprites/enemy05_6.png"
+      ],
+      "count": 7
+    },
+    "enemy06": {
+      "frames": [
+        "sprites/enemy06_0.png",
+        "sprites/enemy06_1.png",
+        "sprites/enemy06_2.png",
+        "sprites/enemy06_3.png",
+        "sprites/enemy06_4.png",
+        "sprites/enemy06_5.png",
+        "sprites/enemy06_6.png"
+      ],
+      "count": 7
+    },
+    "enemy07": {
+      "frames": [
+        "sprites/enemy07_0.png",
+        "sprites/enemy07_1.png",
+        "sprites/enemy07_2.png",
+        "sprites/enemy07_3.png",
+        "sprites/enemy07_4.png",
+        "sprites/enemy07_5.png",
+        "sprites/enemy07_6.png",
+        "sprites/enemy07_7.png",
+        "sprites/enemy07_8.png"
+      ],
+      "count": 9
+    },
+    "enemy08": {
+      "frames": [
+        "sprites/enemy08_0.png",
+        "sprites/enemy08_1.png",
+        "sprites/enemy08_2.png",
+        "sprites/enemy08_3.png",
+        "sprites/enemy08_4.png",
+        "sprites/enemy08_5.png",
+        "sprites/enemy08_6.png",
+        "sprites/enemy08_7.png",
+        "sprites/enemy08_8.png"
+      ],
+      "count": 9
+    },
+    "enemy09": {
+      "frames": [
+        "sprites/enemy09_0.png",
+        "sprites/enemy09_1.png",
+        "sprites/enemy09_2.png",
+        "sprites/enemy09_3.png",
+        "sprites/enemy09_4.png",
+        "sprites/enemy09_5.png",
+        "sprites/enemy09_6.png",
+        "sprites/enemy09_7.png",
+        "sprites/enemy09_8.png",
+        "sprites/enemy09_9.png",
+        "sprites/enemy09_10.png",
+        "sprites/enemy09_11.png",
+        "sprites/enemy09_12.png",
+        "sprites/enemy09_13.png"
+      ],
+      "count": 14
+    },
+    "enemy10": {
+      "frames": [
+        "sprites/enemy10_0.png",
+        "sprites/enemy10_1.png",
+        "sprites/enemy10_2.png",
+        "sprites/enemy10_3.png",
+        "sprites/enemy10_4.png",
+        "sprites/enemy10_5.png",
+        "sprites/enemy10_6.png",
+        "sprites/enemy10_7.png",
+        "sprites/enemy10_8.png"
+      ],
+      "count": 9
+    },
+    "enemy11": {
+      "frames": [
+        "sprites/enemy11_0.png",
+        "sprites/enemy11_1.png",
+        "sprites/enemy11_2.png",
+        "sprites/enemy11_3.png",
+        "sprites/enemy11_4.png",
+        "sprites/enemy11_5.png",
+        "sprites/enemy11_6.png"
+      ],
+      "count": 7
+    },
+    "enemy12": {
+      "frames": [
+        "sprites/enemy12_0.png",
+        "sprites/enemy12_1.png",
+        "sprites/enemy12_2.png",
+        "sprites/enemy12_3.png",
+        "sprites/enemy12_4.png",
+        "sprites/enemy12_5.png",
+        "sprites/enemy12_6.png"
+      ],
+      "count": 7
+    },
+    "enemy13": {
+      "frames": [
+        "sprites/enemy13_0.png",
+        "sprites/enemy13_1.png",
+        "sprites/enemy13_2.png",
+        "sprites/enemy13_3.png",
+        "sprites/enemy13_4.png",
+        "sprites/enemy13_5.png",
+        "sprites/enemy13_6.png"
+      ],
+      "count": 7
+    },
+    "enemy14": {
+      "frames": [
+        "sprites/enemy14_0.png",
+        "sprites/enemy14_1.png",
+        "sprites/enemy14_2.png",
+        "sprites/enemy14_3.png",
+        "sprites/enemy14_4.png",
+        "sprites/enemy14_5.png",
+        "sprites/enemy14_6.png",
+        "sprites/enemy14_7.png",
+        "sprites/enemy14_8.png",
+        "sprites/enemy14_9.png",
+        "sprites/enemy14_10.png",
+        "sprites/enemy14_11.png"
+      ],
+      "count": 12
+    },
+    "enemy15": {
+      "frames": [
+        "sprites/enemy15_0.png",
+        "sprites/enemy15_1.png",
+        "sprites/enemy15_2.png",
+        "sprites/enemy15_3.png",
+        "sprites/enemy15_4.png",
+        "sprites/enemy15_5.png",
+        "sprites/enemy15_6.png"
+      ],
+      "count": 7
+    },
+    "enemy16": {
+      "frames": [
+        "sprites/enemy16_0.png",
+        "sprites/enemy16_1.png",
+        "sprites/enemy16_2.png",
+        "sprites/enemy16_3.png",
+        "sprites/enemy16_4.png",
+        "sprites/enemy16_5.png",
+        "sprites/enemy16_6.png",
+        "sprites/enemy16_7.png",
+        "sprites/enemy16_8.png"
+      ],
+      "count": 9
+    },
+    "enemy17": {
+      "frames": [
+        "sprites/enemy17_0.png",
+        "sprites/enemy17_1.png",
+        "sprites/enemy17_2.png",
+        "sprites/enemy17_3.png",
+        "sprites/enemy17_4.png"
+      ],
+      "count": 5
+    },
+    "enemy18": {
+      "frames": [
+        "sprites/enemy18_0.png",
+        "sprites/enemy18_1.png",
+        "sprites/enemy18_2.png",
+        "sprites/enemy18_3.png",
+        "sprites/enemy18_4.png",
+        "sprites/enemy18_5.png",
+        "sprites/enemy18_6.png",
+        "sprites/enemy18_7.png",
+        "sprites/enemy18_8.png",
+        "sprites/enemy18_9.png",
+        "sprites/enemy18_10.png",
+        "sprites/enemy18_11.png",
+        "sprites/enemy18_12.png",
+        "sprites/enemy18_13.png",
+        "sprites/enemy18_14.png",
+        "sprites/enemy18_15.png"
+      ],
+      "count": 16
+    },
+    "enemy20": {
+      "frames": [
+        "sprites/enemy20_0.png",
+        "sprites/enemy20_1.png",
+        "sprites/enemy20_2.png",
+        "sprites/enemy20_3.png",
+        "sprites/enemy20_4.png",
+        "sprites/enemy20_5.png",
+        "sprites/enemy20_6.png"
+      ],
+      "count": 7
+    },
+    "enemy21": {
+      "frames": [
+        "sprites/enemy21_0.png",
+        "sprites/enemy21_1.png",
+        "sprites/enemy21_2.png",
+        "sprites/enemy21_3.png"
+      ],
+      "count": 4
+    },
+    "enemy22": {
+      "frames": [
+        "sprites/enemy22_0.png",
+        "sprites/enemy22_1.png",
+        "sprites/enemy22_2.png",
+        "sprites/enemy22_3.png",
+        "sprites/enemy22_4.png",
+        "sprites/enemy22_5.png",
+        "sprites/enemy22_6.png",
+        "sprites/enemy22_7.png",
+        "sprites/enemy22_8.png"
+      ],
+      "count": 9
+    },
+    "enemy23": {
+      "frames": [
+        "sprites/enemy23_0.png",
+        "sprites/enemy23_1.png",
+        "sprites/enemy23_2.png",
+        "sprites/enemy23_3.png",
+        "sprites/enemy23_4.png",
+        "sprites/enemy23_5.png",
+        "sprites/enemy23_6.png",
+        "sprites/enemy23_7.png",
+        "sprites/enemy23_8.png"
+      ],
+      "count": 9
+    },
+    "enemy24": {
+      "frames": [
+        "sprites/enemy24_0.png",
+        "sprites/enemy24_1.png",
+        "sprites/enemy24_2.png",
+        "sprites/enemy24_3.png",
+        "sprites/enemy24_4.png",
+        "sprites/enemy24_5.png",
+        "sprites/enemy24_6.png",
+        "sprites/enemy24_7.png",
+        "sprites/enemy24_8.png"
+      ],
+      "count": 9
+    },
+    "enemy25": {
+      "frames": [
+        "sprites/enemy25_0.png",
+        "sprites/enemy25_1.png",
+        "sprites/enemy25_2.png",
+        "sprites/enemy25_3.png",
+        "sprites/enemy25_4.png",
+        "sprites/enemy25_5.png",
+        "sprites/enemy25_6.png",
+        "sprites/enemy25_7.png",
+        "sprites/enemy25_8.png"
+      ],
+      "count": 9
+    },
+    "enemy26": {
+      "frames": [
+        "sprites/enemy26_0.png",
+        "sprites/enemy26_1.png",
+        "sprites/enemy26_2.png",
+        "sprites/enemy26_3.png",
+        "sprites/enemy26_4.png",
+        "sprites/enemy26_5.png",
+        "sprites/enemy26_6.png",
+        "sprites/enemy26_7.png",
+        "sprites/enemy26_8.png"
+      ],
+      "count": 9
+    },
+    "enemy27": {
+      "frames": [
+        "sprites/enemy27_0.png",
+        "sprites/enemy27_1.png",
+        "sprites/enemy27_2.png",
+        "sprites/enemy27_3.png",
+        "sprites/enemy27_4.png",
+        "sprites/enemy27_5.png",
+        "sprites/enemy27_6.png"
+      ],
+      "count": 7
+    },
+    "enemy28": {
+      "frames": [
+        "sprites/enemy28_0.png",
+        "sprites/enemy28_1.png",
+        "sprites/enemy28_2.png",
+        "sprites/enemy28_3.png",
+        "sprites/enemy28_4.png",
+        "sprites/enemy28_5.png",
+        "sprites/enemy28_6.png"
+      ],
+      "count": 7
+    },
+    "enemy29": {
+      "frames": [
+        "sprites/enemy29_0.png",
+        "sprites/enemy29_1.png",
+        "sprites/enemy29_2.png",
+        "sprites/enemy29_3.png",
+        "sprites/enemy29_4.png",
+        "sprites/enemy29_5.png",
+        "sprites/enemy29_6.png",
+        "sprites/enemy29_7.png"
+      ],
+      "count": 8
+    },
+    "enemy30": {
+      "frames": [
+        "sprites/enemy30_0.png",
+        "sprites/enemy30_1.png",
+        "sprites/enemy30_2.png",
+        "sprites/enemy30_3.png",
+        "sprites/enemy30_4.png",
+        "sprites/enemy30_5.png",
+        "sprites/enemy30_6.png"
+      ],
+      "count": 7
+    },
+    "enemy31": {
+      "frames": [
+        "sprites/enemy31_0.png",
+        "sprites/enemy31_1.png",
+        "sprites/enemy31_2.png",
+        "sprites/enemy31_3.png",
+        "sprites/enemy31_4.png",
+        "sprites/enemy31_5.png",
+        "sprites/enemy31_6.png"
+      ],
+      "count": 7
+    },
+    "enemy32": {
+      "frames": [
+        "sprites/enemy32_0.png",
+        "sprites/enemy32_1.png",
+        "sprites/enemy32_2.png",
+        "sprites/enemy32_3.png",
+        "sprites/enemy32_4.png",
+        "sprites/enemy32_5.png",
+        "sprites/enemy32_6.png"
+      ],
+      "count": 7
+    },
+    "enemy33": {
+      "frames": [
+        "sprites/enemy33_0.png",
+        "sprites/enemy33_1.png",
+        "sprites/enemy33_2.png",
+        "sprites/enemy33_4.png",
+        "sprites/enemy33_5.png",
+        "sprites/enemy33_7.png"
+      ],
+      "count": 6
+    },
+    "enemy34": {
+      "frames": [
+        "sprites/enemy34_0.png",
+        "sprites/enemy34_1.png",
+        "sprites/enemy34_2.png",
+        "sprites/enemy34_3.png",
+        "sprites/enemy34_4.png",
+        "sprites/enemy34_5.png",
+        "sprites/enemy34_6.png",
+        "sprites/enemy34_7.png",
+        "sprites/enemy34_8.png"
+      ],
+      "count": 9
+    },
+    "enemy35": {
+      "frames": [
+        "sprites/enemy35_0.png",
+        "sprites/enemy35_1.png",
+        "sprites/enemy35_2.png",
+        "sprites/enemy35_3.png",
+        "sprites/enemy35_4.png",
+        "sprites/enemy35_5.png",
+        "sprites/enemy35_6.png",
+        "sprites/enemy35_7.png",
+        "sprites/enemy35_8.png",
+        "sprites/enemy35_9.png",
+        "sprites/enemy35_10.png"
+      ],
+      "count": 11
+    },
+    "enemy36": {
+      "frames": [
+        "sprites/enemy36_0.png",
+        "sprites/enemy36_1.png",
+        "sprites/enemy36_2.png"
+      ],
+      "count": 3
+    },
+    "enemy37": {
+      "frames": [
+        "sprites/enemy37_0.png",
+        "sprites/enemy37_1.png",
+        "sprites/enemy37_2.png",
+        "sprites/enemy37_3.png",
+        "sprites/enemy37_4.png",
+        "sprites/enemy37_5.png",
+        "sprites/enemy37_6.png"
+      ],
+      "count": 7
+    },
+    "enemy38": {
+      "frames": [
+        "sprites/enemy38_0.png",
+        "sprites/enemy38_1.png",
+        "sprites/enemy38_2.png",
+        "sprites/enemy38_3.png",
+        "sprites/enemy38_4.png"
+      ],
+      "count": 5
+    },
+    "enemy39": {
+      "frames": [
+        "sprites/enemy39_0.png",
+        "sprites/enemy39_1.png",
+        "sprites/enemy39_2.png",
+        "sprites/enemy39_3.png",
+        "sprites/enemy39_4.png",
+        "sprites/enemy39_5.png",
+        "sprites/enemy39_6.png",
+        "sprites/enemy39_7.png",
+        "sprites/enemy39_8.png",
+        "sprites/enemy39_9.png"
+      ],
+      "count": 10
+    },
+    "enemy40": {
+      "frames": [
+        "sprites/enemy40_0.png",
+        "sprites/enemy40_1.png",
+        "sprites/enemy40_2.png",
+        "sprites/enemy40_3.png",
+        "sprites/enemy40_4.png",
+        "sprites/enemy40_5.png",
+        "sprites/enemy40_6.png"
+      ],
+      "count": 7
+    },
+    "enemy41": {
+      "frames": [
+        "sprites/enemy41_0.png",
+        "sprites/enemy41_1.png",
+        "sprites/enemy41_2.png",
+        "sprites/enemy41_3.png",
+        "sprites/enemy41_4.png",
+        "sprites/enemy41_5.png",
+        "sprites/enemy41_6.png",
+        "sprites/enemy41_7.png",
+        "sprites/enemy41_8.png"
+      ],
+      "count": 9
+    },
+    "enemy42": {
+      "frames": [
+        "sprites/enemy42_0.png",
+        "sprites/enemy42_1.png",
+        "sprites/enemy42_2.png",
+        "sprites/enemy42_3.png",
+        "sprites/enemy42_4.png",
+        "sprites/enemy42_5.png",
+        "sprites/enemy42_6.png"
+      ],
+      "count": 7
+    },
+    "enemy43": {
+      "frames": [
+        "sprites/enemy43_0.png",
+        "sprites/enemy43_1.png",
+        "sprites/enemy43_2.png",
+        "sprites/enemy43_3.png",
+        "sprites/enemy43_4.png",
+        "sprites/enemy43_5.png",
+        "sprites/enemy43_6.png"
+      ],
+      "count": 7
+    },
+    "enemy44": {
+      "frames": [
+        "sprites/enemy44_0.png",
+        "sprites/enemy44_1.png",
+        "sprites/enemy44_2.png",
+        "sprites/enemy44_3.png",
+        "sprites/enemy44_4.png",
+        "sprites/enemy44_5.png",
+        "sprites/enemy44_6.png",
+        "sprites/enemy44_7.png",
+        "sprites/enemy44_8.png",
+        "sprites/enemy44_9.png",
+        "sprites/enemy44_10.png"
+      ],
+      "count": 11
+    },
+    "enemy45": {
+      "frames": [
+        "sprites/enemy45_0.png",
+        "sprites/enemy45_1.png",
+        "sprites/enemy45_2.png",
+        "sprites/enemy45_3.png",
+        "sprites/enemy45_4.png",
+        "sprites/enemy45_5.png",
+        "sprites/enemy45_6.png",
+        "sprites/enemy45_7.png",
+        "sprites/enemy45_8.png"
+      ],
+      "count": 9
+    },
+    "enemy46": {
+      "frames": [
+        "sprites/enemy46_0.png",
+        "sprites/enemy46_1.png",
+        "sprites/enemy46_2.png",
+        "sprites/enemy46_3.png",
+        "sprites/enemy46_4.png",
+        "sprites/enemy46_5.png",
+        "sprites/enemy46_6.png"
+      ],
+      "count": 7
+    },
+    "enemy_list": {
+      "frames": [
+        "sprites/enemy_list_0.png",
+        "sprites/enemy_list_1.png",
+        "sprites/enemy_list_2.png",
+        "sprites/enemy_list_3.png",
+        "sprites/enemy_list_4.png",
+        "sprites/enemy_list_5.png",
+        "sprites/enemy_list_6.png",
+        "sprites/enemy_list_7.png",
+        "sprites/enemy_list_8.png",
+        "sprites/enemy_list_9.png",
+        "sprites/enemy_list_10.png",
+        "sprites/enemy_list_11.png",
+        "sprites/enemy_list_12.png",
+        "sprites/enemy_list_13.png",
+        "sprites/enemy_list_14.png",
+        "sprites/enemy_list_15.png",
+        "sprites/enemy_list_16.png",
+        "sprites/enemy_list_17.png",
+        "sprites/enemy_list_18.png",
+        "sprites/enemy_list_19.png",
+        "sprites/enemy_list_20.png",
+        "sprites/enemy_list_21.png",
+        "sprites/enemy_list_22.png",
+        "sprites/enemy_list_23.png",
+        "sprites/enemy_list_24.png",
+        "sprites/enemy_list_25.png",
+        "sprites/enemy_list_26.png",
+        "sprites/enemy_list_27.png",
+        "sprites/enemy_list_28.png",
+        "sprites/enemy_list_29.png",
+        "sprites/enemy_list_30.png",
+        "sprites/enemy_list_31.png",
+        "sprites/enemy_list_32.png",
+        "sprites/enemy_list_33.png",
+        "sprites/enemy_list_34.png",
+        "sprites/enemy_list_35.png",
+        "sprites/enemy_list_36.png",
+        "sprites/enemy_list_37.png",
+        "sprites/enemy_list_38.png",
+        "sprites/enemy_list_39.png",
+        "sprites/enemy_list_40.png",
+        "sprites/enemy_list_41.png",
+        "sprites/enemy_list_42.png",
+        "sprites/enemy_list_43.png",
+        "sprites/enemy_list_44.png",
+        "sprites/enemy_list_45.png",
+        "sprites/enemy_list_46.png",
+        "sprites/enemy_list_47.png",
+        "sprites/enemy_list_48.png",
+        "sprites/enemy_list_49.png",
+        "sprites/enemy_list_50.png",
+        "sprites/enemy_list_51.png",
+        "sprites/enemy_list_52.png",
+        "sprites/enemy_list_53.png",
+        "sprites/enemy_list_54.png",
+        "sprites/enemy_list_55.png",
+        "sprites/enemy_list_56.png",
+        "sprites/enemy_list_57.png",
+        "sprites/enemy_list_58.png",
+        "sprites/enemy_list_59.png",
+        "sprites/enemy_list_60.png",
+        "sprites/enemy_list_61.png",
+        "sprites/enemy_list_62.png",
+        "sprites/enemy_list_63.png",
+        "sprites/enemy_list_64.png",
+        "sprites/enemy_list_65.png",
+        "sprites/enemy_list_66.png",
+        "sprites/enemy_list_67.png",
+        "sprites/enemy_list_68.png",
+        "sprites/enemy_list_69.png",
+        "sprites/enemy_list_70.png",
+        "sprites/enemy_list_71.png",
+        "sprites/enemy_list_72.png",
+        "sprites/enemy_list_73.png",
+        "sprites/enemy_list_74.png",
+        "sprites/enemy_list_75.png",
+        "sprites/enemy_list_76.png",
+        "sprites/enemy_list_77.png",
+        "sprites/enemy_list_78.png",
+        "sprites/enemy_list_79.png",
+        "sprites/enemy_list_80.png",
+        "sprites/enemy_list_81.png",
+        "sprites/enemy_list_82.png",
+        "sprites/enemy_list_83.png"
+      ],
+      "count": 84
+    },
+    "engineer_battery_0": {
+      "frames": [
+        "sprites/engineer_battery_0_0.png",
+        "sprites/engineer_battery_0_1.png",
+        "sprites/engineer_battery_0_2.png",
+        "sprites/engineer_battery_0_3.png",
+        "sprites/engineer_battery_0_4.png",
+        "sprites/engineer_battery_0_5.png"
+      ],
+      "count": 6
+    },
+    "engineer_derivative_1": {
+      "frames": [
+        "sprites/engineer_derivative_1_0.png",
+        "sprites/engineer_derivative_1_1.png",
+        "sprites/engineer_derivative_1_2.png",
+        "sprites/engineer_derivative_1_3.png",
+        "sprites/engineer_derivative_1_4.png",
+        "sprites/engineer_derivative_1_5.png",
+        "sprites/engineer_derivative_1_6.png",
+        "sprites/engineer_derivative_1_7.png",
+        "sprites/engineer_derivative_1_8.png"
+      ],
+      "count": 9
+    },
+    "m_lion": {
+      "frames": [
+        "sprites/m_lion_0.png",
+        "sprites/m_lion_1.png",
+        "sprites/m_lion_2.png",
+        "sprites/m_lion_3.png",
+        "sprites/m_lion_4.png"
+      ],
+      "count": 5
+    },
+    "naughtyboy_1": {
+      "frames": [
+        "sprites/naughtyboy_1_0.png",
+        "sprites/naughtyboy_1_1.png",
+        "sprites/naughtyboy_1_2.png",
+        "sprites/naughtyboy_1_3.png",
+        "sprites/naughtyboy_1_4.png",
+        "sprites/naughtyboy_1_5.png",
+        "sprites/naughtyboy_1_6.png",
+        "sprites/naughtyboy_1_7.png"
+      ],
+      "count": 8
+    },
+    "naughtyboy_2": {
+      "frames": [
+        "sprites/naughtyboy_2_0.png",
+        "sprites/naughtyboy_2_1.png",
+        "sprites/naughtyboy_2_2.png",
+        "sprites/naughtyboy_2_3.png",
+        "sprites/naughtyboy_2_4.png",
+        "sprites/naughtyboy_2_5.png",
+        "sprites/naughtyboy_2_6.png",
+        "sprites/naughtyboy_2_7.png"
+      ],
+      "count": 8
+    },
+    "naughtyboy_3": {
+      "frames": [
+        "sprites/naughtyboy_3_0.png",
+        "sprites/naughtyboy_3_1.png",
+        "sprites/naughtyboy_3_2.png",
+        "sprites/naughtyboy_3_3.png",
+        "sprites/naughtyboy_3_4.png",
+        "sprites/naughtyboy_3_5.png",
+        "sprites/naughtyboy_3_6.png",
+        "sprites/naughtyboy_3_7.png"
+      ],
+      "count": 8
+    },
+    "npc00": {
+      "frames": [
+        "sprites/npc00_0.png",
+        "sprites/npc00_1.png",
+        "sprites/npc00_2.png",
+        "sprites/npc00_3.png",
+        "sprites/npc00_4.png",
+        "sprites/npc00_5.png",
+        "sprites/npc00_6.png",
+        "sprites/npc00_7.png"
+      ],
+      "count": 8
+    },
+    "npc01": {
+      "frames": [
+        "sprites/npc01_0.png",
+        "sprites/npc01_1.png",
+        "sprites/npc01_2.png",
+        "sprites/npc01_3.png",
+        "sprites/npc01_4.png",
+        "sprites/npc01_5.png",
+        "sprites/npc01_6.png",
+        "sprites/npc01_7.png"
+      ],
+      "count": 8
+    },
+    "npc02": {
+      "frames": [
+        "sprites/npc02_0.png",
+        "sprites/npc02_1.png",
+        "sprites/npc02_2.png",
+        "sprites/npc02_3.png",
+        "sprites/npc02_4.png",
+        "sprites/npc02_5.png",
+        "sprites/npc02_6.png",
+        "sprites/npc02_7.png",
+        "sprites/npc02_8.png"
+      ],
+      "count": 9
+    },
+    "npc03": {
+      "frames": [
+        "sprites/npc03_0.png",
+        "sprites/npc03_1.png",
+        "sprites/npc03_2.png",
+        "sprites/npc03_3.png",
+        "sprites/npc03_4.png",
+        "sprites/npc03_5.png",
+        "sprites/npc03_6.png"
+      ],
+      "count": 7
+    },
+    "npc04": {
+      "frames": [
+        "sprites/npc04_0.png",
+        "sprites/npc04_1.png",
+        "sprites/npc04_2.png",
+        "sprites/npc04_3.png",
+        "sprites/npc04_4.png",
+        "sprites/npc04_5.png",
+        "sprites/npc04_6.png",
+        "sprites/npc04_7.png",
+        "sprites/npc04_8.png"
+      ],
+      "count": 9
+    },
+    "npc05": {
+      "frames": [
+        "sprites/npc05_0.png",
+        "sprites/npc05_1.png",
+        "sprites/npc05_2.png",
+        "sprites/npc05_3.png",
+        "sprites/npc05_4.png",
+        "sprites/npc05_5.png",
+        "sprites/npc05_6.png",
+        "sprites/npc05_7.png",
+        "sprites/npc05_8.png"
+      ],
+      "count": 9
+    },
+    "npc06": {
+      "frames": [
+        "sprites/npc06_0.png",
+        "sprites/npc06_1.png",
+        "sprites/npc06_2.png",
+        "sprites/npc06_3.png",
+        "sprites/npc06_4.png",
+        "sprites/npc06_5.png",
+        "sprites/npc06_6.png",
+        "sprites/npc06_7.png",
+        "sprites/npc06_8.png"
+      ],
+      "count": 9
+    },
+    "number": {
+      "frames": [
+        "sprites/number_0.png"
+      ],
+      "count": 1
+    },
+    "objects1": {
+      "frames": [
+        "sprites/objects1_0.png",
+        "sprites/objects1_1.png",
+        "sprites/objects1_2.png",
+        "sprites/objects1_3.png",
+        "sprites/objects1_4.png",
+        "sprites/objects1_5.png",
+        "sprites/objects1_6.png",
+        "sprites/objects1_7.png",
+        "sprites/objects1_8.png",
+        "sprites/objects1_9.png",
+        "sprites/objects1_10.png",
+        "sprites/objects1_11.png",
+        "sprites/objects1_12.png",
+        "sprites/objects1_13.png",
+        "sprites/objects1_14.png",
+        "sprites/objects1_15.png",
+        "sprites/objects1_16.png",
+        "sprites/objects1_17.png",
+        "sprites/objects1_19.png",
+        "sprites/objects1_20.png",
+        "sprites/objects1_21.png",
+        "sprites/objects1_22.png",
+        "sprites/objects1_23.png",
+        "sprites/objects1_24.png",
+        "sprites/objects1_25.png",
+        "sprites/objects1_26.png",
+        "sprites/objects1_27.png",
+        "sprites/objects1_28.png",
+        "sprites/objects1_29.png",
+        "sprites/objects1_30.png",
+        "sprites/objects1_31.png",
+        "sprites/objects1_32.png",
+        "sprites/objects1_33.png",
+        "sprites/objects1_34.png",
+        "sprites/objects1_35.png",
+        "sprites/objects1_41.png",
+        "sprites/objects1_64.png",
+        "sprites/objects1_65.png",
+        "sprites/objects1_66.png",
+        "sprites/objects1_67.png",
+        "sprites/objects1_68.png",
+        "sprites/objects1_69.png",
+        "sprites/objects1_70.png",
+        "sprites/objects1_71.png",
+        "sprites/objects1_72.png",
+        "sprites/objects1_73.png",
+        "sprites/objects1_74.png",
+        "sprites/objects1_75.png",
+        "sprites/objects1_76.png",
+        "sprites/objects1_77.png",
+        "sprites/objects1_78.png",
+        "sprites/objects1_79.png",
+        "sprites/objects1_80.png",
+        "sprites/objects1_81.png",
+        "sprites/objects1_82.png",
+        "sprites/objects1_83.png",
+        "sprites/objects1_84.png",
+        "sprites/objects1_85.png",
+        "sprites/objects1_86.png",
+        "sprites/objects1_87.png",
+        "sprites/objects1_88.png"
+      ],
+      "count": 61
+    },
+    "objects2": {
+      "frames": [
+        "sprites/objects2_0.png",
+        "sprites/objects2_1.png",
+        "sprites/objects2_2.png",
+        "sprites/objects2_3.png",
+        "sprites/objects2_4.png",
+        "sprites/objects2_5.png",
+        "sprites/objects2_6.png",
+        "sprites/objects2_7.png",
+        "sprites/objects2_8.png",
+        "sprites/objects2_9.png",
+        "sprites/objects2_10.png",
+        "sprites/objects2_11.png",
+        "sprites/objects2_12.png",
+        "sprites/objects2_13.png",
+        "sprites/objects2_14.png",
+        "sprites/objects2_15.png",
+        "sprites/objects2_16.png",
+        "sprites/objects2_19.png",
+        "sprites/objects2_20.png",
+        "sprites/objects2_21.png",
+        "sprites/objects2_22.png",
+        "sprites/objects2_23.png",
+        "sprites/objects2_24.png",
+        "sprites/objects2_25.png",
+        "sprites/objects2_26.png",
+        "sprites/objects2_27.png",
+        "sprites/objects2_28.png",
+        "sprites/objects2_29.png",
+        "sprites/objects2_30.png",
+        "sprites/objects2_31.png",
+        "sprites/objects2_32.png",
+        "sprites/objects2_33.png",
+        "sprites/objects2_34.png",
+        "sprites/objects2_35.png",
+        "sprites/objects2_36.png",
+        "sprites/objects2_37.png",
+        "sprites/objects2_38.png",
+        "sprites/objects2_39.png",
+        "sprites/objects2_40.png",
+        "sprites/objects2_41.png",
+        "sprites/objects2_42.png",
+        "sprites/objects2_43.png",
+        "sprites/objects2_44.png",
+        "sprites/objects2_45.png",
+        "sprites/objects2_46.png",
+        "sprites/objects2_47.png",
+        "sprites/objects2_48.png",
+        "sprites/objects2_49.png",
+        "sprites/objects2_50.png",
+        "sprites/objects2_51.png",
+        "sprites/objects2_52.png",
+        "sprites/objects2_53.png",
+        "sprites/objects2_54.png",
+        "sprites/objects2_55.png",
+        "sprites/objects2_56.png",
+        "sprites/objects2_57.png",
+        "sprites/objects2_58.png",
+        "sprites/objects2_59.png",
+        "sprites/objects2_60.png",
+        "sprites/objects2_61.png",
+        "sprites/objects2_62.png",
+        "sprites/objects2_63.png",
+        "sprites/objects2_64.png",
+        "sprites/objects2_65.png",
+        "sprites/objects2_66.png",
+        "sprites/objects2_67.png",
+        "sprites/objects2_68.png",
+        "sprites/objects2_69.png",
+        "sprites/objects2_70.png",
+        "sprites/objects2_71.png"
+      ],
+      "count": 70
+    },
+    "objects3": {
+      "frames": [
+        "sprites/objects3_0.png",
+        "sprites/objects3_1.png",
+        "sprites/objects3_2.png",
+        "sprites/objects3_3.png",
+        "sprites/objects3_4.png",
+        "sprites/objects3_5.png",
+        "sprites/objects3_6.png",
+        "sprites/objects3_7.png",
+        "sprites/objects3_8.png",
+        "sprites/objects3_9.png",
+        "sprites/objects3_10.png",
+        "sprites/objects3_11.png",
+        "sprites/objects3_12.png",
+        "sprites/objects3_13.png",
+        "sprites/objects3_14.png",
+        "sprites/objects3_15.png",
+        "sprites/objects3_16.png",
+        "sprites/objects3_17.png",
+        "sprites/objects3_18.png",
+        "sprites/objects3_19.png"
+      ],
+      "count": 20
+    },
+    "objects4": {
+      "frames": [
+        "sprites/objects4_0.png",
+        "sprites/objects4_1.png",
+        "sprites/objects4_2.png",
+        "sprites/objects4_3.png",
+        "sprites/objects4_4.png",
+        "sprites/objects4_5.png",
+        "sprites/objects4_6.png",
+        "sprites/objects4_7.png",
+        "sprites/objects4_8.png",
+        "sprites/objects4_9.png",
+        "sprites/objects4_10.png",
+        "sprites/objects4_11.png",
+        "sprites/objects4_12.png",
+        "sprites/objects4_13.png",
+        "sprites/objects4_14.png",
+        "sprites/objects4_15.png",
+        "sprites/objects4_16.png",
+        "sprites/objects4_17.png",
+        "sprites/objects4_18.png",
+        "sprites/objects4_19.png",
+        "sprites/objects4_20.png",
+        "sprites/objects4_21.png",
+        "sprites/objects4_22.png",
+        "sprites/objects4_23.png",
+        "sprites/objects4_24.png",
+        "sprites/objects4_25.png",
+        "sprites/objects4_26.png",
+        "sprites/objects4_27.png",
+        "sprites/objects4_28.png",
+        "sprites/objects4_29.png",
+        "sprites/objects4_30.png",
+        "sprites/objects4_31.png",
+        "sprites/objects4_32.png",
+        "sprites/objects4_33.png",
+        "sprites/objects4_34.png",
+        "sprites/objects4_35.png",
+        "sprites/objects4_36.png",
+        "sprites/objects4_37.png",
+        "sprites/objects4_38.png",
+        "sprites/objects4_39.png",
+        "sprites/objects4_40.png",
+        "sprites/objects4_41.png"
+      ],
+      "count": 42
+    },
+    "objects_common": {
+      "frames": [
+        "sprites/objects_common_0.png",
+        "sprites/objects_common_1.png",
+        "sprites/objects_common_2.png",
+        "sprites/objects_common_3.png",
+        "sprites/objects_common_4.png",
+        "sprites/objects_common_5.png",
+        "sprites/objects_common_6.png",
+        "sprites/objects_common_7.png",
+        "sprites/objects_common_8.png",
+        "sprites/objects_common_9.png",
+        "sprites/objects_common_10.png",
+        "sprites/objects_common_11.png",
+        "sprites/objects_common_12.png",
+        "sprites/objects_common_13.png",
+        "sprites/objects_common_14.png",
+        "sprites/objects_common_15.png",
+        "sprites/objects_common_16.png",
+        "sprites/objects_common_17.png",
+        "sprites/objects_common_18.png",
+        "sprites/objects_common_19.png",
+        "sprites/objects_common_20.png",
+        "sprites/objects_common_21.png",
+        "sprites/objects_common_22.png",
+        "sprites/objects_common_23.png",
+        "sprites/objects_common_24.png",
+        "sprites/objects_common_25.png",
+        "sprites/objects_common_26.png",
+        "sprites/objects_common_27.png",
+        "sprites/objects_common_28.png",
+        "sprites/objects_common_29.png",
+        "sprites/objects_common_30.png",
+        "sprites/objects_common_31.png",
+        "sprites/objects_common_32.png",
+        "sprites/objects_common_33.png",
+        "sprites/objects_common_34.png",
+        "sprites/objects_common_35.png"
+      ],
+      "count": 36
+    },
+    "pet00": {
+      "frames": [
+        "sprites/pet00_0.png",
+        "sprites/pet00_1.png",
+        "sprites/pet00_2.png",
+        "sprites/pet00_3.png",
+        "sprites/pet00_4.png",
+        "sprites/pet00_5.png",
+        "sprites/pet00_6.png",
+        "sprites/pet00_7.png"
+      ],
+      "count": 8
+    },
+    "pet00_s1": {
+      "frames": [
+        "sprites/pet00_s1_0.png",
+        "sprites/pet00_s1_1.png",
+        "sprites/pet00_s1_2.png",
+        "sprites/pet00_s1_3.png",
+        "sprites/pet00_s1_4.png",
+        "sprites/pet00_s1_5.png",
+        "sprites/pet00_s1_6.png",
+        "sprites/pet00_s1_7.png"
+      ],
+      "count": 8
+    },
+    "pet00_s2": {
+      "frames": [
+        "sprites/pet00_s2_0.png",
+        "sprites/pet00_s2_1.png",
+        "sprites/pet00_s2_2.png",
+        "sprites/pet00_s2_3.png",
+        "sprites/pet00_s2_4.png",
+        "sprites/pet00_s2_5.png",
+        "sprites/pet00_s2_6.png",
+        "sprites/pet00_s2_7.png"
+      ],
+      "count": 8
+    },
+    "pet00_s3": {
+      "frames": [
+        "sprites/pet00_s3_0.png",
+        "sprites/pet00_s3_1.png",
+        "sprites/pet00_s3_2.png",
+        "sprites/pet00_s3_3.png",
+        "sprites/pet00_s3_4.png",
+        "sprites/pet00_s3_5.png",
+        "sprites/pet00_s3_6.png",
+        "sprites/pet00_s3_7.png"
+      ],
+      "count": 8
+    },
+    "pet00_s4": {
+      "frames": [
+        "sprites/pet00_s4_0.png",
+        "sprites/pet00_s4_1.png",
+        "sprites/pet00_s4_2.png",
+        "sprites/pet00_s4_3.png",
+        "sprites/pet00_s4_4.png",
+        "sprites/pet00_s4_5.png",
+        "sprites/pet00_s4_6.png",
+        "sprites/pet00_s4_7.png"
+      ],
+      "count": 8
+    },
+    "pet00_s5": {
+      "frames": [
+        "sprites/pet00_s5_0.png",
+        "sprites/pet00_s5_1.png",
+        "sprites/pet00_s5_2.png",
+        "sprites/pet00_s5_3.png",
+        "sprites/pet00_s5_4.png",
+        "sprites/pet00_s5_5.png",
+        "sprites/pet00_s5_6.png",
+        "sprites/pet00_s5_7.png"
+      ],
+      "count": 8
+    },
+    "pet01": {
+      "frames": [
+        "sprites/pet01_0.png",
+        "sprites/pet01_1.png",
+        "sprites/pet01_2.png",
+        "sprites/pet01_3.png",
+        "sprites/pet01_4.png",
+        "sprites/pet01_5.png",
+        "sprites/pet01_6.png",
+        "sprites/pet01_7.png"
+      ],
+      "count": 8
+    },
+    "pet01_s1": {
+      "frames": [
+        "sprites/pet01_s1_0.png",
+        "sprites/pet01_s1_1.png",
+        "sprites/pet01_s1_2.png",
+        "sprites/pet01_s1_3.png",
+        "sprites/pet01_s1_4.png",
+        "sprites/pet01_s1_5.png",
+        "sprites/pet01_s1_6.png",
+        "sprites/pet01_s1_7.png"
+      ],
+      "count": 8
+    },
+    "pet01_s2": {
+      "frames": [
+        "sprites/pet01_s2_0.png",
+        "sprites/pet01_s2_1.png",
+        "sprites/pet01_s2_2.png",
+        "sprites/pet01_s2_3.png",
+        "sprites/pet01_s2_4.png",
+        "sprites/pet01_s2_5.png",
+        "sprites/pet01_s2_6.png",
+        "sprites/pet01_s2_7.png"
+      ],
+      "count": 8
+    },
+    "pet01_s3": {
+      "frames": [
+        "sprites/pet01_s3_0.png",
+        "sprites/pet01_s3_1.png",
+        "sprites/pet01_s3_2.png",
+        "sprites/pet01_s3_3.png",
+        "sprites/pet01_s3_4.png",
+        "sprites/pet01_s3_5.png",
+        "sprites/pet01_s3_6.png",
+        "sprites/pet01_s3_7.png"
+      ],
+      "count": 8
+    },
+    "pet01_s4": {
+      "frames": [
+        "sprites/pet01_s4_0.png",
+        "sprites/pet01_s4_1.png",
+        "sprites/pet01_s4_2.png",
+        "sprites/pet01_s4_3.png",
+        "sprites/pet01_s4_4.png",
+        "sprites/pet01_s4_5.png"
+      ],
+      "count": 6
+    },
+    "pet01_s5": {
+      "frames": [
+        "sprites/pet01_s5_0.png",
+        "sprites/pet01_s5_1.png",
+        "sprites/pet01_s5_2.png",
+        "sprites/pet01_s5_3.png",
+        "sprites/pet01_s5_4.png",
+        "sprites/pet01_s5_5.png"
+      ],
+      "count": 6
+    },
+    "pet02": {
+      "frames": [
+        "sprites/pet02_0.png",
+        "sprites/pet02_1.png",
+        "sprites/pet02_2.png",
+        "sprites/pet02_3.png",
+        "sprites/pet02_4.png",
+        "sprites/pet02_5.png"
+      ],
+      "count": 6
+    },
+    "pet02_s1": {
+      "frames": [
+        "sprites/pet02_s1_0.png",
+        "sprites/pet02_s1_1.png",
+        "sprites/pet02_s1_2.png",
+        "sprites/pet02_s1_3.png",
+        "sprites/pet02_s1_4.png",
+        "sprites/pet02_s1_5.png"
+      ],
+      "count": 6
+    },
+    "pet02_s2": {
+      "frames": [
+        "sprites/pet02_s2_0.png",
+        "sprites/pet02_s2_1.png",
+        "sprites/pet02_s2_2.png",
+        "sprites/pet02_s2_3.png",
+        "sprites/pet02_s2_4.png",
+        "sprites/pet02_s2_5.png"
+      ],
+      "count": 6
+    },
+    "pet02_s3": {
+      "frames": [
+        "sprites/pet02_s3_0.png",
+        "sprites/pet02_s3_1.png",
+        "sprites/pet02_s3_2.png",
+        "sprites/pet02_s3_3.png",
+        "sprites/pet02_s3_4.png",
+        "sprites/pet02_s3_5.png"
+      ],
+      "count": 6
+    },
+    "pet03": {
+      "frames": [
+        "sprites/pet03_0.png",
+        "sprites/pet03_1.png",
+        "sprites/pet03_2.png",
+        "sprites/pet03_3.png",
+        "sprites/pet03_4.png",
+        "sprites/pet03_5.png"
+      ],
+      "count": 6
+    },
+    "pet04": {
+      "frames": [
+        "sprites/pet04_0.png",
+        "sprites/pet04_1.png",
+        "sprites/pet04_2.png",
+        "sprites/pet04_3.png",
+        "sprites/pet04_4.png",
+        "sprites/pet04_5.png"
+      ],
+      "count": 6
+    },
+    "pet05_s0": {
+      "frames": [
+        "sprites/pet05_s0_0.png",
+        "sprites/pet05_s0_1.png",
+        "sprites/pet05_s0_2.png",
+        "sprites/pet05_s0_3.png"
+      ],
+      "count": 4
+    },
+    "pet06_s0": {
+      "frames": [
+        "sprites/pet06_s0_0.png",
+        "sprites/pet06_s0_1.png",
+        "sprites/pet06_s0_2.png",
+        "sprites/pet06_s0_3.png",
+        "sprites/pet06_s0_4.png",
+        "sprites/pet06_s0_5.png",
+        "sprites/pet06_s0_6.png",
+        "sprites/pet06_s0_7.png"
+      ],
+      "count": 8
+    },
+    "pet07_s0": {
+      "frames": [
+        "sprites/pet07_s0_0.png",
+        "sprites/pet07_s0_1.png",
+        "sprites/pet07_s0_2.png",
+        "sprites/pet07_s0_3.png",
+        "sprites/pet07_s0_4.png",
+        "sprites/pet07_s0_5.png",
+        "sprites/pet07_s0_6.png",
+        "sprites/pet07_s0_7.png"
+      ],
+      "count": 8
+    },
+    "pet08_s0": {
+      "frames": [
+        "sprites/pet08_s0_0.png",
+        "sprites/pet08_s0_1.png",
+        "sprites/pet08_s0_2.png",
+        "sprites/pet08_s0_3.png",
+        "sprites/pet08_s0_4.png",
+        "sprites/pet08_s0_5.png",
+        "sprites/pet08_s0_6.png",
+        "sprites/pet08_s0_7.png",
+        "sprites/pet08_s0_8.png",
+        "sprites/pet08_s0_9.png"
+      ],
+      "count": 10
+    },
+    "pet09": {
+      "frames": [
+        "sprites/pet09_0.png",
+        "sprites/pet09_1.png",
+        "sprites/pet09_2.png",
+        "sprites/pet09_3.png",
+        "sprites/pet09_4.png",
+        "sprites/pet09_5.png",
+        "sprites/pet09_6.png",
+        "sprites/pet09_7.png"
+      ],
+      "count": 8
+    },
+    "room_item": {
+      "frames": [
+        "sprites/room_item_0.png",
+        "sprites/room_item_1.png",
+        "sprites/room_item_2.png",
+        "sprites/room_item_3.png",
+        "sprites/room_item_4.png",
+        "sprites/room_item_5.png",
+        "sprites/room_item_6.png",
+        "sprites/room_item_7.png",
+        "sprites/room_item_8.png",
+        "sprites/room_item_9.png",
+        "sprites/room_item_10.png",
+        "sprites/room_item_11.png",
+        "sprites/room_item_12.png",
+        "sprites/room_item_13.png",
+        "sprites/room_item_14.png",
+        "sprites/room_item_15.png",
+        "sprites/room_item_16.png",
+        "sprites/room_item_17.png",
+        "sprites/room_item_18.png",
+        "sprites/room_item_19.png",
+        "sprites/room_item_20.png",
+        "sprites/room_item_21.png",
+        "sprites/room_item_22.png",
+        "sprites/room_item_23.png",
+        "sprites/room_item_24.png",
+        "sprites/room_item_25.png",
+        "sprites/room_item_26.png",
+        "sprites/room_item_27.png",
+        "sprites/room_item_28.png",
+        "sprites/room_item_29.png",
+        "sprites/room_item_30.png",
+        "sprites/room_item_31.png",
+        "sprites/room_item_32.png",
+        "sprites/room_item_33.png",
+        "sprites/room_item_34.png",
+        "sprites/room_item_35.png",
+        "sprites/room_item_36.png",
+        "sprites/room_item_37.png",
+        "sprites/room_item_38.png",
+        "sprites/room_item_39.png",
+        "sprites/room_item_40.png",
+        "sprites/room_item_41.png",
+        "sprites/room_item_42.png",
+        "sprites/room_item_43.png",
+        "sprites/room_item_44.png",
+        "sprites/room_item_45.png",
+        "sprites/room_item_46.png",
+        "sprites/room_item_47.png",
+        "sprites/room_item_48.png",
+        "sprites/room_item_49.png",
+        "sprites/room_item_50.png",
+        "sprites/room_item_51.png",
+        "sprites/room_item_52.png",
+        "sprites/room_item_53.png",
+        "sprites/room_item_54.png",
+        "sprites/room_item_55.png",
+        "sprites/room_item_56.png",
+        "sprites/room_item_57.png",
+        "sprites/room_item_58.png"
+      ],
+      "count": 59
+    },
+    "room_item_cat": {
+      "frames": [
+        "sprites/room_item_cat_0.png",
+        "sprites/room_item_cat_1.png",
+        "sprites/room_item_cat_2.png",
+        "sprites/room_item_cat_3.png"
+      ],
+      "count": 4
+    },
+    "share_info": {
+      "frames": [
+        "sprites/share_info_00.png",
+        "sprites/share_info_01.png",
+        "sprites/share_info_02.png",
+        "sprites/share_info_03.png",
+        "sprites/share_info_04.png",
+        "sprites/share_info_05.png",
+        "sprites/share_info_06.png",
+        "sprites/share_info_07.png",
+        "sprites/share_info_08.png",
+        "sprites/share_info_09.png",
+        "sprites/share_info_10.png"
+      ],
+      "count": 11
+    },
+    "texiao": {
+      "frames": [
+        "sprites/texiao_01.png"
+      ],
+      "count": 1
+    },
+    "ui2": {
+      "frames": [
+        "sprites/ui2_0.png",
+        "sprites/ui2_1.png",
+        "sprites/ui2_2.png",
+        "sprites/ui2_3.png",
+        "sprites/ui2_4.png",
+        "sprites/ui2_5.png",
+        "sprites/ui2_6.png",
+        "sprites/ui2_7.png",
+        "sprites/ui2_8.png",
+        "sprites/ui2_9.png",
+        "sprites/ui2_10.png",
+        "sprites/ui2_11.png",
+        "sprites/ui2_12.png",
+        "sprites/ui2_13.png",
+        "sprites/ui2_14.png",
+        "sprites/ui2_15.png",
+        "sprites/ui2_16.png",
+        "sprites/ui2_17.png",
+        "sprites/ui2_18.png",
+        "sprites/ui2_19.png",
+        "sprites/ui2_20.png",
+        "sprites/ui2_21.png",
+        "sprites/ui2_22.png",
+        "sprites/ui2_23.png",
+        "sprites/ui2_24.png",
+        "sprites/ui2_25.png",
+        "sprites/ui2_26.png",
+        "sprites/ui2_27.png",
+        "sprites/ui2_28.png",
+        "sprites/ui2_29.png",
+        "sprites/ui2_30.png",
+        "sprites/ui2_31.png",
+        "sprites/ui2_32.png",
+        "sprites/ui2_33.png",
+        "sprites/ui2_34.png",
+        "sprites/ui2_35.png",
+        "sprites/ui2_36.png",
+        "sprites/ui2_37.png",
+        "sprites/ui2_38.png",
+        "sprites/ui2_39.png",
+        "sprites/ui2_40.png",
+        "sprites/ui2_41.png",
+        "sprites/ui2_42.png",
+        "sprites/ui2_43.png",
+        "sprites/ui2_44.png",
+        "sprites/ui2_45.png",
+        "sprites/ui2_46.png",
+        "sprites/ui2_47.png",
+        "sprites/ui2_48.png",
+        "sprites/ui2_49.png",
+        "sprites/ui2_50.png",
+        "sprites/ui2_51.png",
+        "sprites/ui2_52.png",
+        "sprites/ui2_53.png",
+        "sprites/ui2_54.png",
+        "sprites/ui2_55.png",
+        "sprites/ui2_56.png",
+        "sprites/ui2_57.png",
+        "sprites/ui2_58.png",
+        "sprites/ui2_59.png",
+        "sprites/ui2_60.png",
+        "sprites/ui2_61.png",
+        "sprites/ui2_62.png",
+        "sprites/ui2_63.png",
+        "sprites/ui2_64.png",
+        "sprites/ui2_65.png",
+        "sprites/ui2_66.png",
+        "sprites/ui2_67.png",
+        "sprites/ui2_68.png"
+      ],
+      "count": 69
+    },
+    "ui": {
+      "frames": [
+        "sprites/ui_0.png",
+        "sprites/ui_1.png",
+        "sprites/ui_2.png",
+        "sprites/ui_3.png",
+        "sprites/ui_4.png",
+        "sprites/ui_5.png",
+        "sprites/ui_6.png",
+        "sprites/ui_7.png",
+        "sprites/ui_8.png",
+        "sprites/ui_9.png",
+        "sprites/ui_10.png",
+        "sprites/ui_11.png",
+        "sprites/ui_12.png",
+        "sprites/ui_13.png",
+        "sprites/ui_14.png",
+        "sprites/ui_15.png",
+        "sprites/ui_16.png",
+        "sprites/ui_17.png",
+        "sprites/ui_18.png",
+        "sprites/ui_19.png",
+        "sprites/ui_20.png",
+        "sprites/ui_21.png",
+        "sprites/ui_22.png",
+        "sprites/ui_23.png",
+        "sprites/ui_24.png",
+        "sprites/ui_25.png",
+        "sprites/ui_26.png",
+        "sprites/ui_27.png",
+        "sprites/ui_28.png",
+        "sprites/ui_29.png",
+        "sprites/ui_30.png",
+        "sprites/ui_31.png",
+        "sprites/ui_32.png",
+        "sprites/ui_33.png",
+        "sprites/ui_34.png",
+        "sprites/ui_35.png",
+        "sprites/ui_36.png",
+        "sprites/ui_37.png",
+        "sprites/ui_38.png",
+        "sprites/ui_39.png",
+        "sprites/ui_40.png",
+        "sprites/ui_41.png",
+        "sprites/ui_42.png",
+        "sprites/ui_43.png",
+        "sprites/ui_44.png",
+        "sprites/ui_45.png",
+        "sprites/ui_46.png",
+        "sprites/ui_47.png",
+        "sprites/ui_48.png",
+        "sprites/ui_49.png",
+        "sprites/ui_50.png",
+        "sprites/ui_51.png",
+        "sprites/ui_52.png",
+        "sprites/ui_53.png",
+        "sprites/ui_54.png",
+        "sprites/ui_55.png",
+        "sprites/ui_56.png",
+        "sprites/ui_57.png",
+        "sprites/ui_58.png",
+        "sprites/ui_59.png",
+        "sprites/ui_60.png",
+        "sprites/ui_61.png",
+        "sprites/ui_62.png",
+        "sprites/ui_63.png",
+        "sprites/ui_64.png",
+        "sprites/ui_65.png",
+        "sprites/ui_66.png",
+        "sprites/ui_67.png",
+        "sprites/ui_68.png",
+        "sprites/ui_69.png",
+        "sprites/ui_70.png",
+        "sprites/ui_71.png",
+        "sprites/ui_72.png",
+        "sprites/ui_73.png",
+        "sprites/ui_74.png",
+        "sprites/ui_75.png",
+        "sprites/ui_76.png",
+        "sprites/ui_77.png",
+        "sprites/ui_78.png",
+        "sprites/ui_79.png",
+        "sprites/ui_80.png",
+        "sprites/ui_81.png",
+        "sprites/ui_82.png",
+        "sprites/ui_83.png",
+        "sprites/ui_84.png",
+        "sprites/ui_85.png",
+        "sprites/ui_86.png",
+        "sprites/ui_87.png",
+        "sprites/ui_88.png",
+        "sprites/ui_89.png",
+        "sprites/ui_90.png",
+        "sprites/ui_91.png",
+        "sprites/ui_92.png",
+        "sprites/ui_93.png",
+        "sprites/ui_94.png",
+        "sprites/ui_95.png",
+        "sprites/ui_96.png",
+        "sprites/ui_97.png",
+        "sprites/ui_98.png",
+        "sprites/ui_99.png",
+        "sprites/ui_100.png",
+        "sprites/ui_101.png",
+        "sprites/ui_102.png",
+        "sprites/ui_103.png",
+        "sprites/ui_104.png",
+        "sprites/ui_105.png",
+        "sprites/ui_106.png",
+        "sprites/ui_107.png",
+        "sprites/ui_108.png",
+        "sprites/ui_109.png",
+        "sprites/ui_110.png",
+        "sprites/ui_111.png",
+        "sprites/ui_112.png",
+        "sprites/ui_113.png",
+        "sprites/ui_114.png",
+        "sprites/ui_115.png",
+        "sprites/ui_116.png",
+        "sprites/ui_117.png",
+        "sprites/ui_118.png",
+        "sprites/ui_119.png"
+      ],
+      "count": 120
+    },
+    "ui_buff": {
+      "frames": [
+        "sprites/ui_buff_00.png",
+        "sprites/ui_buff_01.png",
+        "sprites/ui_buff_02.png",
+        "sprites/ui_buff_03.png",
+        "sprites/ui_buff_04.png",
+        "sprites/ui_buff_05.png",
+        "sprites/ui_buff_06.png",
+        "sprites/ui_buff_07.png",
+        "sprites/ui_buff_08.png",
+        "sprites/ui_buff_09.png",
+        "sprites/ui_buff_10.png",
+        "sprites/ui_buff_11.png",
+        "sprites/ui_buff_12.png",
+        "sprites/ui_buff_13.png",
+        "sprites/ui_buff_14.png",
+        "sprites/ui_buff_15.png",
+        "sprites/ui_buff_16.png",
+        "sprites/ui_buff_17.png",
+        "sprites/ui_buff_18.png",
+        "sprites/ui_buff_19.png",
+        "sprites/ui_buff_20.png",
+        "sprites/ui_buff_21.png",
+        "sprites/ui_buff_22.png",
+        "sprites/ui_buff_23.png",
+        "sprites/ui_buff_24.png"
+      ],
+      "count": 25
+    },
+    "ui_joy": {
+      "frames": [
+        "sprites/ui_joy_0.png",
+        "sprites/ui_joy_1.png",
+        "sprites/ui_joy_2.png",
+        "sprites/ui_joy_3.png",
+        "sprites/ui_joy_4.png",
+        "sprites/ui_joy_5.png",
+        "sprites/ui_joy_6.png"
+      ],
+      "count": 7
+    },
+    "weapons2": {
+      "frames": [
+        "sprites/weapons2_0.png",
+        "sprites/weapons2_1.png",
+        "sprites/weapons2_2.png",
+        "sprites/weapons2_3.png",
+        "sprites/weapons2_4.png",
+        "sprites/weapons2_5.png",
+        "sprites/weapons2_6.png",
+        "sprites/weapons2_7.png",
+        "sprites/weapons2_8.png",
+        "sprites/weapons2_9.png",
+        "sprites/weapons2_10.png",
+        "sprites/weapons2_11.png",
+        "sprites/weapons2_12.png",
+        "sprites/weapons2_13.png",
+        "sprites/weapons2_14.png",
+        "sprites/weapons2_15.png",
+        "sprites/weapons2_16.png",
+        "sprites/weapons2_17.png",
+        "sprites/weapons2_18.png",
+        "sprites/weapons2_19.png",
+        "sprites/weapons2_20.png",
+        "sprites/weapons2_21.png",
+        "sprites/weapons2_22.png",
+        "sprites/weapons2_23.png",
+        "sprites/weapons2_24.png",
+        "sprites/weapons2_25.png",
+        "sprites/weapons2_26.png",
+        "sprites/weapons2_27.png",
+        "sprites/weapons2_28.png",
+        "sprites/weapons2_29.png",
+        "sprites/weapons2_30.png",
+        "sprites/weapons2_31.png",
+        "sprites/weapons2_32.png",
+        "sprites/weapons2_33.png",
+        "sprites/weapons2_34.png",
+        "sprites/weapons2_35.png",
+        "sprites/weapons2_36.png",
+        "sprites/weapons2_37.png",
+        "sprites/weapons2_38.png",
+        "sprites/weapons2_39.png",
+        "sprites/weapons2_40.png",
+        "sprites/weapons2_41.png",
+        "sprites/weapons2_42.png",
+        "sprites/weapons2_43.png",
+        "sprites/weapons2_44.png",
+        "sprites/weapons2_45.png",
+        "sprites/weapons2_46.png",
+        "sprites/weapons2_47.png",
+        "sprites/weapons2_48.png",
+        "sprites/weapons2_49.png",
+        "sprites/weapons2_50.png",
+        "sprites/weapons2_51.png",
+        "sprites/weapons2_52.png",
+        "sprites/weapons2_53.png",
+        "sprites/weapons2_54.png",
+        "sprites/weapons2_55.png",
+        "sprites/weapons2_56.png",
+        "sprites/weapons2_57.png",
+        "sprites/weapons2_58.png",
+        "sprites/weapons2_59.png",
+        "sprites/weapons2_60.png",
+        "sprites/weapons2_61.png",
+        "sprites/weapons2_62.png",
+        "sprites/weapons2_63.png",
+        "sprites/weapons2_64.png",
+        "sprites/weapons2_65.png",
+        "sprites/weapons2_66.png",
+        "sprites/weapons2_67.png",
+        "sprites/weapons2_68.png",
+        "sprites/weapons2_69.png",
+        "sprites/weapons2_70.png",
+        "sprites/weapons2_71.png",
+        "sprites/weapons2_72.png",
+        "sprites/weapons2_73.png",
+        "sprites/weapons2_74.png",
+        "sprites/weapons2_75.png",
+        "sprites/weapons2_76.png",
+        "sprites/weapons2_77.png",
+        "sprites/weapons2_78.png",
+        "sprites/weapons2_79.png",
+        "sprites/weapons2_80.png",
+        "sprites/weapons2_81.png",
+        "sprites/weapons2_82.png",
+        "sprites/weapons2_83.png",
+        "sprites/weapons2_84.png",
+        "sprites/weapons2_85.png",
+        "sprites/weapons2_86.png",
+        "sprites/weapons2_87.png",
+        "sprites/weapons2_88.png",
+        "sprites/weapons2_89.png",
+        "sprites/weapons2_90.png",
+        "sprites/weapons2_91.png",
+        "sprites/weapons2_92.png",
+        "sprites/weapons2_93.png",
+        "sprites/weapons2_94.png",
+        "sprites/weapons2_95.png",
+        "sprites/weapons2_96.png",
+        "sprites/weapons2_97.png",
+        "sprites/weapons2_98.png",
+        "sprites/weapons2_99.png",
+        "sprites/weapons2_100.png",
+        "sprites/weapons2_101.png",
+        "sprites/weapons2_102.png",
+        "sprites/weapons2_103.png"
+      ],
+      "count": 104
+    },
+    "weapons": {
+      "frames": [
+        "sprites/weapons_0.png",
+        "sprites/weapons_1.png",
+        "sprites/weapons_2.png",
+        "sprites/weapons_3.png",
+        "sprites/weapons_4.png",
+        "sprites/weapons_5.png",
+        "sprites/weapons_6.png",
+        "sprites/weapons_7.png",
+        "sprites/weapons_8.png",
+        "sprites/weapons_9.png",
+        "sprites/weapons_10.png",
+        "sprites/weapons_11.png",
+        "sprites/weapons_12.png",
+        "sprites/weapons_13.png",
+        "sprites/weapons_14.png",
+        "sprites/weapons_15.png",
+        "sprites/weapons_16.png",
+        "sprites/weapons_17.png",
+        "sprites/weapons_18.png",
+        "sprites/weapons_19.png",
+        "sprites/weapons_20.png",
+        "sprites/weapons_21.png",
+        "sprites/weapons_22.png",
+        "sprites/weapons_23.png",
+        "sprites/weapons_24.png",
+        "sprites/weapons_25.png",
+        "sprites/weapons_26.png",
+        "sprites/weapons_27.png",
+        "sprites/weapons_28.png",
+        "sprites/weapons_29.png",
+        "sprites/weapons_30.png",
+        "sprites/weapons_31.png",
+        "sprites/weapons_32.png",
+        "sprites/weapons_33.png",
+        "sprites/weapons_34.png",
+        "sprites/weapons_35.png",
+        "sprites/weapons_36.png",
+        "sprites/weapons_37.png",
+        "sprites/weapons_38.png",
+        "sprites/weapons_39.png",
+        "sprites/weapons_40.png",
+        "sprites/weapons_41.png",
+        "sprites/weapons_42.png",
+        "sprites/weapons_43.png",
+        "sprites/weapons_44.png",
+        "sprites/weapons_45.png",
+        "sprites/weapons_46.png",
+        "sprites/weapons_47.png",
+        "sprites/weapons_48.png",
+        "sprites/weapons_49.png",
+        "sprites/weapons_50.png",
+        "sprites/weapons_51.png",
+        "sprites/weapons_52.png",
+        "sprites/weapons_53.png",
+        "sprites/weapons_54.png",
+        "sprites/weapons_55.png",
+        "sprites/weapons_56.png",
+        "sprites/weapons_57.png",
+        "sprites/weapons_58.png",
+        "sprites/weapons_59.png",
+        "sprites/weapons_60.png",
+        "sprites/weapons_61.png",
+        "sprites/weapons_62.png",
+        "sprites/weapons_63.png",
+        "sprites/weapons_64.png",
+        "sprites/weapons_65.png",
+        "sprites/weapons_66.png",
+        "sprites/weapons_67.png",
+        "sprites/weapons_68.png",
+        "sprites/weapons_69.png",
+        "sprites/weapons_70.png",
+        "sprites/weapons_71.png",
+        "sprites/weapons_72.png",
+        "sprites/weapons_73.png",
+        "sprites/weapons_74.png",
+        "sprites/weapons_75.png",
+        "sprites/weapons_76.png",
+        "sprites/weapons_77.png",
+        "sprites/weapons_78.png",
+        "sprites/weapons_79.png",
+        "sprites/weapons_80.png",
+        "sprites/weapons_81.png",
+        "sprites/weapons_82.png",
+        "sprites/weapons_83.png",
+        "sprites/weapons_84.png",
+        "sprites/weapons_85.png",
+        "sprites/weapons_86.png",
+        "sprites/weapons_87.png",
+        "sprites/weapons_88.png",
+        "sprites/weapons_89.png",
+        "sprites/weapons_90.png",
+        "sprites/weapons_91.png",
+        "sprites/weapons_92.png",
+        "sprites/weapons_93.png",
+        "sprites/weapons_94.png",
+        "sprites/weapons_95.png",
+        "sprites/weapons_96.png",
+        "sprites/weapons_97.png",
+        "sprites/weapons_98.png",
+        "sprites/weapons_99.png",
+        "sprites/weapons_100.png",
+        "sprites/weapons_101.png",
+        "sprites/weapons_102.png",
+        "sprites/weapons_103.png",
+        "sprites/weapons_104.png",
+        "sprites/weapons_105.png",
+        "sprites/weapons_106.png",
+        "sprites/weapons_107.png",
+        "sprites/weapons_108.png",
+        "sprites/weapons_109.png",
+        "sprites/weapons_110.png",
+        "sprites/weapons_111.png",
+        "sprites/weapons_112.png",
+        "sprites/weapons_113.png",
+        "sprites/weapons_114.png",
+        "sprites/weapons_115.png",
+        "sprites/weapons_116.png",
+        "sprites/weapons_117.png",
+        "sprites/weapons_118.png",
+        "sprites/weapons_119.png",
+        "sprites/weapons_120.png",
+        "sprites/weapons_121.png",
+        "sprites/weapons_122.png",
+        "sprites/weapons_123.png",
+        "sprites/weapons_124.png",
+        "sprites/weapons_125.png",
+        "sprites/weapons_126.png",
+        "sprites/weapons_127.png",
+        "sprites/weapons_128.png",
+        "sprites/weapons_129.png",
+        "sprites/weapons_130.png",
+        "sprites/weapons_131.png",
+        "sprites/weapons_132.png",
+        "sprites/weapons_133.png",
+        "sprites/weapons_134.png",
+        "sprites/weapons_135.png",
+        "sprites/weapons_136.png",
+        "sprites/weapons_137.png",
+        "sprites/weapons_138.png",
+        "sprites/weapons_139.png",
+        "sprites/weapons_140.png",
+        "sprites/weapons_141.png",
+        "sprites/weapons_142.png",
+        "sprites/weapons_143.png",
+        "sprites/weapons_144.png",
+        "sprites/weapons_145.png",
+        "sprites/weapons_146.png",
+        "sprites/weapons_147.png",
+        "sprites/weapons_148.png",
+        "sprites/weapons_149.png",
+        "sprites/weapons_150.png",
+        "sprites/weapons_151.png",
+        "sprites/weapons_152.png",
+        "sprites/weapons_153.png",
+        "sprites/weapons_154.png",
+        "sprites/weapons_155.png"
+      ],
+      "count": 156
+    },
+    "weapons_s": {
+      "frames": [
+        "sprites/weapons_s_00.png",
+        "sprites/weapons_s_01.png",
+        "sprites/weapons_s_02.png",
+        "sprites/weapons_s_03.png",
+        "sprites/weapons_s_04.png",
+        "sprites/weapons_s_05.png",
+        "sprites/weapons_s_06.png"
+      ],
+      "count": 7
+    },
+    "antlers": {
+      "frames": [
+        "sprites/antlers.png"
+      ],
+      "count": 1
+    },
+    "Background": {
+      "frames": [
+        "sprites/Background.png"
+      ],
+      "count": 1
+    },
+    "biaoti 01": {
+      "frames": [
+        "sprites/biaoti 01.png"
+      ],
+      "count": 1
+    },
+    "biaoti 02": {
+      "frames": [
+        "sprites/biaoti 02.png"
+      ],
+      "count": 1
+    },
+    "biaoti02": {
+      "frames": [
+        "sprites/biaoti02.png"
+      ],
+      "count": 1
+    },
+    "biaoti03": {
+      "frames": [
+        "sprites/biaoti03.png"
+      ],
+      "count": 1
+    },
+    "biaoti05png": {
+      "frames": [
+        "sprites/biaoti05png.png"
+      ],
+      "count": 1
+    },
+    "boss_nian": {
+      "frames": [
+        "sprites/boss_nian.png"
+      ],
+      "count": 1
+    },
+    "box01": {
+      "frames": [
+        "sprites/box01.png"
+      ],
+      "count": 1
+    },
+    "box02": {
+      "frames": [
+        "sprites/box02.png"
+      ],
+      "count": 1
+    },
+    "Checkmark": {
+      "frames": [
+        "sprites/Checkmark.png"
+      ],
+      "count": 1
+    },
+    "chillyroom_LOGO2": {
+      "frames": [
+        "sprites/chillyroom_LOGO2.png"
+      ],
+      "count": 1
+    },
+    "christmas tree": {
+      "frames": [
+        "sprites/christmas tree.png"
+      ],
+      "count": 1
+    },
+    "christmas_hat": {
+      "frames": [
+        "sprites/christmas_hat.png"
+      ],
+      "count": 1
+    },
+    "common_room_bg": {
+      "frames": [
+        "sprites/common_room_bg.png"
+      ],
+      "count": 1
+    },
+    "digi-1": {
+      "frames": [
+        "sprites/digi-1.png"
+      ],
+      "count": 1
+    },
+    "digi-10": {
+      "frames": [
+        "sprites/digi-10.png"
+      ],
+      "count": 1
+    },
+    "digi-2": {
+      "frames": [
+        "sprites/digi-2.png"
+      ],
+      "count": 1
+    },
+    "digi-3": {
+      "frames": [
+        "sprites/digi-3.png"
+      ],
+      "count": 1
+    },
+    "digi-4": {
+      "frames": [
+        "sprites/digi-4.png"
+      ],
+      "count": 1
+    },
+    "digi-5": {
+      "frames": [
+        "sprites/digi-5.png"
+      ],
+      "count": 1
+    },
+    "digi-6": {
+      "frames": [
+        "sprites/digi-6.png"
+      ],
+      "count": 1
+    },
+    "digi-7": {
+      "frames": [
+        "sprites/digi-7.png"
+      ],
+      "count": 1
+    },
+    "digi-8": {
+      "frames": [
+        "sprites/digi-8.png"
+      ],
+      "count": 1
+    },
+    "digi-9": {
+      "frames": [
+        "sprites/digi-9.png"
+      ],
+      "count": 1
+    },
+    "door01": {
+      "frames": [
+        "sprites/door01.png"
+      ],
+      "count": 1
+    },
+    "door02": {
+      "frames": [
+        "sprites/door02.png"
+      ],
+      "count": 1
+    },
+    "door03": {
+      "frames": [
+        "sprites/door03.png"
+      ],
+      "count": 1
+    },
+    "DropdownArrow": {
+      "frames": [
+        "sprites/DropdownArrow.png"
+      ],
+      "count": 1
+    },
+    "e0": {
+      "frames": [
+        "sprites/e0.png"
+      ],
+      "count": 1
+    },
+    "e1": {
+      "frames": [
+        "sprites/e1.png"
+      ],
+      "count": 1
+    },
+    "effect01": {
+      "frames": [
+        "sprites/effect01.png"
+      ],
+      "count": 1
+    },
+    "effect05": {
+      "frames": [
+        "sprites/effect05.png"
+      ],
+      "count": 1
+    },
+    "effect06": {
+      "frames": [
+        "sprites/effect06.png"
+      ],
+      "count": 1
+    },
+    "effect_down": {
+      "frames": [
+        "sprites/effect_down.png"
+      ],
+      "count": 1
+    },
+    "effect_up": {
+      "frames": [
+        "sprites/effect_up.png"
+      ],
+      "count": 1
+    },
+    "f101": {
+      "frames": [
+        "sprites/f101.png"
+      ],
+      "count": 1
+    },
+    "f102": {
+      "frames": [
+        "sprites/f102.png"
+      ],
+      "count": 1
+    },
+    "f103": {
+      "frames": [
+        "sprites/f103.png"
+      ],
+      "count": 1
+    },
+    "f104": {
+      "frames": [
+        "sprites/f104.png"
+      ],
+      "count": 1
+    },
+    "f105": {
+      "frames": [
+        "sprites/f105.png"
+      ],
+      "count": 1
+    },
+    "f106": {
+      "frames": [
+        "sprites/f106.png"
+      ],
+      "count": 1
+    },
+    "f201": {
+      "frames": [
+        "sprites/f201.png"
+      ],
+      "count": 1
+    },
+    "f202": {
+      "frames": [
+        "sprites/f202.png"
+      ],
+      "count": 1
+    },
+    "f203": {
+      "frames": [
+        "sprites/f203.png"
+      ],
+      "count": 1
+    },
+    "f204": {
+      "frames": [
+        "sprites/f204.png"
+      ],
+      "count": 1
+    },
+    "f205": {
+      "frames": [
+        "sprites/f205.png"
+      ],
+      "count": 1
+    },
+    "f206": {
+      "frames": [
+        "sprites/f206.png"
+      ],
+      "count": 1
+    },
+    "f301": {
+      "frames": [
+        "sprites/f301.png"
+      ],
+      "count": 1
+    },
+    "f302": {
+      "frames": [
+        "sprites/f302.png"
+      ],
+      "count": 1
+    },
+    "f303": {
+      "frames": [
+        "sprites/f303.png"
+      ],
+      "count": 1
+    },
+    "f304": {
+      "frames": [
+        "sprites/f304.png"
+      ],
+      "count": 1
+    },
+    "f305": {
+      "frames": [
+        "sprites/f305.png"
+      ],
+      "count": 1
+    },
+    "f306": {
+      "frames": [
+        "sprites/f306.png"
+      ],
+      "count": 1
+    },
+    "f401": {
+      "frames": [
+        "sprites/f401.png"
+      ],
+      "count": 1
+    },
+    "f402": {
+      "frames": [
+        "sprites/f402.png"
+      ],
+      "count": 1
+    },
+    "f403": {
+      "frames": [
+        "sprites/f403.png"
+      ],
+      "count": 1
+    },
+    "f404": {
+      "frames": [
+        "sprites/f404.png"
+      ],
+      "count": 1
+    },
+    "f405": {
+      "frames": [
+        "sprites/f405.png"
+      ],
+      "count": 1
+    },
+    "f406": {
+      "frames": [
+        "sprites/f406.png"
+      ],
+      "count": 1
+    },
+    "f501": {
+      "frames": [
+        "sprites/f501.png"
+      ],
+      "count": 1
+    },
+    "f502": {
+      "frames": [
+        "sprites/f502.png"
+      ],
+      "count": 1
+    },
+    "f503": {
+      "frames": [
+        "sprites/f503.png"
+      ],
+      "count": 1
+    },
+    "f504": {
+      "frames": [
+        "sprites/f504.png"
+      ],
+      "count": 1
+    },
+    "f505": {
+      "frames": [
+        "sprites/f505.png"
+      ],
+      "count": 1
+    },
+    "f506": {
+      "frames": [
+        "sprites/f506.png"
+      ],
+      "count": 1
+    },
+    "f507": {
+      "frames": [
+        "sprites/f507.png"
+      ],
+      "count": 1
+    },
+    "f508": {
+      "frames": [
+        "sprites/f508.png"
+      ],
+      "count": 1
+    },
+    "f509": {
+      "frames": [
+        "sprites/f509.png"
+      ],
+      "count": 1
+    },
+    "f601": {
+      "frames": [
+        "sprites/f601.png"
+      ],
+      "count": 1
+    },
+    "f602": {
+      "frames": [
+        "sprites/f602.png"
+      ],
+      "count": 1
+    },
+    "f603": {
+      "frames": [
+        "sprites/f603.png"
+      ],
+      "count": 1
+    },
+    "f604": {
+      "frames": [
+        "sprites/f604.png"
+      ],
+      "count": 1
+    },
+    "f605": {
+      "frames": [
+        "sprites/f605.png"
+      ],
+      "count": 1
+    },
+    "f606": {
+      "frames": [
+        "sprites/f606.png"
+      ],
+      "count": 1
+    },
+    "f701": {
+      "frames": [
+        "sprites/f701.png"
+      ],
+      "count": 1
+    },
+    "f702": {
+      "frames": [
+        "sprites/f702.png"
+      ],
+      "count": 1
+    },
+    "f703": {
+      "frames": [
+        "sprites/f703.png"
+      ],
+      "count": 1
+    },
+    "f704": {
+      "frames": [
+        "sprites/f704.png"
+      ],
+      "count": 1
+    },
+    "f705": {
+      "frames": [
+        "sprites/f705.png"
+      ],
+      "count": 1
+    },
+    "f706": {
+      "frames": [
+        "sprites/f706.png"
+      ],
+      "count": 1
+    },
+    "f707": {
+      "frames": [
+        "sprites/f707.png"
+      ],
+      "count": 1
+    },
+    "f708": {
+      "frames": [
+        "sprites/f708.png"
+      ],
+      "count": 1
+    },
+    "f709": {
+      "frames": [
+        "sprites/f709.png"
+      ],
+      "count": 1
+    },
+    "f710": {
+      "frames": [
+        "sprites/f710.png"
+      ],
+      "count": 1
+    },
+    "f711": {
+      "frames": [
+        "sprites/f711.png"
+      ],
+      "count": 1
+    },
+    "f712": {
+      "frames": [
+        "sprites/f712.png"
+      ],
+      "count": 1
+    },
+    "f713": {
+      "frames": [
+        "sprites/f713.png"
+      ],
+      "count": 1
+    },
+    "f714": {
+      "frames": [
+        "sprites/f714.png"
+      ],
+      "count": 1
+    },
+    "ftest": {
+      "frames": [
+        "sprites/ftest.png"
+      ],
+      "count": 1
+    },
+    "games_achievements_white": {
+      "frames": [
+        "sprites/games_achievements_white.png"
+      ],
+      "count": 1
+    },
+    "games_controller_white": {
+      "frames": [
+        "sprites/games_controller_white.png"
+      ],
+      "count": 1
+    },
+    "hand-1": {
+      "frames": [
+        "sprites/hand-1.png"
+      ],
+      "count": 1
+    },
+    "hand-10": {
+      "frames": [
+        "sprites/hand-10.png"
+      ],
+      "count": 1
+    },
+    "hand-2": {
+      "frames": [
+        "sprites/hand-2.png"
+      ],
+      "count": 1
+    },
+    "hand-3": {
+      "frames": [
+        "sprites/hand-3.png"
+      ],
+      "count": 1
+    },
+    "hand-4": {
+      "frames": [
+        "sprites/hand-4.png"
+      ],
+      "count": 1
+    },
+    "hand-5": {
+      "frames": [
+        "sprites/hand-5.png"
+      ],
+      "count": 1
+    },
+    "hand-6": {
+      "frames": [
+        "sprites/hand-6.png"
+      ],
+      "count": 1
+    },
+    "hand-7": {
+      "frames": [
+        "sprites/hand-7.png"
+      ],
+      "count": 1
+    },
+    "hand-8": {
+      "frames": [
+        "sprites/hand-8.png"
+      ],
+      "count": 1
+    },
+    "hand-9": {
+      "frames": [
+        "sprites/hand-9.png"
+      ],
+      "count": 1
+    },
+    "juqing01": {
+      "frames": [
+        "sprites/juqing01.png"
+      ],
+      "count": 1
+    },
+    "juqing02": {
+      "frames": [
+        "sprites/juqing02.png"
+      ],
+      "count": 1
+    },
+    "L_EN": {
+      "frames": [
+        "sprites/L_EN.png"
+      ],
+      "count": 1
+    },
+    "L_ES": {
+      "frames": [
+        "sprites/L_ES.png"
+      ],
+      "count": 1
+    },
+    "L_FR": {
+      "frames": [
+        "sprites/L_FR.png"
+      ],
+      "count": 1
+    },
+    "nothing": {
+      "frames": [
+        "sprites/nothing.png"
+      ],
+      "count": 1
+    },
+    "nothing_ui": {
+      "frames": [
+        "sprites/nothing_ui.png"
+      ],
+      "count": 1
+    },
+    "particle_star": {
+      "frames": [
+        "sprites/particle_star.png"
+      ],
+      "count": 1
+    },
+    "rabbit_hat": {
+      "frames": [
+        "sprites/rabbit_hat.png"
+      ],
+      "count": 1
+    },
+    "shadow0": {
+      "frames": [
+        "sprites/shadow0.png"
+      ],
+      "count": 1
+    },
+    "shadow1": {
+      "frames": [
+        "sprites/shadow1.png"
+      ],
+      "count": 1
+    },
+    "shadow2": {
+      "frames": [
+        "sprites/shadow2.png"
+      ],
+      "count": 1
+    },
+    "shadow3": {
+      "frames": [
+        "sprites/shadow3.png"
+      ],
+      "count": 1
+    },
+    "shadow_lock": {
+      "frames": [
+        "sprites/shadow_lock.png"
+      ],
+      "count": 1
+    },
+    "share_bg0": {
+      "frames": [
+        "sprites/share_bg0.png"
+      ],
+      "count": 1
+    },
+    "share_bg1": {
+      "frames": [
+        "sprites/share_bg1.png"
+      ],
+      "count": 1
+    },
+    "share_info_00_en": {
+      "frames": [
+        "sprites/share_info_00_en.png"
+      ],
+      "count": 1
+    },
+    "skin": {
+      "frames": [
+        "sprites/skin.png"
+      ],
+      "count": 1
+    },
+    "texture_c1": {
+      "frames": [
+        "sprites/texture_c1.png"
+      ],
+      "count": 1
+    },
+    "texture_c14": {
+      "frames": [
+        "sprites/texture_c14.png"
+      ],
+      "count": 1
+    },
+    "texture_c15": {
+      "frames": [
+        "sprites/texture_c15.png"
+      ],
+      "count": 1
+    },
+    "texture_c2": {
+      "frames": [
+        "sprites/texture_c2.png"
+      ],
+      "count": 1
+    },
+    "texture_c21": {
+      "frames": [
+        "sprites/texture_c21.png"
+      ],
+      "count": 1
+    },
+    "texture_c22": {
+      "frames": [
+        "sprites/texture_c22.png"
+      ],
+      "count": 1
+    },
+    "texture_c4": {
+      "frames": [
+        "sprites/texture_c4.png"
+      ],
+      "count": 1
+    },
+    "texture_c5": {
+      "frames": [
+        "sprites/texture_c5.png"
+      ],
+      "count": 1
+    },
+    "texture_c7": {
+      "frames": [
+        "sprites/texture_c7.png"
+      ],
+      "count": 1
+    },
+    "texture_mask": {
+      "frames": [
+        "sprites/texture_mask.png"
+      ],
+      "count": 1
+    },
+    "title_cn0": {
+      "frames": [
+        "sprites/title_cn0.png"
+      ],
+      "count": 1
+    },
+    "title_cn1": {
+      "frames": [
+        "sprites/title_cn1.png"
+      ],
+      "count": 1
+    },
+    "title_en0": {
+      "frames": [
+        "sprites/title_en0.png"
+      ],
+      "count": 1
+    },
+    "ui_btn1": {
+      "frames": [
+        "sprites/ui_btn1.png"
+      ],
+      "count": 1
+    },
+    "ui_btn2": {
+      "frames": [
+        "sprites/ui_btn2.png"
+      ],
+      "count": 1
+    },
+    "ui_btn3": {
+      "frames": [
+        "sprites/ui_btn3.png"
+      ],
+      "count": 1
+    },
+    "ui_btn4": {
+      "frames": [
+        "sprites/ui_btn4.png"
+      ],
+      "count": 1
+    },
+    "ui_btn5": {
+      "frames": [
+        "sprites/ui_btn5.png"
+      ],
+      "count": 1
+    },
+    "ui_skill01": {
+      "frames": [
+        "sprites/ui_skill01.png"
+      ],
+      "count": 1
+    },
+    "ui_skill02": {
+      "frames": [
+        "sprites/ui_skill02.png"
+      ],
+      "count": 1
+    },
+    "ui_skill03": {
+      "frames": [
+        "sprites/ui_skill03.png"
+      ],
+      "count": 1
+    },
+    "ui_skill04": {
+      "frames": [
+        "sprites/ui_skill04.png"
+      ],
+      "count": 1
+    },
+    "ui_skill05": {
+      "frames": [
+        "sprites/ui_skill05.png"
+      ],
+      "count": 1
+    },
+    "ui_skill06": {
+      "frames": [
+        "sprites/ui_skill06.png"
+      ],
+      "count": 1
+    },
+    "ui_skill07": {
+      "frames": [
+        "sprites/ui_skill07.png"
+      ],
+      "count": 1
+    },
+    "ui_skill08": {
+      "frames": [
+        "sprites/ui_skill08.png"
+      ],
+      "count": 1
+    },
+    "ui_skill09": {
+      "frames": [
+        "sprites/ui_skill09.png"
+      ],
+      "count": 1
+    },
+    "ui_skill10": {
+      "frames": [
+        "sprites/ui_skill10.png"
+      ],
+      "count": 1
+    },
+    "ui_skill11": {
+      "frames": [
+        "sprites/ui_skill11.png"
+      ],
+      "count": 1
+    },
+    "ui_skill12": {
+      "frames": [
+        "sprites/ui_skill12.png"
+      ],
+      "count": 1
+    },
+    "UIMask": {
+      "frames": [
+        "sprites/UIMask.png"
+      ],
+      "count": 1
+    },
+    "UISprite": {
+      "frames": [
+        "sprites/UISprite.png"
+      ],
+      "count": 1
+    },
+    "UnitySplash-cube": {
+      "frames": [
+        "sprites/UnitySplash-cube.png"
+      ],
+      "count": 1
+    },
+    "w001": {
+      "frames": [
+        "sprites/w001.png"
+      ],
+      "count": 1
+    },
+    "w002": {
+      "frames": [
+        "sprites/w002.png"
+      ],
+      "count": 1
+    },
+    "w003": {
+      "frames": [
+        "sprites/w003.png"
+      ],
+      "count": 1
+    },
+    "w004": {
+      "frames": [
+        "sprites/w004.png"
+      ],
+      "count": 1
+    },
+    "w005": {
+      "frames": [
+        "sprites/w005.png"
+      ],
+      "count": 1
+    },
+    "w101": {
+      "frames": [
+        "sprites/w101.png"
+      ],
+      "count": 1
+    },
+    "w102": {
+      "frames": [
+        "sprites/w102.png"
+      ],
+      "count": 1
+    },
+    "w103": {
+      "frames": [
+        "sprites/w103.png"
+      ],
+      "count": 1
+    },
+    "w201": {
+      "frames": [
+        "sprites/w201.png"
+      ],
+      "count": 1
+    },
+    "w202": {
+      "frames": [
+        "sprites/w202.png"
+      ],
+      "count": 1
+    },
+    "w203": {
+      "frames": [
+        "sprites/w203.png"
+      ],
+      "count": 1
+    },
+    "w301": {
+      "frames": [
+        "sprites/w301.png"
+      ],
+      "count": 1
+    },
+    "w302": {
+      "frames": [
+        "sprites/w302.png"
+      ],
+      "count": 1
+    },
+    "w303": {
+      "frames": [
+        "sprites/w303.png"
+      ],
+      "count": 1
+    },
+    "w304": {
+      "frames": [
+        "sprites/w304.png"
+      ],
+      "count": 1
+    },
+    "w401": {
+      "frames": [
+        "sprites/w401.png"
+      ],
+      "count": 1
+    },
+    "w402": {
+      "frames": [
+        "sprites/w402.png"
+      ],
+      "count": 1
+    },
+    "w403": {
+      "frames": [
+        "sprites/w403.png"
+      ],
+      "count": 1
+    },
+    "w404": {
+      "frames": [
+        "sprites/w404.png"
+      ],
+      "count": 1
+    },
+    "w405": {
+      "frames": [
+        "sprites/w405.png"
+      ],
+      "count": 1
+    },
+    "w406": {
+      "frames": [
+        "sprites/w406.png"
+      ],
+      "count": 1
+    },
+    "w407": {
+      "frames": [
+        "sprites/w407.png"
+      ],
+      "count": 1
+    },
+    "w408": {
+      "frames": [
+        "sprites/w408.png"
+      ],
+      "count": 1
+    },
+    "w501": {
+      "frames": [
+        "sprites/w501.png"
+      ],
+      "count": 1
+    },
+    "w502": {
+      "frames": [
+        "sprites/w502.png"
+      ],
+      "count": 1
+    },
+    "w503": {
+      "frames": [
+        "sprites/w503.png"
+      ],
+      "count": 1
+    },
+    "w504": {
+      "frames": [
+        "sprites/w504.png"
+      ],
+      "count": 1
+    },
+    "w505": {
+      "frames": [
+        "sprites/w505.png"
+      ],
+      "count": 1
+    },
+    "w506": {
+      "frames": [
+        "sprites/w506.png"
+      ],
+      "count": 1
+    },
+    "w507": {
+      "frames": [
+        "sprites/w507.png"
+      ],
+      "count": 1
+    },
+    "w508": {
+      "frames": [
+        "sprites/w508.png"
+      ],
+      "count": 1
+    },
+    "w601": {
+      "frames": [
+        "sprites/w601.png"
+      ],
+      "count": 1
+    },
+    "w602": {
+      "frames": [
+        "sprites/w602.png"
+      ],
+      "count": 1
+    },
+    "w603": {
+      "frames": [
+        "sprites/w603.png"
+      ],
+      "count": 1
+    },
+    "w604": {
+      "frames": [
+        "sprites/w604.png"
+      ],
+      "count": 1
+    },
+    "w701": {
+      "frames": [
+        "sprites/w701.png"
+      ],
+      "count": 1
+    },
+    "w702": {
+      "frames": [
+        "sprites/w702.png"
+      ],
+      "count": 1
+    },
+    "w703": {
+      "frames": [
+        "sprites/w703.png"
+      ],
+      "count": 1
+    },
+    "w704": {
+      "frames": [
+        "sprites/w704.png"
+      ],
+      "count": 1
+    },
+    "wm_adStar@2x": {
+      "frames": [
+        "sprites/wm_adStar@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_adStar@3x": {
+      "frames": [
+        "sprites/wm_adStar@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_adStarEmpty@2x": {
+      "frames": [
+        "sprites/wm_adStarEmpty@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_adStarEmpty@3x": {
+      "frames": [
+        "sprites/wm_adStarEmpty@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_back_normal": {
+      "frames": [
+        "sprites/wm_back_normal.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomPause@2x": {
+      "frames": [
+        "sprites/wm_bottomPause@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomPause@3x": {
+      "frames": [
+        "sprites/wm_bottomPause@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomPlay@2x": {
+      "frames": [
+        "sprites/wm_bottomPlay@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomPlay@3x": {
+      "frames": [
+        "sprites/wm_bottomPlay@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomShadow@2x": {
+      "frames": [
+        "sprites/wm_bottomShadow@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_bottomShadow@3x": {
+      "frames": [
+        "sprites/wm_bottomShadow@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_brightness@2x": {
+      "frames": [
+        "sprites/wm_brightness@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_brightness@3x": {
+      "frames": [
+        "sprites/wm_brightness@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_close@2x": {
+      "frames": [
+        "sprites/wm_close@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_close@3x": {
+      "frames": [
+        "sprites/wm_close@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_dislike@2x": {
+      "frames": [
+        "sprites/wm_dislike@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_dislike@3x": {
+      "frames": [
+        "sprites/wm_dislike@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_fastBackward@2x": {
+      "frames": [
+        "sprites/wm_fastBackward@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_fastBackward@3x": {
+      "frames": [
+        "sprites/wm_fastBackward@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_fastForward@2x": {
+      "frames": [
+        "sprites/wm_fastForward@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_fastForward@3x": {
+      "frames": [
+        "sprites/wm_fastForward@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_fullClose@2x": {
+      "frames": [
+        "sprites/wm_fullClose@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_fullClose@3x": {
+      "frames": [
+        "sprites/wm_fullClose@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_fullScreen@2x": {
+      "frames": [
+        "sprites/wm_fullScreen@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_fullScreen@3x": {
+      "frames": [
+        "sprites/wm_fullScreen@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_leftback@2x": {
+      "frames": [
+        "sprites/wm_leftback@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_leftback@3x": {
+      "frames": [
+        "sprites/wm_leftback@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_logo@2x": {
+      "frames": [
+        "sprites/wm_logo@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_logo@3x": {
+      "frames": [
+        "sprites/wm_logo@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_pause@2x": {
+      "frames": [
+        "sprites/wm_pause@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_pause@3x": {
+      "frames": [
+        "sprites/wm_pause@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_play@2x": {
+      "frames": [
+        "sprites/wm_play@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_play@3x": {
+      "frames": [
+        "sprites/wm_play@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_shrinkScreen@2x": {
+      "frames": [
+        "sprites/wm_shrinkScreen@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_shrinkScreen@3x": {
+      "frames": [
+        "sprites/wm_shrinkScreen@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_sliderDot@2x": {
+      "frames": [
+        "sprites/wm_sliderDot@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_sliderDot@3x": {
+      "frames": [
+        "sprites/wm_sliderDot@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_topShadow@2x": {
+      "frames": [
+        "sprites/wm_topShadow@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_topShadow@3x": {
+      "frames": [
+        "sprites/wm_topShadow@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_voice@2x": {
+      "frames": [
+        "sprites/wm_voice@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_voice@3x": {
+      "frames": [
+        "sprites/wm_voice@3x.png"
+      ],
+      "count": 1
+    },
+    "wm_voice_silent@2x": {
+      "frames": [
+        "sprites/wm_voice_silent@2x.png"
+      ],
+      "count": 1
+    },
+    "wm_voice_silent@3x": {
+      "frames": [
+        "sprites/wm_voice_silent@3x.png"
+      ],
+      "count": 1
+    }
+  }
+}
