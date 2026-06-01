@@ -23,6 +23,21 @@ namespace Util {
 Core::Matrices ConvertToUniformBufferData(const Util::Transform &transform,
                                           const glm::vec2 &size, float zIndex);
 
+/**
+ * @brief Set the active world-to-view matrix applied to all subsequent drawing.
+ *
+ * Multiplied into the screen mapping inside ConvertToUniformBufferData, so a
+ * Core::Camera2D can pan/zoom the world. Defaults to identity, which leaves
+ * rendering unchanged. Set it before drawing world objects, and reset it to
+ * identity before drawing screen-space UI that should not move with the camera.
+ *
+ * @param view The world-to-view matrix (e.g. Core::Camera2D::GetViewMatrix()).
+ */
+void SetActiveViewMatrix(const glm::mat4 &view);
+
+/// Get the active world-to-view matrix (identity by default).
+const glm::mat4 &GetActiveViewMatrix();
+
 } // namespace Util
 
 #endif // UTIL_TRANSFORM_UTILS_HPP
