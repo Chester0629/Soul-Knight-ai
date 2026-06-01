@@ -152,6 +152,17 @@ public:
             m_Children.end());
     }
 
+    /**
+     * @brief Per-frame update hook.
+     *
+     * Called by the owning scene/world each (fixed) step. The base
+     * implementation does nothing; override in derived game objects to advance
+     * behaviour, AI, animation, or physics.
+     *
+     * @param dtMs The elapsed time for this step, in milliseconds.
+     */
+    virtual void Update(float /*dtMs*/) {}
+
     void Draw();
 
 protected:

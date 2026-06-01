@@ -59,6 +59,10 @@ set(SRC_FILES
     # Soul-Knight engine extensions (Phase 1A)
     ${SRC_DIR}/Physics/CollisionWorld.cpp
     ${SRC_DIR}/Util/DataStore.cpp
+
+    # Soul-Knight engine extensions (Phase 1B)
+    ${SRC_DIR}/Core/SceneManager.cpp
+    ${SRC_DIR}/Core/Camera2D.cpp
 )
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(INCLUDE_FILES
@@ -104,6 +108,12 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/Util/Collider.hpp
     ${INCLUDE_DIR}/Util/DataStore.hpp
     ${INCLUDE_DIR}/Physics/CollisionWorld.hpp
+
+    # Soul-Knight engine extensions (Phase 1B)
+    ${INCLUDE_DIR}/Util/FixedTimestep.hpp
+    ${INCLUDE_DIR}/Core/Scene.hpp
+    ${INCLUDE_DIR}/Core/SceneManager.hpp
+    ${INCLUDE_DIR}/Core/Camera2D.hpp
 )
 set(EXAMPLE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example)
 set(EXAMPLE_FILES
@@ -128,6 +138,11 @@ set(TEST_FILES
     ${TEST_DIR}/ObjectPoolTest.cpp
     ${TEST_DIR}/CollisionTest.cpp
     ${TEST_DIR}/DataStoreTest.cpp
+
+    # Soul-Knight engine extensions (Phase 1B)
+    ${TEST_DIR}/FixedTimestepTest.cpp
+    ${TEST_DIR}/SceneManagerTest.cpp
+    ${TEST_DIR}/Camera2DTest.cpp
 )
 
 add_library(PTSD STATIC
