@@ -1,0 +1,38 @@
+{
+  "player_template": {
+    "camp": 0,
+    "speed": 6.5,
+    "speed_rate": 0.5,
+    "max_hp": 6,
+    "hp": 6,
+    "deviation": 0.0,
+    "critical": 5,
+    "max_armor": 3,
+    "armor": 3,
+    "max_energy": 130,
+    "_energy": 130,
+    "atk": 5,
+    "skill_cd": 2.5,
+    "in_skill_time": 5.0,
+    "c_index": 11,
+    "c_level": 0,
+    "default_buff": 17,
+    "fire_rate": 0.0
+  },
+  "roster": [
+    "c01",
+    "c02",
+    "c03",
+    "c04",
+    "c05",
+    "c06",
+    "c07",
+    "c08",
+    "c09",
+    "c10",
+    "c11",
+    "c12",
+    "c13"
+  ],
+  "_note": "per-character stat overrides pending (1.7.10 IL2CPP RE track)"
+}

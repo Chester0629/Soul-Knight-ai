@@ -1,0 +1,452 @@
+[
+  {
+    "weapon_id": "weapon_000",
+    "name": "骑士荣耀",
+    "info": "常常穿梭于战场，但却从未留名"
+  },
+  {
+    "weapon_id": "weapon_001",
+    "name": "有毒的菠镐",
+    "info": "没有生锈的手枪，效果要比旧手枪好很多"
+  },
+  {
+    "weapon_id": "weapon_002",
+    "name": "炼狱触手",
+    "info": "不用压枪，稳如杜康"
+  },
+  {
+    "weapon_id": "weapon_003",
+    "name": "徐小航",
+    "info": "你们一直说的“喷子”，就是我"
+  },
+  {
+    "weapon_id": "weapon_005",
+    "name": "稳定性格",
+    "info": "哒哒哒的声音停不下来了"
+  },
+  {
+    "weapon_id": "weapon_006",
+    "name": "彼方",
+    "info": "精神分裂?我和我和我可没有这种毛病"
+  },
+  {
+    "weapon_id": "weapon_010",
+    "name": "J酱",
+    "info": "金次!我要在你脑门上开洞!"
+  },
+  {
+    "weapon_id": "weapon_11",
+    "name": "接个吻，开一枪",
+    "info": "我是来自外星的。连我自己都差点信了"
+  },
+  {
+    "weapon_id": "weapon_012",
+    "name": "冰冬凌雨",
+    "info": "感受物美价廉的冰冻"
+  },
+  {
+    "weapon_id": "weapon_013",
+    "name": "不言",
+    "info": "燃烧吧！我的斗志"
+  },
+  {
+    "weapon_id": "weapon_014",
+    "name": "雷电法王",
+    "info": "弹弹弹，弹走鱼尾纹"
+  },
+  {
+    "weapon_id": "weapon_015",
+    "name": "十四寒",
+    "info": "午时已到岂不美哉"
+  },
+  {
+    "weapon_id": "weapon_019",
+    "name": "神马TITAN",
+    "info": "我已经进化成pro了，来见识见识我新技能"
+  },
+  {
+    "weapon_id": "weapon_020",
+    "name": "浊丶泪",
+    "info": "这把枪的枪口多了两个洞，不知道是干什么用的"
+  },
+  {
+    "weapon_id": "weapon_024",
+    "name": "俺叫无名氏4",
+    "info": "我来自火山"
+  },
+  {
+    "weapon_id": "weapon_025",
+    "name": "天灰",
+    "info": "一道光，穿破长夜"
+  },
+  {
+    "weapon_id": "weapon_027",
+    "name": "娜娜",
+    "info": "由H-K公司生产，军警通用的世界名枪"
+  },
+  {
+    "weapon_id": "weapon_030",
+    "name": "茶中小珀",
+    "info": "知道什么叫火蛇狂舞吗"
+  },
+  {
+    "weapon_id": "weapon_031",
+    "name": "Creeper",
+    "info": "对，就像毒蛇一样迅猛"
+  },
+  {
+    "weapon_id": "weapon_032",
+    "name": "Umbrella",
+    "info": "不服啊，来来来我们比比伤害"
+  },
+  {
+    "weapon_id": "weapon_033",
+    "name": "旁白君",
+    "info": "我为杀戮而行动"
+  },
+  {
+    "weapon_id": "weapon_034",
+    "name": "比那名居天子",
+    "info": "一把装载了冰冻弹的狙击步枪"
+  },
+  {
+    "weapon_id": "weapon_035",
+    "name": "佛罗伦萨之歌",
+    "info": "被它瞄准的敌人只能看见眼前一亮"
+  },
+  {
+    "weapon_id": "weapon_036",
+    "name": "甲鱼TT",
+    "info": "射出来自山下之王熔炉里的火焰"
+  },
+  {
+    "weapon_id": "weapon_038",
+    "name": "俺叫无名氏4",
+    "info": "小拳拳锤你胸口！"
+  },
+  {
+    "weapon_id": "weapon_039",
+    "name": "空城旧梦",
+    "info": "风一般的射速和致命的毒气"
+  },
+  {
+    "weapon_id": "weapon_041",
+    "name": "人民艺术家",
+    "info": "感觉身体被掏空"
+  },
+  {
+    "weapon_id": "weapon_042",
+    "name": "逃税奸商",
+    "info": "这不是要钻地，这是要钻破天际！"
+  },
+  {
+    "weapon_id": "weapon_044",
+    "name": "Alto.Clef",
+    "info": "E=mc²"
+  },
+  {
+    "weapon_id": "weapon_047",
+    "name": "冰结晶城",
+    "info": "自动追踪的炮弹，敌人绝望的呐喊"
+  },
+  {
+    "weapon_id": "weapon_049",
+    "name": "娜娜",
+    "info": "采用的等离子压缩机能极大节省能耗以增加弹数"
+  },
+  {
+    "weapon_id": "weapon_056",
+    "name": "老爷爷万岁\\(≧▽≦)/",
+    "info": "没错 我就是便携式二营长的意大利炮"
+  },
+  {
+    "weapon_id": "weapon_058",
+    "name": "頹然一笑丶",
+    "info": "我这是双螺旋结构！"
+  },
+  {
+    "weapon_id": "weapon_060",
+    "name": "徐小航",
+    "info": "纪念死去的灵魂"
+  },
+  {
+    "weapon_id": "weapon_061",
+    "name": "娜娜",
+    "info": "尝试着将它的敌人炸成蜂窝"
+  },
+  {
+    "weapon_id": "weapon_062",
+    "name": "Mojo",
+    "info": "打 打 打打劫"
+  },
+  {
+    "weapon_id": "weapon_064",
+    "name": "俺叫无名氏4",
+    "info": "任务失败了就把我刺入你的胸口"
+  },
+  {
+    "weapon_id": "weapon_065",
+    "name": "骑士荣耀",
+    "info": "在海洋深处的沉船里打捞上来，将在骑士手中重见天日"
+  },
+  {
+    "weapon_id": "weapon_067",
+    "name": "幻光-锋芒",
+    "info": "我会闪现……撞枪口上"
+  },
+  {
+    "weapon_id": "weapon_069",
+    "name": "唐奕雪",
+    "info": "For the Horde!"
+  },
+  {
+    "weapon_id": "weapon_070",
+    "name": "骑士荣耀",
+    "info": "火焰，净化万物生灵"
+  },
+  {
+    "weapon_id": "weapon_071",
+    "name": "Alto.Clef",
+    "info": "我的好兄弟，平底锅上哪儿去了？"
+  },
+  {
+    "weapon_id": "weapon_072",
+    "name": "俺叫无名氏4",
+    "info": "工农武装割据"
+  },
+  {
+    "weapon_id": "weapon_073",
+    "name": "俺叫无名氏4",
+    "info": "你的幸运值会降低"
+  },
+  {
+    "weapon_id": "weapon_074",
+    "name": "遗忘时间线",
+    "info": "愿原力与你同在"
+  },
+  {
+    "weapon_id": "weapon_075",
+    "name": "哲学の绅士",
+    "info": "你对原力一无所知"
+  },
+  {
+    "weapon_id": "weapon_076",
+    "name": "冰岚和袭",
+    "info": "传说中海神的武器，虽尘封千年仍光芒夺目"
+  },
+  {
+    "weapon_id": "weapon_077",
+    "name": "scp070",
+    "info": "大骑士的单手阔剑，堵塞的血槽是岁月的痕迹"
+  },
+  {
+    "weapon_id": "weapon_080",
+    "name": "徐小航",
+    "info": "一根弯木棍和一根绳子造就了这把弓"
+  },
+  {
+    "weapon_id": "weapon_081",
+    "name": "人冷心凉",
+    "info": "比弓更强，更柔韧"
+  },
+  {
+    "weapon_id": "weapon_083",
+    "name": "库洛诺斯教授",
+    "info": "嘘～准备狩猎"
+  },
+  {
+    "weapon_id": "weapon_084",
+    "name": "甲鱼TT",
+    "info": "天下武功，唯快不破"
+  },
+  {
+    "weapon_id": "weapon_085",
+    "name": "微笑的向日葵",
+    "info": "别动，让我给你加个冰buff！"
+  },
+  {
+    "weapon_id": "weapon_086",
+    "name": "xiao_wu23",
+    "info": "射出的箭会自动燃烧起来，曾经被当做烤肉架使"
+  },
+  {
+    "weapon_id": "weapon_088",
+    "name": "逃税奸商",
+    "info": "人是英雄，弓是传奇"
+  },
+  {
+    "weapon_id": "weapon_089",
+    "name": "甲鱼TT",
+    "info": "魔法的力量，在觉醒！"
+  },
+  {
+    "weapon_id": "weapon_090",
+    "name": "蒙蒙细宇",
+    "info": "别打我，我投翔"
+  },
+  {
+    "weapon_id": "weapon_091",
+    "name": "Clown",
+    "info": "就算麻瓜也能很简单的使用它"
+  },
+  {
+    "weapon_id": "weapon_092",
+    "name": "Alto.Clef",
+    "info": "它本是一把普通的激光枪，直到有一天它得了散光"
+  },
+  {
+    "weapon_id": "weapon_093",
+    "name": "俺叫无名氏4",
+    "info": "我差不多也是一条咸鱼了"
+  },
+  {
+    "weapon_id": "weapon_094",
+    "name": "UncleR",
+    "info": "一条有梦想的鱼"
+  },
+  {
+    "weapon_id": "weapon_095",
+    "name": "卡通狗蛋龙",
+    "info": "圣骑士同款盾牌"
+  },
+  {
+    "weapon_id": "weapon_096",
+    "name": "Creeper",
+    "info": "为何不来一场紧张而又刺激的球赛呢"
+  },
+  {
+    "weapon_id": "weapon_097",
+    "name": "茶中小珀",
+    "info": "留给国足的时间不多了"
+  },
+  {
+    "weapon_id": "weapon_098",
+    "name": "SG",
+    "info": "哒哒哒~啊~滴答滴~啊~滴答滴答滴答滴。。"
+  },
+  {
+    "weapon_id": "weapon_099",
+    "name": "深推一波很舒服",
+    "info": "哥布林烤肉架上的一块鸡腿肉"
+  },
+  {
+    "weapon_id": "weapon_100",
+    "name": "畏使㱙栎纶殒上",
+    "info": "这个游戏不是回合制的吗"
+  },
+  {
+    "weapon_id": "weapon_101",
+    "name": "茶中小珀",
+    "info": "极芒以至，碎裂成阴"
+  },
+  {
+    "weapon_id": "weapon_102",
+    "name": "冰灿之",
+    "info": "不客观的说，我是把“好枪”"
+  },
+  {
+    "weapon_id": "weapon_107",
+    "name": "笑天",
+    "info": "无论什么，我只用Plus的！"
+  },
+  {
+    "weapon_id": "weapon_108",
+    "name": "qwqw",
+    "info": "地图炮在此"
+  },
+  {
+    "weapon_id": "weapon_109",
+    "name": "浊丶泪",
+    "info": "没错，输出全靠吼"
+  },
+  {
+    "weapon_id": "weapon_110",
+    "name": "xiao_wu23",
+    "info": "拥有它你一个人就是一只军队"
+  },
+  {
+    "weapon_id": "weapon_111",
+    "name": "彼方",
+    "info": "世界上没有什么是一发火箭筒解决不了的"
+  },
+  {
+    "weapon_id": "weapon_112",
+    "name": "zkxiang",
+    "info": "很像一根烂木头，也许在你下次使用的时候就会断掉"
+  },
+  {
+    "weapon_id": "weapon_113",
+    "name": "神马TITAN",
+    "info": "这是法杖，它很精致，童叟无欺"
+  },
+  {
+    "weapon_id": "weapon_114",
+    "name": "库洛诺斯教授",
+    "info": "上帝之怒！"
+  },
+  {
+    "weapon_id": "weapon_115",
+    "name": "一位隐者",
+    "info": "可以闻到淡淡的草木芬芳"
+  },
+  {
+    "weapon_id": "weapon_116",
+    "name": "Umbrella",
+    "info": "一个法杖召唤一只军队"
+  },
+  {
+    "weapon_id": "weapon_117",
+    "name": "一位隐者",
+    "info": "请不要舔"
+  },
+  {
+    "weapon_id": "weapon_118",
+    "name": "Creeper",
+    "info": "看到眼前的情侣，不知为何，手中出现了这把法杖"
+  },
+  {
+    "weapon_id": "weapon_119",
+    "name": "一位隐者",
+    "info": "曾是卡拉巴克上的路灯"
+  },
+  {
+    "weapon_id": "weapon_121",
+    "name": "zkxiang",
+    "info": "知道自己错在哪里了吗？"
+  },
+  {
+    "weapon_id": "weapon_123",
+    "name": "cn523",
+    "info": "不要在意地牢里哪来的陨石！"
+  },
+  {
+    "weapon_id": "weapon_125",
+    "name": "Creeper",
+    "info": "注意点，别吸回去了…"
+  },
+  {
+    "weapon_id": "weapon_126",
+    "name": "1233菌",
+    "info": "简单来说就是一个发射的箭会掉羽毛的弩"
+  },
+  {
+    "weapon_id": "weapon_129",
+    "name": "1233菌",
+    "info": "龙的咆哮是由远至近的"
+  },
+  {
+    "weapon_id": "weapon_130",
+    "name": "深推一波很舒服",
+    "info": "极其不稳定的高速机枪"
+  },
+  {
+    "weapon_id": "weapon_133",
+    "name": "贴吧@998买了",
+    "info": "不得不夸一下哥布林工匠的手艺"
+  },
+  {
+    "weapon_id": "weapon_140",
+    "name": "Mr.5",
+    "info": "优雅的绽放，墨染的樱花"
+  }
+]

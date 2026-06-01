@@ -1,0 +1,1677 @@
+[
+  {
+    "id": "Gun001",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 1826340476550598763
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 40,
+    "atk": 15,
+    "repel": 2.0,
+    "bullet_speed": 32.0,
+    "critical": 0,
+    "deviation": 5,
+    "consume": 5,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -5815667621678913623
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "Gun002",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 1,
+    "item_value": 36,
+    "atk": 3,
+    "repel": 2.0,
+    "bullet_speed": 38.0,
+    "critical": 6,
+    "deviation": 0,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 3574166900669557007
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "speed_correction": 0.0,
+    "count": 3,
+    "angle": 15
+  },
+  {
+    "id": "Gun003",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1273511569000823963
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 42,
+    "atk": 3,
+    "repel": 3.0,
+    "bullet_speed": 0.2,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -8468283346068941140
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "reflect_count": 0
+  },
+  {
+    "id": "Gun004",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -6825057062157277178
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 23,
+    "atk": 3,
+    "repel": 4.0,
+    "bullet_speed": 40.0,
+    "critical": 8,
+    "deviation": 15,
+    "consume": 4,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.2,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 4476309171788894871
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "count": 6,
+    "has_delay": 0,
+    "max_delay": 0.2
+  },
+  {
+    "id": "Gun005",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 3645468420890962499
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 36,
+    "atk": 4,
+    "repel": 2.0,
+    "bullet_speed": 30.0,
+    "critical": 20,
+    "deviation": 0,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -3064521018216460322
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": -269502273301923333
+    },
+    "s_ide": {
+      "_unresolved_ref": -8992348752369135813
+    },
+    "s_atk": {
+      "_unresolved_ref": -3085745885772110447
+    },
+    "a_atk": 12,
+    "a_critical": 60,
+    "a_speed": 15,
+    "max_time": 0.5,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    }
+  },
+  {
+    "id": "Gun006",
+    "weapon_type": 11,
+    "audio_clip": {
+      "_unresolved_ref": -5320813973430249721
+    },
+    "activate": 1,
+    "item_level": 1,
+    "item_value": 19,
+    "atk": 8,
+    "repel": 2.0,
+    "bullet_speed": 0.0,
+    "critical": 19,
+    "deviation": 0,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.05,
+    "bullet": {
+      "_unresolved_ref": 2515942999916920918
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "Gun007",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -6825057062157277178
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 25,
+    "atk": 6,
+    "repel": 2.0,
+    "bullet_speed": 40.0,
+    "critical": -50,
+    "deviation": 0,
+    "consume": 5,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -4430648454794119013
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": -3258056879945356288
+    },
+    "clip_big": {
+      "_unresolved_ref": 4316199098600088263
+    },
+    "a_atk": 12,
+    "a_critical": 100,
+    "a_speed": -25,
+    "a_count": 1,
+    "a_interval": 0.222,
+    "angle": 15,
+    "start_size": 0.3,
+    "end_size": 1.5,
+    "max_time": 1.0,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    }
+  },
+  {
+    "id": "Gun008",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 3867011873097407371
+    },
+    "activate": 1,
+    "item_level": 1,
+    "item_value": 25,
+    "atk": 3,
+    "repel": 2.0,
+    "bullet_speed": 36.0,
+    "critical": 0,
+    "deviation": 5,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.3,
+    "bullet": {
+      "_unresolved_ref": -51672555820174415
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "count": 3,
+    "delay": 0.12
+  },
+  {
+    "id": "Gun009",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 28,
+    "atk": 3,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": -25,
+    "deviation": 0,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 6947118191126760465
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "reflect_count": 3
+  },
+  {
+    "id": "Gun010",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 1299091947137512254
+    },
+    "activate": 1,
+    "item_level": 4,
+    "item_value": 38,
+    "atk": 4,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 4,
+    "deviation": 0,
+    "consume": 6,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -3665147622579418574
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "destory_time": 12.0,
+    "target_offset": {
+      "x": 0.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "id": "Gun011",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1394743294411731189
+    },
+    "activate": 1,
+    "item_level": 4,
+    "item_value": 45,
+    "atk": 3,
+    "repel": 2.0,
+    "bullet_speed": 42.0,
+    "critical": 18,
+    "deviation": 5,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 3860298820906669509
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_end_shoot": {
+      "_unresolved_ref": 1826340476550598763
+    },
+    "bullet_end": {
+      "_unresolved_ref": -5815667621678913623
+    },
+    "shoot_end_time": 0.6,
+    "end_shoot_atk": 12,
+    "end__shoot_speed": 32.0
+  },
+  {
+    "id": "Gun012",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 5778059149852892030
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 35,
+    "atk": 3,
+    "repel": 3.0,
+    "bullet_speed": 16.0,
+    "critical": 10,
+    "deviation": 0,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 7795273937686030166
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "speed_correction": 0.0,
+    "count": 4,
+    "angle": 90
+  },
+  {
+    "id": "Gun014",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 7064950869084921188
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 43,
+    "atk": 5,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 20,
+    "deviation": 0,
+    "consume": 5,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.9,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 7065293626662853372
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "count": 3,
+    "has_delay": 0,
+    "max_delay": 0.15,
+    "reflect_count": 0,
+    "angle": 11
+  },
+  {
+    "id": "Gun015",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 9208900048884022347
+    },
+    "activate": 1,
+    "item_level": 1,
+    "item_value": 23,
+    "atk": 12,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 30,
+    "deviation": 0,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.6,
+    "atk_move_speed": -0.2,
+    "bullet": {
+      "_unresolved_ref": 3017872680849492045
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "force": 20,
+    "hasOffset": 0
+  },
+  {
+    "id": "Gun016",
+    "weapon_type": 1,
+    "audio_clip": {
+      "_unresolved_ref": -1394743294411731189
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 18,
+    "atk": 3,
+    "repel": 2.0,
+    "bullet_speed": 38.0,
+    "critical": 0,
+    "deviation": 20,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.3,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 4476309171788894871
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "shoot_max_time": 3.0,
+    "max_atk": 0,
+    "max_anim_speed": 1.2,
+    "max_critical": 30,
+    "max_deviation": -15,
+    "max_consume": 0
+  },
+  {
+    "id": "Gun017",
+    "weapon_type": 11,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 15,
+    "atk": 4,
+    "repel": 3.0,
+    "bullet_speed": 32.0,
+    "critical": 40,
+    "deviation": 0,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -6741935374408489167
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "Gun018",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1394743294411731189
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 50,
+    "atk": 6,
+    "repel": 3.0,
+    "bullet_speed": 32.0,
+    "critical": 32,
+    "deviation": 5,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": -2693084465087097003
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "state1_sprite": {
+      "_unresolved_ref": 6081825083833585316
+    },
+    "state2_sprite": {
+      "_unresolved_ref": -5617361905070661835
+    },
+    "shoot_max_time": 0.8,
+    "max_anim_speed": 0.0,
+    "bullet_1": {
+      "_unresolved_ref": 5857474796398747717
+    },
+    "bullet_1_critical": 40,
+    "bullet_1_atk": 3,
+    "bullet_1_speed": 24.0,
+    "bullet_1_count": 2,
+    "bullet_1_angle": 10,
+    "bullet_1_deviation": 5
+  },
+  {
+    "id": "Gun019",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -8897749584264330905
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 24,
+    "atk": 3,
+    "repel": 4.0,
+    "bullet_speed": 32.0,
+    "critical": -10,
+    "deviation": 5,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.75,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": -4950170399077715230
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "speed_correction": 10.0,
+    "c_count": 2,
+    "angle": 8,
+    "count": 2,
+    "delay": 0.2
+  },
+  {
+    "id": "GunBadminton",
+    "weapon_type": 11,
+    "audio_clip": {
+      "_unresolved_ref": 1826340476550598763
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 26,
+    "atk": 6,
+    "repel": 3.0,
+    "bullet_speed": 40.0,
+    "critical": 25,
+    "deviation": 10,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.2,
+    "bullet": {
+      "_unresolved_ref": -8569154960608246612
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_2": {
+      "_unresolved_ref": -5750422403279357831
+    },
+    "bullet2_atk": 8
+  },
+  {
+    "id": "GunCaliburn",
+    "weapon_type": 3,
+    "audio_clip": {
+      "_unresolved_ref": -5320813973430249721
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 20,
+    "atk": 10,
+    "repel": 3.0,
+    "bullet_speed": 18.0,
+    "critical": 30,
+    "deviation": 5,
+    "consume": 20,
+    "can_through": 1,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.2,
+    "bullet": {
+      "_unresolved_ref": -8569154960608246612
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": 5778059149852892030
+    },
+    "clip_bullet": {
+      "_unresolved_ref": -2454231904093640551
+    },
+    "max_time": 2.0,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    },
+    "bullet_2": "Bullet03",
+    "bullet2_atk": 30
+  },
+  {
+    "id": "GunChain",
+    "weapon_type": 8,
+    "audio_clip": {
+      "_unresolved_ref": -1273511569000823963
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 32,
+    "atk": 2,
+    "repel": 3.0,
+    "bullet_speed": 0.15,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.3,
+    "bullet": {
+      "_unresolved_ref": -4215363346197471080
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "reflect_count": 0
+  },
+  {
+    "id": "GunChannel",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -4349703345033038959
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 44,
+    "atk": 1,
+    "repel": 0.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 1,
+    "can_through": 1,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": "BulletImmediately",
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "show_aim_line": 1,
+    "clip_end_shoot": {
+      "_unresolved_ref": 1826340476550598763
+    },
+    "bullet_end": {
+      "_unresolved_ref": -6394358987155459615
+    },
+    "shoot_end_time": 1.0,
+    "end_shoot_atk": 16,
+    "end_shoot_speed": 32.0,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    }
+  },
+  {
+    "id": "GunDragon",
+    "weapon_type": 1,
+    "audio_clip": {
+      "_unresolved_ref": -6825057062157277178
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 50,
+    "atk": 2,
+    "repel": 3.0,
+    "bullet_speed": 35.0,
+    "critical": 25,
+    "deviation": 5,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": 4844139770968174643
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "audio_clip_mode2": {
+      "_unresolved_ref": -6157145428504221030
+    },
+    "atk_mode2": 10,
+    "critical_mode2": 50,
+    "bullet2": {
+      "_unresolved_ref": -4576216478594154585
+    },
+    "bullet3": "BulletLaterFixedTarget",
+    "reflect_count": 0
+  },
+  {
+    "id": "GunDrill",
+    "weapon_type": 5,
+    "audio_clip": {
+      "_unresolved_ref": 4533874070273519759
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 20,
+    "atk": 5,
+    "repel": 6.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -3813676494573652029
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "force": 1.5,
+    "maxForce": 16
+  },
+  {
+    "id": "GunFireBallStalf",
+    "weapon_type": 7,
+    "audio_clip": {
+      "_unresolved_ref": 2138041291659840983
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 70,
+    "atk": 8,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 9,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.6,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": 2424455811700139227
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "GunFirecracker",
+    "weapon_type": 11,
+    "audio_clip": {
+      "_unresolved_ref": -5320813973430249721
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 26,
+    "atk": 5,
+    "repel": 2.0,
+    "bullet_speed": 14.0,
+    "critical": 0,
+    "deviation": 6,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -8569154960608246612
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_2": {
+      "_unresolved_ref": -9205043430187805685
+    },
+    "atk2_damage": 2,
+    "atk2_count": 1,
+    "atk2_angle": 15.0
+  },
+  {
+    "id": "GunHeroBow",
+    "weapon_type": 6,
+    "audio_clip": {
+      "_unresolved_ref": 3645468420890962499
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 52,
+    "atk": 4,
+    "repel": 2.0,
+    "bullet_speed": 30.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 5,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -433761168553141318
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": -269502273301923333
+    },
+    "s_ide": {
+      "_unresolved_ref": 295442196295138001
+    },
+    "s_atk": {
+      "_unresolved_ref": 5746786370193423251
+    },
+    "a_atk": 12,
+    "a_critical": 60,
+    "a_speed": 10,
+    "max_time": 0.6,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    },
+    "angle": 20,
+    "count": 3
+  },
+  {
+    "id": "GunMagicBow",
+    "weapon_type": 6,
+    "audio_clip": {
+      "_unresolved_ref": 3645468420890962499
+    },
+    "activate": 1,
+    "item_level": 4,
+    "item_value": 52,
+    "atk": 2,
+    "repel": 2.0,
+    "bullet_speed": 20.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 6,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -4155382476230617255
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": -269502273301923333
+    },
+    "s_ide": {
+      "_unresolved_ref": -6096139653374291537
+    },
+    "s_atk": {
+      "_unresolved_ref": 8385953816691328816
+    },
+    "a_atk": 6,
+    "a_critical": 30,
+    "a_count": 3,
+    "max_time": 1.0,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    }
+  },
+  {
+    "id": "GunMultiBullet",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 30,
+    "atk": 4,
+    "repel": 2.0,
+    "bullet_speed": 32.0,
+    "critical": 15,
+    "deviation": 5,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": null,
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullets": [
+      {
+        "_unresolved_ref": -8183170006787665509
+      },
+      {
+        "_unresolved_ref": 3574166900669557007
+      }
+    ],
+    "attacks": [],
+    "speeds": [],
+    "critics": [],
+    "random_weight": [],
+    "canThroughs": [],
+    "allAtOnce": 1,
+    "byOrder": 1,
+    "angle": 15
+  },
+  {
+    "id": "GunMultiBullet02",
+    "weapon_type": 2,
+    "audio_clip": {
+      "_unresolved_ref": -6825057062157277178
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 33,
+    "atk": 4,
+    "repel": 2.0,
+    "bullet_speed": 40.0,
+    "critical": 20,
+    "deviation": 0,
+    "consume": 4,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.25,
+    "atk_move_speed": 0.0,
+    "bullet": null,
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullets": [
+      {
+        "_unresolved_ref": 3574166900669557007
+      },
+      {
+        "_unresolved_ref": -6741935374408489167
+      },
+      {
+        "_unresolved_ref": 5857474796398747717
+      },
+      {
+        "_unresolved_ref": -8183170006787665509
+      },
+      {
+        "_unresolved_ref": 2976977653092543479
+      },
+      {
+        "_unresolved_ref": 5219001088920837266
+      }
+    ],
+    "angle": 8,
+    "count": 4
+  },
+  {
+    "id": "GunOnePunch",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -2454231904093640551
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 66,
+    "atk": 999,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 99,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.2,
+    "bullet": {
+      "_unresolved_ref": 4863825324672958141
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "clip_hold": {
+      "_unresolved_ref": -269502273301923333
+    },
+    "max_time": 4.0,
+    "reload_obj": {
+      "_unresolved_ref": 8255406042087529936
+    },
+    "force": 20
+  },
+  {
+    "id": "GunPhantom",
+    "weapon_type": 7,
+    "audio_clip": {
+      "_unresolved_ref": 1299091947137512254
+    },
+    "activate": 1,
+    "item_level": 4,
+    "item_value": 42,
+    "atk": 0,
+    "repel": 0.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 10,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -78267583239907593
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "GunShield",
+    "weapon_type": 11,
+    "audio_clip": {
+      "_unresolved_ref": 7714463989765790460
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 20,
+    "atk": 1,
+    "repel": 3.0,
+    "bullet_speed": 24.0,
+    "critical": 0,
+    "deviation": 5,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": 8754065086921826510
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "GunSpearBullet",
+    "weapon_type": 11,
+    "audio_clip": null,
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 18,
+    "atk": 4,
+    "repel": 3.0,
+    "bullet_speed": 36.0,
+    "critical": 5,
+    "deviation": 5,
+    "consume": 1,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.2,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": -6519072728089127472
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_2": {
+      "_unresolved_ref": -51672555820174415
+    },
+    "atk2_damage": 3,
+    "atk2_count": -1,
+    "atk2_angle": 15.0,
+    "force": -7
+  },
+  {
+    "id": "GunSpearLaser",
+    "weapon_type": 5,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 2,
+    "item_value": 26,
+    "atk": 8,
+    "repel": 3.0,
+    "bullet_speed": 24.0,
+    "critical": 15,
+    "deviation": 0,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": -6519072728089127472
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_2": {
+      "_unresolved_ref": -5104017826330674873
+    },
+    "atk2_damage": 4,
+    "force": 10,
+    "reflect_count": 0,
+    "bullet2_count": 1,
+    "bullet2_angle": 30
+  },
+  {
+    "id": "GunStaffWizard",
+    "weapon_type": 7,
+    "audio_clip": {
+      "_unresolved_ref": -1500053710922025673
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 40,
+    "atk": 3,
+    "repel": 3.0,
+    "bullet_speed": 28.0,
+    "critical": 80,
+    "deviation": 0,
+    "consume": 3,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.25,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": -6741935374408489167
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "speed_correction": 0.0,
+    "count": 3,
+    "angle": 15,
+    "index": 0,
+    "bullet1": {
+      "_unresolved_ref": -8183170006787665509
+    },
+    "bullet2": {
+      "_unresolved_ref": 5857474796398747717
+    },
+    "bullet3": {
+      "_unresolved_ref": 3574166900669557007
+    }
+  },
+  {
+    "id": "GunSummon01",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 2138041291659840983
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 32,
+    "atk": 0,
+    "repel": 0.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 5,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": -4127417932994875594
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "speed_correction": 0.0,
+    "smoke_effect": {
+      "_unresolved_ref": -889557083460782702
+    }
+  },
+  {
+    "id": "GunSwordKnight",
+    "weapon_type": 3,
+    "audio_clip": {
+      "_unresolved_ref": -9088751832340747206
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 35,
+    "atk": 8,
+    "repel": 3.0,
+    "bullet_speed": 32.0,
+    "critical": 15,
+    "deviation": 0,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.8,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -8569154960608246612
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_1": {
+      "_unresolved_ref": 3017872680849492045
+    },
+    "bullet_2": {
+      "_unresolved_ref": 3860298820906669509
+    },
+    "atk2_damage": 2,
+    "atk2_count": 3,
+    "atk2_angle": 20.0
+  },
+  {
+    "id": "GunSwordShutgun",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -5320813973430249721
+    },
+    "activate": 1,
+    "item_level": 3,
+    "item_value": 40,
+    "atk": 8,
+    "repel": 2.0,
+    "bullet_speed": 32.0,
+    "critical": 20,
+    "deviation": 0,
+    "consume": 4,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": -0.1,
+    "bullet": {
+      "_unresolved_ref": 2515942999916920918
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "bullet_2": {
+      "_unresolved_ref": -7864160204210447137
+    },
+    "atk2_damage": 2,
+    "atk2_count": 2,
+    "atk2_angle": 30.0
+  },
+  {
+    "id": "GunTeamate4",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 7714463989765790460
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 20,
+    "atk": 0,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 8,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": 1479555556254243878
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": [],
+    "sprite_ready": {
+      "_unresolved_ref": 5983482656361327033
+    },
+    "sprite_cd": {
+      "_unresolved_ref": 8363994105014984294
+    }
+  },
+  {
+    "id": "GunTeammate1",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 2021560463690106177
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 15,
+    "atk": 3,
+    "repel": 1.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.2,
+    "bullet": null,
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "hit_object": {
+      "_unresolved_ref": 6473222711231311050
+    }
+  },
+  {
+    "id": "GunTeammate2",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 2194855489963722353
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 15,
+    "atk": 0,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 8,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": "BuffArmor",
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "sprite_ready": {
+      "_unresolved_ref": -7551021196314047665
+    },
+    "sprite_cd": {
+      "_unresolved_ref": 8363994105014984294
+    }
+  },
+  {
+    "id": "GunTeammate3",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 3150488904984120107
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 20,
+    "atk": 0,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 15,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": 6615520912446901405
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "sprite_ready": {
+      "_unresolved_ref": -8737967253631173948
+    },
+    "sprite_cd": {
+      "_unresolved_ref": 8363994105014984294
+    }
+  },
+  {
+    "id": "GunThrow",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": -5320813973430249721
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 15,
+    "atk": 7,
+    "repel": 2.0,
+    "bullet_speed": 15.0,
+    "critical": 33,
+    "deviation": 15,
+    "consume": 2,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": -5626187634478028091
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "max_count": 1,
+    "max_consume": 2,
+    "prepare_time": 0.5,
+    "hasPosOffset": 1,
+    "max_angle": 0
+  },
+  {
+    "id": "GunTNT",
+    "weapon_type": 0,
+    "audio_clip": {
+      "_unresolved_ref": 7494592237317156370
+    },
+    "activate": 1,
+    "item_level": 0,
+    "item_value": 20,
+    "atk": 10,
+    "repel": 3.0,
+    "bullet_speed": 0.0,
+    "critical": 0,
+    "deviation": 0,
+    "consume": 4,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 0.7,
+    "atk_move_speed": 0.0,
+    "bullet": {
+      "_unresolved_ref": 5310439708132401204
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 0,
+    "has_effect": 0,
+    "is_melee": 1,
+    "has_picked": 0,
+    "weaponItems": []
+  },
+  {
+    "id": "GunWaken",
+    "weapon_type": 1,
+    "audio_clip": {
+      "_unresolved_ref": -1394743294411731189
+    },
+    "activate": 1,
+    "item_level": 5,
+    "item_value": 50,
+    "atk": 3,
+    "repel": 3.0,
+    "bullet_speed": 36.0,
+    "critical": -10,
+    "deviation": 8,
+    "consume": 0,
+    "can_through": 0,
+    "through_count": 0,
+    "weapon_speed": 1.0,
+    "atk_move_speed": 0.1,
+    "bullet": {
+      "_unresolved_ref": 3903418895116370910
+    },
+    "gun_point": null,
+    "controller": null,
+    "need_lock": 1,
+    "has_effect": 0,
+    "is_melee": 0,
+    "has_picked": 0,
+    "weaponItems": [],
+    "audio_clip_mode2": {
+      "_unresolved_ref": -6825057062157277178
+    },
+    "atk_mode2": 14,
+    "critical_mode2": 50,
+    "speed_mode2": 45.0,
+    "bullet2": {
+      "_unresolved_ref": 1818639111790945021
+    }
+  }
+]

@@ -1,0 +1,720 @@
+{
+  "0": [
+    {
+      "weapon_id": "weapon_002",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_003",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_008",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_010",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_015",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_017",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_060",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_072",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_080",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_162",
+      "rate": 2
+    }
+  ],
+  "1": [
+    {
+      "weapon_id": "weapon_001",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_002",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_003",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_004",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_007",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_008",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_010",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_011",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_015",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_017",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_020",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_023",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_051",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_052",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_057",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_062",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_066",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_072",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_080",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_081",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_091",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_098",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_103",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_112",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_125",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_133",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_151",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_152",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_153",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_166",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_168",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_171",
+      "rate": 2
+    }
+  ],
+  "2": [
+    {
+      "weapon_id": "weapon_005",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_006",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_012",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_013",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_016",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_019",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_021",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_022",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_027",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_036",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_042",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_053",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_055",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_058",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_060",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_063",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_064",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_065",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_068",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_082",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_083",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_090",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_093",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_106",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_115",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_118",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_129",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_161",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_163",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_150",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_169",
+      "rate": 2
+    }
+  ],
+  "3": [
+    {
+      "weapon_id": "weapon_000",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_014",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_018",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_024",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_025",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_029",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_030",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_032",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_039",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_045",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_048",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_054",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_061",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_069",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_073",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_084",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_092",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_094",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_101",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_104",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_105",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_111",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_126",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_130",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_143",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_146",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_154",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_156",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_157",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_164",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_170",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_177",
+      "rate": 2
+    }
+  ],
+  "4": [
+    {
+      "weapon_id": "weapon_026",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_028",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_031",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_034",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_037",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_038",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_040",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_043",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_050",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_059",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_067",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_070",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_071",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_074",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_075",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_149",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_085",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_086",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_087",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_099",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_102",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_117",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_119",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_121",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_136",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_139",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_140",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_158",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_165",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_159",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_172",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_173",
+      "rate": 2
+    }
+  ],
+  "5": [
+    {
+      "weapon_id": "weapon_009",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_033",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_035",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_041",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_044",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_046",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_047",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_049",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_056",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_076",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_078",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_079",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_088",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_089",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_096",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_097",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_100",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_107",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_108",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_109",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_110",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_113",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_114",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_142",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_144",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_147",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_148",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_155",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_160",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_167",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_174",
+      "rate": 2
+    }
+  ],
+  "6": [
+    {
+      "weapon_id": "weapon_124",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_128",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_135",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_137",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_138",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_120",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_131",
+      "rate": 2
+    },
+    {
+      "weapon_id": "weapon_132",
+      "rate": 2
+    }
+  ]
+}
