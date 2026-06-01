@@ -68,3 +68,36 @@ target_link_libraries(${PROJECT_NAME}
     SDL2::SDL2main
     PTSD
 )
+
+# --- Game-layer unit tests (GoogleTest) ---
+# Compiles the game logic (SRC_FILES, no main) + the game test files, linked
+# against PTSD and gtest_main. Built on demand:
+#   cmake --build build --config Debug --target SoulKnightTests
+# Run with: ctest --test-dir build -C Debug
+if(TEST_FILES)
+    include(GoogleTest)
+    set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
+    list(TRANSFORM TEST_FILES PREPEND ${TEST_DIR}/)
+
+    add_executable(SoulKnightTests EXCLUDE_FROM_ALL
+        ${TEST_FILES}
+        ${SRC_FILES}
+    )
+    if(MSVC)
+        target_compile_options(SoulKnightTests PRIVATE /W4)
+    else()
+        target_compile_options(SoulKnightTests PRIVATE -Wall -Wextra -pedantic)
+    endif()
+    target_compile_definitions(SoulKnightTests PRIVATE
+        RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+    target_include_directories(SoulKnightTests SYSTEM PRIVATE ${DEPENDENCY_INCLUDE_DIRS})
+    target_include_directories(SoulKnightTests PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/PTSD/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+    target_link_libraries(SoulKnightTests
+        PTSD
+        GTest::gtest_main
+    )
+    gtest_discover_tests(SoulKnightTests)
+endif()
