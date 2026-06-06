@@ -1,6 +1,42 @@
 #include "world/Room.hpp"
 
+#include <utility>
+
 namespace Game {
+
+Room::Room(std::vector<Util::Collider> walls, glm::vec2 center, glm::vec2 size)
+    : m_Walls(std::move(walls)), m_Center(center), m_Size(size) {}
+
+bool Room::IsSolidCell(int code) {
+    // Walkable: floor (0), aisle (-2), door (11). Everything else blocks:
+    // border (-1), big obstacle (1), destructible (2), markers (8/9), decor (>2).
+    return code != 0 && code != -2 && code != 11;
+}
+
+glm::vec2 Room::CellToWorld(int x, int y, int width, int height, float cellSize,
+                            glm::vec2 origin) {
+    const float cx = (static_cast<float>(x) - static_cast<float>(width - 1) * 0.5F) * cellSize;
+    const float cy = (static_cast<float>(y) - static_cast<float>(height - 1) * 0.5F) * cellSize;
+    return glm::vec2{cx, cy} + origin;
+}
+
+Room Room::FromRoomGen(const RoomGen &gen, float cellSize, glm::vec2 origin) {
+    const int w = gen.Width();
+    const int h = gen.Height();
+    std::vector<Util::Collider> walls;
+    const glm::vec2 cell{cellSize, cellSize};
+    for (int x = 0; x < w; ++x) {
+        for (int y = 0; y < h; ++y) {
+            if (IsSolidCell(gen.At(x, y))) {
+                walls.push_back(Util::Collider::MakeAABB(
+                    CellToWorld(x, y, w, h, cellSize, origin), cell));
+            }
+        }
+    }
+    const glm::vec2 size{static_cast<float>(w) * cellSize,
+                         static_cast<float>(h) * cellSize};
+    return Room{std::move(walls), origin, size};
+}
 
 Room::Room(glm::vec2 center, glm::vec2 size, float thickness)
     : m_Center(center), m_Size(size) {

@@ -32,13 +32,37 @@ Bullet::Bullet(const std::string &resourceRoot) {
 
 void Bullet::Init(glm::vec2 pos, glm::vec2 velocityPxPerSec, float lifetimeMs,
                   int damage, int camp) {
+    Init(pos, velocityPxPerSec, lifetimeMs, damage, camp, 0.0F, 0, false, 0);
+}
+
+void Bullet::Init(glm::vec2 pos, glm::vec2 velocityPxPerSec, float lifetimeMs,
+                  int damage, int camp, float repel, int critical,
+                  bool canThrough, int pierce) {
     m_Transform.translation = pos;
     m_Velocity = velocityPxPerSec;
     m_LifeMs = lifetimeMs;
     m_Damage = damage;
     m_Camp = camp;
+    m_Repel = repel;
+    m_Critical = critical;
+    m_CanThrough = canThrough;
+    m_Pierce = pierce;
     m_Active = true;
     SetVisible(true);
+}
+
+bool Bullet::ConsumePierce() {
+    // Non-piercing bullet despawns on its first hit.
+    if (!m_CanThrough) {
+        return true;
+    }
+    // Bool "infinite pierce" path (pierce budget 0): never despawns on hit.
+    if (m_Pierce <= 0) {
+        return false;
+    }
+    // Budgeted pierce: spend one pass-through; despawn when exhausted.
+    --m_Pierce;
+    return m_Pierce <= 0;
 }
 
 void Bullet::Update(float dtMs) {

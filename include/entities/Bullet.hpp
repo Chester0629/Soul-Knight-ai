@@ -50,6 +50,20 @@ public:
               int damage, int camp);
 
     /**
+     * @brief Rich (re)init carrying the faithful RGBullet attributes.
+     *
+     * Adds the combat attributes the original RGBullet.UpdateAttribute pushes to
+     * each HurtBox so the hit resolver can roll crit and apply knockback:
+     * @p repel (knockback magnitude), @p critical (crit chance 0..100), and the
+     * pierce model (@p canThrough with a @p pierce budget; pierce 0 + canThrough
+     * true == the bool "infinite pierce" path). The 5-arg @ref Init delegates here
+     * with zeroed attributes.
+     */
+    void Init(glm::vec2 pos, glm::vec2 velocityPxPerSec, float lifetimeMs,
+              int damage, int camp, float repel, int critical, bool canThrough,
+              int pierce);
+
+    /**
      * @brief Advances the bullet by one frame.
      *
      * When active, integrates the position by velocity, decrements the
@@ -86,6 +100,19 @@ public:
      */
     int Camp() const;
 
+    /// @return knockback magnitude this bullet imparts (RGBullet repel).
+    float Repel() const { return m_Repel; }
+    /// @return crit chance 0..100 rolled by the hit resolver.
+    int Critical() const { return m_Critical; }
+    /// @return whether the bullet pierces (does not despawn on its first hit).
+    bool CanThrough() const { return m_CanThrough; }
+    /// @return remaining pass-through budget (0 with CanThrough() == "infinite").
+    int Pierce() const { return m_Pierce; }
+    /// @return current velocity (pixels/second); its direction is the travel dir.
+    glm::vec2 Velocity() const { return m_Velocity; }
+    /// Consume one pierce hit; @return true if the bullet should now despawn.
+    bool ConsumePierce();
+
     /**
      * @brief Returns the collision shape for this bullet.
      *
@@ -98,6 +125,10 @@ private:
     float m_LifeMs{0.0f};
     int m_Damage{0};
     int m_Camp{0};
+    float m_Repel{0.0f};
+    int m_Critical{0};
+    bool m_CanThrough{false};
+    int m_Pierce{0};
     bool m_Active{false};
 };
 

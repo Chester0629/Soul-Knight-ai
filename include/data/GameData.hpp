@@ -26,6 +26,11 @@ struct WeaponDef {
     int needLock = 0;
     int itemLevel = 0;
     int itemValue = 0;
+    /// Bullets spawned per trigger pull (subclass field; 0/absent => single shot).
+    int count = 0;
+    /// Fixed fan step in degrees between adjacent bullets (subclass field).
+    /// RE models this as float (RGWeapon fire_angle); kept float for fidelity.
+    float angle = 0.0F;
 };
 
 /// Bullet definition (from Resources/data/bullets.json).
@@ -50,6 +55,7 @@ struct EnemyDef {
     int eSize = 0;
     int rewardRate = 0;
     float buffImmune = 0.0F;
+    int kinematic = 0;       ///< 1 = turret-style: immovable, ignores knockback
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -112,6 +118,19 @@ public:
     bool LoadAll(const std::string &resourceRoot);
 
     const WeaponDef *FindWeapon(const std::string &id) const;
+
+    /**
+     * @brief Resolve a loot drop id (e.g. "weapon_002") to a WeaponDef.
+     *
+     * Droptables reference weapon PREFAB ids (weapon_NNN) while weapons.json is
+     * keyed by the Gun* class id; the exact weapon_NNN -> Gun* map is the
+     * data-pipeline gap (report #3). Best-effort: exact match first, else the
+     * trailing integer indexed (mod) into the loaded weapons, so a drop always
+     * yields a real, deterministic weapon.
+     * @return a WeaponDef, or nullptr if no weapons are loaded.
+     */
+    const WeaponDef *ResolveDropWeapon(const std::string &dropId) const;
+
     const BulletDef *FindBullet(const std::string &id) const;
     const EnemyDef *FindEnemy(const std::string &id) const;
     const EnemyGunDef *FindEnemyGun(const std::string &id) const;

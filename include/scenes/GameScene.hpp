@@ -13,12 +13,19 @@
 #include "Util/ObjectPool.hpp"
 #include "Util/Renderer.hpp"
 
+#include "combat/Damage.hpp"
 #include "combat/WeaponInstance.hpp"
 #include "data/GameData.hpp"
+#include "data/LootTable.hpp"
+#include "data/RGRandom.hpp"
+#include "entities/Boss.hpp"
 #include "entities/Bullet.hpp"
+#include "entities/Chest.hpp"
 #include "entities/Enemy.hpp"
 #include "entities/Player.hpp"
+#include "entities/WeaponPickup.hpp"
 #include "ui/Hud.hpp"
+#include "world/MapManager.hpp"
 #include "world/Room.hpp"
 
 namespace Game {
@@ -44,6 +51,8 @@ private:
     glm::vec2 AimDirection() const;
     void TryFirePlayerWeapon();
     void UpdateBullets(float dtMs);
+    /// @return true if a circle at @p pos / @p radius overlaps any room's walls.
+    bool BlocksAny(glm::vec2 pos, float radius) const;
 
     GameData m_Data;
     Core::Camera2D m_Camera;
@@ -51,8 +60,24 @@ private:
 
     std::shared_ptr<Util::GameObject> m_Background;
     std::shared_ptr<Player> m_Player;
-    std::shared_ptr<Enemy> m_Enemy;
-    std::unique_ptr<Room> m_Room;
+    /// One Enemy per spawned enemy across the whole floor.
+    std::vector<std::shared_ptr<Enemy>> m_Enemies;
+    /// Bosses on the floor (one, in the room farthest from the start).
+    std::vector<std::shared_ptr<Boss>> m_Bosses;
+    /// One Room (collision) per generated room cell on the floor.
+    std::vector<std::unique_ptr<Room>> m_Rooms;
+    /// Rendered obstacle/wall tiles across all rooms.
+    std::vector<std::shared_ptr<Util::GameObject>> m_RoomTiles;
+    /// Loot tables (droptables.json) for chest rolls.
+    LootTable m_Loot;
+    /// Chests placed across the floor (open once on proximity).
+    std::vector<std::shared_ptr<Chest>> m_Chests;
+    /// Dropped weapon pickups awaiting collection.
+    std::vector<std::shared_ptr<WeaponPickup>> m_Pickups;
+    /// Door-gap colliders per room (sealed while the room is locked).
+    std::vector<std::vector<Util::Collider>> m_RoomDoors;
+    /// Index of the active, uncleared room whose doors are sealed, else -1.
+    int m_LockedRoom = -1;
     std::unique_ptr<WeaponInstance> m_Weapon;
 
     Util::ObjectPool<Bullet> m_BulletPool;
@@ -60,6 +85,13 @@ private:
 
     Hud m_Hud;
     float m_EnergyRegenAccumMs = 0.0F;
+
+    /// Run seed: roots every deterministic stream this scene owns (combat crit
+    /// rolls, the enemy AI stream, and -- once wired -- dungeon generation).
+    int m_RunSeed = 20240607;
+    /// Deterministic stream for combat rolls (crit). The original rolls crit on
+    /// Unity's global RNG; a seeded per-run stream keeps our combat replayable.
+    RGRandom m_Rng;
 };
 } // namespace Game
 

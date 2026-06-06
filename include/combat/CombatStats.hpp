@@ -82,6 +82,43 @@ struct CombatStats {
     }
 
     bool IsDead() const { return hp <= 0; }
+
+    /**
+     * @brief Player receive-damage chain (armor -> hp), reporting death.
+     *
+     * FAITHFUL: RGController__HurtArmor (FUN_005c9810 @ rva 0x5B9810) ->
+     *           RGController__HurtHp @ game_full.c:471725 (rva 0x5B9954).
+     *
+     * Reproduces the recovered player path exactly:
+     *   - armor soaks the hit 1:1 (RestoreArmor(-dmg), clamped >= 0);
+     *   - only the part exceeding armor spills into HP (RestoreHealth(-overflow),
+     *     clamped >= 0);
+     *   - death is "hp reached 0" (hp <= 0), not "hp went negative".
+     * Behaviourally identical to @ref TakeDamage; this overload simply returns the
+     * post-resolution death state so callers can drive the Dead() transition.
+     *
+     * @return true iff this stat block is dead (hp <= 0) after the hit.
+     */
+    bool ApplyPlayerDamage(int dmg) {
+        TakeDamage(dmg);
+        return IsDead();
+    }
+
+    /**
+     * @brief Enemy receive-damage chain: straight HP subtraction, NO armor.
+     *
+     * FAITHFUL: RGEController__SyncGetHurt @ game_full.c:473331 (rva 0x5C2AD8):
+     *   role_attribute.hp -= damage   (no clamp, no armor mitigation).
+     * Death is decided by the caller via @ref IsDead (hp <= 0). The original does
+     * NOT clamp the subtraction here, so HP may legitimately go negative before
+     * the hp<=0 death check fires; we preserve that (no std::max).
+     *
+     * @return true iff this stat block is dead (hp <= 0) after the hit.
+     */
+    bool ApplyEnemyDamage(int dmg) {
+        hp -= dmg; // straight HP loss, exactly as SyncGetHurt (no armor, no clamp)
+        return IsDead();
+    }
 };
 } // namespace Game
 

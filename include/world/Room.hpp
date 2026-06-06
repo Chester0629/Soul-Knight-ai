@@ -7,6 +7,8 @@
 
 #include "Util/Collider.hpp"
 
+#include "world/RoomGen.hpp"
+
 namespace Game {
 
 /**
@@ -36,6 +38,31 @@ public:
      * @param thickness The thickness of each boundary wall.
      */
     Room(glm::vec2 center, glm::vec2 size, float thickness);
+
+    /**
+     * @brief Build a room's collision from a generated RoomGen cell grid.
+     *
+     * Every non-walkable cell becomes a @p cellSize square AABB wall. Walkable
+     * codes are floor (0), aisle (-2) and door (11); everything else (border -1,
+     * obstacles 1/2/8/9, decor >2) is solid. The grid is centred on the origin
+     * so cell (x,y) maps to @ref CellToWorld. Use with @ref CellToWorld to render
+     * matching obstacle sprites.
+     *
+     * @param gen      The generated room grid.
+     * @param cellSize World size (pixels) of one grid cell.
+     * @return A Room whose walls are the solid cells.
+     */
+    static Room FromRoomGen(const RoomGen &gen, float cellSize,
+                            glm::vec2 origin = glm::vec2{0.0F, 0.0F});
+
+    /// World-space centre of room-local cell (x,y) for a @p width x @p height
+    /// grid centred on @p origin, at @p cellSize pixels per cell.
+    static glm::vec2 CellToWorld(int x, int y, int width, int height,
+                                 float cellSize,
+                                 glm::vec2 origin = glm::vec2{0.0F, 0.0F});
+
+    /// @return true if a RoomGen cell @p code blocks movement (not floor/aisle/door).
+    static bool IsSolidCell(int code);
 
     /**
      * @brief Returns the four boundary wall colliders.
@@ -72,6 +99,9 @@ public:
     bool Blocks(glm::vec2 pos, float radius) const;
 
 private:
+    /// Construct directly from a prebuilt wall set (used by @ref FromRoomGen).
+    Room(std::vector<Util::Collider> walls, glm::vec2 center, glm::vec2 size);
+
     std::vector<Util::Collider> m_Walls;
     glm::vec2 m_Center{0.0f, 0.0f};
     glm::vec2 m_Size{0.0f, 0.0f};

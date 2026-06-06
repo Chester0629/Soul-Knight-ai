@@ -56,6 +56,8 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.needLock = GetI(e, "need_lock");
             d.itemLevel = GetI(e, "item_level");
             d.itemValue = GetI(e, "item_value");
+            d.count = GetI(e, "count");
+            d.angle = GetF(e, "angle");
             m_WeaponIndex[d.id] = m_Weapons.size();
             m_Weapons.push_back(std::move(d));
         }
@@ -96,6 +98,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.eSize = GetI(e, "e_size");
             d.rewardRate = GetI(e, "reward_rate");
             d.buffImmune = GetF(e, "buff_immune");
+            d.kinematic = GetI(e, "kinematic");
             m_EnemyIndex[d.id] = m_Enemies.size();
             m_Enemies.push_back(std::move(d));
         }
@@ -173,6 +176,27 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
 const WeaponDef *GameData::FindWeapon(const std::string &id) const {
     auto it = m_WeaponIndex.find(id);
     return it == m_WeaponIndex.end() ? nullptr : &m_Weapons[it->second];
+}
+const WeaponDef *GameData::ResolveDropWeapon(const std::string &dropId) const {
+    if (const WeaponDef *exact = FindWeapon(dropId)) {
+        return exact;
+    }
+    if (m_Weapons.empty()) {
+        return nullptr;
+    }
+    // Parse the trailing run of digits (e.g. "weapon_002" -> 2) and index it
+    // (mod) into the loaded weapons. Deterministic stand-in until the
+    // weapon_NNN -> Gun* map is produced by the data pipeline (report #3).
+    int n = 0;
+    std::size_t i = dropId.size();
+    while (i > 0 && dropId[i - 1] >= '0' && dropId[i - 1] <= '9') {
+        --i;
+    }
+    for (std::size_t k = i; k < dropId.size(); ++k) {
+        n = n * 10 + (dropId[k] - '0');
+    }
+    const std::size_t idx = static_cast<std::size_t>(n) % m_Weapons.size();
+    return &m_Weapons[idx];
 }
 const BulletDef *GameData::FindBullet(const std::string &id) const {
     auto it = m_BulletIndex.find(id);

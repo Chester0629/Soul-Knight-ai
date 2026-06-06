@@ -67,11 +67,26 @@ public:
     /// @return a read-only view of the enemy's combat stats.
     const CombatStats &Stats() const;
 
+    /// @return mutable combat stats (for the faithful Combat::ApplyToEnemy path).
+    CombatStats &MutableStats() { return m_Stats; }
+
+    /// @return the AI brain (seed at spawn; feed knockback via GetForce; drive
+    ///         motion via IntegrateVelocity).
+    EnemyAI &AI() { return m_AI; }
+
+    /// @return base move speed (pixels/second).
+    float Speed() const { return m_Speed; }
+
+    /// Which floor room this enemy belongs to (for clear-room door gating).
+    void SetRoomId(int id) { m_RoomId = id; }
+    int RoomId() const { return m_RoomId; }
+
 private:
     EnemyAI m_AI;
     CombatStats m_Stats{3, 3, 0, 0, 0, 0};
     float m_Speed{60.0F};
     std::shared_ptr<Util::Animation> m_Anim;
+    int m_RoomId{-1};
 };
 
 } // namespace Game
