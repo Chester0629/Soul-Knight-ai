@@ -125,6 +125,9 @@ set(SRC_FILES
     combat/GunHeroBow.cpp
     world/RGRoomXEndless.cpp
 
+    # Engine port -- sim infrastructure (Plan 1)
+    sim/FixedClock.cpp
+
     # Phase 2 combat logic
     combat/WeaponInstance.cpp
     combat/EnemyAI.cpp
@@ -267,6 +270,10 @@ set(INCLUDE_FILES
     combat/GunMultiBullet.hpp
     combat/GunHeroBow.hpp
     world/RGRoomXEndless.hpp
+
+    # Engine port -- sim infrastructure (Plan 1)
+    sim/SimConfig.hpp
+    sim/FixedClock.hpp
 
     # Phase 2 combat logic
     combat/CombatStats.hpp
@@ -415,4 +422,7 @@ set(TEST_FILES
     CombatStatsTest.cpp
     WeaponInstanceTest.cpp
     EnemyAITest.cpp
+
+    # Engine port -- sim infrastructure (Plan 1)
+    FixedClockTest.cpp
 )
