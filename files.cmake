@@ -276,6 +276,11 @@ set(INCLUDE_FILES
     sim/SimConfig.hpp
     sim/FixedClock.hpp
     sim/Scheduler.hpp
+    sim/BulletState.hpp
+    sim/EntityState.hpp
+    sim/FireIntent.hpp
+    sim/SimEvent.hpp
+    sim/WorldCollision.hpp
 
     # Phase 2 combat logic
     combat/CombatStats.hpp
@@ -428,4 +433,5 @@ set(TEST_FILES
     # Engine port -- sim infrastructure (Plan 1)
     FixedClockTest.cpp
     SchedulerTest.cpp
+    SimPodsTest.cpp
 )
