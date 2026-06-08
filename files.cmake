@@ -128,6 +128,7 @@ set(SRC_FILES
     # Engine port -- sim infrastructure (Plan 1)
     sim/FixedClock.cpp
     sim/Scheduler.cpp
+    sim/FireSystem.cpp
 
     # Phase 2 combat logic
     combat/WeaponInstance.cpp
@@ -279,6 +280,7 @@ set(INCLUDE_FILES
     sim/BulletState.hpp
     sim/EntityState.hpp
     sim/FireIntent.hpp
+    sim/FireSystem.hpp
     sim/SimEvent.hpp
     sim/WorldCollision.hpp
 
@@ -434,4 +436,5 @@ set(TEST_FILES
     FixedClockTest.cpp
     SchedulerTest.cpp
     SimPodsTest.cpp
+    FireSystemTest.cpp
 )
