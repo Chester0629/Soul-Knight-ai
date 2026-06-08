@@ -109,6 +109,22 @@ set(SRC_FILES
     world/RGBox.cpp
     world/ItemWishingWell.cpp
 
+    # Phase 5 Wave K (bullet motion/timing accumulators), adversarially verified
+    combat/Bullet03.cpp
+    combat/BulletParabola.cpp
+    combat/BulletBoom.cpp
+    combat/BulletColor.cpp
+    combat/BulletLaterFixedTarget.cpp
+
+    # Phase 5 Wave L (recoverable logic-gap closure), adversarially verified
+    combat/RGPetController.cpp
+    combat/GunStaffWizard.cpp
+    combat/GunWaken.cpp
+    combat/GunMagicBow.cpp
+    combat/GunMultiBullet.cpp
+    combat/GunHeroBow.cpp
+    world/RGRoomXEndless.cpp
+
     # Phase 2 combat logic
     combat/WeaponInstance.cpp
     combat/EnemyAI.cpp
@@ -236,6 +252,22 @@ set(INCLUDE_FILES
     world/RGBox.hpp
     world/ItemWishingWell.hpp
 
+    # Phase 5 Wave K (bullet motion/timing accumulators), adversarially verified
+    combat/Bullet03.hpp
+    combat/BulletParabola.hpp
+    combat/BulletBoom.hpp
+    combat/BulletColor.hpp
+    combat/BulletLaterFixedTarget.hpp
+
+    # Phase 5 Wave L (recoverable logic-gap closure), adversarially verified
+    combat/RGPetController.hpp
+    combat/GunStaffWizard.hpp
+    combat/GunWaken.hpp
+    combat/GunMagicBow.hpp
+    combat/GunMultiBullet.hpp
+    combat/GunHeroBow.hpp
+    world/RGRoomXEndless.hpp
+
     # Phase 2 combat logic
     combat/CombatStats.hpp
     combat/WeaponInstance.hpp
@@ -362,6 +394,22 @@ set(TEST_FILES
     RGAisleTest.cpp
     RGBoxTest.cpp
     ItemWishingWellTest.cpp
+
+    # Phase 5 Wave K (bullet motion/timing accumulators), adversarially verified
+    Bullet03Test.cpp
+    BulletParabolaTest.cpp
+    BulletBoomTest.cpp
+    BulletColorTest.cpp
+    BulletLaterFixedTargetTest.cpp
+
+    # Phase 5 Wave L (recoverable logic-gap closure), adversarially verified
+    RGPetControllerTest.cpp
+    GunStaffWizardTest.cpp
+    GunWakenTest.cpp
+    GunMagicBowTest.cpp
+    GunMultiBulletTest.cpp
+    GunHeroBowTest.cpp
+    RGRoomXEndlessTest.cpp
 
     # Phase 2 combat logic
     CombatStatsTest.cpp
