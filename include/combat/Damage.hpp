@@ -32,11 +32,14 @@ constexpr float kNoDamageFactor = 1.0F;
 /**
  * @brief Default crit damage multiplier (critic_factor, bullet field @ 0x3C).
  *
- * The original reads @c critic_factor off the live bullet trigger; it is NOT
- * present in any shipped JSON table, so it cannot be derived from data. Soul
- * Knight's stock crit doubles damage, so 2.0f is the best-supported default. It
- * is exposed as a parameter on @ref ResolveHit / @ref AttackerInput so callers
- * may override it per-weapon when a faithful value is known. See manual_flags.
+ * RECOVERED (report #4): @c critic_factor is a runtime bullet-trigger field, not a
+ * data-table value (no shipped JSON carries it). Its default is decomp-confirmed
+ * as 2.0f: RGBulletTrigger__RemoveEffectTrigger writes 0x40000000 (== 2.0f) to
+ * +0x3C (game_full.c:469815), and RGBulletTrigger__AddEffectTrigger lowers it to
+ * 0x3f800000 (== 1.0f) while a BuffEffectTrigger is attached (game_full.c:469656).
+ * So crit doubles damage by default and is suppressed to 1.0f under that buff. The
+ * 1.0f suppression case is representable via the per-call @ref AttackerInput
+ * override; the 2.0f default below is the recovered value, not a placeholder.
  */
 constexpr float kDefaultCritFactor = 2.0F;
 
