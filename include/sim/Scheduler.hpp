@@ -15,7 +15,10 @@ public:
     using Handle = std::uint32_t; ///< 0 == invalid.
     using Callback = std::function<void()>;
 
-    /// Convert a real-second delay to a whole tick count (round-half-up).
+    /// Convert a real-second delay to a whole tick count (round-half-up). Returns
+    /// 0 for a non-positive delay -- that is "not schedulable", NOT "fire now":
+    /// callers should guard `if (ticks > 0) Invoke(ticks, ...)`, since Invoke would
+    /// otherwise clamp the 0 up to 1 (next tick) and mask the bad input.
     static int SecondsToTicks(float seconds);
 
     /// Fire @p cb once, @p delayTicks ticks from now. Zero or negative is clamped

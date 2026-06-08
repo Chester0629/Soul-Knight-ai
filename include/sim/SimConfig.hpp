@@ -20,6 +20,12 @@ inline constexpr int kMaxStepsPerAdvance = 8;
 static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
               "kFixedStepMs must equal kFixedStepSeconds * 1000");
 
+/// Data bulletSpeed (raw units from the JSON tables) -> pixels/second. The shell
+/// (GameScene) and the sim's WeaponController must agree on this factor, so it
+/// lives here rather than as an anonymous constant. Mirrors GameScene's historical
+/// kBulletSpeedScale; promote that to use this when the weapon path is wired.
+inline constexpr float kDataSpeedToPxPerSec = 15.0F;
+
 } // namespace Game::Sim
 
 #endif /* GAME_SIM_SIMCONFIG_HPP */
