@@ -132,6 +132,7 @@ set(SRC_FILES
     sim/EnemyController.cpp
     sim/BrainFactory.cpp
     sim/BossController.cpp
+    sim/Simulation.cpp
     sim/WeaponController.cpp
 
     # Phase 2 combat logic
@@ -291,6 +292,8 @@ set(INCLUDE_FILES
     sim/EnemyController.hpp
     sim/BrainFactory.hpp
     sim/BossController.hpp
+    sim/WorldInputs.hpp
+    sim/Simulation.hpp
     sim/WeaponController.hpp
 
     # Phase 2 combat logic
@@ -450,5 +453,6 @@ set(TEST_FILES
     EnemyControllerTest.cpp
     BrainFactoryTest.cpp
     BossControllerTest.cpp
+    SimulationTest.cpp
     WeaponControllerTest.cpp
 )
