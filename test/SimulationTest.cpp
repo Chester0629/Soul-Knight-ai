@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "sim/SimConfig.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldCollision.hpp"
 #include "sim/WorldInputs.hpp"
@@ -125,6 +126,70 @@ TEST(SimulationTest, BulletCulledByWallUnlessCanThrough) {
         sim.Advance(20.0F, in); // bullet marches toward the wall at x>=100
     }
     EXPECT_TRUE(sim.Bullets().empty()); // hit the wall, culled
+}
+
+TEST(SimulationTest, EnemyAsleepUntilPlayerEntersRoom) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::EnemyDef def{};
+    def.shootCd = 0.5F;
+    def.scoutRate = 0.5F;
+    def.friction = 0.9F;
+    sim.AddEnemy(def, glm::vec2{50.0F, 0.0F}, /*roomId=*/2, /*seed=*/1234);
+
+    WorldInputs in = Idle();
+    in.playerRoomId = 1; // different room -> enemy asleep
+    for (int i = 0; i < 60; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    ASSERT_EQ(sim.EnemyViews().size(), 1U);
+    EXPECT_TRUE(sim.Bullets().empty());                 // asleep: no fire
+    EXPECT_FLOAT_EQ(sim.EnemyViews()[0].pos.x, 50.0F);  // asleep: no move
+    EXPECT_TRUE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(sim.EnemyViews()[0].hp, Game::Sim::kSliceEnemyHp);
+}
+
+TEST(SimulationTest, AwakeEnemyMovesTowardPlayerAndFires) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::EnemyDef def{};
+    def.shootCd = 0.2F;
+    def.scoutRate = 0.1F;
+    def.friction = 0.9F;
+    sim.AddEnemy(def, glm::vec2{100.0F, 0.0F}, /*roomId=*/2, /*seed=*/4242);
+
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{0.0F, 0.0F};
+    in.playerRoomId = 2; // same room -> awake
+    for (int i = 0; i < 120; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    const auto ev = sim.EnemyViews()[0];
+    // EnemyAI01 scouts/wanders, so don't assume a direction -- just that it moved.
+    EXPECT_GT(glm::length(ev.pos - glm::vec2{100.0F, 0.0F}), 0.5F);
+    EXPECT_FALSE(sim.Bullets().empty()); // fired enemy bullets (camp 1)
+    EXPECT_EQ(sim.Bullets().front().camp, 1);
+}
+
+TEST(SimulationTest, EnemyReplayIsByteIdentical) {
+    auto run = [](int seed) {
+        Simulation sim(seed, &g_NullWorld);
+        Game::EnemyDef def{};
+        def.shootCd = 0.2F;
+        def.scoutRate = 0.1F;
+        def.friction = 0.9F;
+        sim.AddEnemy(def, glm::vec2{80.0F, 20.0F}, 2, seed + 1000);
+        WorldInputs in = Idle();
+        in.playerRoomId = 2;
+        std::vector<float> trace;
+        for (int i = 0; i < 80; ++i) {
+            sim.Advance(20.0F, in);
+            const auto v = sim.EnemyViews()[0];
+            trace.push_back(v.pos.x);
+            trace.push_back(v.pos.y);
+            trace.push_back(static_cast<float>(sim.Bullets().size()));
+        }
+        return trace;
+    };
+    EXPECT_EQ(run(99), run(99));
 }
 
 // NOLINTEND(readability-magic-numbers)

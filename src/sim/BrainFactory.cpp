@@ -1,21 +1,31 @@
 #include "sim/BrainFactory.hpp"
 
 #include <algorithm>
+#include <memory>
 
 #include "sim/SimConfig.hpp"
 
 namespace Game::Sim {
 
-EnemyController BrainFactory::MakeEnemy(const Game::EnemyDef &def, glm::vec2 spawn,
-                                        int seed) {
+EnemyController::Params BrainFactory::EnemyParams(const Game::EnemyDef &def) {
     EnemyController::Params p;
-    p.speed = 60.0F;                      // slice default (EnemyDef has no per-enemy speed)
-    p.speedRate = 0.0F;                   // slice default (EnemyDef has no speed_rate field)
+    p.speed = 60.0F;     // slice default (EnemyDef has no per-enemy speed)
+    p.speedRate = 0.0F;  // slice default (EnemyDef has no speed_rate field)
     p.friction = def.friction;
     p.scoutRateSeconds = def.scoutRate;
     p.shootCdSeconds = def.shootCd;
     p.kinematic = def.kinematic != 0;
-    return EnemyController(p, spawn, seed); // prvalue -> C++17 guaranteed copy elision
+    return p;
+}
+
+EnemyController BrainFactory::MakeEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int seed) {
+    return EnemyController(EnemyParams(def), spawn, seed); // prvalue -> C++17 guaranteed elision
+}
+
+std::unique_ptr<EnemyController> BrainFactory::MakeEnemyPtr(const Game::EnemyDef &def,
+                                                            glm::vec2 spawn, int seed) {
+    // make_unique forwards (Params, spawn, seed) to the ctor -> in-place, no move.
+    return std::make_unique<EnemyController>(EnemyParams(def), spawn, seed);
 }
 
 BossController BrainFactory::MakeBoss(float baseShootCd, glm::vec2 spawn, int maxHp,

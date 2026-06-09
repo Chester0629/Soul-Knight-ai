@@ -68,7 +68,26 @@ void Simulation::TickWeapon() {
     m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
     m_PlayerShotsLastAdvance += static_cast<int>(m_FireIntents.size() - before);
 }
-void Simulation::MoveControllers() {}
+void Simulation::MoveControllers() {
+    for (auto &e : m_Enemies) {
+        if (e->State().dead) {
+            continue;
+        }
+        const glm::vec2 vel = e->ComputeVelocity(); // ONCE per step (decays knockback).
+        glm::vec2 pos = e->State().pos;
+        // Axis-separated wall slide (same shape as the GameScene player pattern).
+        const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
+        if (!m_World->Blocks(tryX, kEnemyBodyRadius)) {
+            pos.x = tryX.x;
+        }
+        const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
+        if (!m_World->Blocks(tryY, kEnemyBodyRadius)) {
+            pos.y = tryY.y;
+        }
+        e->MutableState().pos = pos;
+    }
+    // Boss movement added in Task 6.
+}
 void Simulation::DrainFireIntents() {
     for (const FireIntent &fi : m_FireIntents) {
         m_FireSystem.Expand(fi, m_NextBulletId, m_Bullets);
@@ -89,7 +108,11 @@ void Simulation::IntegrateBullets() {
 }
 void Simulation::ResolveHits() {}
 void Simulation::Cull() {
-    // Enemy/boss death culling is added in Tasks 5/7; bullet culling here.
+    for (auto &e : m_Enemies) {
+        if (!e->State().dead && e->State().stats.IsDead()) {
+            e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
+        }
+    }
     m_Bullets.erase(std::remove_if(m_Bullets.begin(), m_Bullets.end(),
                                    [](const BulletState &b) {
                                        return !b.active || b.lifeMs <= 0.0F;
@@ -126,7 +149,14 @@ int Simulation::Advance(float dtMs, const WorldInputs &in) {
 }
 
 // AddEnemy / SetBoss / EquipWeapon implemented in Tasks 3, 5, 6.
-void Simulation::AddEnemy(const Game::EnemyDef &, glm::vec2, int, int) {}
+void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId, int seed) {
+    std::unique_ptr<EnemyController> ec = BrainFactory::MakeEnemyPtr(def, spawn, seed);
+    ec->MutableState().roomId = roomId;
+    ec->MutableState().stats.hp = kSliceEnemyHp;    // EnemyDef has no hp; seed the slice value.
+    ec->MutableState().stats.maxHp = kSliceEnemyHp; // (EnemyController leaves stats.hp == 0).
+    ec->Activate(m_Scheduler, m_FireIntents);        // asleep until WakeByRoom().
+    m_Enemies.push_back(std::move(ec));
+}
 void Simulation::SetBoss(float, glm::vec2, int, int, int) {}
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
                              int seed) {
