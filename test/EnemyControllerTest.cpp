@@ -1,8 +1,12 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <vector>
 
+#include "combat/EnemyAI01.hpp"
 #include "sim/EnemyController.hpp"
+#include "sim/FireIntent.hpp"
+#include "sim/Scheduler.hpp"
 
 using Game::Sim::EnemyController;
 
@@ -93,6 +97,97 @@ TEST(EnemyControllerTest, DoubleComputeDecaysTwice) {
     e.ComputeVelocity();
     e.ComputeVelocity();
     EXPECT_FLOAT_EQ(e.InertialVel(), 2.5F);
+}
+
+TEST(EnemyControllerTest, ScoutTickAdvancesStreamAndPicksWanderDir) {
+    EnemyController::Params p;
+    p.scoutRateSeconds = 0.02F; // 1 tick
+    EnemyController e(p, glm::vec2{0.0F, 0.0F}, 777);
+    Game::Sim::Scheduler sched;
+    std::vector<Game::Sim::FireIntent> fire;
+    e.MutableState().awake = true;
+    e.Activate(sched, fire);
+
+    Game::EnemyAI01 ref;
+    ref.SetSeed(777);
+
+    for (int i = 0; i < 4; ++i) {
+        sched.Tick();
+        ref.Scout();
+        const glm::vec2 refDir = ref.RunReflection();
+        EXPECT_FLOAT_EQ(e.MoveDir().x, refDir.x);
+        EXPECT_FLOAT_EQ(e.MoveDir().y, refDir.y);
+    }
+}
+
+TEST(EnemyControllerTest, ShootTickEmitsAimedFireIntentOnCadence) {
+    EnemyController::Params p;
+    p.shootCdSeconds = 0.04F;     // 2 ticks
+    p.scoutRateSeconds = 100.0F;  // keep scout out of the way
+    EnemyController e(p, glm::vec2{0.0F, 0.0F}, 5);
+    Game::Sim::Scheduler sched;
+    std::vector<Game::Sim::FireIntent> fire;
+    e.MutableState().awake = true;
+    e.SetTarget(glm::vec2{10.0F, 0.0F});
+    e.Activate(sched, fire);
+
+    sched.Tick(); // tick 1: nothing (shoot due at tick 2)
+    EXPECT_TRUE(fire.empty());
+    sched.Tick(); // tick 2: shoot fires
+    ASSERT_EQ(fire.size(), 1U);
+    EXPECT_EQ(fire[0].pattern, Game::Sim::FirePattern::Single);
+    EXPECT_EQ(fire[0].camp, 1);
+    EXPECT_NEAR(fire[0].dir.x, 1.0F, 1e-4F);
+    EXPECT_NEAR(fire[0].dir.y, 0.0F, 1e-4F);
+    sched.Tick();
+    sched.Tick(); // tick 4: re-scheduled shot fires again
+    EXPECT_EQ(fire.size(), 2U);
+}
+
+TEST(EnemyControllerTest, DeadEnemyEmitsNoFireAndTakesNoDraw) {
+    EnemyController::Params p;
+    p.shootCdSeconds = 0.02F;
+    p.scoutRateSeconds = 0.02F;
+    EnemyController e(p, glm::vec2{0.0F, 0.0F}, 9);
+    Game::Sim::Scheduler sched;
+    std::vector<Game::Sim::FireIntent> fire;
+    e.MutableState().awake = true;
+    e.Activate(sched, fire);
+    e.Kill();
+
+    Game::EnemyAI01 ref;
+    ref.SetSeed(9);
+    for (int i = 0; i < 8; ++i) {
+        sched.Tick();
+    }
+    EXPECT_TRUE(fire.empty());
+    EXPECT_EQ(e.Brain().Rng().Range(0, 1000), ref.Rng().Range(0, 1000));
+}
+
+TEST(EnemyControllerTest, FullCadenceReplayIsDeterministic) {
+    auto run = [](int seed) {
+        EnemyController::Params p;
+        p.shootCdSeconds = 0.06F;
+        p.scoutRateSeconds = 0.04F;
+        EnemyController e(p, glm::vec2{0.0F, 0.0F}, seed);
+        Game::Sim::Scheduler sched;
+        std::vector<Game::Sim::FireIntent> fire;
+        e.MutableState().awake = true;
+        e.SetTarget(glm::vec2{5.0F, 5.0F});
+        e.Activate(sched, fire);
+        std::vector<float> trace;
+        for (int i = 0; i < 20; ++i) {
+            sched.Tick();
+            const glm::vec2 v = e.ComputeVelocity();
+            trace.push_back(v.x);
+            trace.push_back(v.y);
+            trace.push_back(static_cast<float>(fire.size()));
+        }
+        return trace;
+    };
+    const auto a = run(2024);
+    const auto b = run(2024);
+    EXPECT_EQ(a, b);
 }
 
 // NOLINTEND(readability-magic-numbers)

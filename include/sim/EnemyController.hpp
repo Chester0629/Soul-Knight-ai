@@ -40,6 +40,13 @@ public:
 
     EnemyController(const Params &params, glm::vec2 spawn, int seed);
 
+    // Non-movable / non-copyable: Activate registers scheduler callbacks that
+    // capture `this`, so the controller must keep a stable address for its whole
+    // lifetime (the owner stores it by stable pointer, e.g. unique_ptr, never in a
+    // reallocating vector-of-values). Moving it would dangle those callbacks.
+    EnemyController(EnemyController &&) = delete;
+    EnemyController &operator=(EnemyController &&) = delete;
+
     /// Schedule the scout + shoot cadence. @p fireOut receives emitted intents.
     /// @pre @p scheduler and @p fireOut must outlive this controller, and @p fireOut
     ///      must not be reallocated while the controller is alive (the controller
@@ -82,6 +89,7 @@ private:
 
     Scheduler *m_Scheduler = nullptr;
     std::vector<FireIntent> *m_FireOut = nullptr;
+    Scheduler::Handle m_ScoutHandle = 0; ///< the repeating scout cadence, cancelled on Kill.
 };
 
 } // namespace Game::Sim
