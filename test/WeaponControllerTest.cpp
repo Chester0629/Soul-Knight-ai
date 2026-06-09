@@ -101,4 +101,65 @@ TEST(WeaponControllerTest, HeatMinigunScatterMatchesGun016InLockstep) {
     }
 }
 
+// Determinism guard: the heat ramp runs every tick, but the gun's RNG stream must
+// advance ONLY on ticks that actually emit a shot. A parallel Gun016 `ref` is drawn
+// only on emit ticks; if the ramp ever made a stray draw, the k-th shot's angle would
+// desync from ref's k-th draw and this test would fail.
+TEST(WeaponControllerTest, HeatRampOnNoEmitTickDoesNotAdvanceRng) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::HeatMinigun;
+    p.fireIntervalSeconds = 0.04F; // fires every 2 ticks -> ticks 1,3,5 ramp but don't draw
+    p.heatMaxTime = 2.0F;
+    p.heatBaseAngle = 20.0F;
+    p.heatRecoil = 0.0F;
+    WeaponController w(p, 4242);
+    Game::Gun016 ref;
+    ref.SetSeed(4242);
+
+    std::vector<Game::Sim::FireIntent> out;
+    float heat = 0.0F;
+    int cooldown = 0;
+    std::size_t emitted = 0;
+    for (int i = 0; i < 8; ++i) {
+        // Mirror the controller's per-tick logic: ramp heat, then the cooldown gate.
+        if (heat < 2.0F) {
+            heat += 0.02F;
+        }
+        if (cooldown > 0) {
+            --cooldown;
+        }
+        const bool emit = (cooldown == 0);
+
+        w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+
+        if (emit) {
+            const float spread = Game::Gun016::Spread(20.0F, 0.0F, Game::Gun016::HeatRatio(heat, 2.0F));
+            const float refScatter = ref.ScatterAngle(spread); // ref advances ONLY on emit ticks
+            ASSERT_EQ(out.size(), emitted + 1U);               // controller emitted exactly one new shot
+            ++emitted;
+            const float gotAngle = std::atan2(out.back().dir.y, out.back().dir.x) * 180.0F / 3.14159265358979F;
+            EXPECT_NEAR(gotAngle, refScatter, 1e-2F);
+            cooldown = 2; // SecondsToTicks(0.04) == 2
+        } else {
+            ASSERT_EQ(out.size(), emitted); // no shot, no new FireIntent on a ramp-only tick
+        }
+    }
+    EXPECT_EQ(emitted, 4U); // ticks 0,2,4,6 emit
+}
+
+// Faithful plateau: ShouldTickHeat's strict `shootTime < shootMaxTime` gate stops the
+// ramp at the cap, so heat never runs away no matter how long firing is held.
+TEST(WeaponControllerTest, HeatPlateausAtCapWhileFiring) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::HeatMinigun;
+    p.fireIntervalSeconds = 0.02F; // every tick
+    p.heatMaxTime = 0.04F;         // caps after 2 ramp steps
+    WeaponController w(p, 7);
+    std::vector<Game::Sim::FireIntent> out;
+    for (int i = 0; i < 6; ++i) {
+        w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    }
+    EXPECT_NEAR(w.HeatTime(), 0.04F, 1e-4F); // plateaued at the cap, not 6*0.02
+}
+
 // NOLINTEND(readability-magic-numbers)
