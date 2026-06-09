@@ -1,5 +1,7 @@
 #include "sim/BossController.hpp"
 
+#include <algorithm>
+
 #include "sim/SimMath.hpp"
 
 namespace Game::Sim {
@@ -28,13 +30,42 @@ void BossController::Kill() {
     }
 }
 
-void BossController::OnShootTick() {}  // Task 3
-void BossController::OnWanderTick() {} // Task 3
+void BossController::OnShootTick() {
+    if (m_Scheduler == nullptr || m_FireOut == nullptr || m_State.dead) {
+        return;
+    }
+    if (m_State.awake) {
+        const int attack = m_Brain.ChooseAttack(); // 1 draw Range(0,100)
+        FireIntent intent;
+        intent.pattern = FirePattern::Fan;
+        intent.origin = m_State.pos;
+        intent.dir = Normalize(m_Target - m_State.pos);
+        intent.count = (attack % 2 == 0) ? kFanEven : kFanOdd;
+        intent.spreadDeg = kFanSpreadDeg;
+        intent.speedPxPerSec = kBulletSpeedPxPerSec;
+        intent.lifeMs = kBulletLifeMs;
+        intent.damage = 1;
+        intent.camp = 1;
+        m_FireOut->push_back(intent);
+    }
+    const int next = (std::max)(1, Scheduler::SecondsToTicks(m_Brain.ShootCd()));
+    m_ShootHandle = m_Scheduler->Invoke(next, [this] { OnShootTick(); });
+}
+
+void BossController::OnWanderTick() {
+    if (m_State.dead || !m_State.awake) {
+        return;
+    }
+    m_WanderDir = m_Brain.WanderDirection(); // 2 draws Range(-1,1)
+}
 
 void BossController::Activate(Scheduler &scheduler, std::vector<FireIntent> &fireOut) {
     m_Scheduler = &scheduler;
     m_FireOut = &fireOut;
-    // cadence scheduling in Task 3.
+    const int wanderTicks = (std::max)(1, Scheduler::SecondsToTicks(kWanderSeconds));
+    const int shootTicks = (std::max)(1, Scheduler::SecondsToTicks(m_Brain.ShootCd()));
+    m_WanderHandle = scheduler.InvokeRepeating(wanderTicks, wanderTicks, [this] { OnWanderTick(); });
+    m_ShootHandle = scheduler.Invoke(shootTicks, [this] { OnShootTick(); });
 }
 
 } // namespace Game::Sim
