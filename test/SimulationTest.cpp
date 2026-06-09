@@ -46,4 +46,38 @@ TEST(SimulationTest, EmptyAdvanceIsReplayDeterministic) {
     EXPECT_EQ(run(7), run(7));
 }
 
+TEST(SimulationTest, EquippedWeaponFiresPlayerBulletsOnCadence) {
+    Simulation sim(55, &g_NullWorld);
+    Game::WeaponDef def{};
+    def.weaponSpeed = 1.0F;
+    def.bulletSpeed = 10.0F; // *15 = 150 px/s
+    def.atk = 4;
+    def.deviation = 0;       // clean +x direction
+    sim.EquipWeapon(def, "Gun001", 808);
+
+    WorldInputs in = Idle();
+    in.firing = true;
+    // fireInterval = 0.15s/weaponSpeed -> SecondsToTicks(0.15)=8 ticks; first shot on tick 1.
+    sim.Advance(20.0F, in); // 1 step -> first shot fires
+    ASSERT_EQ(sim.Bullets().size(), 1U);
+    EXPECT_EQ(sim.Bullets()[0].camp, 0);     // player bullet
+    EXPECT_EQ(sim.Bullets()[0].damage, 4);   // def.atk
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1);
+
+    in.firing = false;
+    sim.Advance(20.0F, in);
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 0); // not firing -> no new shot
+    EXPECT_EQ(sim.Bullets().size(), 1U);
+}
+
+TEST(SimulationTest, NotFiringProducesNoBullets) {
+    Simulation sim(1, &g_NullWorld);
+    Game::WeaponDef def{};
+    sim.EquipWeapon(def, "Gun001", 1);
+    for (int i = 0; i < 10; ++i) {
+        sim.Advance(20.0F, Idle()); // firing defaults false
+    }
+    EXPECT_TRUE(sim.Bullets().empty());
+}
+
 // NOLINTEND(readability-magic-numbers)

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "sim/BrainFactory.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
 
@@ -59,9 +60,21 @@ void Simulation::WakeByRoom() {
 }
 
 // Per-step helpers filled across Tasks 3-7.
-void Simulation::TickWeapon() {}
+void Simulation::TickWeapon() {
+    if (!m_Weapon.has_value()) {
+        return;
+    }
+    const std::size_t before = m_FireIntents.size();
+    m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
+    m_PlayerShotsLastAdvance += static_cast<int>(m_FireIntents.size() - before);
+}
 void Simulation::MoveControllers() {}
-void Simulation::DrainFireIntents() {}
+void Simulation::DrainFireIntents() {
+    for (const FireIntent &fi : m_FireIntents) {
+        m_FireSystem.Expand(fi, m_NextBulletId, m_Bullets);
+    }
+    m_FireIntents.clear();
+}
 void Simulation::IntegrateBullets() {}
 void Simulation::ResolveHits() {}
 void Simulation::Cull() {}
@@ -97,6 +110,9 @@ int Simulation::Advance(float dtMs, const WorldInputs &in) {
 // AddEnemy / SetBoss / EquipWeapon implemented in Tasks 3, 5, 6.
 void Simulation::AddEnemy(const Game::EnemyDef &, glm::vec2, int, int) {}
 void Simulation::SetBoss(float, glm::vec2, int, int, int) {}
-void Simulation::EquipWeapon(const Game::WeaponDef &, const std::string &, int) {}
+void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
+                             int seed) {
+    m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed)); // cold rebuild
+}
 
 } // namespace Game::Sim
