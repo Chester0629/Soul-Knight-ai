@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "combat/Gun001.hpp"
+#include "combat/Gun016.hpp"
 #include "sim/WeaponController.hpp"
 
 using Game::Sim::WeaponController;
@@ -57,6 +58,46 @@ TEST(WeaponControllerTest, ScatterMatchesGun001InLockstep) {
         const float refScatter = ref.ScatterAngle(10.0F, 0.5F);
         const float gotAngle = std::atan2(out.back().dir.y, out.back().dir.x) * 180.0F / 3.14159265358979F;
         EXPECT_NEAR(gotAngle, refScatter, 1e-3F); // aim is +x(0deg), so dir angle == scatter
+    }
+}
+
+TEST(WeaponControllerTest, HeatRampsWhileFiringAndCoolsWhenReleased) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::HeatMinigun;
+    p.fireIntervalSeconds = 0.02F; // every tick
+    p.heatMaxTime = 0.2F;          // 10 ticks to full
+    WeaponController w(p, 3);
+    std::vector<Game::Sim::FireIntent> out;
+    for (int i = 0; i < 5; ++i) {
+        w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    }
+    EXPECT_GT(w.HeatTime(), 0.0F);     // heat built while firing
+    const float hot = w.HeatTime();
+    w.Tick(false, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    EXPECT_LT(w.HeatTime(), hot);      // cooled when released
+}
+
+TEST(WeaponControllerTest, HeatMinigunScatterMatchesGun016InLockstep) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::HeatMinigun;
+    p.fireIntervalSeconds = 0.02F;
+    p.heatMaxTime = 2.0F;
+    p.heatBaseAngle = 20.0F;
+    p.heatRecoil = 0.0F;
+    WeaponController w(p, 1234);
+    Game::Gun016 ref;
+    ref.SetSeed(1234);
+    std::vector<Game::Sim::FireIntent> out;
+    // Drive the heat model in parallel: heat ramps kFixedStepSeconds (0.02) per tick.
+    float heat = 0.0F;
+    for (int i = 0; i < 5; ++i) {
+        // controller will ramp THEN fire; mirror that order.
+        if (heat < 2.0F) heat += 0.02F;
+        const float spread = Game::Gun016::Spread(20.0F, 0.0F, Game::Gun016::HeatRatio(heat, 2.0F));
+        const float refScatter = ref.ScatterAngle(spread);
+        w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+        const float gotAngle = std::atan2(out.back().dir.y, out.back().dir.x) * 180.0F / 3.14159265358979F;
+        EXPECT_NEAR(gotAngle, refScatter, 1e-2F);
     }
 }
 
