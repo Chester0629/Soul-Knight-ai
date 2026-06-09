@@ -1,10 +1,14 @@
 #ifndef GAME_SIM_BRAINFACTORY_HPP
 #define GAME_SIM_BRAINFACTORY_HPP
 
+#include <string>
+
 #include <glm/glm.hpp>
 
 #include "data/GameData.hpp"
+#include "sim/BossController.hpp"
 #include "sim/EnemyController.hpp"
+#include "sim/WeaponController.hpp"
 
 namespace Game::Sim {
 
@@ -15,6 +19,15 @@ class BrainFactory {
 public:
     /// Build an EnemyController from an EnemyDef at @p spawn, seeded with @p seed.
     static EnemyController MakeEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int seed);
+
+    /// Build a BossController (BossAI01) at @p spawn. Returned by value (prvalue);
+    /// the owner must store it stably (e.g. unique_ptr) -- the controller is move-deleted.
+    static BossController MakeBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int seed);
+
+    /// Build a WeaponController from a WeaponDef. @p weaponId selects the gun brain
+    /// ("Gun016" -> HeatMinigun, else Single). Returned by value (prvalue).
+    static WeaponController MakeWeapon(const Game::WeaponDef &def,
+                                       const std::string &weaponId, int seed);
 };
 
 } // namespace Game::Sim
