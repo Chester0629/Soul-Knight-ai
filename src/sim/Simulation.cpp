@@ -86,9 +86,14 @@ void Simulation::MoveControllers() {
             pos.y = tryY.y;
         }
         e->MutableState().pos = pos;
+        const glm::vec2 md = e->MoveDir(); // steering heading (excludes knockback shove).
+        if (md.x != 0.0F || md.y != 0.0F) {
+            e->MutableState().facing = Normalize(md);
+        }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().awake) {
-        const glm::vec2 vel = m_Boss->ChaseDir() * BossController::kSpeed;
+        const glm::vec2 dir = m_Boss->ChaseDir();
+        const glm::vec2 vel = dir * BossController::kSpeed;
         glm::vec2 pos = m_Boss->State().pos;
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
         if (!m_World->Blocks(tryX, kBossBodyRadius)) {
@@ -99,6 +104,7 @@ void Simulation::MoveControllers() {
             pos.y = tryY.y;
         }
         m_Boss->MutableState().pos = pos;
+        m_Boss->MutableState().facing = dir; // the boss faces the player it chases.
     }
 }
 void Simulation::DrainFireIntents() {

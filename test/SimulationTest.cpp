@@ -379,4 +379,19 @@ TEST(SimulationTest, AccessorsAndEventsAreSane) {
     EXPECT_TRUE(sim.DrainEvents().empty());
 }
 
+TEST(SimulationTest, ViewFacingReflectsHeading) {
+    Simulation sim(20240607, &g_NullWorld);
+    // Boss at +x chasing the player at the origin -> it should end up facing -x.
+    sim.SetBoss(/*baseShootCd=*/2.0F, glm::vec2{200.0F, 0.0F}, /*maxHp=*/500, /*roomId=*/3,
+                /*seed=*/9000);
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{0.0F, 0.0F};
+    in.playerRoomId = 3; // wake the boss
+    for (int i = 0; i < 10; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_LT(sim.BossView().facing.x, 0.0F);              // faces the player it chases (-x)
+    EXPECT_NEAR(glm::length(sim.BossView().facing), 1.0F, 1e-4F); // unit heading
+}
+
 // NOLINTEND(readability-magic-numbers)

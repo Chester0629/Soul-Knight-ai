@@ -36,7 +36,8 @@ public:
     struct EntityView {
         std::uint32_t id = 0; ///< stable within a run (enemy index / boss sentinel).
         glm::vec2 pos{0.0F, 0.0F};
-        glm::vec2 facing{1.0F, 0.0F};
+        glm::vec2 facing{1.0F, 0.0F}; ///< unit heading: enemy move-dir / boss chase-dir
+                                      ///< (retains last heading while still).
         int hp = 0;
         int maxHp = 0;
         bool alive = false;
