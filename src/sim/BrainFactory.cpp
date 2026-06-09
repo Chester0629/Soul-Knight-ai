@@ -36,6 +36,9 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     p.fireIntervalSeconds /= (std::max)(0.01F, def.weaponSpeed);
     p.bulletSpeedPxPerSec = def.bulletSpeed * kDataSpeedToPxPerSec;
     p.damage = def.atk;
+    // deviation feeds ONLY the Single (Gun001) cone. The Gun016/HeatMinigun path reads
+    // heatBaseAngle, whose faithful source is a per-weapon-class recoil base (owner+0x30),
+    // NOT this JSON field -- so it stays a slice default; do not route deviation into it.
     p.baseAngle = static_cast<float>(def.deviation);
     return WeaponController(p, seed); // prvalue
 }
