@@ -80,4 +80,51 @@ TEST(SimulationTest, NotFiringProducesNoBullets) {
     EXPECT_TRUE(sim.Bullets().empty());
 }
 
+namespace {
+/// Blocks any point with x >= kWallX (a vertical wall) -- for bullet-cull tests.
+class RightWall : public Game::Sim::WorldCollision {
+public:
+    static constexpr float kWallX = 100.0F;
+    bool Blocks(glm::vec2 pos, float /*radius*/) const override { return pos.x >= kWallX; }
+};
+} // namespace
+
+TEST(SimulationTest, BulletAdvancesAndExpires) {
+    Simulation sim(1, &g_NullWorld);
+    Game::WeaponDef def{};
+    def.bulletSpeed = 10.0F; // 150 px/s -> 3 px/step
+    sim.EquipWeapon(def, "Gun001", 1);
+    WorldInputs in = Idle();
+    in.firing = true;
+    sim.Advance(20.0F, in);           // fire one bullet (lifeMs default 1500)
+    ASSERT_EQ(sim.Bullets().size(), 1U);
+    const float x0 = sim.Bullets()[0].pos.x;
+    in.firing = false;
+    sim.Advance(20.0F, in);           // one more step: pos advances ~3px, life -20ms
+    ASSERT_EQ(sim.Bullets().size(), 1U);
+    EXPECT_GT(sim.Bullets()[0].pos.x, x0);
+    EXPECT_LT(sim.Bullets()[0].lifeMs, 1500.0F);
+    // Drive long enough to expire (1500ms / 20ms = 75 steps) -> culled.
+    for (int i = 0; i < 80; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_TRUE(sim.Bullets().empty());
+}
+
+TEST(SimulationTest, BulletCulledByWallUnlessCanThrough) {
+    RightWall wall;
+    Simulation sim(1, &wall);
+    Game::WeaponDef def{};
+    def.bulletSpeed = 40.0F; // 600 px/s -> 12 px/step, crosses x=100 quickly
+    sim.EquipWeapon(def, "Gun001", 1);
+    WorldInputs in = Idle();
+    in.firing = true;
+    sim.Advance(20.0F, in); // fire at origin aiming +x
+    in.firing = false;
+    for (int i = 0; i < 12; ++i) {
+        sim.Advance(20.0F, in); // bullet marches toward the wall at x>=100
+    }
+    EXPECT_TRUE(sim.Bullets().empty()); // hit the wall, culled
+}
+
 // NOLINTEND(readability-magic-numbers)

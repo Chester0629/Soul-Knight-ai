@@ -75,9 +75,27 @@ void Simulation::DrainFireIntents() {
     }
     m_FireIntents.clear();
 }
-void Simulation::IntegrateBullets() {}
+void Simulation::IntegrateBullets() {
+    for (BulletState &b : m_Bullets) {
+        if (!b.active) {
+            continue;
+        }
+        b.pos += b.vel * kFixedStepSeconds;
+        b.lifeMs -= kFixedStepMs;
+        if (!b.canThrough && m_World->Blocks(b.pos, kBulletRadius)) {
+            b.active = false;
+        }
+    }
+}
 void Simulation::ResolveHits() {}
-void Simulation::Cull() {}
+void Simulation::Cull() {
+    // Enemy/boss death culling is added in Tasks 5/7; bullet culling here.
+    m_Bullets.erase(std::remove_if(m_Bullets.begin(), m_Bullets.end(),
+                                   [](const BulletState &b) {
+                                       return !b.active || b.lifeMs <= 0.0F;
+                                   }),
+                    m_Bullets.end());
+}
 
 void Simulation::Step() {
     const glm::vec2 target = m_Input.playerPos;
