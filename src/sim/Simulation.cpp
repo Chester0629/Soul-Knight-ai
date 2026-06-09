@@ -86,7 +86,19 @@ void Simulation::MoveControllers() {
         }
         e->MutableState().pos = pos;
     }
-    // Boss movement added in Task 6.
+    if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().awake) {
+        const glm::vec2 vel = m_Boss->ChaseDir() * BossController::kSpeed;
+        glm::vec2 pos = m_Boss->State().pos;
+        const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
+        if (!m_World->Blocks(tryX, kBossBodyRadius)) {
+            pos.x = tryX.x;
+        }
+        const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
+        if (!m_World->Blocks(tryY, kBossBodyRadius)) {
+            pos.y = tryY.y;
+        }
+        m_Boss->MutableState().pos = pos;
+    }
 }
 void Simulation::DrainFireIntents() {
     for (const FireIntent &fi : m_FireIntents) {
@@ -157,7 +169,11 @@ void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId
     ec->Activate(m_Scheduler, m_FireIntents);        // asleep until WakeByRoom().
     m_Enemies.push_back(std::move(ec));
 }
-void Simulation::SetBoss(float, glm::vec2, int, int, int) {}
+void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed) {
+    m_Boss = std::make_unique<BossController>(baseShootCd, spawn, maxHp, seed);
+    m_Boss->MutableState().roomId = roomId;
+    m_Boss->Activate(m_Scheduler, m_FireIntents); // asleep until WakeByRoom().
+}
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
                              int seed) {
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed)); // cold rebuild

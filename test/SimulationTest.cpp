@@ -192,4 +192,43 @@ TEST(SimulationTest, EnemyReplayIsByteIdentical) {
     EXPECT_EQ(run(99), run(99));
 }
 
+TEST(SimulationTest, BossChasesPlayerAndFiresFan) {
+    Simulation sim(20240607, &g_NullWorld);
+    sim.SetBoss(/*baseShootCd=*/0.2F, glm::vec2{200.0F, 0.0F}, /*maxHp=*/500, /*roomId=*/3,
+                /*seed=*/9000);
+    ASSERT_TRUE(sim.HasBoss());
+    EXPECT_EQ(sim.BossView().id, Simulation::kBossViewId);
+    EXPECT_EQ(sim.BossView().maxHp, 500);
+
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{0.0F, 0.0F};
+    in.playerRoomId = 3; // wake the boss
+    for (int i = 0; i < 120; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_LT(sim.BossView().pos.x, 200.0F); // chased toward the player
+    ASSERT_FALSE(sim.Bullets().empty());     // fired a fan
+    // A fan emits >=3 enemy bullets; confirm camp 1 and multiplicity.
+    EXPECT_EQ(sim.Bullets().front().camp, 1);
+    EXPECT_GE(sim.Bullets().size(), 3U);
+}
+
+TEST(SimulationTest, BossReplayIsByteIdentical) {
+    auto run = [](int seed) {
+        Simulation sim(seed, &g_NullWorld);
+        sim.SetBoss(0.2F, glm::vec2{150.0F, 30.0F}, 500, 3, seed + 9000);
+        WorldInputs in = Idle();
+        in.playerRoomId = 3;
+        std::vector<float> trace;
+        for (int i = 0; i < 80; ++i) {
+            sim.Advance(20.0F, in);
+            trace.push_back(sim.BossView().pos.x);
+            trace.push_back(sim.BossView().pos.y);
+            trace.push_back(static_cast<float>(sim.Bullets().size()));
+        }
+        return trace;
+    };
+    EXPECT_EQ(run(123), run(123));
+}
+
 // NOLINTEND(readability-magic-numbers)
