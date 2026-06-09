@@ -130,6 +130,7 @@ set(SRC_FILES
     sim/Scheduler.cpp
     sim/FireSystem.cpp
     sim/EnemyController.cpp
+    sim/BrainFactory.cpp
 
     # Phase 2 combat logic
     combat/WeaponInstance.cpp
@@ -285,6 +286,7 @@ set(INCLUDE_FILES
     sim/SimEvent.hpp
     sim/WorldCollision.hpp
     sim/EnemyController.hpp
+    sim/BrainFactory.hpp
 
     # Phase 2 combat logic
     combat/CombatStats.hpp
@@ -440,4 +442,5 @@ set(TEST_FILES
     SimPodsTest.cpp
     FireSystemTest.cpp
     EnemyControllerTest.cpp
+    BrainFactoryTest.cpp
 )
