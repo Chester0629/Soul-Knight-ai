@@ -1,12 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "data/GameData.hpp"
-#include "sim/BrainFactory.hpp"
-#include "sim/EnemyController.hpp"
-
 #include <vector>
 
+#include "data/GameData.hpp"
 #include "sim/BossController.hpp"
+#include "sim/BrainFactory.hpp"
+#include "sim/EnemyController.hpp"
 #include "sim/FireIntent.hpp"
 #include "sim/WeaponController.hpp"
 
@@ -49,6 +48,30 @@ TEST(BrainFactoryTest, MakeWeaponSingleFromDef) {
     std::vector<Game::Sim::FireIntent> out;
     w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
     EXPECT_EQ(out.size(), 1U);
+}
+
+TEST(BrainFactoryTest, MakeWeaponMapsDefFieldsToShot) {
+    Game::WeaponDef def{};
+    def.weaponSpeed = 2.0F;  // fire-rate multiplier (still fires on the first tick)
+    def.bulletSpeed = 10.0F; // * kDataSpeedToPxPerSec(15) -> 150 px/s
+    def.atk = 7;
+    def.deviation = 0;       // no spread: keep the shot direction clean
+    Game::Sim::WeaponController w = BrainFactory::MakeWeapon(def, "Gun001", 1);
+    std::vector<Game::Sim::FireIntent> out;
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    ASSERT_EQ(out.size(), 1U);
+    EXPECT_EQ(out.back().damage, 7);                  // def.atk -> damage
+    EXPECT_FLOAT_EQ(out.back().speedPxPerSec, 150.0F); // def.bulletSpeed * 15
+}
+
+TEST(BrainFactoryTest, MakeWeaponGun016SelectsHeatMinigun) {
+    Game::WeaponDef def{};
+    Game::Sim::WeaponController w = BrainFactory::MakeWeapon(def, "Gun016", 1);
+    std::vector<Game::Sim::FireIntent> out;
+    // A HeatMinigun ramps heat while firing; a Single never does. HeatTime() > 0
+    // proves the weaponId -> HeatMinigun branch was taken (not the Single fallback).
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    EXPECT_GT(w.HeatTime(), 0.0F);
 }
 
 // NOLINTEND(readability-magic-numbers)
