@@ -131,6 +131,9 @@ void Simulation::ResolveHits() {
         }
         if (b.camp == 0) {
             // Player bullet -> enemies, then boss. One target per bullet per step.
+            // The enemy gate tests the `dead` FLAG (set later in Cull), not stats.IsDead():
+            // a second bullet landing the same step as a lethal one is consumed on the
+            // about-to-die enemy. Intentional + deterministic -- all in-flight bullets land.
             bool consumed = false;
             for (auto &e : m_Enemies) {
                 if (e->State().dead || !CirclesOverlap(b.pos, kBulletRadius, e->State().pos,
