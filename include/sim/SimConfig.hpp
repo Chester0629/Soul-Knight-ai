@@ -26,6 +26,24 @@ static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
 /// kBulletSpeedScale; promote that to use this when the weapon path is wired.
 inline constexpr float kDataSpeedToPxPerSec = 15.0F;
 
+/// Slice collision radii (px). The sim is geometry-light: bodies/bullets are circles.
+/// These mirror GameScene's kPlayerRadius(16)/kBossBodyRadius(24) placeholders.
+inline constexpr float kBulletRadius = 4.0F;
+inline constexpr float kPlayerBodyRadius = 16.0F;
+inline constexpr float kEnemyBodyRadius = 16.0F;
+inline constexpr float kBossBodyRadius = 24.0F;
+
+/// Slice enemy HP. EnemyDef carries no hp field and EnemyController leaves stats.hp=0,
+/// so the Simulation seeds it; mirrors the old Enemy entity's CombatStats{3,3,...}.
+inline constexpr int kSliceEnemyHp = 3;
+
+/// Repel input scale fed to Combat::AttackerInput (mirrors GameScene's kRepelScale=30).
+inline constexpr float kRepelScale = 30.0F;
+
+/// Salt mixed into runSeed for the hit-resolution RNG stream, so the crit-roll stream
+/// is distinct from every brain stream (which are seeded from runSeed + offsets).
+inline constexpr int kHitRngSalt = 0x5170;
+
 } // namespace Game::Sim
 
 #endif /* GAME_SIM_SIMCONFIG_HPP */

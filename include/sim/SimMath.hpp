@@ -24,6 +24,15 @@ inline glm::vec2 Normalize(glm::vec2 v) {
     return len > 0.0F ? v / len : glm::vec2{1.0F, 0.0F};
 }
 
+/// True if two circles touch or overlap (distance(a,b) <= ar+br). Squared-distance
+/// compare; no sqrt. Used by the sim's bullet<->entity collision (engine-free).
+inline bool CirclesOverlap(glm::vec2 a, float ar, glm::vec2 b, float br) {
+    const float dx = a.x - b.x;
+    const float dy = a.y - b.y;
+    const float sum = ar + br;
+    return (dx * dx + dy * dy) <= (sum * sum);
+}
+
 } // namespace Game::Sim
 
 #endif /* GAME_SIM_SIMMATH_HPP */
