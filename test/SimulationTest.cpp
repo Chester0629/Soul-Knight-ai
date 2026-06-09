@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
+#include "data/GameData.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldCollision.hpp"
@@ -14,6 +17,7 @@ using Game::Sim::WorldInputs;
 
 namespace {
 Game::Sim::NullWorldCollision g_NullWorld;
+const char *kResourceRoot = RESOURCE_DIR; // CMake-injected, as in GameDataTest.
 WorldInputs Idle() {
     WorldInputs in;
     in.playerPos = glm::vec2{0.0F, 0.0F};
@@ -305,6 +309,74 @@ TEST(SimulationTest, HitResolutionReplayIsByteIdentical) {
         return trace;
     };
     EXPECT_EQ(run(2024), run(2024));
+}
+
+TEST(SimulationTest, EndToEndPlayerEnemyBulletsCollisionByteIdentical) {
+    Game::GameData gd;
+    ASSERT_TRUE(gd.LoadAll(kResourceRoot));
+    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
+    ASSERT_NE(edef, nullptr);
+    ASSERT_NE(wdef, nullptr);
+
+    auto run = [&](int runSeed) {
+        Simulation sim(runSeed, &g_NullWorld);
+        Game::CombatStats player;
+        player.hp = 6;
+        player.maxHp = 6;
+        sim.SetPlayerStats(player);
+        sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, runSeed + 1000);
+        sim.EquipWeapon(*wdef, "Gun001", runSeed + 5);
+
+        WorldInputs in = Idle();
+        in.playerPos = glm::vec2{0.0F, 0.0F};
+        in.aimDir = glm::vec2{1.0F, 0.0F};
+        in.firing = true;
+        in.playerRoomId = 0;
+
+        std::vector<float> trace;
+        for (int i = 0; i < 150; ++i) {
+            sim.Advance(20.0F, in);
+            const auto ev = sim.EnemyViews()[0];
+            trace.push_back(ev.pos.x);
+            trace.push_back(ev.pos.y);
+            trace.push_back(static_cast<float>(ev.hp));
+            trace.push_back(static_cast<float>(ev.alive ? 1 : 0));
+            trace.push_back(static_cast<float>(sim.PlayerStats().hp));
+            trace.push_back(static_cast<float>(sim.Bullets().size()));
+        }
+        return trace;
+    };
+    const std::vector<float> a = run(20240607);
+    const std::vector<float> b = run(20240607);
+    EXPECT_EQ(a, b); // byte-identical replay
+
+    // Sanity: two different seeds must diverge somewhere over 150 steps.
+    // Enemy dies in 1 shot (hp=3, atk=15), so the combat trace is seed-independent;
+    // use a wander-only run (no weapon, far spawn) to confirm the RNG streams differ.
+    auto wanderRun = [&](int runSeed) {
+        Simulation sim(runSeed, &g_NullWorld);
+        sim.AddEnemy(*edef, glm::vec2{200.0F, 0.0F}, /*roomId=*/0, runSeed + 1000);
+        WorldInputs in = Idle();
+        in.playerRoomId = 0;
+        std::vector<float> trace;
+        for (int i = 0; i < 150; ++i) {
+            sim.Advance(20.0F, in);
+            trace.push_back(sim.EnemyViews()[0].pos.x);
+            trace.push_back(sim.EnemyViews()[0].pos.y);
+        }
+        return trace;
+    };
+    EXPECT_NE(wanderRun(20240607), wanderRun(20240608)); // different seeds diverge
+}
+
+TEST(SimulationTest, AccessorsAndEventsAreSane) {
+    Simulation sim(1, &g_NullWorld);
+    EXPECT_TRUE(sim.EnemyViews().empty());
+    EXPECT_FALSE(sim.HasBoss());
+    EXPECT_TRUE(sim.DrainEvents().empty()); // emission deferred this cycle.
+    sim.Advance(20.0F, Idle());
+    EXPECT_TRUE(sim.DrainEvents().empty());
 }
 
 // NOLINTEND(readability-magic-numbers)
