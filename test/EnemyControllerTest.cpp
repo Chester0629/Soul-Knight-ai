@@ -88,9 +88,10 @@ TEST(EnemyControllerTest, SteerAndKnockbackCompose) {
     EXPECT_FLOAT_EQ(v.y, 10.0F);
 }
 
-TEST(EnemyControllerTest, DoubleComputeDecaysTwice) {
-    // Documents the call-once contract (see ComputeVelocity doc): a second call in
-    // the same tick decays again. friction 0.5: 10 -> 5 -> 2.5.
+TEST(EnemyControllerTest, DoubleComputeViolatesCallOnceContract) {
+    // MISUSE DEMONSTRATION (not supported behaviour): ComputeVelocity is call-once
+    // per tick (see its header contract). Calling it twice decays inertia twice;
+    // this test exists to make that hazard visible. friction 0.5: 10 -> 5 -> 2.5.
     EnemyController e(MakeParams(), glm::vec2{0.0F, 0.0F}, 1);
     e.SetMoveDir(glm::vec2{0.0F, 0.0F});
     e.ApplyForce(glm::vec2{1.0F, 0.0F}, 10.0F);
@@ -118,6 +119,27 @@ TEST(EnemyControllerTest, ScoutTickAdvancesStreamAndPicksWanderDir) {
         EXPECT_FLOAT_EQ(e.MoveDir().x, refDir.x);
         EXPECT_FLOAT_EQ(e.MoveDir().y, refDir.y);
     }
+}
+
+TEST(EnemyControllerTest, ScoutTickNoOpWhileNotAwake) {
+    // The awake gate: an Activated-but-not-awake enemy must take NO scout draw and
+    // leave its move dir at zero, keeping its RNG stream pristine.
+    EnemyController::Params p;
+    p.scoutRateSeconds = 0.02F; // 1 tick
+    EnemyController e(p, glm::vec2{0.0F, 0.0F}, 777);
+    Game::Sim::Scheduler sched;
+    std::vector<Game::Sim::FireIntent> fire;
+    // NOTE: awake left false.
+    e.Activate(sched, fire);
+
+    Game::EnemyAI01 ref; // never drawn
+    ref.SetSeed(777);
+    for (int i = 0; i < 4; ++i) {
+        sched.Tick();
+    }
+    EXPECT_FLOAT_EQ(e.MoveDir().x, 0.0F);
+    EXPECT_FLOAT_EQ(e.MoveDir().y, 0.0F);
+    EXPECT_EQ(e.Brain().Rng().Range(0, 1000), ref.Rng().Range(0, 1000)); // unadvanced
 }
 
 TEST(EnemyControllerTest, ShootTickEmitsAimedFireIntentOnCadence) {

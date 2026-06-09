@@ -51,9 +51,10 @@ void EnemyController::Kill() {
 }
 
 void EnemyController::OnScoutTick() {
-    if (m_State.dead) {
-        m_Brain.SetDead(true);
-        return; // dead gate: no Scout/RunReflection draw.
+    // Dead/asleep gate: no Scout/RunReflection draw. (Kill() is the single source
+    // of truth for the dead latch, so we do not re-write it here.)
+    if (m_State.dead || !m_State.awake) {
+        return;
     }
     m_Brain.Scout();                     // 1 draw (Range(0,10))
     m_MoveDir = m_Brain.RunReflection(); // 2 draws (Range(-1,1) x2), normalized
@@ -61,22 +62,24 @@ void EnemyController::OnScoutTick() {
 
 void EnemyController::OnShootTick() {
     if (m_Scheduler == nullptr || m_FireOut == nullptr || m_State.dead) {
-        return; // dead enemies stop firing and stop rescheduling.
+        return; // dead enemies stop firing AND stop rescheduling (chain ends).
     }
     // (No SetDead write here: ShootReflection only READS the dead flag in the
     // decomp, and the gate above already guarantees we are alive.)
     float outCd = m_Params.shootCdSeconds;
-    const bool fired = m_Brain.ShootReflection(outCd, m_Params.shootCdSeconds);
-    if (fired) {
-        FireIntent intent;
-        intent.pattern = FirePattern::Single;
-        intent.origin = m_State.pos;
-        intent.dir = Normalize(m_Target - m_State.pos);
-        intent.speedPxPerSec = m_Params.speed * 5.0F; // enemy bullet speed (slice constant)
-        intent.lifeMs = 1500.0F;
-        intent.damage = 1;
-        intent.camp = 1; // enemy bullet
-        m_FireOut->push_back(intent);
+    if (m_State.awake) { // an asleep enemy skips the shot but keeps the chain alive.
+        const bool fired = m_Brain.ShootReflection(outCd, m_Params.shootCdSeconds);
+        if (fired) {
+            FireIntent intent;
+            intent.pattern = FirePattern::Single;
+            intent.origin = m_State.pos;
+            intent.dir = Normalize(m_Target - m_State.pos);
+            intent.speedPxPerSec = m_Params.speed * kSliceBulletSpeedMul;
+            intent.lifeMs = kSliceBulletLifeMs;
+            intent.damage = 1;
+            intent.camp = 1; // enemy bullet
+            m_FireOut->push_back(intent);
+        }
     }
     const int next = (std::max)(1, Scheduler::SecondsToTicks(outCd));
     m_Scheduler->Invoke(next, [this] { OnShootTick(); });

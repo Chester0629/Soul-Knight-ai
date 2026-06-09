@@ -29,6 +29,12 @@ public:
     /// inertialVel must exceed this for the knockback term (FAITHFUL @ 675976).
     static constexpr float kKnockbackThreshold = 1.0F;
 
+    // Slice placeholders for the enemy bullet (greppable + obviously temporary).
+    // Plan 3/4 will source these from EnemyGunDef.bulletSpeed * kDataSpeedToPxPerSec
+    // and the bullet's destroy_time instead of these flat values.
+    static constexpr float kSliceBulletSpeedMul = 5.0F;  ///< bullet speed = speed * this.
+    static constexpr float kSliceBulletLifeMs = 1500.0F; ///< bullet lifetime (ms).
+
     struct Params {
         float speed = 60.0F;
         float speedRate = 0.0F;
