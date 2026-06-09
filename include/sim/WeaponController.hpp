@@ -1,0 +1,54 @@
+#ifndef GAME_SIM_WEAPONCONTROLLER_HPP
+#define GAME_SIM_WEAPONCONTROLLER_HPP
+
+#include <vector>
+
+#include <glm/glm.hpp>
+
+#include "combat/Gun001.hpp"
+#include "combat/Gun016.hpp"
+#include "sim/FireIntent.hpp"
+
+namespace Game::Sim {
+
+/// Player-input-driven weapon: each fixed tick the owner calls Tick(firing, ...);
+/// a fire-rate cooldown gates shots. The active gun brain is the sole RNG stream.
+class WeaponController {
+public:
+    enum class Kind { Single, HeatMinigun };
+
+    struct Params {
+        Kind kind = Kind::Single;
+        float fireIntervalSeconds = 0.15F;
+        float bulletSpeedPxPerSec = 120.0F;
+        float lifeMs = 1500.0F;
+        int damage = 1;
+        // Single (Gun001):
+        float baseAngle = 5.0F;
+        float recoil = 0.0F;
+        // HeatMinigun (Gun016):
+        float heatMaxTime = 2.0F;
+        float heatBaseAngle = 20.0F;
+        float heatRecoil = 0.0F;
+    };
+
+    WeaponController(const Params &params, int seed);
+
+    /// Advance one fixed tick. If @p firing and the fire-rate cooldown elapsed,
+    /// append one Single FireIntent (scattered, player camp 0) to @p out.
+    void Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
+              std::vector<FireIntent> &out);
+
+    float HeatTime() const { return m_HeatTime; } ///< for tests.
+
+private:
+    Params m_Params;
+    Gun001 m_Gun001;
+    Gun016 m_Gun016;
+    int m_CooldownTicks = 0;
+    float m_HeatTime = 0.0F;
+};
+
+} // namespace Game::Sim
+
+#endif /* GAME_SIM_WEAPONCONTROLLER_HPP */
