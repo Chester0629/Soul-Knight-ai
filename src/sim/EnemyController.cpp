@@ -3,15 +3,9 @@
 #include <algorithm>
 #include <cmath>
 
+#include "sim/SimMath.hpp"
+
 namespace Game::Sim {
-namespace {
-
-glm::vec2 Normalize(glm::vec2 v) {
-    const float len = std::sqrt(v.x * v.x + v.y * v.y);
-    return len > 0.0F ? v / len : glm::vec2{1.0F, 0.0F};
-}
-
-} // namespace
 
 EnemyController::EnemyController(const Params &params, glm::vec2 spawn, int seed)
     : m_Params(params) {

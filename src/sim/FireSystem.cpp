@@ -2,17 +2,10 @@
 
 #include <cmath>
 
+#include "sim/SimMath.hpp"
+
 namespace Game::Sim {
 namespace {
-
-constexpr float kDegToRad = 3.14159265358979F / 180.0F;
-
-glm::vec2 RotateDeg(glm::vec2 v, float deg) {
-    const float r = deg * kDegToRad;
-    const float c = std::cos(r);
-    const float s = std::sin(r);
-    return glm::vec2{v.x * c - v.y * s, v.x * s + v.y * c};
-}
 
 BulletState MakeBullet(const FireIntent &in, glm::vec2 dir, std::uint32_t &nextId) {
     BulletState b;

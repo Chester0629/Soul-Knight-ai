@@ -277,6 +277,7 @@ set(INCLUDE_FILES
 
     # Engine port -- sim infrastructure (Plan 1)
     sim/SimConfig.hpp
+    sim/SimMath.hpp
     sim/FixedClock.hpp
     sim/Scheduler.hpp
     sim/BulletState.hpp
@@ -437,6 +438,7 @@ set(TEST_FILES
     EnemyAITest.cpp
 
     # Engine port -- sim infrastructure (Plan 1)
+    SimMathTest.cpp
     FixedClockTest.cpp
     SchedulerTest.cpp
     SimPodsTest.cpp
