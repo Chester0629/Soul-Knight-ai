@@ -231,4 +231,80 @@ TEST(SimulationTest, BossReplayIsByteIdentical) {
     EXPECT_EQ(run(123), run(123));
 }
 
+TEST(SimulationTest, PlayerBulletDamagesAndKillsEnemy) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::EnemyDef def{};
+    def.shootCd = 99.0F; // keep the enemy from firing back during the test
+    def.scoutRate = 99.0F;
+    def.friction = 0.9F;
+    // Enemy sitting at the origin; player just to its left firing +x straight into it.
+    sim.AddEnemy(def, glm::vec2{0.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    Game::WeaponDef wdef{};
+    wdef.bulletSpeed = 4.0F; // slow so it lingers on the enemy
+    wdef.atk = 1;
+    wdef.deviation = 0;
+    sim.EquipWeapon(wdef, "Gun001", 7);
+
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{-20.0F, 0.0F};
+    in.aimDir = glm::vec2{1.0F, 0.0F};
+    in.firing = true;
+    in.playerRoomId = 0; // enemy awake (so Kill/scheduler interplay is exercised)
+    const int startHp = sim.EnemyViews()[0].hp;
+    for (int i = 0; i < 200 && sim.EnemyViews()[0].alive; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_LT(sim.EnemyViews()[0].hp, startHp);   // took damage
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);      // died (hp <= 0)
+}
+
+TEST(SimulationTest, EnemyBulletDamagesPlayer) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::CombatStats player;
+    player.hp = 6;
+    player.maxHp = 6;
+    sim.SetPlayerStats(player);
+    Game::EnemyDef def{};
+    def.shootCd = 0.1F;
+    def.scoutRate = 99.0F; // hold still
+    def.friction = 0.9F;
+    sim.AddEnemy(def, glm::vec2{30.0F, 0.0F}, /*roomId=*/0, /*seed=*/2);
+
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{0.0F, 0.0F}; // enemy fires toward origin (the player)
+    in.playerRoomId = 0;
+    for (int i = 0; i < 200 && sim.PlayerStats().hp == 6; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_LT(sim.PlayerStats().hp, 6); // an enemy bullet reached the player
+}
+
+TEST(SimulationTest, HitResolutionReplayIsByteIdentical) {
+    auto run = [](int seed) {
+        Simulation sim(seed, &g_NullWorld);
+        Game::EnemyDef def{};
+        def.shootCd = 0.3F;
+        def.scoutRate = 0.2F;
+        def.friction = 0.9F;
+        sim.AddEnemy(def, glm::vec2{40.0F, 0.0F}, 0, seed + 1000);
+        Game::WeaponDef wdef{};
+        wdef.bulletSpeed = 8.0F;
+        wdef.atk = 1;
+        sim.EquipWeapon(wdef, "Gun001", seed + 5);
+        WorldInputs in = Idle();
+        in.playerPos = glm::vec2{-10.0F, 0.0F};
+        in.firing = true;
+        in.playerRoomId = 0;
+        std::vector<float> trace;
+        for (int i = 0; i < 100; ++i) {
+            sim.Advance(20.0F, in);
+            trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp));
+            trace.push_back(static_cast<float>(sim.EnemyViews()[0].alive ? 1 : 0));
+            trace.push_back(static_cast<float>(sim.Bullets().size()));
+        }
+        return trace;
+    };
+    EXPECT_EQ(run(2024), run(2024));
+}
+
 // NOLINTEND(readability-magic-numbers)

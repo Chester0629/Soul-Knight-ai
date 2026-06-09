@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "combat/Damage.hpp"
 #include "sim/BrainFactory.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
@@ -118,12 +119,78 @@ void Simulation::IntegrateBullets() {
         }
     }
 }
-void Simulation::ResolveHits() {}
+void Simulation::ResolveHits() {
+    // Deterministic order: ascending bullet id (m_Bullets is append-ordered by id, but
+    // sort defensively so a future reordering cannot desync the hit RNG stream).
+    std::sort(m_Bullets.begin(), m_Bullets.end(),
+              [](const BulletState &a, const BulletState &b) { return a.id < b.id; });
+
+    for (BulletState &b : m_Bullets) {
+        if (!b.active) {
+            continue;
+        }
+        if (b.camp == 0) {
+            // Player bullet -> enemies, then boss. One target per bullet per step.
+            bool consumed = false;
+            for (auto &e : m_Enemies) {
+                if (e->State().dead || !CirclesOverlap(b.pos, kBulletRadius, e->State().pos,
+                                                       kEnemyBodyRadius)) {
+                    continue;
+                }
+                Game::Combat::AttackerInput in;
+                in.baseDamage = b.damage;
+                in.critical = b.critical;
+                in.repelInputMagnitude = b.repel * kRepelScale;
+                const Game::Combat::HitResult hr =
+                    Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
+                Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
+                if (!e->State().kinematic) {
+                    e->ApplyForce(Normalize(b.vel), hr.repelMagnitude);
+                }
+                consumed = true;
+                break;
+            }
+            if (!consumed && m_Boss != nullptr && !m_Boss->State().dead &&
+                CirclesOverlap(b.pos, kBulletRadius, m_Boss->State().pos, kBossBodyRadius)) {
+                Game::Combat::AttackerInput in;
+                in.baseDamage = b.damage;
+                in.critical = b.critical;
+                in.repelInputMagnitude = b.repel * kRepelScale;
+                const Game::Combat::HitResult hr =
+                    Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
+                Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
+                m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
+                consumed = true;
+            }
+            if (consumed && b.pierce <= 0) {
+                b.active = false;
+            } else if (consumed) {
+                --b.pierce; // canThrough/pierce: survive and keep going.
+            }
+        } else {
+            // Enemy bullet -> player.
+            if (m_Input.playerAlive &&
+                CirclesOverlap(b.pos, kBulletRadius, m_Input.playerPos, kPlayerBodyRadius)) {
+                Game::Combat::AttackerInput in;
+                in.baseDamage = b.damage;
+                in.critical = b.critical;
+                in.repelInputMagnitude = b.repel * kRepelScale;
+                const Game::Combat::HitResult hr =
+                    Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::PLAYER);
+                Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
+                b.active = false;
+            }
+        }
+    }
+}
 void Simulation::Cull() {
     for (auto &e : m_Enemies) {
         if (!e->State().dead && e->State().stats.IsDead()) {
             e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
         }
+    }
+    if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().stats.IsDead()) {
+        m_Boss->Kill();
     }
     m_Bullets.erase(std::remove_if(m_Bullets.begin(), m_Bullets.end(),
                                    [](const BulletState &b) {
