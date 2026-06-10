@@ -75,17 +75,17 @@ Enemy/Boss/Bullet.hpp, Simulation.hpp):**
    crit/knockback until that weapon-layer fix lands; boss movement is chase-only; SimEvent anim/
    sfx is unemitted; the 400ms-vs-2.0s energy-reload faithfulness nit stays as-is.
 
-**Open decisions surfaced for review (my recommendation in each):**
-- **A. Player movement timestep.** The spec keeps player movement scene-side at variable dt
-  (recommended, simplest — the sim is deterministic w.r.t. its *inputs*, and the player pos is an
-  input). Alternative: integrate the player at fixed step inside the sim for frame-rate-independent
-  player motion. **Recommend: keep scene-side variable-dt** for this slice (matches spec §5).
-- **B. Multi-shot energy edge.** If >1 player shot fires in one frame's N fixed steps with only
-  enough energy for one, the extra bullet still spawns (the sim doesn't know about energy). At the
-  real weapon cadence (~8 ticks) and ~1-2 steps/frame this is ~never hit. **Recommend: accept for
-  the slice**, note it; tighten later if heat-minigun fire-rate makes it visible.
-- **C. Player hp/armor pull granularity.** We pull `hp`+`armor` back from the sim but not energy
-  (energy is scene-owned). **Recommend: pull hp+armor only** (as written).
+**Decided (user-approved 2026-06-10):**
+- **A. Player movement timestep — KEEP scene-side variable-dt.** The sim is deterministic w.r.t.
+  its *inputs*, and player pos is an input; matches spec §5. (Fixed-step player integration stays
+  a follow-on.)
+- **B. Multi-shot energy edge — ACCEPTED for the slice.** If >1 player shot fires in one frame's N
+  fixed steps with energy for only one, the extra bullet still spawns. At the real cadence (~8
+  ticks, ~1-2 steps/frame) this is ~never hit; tighten only if heat-minigun fire-rate exposes it.
+- **C. Player vitals — ACCEPTED (pull hp+armor only), and MARKED in code.** Energy stays
+  scene-owned, so the per-frame pull-back deliberately copies only `hp`/`armor` from the sim. This
+  is an intentional asymmetry, so Task 2's pull-back site carries an explicit marker comment (a
+  future reader must not "fix" it by also overwriting energy from the sim's stale copy).
 
 ---
 
@@ -318,7 +318,10 @@ void GameScene::Update(float dtMs) {
     m_Sim->SetPlayerStats(m_Player->Stats());      // push current vitals in
     m_Sim->Advance(dtMs, in);                       // sim damages its player-stats copy
     const CombatStats &simPlayer = m_Sim->PlayerStats();
-    m_Player->Stats().hp = simPlayer.hp;            // pull hp/armor back (energy stays scene-side)
+    // MARKER (decision C): pull back ONLY hp + armor. Energy is scene-owned (regen + spend
+    // below); the sim never modifies energy, so do NOT copy simPlayer.energy back -- doing so
+    // would clobber this frame's regen/spend with the value we pushed in. Intentional asymmetry.
+    m_Player->Stats().hp = simPlayer.hp;
     m_Player->Stats().armor = simPlayer.armor;
     for (int s = 0; s < m_Sim->PlayerShotsLastAdvance(); ++s) {
         m_Player->Stats().SpendEnergy(m_WeaponEnergyCost);
@@ -473,19 +476,70 @@ git commit -am "refactor(game): remove dead OLD gameplay path (WeaponInstance, U
 
 ---
 
-## Task 4: Final regression gate + playtest sign-off
+## Task 4: Stress test + final regression gate + playtest sign-off
 
-- [ ] **Step 1:** `cmake --build build --config Debug --target SoulKnight SoulKnightTests` ->
+The view-sync rewire pools `Bullet` objects (released + re-acquired) and keys them by sim
+`BulletState.id`, and nulls dead enemy slots in `m_Enemies` keyed by sim id. The user flagged
+this as the prime off-by-one / id-recycling risk. This task pins it two ways: a **headless
+automated churn test** (the sim half — id monotonicity + no duplicate live ids under rapid
+spawn/despawn) and a **playtest stress pass** (the GameScene half — pool recycle + null-slot
+churn, watched for crashes / ghost or stuck bullets / leaks).
+
+- [ ] **Step 1: Add a headless id-churn stress test** to `test/SimulationTest.cpp` (before
+  `// NOLINTEND`). It fires a near-every-tick weapon for many frames so bullets spawn, live ~75
+  steps, then despawn — a steady-state churn — and asserts every live bullet id is unique and
+  non-zero, and that ids climb well past the max-ever-live count (i.e. ids are never recycled):
+```cpp
+TEST(SimulationTest, RapidBulletChurnKeepsLiveIdsUniqueAndMonotone) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::WeaponDef def{};
+    def.weaponSpeed = 50.0F; // tiny fire-interval -> fires (nearly) every tick.
+    def.bulletSpeed = 30.0F;
+    sim.EquipWeapon(def, "Gun016", 3); // heat-minigun stream.
+    WorldInputs in = Idle();
+    in.firing = true;
+    std::uint32_t maxIdSeen = 0;
+    std::size_t maxLiveAtOnce = 0;
+    for (int frame = 0; frame < 300; ++frame) {
+        sim.Advance(20.0F, in);
+        std::unordered_set<std::uint32_t> live;
+        for (const Game::Sim::BulletState &b : sim.Bullets()) {
+            EXPECT_NE(b.id, 0U) << "0 is the invalid id sentinel";
+            EXPECT_TRUE(live.insert(b.id).second) << "duplicate live bullet id " << b.id;
+            maxIdSeen = (b.id > maxIdSeen) ? b.id : maxIdSeen;
+        }
+        maxLiveAtOnce = (live.size() > maxLiveAtOnce) ? live.size() : maxLiveAtOnce;
+    }
+    // Far more ids were issued than were ever simultaneously live -> ids never recycle.
+    EXPECT_GT(static_cast<std::size_t>(maxIdSeen), maxLiveAtOnce * 2U);
+    EXPECT_GT(maxIdSeen, 100U);
+}
+```
+  Add `#include <unordered_set>` and `#include <cstdint>` to the test if not already present.
+  Build + run: `ctest --test-dir build -C Debug -R SimulationTest` -> passes (now 18 cases).
+
+- [ ] **Step 2:** `cmake --build build --config Debug --target SoulKnight SoulKnightTests` ->
   `/W4`-clean.
-- [ ] **Step 2:** `ctest --test-dir build -C Debug` -> 100% pass (the headless sim suite is
-  unchanged + still green; GameScene has no unit tests by design).
-- [ ] **Step 3:** `gitnexus_detect_changes()` (or `git diff --stat main..HEAD -- src/scenes
-  include/scenes`) -> confirm only `GameScene.{hpp,cpp}` changed in the shell, with the expected
-  symbols.
-- [ ] **Step 4: Playtest sign-off** via `/run`: a full loop — clear a room (enemies wake, chase,
-  shoot, die; door unseals on clear), pick up a Gun016 (heat-minigun spread visibly grows while
-  held), reach + defeat the boss (fan + angry phase at <50% hp), and confirm player death exits.
-  Capture a screenshot or note any visual/behaviour gap.
+- [ ] **Step 3:** `ctest --test-dir build -C Debug` -> 100% pass (headless sim suite + the new
+  churn test; GameScene has no unit tests by design).
+- [ ] **Step 4:** `gitnexus_detect_changes()` (or `git diff --stat main..HEAD -- src/scenes
+  include/scenes`) -> confirm only `GameScene.{hpp,cpp}` changed in the shell (plus the one
+  `SimulationTest.cpp` churn test), with the expected symbols.
+
+- [ ] **Step 5: Playtest sign-off + stress pass** via `/run`:
+  - **Functional loop:** clear a room (enemies wake, chase, shoot, die; door unseals on clear),
+    pick up a Gun016 (heat-minigun spread visibly grows while held), reach + defeat the boss (fan +
+    angry phase at <50% hp), confirm player death exits.
+  - **Rapid spawn/destroy STRESS (the user-requested check):** hold the heat-minigun fire button
+    continuously into a wall and into a crowd so hundreds of bullets spawn → travel → despawn each
+    second (max pool-recycle churn), AND rapidly kill several enemies in quick succession (max
+    null-slot churn). Watch specifically for, and report any of: a crash / assert, a "ghost"
+    bullet that never despawns or that teleports, a bullet that renders at a stale/duplicated
+    position, an enemy view that lingers after death or whose slot mis-maps to another enemy
+    (off-by-one in the `m_Enemies[ev.id]` mapping), a pooled `Bullet` that fails to re-arm after
+    reuse, or a steadily growing memory/object count (pool/map leak). A clean run here is the gate
+    that the id-keyed pool recycle + index-keyed view sync are off-by-one-free. Capture a
+    screenshot or note any gap.
 
 ---
 
