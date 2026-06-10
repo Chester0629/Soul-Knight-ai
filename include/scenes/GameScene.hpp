@@ -1,7 +1,10 @@
 #ifndef GAME_GAME_SCENE_HPP
 #define GAME_GAME_SCENE_HPP
 
+#include <cstdint>
 #include <memory>
+#include <optional>
+#include <unordered_map>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -15,6 +18,9 @@
 
 #include "combat/Damage.hpp"
 #include "combat/WeaponInstance.hpp"
+#include "sim/Simulation.hpp"
+#include "sim/WorldInputs.hpp"
+#include "sim/WorldCollision.hpp"
 #include "data/GameData.hpp"
 #include "data/LootTable.hpp"
 #include "data/RGRandom.hpp"
@@ -39,13 +45,16 @@ namespace Game {
  * Bullets at the mouse; the Enemy runs EnemyAI; Room walls block movement;
  * Camera2D follows; the HUD shows vitals.
  */
-class GameScene : public Core::Scene {
+class GameScene : public Core::Scene, public Sim::WorldCollision {
 public:
     GameScene();
 
     void OnEnter() override;
     void Update(float dtMs) override;
     void Render() override;
+
+    /// WorldCollision: a circle at @p pos / @p radius overlaps a wall or sealed door.
+    bool Blocks(glm::vec2 pos, float radius) const override { return BlocksAny(pos, radius); }
 
 private:
     glm::vec2 AimDirection() const;
@@ -92,6 +101,18 @@ private:
     /// Deterministic stream for combat rolls (crit). The original rolls crit on
     /// Unity's global RNG; a seeded per-run stream keeps our combat replayable.
     RGRandom m_Rng;
+
+    /// The deterministic sim this scene drives (Plan 4a). Constructed in OnEnter with
+    /// (m_RunSeed, this-as-WorldCollision). Move-deleted -> emplaced in place.
+    std::optional<Sim::Simulation> m_Sim;
+    /// Pooled Bullet VIEWS keyed by the sim BulletState id (render mirror only).
+    std::unordered_map<std::uint32_t, std::shared_ptr<Bullet>> m_BulletViews;
+    /// Energy spent per player shot (the equipped WeaponDef.consume).
+    int m_WeaponEnergyCost = 1;
+    /// Bumps each weapon swap so the rebuilt WeaponController gets a fresh deterministic seed.
+    int m_WeaponSwaps = 0;
+    void SyncBulletViews();             // defined in Task 2.
+    bool RoomHasLiveHostile(int roomId) const; // defined in Task 2.
 };
 } // namespace Game
 

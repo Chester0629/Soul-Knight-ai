@@ -59,6 +59,7 @@ void GameScene::OnEnter() {
 
     // Root every deterministic stream this run owns in the run seed.
     m_Rng.SetRandomSeed(m_RunSeed);
+    m_Sim.emplace(m_RunSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
 
     m_Background = std::make_shared<Util::GameObject>();
     m_Background->SetDrawable(
@@ -158,6 +159,7 @@ void GameScene::OnEnter() {
                                                    m_RunSeed + 9000);
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
+                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex, m_RunSeed + 9000);
             } else if (edef != nullptr) {
                 auto enemy =
                     std::make_shared<Enemy>(*edef, root, spawn, 450.0F, 260.0F);
@@ -165,6 +167,7 @@ void GameScene::OnEnter() {
                 enemy->AI().SetKinematic(edef->kinematic != 0);
                 enemy->SetRoomId(roomIndex);
                 m_Enemies.push_back(enemy);
+                m_Sim->AddEnemy(*edef, spawn, roomIndex, m_RunSeed + 1000 + roomIndex);
             }
         }
 
@@ -182,7 +185,9 @@ void GameScene::OnEnter() {
     }
 
     if (const WeaponDef *wdef = m_Data.FindWeapon("Gun001")) {
-        m_Weapon = std::make_unique<WeaponInstance>(*wdef);
+        m_Weapon = std::make_unique<WeaponInstance>(*wdef); // OLD path, removed in Task 3.
+        m_Sim->EquipWeapon(*wdef, "Gun001", m_RunSeed + 5);
+        m_WeaponEnergyCost = wdef->consume > 0 ? wdef->consume : 1;
     }
 
     m_Renderer.AddChild(m_Background);
