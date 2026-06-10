@@ -23,6 +23,11 @@ public:
         float bulletSpeedPxPerSec = 120.0F;
         float lifeMs = 1500.0F;
         int damage = 1;
+        // Bullet attributes carried into the FireIntent (faithful: RGBullet.UpdateAttribute):
+        int critical = 0;        ///< crit chance 0..100 (WeaponDef.critical).
+        float repel = 0.0F;      ///< knockback magnitude (WeaponDef.repel).
+        bool canThrough = false; ///< pierce-through enabled (WeaponDef.canThrough).
+        int pierce = 0;          ///< pass-through budget (WeaponDef.throughCount).
         // Single (Gun001):
         float baseAngle = 5.0F;
         float recoil = 0.0F;

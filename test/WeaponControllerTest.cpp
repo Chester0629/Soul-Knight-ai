@@ -162,4 +162,23 @@ TEST(WeaponControllerTest, HeatPlateausAtCapWhileFiring) {
     EXPECT_NEAR(w.HeatTime(), 0.04F, 1e-4F); // plateaued at the cap, not 6*0.02
 }
 
+TEST(WeaponControllerTest, ShotCarriesCritRepelPierceFromParams) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::Single;
+    p.fireIntervalSeconds = 0.02F;
+    p.baseAngle = 0.0F;
+    p.critical = 25;
+    p.repel = 3.0F;
+    p.canThrough = true;
+    p.pierce = 2;
+    WeaponController w(p, 1);
+    std::vector<Game::Sim::FireIntent> out;
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    ASSERT_EQ(out.size(), 1U);
+    EXPECT_EQ(out[0].critical, 25);
+    EXPECT_FLOAT_EQ(out[0].repel, 3.0F);
+    EXPECT_TRUE(out[0].canThrough);
+    EXPECT_EQ(out[0].pierce, 2);
+}
+
 // NOLINTEND(readability-magic-numbers)

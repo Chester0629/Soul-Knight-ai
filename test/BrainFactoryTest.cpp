@@ -74,4 +74,20 @@ TEST(BrainFactoryTest, MakeWeaponGun016SelectsHeatMinigun) {
     EXPECT_GT(w.HeatTime(), 0.0F);
 }
 
+TEST(BrainFactoryTest, MakeWeaponMapsCritRepelPierce) {
+    Game::WeaponDef def{};
+    def.critical = 30;
+    def.repel = 2.5F;
+    def.canThrough = 1;
+    def.throughCount = 3;
+    Game::Sim::WeaponController w = BrainFactory::MakeWeapon(def, "Gun001", 1);
+    std::vector<Game::Sim::FireIntent> out;
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    ASSERT_EQ(out.size(), 1U);
+    EXPECT_EQ(out[0].critical, 30);
+    EXPECT_FLOAT_EQ(out[0].repel, 2.5F);
+    EXPECT_TRUE(out[0].canThrough);
+    EXPECT_EQ(out[0].pierce, 3);
+}
+
 // NOLINTEND(readability-magic-numbers)

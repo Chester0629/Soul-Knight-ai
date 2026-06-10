@@ -50,6 +50,10 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     // heatBaseAngle, whose faithful source is a per-weapon-class recoil base (owner+0x30),
     // NOT this JSON field -- so it stays a slice default; do not route deviation into it.
     p.baseAngle = static_cast<float>(def.deviation);
+    p.critical = def.critical;
+    p.repel = def.repel;
+    p.canThrough = def.canThrough != 0;
+    p.pierce = def.throughCount;
     return WeaponController(p, seed); // prvalue
 }
 

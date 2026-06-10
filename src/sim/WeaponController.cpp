@@ -51,6 +51,10 @@ void WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
     intent.lifeMs = m_Params.lifeMs;
     intent.damage = m_Params.damage;
     intent.camp = 0;
+    intent.critical = m_Params.critical;
+    intent.repel = m_Params.repel;
+    intent.canThrough = m_Params.canThrough;
+    intent.pierce = m_Params.pierce;
     out.push_back(intent);
     m_CooldownTicks = (std::max)(1, Scheduler::SecondsToTicks(m_Params.fireIntervalSeconds));
 }
