@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <cstdint>
+#include <unordered_set>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -392,6 +394,31 @@ TEST(SimulationTest, ViewFacingReflectsHeading) {
     }
     EXPECT_LT(sim.BossView().facing.x, 0.0F);              // faces the player it chases (-x)
     EXPECT_NEAR(glm::length(sim.BossView().facing), 1.0F, 1e-4F); // unit heading
+}
+
+TEST(SimulationTest, RapidBulletChurnKeepsLiveIdsUniqueAndMonotone) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::WeaponDef def{};
+    def.weaponSpeed = 50.0F; // tiny fire-interval -> fires (nearly) every tick.
+    def.bulletSpeed = 30.0F;
+    sim.EquipWeapon(def, "Gun016", 3); // heat-minigun stream.
+    WorldInputs in = Idle();
+    in.firing = true;
+    std::uint32_t maxIdSeen = 0;
+    std::size_t maxLiveAtOnce = 0;
+    for (int frame = 0; frame < 300; ++frame) {
+        sim.Advance(20.0F, in);
+        std::unordered_set<std::uint32_t> live;
+        for (const Game::Sim::BulletState &b : sim.Bullets()) {
+            EXPECT_NE(b.id, 0U) << "0 is the invalid id sentinel";
+            EXPECT_TRUE(live.insert(b.id).second) << "duplicate live bullet id " << b.id;
+            maxIdSeen = (b.id > maxIdSeen) ? b.id : maxIdSeen;
+        }
+        maxLiveAtOnce = (live.size() > maxLiveAtOnce) ? live.size() : maxLiveAtOnce;
+    }
+    // Far more ids were issued than were ever simultaneously live -> ids never recycle.
+    EXPECT_GT(static_cast<std::size_t>(maxIdSeen), maxLiveAtOnce * 2U);
+    EXPECT_GT(maxIdSeen, 100U);
 }
 
 // NOLINTEND(readability-magic-numbers)
