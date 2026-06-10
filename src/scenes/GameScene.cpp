@@ -1,6 +1,5 @@
 #include "scenes/GameScene.hpp"
 
-#include <array>
 #include <cmath>
 #include <memory>
 #include <string>
@@ -21,14 +20,8 @@
 namespace Game {
 namespace {
 constexpr float kPlayerRadius = 16.0F;
-constexpr float kBulletSpeedScale = 15.0F; // data bullet_speed -> pixels/second
 constexpr float kBulletLifeMs = 1500.0F;
-constexpr float kEnemyBulletSpeed = 300.0F;
 constexpr float kEnergyRegenMs = 400.0F; // +1 energy per interval
-constexpr int kEnemyContactDamage = 1;
-// repel(data, ~1-3) -> pre-clamp impulse; >=1 saturates the 28/30 GetForce cap,
-// matching the original where most hits land at the cap. Tunable (see report).
-constexpr float kRepelScale = 30.0F;
 // World size (pixels) of one RoomGen grid cell.
 constexpr float kCellPx = 32.0F;
 // Fixed room footprint (cells) so rooms tile edge-to-edge and their door gaps
@@ -38,9 +31,6 @@ constexpr float kRoomPitch = static_cast<float>(kRoomCells) * kCellPx;
 // Player must be this close (px) to auto-open a chest / collect a pickup.
 constexpr float kChestOpenRange = 40.0F;
 constexpr float kPickupRange = 28.0F;
-// Boss body radius for wall collision; boss fan spread (degrees).
-constexpr float kBossBodyRadius = 24.0F;
-constexpr float kBossFanSpreadDeg = 30.0F;
 
 glm::vec2 Normalize(glm::vec2 v) {
     const float len = std::sqrt(v.x * v.x + v.y * v.y);
@@ -186,7 +176,6 @@ void GameScene::OnEnter() {
     }
 
     if (const WeaponDef *wdef = m_Data.FindWeapon("Gun001")) {
-        m_Weapon = std::make_unique<WeaponInstance>(*wdef); // OLD path, removed in Task 3.
         m_Sim->EquipWeapon(*wdef, "Gun001", m_RunSeed + 5);
         m_WeaponEnergyCost = wdef->consume > 0 ? wdef->consume : 1;
     }
@@ -215,109 +204,6 @@ glm::vec2 GameScene::AimDirection() const {
     // cursor is the camera position plus the cursor's center-origin offset.
     const glm::vec2 worldCursor = m_Camera.GetPosition() + glm::vec2(w.x, w.y);
     return Normalize(worldCursor - m_Player->Position());
-}
-
-void GameScene::TryFirePlayerWeapon() {
-    if (m_Weapon == nullptr || !m_Weapon->Ready()) {
-        return;
-    }
-    if (!m_Player->Stats().SpendEnergy(m_Weapon->EnergyCost())) {
-        return; // not enough energy
-    }
-    m_Weapon->TryFire();
-
-    // Faithful multi-bullet fire: one trigger pull -> N deviation-jittered bullets
-    // (single/spread/shotgun), each carrying atk/repel/critical/pierce.
-    const FirePlan plan = m_Weapon->BuildFirePlan(AimDirection(), m_Rng);
-    for (const BulletSpawn &bs : plan.bullets) {
-        auto bullet = m_BulletPool.Acquire();
-        bullet->Init(m_Player->Position(), bs.velocity * kBulletSpeedScale,
-                     kBulletLifeMs, bs.damage, /*camp=*/0, bs.repel, bs.critical,
-                     bs.canThrough, bs.pierce);
-        m_Renderer.AddChild(bullet);
-        m_Bullets.push_back(bullet);
-    }
-}
-
-void GameScene::UpdateBullets(float dtMs) {
-    for (auto it = m_Bullets.begin(); it != m_Bullets.end();) {
-        auto &bullet = *it;
-        bullet->Update(dtMs);
-
-        if (bullet->Active()) {
-            if (bullet->Camp() == 0) {
-                for (auto &enemy : m_Enemies) {
-                    if (enemy->IsDead() ||
-                        !Util::Overlap(bullet->GetCollider(),
-                                       enemy->GetCollider())) {
-                        continue;
-                    }
-                    // Faithful attacker-side resolution: damage factor, crit
-                    // roll, crit scaling, repel (doubled on crit, capped). Enemy
-                    // takes it straight to HP (no armor).
-                    Combat::AttackerInput in;
-                    in.baseDamage = bullet->Damage();
-                    in.critical = bullet->Critical();
-                    in.repelInputMagnitude = bullet->Repel() * kRepelScale;
-                    const Combat::HitResult hr = Combat::ResolveHit(
-                        in, m_Rng, Combat::Defender::ENEMY);
-                    Combat::ApplyToEnemy(enemy->MutableStats(), hr,
-                                         /*canHurt=*/true);
-                    if (hr.repelMagnitude > 0.0F) {
-                        enemy->AI().GetForce(Normalize(bullet->Velocity()),
-                                             hr.repelMagnitude);
-                    }
-                    if (bullet->ConsumePierce()) {
-                        bullet->Deactivate();
-                    }
-                    break; // one enemy hit per bullet per frame
-                }
-                if (bullet->Active()) {
-                    for (auto &boss : m_Bosses) {
-                        if (boss->IsDead() ||
-                            !Util::Overlap(bullet->GetCollider(),
-                                           boss->GetCollider())) {
-                            continue;
-                        }
-                        Combat::AttackerInput in;
-                        in.baseDamage = bullet->Damage();
-                        in.critical = bullet->Critical();
-                        in.repelInputMagnitude = bullet->Repel() * kRepelScale;
-                        const Combat::HitResult hr = Combat::ResolveHit(
-                            in, m_Rng, Combat::Defender::ENEMY);
-                        boss->TakeDamage(hr.finalDamage);
-                        if (bullet->ConsumePierce()) {
-                            bullet->Deactivate();
-                        }
-                        break;
-                    }
-                }
-            } else if (bullet->Camp() == 1) {
-                const Util::Collider playerHit =
-                    Util::Collider::MakeCircle(m_Player->Position(),
-                                               kPlayerRadius);
-                if (Util::Overlap(bullet->GetCollider(), playerHit)) {
-                    // Player defender: armor-then-HP via the faithful chain.
-                    Combat::AttackerInput in;
-                    in.baseDamage = bullet->Damage();
-                    in.critical = bullet->Critical();
-                    in.repelInputMagnitude = bullet->Repel() * kRepelScale;
-                    const Combat::HitResult hr = Combat::ResolveHit(
-                        in, m_Rng, Combat::Defender::PLAYER);
-                    Combat::ApplyToPlayer(m_Player->Stats(), hr, /*canHurt=*/true);
-                    bullet->Deactivate();
-                }
-            }
-        }
-
-        if (!bullet->Active()) {
-            m_Renderer.RemoveChild(bullet);
-            m_BulletPool.Release(bullet);
-            it = m_Bullets.erase(it);
-        } else {
-            ++it;
-        }
-    }
 }
 
 bool GameScene::BlocksAny(glm::vec2 pos, float radius) const {

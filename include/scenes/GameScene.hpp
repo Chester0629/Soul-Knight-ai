@@ -16,8 +16,6 @@
 #include "Util/ObjectPool.hpp"
 #include "Util/Renderer.hpp"
 
-#include "combat/Damage.hpp"
-#include "combat/WeaponInstance.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldInputs.hpp"
 #include "sim/WorldCollision.hpp"
@@ -41,8 +39,8 @@ namespace Game {
  *        damage, all inside a walled room with a follow camera and HUD.
  *
  * Converges the engine + game systems built across Phases 1-2: SceneManager
- * drives this scene; the player (CombatStats + WeaponInstance) fires pooled
- * Bullets at the mouse; the Enemy runs EnemyAI; Room walls block movement;
+ * drives this scene; the sim (Sim::Simulation) handles combat and fires pooled
+ * Bullets; the Enemy/Boss run inside the sim; Room walls block movement;
  * Camera2D follows; the HUD shows vitals.
  */
 class GameScene : public Core::Scene, public Sim::WorldCollision {
@@ -58,8 +56,6 @@ public:
 
 private:
     glm::vec2 AimDirection() const;
-    void TryFirePlayerWeapon();
-    void UpdateBullets(float dtMs);
     /// @return true if a circle at @p pos / @p radius overlaps any room's walls.
     bool BlocksAny(glm::vec2 pos, float radius) const;
 
@@ -87,10 +83,8 @@ private:
     std::vector<std::vector<Util::Collider>> m_RoomDoors;
     /// Index of the active, uncleared room whose doors are sealed, else -1.
     int m_LockedRoom = -1;
-    std::unique_ptr<WeaponInstance> m_Weapon;
 
     Util::ObjectPool<Bullet> m_BulletPool;
-    std::vector<std::shared_ptr<Bullet>> m_Bullets;
 
     Hud m_Hud;
     float m_EnergyRegenAccumMs = 0.0F;
