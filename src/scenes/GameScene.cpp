@@ -4,6 +4,7 @@
 #include <cmath>
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 #include <glm/glm.hpp>
 
@@ -338,154 +339,147 @@ bool GameScene::BlocksAny(glm::vec2 pos, float radius) const {
     return false;
 }
 
+void GameScene::SyncBulletViews() {
+    const std::vector<Sim::BulletState> &bullets = m_Sim->Bullets();
+    std::unordered_set<std::uint32_t> present;
+    present.reserve(bullets.size());
+    for (const Sim::BulletState &b : bullets) {
+        present.insert(b.id);
+    }
+    // Release views whose sim bullet is gone.
+    for (auto it = m_BulletViews.begin(); it != m_BulletViews.end();) {
+        if (present.find(it->first) == present.end()) {
+            m_Renderer.RemoveChild(it->second);
+            it->second->Deactivate();
+            m_BulletPool.Release(it->second);
+            it = m_BulletViews.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    // Acquire new views; mirror every live bullet's position.
+    for (const Sim::BulletState &b : bullets) {
+        auto found = m_BulletViews.find(b.id);
+        std::shared_ptr<Bullet> view;
+        if (found == m_BulletViews.end()) {
+            view = m_BulletPool.Acquire();
+            view->Init(b.pos, b.vel, kBulletLifeMs, b.damage, b.camp); // arms the sprite; not Update()d.
+            m_Renderer.AddChild(view);
+            m_BulletViews.emplace(b.id, view);
+        } else {
+            view = found->second;
+        }
+        view->m_Transform.translation = b.pos;
+    }
+}
+
+bool GameScene::RoomHasLiveHostile(int roomId) const {
+    for (const Sim::Simulation::EntityView &ev : m_Sim->EnemyViews()) {
+        if (ev.alive && ev.roomId == roomId) {
+            return true;
+        }
+    }
+    if (m_Sim->HasBoss()) {
+        const Sim::Simulation::EntityView bv = m_Sim->BossView();
+        if (bv.alive && bv.roomId == roomId) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void GameScene::Update(float dtMs) {
     if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         Core::Context::GetInstance()->SetExit(true);
         return;
     }
 
-    // --- Clear-room gating: seal the active room while it has live enemies ---
-    m_LockedRoom = -1;
-    {
-        const glm::vec2 ppos = m_Player->Position();
-        for (std::size_t i = 0; i < m_Rooms.size(); ++i) {
-            const glm::vec2 c = m_Rooms[i]->Center();
-            const glm::vec2 hs = m_Rooms[i]->Size() * 0.5F;
-            if (ppos.x < c.x - hs.x || ppos.x > c.x + hs.x ||
-                ppos.y < c.y - hs.y || ppos.y > c.y + hs.y) {
-                continue; // player not inside room i
-            }
-            for (const auto &e : m_Enemies) {
-                if (!e->IsDead() && e->RoomId() == static_cast<int>(i)) {
-                    m_LockedRoom = static_cast<int>(i); // live enemies -> seal
-                    break;
-                }
-            }
-            for (const auto &b : m_Bosses) {
-                if (!b->IsDead() && b->RoomId() == static_cast<int>(i)) {
-                    m_LockedRoom = static_cast<int>(i); // live boss -> seal
-                    break;
-                }
-            }
-            break; // player is in exactly one room
-        }
-    }
-
-    // --- Player movement with axis-separated wall sliding ---
+    // --- Player movement with axis-separated wall sliding (stays scene-side) ---
     const glm::vec2 before = m_Player->Position();
     m_Player->Update(dtMs);
     const glm::vec2 after = m_Player->Position();
-    {
-        glm::vec2 resolved = before;
-        if (!BlocksAny(glm::vec2(after.x, before.y), kPlayerRadius)) {
-            resolved.x = after.x;
-        }
-        if (!BlocksAny(glm::vec2(resolved.x, after.y), kPlayerRadius)) {
-            resolved.y = after.y;
-        }
-        m_Player->m_Transform.translation = resolved;
+    glm::vec2 resolved = before;
+    if (!BlocksAny(glm::vec2(after.x, before.y), kPlayerRadius)) {
+        resolved.x = after.x;
     }
+    if (!BlocksAny(glm::vec2(resolved.x, after.y), kPlayerRadius)) {
+        resolved.y = after.y;
+    }
+    m_Player->m_Transform.translation = resolved;
 
-    // --- Energy regen ---
+    // --- Energy regen (scene-owned) ---
     m_EnergyRegenAccumMs += dtMs;
     while (m_EnergyRegenAccumMs >= kEnergyRegenMs) {
         m_EnergyRegenAccumMs -= kEnergyRegenMs;
         m_Player->Stats().AddEnergy(1);
     }
 
-    // --- Weapon fire ---
-    if (m_Weapon != nullptr) {
-        m_Weapon->Update(dtMs);
-    }
-    if (Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB)) {
-        TryFirePlayerWeapon();
+    // --- Which room is the player in (awake gating + clear-room) ---
+    int playerRoomId = -1;
+    for (std::size_t i = 0; i < m_Rooms.size(); ++i) {
+        const glm::vec2 c = m_Rooms[i]->Center();
+        const glm::vec2 hs = m_Rooms[i]->Size() * 0.5F;
+        if (resolved.x >= c.x - hs.x && resolved.x <= c.x + hs.x &&
+            resolved.y >= c.y - hs.y && resolved.y <= c.y + hs.y) {
+            playerRoomId = static_cast<int>(i);
+            break; // player is in exactly one room
+        }
     }
 
-    // --- Enemy AI (every live enemy across the floor) ---
-    for (auto &enemy : m_Enemies) {
-        if (enemy->IsDead()) {
+    // --- Drive the deterministic sim ---
+    Sim::WorldInputs in;
+    in.playerPos = resolved;
+    in.aimDir = AimDirection();
+    in.firing = Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB) &&
+                m_Player->Stats().energy >= m_WeaponEnergyCost;
+    in.playerAlive = !m_Player->Stats().IsDead();
+    in.playerRoomId = playerRoomId;
+
+    m_Sim->SetPlayerStats(m_Player->Stats());      // push current vitals in
+    m_Sim->Advance(dtMs, in);                       // sim damages its player-stats copy
+    const CombatStats &simPlayer = m_Sim->PlayerStats();
+    // MARKER (decision C): pull back ONLY hp + armor. Energy is scene-owned (regen + spend
+    // below); the sim never modifies energy, so do NOT copy simPlayer.energy back -- doing so
+    // would clobber this frame's regen/spend with the value we pushed in. Intentional asymmetry.
+    m_Player->Stats().hp = simPlayer.hp;
+    m_Player->Stats().armor = simPlayer.armor;
+    for (int s = 0; s < m_Sim->PlayerShotsLastAdvance(); ++s) {
+        m_Player->Stats().SpendEnergy(m_WeaponEnergyCost);
+    }
+
+    // --- Clear-room gating from sim liveness ---
+    m_LockedRoom = (playerRoomId >= 0 && RoomHasLiveHostile(playerRoomId)) ? playerRoomId : -1;
+
+    // --- Sync enemy/boss render views from the sim (entities are never erased: null on death) ---
+    const std::vector<Sim::Simulation::EntityView> eviews = m_Sim->EnemyViews();
+    for (const Sim::Simulation::EntityView &ev : eviews) {
+        if (ev.id >= m_Enemies.size()) {
             continue;
         }
-        const EnemyAI::Decision decision =
-            enemy->Think(dtMs, m_Player->Position());
-        const glm::vec2 enemyBefore = enemy->Position();
-        // Faithful RGEController integration: steering velocity + decaying
-        // knockback impulse (fed by GetForce on hit), per FixedUpdateSeed.
-        const glm::vec2 vel = enemy->AI().IntegrateVelocity(
-            decision.moveDir, enemy->Speed(), /*speedRate=*/0.0F);
-        enemy->m_Transform.translation += vel * (dtMs / 1000.0F);
-        if (BlocksAny(enemy->Position(), kPlayerRadius)) {
-            enemy->m_Transform.translation = enemyBefore; // wall blocks enemy
-        }
-        if (decision.shouldShoot) {
-            const glm::vec2 dir =
-                Normalize(m_Player->Position() - enemy->Position());
-            auto bullet = m_BulletPool.Acquire();
-            bullet->Init(enemy->Position(), dir * kEnemyBulletSpeed,
-                         kBulletLifeMs, kEnemyContactDamage, /*camp=*/1);
-            m_Renderer.AddChild(bullet);
-            m_Bullets.push_back(bullet);
-        }
-    }
-
-    // --- Boss AI: chase the player + fire a fan on each shoot tick ---
-    for (auto &boss : m_Bosses) {
-        if (boss->IsDead()) {
+        std::shared_ptr<Enemy> &view = m_Enemies[ev.id];
+        if (view == nullptr) {
             continue;
         }
-        bool shoot = false;
-        int attack = 0;
-        const glm::vec2 dir =
-            boss->Think(dtMs, m_Player->Position(), shoot, attack);
-        const glm::vec2 bossBefore = boss->Position();
-        boss->m_Transform.translation += dir * (boss->Speed() * dtMs / 1000.0F);
-        if (BlocksAny(boss->Position(), kBossBodyRadius)) {
-            boss->m_Transform.translation = bossBefore;
-        }
-        if (shoot) {
-            const int n = 3 + (attack % 2) * 2; // 3 or 5 bullets per volley
-            const glm::vec2 aim =
-                Normalize(m_Player->Position() - boss->Position());
-            for (int k = 0; k < n; ++k) {
-                const float t =
-                    (n == 1) ? 0.0F
-                             : (static_cast<float>(k) /
-                                    static_cast<float>(n - 1) -
-                                0.5F);
-                const float ang = t * kBossFanSpreadDeg * 3.14159265F / 180.0F;
-                const float ca = std::cos(ang);
-                const float sa = std::sin(ang);
-                const glm::vec2 d2{aim.x * ca - aim.y * sa,
-                                   aim.x * sa + aim.y * ca};
-                auto bullet = m_BulletPool.Acquire();
-                bullet->Init(boss->Position(), d2 * kEnemyBulletSpeed,
-                             kBulletLifeMs, kEnemyContactDamage, /*camp=*/1);
-                m_Renderer.AddChild(bullet);
-                m_Bullets.push_back(bullet);
-            }
+        view->m_Transform.translation = ev.pos;
+        if (!ev.alive) {
+            m_Renderer.RemoveChild(view);
+            view = nullptr;
         }
     }
-
-    UpdateBullets(dtMs);
-
-    // --- Deaths: remove defeated enemies from the floor ---
-    for (auto it = m_Enemies.begin(); it != m_Enemies.end();) {
-        if ((*it)->IsDead()) {
-            m_Renderer.RemoveChild(*it);
-            it = m_Enemies.erase(it);
-        } else {
-            ++it;
-        }
-    }
-    for (auto it = m_Bosses.begin(); it != m_Bosses.end();) {
-        if ((*it)->IsDead()) {
-            m_Renderer.RemoveChild(*it);
-            it = m_Bosses.erase(it);
+    if (!m_Bosses.empty() && m_Bosses[0] != nullptr && m_Sim->HasBoss()) {
+        const Sim::Simulation::EntityView bv = m_Sim->BossView();
+        m_Bosses[0]->m_Transform.translation = bv.pos;
+        if (!bv.alive) {
+            m_Renderer.RemoveChild(m_Bosses[0]);
+            m_Bosses[0] = nullptr;
             LOG_INFO("Boss defeated!");
-        } else {
-            ++it;
         }
     }
+
+    // --- Sync bullet views ---
+    SyncBulletViews();
+
+    // --- Player death ---
     if (m_Player->Stats().IsDead()) {
         LOG_INFO("Player defeated -- exiting");
         Core::Context::GetInstance()->SetExit(true);
@@ -493,7 +487,7 @@ void GameScene::Update(float dtMs) {
     }
 
     // --- Chests: open on proximity, roll loot, drop a weapon pickup ---
-    const glm::vec2 playerPos = m_Player->Position();
+    const glm::vec2 playerPos = resolved;
     for (auto &chest : m_Chests) {
         if (chest->Opened() ||
             glm::distance(playerPos, chest->Position()) > kChestOpenRange) {
@@ -510,10 +504,13 @@ void GameScene::Update(float dtMs) {
         }
     }
 
-    // --- Pickups: walk over one to equip it (swaps the player's weapon) ---
+    // --- Pickups: walk over one to equip it (rebuilds the sim WeaponController) ---
     for (auto it = m_Pickups.begin(); it != m_Pickups.end();) {
         if (glm::distance(playerPos, (*it)->Position()) <= kPickupRange) {
-            m_Weapon = std::make_unique<WeaponInstance>(*(*it)->Def());
+            const WeaponDef *def = (*it)->Def();
+            ++m_WeaponSwaps;
+            m_Sim->EquipWeapon(*def, def->id, m_RunSeed + 5 + m_WeaponSwaps);
+            m_WeaponEnergyCost = def->consume > 0 ? def->consume : 1;
             m_Renderer.RemoveChild(*it);
             it = m_Pickups.erase(it);
         } else {
