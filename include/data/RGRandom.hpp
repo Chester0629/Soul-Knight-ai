@@ -57,9 +57,12 @@ public:
      * @brief Seed this stream's private state via Unity's InitState(seed).
      * @param seed The deterministic seed (network-authoritative in the original).
      *
-     * FAITHFUL to RGRandom__SetRandomSeed @ 0x4EC620: snapshots the (here inline)
-     * RNG state, runs InitState, captures the seeded state, and marks the stream
-     * ready (seed_state = GET_SEED == 3).
+     * FAITHFUL to RGRandom__SetRandomSeed @ 0x4FC620 (game_named.c:92648): snapshots
+     * the (here inline) RNG state, runs InitState, captures the seeded state, and
+     * marks the stream ready (seed_state = GET_SEED == 3). NOTE: the InitState /
+     * Xorshift math itself is a native UnityEngine.Random il2cpp icall with NO body
+     * in this code export -- it is validated against an external Unity 2017.4
+     * reference (see the class VALIDATION STATUS), not against the decomp.
      */
     void SetRandomSeed(int seed);
 
@@ -68,8 +71,8 @@ public:
      * @return @c minInclusive when the range is empty (max <= min), matching
      *         Unity's degenerate-range behaviour.
      *
-     * FAITHFUL to RGRandom__Range(int) @ 0x4FACFC: lazy-seeds, loads state,
-     * draws via Unity Random.Range(int) (max exclusive), saves advanced state.
+     * FAITHFUL to RGRandom__Range(int) @ 0x50ACFC (game_named.c:100022): lazy-seeds,
+     * loads state, draws via Unity Random.Range(int) (max exclusive), saves advanced state.
      */
     int Range(int minInclusive, int maxExclusive);
 

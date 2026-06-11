@@ -23,7 +23,7 @@ void BossAI01::OnHurt(int hpAfter, int maxHp) {
 // FAITHFUL: ShootReflection's rg_random.Range(0, 100) attack roll.
 int BossAI01::ChooseAttack() {
     const int roll = m_Rng.Range(0, 100);
-    int idx = roll / (100 / kAttackCount); // 4 equal buckets (TODO[verify])
+    int idx = roll / (100 / kAttackCount); // 4 equal buckets (BLOCKED: dispatch truncated, see hpp)
     if (idx >= kAttackCount) {
         idx = kAttackCount - 1;
     }

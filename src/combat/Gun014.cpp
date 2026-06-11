@@ -13,18 +13,17 @@ bool Gun014::ShouldReadjust(int bulletCount) const {
 
 // FAITHFUL: Gun014__AdjustAngle @ game_full.c:964350.
 //   uVar1 = FUN_001ceef4(0x168); *(param_1 + 0x7c) = uVar1;
-// FUN_001ceef4(0x168) is called with NO rng-instance argument; param_1+0x60
-// (the RGRandom field) is never accessed anywhere in Gun014__AdjustAngle
-// (964350-964361). The call is therefore NOT RGRandom::Range on the per-object
-// stream. Do NOT advance m_Rng here.
-// TODO[verify]: FUN_001ceef4(0x168) is not RGRandom::Range; do not advance m_Rng here.
+// FUN_001ceef4 is __aeabi_idiv -- the ARM EABI signed integer-division helper (its body at
+// game_full.c:4881 is `void FUN_001ceef4(void){ __aeabi_idiv(); }`). So this is integer
+// DIVISION, not RNG: angle = 360 / <divisor> (numerator 0x168 == 360; the divisor is the r1
+// operand Ghidra dropped -- owner-fed, unrecovered). The per-object RGRandom field
+// (param_1+0x60) is never touched, so this advances NO RNG. Do NOT advance m_Rng here.
 bool Gun014::ReadjustAngle(int bulletCount) {
     if (!ShouldReadjust(bulletCount)) {
         return false; // 964355: early return -- angle unchanged, stream unadvanced
     }
-    // 964358: FUN_001ceef4(0x168) -- global/non-per-object random; source unknown.
-    // TODO[verify]: FUN_001ceef4(0x168) is not RGRandom::Range; do not advance m_Rng here.
-    // m_BaseAngle is written by the owner from the result of FUN_001ceef4(0x168).
+    // 964358: angle = 360 / <divisor> via __aeabi_idiv (FUN_001ceef4). Deterministic, NO RNG;
+    // m_BaseAngle is written by the owner from that division result.
     return true;
 }
 

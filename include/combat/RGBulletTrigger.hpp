@@ -62,10 +62,14 @@ public:
     static constexpr float kBuffCriticFactorAdd = 1.0F;
     /// RemoveEffectTrigger's BuffEffectTrigger critic_factor (0x40000000 == 2.0f).
     static constexpr float kBuffCriticFactorRemove = 2.0F;
-    /// Ice-mode reduced factor the truncated ice branch MIGHT return. The decomp
-    /// truncates before this value; the recreation guesses 0.5f. Unverifiable.
-    // TODO[verify 0x5A9BBC]: ice-buff branch tail-calls Singleton<RGGameProcess>
-    // and truncates; the returned factor is not recoverable from game_full.c.
+    /// Ice-mode reduced factor the truncated ice branch MIGHT return. NOT recoverable even with
+    /// the decomp: GetDamageFactor's ice path (has_ice_buff != 0, +0x40) returns DAT_005b9c88
+    /// (a .data-segment slot) reached only through a non-returning Singleton<RGGameProcess>::
+    /// get_Inst tail-call, so the factor is computed in un-decompiled owner code. The recreation
+    /// guesses 0.5f; it is exposed here ONLY as a constant and is NEVER returned (the live
+    /// GetDamageFactor yields the recovered 1.0f baseline).
+    // TODO[verify 0x5B9BBC]: ice-buff factor needs a binary .data dump + the RGGameProcess getter
+    // body (or a runtime trace); it is not a code immediate in any recoverable decomp body.
     static constexpr float kIceBuffFactorUnverified = 0.5F;
 
     RGBulletTrigger() = default;

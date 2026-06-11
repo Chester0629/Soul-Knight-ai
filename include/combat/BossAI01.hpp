@@ -55,10 +55,13 @@ public:
     /**
      * @brief Pick which of the 4 attacks to trigger.
      *
-     * FAITHFUL to ShootReflection's `rg_random.Range(0, 100)` roll; the original's
-     * roll->attack bucketing is truncated in the decomp, so the 4 equal buckets
-     * here are a reconstruction (TODO[verify] exact thresholds). The single
-     * Range(0,100) draw keeps the stream in lockstep.
+     * FAITHFUL to ShootReflection's `rg_random.Range(0, 100)` roll. The roll->attack
+     * bucketing is BLOCKED, not merely unverified: ShootReflection tail-calls the no-return
+     * stub FUN_010b7dcc immediately after Range(0,100) (game_full.c:436790-436793), so Ghidra
+     * never linearized the dispatch -- the roll value is not even stored. The 4 equal 25-wide
+     * buckets are an unverifiable reconstruction (recovering the real thresholds needs a raw
+     * disassembly past FUN_010b7dcc or a runtime trace). The single Range(0,100) draw -- the
+     * one decomp-confirmed fact -- keeps the stream in lockstep.
      * @return attack index in [0, kAttackCount).
      */
     int ChooseAttack();

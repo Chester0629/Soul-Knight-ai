@@ -22,12 +22,12 @@ namespace Game {
  *
  *   - AdjustAngle (Gun014__AdjustAngle @ game_full.c:964350): the rotating base
  *     angle (this+0x7c) is re-rolled ONLY when angle(0x7c) * count(0x6c) >= 361
- *     (the decomp gates on `< 0x169` -> return). The re-roll is made via
- *     FUN_001ceef4(0x168) which is called with NO rng-instance argument;
- *     param_1+0x60 (the m_Rng field) is never accessed in this function body
- *     (964350-964361). m_Rng is therefore NOT advanced by ReadjustAngle().
+ *     (the decomp gates on `< 0x169` -> return). The re-roll is integer DIVISION,
+ *     NOT RNG: FUN_001ceef4 is __aeabi_idiv (its body at game_full.c:4881), so
+ *     angle = 360 / <divisor> (numerator 0x168 == 360; the divisor is owner-fed and
+ *     was dropped by Ghidra). param_1+0x60 (the m_Rng field) is never accessed in
+ *     this function body (964350-964361), so m_Rng is NOT advanced by ReadjustAngle().
  *     ShouldReadjust() models the gate; ReadjustAngle() returns the gate result.
- *     TODO[verify]: FUN_001ceef4(0x168) is not RGRandom::Range; do not advance m_Rng here.
  *   - Attack (Gun014__Attack @ game_full.c:964365): the fire/re-fire branch --
  *     in_atk(0x1c)==0 fires CreateBullet immediately, else schedules a delayed
  *     re-fire via Invoke(..., delay(0x1d)). FireOrInvoke() models that predicate;
@@ -41,20 +41,20 @@ namespace Game {
  *     RGRandom.Range(-spread, +spread) (ScatterDraw()). The rotating base angle
  *     (0x7c) carried to the spawn and the PrefabPool Instantiate are OWNER.
  *
- * Determinism: AdjustAngle does NOT advance m_Rng (FUN_001ceef4(0x168) is a
- * global/non-per-object call; param_1+0x60 is never touched). CreateBullet
+ * Determinism: AdjustAngle does NOT advance m_Rng (FUN_001ceef4 is __aeabi_idiv
+ * integer division -- angle = 360/divisor; param_1+0x60 is never touched). CreateBullet
  * draws ONE float (Range(-spread,+spread), max-inclusive) per pellet via
  * m_Rng. Attack draws none. Every modelled method preserves its draw count
  * and order against a parallel same-seeded stream for the float-only scatter.
- * TODO[verify]: FUN_001ceef4(0x168) is not RGRandom::Range; do not advance m_Rng here.
  *
  * @see recreation Enemy/RGEController.cs (field-offset reference);
  *      FAITHFUL: Gun014 @ game_full.c:964350-964442.
  */
 class Gun014 {
 public:
-    /// Rotating-angle re-roll ceiling: RGRandom.Range(0, 360) -> 0..359 deg.
-    /// FAITHFUL: Gun014__AdjustAngle @ 964358 -- FUN_001ceef4(0x168), 0x168 = 360.
+    /// Rotating-angle division NUMERATOR: angle = 360 / <divisor> (NOT an RGRandom range --
+    /// FUN_001ceef4 is __aeabi_idiv integer division, and the divisor is owner-fed/unrecovered).
+    /// FAITHFUL: Gun014__AdjustAngle @ 964358 -- FUN_001ceef4 == __aeabi_idiv, 0x168 = 360.
     static constexpr int kAngleRange = 360;
     /// Readjust gate threshold: the decomp returns when angle*count < 0x169.
     /// FAITHFUL: Gun014__AdjustAngle @ 964354 -- 0x169 = 361.
