@@ -28,6 +28,11 @@ public:
         float repel = 0.0F;      ///< knockback magnitude (WeaponDef.repel).
         bool canThrough = false; ///< pierce-through enabled (WeaponDef.canThrough).
         int pierce = 0;          ///< pass-through budget (WeaponDef.throughCount).
+        // Multi-shot (WeaponDef.count/angle): count > 1 fires one deterministic Fan of
+        // `count` bullets across `fanSpreadDeg` total, expanded by FireSystem. count <= 1
+        // keeps the single-shot path. Independent of kind (HeatMinigun takes precedence).
+        int count = 1;
+        float fanSpreadDeg = 0.0F;
         // Single (Gun001):
         float baseAngle = 5.0F;
         float recoil = 0.0F;

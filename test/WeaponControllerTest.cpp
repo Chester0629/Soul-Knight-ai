@@ -181,4 +181,35 @@ TEST(WeaponControllerTest, ShotCarriesCritRepelPierceFromParams) {
     EXPECT_EQ(out[0].pierce, 2);
 }
 
+// B3 (multi-shot): a WeaponDef.count > 1 weapon emits ONE Fan intent of `count` bullets
+// over fanSpreadDeg (FireSystem then expands it). No RNG scatter draw on this path.
+TEST(WeaponControllerTest, MultiShotEmitsFanOfCount) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::Single; // count>1 fans regardless of the (non-heat) kind
+    p.fireIntervalSeconds = 0.02F;
+    p.count = 3;
+    p.fanSpreadDeg = 30.0F;
+    WeaponController w(p, 1);
+    std::vector<Game::Sim::FireIntent> out;
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    ASSERT_EQ(out.size(), 1U);
+    EXPECT_EQ(out[0].pattern, Game::Sim::FirePattern::Fan);
+    EXPECT_EQ(out[0].count, 3);
+    EXPECT_FLOAT_EQ(out[0].spreadDeg, 30.0F);
+    EXPECT_EQ(out[0].camp, 0);
+}
+
+// Regression: a single-shot weapon (count defaults to 1) stays on the Single path.
+TEST(WeaponControllerTest, CountOneStaysSingle) {
+    WeaponController::Params p;
+    p.kind = WeaponController::Kind::Single;
+    p.fireIntervalSeconds = 0.02F;
+    p.baseAngle = 0.0F;
+    WeaponController w(p, 1);
+    std::vector<Game::Sim::FireIntent> out;
+    w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
+    ASSERT_EQ(out.size(), 1U);
+    EXPECT_EQ(out[0].pattern, Game::Sim::FirePattern::Single);
+}
+
 // NOLINTEND(readability-magic-numbers)

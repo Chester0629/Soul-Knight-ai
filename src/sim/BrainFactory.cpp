@@ -54,6 +54,11 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     p.repel = def.repel;
     p.canThrough = def.canThrough != 0;
     p.pierce = def.throughCount;
+    // Multi-shot: WeaponDef.count bullets fanned over (count-1) * angle-step total degrees.
+    // FireSystem expands the Fan; count <= 1 leaves the single-shot path untouched. Gun016
+    // stays a heat single-stream (kind takes precedence over count in WeaponController::Tick).
+    p.count = def.count > 1 ? def.count : 1;
+    p.fanSpreadDeg = def.angle * static_cast<float>(p.count - 1);
     return WeaponController(p, seed); // prvalue
 }
 
