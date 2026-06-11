@@ -13,10 +13,12 @@ using Game::RGRandom;
 // ---- ctor scalars: exact recovered values (no logic, no RNG) ----------------
 
 TEST(GunWakenTest, CtorScalarsMatchDecompImmediates) {
-    // GunWaken___ctor @ game_full.c:970412-970414: 0xc, 0x32, 0x42340000.
-    EXPECT_EQ(GunWaken::kCtorField70, 12);
-    EXPECT_EQ(GunWaken::kCtorField74, 50);
-    EXPECT_FLOAT_EQ(GunWaken::kCtorField78, 45.0F);
+    // GunWaken___ctor @ game_full.c:970412-970414: 0xc, 0x32, 0x42340000 -- the recovered
+    // awakened-mode (mode-2) override fields atk_mode2/critical_mode2/speed_mode2
+    // (Il2CppDumper dump.cs:270938-270940).
+    EXPECT_EQ(GunWaken::kAtkMode2, 12);
+    EXPECT_EQ(GunWaken::kCriticalMode2, 50);
+    EXPECT_FLOAT_EQ(GunWaken::kSpeedMode2, 45.0F);
 }
 
 // ---- IsAwakened: the wakenFlag gate (owner+0x84), no RNG --------------------

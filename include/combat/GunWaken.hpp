@@ -36,11 +36,12 @@ namespace Game {
  * both -- never advance the stream when wakenFlag != 0.
  *
  * The three ctor-configured scalars (GunWaken___ctor @ game_full.c:970412-970414:
- * owner+0x70 = 12, owner+0x74 = 50, owner+0x78 = 45.0f) are RGWeapon base config
- * written before RGWeapon___ctor(param_1, 0). They do NOT enter the Attack math;
- * their exact values are recovered and recorded below, but their semantic meaning
- * (cooldown / range / damage / etc.) is not determinable from the decomp, so it
- * is left // TODO[verify] rather than guessed.
+ * owner+0x70 = 12, owner+0x74 = 50, owner+0x78 = 45.0f) are GunWaken's OWN awakened-mode
+ * override fields -- atk_mode2 / critical_mode2 / speed_mode2 -- the mode-2 counterparts of
+ * RGWeapon's base atk(+0x20) / critical(+0x2C) / bullet_speed(+0x28), identified via the
+ * Il2CppDumper field-offset dump (dump.cs:270938-270947). They are default-seeded here (a
+ * prefab/Inspector instance may override them) and do NOT enter the Attack scatter math. The
+ * owner+0x84 "waken flag" this module gates on is GunWaken's `mode` field (dump.cs:270947).
  *
  * @see recreation Weapon/RGWeapon.cs (field-offset reference; no GunWaken C#);
  *      FAITHFUL: GunWaken @ game_full.c:970405-970465.
@@ -52,21 +53,21 @@ public:
     /// FAITHFUL: GunWaken__Attack @ game_full.c:970452 (`if (owner+0x84 == 0)`).
     static constexpr int kWakenFlagNormal = 0;
 
-    /// owner+0x70: int immediate 0xc == 12, written by the ctor before the base
-    /// RGWeapon ctor. RGWeapon base config; does NOT enter the Attack math, and
-    /// the decomp does not reveal its semantic role.
-    /// FAITHFUL: GunWaken___ctor @ game_full.c:970412 (*(owner+0x70) = 0xc).
-    static constexpr int kCtorField70 = 12; // TODO[verify] meaning (cooldown/count?)
+    /// GunWaken.atk_mode2 (owner+0x70, int 0xc == 12): the awakened-mode attack/damage value
+    /// (mode-2 override of RGWeapon base atk). Default-seeded by the ctor; does NOT enter the
+    /// Attack scatter math. FAITHFUL: GunWaken___ctor @ game_full.c:970412 (*(owner+0x70) = 0xc);
+    /// offset/identity per Il2CppDumper dump.cs:270938 (`public int atk_mode2; // 0x70`).
+    static constexpr int kAtkMode2 = 12;
 
-    /// owner+0x74: int immediate 0x32 == 50, written by the ctor. RGWeapon base
-    /// config; does NOT enter the Attack math.
-    /// FAITHFUL: GunWaken___ctor @ game_full.c:970413 (*(owner+0x74) = 0x32).
-    static constexpr int kCtorField74 = 50; // TODO[verify] meaning
+    /// GunWaken.critical_mode2 (owner+0x74, int 0x32 == 50): the awakened-mode critical value.
+    /// FAITHFUL: GunWaken___ctor @ game_full.c:970413 (*(owner+0x74) = 0x32); dump.cs:270939
+    /// (`public int critical_mode2; // 0x74`).
+    static constexpr int kCriticalMode2 = 50;
 
-    /// owner+0x78: float immediate 0x42340000 == 45.0f, written by the ctor.
-    /// RGWeapon base config; does NOT enter the Attack math.
-    /// FAITHFUL: GunWaken___ctor @ game_full.c:970414 (*(owner+0x78) = 0x42340000).
-    static constexpr float kCtorField78 = 45.0F; // TODO[verify] meaning (range?)
+    /// GunWaken.speed_mode2 (owner+0x78, float 0x42340000 == 45.0f): the awakened-mode bullet
+    /// speed. FAITHFUL: GunWaken___ctor @ game_full.c:970414 (*(owner+0x78) = 0x42340000);
+    /// dump.cs:270940 (`public float speed_mode2; // 0x78`).
+    static constexpr float kSpeedMode2 = 45.0F;
 
     GunWaken() = default;
 
