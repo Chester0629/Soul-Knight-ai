@@ -67,6 +67,21 @@ TEST(EnemyControllerTest, KinematicIgnoresKnockbackTerm) {
     EXPECT_FLOAT_EQ(v.y, 0.0F);
 }
 
+TEST(EnemyControllerTest, KinematicTurretDoesNotTranslateUnderSteer) {
+    // F1 regression (EnemyAI06 turret): a kinematic enemy must NEVER translate, even when
+    // the EnemyAI01 brain has picked a non-zero wander move-dir on its scout tick. Before
+    // the fix, ComputeVelocity gated only the knockback term, so the "fixed" turret drifted
+    // at full steer speed along its wander heading. (The pre-existing
+    // KinematicIgnoresKnockbackTerm used a zero move-dir, so it never caught this.)
+    EnemyController::Params p = MakeParams();
+    p.kinematic = true;
+    EnemyController e(p, glm::vec2{0.0F, 0.0F}, 1);
+    e.SetMoveDir(glm::vec2{1.0F, 0.0F}); // a wander heading the turret must ignore
+    const glm::vec2 v = e.ComputeVelocity();
+    EXPECT_FLOAT_EQ(v.x, 0.0F);
+    EXPECT_FLOAT_EQ(v.y, 0.0F);
+}
+
 TEST(EnemyControllerTest, KnockbackSuppressedAtExactThreshold) {
     // The gate is strictly inertialVel > 1.0; exactly 1.0 must NOT apply knockback
     // and must NOT decay.

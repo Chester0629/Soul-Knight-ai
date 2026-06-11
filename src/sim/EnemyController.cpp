@@ -23,9 +23,18 @@ void EnemyController::ApplyForce(glm::vec2 dir, float power) {
 }
 
 glm::vec2 EnemyController::ComputeVelocity() {
+    // A kinematic enemy is a fixed turret (EnemyAI06, the sole `kinematic:1` def): it never
+    // translates -- it only re-aims (facing) and fires. The EnemyAI01 brain still picks a
+    // wander m_MoveDir on its scout tick, so we must suppress the steering here, not just the
+    // knockback term. ResolveHits already skips ApplyForce on kinematic targets, so knockback
+    // never accrues either; this makes the "fixed" part faithful to the FixedRotation turret.
+    if (m_Params.kinematic) {
+        m_State.vel = glm::vec2(0.0F, 0.0F);
+        return m_State.vel;
+    }
     const float scale = m_Params.speed * (m_Params.speedRate + 1.0F);
     glm::vec2 velocity = m_MoveDir * scale;
-    if (!m_Params.kinematic && m_InertialVel > kKnockbackThreshold) {
+    if (m_InertialVel > kKnockbackThreshold) {
         velocity += m_ForceDir * m_InertialVel;
         m_InertialVel *= m_Params.friction;
     }
