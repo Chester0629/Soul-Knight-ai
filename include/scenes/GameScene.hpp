@@ -63,7 +63,6 @@ private:
     Core::Camera2D m_Camera;
     Util::Renderer m_Renderer;
 
-    std::shared_ptr<Util::GameObject> m_Background;
     std::shared_ptr<Player> m_Player;
     /// One Enemy per spawned enemy across the whole floor.
     std::vector<std::shared_ptr<Enemy>> m_Enemies;

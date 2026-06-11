@@ -52,11 +52,6 @@ void GameScene::OnEnter() {
     m_Rng.SetRandomSeed(m_RunSeed);
     m_Sim.emplace(m_RunSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
 
-    m_Background = std::make_shared<Util::GameObject>();
-    m_Background->SetDrawable(
-        std::make_shared<Util::Image>(root + "/sprites/Background.png"));
-    m_Background->SetZIndex(0.0F);
-
     m_Player = std::make_shared<Player>(m_Data.PlayerTemplate(), root);
 
     // --- Procedural floor: a MapManager random-walk lays out the rooms; each is
@@ -85,6 +80,17 @@ void GameScene::OnEnter() {
     }
 
     const EnemyDef *edef = m_Data.FindEnemy("EnemyAI01");
+    // Shared tile drawables: one floor sprite + one wall sprite reused (one GPU
+    // texture each) across every cell of every room.
+    auto floorImg =
+        std::make_shared<Util::Image>(root + "/sprites/floor_tile.png");
+    auto wallImg =
+        std::make_shared<Util::Image>(root + "/sprites/wall_tile.png");
+    const glm::vec2 floorSz = floorImg->GetSize();
+    const glm::vec2 wallSz = wallImg->GetSize();
+    // The start room repositions the player onto a guaranteed floor cell (set
+    // in the loop below); the hardcoded (0,0) spawn can land inside a wall.
+    glm::vec2 startFloorPos{0.0F, 0.0F};
     int roomIndex = 0;
     for (const RoomCell &cell : floor.Rooms()) {
         const glm::vec2 origin{
@@ -102,25 +108,31 @@ void GameScene::OnEnter() {
         m_Rooms.push_back(
             std::make_unique<Room>(Room::FromRoomGen(rg, kCellPx, origin)));
 
+        // Tile every cell so the floor is actually drawn: a floor sprite under
+        // walkable cells (floor/aisle/door), a wall sprite on solid cells.
+        // Previously only solid cells were tiled, leaving the floor an
+        // unrendered void.
+        const auto addTile = [&](const std::shared_ptr<Util::Image> &img,
+                                 const glm::vec2 &sz, int cx, int cy, float z) {
+            auto tile = std::make_shared<Util::GameObject>();
+            tile->SetDrawable(img);
+            tile->SetZIndex(z);
+            tile->m_Transform.translation = Room::CellToWorld(
+                cx, cy, rg.Width(), rg.Height(), kCellPx, origin);
+            if (sz.x > 0.0F && sz.y > 0.0F) {
+                tile->m_Transform.scale =
+                    glm::vec2(kCellPx / sz.x, kCellPx / sz.y);
+            }
+            m_RoomTiles.push_back(tile);
+            m_Renderer.AddChild(tile);
+        };
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
-                if (!Room::IsSolidCell(rg.At(x, y))) {
-                    continue;
+                if (Room::IsSolidCell(rg.At(x, y))) {
+                    addTile(wallImg, wallSz, x, y, 1.0F);  // wall / obstacle
+                } else {
+                    addTile(floorImg, floorSz, x, y, 0.0F); // walkable floor
                 }
-                auto img =
-                    std::make_shared<Util::Image>(root + "/sprites/box01.png");
-                const glm::vec2 sz = img->GetSize();
-                auto tile = std::make_shared<Util::GameObject>();
-                tile->SetDrawable(img);
-                tile->SetZIndex(1.0F);
-                tile->m_Transform.translation = Room::CellToWorld(
-                    x, y, rg.Width(), rg.Height(), kCellPx, origin);
-                if (sz.x > 0.0F && sz.y > 0.0F) {
-                    tile->m_Transform.scale =
-                        glm::vec2(kCellPx / sz.x, kCellPx / sz.y);
-                }
-                m_RoomTiles.push_back(tile);
-                m_Renderer.AddChild(tile);
             }
         }
 
@@ -138,6 +150,14 @@ void GameScene::OnEnter() {
             }
         }
         m_RoomDoors.push_back(std::move(doors));
+
+        // Put the player on a guaranteed floor cell of the start room (spawning
+        // at the hardcoded origin can land inside a generated wall -> stuck).
+        if (roomIndex == floor.StartIndex() && !rg.FloorList().empty()) {
+            const auto &pc = rg.FloorList()[rg.FloorList().size() / 2];
+            startFloorPos = Room::CellToWorld(pc.first, pc.second, rg.Width(),
+                                              rg.Height(), kCellPx, origin);
+        }
 
         // Boss room gets a boss; every other non-start room gets one enemy.
         if (roomIndex != floor.StartIndex() && !rg.FloorList().empty()) {
@@ -180,7 +200,6 @@ void GameScene::OnEnter() {
         m_WeaponEnergyCost = wdef->consume > 0 ? wdef->consume : 1;
     }
 
-    m_Renderer.AddChild(m_Background);
     m_Renderer.AddChild(m_Player);
     for (const auto &enemy : m_Enemies) {
         m_Renderer.AddChild(enemy);
@@ -189,6 +208,7 @@ void GameScene::OnEnter() {
         m_Renderer.AddChild(boss);
     }
 
+    m_Player->m_Transform.translation = startFloorPos;
     m_Camera.SetPosition(m_Player->Position());
     LOG_INFO("GameScene: multi-room floor ready");
 }
@@ -335,6 +355,17 @@ void GameScene::Update(float dtMs) {
 
     // --- Clear-room gating from sim liveness ---
     m_LockedRoom = (playerRoomId >= 0 && RoomHasLiveHostile(playerRoomId)) ? playerRoomId : -1;
+
+    // TEMP diagnostic (remove after): is the player actually moving, or wedged?
+    static float s_DbgMs = 0.0F;
+    s_DbgMs += dtMs;
+    if (s_DbgMs >= 1000.0F) {
+        s_DbgMs = 0.0F;
+        LOG_INFO("DBG player before=({:.0f},{:.0f}) after=({:.0f},{:.0f}) "
+                 "resolved=({:.0f},{:.0f}) room={} locked={}",
+                 before.x, before.y, after.x, after.y, resolved.x, resolved.y,
+                 playerRoomId, m_LockedRoom);
+    }
 
     // --- Sync enemy/boss render views from the sim (entities are never erased: null on death) ---
     const std::vector<Sim::Simulation::EntityView> eviews = m_Sim->EnemyViews();
