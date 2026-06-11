@@ -9,9 +9,11 @@
 
 #include "Core/Context.hpp"
 
+#include "Util/Animation.hpp"
 #include "Util/Collider.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
+#include "Util/SFX.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Position.hpp"
@@ -34,6 +36,28 @@ constexpr float kPickupRange = 28.0F;
 glm::vec2 Normalize(glm::vec2 v) {
     const float len = std::sqrt(v.x * v.x + v.y * v.y);
     return len > 0.0F ? v / len : glm::vec2(0.0F, 0.0F);
+}
+
+// --- A (presentation): map a sim cue name to a transient effect sprite + an SFX clip ---
+// The per-state BODY animation of an actor (its own attack/hurt/death pose) stays asset-
+// blocked: the manifest is flat and every atk_clip/clip_dead ref is an unresolved Unity
+// pathid, so there are no per-state frame ranges to switch to. Instead we present each cue
+// with a standalone effect sprite (which DO exist) plus a real fx_*.wav, which is the
+// "owner plays Animator/sfx/effects" half of the SimEvent design.
+std::vector<std::string> EffectFrames(const std::string &root, const std::string &base,
+                                      int count) {
+    std::vector<std::string> frames;
+    frames.reserve(static_cast<std::size_t>(count));
+    for (int i = 0; i < count; ++i) {
+        frames.push_back(root + "/sprites/" + base + "_" + std::to_string(i) + ".png");
+    }
+    return frames;
+}
+
+void PlaySfx(const std::string &root, const std::string &file) {
+    // Mix_Chunk is cached in Util::SFX's AssetStore, so re-loading by path is cheap.
+    Util::SFX sfx(root + "/audio/" + file);
+    sfx.Play();
 }
 } // namespace
 
@@ -352,6 +376,10 @@ void GameScene::Update(float dtMs) {
         m_Player->Stats().SpendEnergy(m_WeaponEnergyCost);
     }
 
+    // --- A: present the sim's anim/sfx cues (muzzle/hit/death). Drained before the view
+    // sync below so a dying entity's view is still alive to anchor its death effect. ---
+    ConsumeSimEvents(resolved);
+
     // --- Clear-room gating from sim liveness ---
     m_LockedRoom = (playerRoomId >= 0 && RoomHasLiveHostile(playerRoomId)) ? playerRoomId : -1;
 
@@ -434,9 +462,70 @@ void GameScene::Update(float dtMs) {
         }
     }
 
+    // --- A: age out transient presentation effects (they self-animate on wall-clock) ---
+    for (auto it = m_Effects.begin(); it != m_Effects.end();) {
+        it->second -= dtMs;
+        if (it->second <= 0.0F) {
+            m_Renderer.RemoveChild(it->first);
+            it = m_Effects.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
     // --- Camera follow ---
     m_Camera.Follow(m_Player->Position(), 0.1F);
     m_Camera.Update(dtMs);
+}
+
+void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
+    const std::string root(RESOURCE_DIR);
+    const std::vector<Sim::Simulation::EntityView> evs = m_Sim->EnemyViews();
+    for (const Sim::SimEvent &e : m_Sim->DrainEvents()) {
+        if (e.type != Sim::SimEventType::AnimTrigger) {
+            continue; // the sim emits no Sfx-typed events yet; audio rides on the names below.
+        }
+        // Resolve the cue's world anchor from its entity id.
+        glm::vec2 pos = playerPos;
+        const bool isPlayer = (e.entityId == Sim::Simulation::kPlayerViewId);
+        const bool isBoss = (e.entityId == Sim::Simulation::kBossViewId);
+        if (isBoss) {
+            if (m_Sim->HasBoss()) {
+                pos = m_Sim->BossView().pos;
+            }
+        } else if (!isPlayer) {
+            if (e.entityId < evs.size()) {
+                pos = evs[e.entityId].pos;
+            }
+        }
+
+        if (e.name == "fire" || e.name == "attack") {
+            SpawnEffect({root + "/sprites/effect01.png"}, pos, 80.0F); // muzzle flash
+        } else if (e.name == "hurt") {
+            SpawnEffect(EffectFrames(root, "effect03", 3), pos, 180.0F); // hit spark
+            PlaySfx(root, isPlayer ? "fx_hurt.wav" : "fx_hit_p1.wav");
+        } else if (e.name == "death") {
+            SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
+            PlaySfx(root, isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav");
+        }
+    }
+}
+
+void GameScene::SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, float lifeMs) {
+    if (frames.empty()) {
+        return;
+    }
+    int interval = static_cast<int>(lifeMs / static_cast<float>(frames.size()));
+    if (interval < 1) {
+        interval = 1;
+    }
+    auto obj = std::make_shared<Util::GameObject>();
+    obj->SetDrawable(std::make_shared<Util::Animation>(std::move(frames), /*play=*/true,
+                                                       interval, /*looping=*/false));
+    obj->SetZIndex(7.0F); // above actors (player 5, boss 6)
+    obj->m_Transform.translation = pos;
+    m_Renderer.AddChild(obj);
+    m_Effects.emplace_back(std::move(obj), lifeMs);
 }
 
 void GameScene::Render() {

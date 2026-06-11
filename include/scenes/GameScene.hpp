@@ -4,7 +4,9 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -105,6 +107,16 @@ private:
     int m_WeaponSwaps = 0;
     void SyncBulletViews();             // defined in Task 2.
     bool RoomHasLiveHostile(int roomId) const; // defined in Task 2.
+
+    // --- A (presentation): drain the sim's anim/sfx cues each frame and play them ---
+    /// Drain Simulation::DrainEvents() and turn each cue into a transient effect + SFX,
+    /// resolving the entity's world position from the sim views. @p playerPos is this
+    /// frame's resolved player position (kPlayerViewId events anchor there).
+    void ConsumeSimEvents(glm::vec2 playerPos);
+    /// Spawn a one-shot effect animation at @p pos that auto-removes after @p lifeMs.
+    void SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, float lifeMs);
+    /// Live transient presentation effects (muzzle/hit/death): {object, remaining ms}.
+    std::vector<std::pair<std::shared_ptr<Util::GameObject>, float>> m_Effects;
 };
 } // namespace Game
 
