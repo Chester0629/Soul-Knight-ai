@@ -4,6 +4,15 @@
 #include <glm/gtx/matrix_transform_2d.hpp>
 
 namespace Util {
+
+namespace {
+// The active world-to-view matrix; identity until a camera sets it.
+glm::mat4 s_ActiveViewMatrix(1.0F);
+} // namespace
+
+void SetActiveViewMatrix(const glm::mat4 &view) { s_ActiveViewMatrix = view; }
+const glm::mat4 &GetActiveViewMatrix() { return s_ActiveViewMatrix; }
+
 Core::Matrices ConvertToUniformBufferData(const Util::Transform &transform,
                                           const glm::vec2 &size,
                                           const float zIndex) {
@@ -17,7 +26,8 @@ Core::Matrices ConvertToUniformBufferData(const Util::Transform &transform,
     auto view = glm::scale(eye, {1.F / PTSD_Config::WINDOW_WIDTH,
                                  1.F / PTSD_Config::WINDOW_HEIGHT, 1.F}) *
                 glm::translate(eye, {PTSD_Config::WINDOW_WIDTH / 2,
-                                     PTSD_Config::WINDOW_HEIGHT / 2, 0});
+                                     PTSD_Config::WINDOW_HEIGHT / 2, 0}) *
+                s_ActiveViewMatrix;
 
     // TODO: TRS comment
     auto model = glm::translate(eye, {transform.translation, zIndex}) *

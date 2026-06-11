@@ -16,7 +16,7 @@ namespace Util {
  * falls too far behind (e.g. after a breakpoint or a long stall), the backlog is
  * dropped instead of trying to catch up forever.
  *
- * @note Pure value type: no global state, no time source, no randomness — fully
+ * @note Pure value type: no global state, no time source, no randomness - fully
  * deterministic and unit-testable.
  */
 class FixedTimestep {

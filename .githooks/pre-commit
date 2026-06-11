@@ -1,0 +1,62 @@
+#!/bin/sh
+# Soul-Knight-ai pre-commit gate.
+# Enable once per clone:  git config core.hooksPath .githooks
+# Bypass in an emergency:  git commit --no-verify
+#
+# Blocks a commit when: (1) the data tables fail validation, (2) build artifacts
+# / vendored deps / raw dumps are staged, or (3) staged C++ source contains
+# non-ASCII bytes (which trip MSVC C4819).
+
+fail=0
+
+# (1) Data validation gate.
+if [ -f tools/validate_data.py ]; then
+    if ! python tools/validate_data.py >/tmp/sk_precommit_validate.log 2>&1; then
+        echo "[pre-commit] FAIL: data validation (tools/validate_data.py):" >&2
+        tail -6 /tmp/sk_precommit_validate.log | sed 's/^/    /' >&2
+        fail=1
+    fi
+fi
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+
+# (2) Forbidden staged paths: build artifacts, vendored deps, raw Unity dumps,
+#     and generated (git-ignored) assets.
+forbidden=$(printf '%s\n' "$staged" | grep -E \
+    '(^|/)(build/|PTSD/lib/|PTSD/build/|1\.07/|1\.7\.10/|Resources/(sprites|audio|fonts)/)|\.(exe|obj|lib|pdb|ilk|dll)$' \
+    || true)
+if [ -n "$forbidden" ]; then
+    echo "[pre-commit] FAIL: do not commit build artifacts / vendored deps / raw dumps / generated assets:" >&2
+    printf '%s\n' "$forbidden" | sed 's/^/    /' >&2
+    fail=1
+fi
+
+# (3) ASCII-only C++ source (avoids MSVC C4819 under non-UTF-8 code pages).
+src=$(printf '%s\n' "$staged" | grep -E '\.(hpp|cpp|h|inl)$' || true)
+if [ -n "$src" ]; then
+    bad=$(printf '%s\n' "$src" | python -c '
+import sys
+out = []
+for line in sys.stdin:
+    f = line.strip()
+    if not f:
+        continue
+    try:
+        if any(b > 127 for b in open(f, "rb").read()):
+            out.append(f)
+    except OSError:
+        pass
+print("\n".join(out))
+')
+    if [ -n "$bad" ]; then
+        echo "[pre-commit] FAIL: non-ASCII bytes in source (MSVC C4819) - ASCII-clean these:" >&2
+        printf '%s\n' "$bad" | sed 's/^/    /' >&2
+        fail=1
+    fi
+fi
+
+if [ "$fail" -ne 0 ]; then
+    echo "[pre-commit] commit blocked. (override with: git commit --no-verify)" >&2
+    exit 1
+fi
+exit 0
