@@ -30,13 +30,28 @@ int BossAI01::ChooseAttack() {
     return idx;
 }
 
-// FAITHFUL: RunReflection wander (Range(-1,1) x2, normalized).
+// FAITHFUL: RunReflection wander (no-target branch: Range(-1,1) x2, normalized).
 glm::vec2 BossAI01::WanderDirection() {
     const float rx = m_Rng.Range(-1.0F, 1.0F);
     const float ry = m_Rng.Range(-1.0F, 1.0F);
     const float len = std::sqrt(rx * rx + ry * ry);
     return len > 0.0F ? glm::vec2(rx / len, ry / len)
                       : glm::vec2(0.0F, 0.0F);
+}
+
+// FAITHFUL: RunReflection with-target move decision (game_named.c:122666-122723).
+// Draw order: threshold Range(5,10) FIRST, then selector Range(0,10) -- both int draws.
+glm::vec2 BossAI01::ChaseMoveDecision(glm::vec2 chaseDir, float dist) {
+    const int thr = m_Rng.Range(5, 10);  // retreat-distance threshold (drawn first), 5..9
+    const int roll = m_Rng.Range(0, 10); // switch selector (drawn second), 0..9
+    if (roll < 6) {
+        // ~60%: chase the player, but retreat (negate) when closer than the threshold.
+        return (dist < static_cast<float>(thr)) ? glm::vec2(-chaseDir.x, -chaseDir.y) : chaseDir;
+    }
+    if (roll < 8) {
+        return glm::vec2(-chaseDir.x, chaseDir.y); // ~20%: strafe, mirror X
+    }
+    return glm::vec2(chaseDir.x, -chaseDir.y); // ~20%: strafe, mirror Y
 }
 
 } // namespace Game

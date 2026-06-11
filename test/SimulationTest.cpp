@@ -212,7 +212,9 @@ TEST(SimulationTest, BossChasesPlayerAndFiresFan) {
     for (int i = 0; i < 120; ++i) {
         sim.Advance(20.0F, in);
     }
-    EXPECT_LT(sim.BossView().pos.x, 200.0F); // chased toward the player
+    // F2: the boss now MOVES per BossAI01's RunReflection decision (chase / strafe / retreat),
+    // not pure chase, so it leaves its spawn x but need not be monotonically closer.
+    EXPECT_NE(sim.BossView().pos.x, 200.0F); // moved off spawn
     ASSERT_FALSE(sim.Bullets().empty());     // fired a fan
     // A fan emits >=3 enemy bullets; confirm camp 1 and multiplicity.
     EXPECT_EQ(sim.Bullets().front().camp, 1);

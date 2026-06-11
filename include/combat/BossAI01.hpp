@@ -63,8 +63,28 @@ public:
      */
     int ChooseAttack();
 
-    /// Random wander direction (RunReflection: Range(-1,1) x2, normalized).
+    /// Random wander direction -- the NO-TARGET branch of RunReflection (Range(-1,1) x2,
+    /// normalized). The sim always supplies a target, so @ref ChaseMoveDecision runs instead;
+    /// this is kept for faithfulness and is exercised directly by the brain tests.
     glm::vec2 WanderDirection();
+
+    /**
+     * @brief The WITH-TARGET move decision (RunReflection, game_named.c:122666-122723).
+     *
+     * FAITHFUL: with a player target the boss defaults to @p chaseDir, then ONE per-cycle
+     * switch overrides it on a fresh roll:
+     *   - roll in [0,6): keep chase, BUT if @p dist < a Range(5,10) threshold, RETREAT
+     *     (negate chase) -- the boss backs off when the player gets too close;
+     *   - roll in [6,8): strafe by mirroring X (-chase.x, chase.y);
+     *   - roll in [8,10): strafe by mirroring Y (chase.x, -chase.y).
+     * Draw ORDER is load-bearing for RNG parity: the Range(5,10) threshold is drawn BEFORE
+     * the Range(0,10) selector (both are int draws, so this consumes the same 2 stream steps
+     * as @ref WanderDirection -- the attack roll downstream is unaffected).
+     * @param chaseDir unit direction toward the player (normalize(player - own)).
+     * @param dist     world-space distance from the boss to the player.
+     * @return the chosen move direction (unit, except a zero @p chaseDir passes through).
+     */
+    glm::vec2 ChaseMoveDecision(glm::vec2 chaseDir, float dist);
 
     RGRandom &Rng() { return m_Rng; }
 

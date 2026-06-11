@@ -112,8 +112,12 @@ void Simulation::MoveControllers() {
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().awake) {
-        const glm::vec2 dir = m_Boss->ChaseDir();
-        const glm::vec2 vel = dir * BossController::kSpeed;
+        const glm::vec2 chase = m_Boss->ChaseDir(); // toward player: facing + the decision base.
+        glm::vec2 moveDir = m_Boss->MoveDir();      // F2: RunReflection move decision (chase/strafe/retreat).
+        if (moveDir.x == 0.0F && moveDir.y == 0.0F) {
+            moveDir = chase; // before the first think tick: fall back to chase (no idle freeze).
+        }
+        const glm::vec2 vel = moveDir * BossController::kSpeed;
         glm::vec2 pos = m_Boss->State().pos;
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
         if (!m_World->Blocks(tryX, kBossBodyRadius)) {
@@ -124,7 +128,7 @@ void Simulation::MoveControllers() {
             pos.y = tryY.y;
         }
         m_Boss->MutableState().pos = pos;
-        m_Boss->MutableState().facing = dir; // the boss faces the player it chases.
+        m_Boss->MutableState().facing = chase; // the boss faces the player it chases.
     }
 }
 void Simulation::DrainFireIntents() {

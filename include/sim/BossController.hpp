@@ -12,9 +12,10 @@
 
 namespace Game::Sim {
 
-/// Drives the BossAI01 boss: chases the player, fires a brain-selected fan on its
-/// shoot cadence (halved once on angry), wanders on a wander cadence. BossAI01 is
-/// the sole RNG stream. Move/copy deleted (this-capturing scheduler callbacks).
+/// Drives the BossAI01 boss: moves per BossAI01's RunReflection decision (chase /
+/// strafe / retreat) on a think cadence, and fires a brain-selected fan on its shoot
+/// cadence (halved once on angry). BossAI01 is the sole RNG stream. Move/copy deleted
+/// (this-capturing scheduler callbacks).
 class BossController {
 public:
     static constexpr int kFanEven = 3;
@@ -48,7 +49,9 @@ public:
     const EntityState &State() const { return m_State; }
     EntityState &MutableState() { return m_State; }
     BossAI01 &Brain() { return m_Brain; }
-    glm::vec2 WanderDir() const { return m_WanderDir; }
+    /// F2: the per-cycle move decision (chase / strafe / retreat) the boss moves along;
+    /// {0,0} before the first think tick. Consumed by Simulation::MoveControllers.
+    glm::vec2 MoveDir() const { return m_MoveDir; }
     /// A (presentation): true iff the boss fired since the last call; reading clears the
     /// latch. Simulation drains it per step to emit a boss "attack" AnimTrigger SimEvent.
     bool ConsumeFiredThisStep() {
@@ -64,7 +67,7 @@ private:
     BossAI01 m_Brain;
     EntityState m_State;
     glm::vec2 m_Target{0.0F, 0.0F};
-    glm::vec2 m_WanderDir{0.0F, 0.0F};
+    glm::vec2 m_MoveDir{0.0F, 0.0F}; ///< F2: RunReflection move decision; consumed by MoveControllers.
     bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
 
     Scheduler *m_Scheduler = nullptr;

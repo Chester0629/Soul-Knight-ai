@@ -68,7 +68,7 @@ TEST(BossControllerTest, FullCadenceReplayIsDeterministic) {
         std::vector<float> trace;
         for (int i = 0; i < 24; ++i) {
             sched.Tick();
-            trace.push_back(b.WanderDir().x);
+            trace.push_back(b.MoveDir().x);
             trace.push_back(static_cast<float>(fire.size()));
             if (!fire.empty()) {
                 trace.push_back(static_cast<float>(fire.back().count));

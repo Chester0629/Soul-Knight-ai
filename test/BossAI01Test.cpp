@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "combat/BossAI01.hpp"
+#include "data/RGRandom.hpp"
 
 using Game::BossAI01;
 
@@ -76,6 +77,50 @@ TEST(BossAI01Test, WanderDirectionIsUnitAndDeterministic) {
         const float len = std::sqrt(da.x * da.x + da.y * da.y);
         EXPECT_NEAR(len, 1.0F, 1e-4F); // normalized (degenerate zero is improbable)
     }
+}
+
+// F2: the WITH-TARGET move decision (RunReflection switch). Reproduce it with a parallel
+// reference RGRandom drawing in the SAME order -- threshold Range(5,10) FIRST, then selector
+// Range(0,10). dist=7 sits inside [5,10) so the retreat branch depends on the threshold draw,
+// which makes the draw ORDER observable. Covers determinism + every branch.
+TEST(BossAI01Test, ChaseMoveDecisionMatchesRunReflectionSwitch) {
+    BossAI01 b(2.0F);
+    b.SetSeed(1234);
+    Game::RGRandom ref;
+    ref.SetRandomSeed(1234);
+    const glm::vec2 chase(0.6F, 0.8F); // unit
+    const float dist = 7.0F;
+    int sawChase = 0;
+    int sawRetreat = 0;
+    int sawMirrorX = 0;
+    int sawMirrorY = 0;
+    for (int i = 0; i < 256; ++i) {
+        const int thr = ref.Range(5, 10);  // FIRST (must match BossAI01::ChaseMoveDecision)
+        const int roll = ref.Range(0, 10); // SECOND
+        glm::vec2 expected;
+        if (roll < 6) {
+            if (dist < static_cast<float>(thr)) {
+                expected = glm::vec2(-chase.x, -chase.y); // retreat
+                ++sawRetreat;
+            } else {
+                expected = chase;
+                ++sawChase;
+            }
+        } else if (roll < 8) {
+            expected = glm::vec2(-chase.x, chase.y); // mirror X
+            ++sawMirrorX;
+        } else {
+            expected = glm::vec2(chase.x, -chase.y); // mirror Y
+            ++sawMirrorY;
+        }
+        const glm::vec2 got = b.ChaseMoveDecision(chase, dist);
+        EXPECT_FLOAT_EQ(got.x, expected.x);
+        EXPECT_FLOAT_EQ(got.y, expected.y);
+    }
+    EXPECT_GT(sawChase, 0);   // every branch reachable over 256 cycles
+    EXPECT_GT(sawRetreat, 0);
+    EXPECT_GT(sawMirrorX, 0);
+    EXPECT_GT(sawMirrorY, 0);
 }
 
 // NOLINTEND(readability-magic-numbers)

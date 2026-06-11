@@ -57,7 +57,13 @@ void BossController::OnWanderTick() {
     if (m_State.dead || !m_State.awake) {
         return;
     }
-    m_WanderDir = m_Brain.WanderDirection(); // 2 draws Range(-1,1)
+    // FAITHFUL: RunReflection's WITH-TARGET move decision. The sim always supplies the player
+    // as the target, so the boss takes the chase/strafe/retreat switch (game_named.c:122666),
+    // NOT the no-target WanderDirection. Two int draws (threshold then selector) -- the same
+    // stream length the old WanderDirection consumed, so the shoot-tick attack roll is unchanged.
+    const glm::vec2 chase = ChaseDir();
+    const float dist = glm::distance(m_Target, m_State.pos);
+    m_MoveDir = m_Brain.ChaseMoveDecision(chase, dist);
 }
 
 void BossController::Activate(Scheduler &scheduler, std::vector<FireIntent> &fireOut) {
