@@ -86,7 +86,6 @@ private:
     Util::ObjectPool<Bullet> m_BulletPool;
 
     Hud m_Hud;
-    float m_EnergyRegenAccumMs = 0.0F;
 
     /// Run seed: roots every deterministic stream this scene owns (combat crit
     /// rolls, the enemy AI stream, and -- once wired -- dungeon generation).

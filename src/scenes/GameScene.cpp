@@ -21,7 +21,6 @@ namespace Game {
 namespace {
 constexpr float kPlayerRadius = 16.0F;
 constexpr float kBulletLifeMs = 1500.0F;
-constexpr float kEnergyRegenMs = 400.0F; // +1 energy per interval
 // World size (pixels) of one RoomGen grid cell.
 constexpr float kCellPx = 32.0F;
 // Fixed room footprint (cells) so rooms tile edge-to-edge and their door gaps
@@ -313,12 +312,12 @@ void GameScene::Update(float dtMs) {
     }
     m_Player->m_Transform.translation = resolved;
 
-    // --- Energy regen (scene-owned) ---
-    m_EnergyRegenAccumMs += dtMs;
-    while (m_EnergyRegenAccumMs >= kEnergyRegenMs) {
-        m_EnergyRegenAccumMs -= kEnergyRegenMs;
-        m_Player->Stats().AddEnergy(1);
-    }
+    // --- Energy regen (scene-owned, decision C) ---
+    // FAITHFUL: drive the decomp-grounded 2.0s cadence via CombatStats::EnergyReloadTick
+    // (RoleAttributePlayer__EnergyReLoad @ game_full.c:432415) -- one tick per frame, +1
+    // energy at the 2.0s boundary -- instead of the old hand-rolled 400ms accumulator,
+    // which regenerated energy 5x too fast. The accumulator now lives in CombatStats.energyTime.
+    m_Player->Stats().EnergyReloadTick(dtMs / 1000.0F);
 
     // --- Which room is the player in (awake gating + clear-room) ---
     int playerRoomId = -1;
