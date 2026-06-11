@@ -153,6 +153,23 @@ TEST(CombatStatsTest, ArmorReloadAccumulatesUntilThreshold) {
     EXPECT_FLOAT_EQ(s.armorTime, 1.0F); // reset to armorLoad, not 0
 }
 
+TEST(CombatStatsTest, ArmorReloadDefaultDelayIsFourThenOneSecond) {
+    // FAITHFUL defaults armor_load=3.0 / armor_rate=1.0 (RoleAttributePlayer..ctor @
+    // game_typed.c:33618-33619). First point takes load+rate = 4.0s; because armorTime resets
+    // to armorLoad=3.0 (not 0), every subsequent point arrives after just 1.0s.
+    auto s = Make(6, 5, 0);
+    s.armor = 0; // armorLoad/armorRate left at the faithful defaults
+    EXPECT_FLOAT_EQ(s.armorLoad, 3.0F);
+    EXPECT_FLOAT_EQ(s.armorRate, 1.0F);
+    EXPECT_FALSE(s.ArmorReloadTick(3.5F)); // 3.5 < 4.0
+    EXPECT_FALSE(s.ArmorReloadTick(0.4F)); // 3.9 < 4.0
+    EXPECT_TRUE(s.ArmorReloadTick(0.2F));  // 4.1 >= 4.0 -> grant
+    EXPECT_EQ(s.armor, 1);
+    EXPECT_FLOAT_EQ(s.armorTime, 3.0F);    // reset to armorLoad, not 0
+    EXPECT_TRUE(s.ArmorReloadTick(1.0F));  // 3.0 + 1.0 = 4.0 -> next point after only 1.0s
+    EXPECT_EQ(s.armor, 2);
+}
+
 TEST(CombatStatsTest, ArmorReloadStopsAtMaxArmor) {
     auto s = Make(6, 3, 0);
     s.armor = 3; // already full -> guard returns false, no accumulation

@@ -47,11 +47,15 @@ struct CombatStats {
 
     /// Armor-reload accumulator in seconds (RoleAttributePlayer.armor_time, +0x68).
     float armorTime = 0.0F;
-    /// Base armor-reload delay (RoleAttributePlayer.armor_load, +0x60). Data-driven
-    /// per character; not written by the recovered ctor.
-    float armorLoad = 0.0F; // TODO[verify] numeric default set by data, not in decomp body
-    /// Extra armor-reload delay (RoleAttributePlayer.armor_rate, +0x64). Data-driven.
-    float armorRate = 0.0F; // TODO[verify] numeric default set by data, not in decomp body
+    /// Base armor-reload delay (RoleAttributePlayer.armor_load, +0x60).
+    /// FAITHFUL: RoleAttributePlayer..ctor @ game_typed.c:33618 sets armor_load = 3.0 as a code
+    /// immediate; SetUpChar (FUN_00524710) never writes +0x60, so 3.0 is the live default (the
+    /// earlier "set by data" assumption was wrong). First armor point takes load+rate = 4.0s.
+    float armorLoad = 3.0F;
+    /// Extra armor-reload delay (RoleAttributePlayer.armor_rate, +0x64).
+    /// FAITHFUL: RoleAttributePlayer..ctor @ game_typed.c:33619 sets armor_rate = 1.0; after the
+    /// first point armorTime resets to armorLoad (3.0), so every later point takes just 1.0s.
+    float armorRate = 1.0F;
 
     /// Energy-reload accumulator in seconds (RoleAttributePlayer.energy_time, +0x6c).
     float energyTime = 0.0F;
