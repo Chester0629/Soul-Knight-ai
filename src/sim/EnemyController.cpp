@@ -82,6 +82,7 @@ void EnemyController::OnShootTick() {
             intent.damage = 1;
             intent.camp = 1; // enemy bullet
             m_FireOut->push_back(intent);
+            m_FiredThisStep = true; // A: latch a shot for the "attack" AnimTrigger.
         }
     }
     const int next = (std::max)(1, Scheduler::SecondsToTicks(outCd));

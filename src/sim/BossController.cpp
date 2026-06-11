@@ -47,6 +47,7 @@ void BossController::OnShootTick() {
         intent.damage = 1;
         intent.camp = 1;
         m_FireOut->push_back(intent);
+        m_FiredThisStep = true; // A: latch a shot for the boss "attack" AnimTrigger.
     }
     const int next = (std::max)(1, Scheduler::SecondsToTicks(m_Brain.ShootCd()));
     m_ShootHandle = m_Scheduler->Invoke(next, [this] { OnShootTick(); });

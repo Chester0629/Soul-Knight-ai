@@ -376,9 +376,72 @@ TEST(SimulationTest, AccessorsAndEventsAreSane) {
     Simulation sim(1, &g_NullWorld);
     EXPECT_TRUE(sim.EnemyViews().empty());
     EXPECT_FALSE(sim.HasBoss());
-    EXPECT_TRUE(sim.DrainEvents().empty()); // emission deferred this cycle.
+    EXPECT_TRUE(sim.DrainEvents().empty()); // no weapon/enemies -> nothing emits.
     sim.Advance(20.0F, Idle());
-    EXPECT_TRUE(sim.DrainEvents().empty());
+    EXPECT_TRUE(sim.DrainEvents().empty()); // idle, no firing/hits/deaths -> still empty.
+}
+
+// A: the SimEvent channel is now populated -- player fire, enemy hurt, enemy death.
+TEST(SimulationTest, EmitsPlayerFireEnemyHurtAndDeathEvents) {
+    using Game::Sim::SimEvent;
+    using Game::Sim::SimEventType;
+    Game::GameData gd;
+    ASSERT_TRUE(gd.LoadAll(kResourceRoot));
+    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
+    ASSERT_NE(edef, nullptr);
+    ASSERT_NE(wdef, nullptr);
+
+    Simulation sim(20240607, &g_NullWorld);
+    sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
+    sim.EquipWeapon(*wdef, "Gun001", 5);
+
+    WorldInputs in = Idle();
+    in.firing = true;    // hold the trigger
+    in.playerRoomId = 0; // wake the room-0 enemy
+
+    bool sawFire = false;
+    bool sawHurt = false;
+    bool sawDeath = false;
+    for (int i = 0; i < 60; ++i) { // 60 * 20ms = 1.2s; the hp-3 enemy dies in one Gun001 shot.
+        sim.Advance(20.0F, in);
+        for (const SimEvent &e : sim.DrainEvents()) {
+            EXPECT_EQ(e.type, SimEventType::AnimTrigger);
+            if (e.name == "fire" && e.entityId == Simulation::kPlayerViewId) {
+                sawFire = true;
+            }
+            if (e.name == "hurt" && e.entityId == 0U) { // enemy view id == m_Enemies index 0
+                sawHurt = true;
+            }
+            if (e.name == "death" && e.entityId == 0U) {
+                sawDeath = true;
+            }
+        }
+    }
+    EXPECT_TRUE(sawFire);
+    EXPECT_TRUE(sawHurt);
+    EXPECT_TRUE(sawDeath);
+}
+
+// A: the boss emits an "attack" cue keyed by the boss sentinel id (covers EmitAttackEvents +
+// the kBossViewId path). No weapon -> the boss never dies, so the firing cadence is observable.
+TEST(SimulationTest, EmitsBossAttackEvent) {
+    Simulation sim(20240607, &g_NullWorld);
+    sim.SetBoss(/*baseShootCd=*/0.1F, glm::vec2{200.0F, 0.0F}, /*maxHp=*/500, /*roomId=*/0,
+                /*seed=*/9000);
+    WorldInputs in = Idle();
+    in.playerRoomId = 0; // wake the boss
+
+    bool sawAttack = false;
+    for (int i = 0; i < 40 && !sawAttack; ++i) {
+        sim.Advance(20.0F, in);
+        for (const auto &e : sim.DrainEvents()) {
+            if (e.name == "attack" && e.entityId == Simulation::kBossViewId) {
+                sawAttack = true;
+            }
+        }
+    }
+    EXPECT_TRUE(sawAttack);
 }
 
 TEST(SimulationTest, ViewFacingReflectsHeading) {

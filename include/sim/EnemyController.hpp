@@ -76,6 +76,14 @@ public:
 
     const EntityState &State() const { return m_State; }
     EntityState &MutableState() { return m_State; }
+    /// A (presentation): true iff this controller emitted a shot since the last call;
+    /// reading it clears the latch. The Simulation consumes it once per step to emit an
+    /// "attack" AnimTrigger SimEvent for this enemy's view. Does not affect the RNG/sim.
+    bool ConsumeFiredThisStep() {
+        const bool fired = m_FiredThisStep;
+        m_FiredThisStep = false;
+        return fired;
+    }
     float InertialVel() const { return m_InertialVel; }
     glm::vec2 MoveDir() const { return m_MoveDir; }
     void SetMoveDir(glm::vec2 dir) { m_MoveDir = dir; }
@@ -90,6 +98,7 @@ private:
     EntityState m_State;
     glm::vec2 m_MoveDir{0.0F, 0.0F};
     glm::vec2 m_ForceDir{0.0F, 0.0F};
+    bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
     float m_InertialVel = 0.0F;
     glm::vec2 m_Target{0.0F, 0.0F};
 

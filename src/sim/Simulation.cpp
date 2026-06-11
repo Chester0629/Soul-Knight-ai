@@ -67,7 +67,27 @@ void Simulation::TickWeapon() {
     }
     const std::size_t before = m_FireIntents.size();
     m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
-    m_PlayerShotsLastAdvance += static_cast<int>(m_FireIntents.size() - before);
+    const std::size_t shots = m_FireIntents.size() - before;
+    m_PlayerShotsLastAdvance += static_cast<int>(shots);
+    for (std::size_t i = 0; i < shots; ++i) { // A: one "fire" cue per player shot (muzzle flash).
+        m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
+    }
+}
+
+// A: turn each controller's latched shot into an "attack" AnimTrigger keyed by its view id
+// (enemy = m_Enemies index, boss = kBossViewId). Drained once per step after the scheduler
+// has run the OnShootTick callbacks. Purely presentation -- no RNG, no effect on the sim.
+void Simulation::EmitAttackEvents() {
+    std::uint32_t id = 0;
+    for (auto &e : m_Enemies) {
+        if (e->ConsumeFiredThisStep()) {
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, id, "attack"});
+        }
+        ++id;
+    }
+    if (m_Boss != nullptr && m_Boss->ConsumeFiredThisStep()) {
+        m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "attack"});
+    }
 }
 void Simulation::MoveControllers() {
     for (auto &e : m_Enemies) {
@@ -141,7 +161,8 @@ void Simulation::ResolveHits() {
             // a second bullet landing the same step as a lethal one is consumed on the
             // about-to-die enemy. Intentional + deterministic -- all in-flight bullets land.
             bool consumed = false;
-            for (auto &e : m_Enemies) {
+            for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
+                auto &e = m_Enemies[ei];
                 if (e->State().dead || !CirclesOverlap(b.pos, kBulletRadius, e->State().pos,
                                                        kEnemyBodyRadius)) {
                     continue;
@@ -156,6 +177,8 @@ void Simulation::ResolveHits() {
                 if (!e->State().kinematic) {
                     e->ApplyForce(Normalize(b.vel), hr.repelMagnitude);
                 }
+                m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
+                                            static_cast<std::uint32_t>(ei), "hurt"}); // A
                 consumed = true;
                 break;
             }
@@ -169,6 +192,7 @@ void Simulation::ResolveHits() {
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
                 Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
                 m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
+                m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"}); // A
                 consumed = true;
             }
             if (consumed && b.pierce <= 0) {
@@ -187,19 +211,24 @@ void Simulation::ResolveHits() {
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::PLAYER);
                 Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
+                m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"}); // A
                 b.active = false;
             }
         }
     }
 }
 void Simulation::Cull() {
-    for (auto &e : m_Enemies) {
+    for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
+        auto &e = m_Enemies[ei];
         if (!e->State().dead && e->State().stats.IsDead()) {
             e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
+                                        static_cast<std::uint32_t>(ei), "death"}); // A
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().stats.IsDead()) {
         m_Boss->Kill();
+        m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "death"}); // A
     }
     m_Bullets.erase(std::remove_if(m_Bullets.begin(), m_Bullets.end(),
                                    [](const BulletState &b) {
@@ -218,6 +247,7 @@ void Simulation::Step() {
     }
     m_Scheduler.Tick();
     TickWeapon();
+    EmitAttackEvents(); // A: enemy/boss "attack" cues (the OnShootTicks ran in Scheduler.Tick).
     MoveControllers();
     DrainFireIntents();
     IntegrateBullets();

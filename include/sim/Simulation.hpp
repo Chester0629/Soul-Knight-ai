@@ -44,7 +44,9 @@ public:
         int roomId = -1;
     };
 
-    static constexpr std::uint32_t kBossViewId = 0xB055; ///< sentinel id for the boss view.
+    static constexpr std::uint32_t kBossViewId = 0xB055;   ///< sentinel id for the boss view.
+    static constexpr std::uint32_t kPlayerViewId = 0xF00D; ///< sentinel id for the player in SimEvents
+                                                           ///< (enemy view ids are small indices 0..N).
 
     Simulation(int runSeed, WorldCollision *world);
 
@@ -81,6 +83,7 @@ private:
     void Step();                              // one fixed tick (built across Tasks 3-7).
     void WakeByRoom();                         // awake = (roomId == m_Input.playerRoomId).
     void TickWeapon();                         // Task 3.
+    void EmitAttackEvents();                   // A: per-controller fire -> AnimTrigger "attack".
     void MoveControllers();                    // Task 5/6.
     void DrainFireIntents();                   // Task 3.
     void IntegrateBullets();                   // Task 4.

@@ -49,6 +49,13 @@ public:
     EntityState &MutableState() { return m_State; }
     BossAI01 &Brain() { return m_Brain; }
     glm::vec2 WanderDir() const { return m_WanderDir; }
+    /// A (presentation): true iff the boss fired since the last call; reading clears the
+    /// latch. Simulation drains it per step to emit a boss "attack" AnimTrigger SimEvent.
+    bool ConsumeFiredThisStep() {
+        const bool fired = m_FiredThisStep;
+        m_FiredThisStep = false;
+        return fired;
+    }
 
 private:
     void OnShootTick();
@@ -58,6 +65,7 @@ private:
     EntityState m_State;
     glm::vec2 m_Target{0.0F, 0.0F};
     glm::vec2 m_WanderDir{0.0F, 0.0F};
+    bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
 
     Scheduler *m_Scheduler = nullptr;
     std::vector<FireIntent> *m_FireOut = nullptr;
