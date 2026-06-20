@@ -96,6 +96,28 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
 
 ## 7. 已知債（明標,不假裝沒有）
 
+- **★ P4 tileset — 純視覺債(`tools/extract_tiles.py` + `GameScene` 渲染)**:
+  - **floor/wall biome = biome 6 冰雪(已釘死,HIGH — P4-RE)**:floor-1 = world 1
+    (`AB:level-1` bundle)= **biome 6**(`floor601`/`wall601`,淺藍雪地)。證據:biome 集**按 world
+    bundle 分包**(`AB:level-1` = biome 5+6、`AB:level-3` = biome 4+7);已萃的 `MapManager.json`
+    **`level='3-1'`(chapter 3)**,其 `floor_list` 整組 pid 解到 `AB:level-3` 的 floor701-706 =
+    **biome 7 棕色 —— 那是 chapter-3、不是 floor-1**。**floor-1-ice 的 MapManager 配置(level `1-x`)
+    未在已萃 dump**,按 world-1 bundle 歸屬 + 視覺雪地推定 biome 6(故先前「肉眼/med」措辭升級為釘死)。
+    *殘留債(LOW)*:world-1 內 **1-1 vs 1-2 對 biome 5/6** 未釘死(`1-x` MapManager 未萃);biome 6 是
+    world-1 唯一雪地、為專案要的冰雪,故選 6 正確,待 `1-x` dump / 真機 capture 終確認。
+  - **floor 6 變體只用 1 個**:port grid floor 全 code 0、無變體碼,故只用 f601 一張(原版 f601–606)。
+  - **wall 渲染 cell-stretch**:grid 牆(perimeter/corridor/設計牆)用既有 cell-fill(16×24→32×32 微拉),
+    只有**障礙** sprite 走 bottom-anchored 原生比例。In-game 牆觀感 OK,列為微債。
+  - **obj_index 0 設計牆 = 渲染成冰牆**(grid wall601),**非 `wall703` skin**(視覺一致 + 免雙描);
+    碰撞不變(仍 grid solid)。
+  - **obj_index 5/7 sprite = HIGH 推斷**:RGObjectSkin 末步 sprite-copy owner-truncated 未 byte 恢復
+    (索引 `obstacle_list[obj_index]` 已二進位 pinned);**node 名 `skin_trap`@5 / `skin_speed_down`@7
+    是 cosmetic**,渲染體 = obstacle_list(5=speed_up、7=sting01)。日後實機 capture 若 5/7 不符 →
+    re-baseline(歸入下面「實機驗證債」)。**碰撞不受影響**(5/7 P3 皆非 blocker)。
+  - **obj_index 8(obj11_07)**:sprite 確定,**floor-1 視覺意義 MED**。
+  - **裝飾(5/6/7/8)實機截圖待補**:start room 無裝飾、naive autowalk 進不了裝飾房;已用**離線版面預覽**
+    (r1_100 的 32 速度墊成環)+ 同一 `addObjSprite` 管線(in-game box 已證)確認 sprite+擺位正確。
+    歸入「實機驗證債」一起補。
 - **★ special/badass 房形狀缺失(P2 政策2 fallback — 顯式債,非 latent)**:floor-1 設計池
   只有 type-1 房(`room_layouts.json` 全 `type:1`),所以 type-2(special)/type-3(badass)
   slot 在 `MapManager::SelectDesignRooms` 走 **type-1 fallback** → 拿到的是 **type-1 房形狀**。

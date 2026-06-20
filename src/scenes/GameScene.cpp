@@ -150,14 +150,22 @@ void GameScene::OnEnter() {
     }
 
     const EnemyDef *edef = m_Data.FindEnemy("EnemyAI01");
-    // Shared tile drawables: one floor sprite + one wall sprite reused (one GPU
-    // texture each) across every cell of every room.
+    // Phase 4 (pure visual): real floor-1 ICE tileset. floor/wall come from biome 6
+    // (f601/w601, the snow tiles -- the obstacle_list config's biome 7 was brown);
+    // obstacles come from the authoritative obstacle_list[obj_index] chain (common
+    // atlas, theme-independent). Extracted by tools/extract_tiles.py.
     auto floorImg =
-        std::make_shared<Util::Image>(root + "/sprites/floor_tile.png");
-    auto wallImg =
-        std::make_shared<Util::Image>(root + "/sprites/wall_tile.png");
+        std::make_shared<Util::Image>(root + "/sprites/tiles/floor.png");
+    auto wallImg = std::make_shared<Util::Image>(root + "/sprites/tiles/wall.png");
     const glm::vec2 floorSz = floorImg->GetSize();
     const glm::vec2 wallSz = wallImg->GetSize();
+    // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list,
+    // P4-RE). Floor-1 uses {0,1,2,3,4,5,6,7,8,11}; 9/10 stay null (unused).
+    std::array<std::shared_ptr<Util::Image>, 12> objImg{};
+    for (int i : {1, 2, 3, 4, 5, 6, 7, 8, 11}) {
+        objImg[static_cast<std::size_t>(i)] = std::make_shared<Util::Image>(
+            root + "/sprites/tiles/obj_" + std::to_string(i) + ".png");
+    }
     // The start room repositions the player onto a guaranteed floor cell (set
     // in the loop below); the hardcoded (0,0) spawn can land inside a wall.
     glm::vec2 startFloorPos{0.0F, 0.0F};
@@ -252,48 +260,59 @@ void GameScene::OnEnter() {
             }
         }
 
-        // Phase 3 design-obstacle OVERLAY: boxes (obj_index 1-4) + braziers (11)
-        // block movement but stay OFF the connectivity grid (so they never make a
-        // door unreachable -- decision #2/Step 0.5 #2). Each gets a permanent
-        // collider + a placeholder tile (real sprite = deferred skin pass). Walls
-        // (0) are already in the grid/tiled; trap(5)/pad(6,7)/skin_obj(8) are
-        // non-blocking and left visual-only for now (explicit debt: 8 + brazier
-        // collision UNVERIFIED, conservative blocker for 11).
+        // Phase 4 design-obstacle VISUALS (+ unchanged Phase 3 collision). Renders
+        // each obj_index's REAL sprite (RGObjectSkin -> obstacle_list[obj_index],
+        // P4-RE) bottom-anchored at native aspect: pivot (0.5,0), pixelsToUnits 16,
+        // so a 16x8 box sits low and a 16x24 prop extends up. PURE VISUAL -- the
+        // collision is IDENTICAL to Phase 3: only box (1-4) + brazier (11) get a
+        // collider; wall (0) is already a grid solid (rendered as the ice grid wall
+        // -- minor: not the wall703 skin, see s7); trap(5)/pad(6,7)/obj(8) stay
+        // non-blocking, visual-only. No grid / connectivity / RGRoomX change.
+        const auto addObjSprite = [&](const std::shared_ptr<Util::Image> &img,
+                                      int cx, int cy)
+            -> std::shared_ptr<Util::GameObject> {
+            auto tile = std::make_shared<Util::GameObject>();
+            tile->SetDrawable(img);
+            tile->SetZIndex(1.0F);
+            const glm::vec2 sz = img->GetSize();
+            const float scale = kCellPx / 16.0F; // pixelsToUnits 16 -> 2x cell fit
+            tile->m_Transform.scale = glm::vec2(scale, scale);
+            // Bottom of the sprite at the cell's bottom edge (pivot 0.5,0).
+            tile->m_Transform.translation =
+                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin) +
+                glm::vec2(0.0F, sz.y * scale * 0.5F - kCellPx * 0.5F);
+            m_RoomTiles.push_back(tile);
+            m_Renderer.AddChild(tile);
+            return tile;
+        };
         if (design != nullptr) {
             for (const DesignObstacle &o : design->obstacles) {
-                const bool box = o.objIndex >= 1 && o.objIndex <= 4;
-                const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
-                if (!box && !brazier) {
-                    continue;
-                }
                 if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
                     continue;
                 }
-                const glm::vec2 wpos = Room::CellToWorld(o.x, o.y, rg.Width(),
-                                                         rg.Height(), kCellPx, origin);
-                // Placeholder skin tile (real sprite = deferred skin pass), kept on
-                // the box so a broken box can be hidden.
-                auto tile = std::make_shared<Util::GameObject>();
-                tile->SetDrawable(wallImg);
-                tile->SetZIndex(1.0F);
-                tile->m_Transform.translation = wpos;
-                if (wallSz.x > 0.0F && wallSz.y > 0.0F) {
-                    tile->m_Transform.scale =
-                        glm::vec2(kCellPx / wallSz.x, kCellPx / wallSz.y);
+                const std::size_t oi = static_cast<std::size_t>(o.objIndex);
+                if (o.objIndex <= 0 || oi >= objImg.size() ||
+                    objImg[oi] == nullptr) {
+                    continue; // 0 is the grid wall; 9/10 unused -> null
                 }
-                m_RoomTiles.push_back(tile);
-                m_Renderer.AddChild(tile);
+                auto tile = addObjSprite(objImg[oi], o.x, o.y);
 
-                ObstacleBox ob;
-                ob.collider =
-                    Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
-                ob.tile = tile;
-                ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
-                if (box) {
-                    ob.box.SetHp(kBoxHp);
-                    ob.box.SetSeed(m_FloorSeed + 1 + roomIndex);
+                const bool box = o.objIndex >= 1 && o.objIndex <= 4;
+                const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
+                if (box || brazier) {
+                    const glm::vec2 wpos = Room::CellToWorld(
+                        o.x, o.y, rg.Width(), rg.Height(), kCellPx, origin);
+                    ObstacleBox ob;
+                    ob.collider = Util::Collider::MakeAABB(
+                        wpos, glm::vec2{kCellPx, kCellPx});
+                    ob.tile = tile;
+                    ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
+                    if (box) {
+                        ob.box.SetHp(kBoxHp);
+                        ob.box.SetSeed(m_FloorSeed + 1 + roomIndex);
+                    }
+                    m_RoomObstacles.push_back(std::move(ob));
                 }
-                m_RoomObstacles.push_back(std::move(ob));
             }
         }
 
