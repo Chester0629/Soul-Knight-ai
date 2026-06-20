@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "sim/EnemyBrainAdapters.hpp"
 #include "sim/SimConfig.hpp"
 
 namespace Game::Sim {
@@ -19,13 +20,15 @@ EnemyController::Params BrainFactory::EnemyParams(const Game::EnemyDef &def) {
 }
 
 EnemyController BrainFactory::MakeEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int seed) {
-    return EnemyController(EnemyParams(def), spawn, seed); // prvalue -> C++17 guaranteed elision
+    // (d) dispatch: pick the brain adapter by enemy id (def.id == "EnemyAIxx").
+    return EnemyController(MakeEnemyBrain(def.id), EnemyParams(def), spawn,
+                          seed); // prvalue -> C++17 guaranteed elision
 }
 
 std::unique_ptr<EnemyController> BrainFactory::MakeEnemyPtr(const Game::EnemyDef &def,
                                                             glm::vec2 spawn, int seed) {
-    // make_unique forwards (Params, spawn, seed) to the ctor -> in-place, no move.
-    return std::make_unique<EnemyController>(EnemyParams(def), spawn, seed);
+    return std::make_unique<EnemyController>(MakeEnemyBrain(def.id), EnemyParams(def),
+                                             spawn, seed);
 }
 
 BossController BrainFactory::MakeBoss(float baseShootCd, glm::vec2 spawn, int maxHp,

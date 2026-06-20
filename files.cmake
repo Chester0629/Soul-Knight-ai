@@ -475,6 +475,7 @@ set(TEST_FILES
     SimPodsTest.cpp
     FireSystemTest.cpp
     EnemyControllerTest.cpp
+    EnemyBrainDispatchTest.cpp
     BrainFactoryTest.cpp
     BossControllerTest.cpp
     SimulationTest.cpp

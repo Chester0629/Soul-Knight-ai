@@ -154,7 +154,7 @@ TEST(EnemyControllerTest, ScoutTickNoOpWhileNotAwake) {
     }
     EXPECT_FLOAT_EQ(e.MoveDir().x, 0.0F);
     EXPECT_FLOAT_EQ(e.MoveDir().y, 0.0F);
-    EXPECT_EQ(e.Brain().Rng().Range(0, 1000), ref.Rng().Range(0, 1000)); // unadvanced
+    EXPECT_EQ(e.Brain().RngRange(0, 1000), ref.Rng().Range(0, 1000)); // unadvanced
 }
 
 TEST(EnemyControllerTest, ShootTickEmitsAimedFireIntentOnCadence) {
@@ -198,7 +198,7 @@ TEST(EnemyControllerTest, DeadEnemyEmitsNoFireAndTakesNoDraw) {
         sched.Tick();
     }
     EXPECT_TRUE(fire.empty());
-    EXPECT_EQ(e.Brain().Rng().Range(0, 1000), ref.Rng().Range(0, 1000));
+    EXPECT_EQ(e.Brain().RngRange(0, 1000), ref.Rng().Range(0, 1000));
 }
 
 TEST(EnemyControllerTest, FullCadenceReplayIsDeterministic) {

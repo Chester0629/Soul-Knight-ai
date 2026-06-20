@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "combat/EnemyAI01.hpp"
 #include "data/GameData.hpp"
 #include "sim/BossController.hpp"
 #include "sim/BrainFactory.hpp"
@@ -25,7 +26,11 @@ TEST(BrainFactoryTest, MakeEnemyAppliesDefParamsAndSpawn) {
     EXPECT_FLOAT_EQ(e.State().pos.x, 20.0F);
     EXPECT_FLOAT_EQ(e.State().pos.y, 30.0F);
     EXPECT_FALSE(e.State().kinematic);
-    EXPECT_TRUE(e.Brain().Seeded());
+    // Seeded with 42 via the (d) AI01 adapter (empty id -> default): the brain's
+    // first RNG draw matches a 42-seeded reference (Brain() is now IEnemyBrain).
+    Game::EnemyAI01 ref;
+    ref.SetSeed(42);
+    EXPECT_EQ(e.Brain().RngRange(0, 1000), ref.Rng().Range(0, 1000));
 }
 
 TEST(BrainFactoryTest, MakeEnemyHonoursKinematicFlag) {

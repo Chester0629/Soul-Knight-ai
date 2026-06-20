@@ -1,13 +1,14 @@
 #ifndef GAME_SIM_ENEMYCONTROLLER_HPP
 #define GAME_SIM_ENEMYCONTROLLER_HPP
 
+#include <memory>
 #include <vector>
 
 #include <glm/glm.hpp>
 
-#include "combat/EnemyAI01.hpp"
 #include "sim/EntityState.hpp"
 #include "sim/FireIntent.hpp"
+#include "sim/IEnemyBrain.hpp"
 #include "sim/Scheduler.hpp"
 
 namespace Game::Sim {
@@ -44,7 +45,13 @@ public:
         bool kinematic = false;
     };
 
+    /// Default: drives an EnemyAI01 brain (back-compat + the determinism tests;
+    /// byte-identical to the pre-(d) controller).
     EnemyController(const Params &params, glm::vec2 spawn, int seed);
+    /// (d) dispatch: drive any injected brain adapter (BrainFactory picks it by
+    /// enemy id). @p brain must be non-null.
+    EnemyController(std::unique_ptr<IEnemyBrain> brain, const Params &params,
+                    glm::vec2 spawn, int seed);
 
     // Non-movable / non-copyable: Activate registers scheduler callbacks that
     // capture `this`, so the controller must keep a stable address for its whole
@@ -87,14 +94,16 @@ public:
     float InertialVel() const { return m_InertialVel; }
     glm::vec2 MoveDir() const { return m_MoveDir; }
     void SetMoveDir(glm::vec2 dir) { m_MoveDir = dir; }
-    EnemyAI01 &Brain() { return m_Brain; }
+    /// The dispatched brain (via IEnemyBrain). Tests use Brain().RngRange(...) to
+    /// probe the brain's RNG; the sim never type-queries the concrete brain.
+    IEnemyBrain &Brain() { return *m_Brain; }
 
 private:
     void OnScoutTick();
     void OnShootTick();
 
     Params m_Params;
-    EnemyAI01 m_Brain;
+    std::unique_ptr<IEnemyBrain> m_Brain; ///< (d) dispatched brain; never null.
     EntityState m_State;
     glm::vec2 m_MoveDir{0.0F, 0.0F};
     glm::vec2 m_ForceDir{0.0F, 0.0F};

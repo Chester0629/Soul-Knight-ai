@@ -2,15 +2,24 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
+#include <utility>
 
+#include "sim/EnemyBrainAdapters.hpp"
 #include "sim/SimMath.hpp"
 
 namespace Game::Sim {
 
+// Default ctor: the AI01 adapter (back-compat + the determinism tests). Delegates
+// to the (d) inject ctor so there is one initialisation path.
 EnemyController::EnemyController(const Params &params, glm::vec2 spawn, int seed)
-    : m_Params(params) {
-    m_Brain.SetSeed(seed);
-    m_Brain.SetKinematic(params.kinematic);
+    : EnemyController(std::make_unique<EnemyAI01Adapter>(), params, spawn, seed) {}
+
+EnemyController::EnemyController(std::unique_ptr<IEnemyBrain> brain,
+                                const Params &params, glm::vec2 spawn, int seed)
+    : m_Params(params), m_Brain(std::move(brain)) {
+    m_Brain->SetSeed(seed);
+    m_Brain->SetKinematic(params.kinematic);
     m_State.pos = spawn;
     m_State.kinematic = params.kinematic;
 }
@@ -44,7 +53,7 @@ glm::vec2 EnemyController::ComputeVelocity() {
 
 void EnemyController::Kill() {
     m_State.dead = true;
-    m_Brain.SetDead(true);
+    m_Brain->SetDead(true);
     // Stop the repeating scout cadence (mirrors the decomp's CancelInvoke on death)
     // so a dead enemy does not churn a scheduler slot every tick forever. The shoot
     // chain self-terminates via its dead gate, so it needs no explicit cancel.
@@ -59,8 +68,8 @@ void EnemyController::OnScoutTick() {
     if (m_State.dead || !m_State.awake) {
         return;
     }
-    m_Brain.Scout();                     // 1 draw (Range(0,10))
-    m_MoveDir = m_Brain.RunReflection(); // 2 draws (Range(-1,1) x2), normalized
+    m_Brain->Scout();                     // 1 draw (Range(0,10))
+    m_MoveDir = m_Brain->RunReflection(); // 2 draws (Range(-1,1) x2), normalized
 }
 
 void EnemyController::OnShootTick() {
@@ -71,8 +80,10 @@ void EnemyController::OnShootTick() {
     // decomp, and the gate above already guarantees we are alive.)
     float outCd = m_Params.shootCdSeconds;
     if (m_State.awake) { // an asleep enemy skips the shot but keeps the chain alive.
-        const bool fired = m_Brain.ShootReflection(outCd, m_Params.shootCdSeconds);
-        if (fired) {
+        const IEnemyBrain::ShootResult shot =
+            m_Brain->ShootTick(m_Params.shootCdSeconds);
+        outCd = shot.nextCd;
+        if (shot.fired) {
             FireIntent intent;
             intent.pattern = FirePattern::Single;
             intent.origin = m_State.pos;

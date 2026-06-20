@@ -405,14 +405,38 @@ void GameScene::OnEnter() {
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex, m_FloorSeed + 9000);
-            } else if (edef != nullptr) {
-                auto enemy =
-                    std::make_shared<Enemy>(*edef, root, spawn, 450.0F, 260.0F);
-                enemy->AI().SetSeed(m_FloorSeed + 1000 + roomIndex);
-                enemy->AI().SetKinematic(edef->kinematic != 0);
-                enemy->SetRoomId(roomIndex);
-                m_Enemies.push_back(enemy);
-                m_Sim->AddEnemy(*edef, spawn, roomIndex, m_FloorSeed + 1000 + roomIndex);
+            } else {
+                // EnemyMaker-lite (B1-P1, policy C): pick ONE enemy per room from
+                // a representative SHOOTER roster (AI11 = ice; AI06 turret; AI07
+                // int-shoot; + AI04 melee accent that chases but does not damage
+                // yet -- contact-damage subsystem is deferred). The pick is a pure
+                // DETERMINISTIC function of (room type, index) -- it draws NOTHING
+                // from the per-floor RNG, so golden/combat determinism is untouched.
+                // count = 1 (the real EnemyMaker this_count is owner-side: debt s7).
+                // The dispatch (BrainFactory -> (d) adapter) routes the id to the
+                // matching brain; the floor-1 FAITHFUL roster is deferred (s7).
+                static constexpr std::array<const char *, 5> kRosterC = {
+                    "EnemyAI01", "EnemyAI11", "EnemyAI07", "EnemyAI06", "EnemyAI04"};
+                const std::size_t pick =
+                    (static_cast<std::size_t>(cell.type) +
+                     static_cast<std::size_t>(roomIndex)) %
+                    kRosterC.size();
+                const EnemyDef *rdef = m_Data.FindEnemy(kRosterC[pick]);
+                if (rdef == nullptr) {
+                    rdef = edef; // defensive: fall back to AI01
+                }
+                if (rdef != nullptr) {
+                    auto enemy = std::make_shared<Enemy>(*rdef, root, spawn, 450.0F,
+                                                         260.0F);
+                    enemy->AI().SetSeed(m_FloorSeed + 1000 + roomIndex);
+                    enemy->AI().SetKinematic(rdef->kinematic != 0);
+                    enemy->SetRoomId(roomIndex);
+                    m_Enemies.push_back(enemy);
+                    m_Sim->AddEnemy(*rdef, spawn, roomIndex,
+                                    m_FloorSeed + 1000 + roomIndex);
+                    LOG_INFO("EnemyMaker-lite: room {} spawned {} (type {})",
+                             roomIndex, rdef->id, cell.type);
+                }
             }
         }
 

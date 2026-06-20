@@ -96,6 +96,25 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
 
 ## 7. 已知債（明標,不假裝沒有）
 
+- **★ B1-P1 敵人 roster — (d) dispatch 立妥、spawn 走 C 代表性(可逆債)**:
+  - **dispatch = (d) function-adapter**(`IEnemyBrain` + `EnemyBrainBase<T>` + per-brain adapter,brain
+    源碼**零改動**);**全 15 brain**(EnemyAI01–04/06–15+Shark;**無 AI05 brain**)註冊進
+    `MakeEnemyBrain`。AI01 adapter 逐字 forward → byte-identical。
+  - **★ AI04/08/13 近戰攻擊未接**:它們無 `ShootReflection`、攻擊靠**接觸/爆**,而 **sim 無接觸傷害**
+    (玩家只吃子彈)。現為 **move-wired(會追玩家)但不造成傷害**(`MoveOnlyAdapter`/AI13 adapter,
+    brain 不改)。需**接觸傷害子系統**(跨敵/boss 共用,獨立階段)+ **owner-side 傷害量/時機 TODO[verify]
+    不可恢復**。**非 bug,是顯式債。**
+  - **AI03 發射 = adapter 層重建**(`CanShoot && awake` + shootCd cadence,brain 不改);忠實 AI03 的
+    Shooting/StandIn 狀態機 gating = refinement debt。
+  - **★ floor-1 忠實 roster 不可恢復 → C 降級(可逆)**:無 enemy_group prefab、`enemies.json` 無 chapter 欄、
+    dump 是 chapter-3、clip_dead 只 AI05/AI11 帶冰雪(AI05 無 brain)。現用 **C 代表性射手 roster**
+    (AI01/AI11冰雪/AI07/AI06turret + AI04 近戰點綴),per-room 按 (room-type+index) **純決定性挑**
+    (不抽 RNG、不擾 perFloorSeed)。待 **chapter-1 dump/真機 re-baseline**。
+  - **EnemyMaker-lite**:count=1(真 `this_count` owner-side、選法/擺位 owner-truncated = TODO[verify]);
+    EnemyMaker→敵→`RoomHasLiveHostile`→`RGRoomX.ClearRoom` **前半接通**(實玩已見進房→StartRoom 鎖,真敵 AI07)。
+  - **AI05 brain 未 port**(`enemies.json` 16 def vs 15 brain);**floors 2–N roster = placeholder**(多樓層 deferred)。
+  - clear-flow **後半(殺敵→ClearRoom→開門)** + 親手實玩仍待 **P5**(需瞄準 combat input,autowalk/autofire 打不準敵人)。
+
 - **★ P4 tileset — 純視覺債(`tools/extract_tiles.py` + `GameScene` 渲染)**:
   - **floor/wall biome = biome 6 冰雪(已釘死,HIGH — P4-RE)**:floor-1 = world 1
     (`AB:level-1` bundle)= **biome 6**(`floor601`/`wall601`,淺藍雪地)。證據:biome 集**按 world
