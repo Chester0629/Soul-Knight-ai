@@ -273,4 +273,30 @@ TEST(FloorBlockTest, DoorSealCoversFullOpeningNotJustCode11) {
     }
 }
 
+// --- Phase 2: geometry adapts to a non-15 room size (size-invariant band) ------
+TEST(FloorBlockTest, GeometryAdaptsTo21WideRoom) {
+    RoomGen::Options o;
+    o.randomRoom = false;
+    o.roomWidth = 21;
+    o.roomHeight = 21;
+    o.wallLevel = 1;
+    o.obstacleLevel = 1;
+    const RoomGen rg(4242, kEastOnly, o);
+
+    EXPECT_EQ(FloorBlock::OffsetX(rg), 10); // (41-21)/2
+    EXPECT_EQ(FloorBlock::OffsetY(rg), 10);
+
+    const FloorBlock::Rect e = FloorBlock::CorridorStrip(FloorBlock::DIR_EAST, rg);
+    EXPECT_EQ(e.x0, 31); // offset_x + W = 10 + 21 (corridor starts later for a wider room)
+    EXPECT_EQ(e.x1, 40); // still reaches the block edge
+    EXPECT_EQ(e.y0, 18); // ...but the door band stays centred at 18-22 for ANY size
+    EXPECT_EQ(e.y1, 22);
+
+    const auto block = FloorBlock::Build(rg, kEastOnly);
+    for (int y = 18; y <= 22; ++y) {
+        EXPECT_TRUE(Walkable(FloorBlock::At(block, 31, y))) << "junction, y=" << y;
+        EXPECT_TRUE(Walkable(FloorBlock::At(block, 40, y))) << "block edge, y=" << y;
+    }
+}
+
 // NOLINTEND(readability-magic-numbers)

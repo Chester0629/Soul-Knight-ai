@@ -21,6 +21,20 @@ TEST(GameDataTest, LoadsAllTablesWithExpectedCounts) {
     EXPECT_EQ(gd.Buffs().size(), 12u);
 }
 
+TEST(GameDataTest, LoadsFloor1RoomLayouts) {
+    GameData gd;
+    gd.LoadAll(kResourceRoot);
+    const auto &rl = gd.RoomLayouts();
+    EXPECT_EQ(rl.size(), 108u); // the 108 floor-1 (r1_*) design rooms
+    for (const auto &r : rl) {
+        EXPECT_FALSE(r.id.empty());
+        // Floor-1 sizes are only 15 or 21 per axis (no 25); all rooms are type 1.
+        EXPECT_TRUE(r.width == 15 || r.width == 21) << r.id << " w=" << r.width;
+        EXPECT_TRUE(r.height == 15 || r.height == 21) << r.id << " h=" << r.height;
+        EXPECT_EQ(r.type, 1) << r.id;
+    }
+}
+
 TEST(GameDataTest, Gun001ScalarStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);

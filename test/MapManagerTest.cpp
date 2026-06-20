@@ -2,11 +2,14 @@
 
 #include <array>
 #include <cstddef>
+#include <set>
+#include <string>
 #include <vector>
 
 #include "world/MapManager.hpp"
 #include "world/RoomGen.hpp"
 
+using Game::DesignRoom;
 using Game::MapManager;
 using Game::RoomCell;
 using Game::RoomGen;
@@ -182,6 +185,95 @@ TEST(MapManagerTest, AdjacentRoomsHaveAlignedDoorOpenings) {
                                       << " room " << i << "->" << j;
                 }
             }
+        }
+    }
+}
+
+// === Phase 2: real per-slot design-room selection ============================
+
+namespace {
+std::vector<DesignRoom> Floor1DesignPool() { // 108 type-1 rooms, mixed sizes
+    std::vector<DesignRoom> p;
+    const int sizes[4][2] = {{15, 15}, {15, 21}, {21, 15}, {21, 21}};
+    const int freq[4] = {49, 23, 22, 14};
+    int id = 0;
+    for (int s = 0; s < 4; ++s) {
+        for (int k = 0; k < freq[s]; ++k) {
+            p.push_back({"r1_" + std::to_string(id++), sizes[s][0], sizes[s][1], 1});
+        }
+    }
+    return p;
+}
+} // namespace
+
+TEST(MapManagerTest, SelectDesignRoomsByTypeWithType1Fallback) {
+    const std::vector<DesignRoom> pool = {
+        {"r1_1", 15, 15, 1}, {"r1_2", 21, 21, 1}, {"r1_3", 15, 21, 1}, // type 1
+        {"s2_1", 25, 25, 2},                                          // a type-2 room
+    };
+    const auto idx = MapManager::SelectDesignRooms(pool, {1, 2, 1}, 7);
+    ASSERT_EQ(idx.size(), 3u);
+    EXPECT_EQ(pool[static_cast<std::size_t>(idx[0])].type, 1);
+    EXPECT_EQ(pool[static_cast<std::size_t>(idx[1])].type, 2); // type-2 slot -> type-2 room
+    EXPECT_EQ(pool[static_cast<std::size_t>(idx[2])].type, 1);
+
+    // Pool with ONLY type-1 rooms: a type-2/3 slot falls back to the type-1 pool.
+    const std::vector<DesignRoom> onlyT1 = {{"r1_1", 15, 15, 1}, {"r1_2", 21, 21, 1}};
+    const auto fb = MapManager::SelectDesignRooms(onlyT1, {2, 3}, 7);
+    ASSERT_EQ(fb.size(), 2u);
+    EXPECT_EQ(onlyT1[static_cast<std::size_t>(fb[0])].type, 1) << "type-2 -> type-1 fallback";
+    EXPECT_EQ(onlyT1[static_cast<std::size_t>(fb[1])].type, 1) << "type-3 -> type-1 fallback";
+}
+
+TEST(MapManagerTest, SelectDesignRoomsAvoidsRecentRepeats) {
+    const auto pool = Floor1DesignPool(); // 108 distinct rooms
+    const auto idx = MapManager::SelectDesignRooms(pool, std::vector<int>(7, 1), 3);
+    ASSERT_EQ(idx.size(), 7u);
+    const std::set<int> uniq(idx.begin(), idx.end());
+    EXPECT_EQ(uniq.size(), idx.size()) << "7 slots from 108 rooms should be distinct";
+}
+
+TEST(MapManagerTest, SelectDesignRoomsDeterministicAndEmptySafe) {
+    const auto pool = Floor1DesignPool();
+    EXPECT_EQ(MapManager::SelectDesignRooms(pool, std::vector<int>(7, 1), 42),
+              MapManager::SelectDesignRooms(pool, std::vector<int>(7, 1), 42));
+    EXPECT_TRUE(MapManager::SelectDesignRooms({}, {1, 1}, 1).empty());
+}
+
+TEST(MapManagerTest, ConstructorAssignsDesignRoomPerSlot) {
+    MapManager::Options o;
+    o.mapLong = 7;
+    o.designRooms = Floor1DesignPool();
+    const MapManager m(1, o);
+    ASSERT_EQ(static_cast<int>(m.Rooms().size()), 7);
+    std::set<std::string> ids;
+    for (const RoomCell &r : m.Rooms()) {
+        EXPECT_FALSE(r.roomId.empty()) << "slot must record its design-room id";
+        EXPECT_TRUE(r.width == 15 || r.width == 21);
+        EXPECT_TRUE(r.height == 15 || r.height == 21);
+        ids.insert(r.roomId);
+    }
+    EXPECT_EQ(ids.size(), m.Rooms().size()) << "distinct design room per slot (usedRoom)";
+}
+
+// * Determinism: design selection runs on a SEPARATE stream, so the random walk
+// (gridX/gridY/type/entrance) is byte-identical with and without a design pool --
+// the existing map determinism (and downstream golden / combat seeds) is untouched.
+TEST(MapManagerTest, DesignSelectionDoesNotPerturbTheWalk) {
+    MapManager::Options bare;
+    bare.mapLong = 12;
+    bare.ranRoomProbability = 25;
+    MapManager::Options withRooms = bare;
+    withRooms.designRooms = Floor1DesignPool();
+    for (int seed : {1, 2, 3, 7, 12345}) {
+        const MapManager a(seed, bare);
+        const MapManager b(seed, withRooms);
+        ASSERT_EQ(a.Rooms().size(), b.Rooms().size()) << "seed=" << seed;
+        for (std::size_t i = 0; i < a.Rooms().size(); ++i) {
+            EXPECT_EQ(a.Rooms()[i].gridX, b.Rooms()[i].gridX) << "seed=" << seed;
+            EXPECT_EQ(a.Rooms()[i].gridY, b.Rooms()[i].gridY) << "seed=" << seed;
+            EXPECT_EQ(a.Rooms()[i].type, b.Rooms()[i].type) << "seed=" << seed;
+            EXPECT_EQ(a.Rooms()[i].entrance, b.Rooms()[i].entrance) << "seed=" << seed;
         }
     }
 }

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstddef>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -10,6 +11,7 @@
 #include "world/Room.hpp"
 #include "world/RoomGen.hpp"
 
+using Game::DesignRoom;
 using Game::FloorBlock;
 using Game::MapManager;
 using Game::Room;
@@ -34,6 +36,33 @@ RoomGen BuildRoom(int floorSeed, int idx, const std::array<int, 4> &ent) {
     o.wallLevel = 1;
     o.obstacleLevel = 1;
     return RoomGen(floorSeed + 1 + idx, ent, o);
+}
+
+// Phase-2 per-slot build: explicit (w,h) from the size picker.
+RoomGen BuildRoomSized(int floorSeed, int idx, const std::array<int, 4> &ent,
+                       int w, int h) {
+    RoomGen::Options o;
+    o.randomRoom = false;
+    o.roomWidth = w;
+    o.roomHeight = h;
+    o.wallLevel = 1;
+    o.obstacleLevel = 1;
+    return RoomGen(floorSeed + 1 + idx, ent, o);
+}
+
+// The floor-1 design-room pool (108 type-1 rooms at their csv size frequencies);
+// MapManager assigns one per slot, so sizes follow this distribution.
+std::vector<DesignRoom> Floor1DesignPool() {
+    const int sz[4][2] = {{15, 15}, {15, 21}, {21, 15}, {21, 21}};
+    const int freq[4] = {49, 23, 22, 14};
+    std::vector<DesignRoom> pool;
+    int id = 0;
+    for (int s = 0; s < 4; ++s) {
+        for (int k = 0; k < freq[s]; ++k) {
+            pool.push_back({"r1_" + std::to_string(id++), sz[s][0], sz[s][1], 1});
+        }
+    }
+    return pool;
 }
 
 // The representative "interior" cell GameScene actually spawns the player/enemy
@@ -294,6 +323,83 @@ TEST(FloorConnectivityTest, BfsCatchesVerticalCorridorBreakWeakCheckMisses) {
     EXPECT_FALSE(Reachable(brokenSeam, sa, tb))
         << "BFS must detect the row40<->41 seam break";
     EXPECT_TRUE(BothRoomEdgesOpen(blockA, blockB, false));
+}
+
+// === Phase 2: the SAME BFS acceptance, now with VARIABLE per-slot sizes ========
+// Each slot takes a floor-1 size from the picker (mixed 15/21, square + non-square).
+// Mixed-size neighbours must still connect interior->corridor->interior, because the
+// door band is always centred at block 18-22 regardless of size. 5 seeds, both axes.
+TEST(FloorConnectivityTest, VariableSizeEveryAdjacentPairReachable) {
+    const auto pool = Floor1DesignPool();
+    int totalHoriz = 0;
+    int totalVert = 0;
+    int non15Seen = 0;
+    int nonSquareSeen = 0;
+    for (int floorSeed : {1, 2, 3, 7, 12345}) {
+        // MapManager assigns each slot a design room (id + size) -- the real P2 path.
+        MapManager::Options o;
+        o.mapLong = 7;
+        o.ranRoomProbability = 25;
+        o.designRooms = pool;
+        const MapManager m(floorSeed, o);
+        const auto &rooms = m.Rooms();
+
+        std::vector<RoomGen> grids;
+        std::vector<std::vector<int>> blocks;
+        grids.reserve(rooms.size());
+        blocks.reserve(rooms.size());
+        for (std::size_t i = 0; i < rooms.size(); ++i) {
+            ASSERT_GT(rooms[i].width, 0) << "slot " << i << " got no design size";
+            grids.push_back(BuildRoomSized(floorSeed, static_cast<int>(i),
+                                           rooms[i].entrance, rooms[i].width,
+                                           rooms[i].height));
+            blocks.push_back(FloorBlock::Build(grids[i], rooms[i].entrance));
+            if (rooms[i].width != 15 || rooms[i].height != 15) {
+                ++non15Seen;
+            }
+            if (rooms[i].width != rooms[i].height) {
+                ++nonSquareSeen;
+            }
+        }
+
+        for (std::size_t i = 0; i < rooms.size(); ++i) {
+            for (std::size_t j = 0; j < rooms.size(); ++j) {
+                if (i == j) {
+                    continue;
+                }
+                const int ddx = rooms[j].gridX - rooms[i].gridX;
+                const int ddy = rooms[j].gridY - rooms[i].gridY;
+                const bool horiz = (ddx == 1 && ddy == 0);
+                const bool vert = (ddx == 0 && ddy == 1);
+                if (!horiz && !vert) {
+                    continue;
+                }
+                if (horiz) {
+                    ++totalHoriz;
+                } else {
+                    ++totalVert;
+                }
+                const Pair p = MakePair(blocks[i], blocks[j], horiz);
+                const auto si = InteriorCell(grids[i]);
+                auto tj = InteriorCell(grids[j]);
+                if (horiz) {
+                    tj.first += B;
+                } else {
+                    tj.second += B;
+                }
+                EXPECT_TRUE(Reachable(p, si, tj))
+                    << "seed=" << floorSeed << " " << (horiz ? "H" : "V") << " "
+                    << i << "->" << j << " sizes " << rooms[i].width << "x"
+                    << rooms[i].height << " / " << rooms[j].width << "x"
+                    << rooms[j].height;
+            }
+        }
+    }
+    EXPECT_GT(totalHoriz, 0);
+    EXPECT_GT(totalVert, 0);
+    // Guard against vacuous coverage: the picker must actually produce variety.
+    EXPECT_GT(non15Seen, 0) << "no non-15x15 room appeared -- variability untested";
+    EXPECT_GT(nonSquareSeen, 0) << "no non-square room (15x21/21x15) appeared";
 }
 
 // NOLINTEND(readability-magic-numbers)

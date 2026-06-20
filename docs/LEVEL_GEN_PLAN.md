@@ -21,7 +21,7 @@ caveat」,供跨 session 接續。實作細節看 code/測試;這裡只留「為
 | 岔路 | 定案 | 一句理由 |
 |---|---|---|
 | 房間間距 | **41-pitch = 41×32 = 1312px** | 每房佔一個 `MAP_SIZE=41` 邏輯塊,塊邊對塊邊鋪,走廊在塊間 margin 接縫 |
-| 可變房尺寸來源 | **`room_layouts.csv`** | 原版每個設計房有自己的 W×H;由此表驅動 (P2),非寫死 15 |
+| 設計房選用 + 尺寸 | **`room_layouts.json`**(108 房 `{id,w,h,type}`) | **政策2「真選房」**:MapManager 按 slot type 選 floor-1 設計房【身份 `r1_N`】+ 用其 W×H 驅動建房 (P2),非寫死 15 |
 | prefab sprite | **版面/collider 優先;PPtr→sprite「v2」當補皮** | 先把「房長怎樣、能不能走」做對 (layout JSON + collider),貼圖 (PPtr 解到實際 sprite) 後補,不卡進度 |
 | tileset | **切已萃取圖集 (正交)** | 地板/牆用從圖集切出的正交瓦片 (P4),不自繪 |
 | 範圍 | **floor-1** | 同上,先一層 |
@@ -61,10 +61,15 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
 ## 5. Phase 狀態
 
 - **P1 走廊幾何 — DONE**(本文 §3/§4;1961 測試綠、golden 不變)。
-- **P2 可變房尺寸**(前置 P1):RoomGen 從 `room_layouts.csv` 取每房 W×H,FloorBlock offset
-  改用真尺寸(已是 `(41−W)/2` 通式,走廊 band 已用 `cy/cx` 通式 → 幾何已 size-invariant)。
-- **P3 設計房 prefab 載入 + RGRoomX**(前置 P1+P2):載 108 房 LoadRoom JSON(版面/collider
-  優先),與程序房 (RGRoomX random_room) 混排,接 MapManager。
+- **P2 真選房(政策2)— 實作完成、待驗收**(前置 P1):**不是只挑尺寸**——MapManager 按
+  slot type 選一個 floor-1 設計房【身份 `r1_N`】(`SelectDesignRooms`,跑在獨立 RNG 流
+  `seed + 104729`,`usedRoom` 去重避免近期重複),把選到房的 **W×H 灌進** FloorBlock offset
+  (`(41−W)/2` 通式,走廊 band `cy/cx` 通式 → 幾何 size-invariant)。**內裝仍 RoomGen 程序生**
+  (prefab 內裝是 P3 的事);`roomId` 即 P3 的 load handle。special/badass slot 走 type-1
+  fallback(**見 §7 顯式債**)。獨立 seed 流 ⇒ 主 random-walk 與下游 golden/combat 決定性
+  byte-identical(`DesignSelectionDoesNotPerturbTheWalk`)。
+- **P3 設計房 prefab 內裝載入 + RGRoomX**(前置 P1+P2):在 **P2 已選好的 `r1_N`** 上載該房的
+  LoadRoom JSON(版面/collider 優先)取代程序內裝,與程序房 (RGRoomX random_room) 混排。
 - **P4 tileset(正交)**(前置 P3):用切出的正交圖集瓦片替換 floor_tile/wall_tile 佔位圖。
 
 ## 6. 跨階段回歸守則
@@ -78,6 +83,18 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
 
 ## 7. 已知債（明標,不假裝沒有）
 
+- **★ special/badass 房形狀缺失(P2 政策2 fallback — 顯式債,非 latent)**:floor-1 設計池
+  只有 type-1 房(`room_layouts.json` 全 `type:1`),所以 type-2(special)/type-3(badass)
+  slot 在 `MapManager::SelectDesignRooms` 走 **type-1 fallback** → 拿到的是 **type-1 房形狀**。
+  special 房的獨特形狀**尚未重建**,需專門的 **special-room RE** pass,deferred。
+  *(floor-0 實證:slot5 `type2 → r1_81`、slot4 `type3 → r1_17`,兩者都是 type-1 房。)*
+  code 接點:`MapManager.cpp` 的 `TODO[debt: special-room content]`(與其上方的演算法保真
+  `TODO[verify]` 是**兩個不同的債**)。
+- **★ loot overlay 忠實度 UNVERIFIED**:special/badass slot 的 loot overlay(`wallLevel` +
+  chest tier)維持**港版現行處理**,**忠實度未驗證**——**不標成已驗證忠實**;待 special-room
+  RE 確認 floor-1 special 房是否架構獨立後才能判定。
+- **★「忠實 floor-1」帶星號**:§1 北極星的「重現 floor-1 本貌」目前 = **normal 房忠實** /
+  **special·badass 房 = type-1 形狀 + 未驗證 loot**。對 special 房尚未達成,須隨上面兩條一起收。
 - **多角色身份 / buff**(B5):目前固定 c01;角色選擇 + buff 系統未接。
 - **跨層技能冷卻延續**:每層從 template 重建(starts ready),冷卻不跨層帶。
 - **c01 完整二手**(B1b):技能 brain 已接進 Player,但完整二手回收(full second-hand)未做。

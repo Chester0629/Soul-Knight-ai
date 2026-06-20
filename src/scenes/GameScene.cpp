@@ -33,10 +33,12 @@ constexpr float kPlayerRadius = 16.0F;
 constexpr float kBulletLifeMs = 1500.0F;
 // World size (pixels) of one RoomGen grid cell.
 constexpr float kCellPx = 32.0F;
-// Fixed room footprint (cells). Each room is centred inside its MAP_SIZE (41-cell)
-// dungeon block, so blocks tile at a 41-cell pitch (1312 px at 32 px/cell) and the
-// corridors carved into the inter-block margins meet at the shared seam between
-// adjacent blocks (the "A geometry"). See world/FloorBlock.hpp.
+// Fallback room footprint (cells) when no room_layouts size pool is loaded. Each
+// room is centred inside its MAP_SIZE (41-cell) dungeon block, so blocks tile at a
+// 41-cell pitch (1312 px at 32 px/cell) and the corridors carved into the inter-
+// block margins meet at the shared seam between adjacent blocks (the "A geometry").
+// The door band is centred at block 18-22 for ANY room size, so mixed sizes still
+// tile + align. See world/FloorBlock.hpp.
 constexpr int kRoomCells = 15;
 constexpr float kRoomPitch = static_cast<float>(FloorBlock::kBlock) * kCellPx;
 // Player must be this close (px) to auto-open a chest / collect a pickup.
@@ -100,6 +102,19 @@ void GameScene::OnEnter() {
     MapManager::Options mapOpt;
     mapOpt.mapLong = 7;
     mapOpt.ranRoomProbability = 25;
+    // --- Phase 2: real per-slot design-room selection ---
+    // Hand MapManager the floor-1 design-room pool; it assigns each slot a design
+    // room (id + size) by type (type-1 fallback for special/badass slots) on a
+    // SEPARATE RNG stream, so the walk's draw order -- and thus golden / combat
+    // determinism -- is untouched. The slot's roomId is the P3 load handle; its
+    // width/height drive the room build (interior stays RoomGen-procedural until
+    // P3). The door band is centred (block 18-22) for any size, so mixed sizes
+    // still tile and the corridors meet at the seam.
+    mapOpt.designRooms.reserve(m_Data.RoomLayouts().size());
+    for (const RoomLayoutDef &rl : m_Data.RoomLayouts()) {
+        mapOpt.designRooms.push_back(
+            DesignRoom{rl.id, rl.width, rl.height, rl.type});
+    }
     const MapManager floor(m_FloorSeed, mapOpt);
     const RoomCell &startCell = floor.Rooms()[floor.StartIndex()];
     const int startGx = startCell.gridX;
@@ -116,6 +131,17 @@ void GameScene::OnEnter() {
             bestDist = dist;
             bossRoom = static_cast<int>(i);
         }
+    }
+
+    {
+        std::string roomLog; // slot -> r1_N (size) -- the realised design selection.
+        for (const RoomCell &c : floor.Rooms()) {
+            roomLog += (c.roomId.empty() ? "?" : c.roomId) + "(" +
+                       std::to_string(c.width > 0 ? c.width : kRoomCells) + "x" +
+                       std::to_string(c.height > 0 ? c.height : kRoomCells) + ") ";
+        }
+        LOG_INFO("Floor {} rooms (design-pool={}): {}", m_FloorIndex,
+                 mapOpt.designRooms.size(), roomLog);
     }
 
     const EnemyDef *edef = m_Data.FindEnemy("EnemyAI01");
@@ -137,9 +163,12 @@ void GameScene::OnEnter() {
             static_cast<float>(cell.gridY - startGy) * kRoomPitch};
 
         RoomGen::Options ropt;
-        ropt.randomRoom = false; // fixed size so rooms tile + doors align
-        ropt.roomWidth = kRoomCells;
-        ropt.roomHeight = kRoomCells;
+        ropt.randomRoom = false; // explicit per-slot size; interior stays procedural
+        // Size = the design room MapManager chose for this slot (cell.roomId); fall
+        // back to kRoomCells only when no design pool was loaded.
+        const bool haveSize = cell.width > 0 && cell.height > 0;
+        ropt.roomWidth = haveSize ? cell.width : kRoomCells;
+        ropt.roomHeight = haveSize ? cell.height : kRoomCells;
         ropt.wallLevel = cell.type >= 2 ? 2 : 1; // richer obstacles in special rooms
         ropt.obstacleLevel = 1;
         // Thread the real floor index for fidelity. NOTE: this is INERT here --

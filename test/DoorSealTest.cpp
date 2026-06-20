@@ -38,6 +38,16 @@ RoomGen MakeRoom(const std::array<int, 4> &ent) {
     return RoomGen(4242, ent, o);
 }
 
+RoomGen MakeRoomWH(const std::array<int, 4> &ent, int w, int h) {
+    RoomGen::Options o;
+    o.randomRoom = false;
+    o.roomWidth = w;
+    o.roomHeight = h;
+    o.wallLevel = 1;
+    o.obstacleLevel = 1;
+    return RoomGen(4242, ent, o);
+}
+
 glm::vec2 BlockWorld(int bx, int by, glm::vec2 origin) {
     return Room::CellToWorld(bx, by, FloorBlock::kBlock, FloorBlock::kBlock,
                              kCellPx, origin);
@@ -143,6 +153,30 @@ TEST(DoorSealTest, LockedDoorSealBlocksFullOpening) {
     }
     EXPECT_TRUE(BlockedBy(locked, doorCentre))
         << "locked room leaks: the aisle-band centre of the door is not sealed";
+}
+
+// * Phase 2 combat-on-geometry: the radius-16 circle (the sim's WorldCollision
+// probe) traverses a VARIABLE-SIZE pair -- a 21-wide room (offset 10, corridor
+// cols 31..40) into a 15-wide room (offset 13). The variable-length corridors
+// still meet at the seam (band centred 18-22), and the physics walls (Room walls
+// of a 21x21 room + the flank colliders of the shorter corridor) let the entity
+// through the whole centreline with no collision: no wall-clip, no stuck.
+TEST(DoorSealTest, CircleTraversesVariableSizeCorridorUnblocked) {
+    const RoomGen a = MakeRoomWH({1, 0, 0, 0}, 21, 21); // east door, 21 wide
+    const RoomGen b = MakeRoomWH({0, 0, 1, 0}, 15, 15); // west door, 15 wide
+    const glm::vec2 oa{0.0F, 0.0F};
+    const glm::vec2 ob{kPitch, 0.0F};
+    const auto base = BasePair(a, b, oa, ob);
+
+    // a's east opening (room-local col 20) is world x=320; b's west door world
+    // x=1088. y=0 is the band centre of both openings + the corridors between.
+    for (float x = 320.0F; x <= 1088.0F; x += 16.0F) {
+        EXPECT_FALSE(BlockedBy(base, glm::vec2{x, 0.0F}))
+            << "variable-size centreline blocked at x=" << x;
+    }
+    // The corridor is still walled off-band (the 21-room's corridor flank at
+    // block (35,17) -> world (15*32,-3*32)=(480,-96) blocks).
+    EXPECT_TRUE(BlockedBy(base, BlockWorld(35, 17, oa)));
 }
 
 // Symmetric counterpart to LockedDoorSealBlocksFullOpening: a CLEARED (unlocked)

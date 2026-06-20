@@ -110,6 +110,16 @@ struct BuffDef {
     float buffTime = 0.0F;
 };
 
+/// One floor-1 design room's SIZE (from Resources/data/room_layouts.json).
+/// Phase 2 size source: a dungeon slot takes one of these rooms' width/height; the
+/// room INTERIOR is still RoomGen-procedural (design-room layout loading is Phase 3).
+struct RoomLayoutDef {
+    std::string id;
+    int width = 0;
+    int height = 0;
+    int type = 0; ///< design-room category (floor-1 rooms are all type 1).
+};
+
 /**
  * @class GameData
  * @brief Loads and indexes the generated game-data tables for the game layer.
@@ -157,6 +167,9 @@ public:
     const std::vector<EnemyDef> &Enemies() const { return m_Enemies; }
     const std::vector<EnemyGunDef> &EnemyGuns() const { return m_EnemyGuns; }
     const std::vector<BuffDef> &Buffs() const { return m_Buffs; }
+    /// Floor-1 design-room sizes (the Phase-2 size pool). Empty if the table is
+    /// absent -- callers fall back to a fixed room size.
+    const std::vector<RoomLayoutDef> &RoomLayouts() const { return m_RoomLayouts; }
 
 private:
     std::vector<WeaponDef> m_Weapons;
@@ -164,6 +177,7 @@ private:
     std::vector<EnemyDef> m_Enemies;
     std::vector<EnemyGunDef> m_EnemyGuns;
     std::vector<BuffDef> m_Buffs;
+    std::vector<RoomLayoutDef> m_RoomLayouts;
     CharacterDef m_PlayerTemplate;
 
     std::unordered_map<std::string, std::size_t> m_WeaponIndex;

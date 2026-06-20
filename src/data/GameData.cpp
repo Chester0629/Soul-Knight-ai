@@ -166,10 +166,29 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         ok = false;
     }
 
+    // Floor room sizes (Phase-2 size pool). OPTIONAL: absence is not a load
+    // failure -- the caller (GameScene) falls back to a fixed room size -- so this
+    // never flips `ok`. Extracted from the RE dump by tools/extract_room_layouts.py.
+    const json &roomLayouts = store.Load(dir + "room_layouts.json");
+    if (roomLayouts.is_array()) {
+        for (const auto &e : roomLayouts) {
+            RoomLayoutDef d;
+            d.id = GetS(e, "id");
+            d.width = GetI(e, "w");
+            d.height = GetI(e, "h");
+            d.type = GetI(e, "type", 1);
+            if (d.width > 0 && d.height > 0) {
+                m_RoomLayouts.push_back(std::move(d));
+            }
+        }
+    } else {
+        LOG_INFO("GameData: room_layouts.json absent; rooms will use the default size");
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
-             "enemy_guns, {} buffs",
+             "enemy_guns, {} buffs, {} room layouts",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
-             m_EnemyGuns.size(), m_Buffs.size());
+             m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size());
     return ok;
 }
 
