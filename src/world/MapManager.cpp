@@ -65,13 +65,19 @@ MapManager::MapManager(int seed, const Options &options) {
         m_Rooms.push_back(RoomCell{nx, ny, stored, {0, 0, 0, 0}});
     }
 
-    // Derive each room's door flags from its placed orthogonal neighbours, in
-    // RoomGen's entrance order: [0]=EAST(+x) [1]=NORTH(+y) [2]=WEST(-x) [3]=SOUTH(-y).
+    // Derive each room's door flags from its placed orthogonal neighbours. The
+    // index->edge mapping is FIXED by RoomGen::CreateAisle's carve sides (not by a
+    // compass label): [0] carves max-x, [2] min-x, [1] min-y (cell y=0), [3] max-y
+    // (cell y=h-1). Through CellToWorld + GameScene's origin, min-y/max-y are the
+    // -y/+y world edges, so each door must be flagged for the neighbour on THAT
+    // side: [1]<-(gridY-1), [3]<-(gridY+1). (The y pair was previously swapped to
+    // the +y/-y neighbours, so vertical seams became solid double-walls and the
+    // doors faced the outer void -- the room-to-room navigation bug.)
     for (RoomCell &room : m_Rooms) {
-        room.entrance[0] = HasRoom(room.gridX + 1, room.gridY) ? 1 : 0;
-        room.entrance[1] = HasRoom(room.gridX, room.gridY + 1) ? 1 : 0;
-        room.entrance[2] = HasRoom(room.gridX - 1, room.gridY) ? 1 : 0;
-        room.entrance[3] = HasRoom(room.gridX, room.gridY - 1) ? 1 : 0;
+        room.entrance[0] = HasRoom(room.gridX + 1, room.gridY) ? 1 : 0; // max-x -> +x
+        room.entrance[1] = HasRoom(room.gridX, room.gridY - 1) ? 1 : 0; // min-y -> -y
+        room.entrance[2] = HasRoom(room.gridX - 1, room.gridY) ? 1 : 0; // min-x -> -x
+        room.entrance[3] = HasRoom(room.gridX, room.gridY + 1) ? 1 : 0; // max-y -> +y
     }
 }
 

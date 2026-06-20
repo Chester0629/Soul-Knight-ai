@@ -63,6 +63,9 @@ set(SRC_FILES
     # Soul-Knight engine extensions (Phase 1B)
     ${SRC_DIR}/Core/SceneManager.cpp
     ${SRC_DIR}/Core/Camera2D.cpp
+
+    # Soul-Knight engine extension (A4): Vertical/Bottom Filled (UV-crop) drawable
+    ${SRC_DIR}/Util/FilledImage.cpp
 )
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(INCLUDE_FILES
@@ -114,6 +117,9 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/Core/Scene.hpp
     ${INCLUDE_DIR}/Core/SceneManager.hpp
     ${INCLUDE_DIR}/Core/Camera2D.hpp
+
+    # Soul-Knight engine extension (A4): Vertical/Bottom Filled (UV-crop) drawable
+    ${INCLUDE_DIR}/Util/FilledImage.hpp
 )
 set(EXAMPLE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/example)
 set(EXAMPLE_FILES
@@ -144,6 +150,14 @@ set(TEST_FILES
     ${TEST_DIR}/SceneManagerTest.cpp
     ${TEST_DIR}/Camera2DTest.cpp
 )
+
+# FilledImage is OUR code (A4 engine extension) living in PTSD. Apply the SAME
+# vendored-spdlog/fmt C4996 (stdext::checked_array_iterator) suppression the game
+# targets use (../CMakeLists.txt) -- scoped to THIS source file only, so our TU is
+# /W4-clean without changing PTSD's deliberate global warning behaviour. Notice-only
+# define (STL4043), zero codegen impact; remove once spdlog/fmt drop the deprecated API.
+set_source_files_properties(${SRC_DIR}/Util/FilledImage.cpp PROPERTIES
+    COMPILE_DEFINITIONS "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING")
 
 add_library(PTSD STATIC
     ${SRC_FILES}

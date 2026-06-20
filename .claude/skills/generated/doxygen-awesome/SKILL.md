@@ -31,12 +31,6 @@ description: "Skill for the Doxygen-awesome area of Soul-Knight-ai. 7 symbols ac
 | `toggleDarkMode` | Method | `PTSD/docs/doxygen-awesome/doxygen-awesome-darkmode-toggle.js` | 142 |
 | `updateIcon` | Method | `PTSD/docs/doxygen-awesome/doxygen-awesome-darkmode-toggle.js` | 147 |
 
-## Execution Flows
-
-| Flow | Type | Steps |
-|------|------|-------|
-| `UserPreference → EnableDarkMode` | intra_community | 3 |
-
 ## How to Explore
 
 1. `gitnexus_context({name: "userPreference"})` — see callers and callees

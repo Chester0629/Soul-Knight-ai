@@ -68,10 +68,56 @@ void Simulation::TickWeapon() {
     const std::size_t before = m_FireIntents.size();
     m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
     const std::size_t shots = m_FireIntents.size() - before;
-    m_PlayerShotsLastAdvance += static_cast<int>(shots);
+    m_PlayerShotsLastAdvance += static_cast<int>(shots); // primary hand only -> energy spend.
     for (std::size_t i = 0; i < shots; ++i) { // A: one "fire" cue per player shot (muzzle flash).
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
     }
+
+    // --- C01 skill effect (to the degree the sim supports; honest fidelity flag) ---
+    // While the ultimate is active, the second hand MIRRORS the primary attack
+    // (CharSkillC01::RoleAtk -> mirrorSecondHand). Modeled as a FREE duplicate of this
+    // step's primary shots, offset perpendicular to aim as a stand-in for the second
+    // hand's position. NOT FAITHFUL-COMPLETE: the real c01 second hand is a SEPARATE
+    // gun with its own cadence, fired via a 0.1s-delayed Invoke ("Hand2Atk"), with the
+    // actual hand transform + animation -- all owner/presentation, the truncated
+    // get_transform tail-call the brain does not model. Full c01 fidelity = B1b.
+    if (m_Skill.has_value() && shots > 0) {
+        const Game::CharSkillC01::AtkDecision d =
+            m_Skill->RoleAtk(/*pressDown=*/m_Input.firing, /*standingOnItem=*/false);
+        if (d.mirrorSecondHand && d.secondHandAttackValue) {
+            constexpr float kSecondHandOffsetPx = 12.0F; // placeholder hand offset (B1b: real transform).
+            // Copy the primary shots first: push_back below may reallocate the buffer.
+            const std::vector<FireIntent> primary(
+                m_FireIntents.begin() + static_cast<std::ptrdiff_t>(before),
+                m_FireIntents.begin() + static_cast<std::ptrdiff_t>(before + shots));
+            for (FireIntent mirror : primary) {
+                const glm::vec2 perp{-mirror.dir.y, mirror.dir.x};
+                mirror.origin += perp * kSecondHandOffsetPx;
+                m_FireIntents.push_back(mirror);
+                m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
+            }
+            // The mirror is a FREE bonus: intentionally NOT added to
+            // m_PlayerShotsLastAdvance, so the second hand does not double energy spend.
+        }
+    }
+}
+
+void Simulation::TickSkill() {
+    if (!m_Skill.has_value()) {
+        return;
+    }
+    // Activation (RoleSkill gate): the skill button this step tries to enter the
+    // ultimate. Idempotent -- TryActivateSkill no-ops if on cooldown or already in
+    // skill, so a held / multi-step-constant input cannot re-cast.
+    if (m_Input.skill) {
+        m_Skill->TryActivateSkill();
+    }
+    // Per-frame Update: cooldown counts UP (NOT frozen while in_skill) + the active
+    // in_skill_time window counts down and auto-ends (CharSkillC01::Tick).
+    m_Skill->Tick(kFixedStepMs);
+    // A3 cooldown bridge: publish the 0..1 charge into the player stats the shell
+    // pulls back each frame (-> CombatStats::skillCdProgress -> HUD; A4 renders it).
+    m_PlayerStats.skillCdProgress = SkillCooldownProgress(*m_Skill);
 }
 
 // A: turn each controller's latched shot into an "attack" AnimTrigger keyed by its view id
@@ -250,6 +296,7 @@ void Simulation::Step() {
         m_Boss->SetTarget(target);
     }
     m_Scheduler.Tick();
+    TickSkill();  // A3: activate + advance cooldown BEFORE the weapon (so the mirror sees in_skill).
     TickWeapon();
     EmitAttackEvents(); // A: enemy/boss "attack" cues (the OnShootTicks ran in Scheduler.Tick).
     MoveControllers();
@@ -287,6 +334,12 @@ void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int room
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
                              int seed) {
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed)); // cold rebuild
+}
+void Simulation::SetPlayerSkill(float skillCd, float inSkillTime) {
+    // A3: fixed c01. Single owned member (parallel to m_Weapon) -- not an entity, not
+    // via BrainFactory (a bespoke per-hero brain, no base class). Multi-character
+    // dispatch is B5. The skill starts READY (CharSkillC01 ctor).
+    m_Skill.emplace(skillCd, inSkillTime);
 }
 
 } // namespace Game::Sim

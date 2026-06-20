@@ -1,13 +1,21 @@
 #include "scenes/GameScene.hpp"
 
+#include <algorithm>
 #include <cmath>
+#include <cstdlib>
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <utility>
 
 #include <glm/glm.hpp>
 
 #include "Core/Context.hpp"
+
+#include "game/FloorClear.hpp"
+#include "game/RunController.hpp"
+
+#include "world/FloorBlock.hpp"
 
 #include "Util/Animation.hpp"
 #include "Util/Collider.hpp"
@@ -25,13 +33,17 @@ constexpr float kPlayerRadius = 16.0F;
 constexpr float kBulletLifeMs = 1500.0F;
 // World size (pixels) of one RoomGen grid cell.
 constexpr float kCellPx = 32.0F;
-// Fixed room footprint (cells) so rooms tile edge-to-edge and their door gaps
-// align between neighbours; pitch is the world distance between room centres.
+// Fixed room footprint (cells). Each room is centred inside its MAP_SIZE (41-cell)
+// dungeon block, so blocks tile at a 41-cell pitch (1312 px at 32 px/cell) and the
+// corridors carved into the inter-block margins meet at the shared seam between
+// adjacent blocks (the "A geometry"). See world/FloorBlock.hpp.
 constexpr int kRoomCells = 15;
-constexpr float kRoomPitch = static_cast<float>(kRoomCells) * kCellPx;
+constexpr float kRoomPitch = static_cast<float>(FloorBlock::kBlock) * kCellPx;
 // Player must be this close (px) to auto-open a chest / collect a pickup.
 constexpr float kChestOpenRange = 40.0F;
 constexpr float kPickupRange = 28.0F;
+// SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
+constexpr float kAutoWalkSpeed = 300.0F;
 
 glm::vec2 Normalize(glm::vec2 v) {
     const float len = std::sqrt(v.x * v.x + v.y * v.y);
@@ -61,19 +73,23 @@ void PlaySfx(const std::string &root, const std::string &file) {
 }
 } // namespace
 
-GameScene::GameScene()
-    : m_BulletPool(0, [] {
-          return std::make_shared<Bullet>(std::string(RESOURCE_DIR));
-      }) {}
+GameScene::GameScene(int floorSeed, int floorIndex,
+                     std::optional<PlayerContinuation> carried, RunController *run)
+    : m_BulletPool(0,
+                   [] {
+                       return std::make_shared<Bullet>(std::string(RESOURCE_DIR));
+                   }),
+      m_FloorSeed(floorSeed), m_FloorIndex(floorIndex),
+      m_Carried(std::move(carried)), m_Run(run) {}
 
 void GameScene::OnEnter() {
     const std::string root = RESOURCE_DIR;
     m_Data.LoadAll(root);
     m_Loot.LoadAll(root); // chest droptables
 
-    // Root every deterministic stream this run owns in the run seed.
-    m_Rng.SetRandomSeed(m_RunSeed);
-    m_Sim.emplace(m_RunSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
+    // Root every deterministic stream this floor owns in the per-floor seed.
+    m_Rng.SetRandomSeed(m_FloorSeed);
+    m_Sim.emplace(m_FloorSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
 
     m_Player = std::make_shared<Player>(m_Data.PlayerTemplate(), root);
 
@@ -84,7 +100,7 @@ void GameScene::OnEnter() {
     MapManager::Options mapOpt;
     mapOpt.mapLong = 7;
     mapOpt.ranRoomProbability = 25;
-    const MapManager floor(m_RunSeed, mapOpt);
+    const MapManager floor(m_FloorSeed, mapOpt);
     const RoomCell &startCell = floor.Rooms()[floor.StartIndex()];
     const int startGx = startCell.gridX;
     const int startGy = startCell.gridY;
@@ -126,10 +142,22 @@ void GameScene::OnEnter() {
         ropt.roomHeight = kRoomCells;
         ropt.wallLevel = cell.type >= 2 ? 2 : 1; // richer obstacles in special rooms
         ropt.obstacleLevel = 1;
-        const RoomGen rg(m_RunSeed + 1 + roomIndex, cell.entrance, ropt);
+        // Thread the real floor index for fidelity. NOTE: this is INERT here --
+        // RoomGen reads floorIndex ONLY inside its randomRoom==true branch
+        // (RoomGen.cpp:53-69) and we build with randomRoom=false, so it does not
+        // change generation. The live per-floor difference is m_FloorSeed; Phase 2
+        // reconciles the %5 size-narrowing under randomRoom=false (RUN_LOOP_PLAN section 4b).
+        ropt.floorIndex = m_FloorIndex;
+        const RoomGen rg(m_FloorSeed + 1 + roomIndex, cell.entrance, ropt);
 
         m_Rooms.push_back(
             std::make_unique<Room>(Room::FromRoomGen(rg, kCellPx, origin)));
+
+        // Corridor-connected floor cells (the door-reachable main region). Spawns
+        // anchor here so the player can never start trapped in an obstacle pocket
+        // -- RoomGen::FloorList can include cells isolated from every exit. Same
+        // source FloorConnectivityTest anchors its reachability assertion on.
+        const auto spawnCells = FloorBlock::ConnectedFloorCells(rg);
 
         // Tile every cell so the floor is actually drawn: a floor sprite under
         // walkable cells (floor/aisle/door), a wall sprite on solid cells.
@@ -159,56 +187,110 @@ void GameScene::OnEnter() {
             }
         }
 
-        // Collect this room's door-gap cells (code 11) as colliders, sealed
-        // while the room is the active uncleared room (clear-room gating).
-        std::vector<Util::Collider> doors;
-        for (int x = 0; x < rg.Width(); ++x) {
-            for (int y = 0; y < rg.Height(); ++y) {
-                if (rg.At(x, y) == 11) {
-                    doors.push_back(Util::Collider::MakeAABB(
-                        Room::CellToWorld(x, y, rg.Width(), rg.Height(), kCellPx,
-                                          origin),
-                        glm::vec2{kCellPx, kCellPx}));
+        // --- A geometry: carve the inter-block corridors toward each connected
+        // neighbour (RGAisle-math: 5-wide, aligned to the door band, room edge ->
+        // block edge). The walkable strip gets floor tiles; each long flank gets a
+        // wall tile + a permanent collider (so the corridor is walled on its sides
+        // but open at both ends, where it meets the room door and the neighbour's
+        // corridor). The strip geometry is FloorBlock::CorridorStrip -- the SAME
+        // source the connectivity tests use, so the tested walk space IS this one.
+        const auto blockToWorld = [&](int bx, int by) {
+            return Room::CellToWorld(bx, by, FloorBlock::kBlock,
+                                     FloorBlock::kBlock, kCellPx, origin);
+        };
+        const auto addBlockTile = [&](const std::shared_ptr<Util::Image> &img,
+                                      const glm::vec2 &sz, int bx, int by,
+                                      float z) {
+            auto tile = std::make_shared<Util::GameObject>();
+            tile->SetDrawable(img);
+            tile->SetZIndex(z);
+            tile->m_Transform.translation = blockToWorld(bx, by);
+            if (sz.x > 0.0F && sz.y > 0.0F) {
+                tile->m_Transform.scale = glm::vec2(kCellPx / sz.x, kCellPx / sz.y);
+            }
+            m_RoomTiles.push_back(tile);
+            m_Renderer.AddChild(tile);
+        };
+        const auto addCorridorWall = [&](int bx, int by) {
+            addBlockTile(wallImg, wallSz, bx, by, 1.0F);
+            m_Corridors.push_back(Util::Collider::MakeAABB(
+                blockToWorld(bx, by), glm::vec2{kCellPx, kCellPx}));
+        };
+        for (int dir = 0; dir < 4; ++dir) {
+            if (cell.entrance[static_cast<std::size_t>(dir)] != 1) {
+                continue;
+            }
+            const FloorBlock::Rect s = FloorBlock::CorridorStrip(dir, rg);
+            for (int bx = s.x0; bx <= s.x1; ++bx) {
+                for (int by = s.y0; by <= s.y1; ++by) {
+                    addBlockTile(floorImg, floorSz, bx, by, 0.0F); // walkable
+                }
+            }
+            const bool horiz = (dir == FloorBlock::DIR_EAST ||
+                                dir == FloorBlock::DIR_WEST);
+            if (horiz) { // flank the long (x) sides with walls
+                for (int bx = s.x0; bx <= s.x1; ++bx) {
+                    addCorridorWall(bx, s.y0 - 1);
+                    addCorridorWall(bx, s.y1 + 1);
+                }
+            } else { // flank the long (y) sides with walls
+                for (int by = s.y0; by <= s.y1; ++by) {
+                    addCorridorWall(s.x0 - 1, by);
+                    addCorridorWall(s.x1 + 1, by);
                 }
             }
         }
+
+        // Collect this room's FULL door opening (perimeter aisle band + the two
+        // code-11 flanks, via FloorBlock::DoorSealCells) as colliders, sealed while
+        // the room is the active uncleared room (clear-room gating). Sealing only
+        // the code-11 cells would leave the 5-wide aisle band open and the locked
+        // room would contain nobody -- the seal must span the whole opening.
+        std::vector<Util::Collider> doors;
+        for (const auto &c : FloorBlock::DoorSealCells(rg)) {
+            doors.push_back(Util::Collider::MakeAABB(
+                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(),
+                                  kCellPx, origin),
+                glm::vec2{kCellPx, kCellPx}));
+        }
         m_RoomDoors.push_back(std::move(doors));
 
-        // Put the player on a guaranteed floor cell of the start room (spawning
-        // at the hardcoded origin can land inside a generated wall -> stuck).
-        if (roomIndex == floor.StartIndex() && !rg.FloorList().empty()) {
-            const auto &pc = rg.FloorList()[rg.FloorList().size() / 2];
+        // Put the player on a corridor-connected floor cell of the start room
+        // (spawning at the origin can land in a wall, and a raw FloorList cell can
+        // be an isolated pocket -> the player would start unable to reach a door).
+        if (roomIndex == floor.StartIndex() && !spawnCells.empty()) {
+            const auto &pc = spawnCells[spawnCells.size() / 2];
             startFloorPos = Room::CellToWorld(pc.first, pc.second, rg.Width(),
                                               rg.Height(), kCellPx, origin);
         }
 
         // Boss room gets a boss; every other non-start room gets one enemy.
-        if (roomIndex != floor.StartIndex() && !rg.FloorList().empty()) {
-            const auto &fc = rg.FloorList()[rg.FloorList().size() / 2];
+        if (roomIndex != floor.StartIndex() && !spawnCells.empty()) {
+            const auto &fc = spawnCells[spawnCells.size() / 2];
             const glm::vec2 spawn = Room::CellToWorld(
                 fc.first, fc.second, rg.Width(), rg.Height(), kCellPx, origin);
             if (roomIndex == bossRoom) {
                 auto boss = std::make_shared<Boss>(root, spawn, /*maxHp=*/500,
                                                    /*shootCd=*/2.0F,
-                                                   m_RunSeed + 9000);
+                                                   m_FloorSeed + 9000);
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
-                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex, m_RunSeed + 9000);
+                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex, m_FloorSeed + 9000);
             } else if (edef != nullptr) {
                 auto enemy =
                     std::make_shared<Enemy>(*edef, root, spawn, 450.0F, 260.0F);
-                enemy->AI().SetSeed(m_RunSeed + 1000 + roomIndex);
+                enemy->AI().SetSeed(m_FloorSeed + 1000 + roomIndex);
                 enemy->AI().SetKinematic(edef->kinematic != 0);
                 enemy->SetRoomId(roomIndex);
                 m_Enemies.push_back(enemy);
-                m_Sim->AddEnemy(*edef, spawn, roomIndex, m_RunSeed + 1000 + roomIndex);
+                m_Sim->AddEnemy(*edef, spawn, roomIndex, m_FloorSeed + 1000 + roomIndex);
             }
         }
 
         // Place a chest in every non-start room on a floor cell (tier = room
         // type, so special/badass rooms roll richer loot).
-        if (roomIndex != floor.StartIndex() && !rg.FloorList().empty()) {
-            const auto &cc = rg.FloorList()[rg.FloorList().size() / 4];
+        if (roomIndex != floor.StartIndex() && !spawnCells.empty()) {
+            const auto &cc = spawnCells[spawnCells.size() / 4];
             const glm::vec2 cpos = Room::CellToWorld(
                 cc.first, cc.second, rg.Width(), rg.Height(), kCellPx, origin);
             auto chest = std::make_shared<Chest>(root, cpos, cell.type);
@@ -218,9 +300,77 @@ void GameScene::OnEnter() {
         ++roomIndex;
     }
 
-    if (const WeaponDef *wdef = m_Data.FindWeapon("Gun001")) {
-        m_Sim->EquipWeapon(*wdef, "Gun001", m_RunSeed + 5);
-        m_WeaponEnergyCost = wdef->consume > 0 ? wdef->consume : 1;
+    // --- Player continuation (Route (a)) ---
+    // Overwrite the template vitals with the carried snapshot (empty on floor 0),
+    // then equip the carried weapon (floor 0 -> default Gun001). This MIRRORS the
+    // live pickup-equip below: on EVERY equip, set m_CurrentWeaponId AND re-derive
+    // m_WeaponEnergyCost via WeaponEnergyCost() -- the firing gate + energy spend
+    // read it and it defaults to 1, so a carried weapon whose consume != 1 would
+    // mis-cost the whole floor if this DERIVE were skipped (RUN_LOOP_PLAN D3).
+    if (m_Carried) {
+        m_Player->Stats() = m_Carried->stats; // continue hp/armor/energy (Player.hpp:33 mutable ref)
+    }
+    const std::string equipWeaponId =
+        m_Carried ? m_Carried->weaponId : std::string("Gun001");
+    if (const WeaponDef *wdef = m_Data.FindWeapon(equipWeaponId)) {
+        m_Sim->EquipWeapon(*wdef, equipWeaponId, m_FloorSeed + 5);
+        m_WeaponEnergyCost = WeaponEnergyCost(*wdef);
+        m_CurrentWeaponId = equipWeaponId;
+    } // else: unknown id -> leave the default (never deref a null FindWeapon).
+
+    // --- A3: equip the player skill brain (fixed c01) from the character stat sheet.
+    // skillCd / inSkillTime come from PlayerTemplate (CharacterDef). Single sim member
+    // like the weapon; rebuilt per floor from the template (starts ready) -- cross-floor
+    // skill-cooldown continuation is out of A3 scope (multi-character dispatch is B5).
+    m_Sim->SetPlayerSkill(m_Data.PlayerTemplate().skillCd, m_Data.PlayerTemplate().inSkillTime);
+
+    // --- Forward run loop (step 2a) setup ---
+    // Arm the clear check only after >= 1 hostile has existed, read from the sim's
+    // AUTHORITATIVE state (not the render mirrors). A boss spawns every floor, so
+    // this is normally true; the guard stops a degenerate floor from auto-skipping.
+    m_HadHostiles = m_Sim->HasBoss() || !m_Sim->EnemyViews().empty();
+    // SK_FORCE_CLEAR=K test hook (env, NO-OP if unset): force the clear path on frame
+    // K of THIS floor, to drive the play->clear->next-floor transition headlessly.
+    if (const char *fc = std::getenv("SK_FORCE_CLEAR")) {
+        m_ForceClearFrame = std::atol(fc);
+    }
+    if (const char *fd = std::getenv("SK_FORCE_DIE")) {
+        m_ForceDieFrame = std::atol(fd);
+    }
+    if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
+        m_ForceSkillFrame = std::atol(fs);
+    }
+    // SK_AUTOWALK test hook (env, NO-OP if unset): steer the player straight at an
+    // orthogonally-adjacent room's centre each frame so the play->corridor->room
+    // traversal can be exercised + logged headlessly (the start room's centre is
+    // the world origin, so adjacent room centres sit at +/-kRoomPitch on one axis).
+    if (std::getenv("SK_AUTOWALK") != nullptr) {
+        for (std::size_t i = 0; i < m_Rooms.size(); ++i) {
+            if (static_cast<int>(i) == floor.StartIndex()) {
+                continue;
+            }
+            const glm::vec2 c = m_Rooms[i]->Center();
+            const bool adj =
+                (std::abs(std::abs(c.x) - kRoomPitch) < 1.0F && std::abs(c.y) < 1.0F) ||
+                (std::abs(c.x) < 1.0F && std::abs(std::abs(c.y) - kRoomPitch) < 1.0F);
+            if (adj) {
+                m_AutoWalk = true;
+                m_AutoWalkTarget = c;
+                m_AutoWalkRoom = static_cast<int>(i);
+                break;
+            }
+        }
+        LOG_INFO("SK_AUTOWALK -> target room={} centre=({:.0f},{:.0f}) startSpawn=({:.0f},{:.0f})",
+                 m_AutoWalkRoom, m_AutoWalkTarget.x, m_AutoWalkTarget.y,
+                 startFloorPos.x, startFloorPos.y);
+    }
+    if (m_Carried) {
+        LOG_INFO("Floor {} continuation LOADED: hp={} armor={} energy={} weapon='{}' (seed={})",
+                 m_FloorIndex, m_Player->Stats().hp, m_Player->Stats().armor,
+                 m_Player->Stats().energy, m_CurrentWeaponId, m_FloorSeed);
+    } else {
+        LOG_INFO("Floor {} fresh start (template) hp={} weapon='{}' (seed={})", m_FloorIndex,
+                 m_Player->Stats().hp, m_CurrentWeaponId, m_FloorSeed);
     }
 
     m_Renderer.AddChild(m_Player);
@@ -233,19 +383,36 @@ void GameScene::OnEnter() {
 
     m_Player->m_Transform.translation = startFloorPos;
     m_Camera.SetPosition(m_Player->Position());
+    // D: zoom in so the character occupies a reasonable fraction of the screen (the
+    // c01 sprite is 32x29 px; at zoom 1 it was ~2.5% of a 1280px view -- a tiny dot).
+    // Zoom 2.5 -> ~80px tall + shows ~512px of world (about one 15-cell room), matching
+    // the original's framing. A camera-DISTANCE change: the whole world->screen ratio
+    // scales together, so player/enemy/tile relative sizes stay consistent. Feel value.
+    m_Camera.SetZoom(2.5F);
     LOG_INFO("GameScene: multi-room floor ready");
 }
 
+void GameScene::OnExit() {
+    // Fires when the SceneManager pops/replaces this scene (DoPop -> OnExit before
+    // destruction). Logging it proves the dying floor is EXITED on a death/clear
+    // Replace -- not Pushed-over-and-leaked at the bottom of the stack (step 2b).
+    LOG_INFO("Floor {} GameScene OnExit (scene torn down, not leaked)", m_FloorIndex);
+}
+
 glm::vec2 GameScene::AimDirection() const {
-    // GetCursorPosition returns a PTSDPosition; keep it typed to avoid the
-    // deprecated implicit PTSDPosition -> glm::vec2 conversion (MSVC C4996).
-    const Util::PTSDPosition cursor =
-        Util::Input::GetCursorPosition(); // screen px (y down)
-    const Util::PTSDPosition w = Util::PTSDPosition::FromSDL(
-        static_cast<int>(cursor.x), static_cast<int>(cursor.y));
-    // The camera center maps to the screen center, so the world point under the
-    // cursor is the camera position plus the cursor's center-origin offset.
-    const glm::vec2 worldCursor = m_Camera.GetPosition() + glm::vec2(w.x, w.y);
+    // FIX (aim never tracked the mouse): Util::Input::GetCursorPosition() ALREADY returns
+    // PTSD coords -- center-origin, Y-up -- i.e. the cursor's offset from the screen centre
+    // in screen px (Input::Update calls FromSDL once, Input.cpp:80). The old code applied
+    // FromSDL a SECOND time, giving w.x = sdlx - WINDOW_WIDTH (always <= 0) and w.y = sdly
+    // (Y un-flipped), which pinned the aim to the up-left quadrant regardless of the mouse.
+    // Use the cursor directly.
+    const Util::PTSDPosition cursor = Util::Input::GetCursorPosition();
+    const float zoom = m_Camera.GetZoom() > 0.0F ? m_Camera.GetZoom() : 1.0F;
+    // The camera centre maps to the screen centre; 1 world px renders as `zoom` screen px,
+    // so a screen-px cursor offset is `offset / zoom` world px about the camera centre ->
+    // the world point under the cursor.
+    const glm::vec2 worldCursor =
+        m_Camera.GetPosition() + glm::vec2(cursor.x, cursor.y) / zoom;
     return Normalize(worldCursor - m_Player->Position());
 }
 
@@ -253,6 +420,16 @@ bool GameScene::BlocksAny(glm::vec2 pos, float radius) const {
     for (const auto &room : m_Rooms) {
         if (room->Blocks(pos, radius)) {
             return true;
+        }
+    }
+    // Corridor flank walls (permanent: the strip is walled on its long sides and
+    // open only at its two ends -- the room door and the neighbour's corridor).
+    if (!m_Corridors.empty()) {
+        const Util::Collider circle = Util::Collider::MakeCircle(pos, radius);
+        for (const Util::Collider &wall : m_Corridors) {
+            if (Util::Overlap(wall, circle)) {
+                return true;
+            }
         }
     }
     // Sealed doors of the active uncleared room block both player and enemies.
@@ -323,10 +500,25 @@ void GameScene::Update(float dtMs) {
         return;
     }
 
+    ++m_Frame; // drives the SK_FORCE_CLEAR / SK_FORCE_DIE test hooks.
+    // SK_FORCE_DIE=K test hook (env, NO-OP if unset): kill the player on frame K to
+    // drive the death->EndScene path headlessly (no combat needed). Runs BEFORE the
+    // death check below.
+    if (m_ForceDieFrame >= 0 && m_Frame >= m_ForceDieFrame) {
+        m_Player->Stats().hp = 0;
+    }
+
     // --- Player movement with axis-separated wall sliding (stays scene-side) ---
     const glm::vec2 before = m_Player->Position();
     m_Player->Update(dtMs);
-    const glm::vec2 after = m_Player->Position();
+    glm::vec2 after = m_Player->Position();
+    if (m_AutoWalk) { // SK_AUTOWALK: override input with a steer toward the target
+        const glm::vec2 d = m_AutoWalkTarget - before;
+        const float len = std::sqrt(d.x * d.x + d.y * d.y);
+        if (len > 1.0F) {
+            after = before + (d / len) * (kAutoWalkSpeed * dtMs / 1000.0F);
+        }
+    }
     glm::vec2 resolved = before;
     if (!BlocksAny(glm::vec2(after.x, before.y), kPlayerRadius)) {
         resolved.x = after.x;
@@ -346,21 +538,32 @@ void GameScene::Update(float dtMs) {
     // --- Which room is the player in (awake gating + clear-room) ---
     int playerRoomId = -1;
     for (std::size_t i = 0; i < m_Rooms.size(); ++i) {
-        const glm::vec2 c = m_Rooms[i]->Center();
-        const glm::vec2 hs = m_Rooms[i]->Size() * 0.5F;
-        if (resolved.x >= c.x - hs.x && resolved.x <= c.x + hs.x &&
-            resolved.y >= c.y - hs.y && resolved.y <= c.y + hs.y) {
+        // Seam 2 (corridors are neutral): a corridor position lies in the
+        // inter-block margin, inside NO room rect, so playerRoomId stays -1 there
+        // and the clear-room door seal never arms while the player is in a
+        // corridor. Same Room::ContainsPoint the neutrality test asserts.
+        if (m_Rooms[i]->ContainsPoint(resolved)) {
             playerRoomId = static_cast<int>(i);
             break; // player is in exactly one room
         }
     }
 
     // --- Drive the deterministic sim ---
+    // A3 skill input: skill/ultimate on MOUSE_RB (edge-triggered, like a press). NOTE:
+    // no original PC skill key is recoverable -- Soul Knight is mobile-origin (the skill
+    // is an on-screen button), nothing in the decomp/docs binds one (verified) -- so
+    // MOUSE_RB is a reasonable default pairing with MOUSE_LB fire; revisit if a faithful
+    // binding ever surfaces.
+    const bool forceSkill = (m_ForceSkillFrame >= 0 && m_Frame >= m_ForceSkillFrame);
     Sim::WorldInputs in;
     in.playerPos = resolved;
     in.aimDir = AimDirection();
     in.firing = Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB) &&
                 m_Player->Stats().energy >= m_WeaponEnergyCost;
+    in.skill = Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB) || forceSkill;
+    if (forceSkill) {
+        in.firing = true; // SK_FORCE_SKILL hook: hold fire so the active-skill mirror is observable.
+    }
     in.playerAlive = !m_Player->Stats().IsDead();
     in.playerRoomId = playerRoomId;
 
@@ -372,8 +575,19 @@ void GameScene::Update(float dtMs) {
     // would clobber this frame's regen/spend with the value we pushed in. Intentional asymmetry.
     m_Player->Stats().hp = simPlayer.hp;
     m_Player->Stats().armor = simPlayer.armor;
+    // A3 cooldown bridge: the sim wrote the skill's 0..1 charge into its player-stats
+    // copy (TickSkill); pull it back so the HUD (which reads m_Player->Stats()) reaches
+    // it. A4 renders the mask; A3 only makes it reachable.
+    m_Player->Stats().skillCdProgress = simPlayer.skillCdProgress;
     for (int s = 0; s < m_Sim->PlayerShotsLastAdvance(); ++s) {
         m_Player->Stats().SpendEnergy(m_WeaponEnergyCost);
+    }
+    if (m_ForceSkillFrame >= 0 && (m_Frame % 30) == 0) { // SK_FORCE_SKILL: periodic skill trace.
+        const bool inSkill = m_Sim->PlayerSkill() && m_Sim->PlayerSkill()->InSkill();
+        const bool ready = m_Sim->PlayerSkill() && m_Sim->PlayerSkill()->SkillReady();
+        LOG_INFO("SKILL frame={} progress={:.2f} inSkill={} ready={} shots={}", m_Frame,
+                 m_Player->Stats().skillCdProgress, inSkill, ready,
+                 m_Sim->PlayerShotsLastAdvance());
     }
 
     // --- A: present the sim's anim/sfx cues (muzzle/hit/death). Drained before the view
@@ -383,15 +597,14 @@ void GameScene::Update(float dtMs) {
     // --- Clear-room gating from sim liveness ---
     m_LockedRoom = (playerRoomId >= 0 && RoomHasLiveHostile(playerRoomId)) ? playerRoomId : -1;
 
-    // TEMP diagnostic (remove after): is the player actually moving, or wedged?
-    static float s_DbgMs = 0.0F;
-    s_DbgMs += dtMs;
-    if (s_DbgMs >= 1000.0F) {
-        s_DbgMs = 0.0F;
-        LOG_INFO("DBG player before=({:.0f},{:.0f}) after=({:.0f},{:.0f}) "
-                 "resolved=({:.0f},{:.0f}) room={} locked={}",
-                 before.x, before.y, after.x, after.y, resolved.x, resolved.y,
-                 playerRoomId, m_LockedRoom);
+    // SK_AUTOWALK: log each room transition (start -> -1 corridor -> neighbour) so
+    // the headless run shows real room->corridor->room traversal, that the corridor
+    // is neutral (locked=-1 while playerRoom=-1), and that the spawn is not wedged.
+    if (m_AutoWalk && playerRoomId != m_LastRoomId) {
+        LOG_INFO("AUTOWALK frame={} room {} -> {} pos=({:.0f},{:.0f}) locked={}",
+                 m_Frame, m_LastRoomId, playerRoomId, resolved.x, resolved.y,
+                 m_LockedRoom);
+        m_LastRoomId = playerRoomId;
     }
 
     // --- Sync enemy/boss render views from the sim (entities are never erased: null on death) ---
@@ -423,10 +636,22 @@ void GameScene::Update(float dtMs) {
     // --- Sync bullet views ---
     SyncBulletViews();
 
-    // --- Player death ---
+    // --- Player death (step 2b): no longer an app quit -- signal the controller to
+    // Replace this floor with a minimal EndScene. Captured-while-alive + deferred,
+    // same timing as a floor clear. The death check runs BEFORE the clear check, so a
+    // dead player never triggers a floor transition. m_Transitioning is shared so we
+    // signal exactly once (death takes precedence). ---
     if (m_Player->Stats().IsDead()) {
-        LOG_INFO("Player defeated -- exiting");
-        Core::Context::GetInstance()->SetExit(true);
+        if (m_Run != nullptr) {
+            if (!m_Transitioning) {
+                m_Transitioning = true;
+                LOG_INFO("Player died on floor {} -> EndScene", m_FloorIndex);
+                m_Run->OnPlayerDied();
+            }
+        } else {
+            // No controller (defensive fallback): keep the old quit behaviour.
+            Core::Context::GetInstance()->SetExit(true);
+        }
         return;
     }
 
@@ -453,8 +678,9 @@ void GameScene::Update(float dtMs) {
         if (glm::distance(playerPos, (*it)->Position()) <= kPickupRange) {
             const WeaponDef *def = (*it)->Def();
             ++m_WeaponSwaps;
-            m_Sim->EquipWeapon(*def, def->id, m_RunSeed + 5 + m_WeaponSwaps);
-            m_WeaponEnergyCost = def->consume > 0 ? def->consume : 1;
+            m_Sim->EquipWeapon(*def, def->id, m_FloorSeed + 5 + m_WeaponSwaps);
+            m_WeaponEnergyCost = WeaponEnergyCost(*def);
+            m_CurrentWeaponId = def->id; // keep the weapon-id carry vehicle in sync on every equip
             m_Renderer.RemoveChild(*it);
             it = m_Pickups.erase(it);
         } else {
@@ -476,6 +702,32 @@ void GameScene::Update(float dtMs) {
     // --- Camera follow ---
     m_Camera.Follow(m_Player->Position(), 0.1F);
     m_Camera.Update(dtMs);
+
+    // --- Forward run loop (step 2a): whole-floor clear -> snapshot -> transition ---
+    // This is the END of Update on purpose: the snapshot must reflect this frame's
+    // FINAL hp/armor/energy (after the sim pull-back above) and the FINAL weapon +
+    // m_CurrentWeaponId (after the pickup->equip block above). The clear test reads
+    // the sim's AUTHORITATIVE liveness (FloorCleared -> EnemyViews/BossView), not the
+    // render mirrors. CAPTURE-BEFORE-DESTROY: we build the snapshot here, while
+    // m_Player is alive, and hand it to OnFloorCleared, which copies it into RunState
+    // and requests a DEFERRED Replace -- the SceneManager tears this scene (and
+    // m_Player) down only after this Update returns, so the snapshot is safe.
+    const bool forceClear = (m_ForceClearFrame >= 0 && m_Frame >= m_ForceClearFrame);
+    const bool cleared = m_HadHostiles && FloorCleared(*m_Sim);
+    if (!m_Transitioning && m_Run != nullptr && (cleared || forceClear)) {
+        m_Transitioning = true; // signal exactly once
+        if (forceClear) {
+            // Test hook only: bleed 1 hp so cross-floor hp-continuation is observable
+            // headlessly (no combat/input). Never runs in normal play (env unset).
+            CombatStats &st = m_Player->Stats();
+            st.hp = std::max(1, st.hp - 1);
+        }
+        const PlayerContinuation snapshot{m_Player->Stats(), m_CurrentWeaponId};
+        LOG_INFO("Floor {} CLEARED -> snapshot hp={} armor={} energy={} weapon='{}' (next floor {})",
+                 m_FloorIndex, snapshot.stats.hp, snapshot.stats.armor,
+                 snapshot.stats.energy, snapshot.weaponId, m_FloorIndex + 1);
+        m_Run->OnFloorCleared(snapshot); // carry + ++floorIndex + deferred Replace
+    }
 }
 
 void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {

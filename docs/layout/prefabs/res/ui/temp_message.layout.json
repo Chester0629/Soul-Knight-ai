@@ -1,0 +1,214 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\res\\ui\\temp_message.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "temp_message",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224618682377417806,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "anchor_min": [
+        0.0,
+        1.0
+      ],
+      "anchor_max": [
+        1.0,
+        1.0
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        0.0,
+        60.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "Panel",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224243736805655561,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            5.722046e-06,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "11c31cb499cd8564882d4d85d3390ee9",
+                "asset": "Assets/rgtexture/ui/ui_3.asset",
+                "name": "ui_3",
+                "sprite_rect": {
+                  "x": 862.0,
+                  "y": 33.0,
+                  "w": 31.0,
+                  "h": 27.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "border": {
+                  "left": 3.0,
+                  "bottom": 4.0,
+                  "right": 3.0,
+                  "top": 4.0
+                },
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_3.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 1,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        },
+        {
+          "name": "temp_message",
+          "active": true,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 224044625135789424,
+          "go_fid": 1724804207875695,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "Video ad will be played before end game reward.",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "0000000000000000e000000000000000",
+                "font_size": 36,
+                "font_style": 0,
+                "alignment": 4,
+                "min_size": 3,
+                "max_size": 40,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": true,
+                "rich_text": true
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280,
+        "h": 720
+      }
+    }
+  ],
+  "degenerate_root_size": [
+    "temp_message"
+  ]
+}

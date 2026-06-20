@@ -496,16 +496,29 @@ lib/
 docs/html/
 
 # --- Soul-Knight-ai project (local source dumps + generated/imported assets) ---
+# Raw original-game source dumps: the reverse-engineering INPUT (~100MB each,
+# re-extractable from the game APK; not read by the port's build/runtime).
 /1.07/
 /1.7.10/
 /build/
-# imported binary assets are regenerable from 1.07/ via tools/import_assets.py
+# Imported binary runtime assets are regenerable from 1.07/ via
+# tools/import_assets.py and are forbidden by .githooks/pre-commit -- they stay
+# local. The data tables (the data contract, Resources/data/) and the extracted
+# UI sprites (Resources/Sprite/) ARE tracked (RE work product, hook-allowed).
 /Resources/sprites/
 /Resources/audio/
 /Resources/fonts/
-# keep the small generated data tables under version control (the data contract)
 !/Resources/data/
 
 # Soul-Knight-ai: local tooling / generated indexes (do not commit)
 .claude/settings.local.json
 .gitnexus/
+
+# Phase-1 baseline additions: build/cache/runtime-state not covered by the
+# VS/JetBrains templates above.
+imgui.ini
+*.o
+*.exe
+.venv/
+CMakeCache.txt
+CMakeFiles/

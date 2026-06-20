@@ -147,8 +147,14 @@ set(SRC_FILES
     entities/Chest.cpp
     entities/WeaponPickup.cpp
     world/Room.cpp
+    world/FloorBlock.cpp
     ui/Hud.cpp
+    ui/HudLayout.cpp
     scenes/GameScene.cpp
+    scenes/EndScene.cpp
+
+    # Engine port -- run loop (Line 2, Phase 1): run-level state + controller
+    game/RunController.cpp
 )
 
 set(INCLUDE_FILES
@@ -309,8 +315,16 @@ set(INCLUDE_FILES
     entities/Chest.hpp
     entities/WeaponPickup.hpp
     world/Room.hpp
+    world/FloorBlock.hpp
     ui/Hud.hpp
+    ui/HudLayout.hpp
     scenes/GameScene.hpp
+    scenes/EndScene.hpp
+
+    # Engine port -- run loop (Line 2, Phase 1)
+    game/RunState.hpp
+    game/RunController.hpp
+    game/FloorClear.hpp
 )
 
 set(TEST_FILES
@@ -321,6 +335,10 @@ set(TEST_FILES
     RGMazeTest.cpp
     RoomGenTest.cpp
     MapManagerTest.cpp
+    FloorBlockTest.cpp
+    FloorConnectivityTest.cpp
+    CorridorNeutralityTest.cpp
+    DoorSealTest.cpp
     DamageTest.cpp
     LootTableTest.cpp
     LootIntegrationTest.cpp
@@ -444,6 +462,9 @@ set(TEST_FILES
     WeaponInstanceTest.cpp
     EnemyAITest.cpp
 
+    # HUD landing Phase 1 -- pure coordinate logic (converter + loader + parked)
+    HudLayoutTest.cpp
+
     # Engine port -- sim infrastructure (Plan 1)
     SimMathTest.cpp
     FixedClockTest.cpp
@@ -455,4 +476,13 @@ set(TEST_FILES
     BossControllerTest.cpp
     SimulationTest.cpp
     WeaponControllerTest.cpp
+
+    # Engine port -- run loop (Line 2, Phase 1): RunState/continuation + perFloorSeed
+    RunLoopTest.cpp
+
+    # Milestone 1 A3: CharSkill -> sim pipeline (skill cast + cooldown -> HUD)
+    SkillPipelineTest.cpp
+
+    # Milestone 1 A4: Vertical/Bottom Filled (UV-crop) cooldown-mask geometry
+    FilledImageTest.cpp
 )

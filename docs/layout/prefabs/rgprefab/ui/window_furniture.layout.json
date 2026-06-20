@@ -1,0 +1,938 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\rgprefab\\ui\\window_furniture.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 520.0,
+    "h": 400.0
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "window_furniture",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224044625135789424,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 520.0,
+        "h": 400.0
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 520.0,
+        "h": 400.0
+      },
+      "anchor_min": [
+        0.5,
+        0.5
+      ],
+      "anchor_max": [
+        0.5,
+        0.5
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        12.5
+      ],
+      "size_delta": [
+        520.0,
+        400.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "visual": [
+        {
+          "kind": "Image",
+          "sprite": {
+            "guid": "21d92053b43ca2949951d4e1678edbe8",
+            "asset": "Assets/rgtexture/ui/ui_2.asset",
+            "name": "ui_2",
+            "sprite_rect": {
+              "x": 544.0,
+              "y": 282.0,
+              "w": 31.0,
+              "h": 28.0
+            },
+            "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+            "border": {
+              "left": 3.0,
+              "bottom": 6.0,
+              "right": 3.0,
+              "top": 3.0
+            },
+            "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+            "needs_crop": true,
+            "png": "docs\\layout\\crops\\ui_2.png"
+          },
+          "color": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 1.0
+          },
+          "image_type": 1,
+          "fill_method": 4,
+          "fill_amount": 1.0,
+          "fill_origin": 0,
+          "preserve_aspect": false
+        }
+      ],
+      "children": [
+        {
+          "name": "btn_back",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224977153420339851,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 25.0,
+            "y": 30.0,
+            "w": 150.0,
+            "h": 120.0
+          },
+          "local_rect": {
+            "left": 25.0,
+            "top": 250.0,
+            "w": 150.0,
+            "h": 120.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            -160.0,
+            -110.0
+          ],
+          "size_delta": [
+            150.0,
+            120.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "4ae4a36b8c0805e4cbdd3ebb7dd96cd1",
+                "asset": "Assets/rgtexture/ui/ui_38.asset",
+                "name": "ui_38",
+                "sprite_rect": {
+                  "x": 419.0,
+                  "y": 258.0,
+                  "w": 43.0,
+                  "h": 35.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "border": {
+                  "left": 9.0,
+                  "bottom": 11.0,
+                  "right": 9.0,
+                  "top": 9.0
+                },
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_38.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 1,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ],
+          "selectable": {
+            "type": "Button",
+            "transition": 1,
+            "interactable": true,
+            "color_tint": {
+              "normal": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "highlighted": {
+                "r": 0.9607843,
+                "g": 0.9607843,
+                "b": 0.9607843,
+                "a": 1.0
+              },
+              "pressed": {
+                "r": 0.78431374,
+                "g": 0.78431374,
+                "b": 0.78431374,
+                "a": 1.0
+              },
+              "disabled": {
+                "r": 0.78431374,
+                "g": 0.78431374,
+                "b": 0.78431374,
+                "a": 0.5019608
+              },
+              "color_multiplier": 1.0,
+              "fade_duration": 0.1
+            },
+            "target_graphic": {
+              "fileID": 114256069497284392,
+              "go_fid": 1730242686860875,
+              "name": "btn_back"
+            }
+          },
+          "children": [
+            {
+              "name": "Image",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 224470112387431263,
+              "go_fid": 1724804207875695,
+              "unity_rect": {
+                "x": 71.88,
+                "y": 61.88,
+                "w": 56.25,
+                "h": 56.25
+              },
+              "local_rect": {
+                "left": 71.88,
+                "top": 281.88,
+                "w": 56.25,
+                "h": 56.25
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                56.25,
+                56.25
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "363fc9821d6067e4f8bdba9a03793797",
+                    "asset": "Assets/rgtexture/ui/ui_96.asset",
+                    "name": "ui_96",
+                    "sprite_rect": {
+                      "x": 382.0,
+                      "y": 240.0,
+                      "w": 18.0,
+                      "h": 18.0
+                    },
+                    "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\ui_96.png"
+                  },
+                  "color": {
+                    "r": 0.6911765,
+                    "g": 0.60782874,
+                    "b": 0.4828071,
+                    "a": 1.0
+                  },
+                  "image_type": 0,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "btn_confirm",
+          "active": true,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 224634108722742392,
+          "go_fid": 1618682377417806,
+          "unity_rect": {
+            "x": 200.0,
+            "y": 30.0,
+            "w": 300.0,
+            "h": 120.0
+          },
+          "local_rect": {
+            "left": 200.0,
+            "top": 250.0,
+            "w": 300.0,
+            "h": 120.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            90.0,
+            -110.0
+          ],
+          "size_delta": [
+            300.0,
+            120.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "4ae4a36b8c0805e4cbdd3ebb7dd96cd1",
+                "asset": "Assets/rgtexture/ui/ui_38.asset",
+                "name": "ui_38",
+                "sprite_rect": {
+                  "x": 419.0,
+                  "y": 258.0,
+                  "w": 43.0,
+                  "h": 35.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "border": {
+                  "left": 9.0,
+                  "bottom": 11.0,
+                  "right": 9.0,
+                  "top": 9.0
+                },
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_38.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 1,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ],
+          "selectable": {
+            "type": "Button",
+            "transition": 1,
+            "interactable": true,
+            "color_tint": {
+              "normal": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "highlighted": {
+                "r": 0.9607843,
+                "g": 0.9607843,
+                "b": 0.9607843,
+                "a": 1.0
+              },
+              "pressed": {
+                "r": 0.78431374,
+                "g": 0.78431374,
+                "b": 0.78431374,
+                "a": 1.0
+              },
+              "disabled": {
+                "r": 0.78431374,
+                "g": 0.78431374,
+                "b": 0.78431374,
+                "a": 0.5019608
+              },
+              "color_multiplier": 1.0,
+              "fade_duration": 0.1
+            },
+            "target_graphic": {
+              "fileID": 114969106005120503,
+              "go_fid": 1618682377417806,
+              "name": "btn_confirm"
+            }
+          },
+          "children": [
+            {
+              "name": "text1",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 224711914853252429,
+              "go_fid": 1703437598541787,
+              "unity_rect": {
+                "x": 230.0,
+                "y": 87.0,
+                "w": 240.0,
+                "h": 50.0
+              },
+              "local_rect": {
+                "left": 230.0,
+                "top": 263.0,
+                "w": 240.0,
+                "h": 50.0
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                22.0
+              ],
+              "size_delta": [
+                240.0,
+                50.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "UPGRADE",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "cde1e2c43e65a1c45b76b181f3a713ff",
+                    "font_size": 36,
+                    "font_style": 0,
+                    "alignment": 4,
+                    "min_size": 2,
+                    "max_size": 50,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": true,
+                    "rich_text": true,
+                    "font": "pixel_bold"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            },
+            {
+              "name": "text2",
+              "active": true,
+              "depth": 2,
+              "draw_order": 1,
+              "rt_fid": 224371939378208658,
+              "go_fid": 1884547391421755,
+              "unity_rect": {
+                "x": 310.0,
+                "y": 50.0,
+                "w": 80.0,
+                "h": 20.0
+              },
+              "local_rect": {
+                "left": 310.0,
+                "top": 330.0,
+                "w": 80.0,
+                "h": 20.0
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                -30.0
+              ],
+              "size_delta": [
+                80.0,
+                20.0
+              ],
+              "scale": [
+                3.0,
+                3.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "g50",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "8f70818e58f8ef940870b736d01c1d00",
+                    "font_size": 0,
+                    "font_style": 0,
+                    "alignment": 4,
+                    "min_size": 0,
+                    "max_size": 50,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": false,
+                    "rich_text": true,
+                    "font": "number"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "img",
+          "active": true,
+          "depth": 1,
+          "draw_order": 2,
+          "rt_fid": 224733206282342372,
+          "go_fid": 1099118695303065,
+          "unity_rect": {
+            "x": 25.0,
+            "y": 165.0,
+            "w": 150.0,
+            "h": 150.0
+          },
+          "local_rect": {
+            "left": 25.0,
+            "top": 85.0,
+            "w": 150.0,
+            "h": 150.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            -160.0,
+            40.0
+          ],
+          "size_delta": [
+            150.0,
+            150.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "d586a3514d141e545b393c034570b97f",
+                "asset": "Assets/rgtexture/ui/ui_22.asset",
+                "name": "ui_22",
+                "sprite_rect": {
+                  "x": 812.0,
+                  "y": 114.0,
+                  "w": 28.0,
+                  "h": 22.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "border": {
+                  "left": 2.0,
+                  "bottom": 2.0,
+                  "right": 2.0,
+                  "top": 2.0
+                },
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_22.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 1,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ],
+          "mask": {
+            "type": "Mask",
+            "show_mask_graphic": true
+          },
+          "children": [
+            {
+              "name": "Image",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 224060945828524476,
+              "go_fid": 1243736805655561,
+              "unity_rect": {
+                "x": 30.0,
+                "y": 170.0,
+                "w": 140.0,
+                "h": 140.0
+              },
+              "local_rect": {
+                "left": 30.0,
+                "top": 90.0,
+                "w": 140.0,
+                "h": 140.0
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                140.0,
+                140.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "1df2e98b6cbd36041853df28ea0a945c",
+                    "asset": "Assets/rgtexture/room/decoration/room_item_19.asset",
+                    "name": "room_item_19",
+                    "sprite_rect": {
+                      "x": 212.0,
+                      "y": 119.0,
+                      "w": 15.0,
+                      "h": 48.0
+                    },
+                    "source_texture_guid": "e8d2f60243ae5c4439d3f5adf5706cb3",
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-room (Group 0)-256x512-fmt4.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\room_item_19.png"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "image_type": 0,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "title",
+          "active": true,
+          "depth": 1,
+          "draw_order": 3,
+          "rt_fid": 224220653531496868,
+          "go_fid": 1061268324235159,
+          "unity_rect": {
+            "x": 35.0,
+            "y": 320.0,
+            "w": 450.0,
+            "h": 100.0
+          },
+          "local_rect": {
+            "left": 35.0,
+            "top": -20.0,
+            "w": 450.0,
+            "h": 100.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            170.0
+          ],
+          "size_delta": [
+            450.0,
+            100.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "6acab95c779c7104f999a5a158a42bf6",
+                "asset": "Assets/rgtexture/ui/ui_1.asset",
+                "name": "ui_1",
+                "sprite_rect": {
+                  "x": 0.0,
+                  "y": 379.0,
+                  "w": 108.0,
+                  "h": 38.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "border": {
+                  "left": 24.0,
+                  "bottom": 0.0,
+                  "right": 24.0,
+                  "top": 0.0
+                },
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_1.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 1,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        },
+        {
+          "name": "text_name",
+          "active": true,
+          "depth": 1,
+          "draw_order": 4,
+          "rt_fid": 224344419225485095,
+          "go_fid": 1587765826080250,
+          "unity_rect": {
+            "x": 10.0,
+            "y": 340.0,
+            "w": 500.0,
+            "h": 80.0
+          },
+          "local_rect": {
+            "left": 10.0,
+            "top": -20.0,
+            "w": 500.0,
+            "h": 80.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            180.0
+          ],
+          "size_delta": [
+            500.0,
+            80.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "plant",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "cde1e2c43e65a1c45b76b181f3a713ff",
+                "font_size": 80,
+                "font_style": 0,
+                "alignment": 4,
+                "min_size": 0,
+                "max_size": 300,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": true,
+                "rich_text": true,
+                "font": "pixel_bold"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "text_info",
+          "active": true,
+          "depth": 1,
+          "draw_order": 5,
+          "rt_fid": 224719342369648492,
+          "go_fid": 1709867586078768,
+          "unity_rect": {
+            "x": 200.0,
+            "y": 165.0,
+            "w": 300.0,
+            "h": 150.0
+          },
+          "local_rect": {
+            "left": 200.0,
+            "top": 85.0,
+            "w": 300.0,
+            "h": 150.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            90.0,
+            40.0
+          ],
+          "size_delta": [
+            300.0,
+            150.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "0/5\\nspeed+0",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "cde1e2c43e65a1c45b76b181f3a713ff",
+                "font_size": 36,
+                "font_style": 0,
+                "alignment": 4,
+                "min_size": 2,
+                "max_size": 40,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": true,
+                "rich_text": true,
+                "font": "pixel_bold"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 520.0,
+        "h": 400.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,3753 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\rgprefab\\ui\\window_draw.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "window_draw",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224089843903986396,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        1.0,
+        1.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "content",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224518489005915545,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 80.0,
+            "y": 50.0,
+            "w": 1120.0,
+            "h": 620.0
+          },
+          "local_rect": {
+            "left": 80.0,
+            "top": 50.0,
+            "w": 1120.0,
+            "h": 620.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            -160.0,
+            -100.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "children": [
+            {
+              "name": "bg",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 224841364053301648,
+              "go_fid": 1724804207875695,
+              "unity_rect": {
+                "x": 80.0,
+                "y": 50.0,
+                "w": 1120.0,
+                "h": 620.0
+              },
+              "local_rect": {
+                "left": 80.0,
+                "top": 50.0,
+                "w": 1120.0,
+                "h": 620.0
+              },
+              "anchor_min": [
+                0.0,
+                0.0
+              ],
+              "anchor_max": [
+                1.0,
+                1.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                0.0,
+                0.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "408cdea5c1b502c438c89989fd581134",
+                    "asset": "Assets/rgtexture/ui/ui_116.asset",
+                    "name": "ui_116",
+                    "sprite_rect": {
+                      "x": 286.0,
+                      "y": 309.0,
+                      "w": 48.0,
+                      "h": 30.0
+                    },
+                    "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                    "border": {
+                      "left": 8.0,
+                      "bottom": 8.0,
+                      "right": 8.0,
+                      "top": 8.0
+                    },
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\ui_116.png"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "image_type": 1,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ]
+            },
+            {
+              "name": "content",
+              "active": true,
+              "depth": 2,
+              "draw_order": 1,
+              "rt_fid": 224919942235722503,
+              "go_fid": 1618682377417806,
+              "unity_rect": {
+                "x": 80.0,
+                "y": 50.0,
+                "w": 1120.0,
+                "h": 620.0
+              },
+              "local_rect": {
+                "left": 80.0,
+                "top": 50.0,
+                "w": 1120.0,
+                "h": 620.0
+              },
+              "anchor_min": [
+                0.0,
+                0.0
+              ],
+              "anchor_max": [
+                1.0,
+                1.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                0.0,
+                0.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "mask": {
+                "type": "Mask",
+                "show_mask_graphic": false
+              },
+              "children": [
+                {
+                  "name": "panel_1",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 0,
+                  "rt_fid": 224726790013014859,
+                  "go_fid": 1703437598541787,
+                  "unity_rect": {
+                    "x": 80.0,
+                    "y": 50.0,
+                    "w": 1120.0,
+                    "h": 620.0
+                  },
+                  "local_rect": {
+                    "left": 80.0,
+                    "top": 50.0,
+                    "w": 1120.0,
+                    "h": 620.0
+                  },
+                  "anchor_min": [
+                    0.0,
+                    0.0
+                  ],
+                  "anchor_max": [
+                    1.0,
+                    1.0
+                  ],
+                  "pivot": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchored_pos": [
+                    0.0,
+                    0.0
+                  ],
+                  "size_delta": [
+                    0.0,
+                    0.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "children": [
+                    {
+                      "name": "Adrian Pang",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 0,
+                      "rt_fid": 224693329660128220,
+                      "go_fid": 1884547391421755,
+                      "unity_rect": {
+                        "x": 657.5,
+                        "y": 248.11,
+                        "w": 173.0,
+                        "h": 184.0
+                      },
+                      "local_rect": {
+                        "left": 657.5,
+                        "top": 287.89,
+                        "w": 173.0,
+                        "h": 184.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        104.0,
+                        -19.890015
+                      ],
+                      "size_delta": [
+                        173.0,
+                        184.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "32b23d2b358f32b48baaf09237fe9fdc",
+                            "asset": "Assets/rgtexture/draw/digi-1.asset",
+                            "name": "digi-1",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 783.0,
+                              "w": 678.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "8351911d41bf41847961904610a65f59",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-1.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114000955326284023,
+                          "go_fid": 1884547391421755,
+                          "name": "Adrian Pang"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Plume羽",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 1,
+                      "rt_fid": 224581786255902400,
+                      "go_fid": 1099118695303065,
+                      "unity_rect": {
+                        "x": 133.73,
+                        "y": 72.5,
+                        "w": 201.0,
+                        "h": 201.0
+                      },
+                      "local_rect": {
+                        "left": 133.73,
+                        "top": 446.5,
+                        "w": 201.0,
+                        "h": 201.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -405.77,
+                        -187.0
+                      ],
+                      "size_delta": [
+                        201.0,
+                        201.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "0b5cf82a9d13667418ae1687dddff268",
+                            "asset": "Assets/rgtexture/draw/digi-2.asset",
+                            "name": "digi-2",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 0.0,
+                              "w": 509.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "eb4da87465a319d4bb0ba0640ce93fb0",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-2.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114045458335737618,
+                          "go_fid": 1099118695303065,
+                          "name": "Plume羽"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Plume羽",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 2,
+                      "rt_fid": 224215879266689626,
+                      "go_fid": 1243736805655561,
+                      "unity_rect": {
+                        "x": 846.5,
+                        "y": 170.5,
+                        "w": 277.0,
+                        "h": 195.0
+                      },
+                      "local_rect": {
+                        "left": 846.5,
+                        "top": 354.5,
+                        "w": 277.0,
+                        "h": 195.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        345.0,
+                        -92.0
+                      ],
+                      "size_delta": [
+                        277.0,
+                        195.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "5130ada547a0755498b14a965c51a692",
+                            "asset": "Assets/rgtexture/draw/digi-3.asset",
+                            "name": "digi-3",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 951.0,
+                              "w": 1280.0,
+                              "h": 904.0
+                            },
+                            "source_texture_guid": "65c14de86aaf5c24393c5f6c609d994b",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-3.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114043919389829319,
+                          "go_fid": 1243736805655561,
+                          "name": "Plume羽"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Plume羽",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 3,
+                      "rt_fid": 224026196548002408,
+                      "go_fid": 1061268324235159,
+                      "unity_rect": {
+                        "x": 351.5,
+                        "y": 448.39,
+                        "w": 320.0,
+                        "h": 195.25
+                      },
+                      "local_rect": {
+                        "left": 351.5,
+                        "top": 76.36,
+                        "w": 320.0,
+                        "h": 195.25
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -128.5,
+                        186.01003
+                      ],
+                      "size_delta": [
+                        320.0,
+                        195.25
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "1bf102ce551aed24295d503166edefd9",
+                            "asset": "Assets/rgtexture/draw/digi-4.asset",
+                            "name": "digi-4",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 0.0,
+                              "w": 1280.0,
+                              "h": 781.0
+                            },
+                            "source_texture_guid": "8351911d41bf41847961904610a65f59",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-4.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114279359913592680,
+                          "go_fid": 1061268324235159,
+                          "name": "Plume羽"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Zhou Tiger",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 4,
+                      "rt_fid": 224292246286975720,
+                      "go_fid": 1587765826080250,
+                      "unity_rect": {
+                        "x": 351.5,
+                        "y": 74.72,
+                        "w": 240.0,
+                        "h": 156.57
+                      },
+                      "local_rect": {
+                        "left": 351.5,
+                        "top": 488.72,
+                        "w": 240.0,
+                        "h": 156.57
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -168.5,
+                        -207.0
+                      ],
+                      "size_delta": [
+                        240.0,
+                        156.57
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "mask": {
+                        "type": "Mask",
+                        "show_mask_graphic": false
+                      },
+                      "children": [
+                        {
+                          "name": "Zhou Tiger",
+                          "active": true,
+                          "depth": 5,
+                          "draw_order": 0,
+                          "rt_fid": 224009931292380359,
+                          "go_fid": 1709867586078768,
+                          "unity_rect": {
+                            "x": 351.5,
+                            "y": -764.72,
+                            "w": 240.0,
+                            "h": 996.0
+                          },
+                          "local_rect": {
+                            "left": 351.5,
+                            "top": 488.72,
+                            "w": 240.0,
+                            "h": 996.0
+                          },
+                          "anchor_min": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchor_max": [
+                            0.5,
+                            1.0
+                          ],
+                          "pivot": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchored_pos": [
+                            0.0,
+                            0.0
+                          ],
+                          "size_delta": [
+                            240.0,
+                            996.0
+                          ],
+                          "scale": [
+                            1.0,
+                            1.0
+                          ],
+                          "visual": [
+                            {
+                              "kind": "Image",
+                              "sprite": {
+                                "guid": "5c9b5b91d7be7b549b8147f8134374c1",
+                                "asset": "Assets/rgtexture/draw/digi-5.asset",
+                                "name": "digi-5",
+                                "sprite_rect": {
+                                  "x": 1282.0,
+                                  "y": 0.0,
+                                  "w": 493.0,
+                                  "h": 2046.0
+                                },
+                                "source_texture_guid": "7372233f53f01c8488ce002e0b556023",
+                                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-5.png"
+                              },
+                              "color": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "image_type": 0,
+                              "fill_method": 4,
+                              "fill_amount": 1.0,
+                              "fill_origin": 0,
+                              "preserve_aspect": false
+                            }
+                          ],
+                          "selectable": {
+                            "type": "Button",
+                            "transition": 1,
+                            "interactable": true,
+                            "color_tint": {
+                              "normal": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "highlighted": {
+                                "r": 0.9607843,
+                                "g": 0.9607843,
+                                "b": 0.9607843,
+                                "a": 1.0
+                              },
+                              "pressed": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 1.0
+                              },
+                              "disabled": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 0.5019608
+                              },
+                              "color_multiplier": 1.0,
+                              "fade_duration": 0.1
+                            },
+                            "target_graphic": {
+                              "fileID": 114799762105739359,
+                              "go_fid": 1709867586078768,
+                              "name": "Zhou Tiger"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "习小煦、",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 5,
+                      "rt_fid": 224552309709192268,
+                      "go_fid": 1044625135789424,
+                      "unity_rect": {
+                        "x": 351.5,
+                        "y": 248.11,
+                        "w": 287.0,
+                        "h": 191.33
+                      },
+                      "local_rect": {
+                        "left": 351.5,
+                        "top": 280.56,
+                        "w": 287.0,
+                        "h": 191.33
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -145.0,
+                        -16.224998
+                      ],
+                      "size_delta": [
+                        287.0,
+                        191.33
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "d93264f3bf2d4b74f9c54fd5a53aa617",
+                            "asset": "Assets/rgtexture/draw/digi-6.asset",
+                            "name": "digi-6",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 859.0,
+                              "w": 1280.0,
+                              "h": 853.0
+                            },
+                            "source_texture_guid": "7372233f53f01c8488ce002e0b556023",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-6.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114534704304255049,
+                          "go_fid": 1044625135789424,
+                          "name": "习小煦、"
+                        }
+                      }
+                    },
+                    {
+                      "name": "吞下早晨",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 6,
+                      "rt_fid": 224208575754630950,
+                      "go_fid": 1589667821646929,
+                      "unity_rect": {
+                        "x": 604.0,
+                        "y": 74.72,
+                        "w": 222.0,
+                        "h": 156.57
+                      },
+                      "local_rect": {
+                        "left": 604.0,
+                        "top": 488.72,
+                        "w": 222.0,
+                        "h": 156.57
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        75.0,
+                        -207.0
+                      ],
+                      "size_delta": [
+                        222.0,
+                        156.57
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "mask": {
+                        "type": "Mask",
+                        "show_mask_graphic": false
+                      },
+                      "children": [
+                        {
+                          "name": "吞下早晨",
+                          "active": true,
+                          "depth": 5,
+                          "draw_order": 0,
+                          "rt_fid": 224264357844037074,
+                          "go_fid": 1372920208702427,
+                          "unity_rect": {
+                            "x": 604.0,
+                            "y": 0.09,
+                            "w": 222.0,
+                            "h": 255.0
+                          },
+                          "local_rect": {
+                            "left": 604.0,
+                            "top": 464.91,
+                            "w": 222.0,
+                            "h": 255.0
+                          },
+                          "anchor_min": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchor_max": [
+                            0.5,
+                            1.0
+                          ],
+                          "pivot": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchored_pos": [
+                            0.0,
+                            23.800003
+                          ],
+                          "size_delta": [
+                            222.0,
+                            255.0
+                          ],
+                          "scale": [
+                            1.0,
+                            1.0
+                          ],
+                          "visual": [
+                            {
+                              "kind": "Image",
+                              "sprite": {
+                                "guid": "68650a09c2ac78f42992ab2337a26035",
+                                "asset": "Assets/rgtexture/draw/digi-8.asset",
+                                "name": "digi-8",
+                                "sprite_rect": {
+                                  "x": 1282.0,
+                                  "y": 0.0,
+                                  "w": 626.0,
+                                  "h": 720.0
+                                },
+                                "source_texture_guid": "65c14de86aaf5c24393c5f6c609d994b",
+                                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-8.png"
+                              },
+                              "color": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "image_type": 0,
+                              "fill_method": 4,
+                              "fill_amount": 1.0,
+                              "fill_origin": 0,
+                              "preserve_aspect": false
+                            }
+                          ],
+                          "selectable": {
+                            "type": "Button",
+                            "transition": 1,
+                            "interactable": true,
+                            "color_tint": {
+                              "normal": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "highlighted": {
+                                "r": 0.9607843,
+                                "g": 0.9607843,
+                                "b": 0.9607843,
+                                "a": 1.0
+                              },
+                              "pressed": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 1.0
+                              },
+                              "disabled": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 0.5019608
+                              },
+                              "color_multiplier": 1.0,
+                              "fade_duration": 0.1
+                            },
+                            "target_graphic": {
+                              "fileID": 114658330495870062,
+                              "go_fid": 1372920208702427,
+                              "name": "吞下早晨"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "千喜酱",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 7,
+                      "rt_fid": 224806657225351454,
+                      "go_fid": 1025901758691103,
+                      "unity_rect": {
+                        "x": 700.0,
+                        "y": 439.44,
+                        "w": 220.0,
+                        "h": 204.2
+                      },
+                      "local_rect": {
+                        "left": 700.0,
+                        "top": 76.36,
+                        "w": 220.0,
+                        "h": 204.2
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        170.0,
+                        181.54
+                      ],
+                      "size_delta": [
+                        220.0,
+                        204.2
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "mask": {
+                        "type": "Mask",
+                        "show_mask_graphic": false
+                      },
+                      "children": [
+                        {
+                          "name": "千喜酱",
+                          "active": true,
+                          "depth": 5,
+                          "draw_order": 0,
+                          "rt_fid": 224354824845356902,
+                          "go_fid": 1985305603660343,
+                          "unity_rect": {
+                            "x": 700.0,
+                            "y": -1097.36,
+                            "w": 220.0,
+                            "h": 1741.0
+                          },
+                          "local_rect": {
+                            "left": 700.0,
+                            "top": 76.36,
+                            "w": 220.0,
+                            "h": 1741.0
+                          },
+                          "anchor_min": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchor_max": [
+                            0.5,
+                            1.0
+                          ],
+                          "pivot": [
+                            0.5,
+                            1.0
+                          ],
+                          "anchored_pos": [
+                            0.0,
+                            0.0
+                          ],
+                          "size_delta": [
+                            220.0,
+                            1741.0
+                          ],
+                          "scale": [
+                            1.0,
+                            1.0
+                          ],
+                          "visual": [
+                            {
+                              "kind": "Image",
+                              "sprite": {
+                                "guid": "898590cd82e0f1648896ca00df196eae",
+                                "asset": "Assets/rgtexture/draw/digi-7.asset",
+                                "name": "digi-7",
+                                "sprite_rect": {
+                                  "x": 1282.0,
+                                  "y": 0.0,
+                                  "w": 259.0,
+                                  "h": 2048.0
+                                },
+                                "source_texture_guid": "8351911d41bf41847961904610a65f59",
+                                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-7.png"
+                              },
+                              "color": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "image_type": 1,
+                              "fill_method": 4,
+                              "fill_amount": 1.0,
+                              "fill_origin": 0,
+                              "preserve_aspect": false
+                            }
+                          ],
+                          "selectable": {
+                            "type": "Button",
+                            "transition": 1,
+                            "interactable": true,
+                            "color_tint": {
+                              "normal": {
+                                "r": 1.0,
+                                "g": 1.0,
+                                "b": 1.0,
+                                "a": 1.0
+                              },
+                              "highlighted": {
+                                "r": 0.9607843,
+                                "g": 0.9607843,
+                                "b": 0.9607843,
+                                "a": 1.0
+                              },
+                              "pressed": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 1.0
+                              },
+                              "disabled": {
+                                "r": 0.78431374,
+                                "g": 0.78431374,
+                                "b": 0.78431374,
+                                "a": 0.5019608
+                              },
+                              "color_multiplier": 1.0,
+                              "fade_duration": 0.1
+                            },
+                            "target_graphic": {
+                              "fileID": 114123703392571528,
+                              "go_fid": 1985305603660343,
+                              "name": "千喜酱"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "粽砸",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 8,
+                      "rt_fid": 224150646884989824,
+                      "go_fid": 1705390221481576,
+                      "unity_rect": {
+                        "x": 934.5,
+                        "y": 373.63,
+                        "w": 189.0,
+                        "h": 270.0
+                      },
+                      "local_rect": {
+                        "left": 934.5,
+                        "top": 76.37,
+                        "w": 189.0,
+                        "h": 270.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        389.0,
+                        148.63
+                      ],
+                      "size_delta": [
+                        189.0,
+                        270.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "a5b7e73902a589646bd57e1727be5495",
+                            "asset": "Assets/rgtexture/draw/digi-9.asset",
+                            "name": "digi-9",
+                            "sprite_rect": {
+                              "x": 511.0,
+                              "y": 0.0,
+                              "w": 503.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "eb4da87465a319d4bb0ba0640ce93fb0",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-9.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114167524263268962,
+                          "go_fid": 1705390221481576,
+                          "name": "粽砸"
+                        }
+                      }
+                    },
+                    {
+                      "name": "阿夏",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 9,
+                      "rt_fid": 224601984538237284,
+                      "go_fid": 1977153420339851,
+                      "unity_rect": {
+                        "x": 129.5,
+                        "y": 288.33,
+                        "w": 205.0,
+                        "h": 355.3
+                      },
+                      "local_rect": {
+                        "left": 129.5,
+                        "top": 76.37,
+                        "w": 205.0,
+                        "h": 355.3
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -408.0,
+                        105.98
+                      ],
+                      "size_delta": [
+                        205.0,
+                        355.3
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "e0cb02288e1180349b94f2dae2bef832",
+                            "asset": "Assets/rgtexture/draw/digi-10.asset",
+                            "name": "digi-10",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 722.0,
+                              "w": 416.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "eb4da87465a319d4bb0ba0640ce93fb0",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-10.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114007513189690300,
+                          "go_fid": 1977153420339851,
+                          "name": "阿夏"
+                        }
+                      }
+                    },
+                    {
+                      "name": "btn_back",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 10,
+                      "rt_fid": 224190181876552715,
+                      "go_fid": 1336590748365959,
+                      "unity_rect": {
+                        "x": 1044.0,
+                        "y": 72.0,
+                        "w": 90.0,
+                        "h": 90.0
+                      },
+                      "local_rect": {
+                        "left": 1044.0,
+                        "top": 558.0,
+                        "w": 90.0,
+                        "h": 90.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        449.0,
+                        -243.0
+                      ],
+                      "size_delta": [
+                        90.0,
+                        90.0
+                      ],
+                      "scale": [
+                        0.99984,
+                        0.99984
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "8974779f8c414c648b290de3cc126175",
+                            "asset": "Assets/rgtexture/ui/ui_btn1.asset",
+                            "name": "ui_btn1",
+                            "sprite_rect": {
+                              "x": 617.0,
+                              "y": 323.0,
+                              "w": 18.0,
+                              "h": 17.0
+                            },
+                            "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                            "border": {
+                              "left": 5.0,
+                              "bottom": 8.0,
+                              "right": 5.0,
+                              "top": 6.0
+                            },
+                            "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                            "needs_crop": true,
+                            "png": "docs\\layout\\crops\\ui_btn1.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 1,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114617365563186364,
+                          "go_fid": 1336590748365959,
+                          "name": "btn_back"
+                        }
+                      },
+                      "children": [
+                        {
+                          "name": "image",
+                          "active": true,
+                          "depth": 5,
+                          "draw_order": 0,
+                          "rt_fid": 224611579644537198,
+                          "go_fid": 1256069497284392,
+                          "unity_rect": {
+                            "x": 1067.0,
+                            "y": 101.0,
+                            "w": 39.99,
+                            "h": 39.99
+                          },
+                          "local_rect": {
+                            "left": 1067.0,
+                            "top": 579.0,
+                            "w": 39.99,
+                            "h": 39.99
+                          },
+                          "anchor_min": [
+                            0.5,
+                            0.5
+                          ],
+                          "anchor_max": [
+                            0.5,
+                            0.5
+                          ],
+                          "pivot": [
+                            0.5,
+                            0.5
+                          ],
+                          "anchored_pos": [
+                            -2.0,
+                            4.0
+                          ],
+                          "size_delta": [
+                            40.0,
+                            40.0
+                          ],
+                          "scale": [
+                            1.0,
+                            1.0
+                          ],
+                          "visual": [
+                            {
+                              "kind": "Image",
+                              "sprite": {
+                                "guid": "d4dd05f6601d64a4f8ffb9e74c2f5b51",
+                                "asset": "Assets/rgtexture/ui/ui_64.asset",
+                                "name": "ui_64",
+                                "sprite_rect": {
+                                  "x": 943.0,
+                                  "y": 55.0,
+                                  "w": 6.0,
+                                  "h": 12.0
+                                },
+                                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                                "needs_crop": true,
+                                "png": "docs\\layout\\crops\\ui_64.png"
+                              },
+                              "color": {
+                                "r": 0.8,
+                                "g": 0.654902,
+                                "b": 0.5019608,
+                                "a": 1.0
+                              },
+                              "image_type": 0,
+                              "fill_method": 4,
+                              "fill_amount": 1.0,
+                              "fill_origin": 0,
+                              "preserve_aspect": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "panel_2",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 1,
+                  "rt_fid": 224295428814336086,
+                  "go_fid": 1161607090078389,
+                  "unity_rect": {
+                    "x": 1160.0,
+                    "y": 50.0,
+                    "w": 1120.0,
+                    "h": 620.0
+                  },
+                  "local_rect": {
+                    "left": 1160.0,
+                    "top": 50.0,
+                    "w": 1120.0,
+                    "h": 620.0
+                  },
+                  "anchor_min": [
+                    0.0,
+                    0.0
+                  ],
+                  "anchor_max": [
+                    1.0,
+                    1.0
+                  ],
+                  "pivot": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchored_pos": [
+                    1080.0,
+                    0.0
+                  ],
+                  "size_delta": [
+                    0.0,
+                    0.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "children": [
+                    {
+                      "name": "Johnny Thunder",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 0,
+                      "rt_fid": 224386943702330414,
+                      "go_fid": 1002669891404536,
+                      "unity_rect": {
+                        "x": 2041.87,
+                        "y": 372.25,
+                        "w": 179.67,
+                        "h": 240.0
+                      },
+                      "local_rect": {
+                        "left": 2041.87,
+                        "top": 107.75,
+                        "w": 179.67,
+                        "h": 240.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        411.7,
+                        132.25
+                      ],
+                      "size_delta": [
+                        179.66667,
+                        240.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "cf3c7ea7f1de87f43908e7fbea8891b4",
+                            "asset": "Assets/rgtexture/draw/hand-1.asset",
+                            "name": "hand-1",
+                            "sprite_rect": {
+                              "x": 1282.0,
+                              "y": 0.0,
+                              "w": 539.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "26dfad55b83e8dc44a782f5d574180ab",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-1.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114824317463469755,
+                          "go_fid": 1002669891404536,
+                          "name": "Johnny Thunder"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Mirror",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 1,
+                      "rt_fid": 224528911807818478,
+                      "go_fid": 1470112387431263,
+                      "unity_rect": {
+                        "x": 1420.0,
+                        "y": 419.25,
+                        "w": 260.0,
+                        "h": 193.0
+                      },
+                      "local_rect": {
+                        "left": 1420.0,
+                        "top": 107.75,
+                        "w": 260.0,
+                        "h": 193.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -170.0,
+                        155.75
+                      ],
+                      "size_delta": [
+                        260.0,
+                        193.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "5bdad70749800fb49ad48b7b9104644e",
+                            "asset": "Assets/rgtexture/draw/hand-2.asset",
+                            "name": "hand-2",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 0.0,
+                              "w": 1280.0,
+                              "h": 949.0
+                            },
+                            "source_texture_guid": "65c14de86aaf5c24393c5f6c609d994b",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-2.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114091882994760266,
+                          "go_fid": 1470112387431263,
+                          "name": "Mirror"
+                        }
+                      }
+                    },
+                    {
+                      "name": "Mirror",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 2,
+                      "rt_fid": 224771092198208730,
+                      "go_fid": 1313026266067498,
+                      "unity_rect": {
+                        "x": 1894.6,
+                        "y": 67.0,
+                        "w": 320.0,
+                        "h": 284.5
+                      },
+                      "local_rect": {
+                        "left": 1894.6,
+                        "top": 368.5,
+                        "w": 320.0,
+                        "h": 284.5
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        334.6,
+                        -150.75
+                      ],
+                      "size_delta": [
+                        320.0,
+                        284.5
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "bdbfd0a96dcfc33428c375a82a502ea4",
+                            "asset": "Assets/rgtexture/draw/hand-3.asset",
+                            "name": "hand-3",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 0.0,
+                              "w": 1280.0,
+                              "h": 1138.0
+                            },
+                            "source_texture_guid": "26dfad55b83e8dc44a782f5d574180ab",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-3.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114011164340880974,
+                          "go_fid": 1313026266067498,
+                          "name": "Mirror"
+                        }
+                      }
+                    },
+                    {
+                      "name": "✧灵希の星☆",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 3,
+                      "rt_fid": 224695600491528212,
+                      "go_fid": 1621510681728303,
+                      "unity_rect": {
+                        "x": 1202.7,
+                        "y": 197.88,
+                        "w": 291.0,
+                        "h": 194.85
+                      },
+                      "local_rect": {
+                        "left": 1202.7,
+                        "top": 327.27,
+                        "w": 291.0,
+                        "h": 194.85
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -371.8,
+                        -64.7
+                      ],
+                      "size_delta": [
+                        291.0,
+                        194.85
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "d2ef55f0bcb89dc4bbe9dbfc55f459c8",
+                            "asset": "Assets/rgtexture/draw/hand-4.asset",
+                            "name": "hand-4",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 0.0,
+                              "w": 1280.0,
+                              "h": 857.0
+                            },
+                            "source_texture_guid": "7372233f53f01c8488ce002e0b556023",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-4.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114291632710222552,
+                          "go_fid": 1621510681728303,
+                          "name": "✧灵希の星☆"
+                        }
+                      }
+                    },
+                    {
+                      "name": "一个想变触的zz",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 4,
+                      "rt_fid": 224168105826085154,
+                      "go_fid": 1632457200066912,
+                      "unity_rect": {
+                        "x": 1695.2,
+                        "y": 446.2,
+                        "w": 150.0,
+                        "h": 201.0
+                      },
+                      "local_rect": {
+                        "left": 1695.2,
+                        "top": 72.8,
+                        "w": 150.0,
+                        "h": 201.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        50.2,
+                        186.7
+                      ],
+                      "size_delta": [
+                        150.0,
+                        201.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "0d1ef2841e89d3d4dad06e2f27577817",
+                            "asset": "Assets/rgtexture/draw/hand-5.asset",
+                            "name": "hand-5",
+                            "sprite_rect": {
+                              "x": 1282.0,
+                              "y": 722.0,
+                              "w": 538.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "26dfad55b83e8dc44a782f5d574180ab",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-5.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114146109142143575,
+                          "go_fid": 1632457200066912,
+                          "name": "一个想变触的zz"
+                        }
+                      }
+                    },
+                    {
+                      "name": "停车场摧毁龙卷风",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 5,
+                      "rt_fid": 224592664909728774,
+                      "go_fid": 1634108722742392,
+                      "unity_rect": {
+                        "x": 1695.15,
+                        "y": 261.35,
+                        "w": 163.7,
+                        "h": 174.1
+                      },
+                      "local_rect": {
+                        "left": 1695.15,
+                        "top": 284.55,
+                        "w": 163.7,
+                        "h": 174.1
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        57.0,
+                        -11.6
+                      ],
+                      "size_delta": [
+                        163.7,
+                        174.1
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "8318030bd6f0d794b90915d2996c1d29",
+                            "asset": "Assets/rgtexture/draw/hand-6.asset",
+                            "name": "hand-6",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 1140.0,
+                              "w": 1280.0,
+                              "h": 890.0
+                            },
+                            "source_texture_guid": "26dfad55b83e8dc44a782f5d574180ab",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-6.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114709890794832471,
+                          "go_fid": 1634108722742392,
+                          "name": "停车场摧毁龙卷风"
+                        }
+                      }
+                    },
+                    {
+                      "name": "八公",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 6,
+                      "rt_fid": 224589652054545887,
+                      "go_fid": 1302127217294661,
+                      "unity_rect": {
+                        "x": 1695.2,
+                        "y": 67.0,
+                        "w": 173.0,
+                        "h": 184.0
+                      },
+                      "local_rect": {
+                        "left": 1695.2,
+                        "top": 469.0,
+                        "w": 173.0,
+                        "h": 184.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        61.700012,
+                        -201.0
+                      ],
+                      "size_delta": [
+                        173.0,
+                        184.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "c0c68c6ca44d3804db3ddb1c01ac9f55",
+                            "asset": "Assets/rgtexture/draw/hand-7.asset",
+                            "name": "hand-7",
+                            "sprite_rect": {
+                              "x": 1518.0,
+                              "y": 0.0,
+                              "w": 500.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "eb4da87465a319d4bb0ba0640ce93fb0",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-7.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114817325062191328,
+                          "go_fid": 1302127217294661,
+                          "name": "八公"
+                        }
+                      }
+                    },
+                    {
+                      "name": "咩野酱",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 7,
+                      "rt_fid": 224294885792020211,
+                      "go_fid": 1969106005120503,
+                      "unity_rect": {
+                        "x": 1871.07,
+                        "y": 402.5,
+                        "w": 166.67,
+                        "h": 240.0
+                      },
+                      "local_rect": {
+                        "left": 1871.07,
+                        "top": 77.5,
+                        "w": 166.67,
+                        "h": 240.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        234.4,
+                        162.5
+                      ],
+                      "size_delta": [
+                        166.66667,
+                        240.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "2a761e2fe929d994fac824458e6bcf12",
+                            "asset": "Assets/rgtexture/draw/hand-8.asset",
+                            "name": "hand-8",
+                            "sprite_rect": {
+                              "x": 1016.0,
+                              "y": 0.0,
+                              "w": 500.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "eb4da87465a319d4bb0ba0640ce93fb0",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-8.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114499517081926786,
+                          "go_fid": 1969106005120503,
+                          "name": "咩野酱"
+                        }
+                      }
+                    },
+                    {
+                      "name": "星碎满空",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 8,
+                      "rt_fid": 224911997548769506,
+                      "go_fid": 1642988549198181,
+                      "unity_rect": {
+                        "x": 1212.7,
+                        "y": 407.2,
+                        "w": 180.0,
+                        "h": 240.0
+                      },
+                      "local_rect": {
+                        "left": 1212.7,
+                        "top": 72.8,
+                        "w": 180.0,
+                        "h": 240.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -417.3,
+                        167.20003
+                      ],
+                      "size_delta": [
+                        180.0,
+                        240.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "126a575552fd3184d8d6f5f29c79ac90",
+                            "asset": "Assets/rgtexture/draw/hand-9.asset",
+                            "name": "hand-9",
+                            "sprite_rect": {
+                              "x": 680.0,
+                              "y": 783.0,
+                              "w": 540.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "8351911d41bf41847961904610a65f59",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-9.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114901155395665742,
+                          "go_fid": 1642988549198181,
+                          "name": "星碎满空"
+                        }
+                      }
+                    },
+                    {
+                      "name": "苏泊比亚",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 9,
+                      "rt_fid": 224941304181978548,
+                      "go_fid": 1946936116752871,
+                      "unity_rect": {
+                        "x": 1506.4,
+                        "y": 132.25,
+                        "w": 180.0,
+                        "h": 240.0
+                      },
+                      "local_rect": {
+                        "left": 1506.4,
+                        "top": 347.75,
+                        "w": 180.0,
+                        "h": 240.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -123.600006,
+                        -107.75
+                      ],
+                      "size_delta": [
+                        180.0,
+                        240.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "0a652c8649229d9478e29ea5fb86078f",
+                            "asset": "Assets/rgtexture/draw/hand-10.asset",
+                            "name": "hand-10",
+                            "sprite_rect": {
+                              "x": 1282.0,
+                              "y": 722.0,
+                              "w": 540.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "65c14de86aaf5c24393c5f6c609d994b",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\hand-10.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114274303670636188,
+                          "go_fid": 1946936116752871,
+                          "name": "苏泊比亚"
+                        }
+                      }
+                    },
+                    {
+                      "name": "btn_back",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 10,
+                      "rt_fid": 224295926465608920,
+                      "go_fid": 1711914853252429,
+                      "unity_rect": {
+                        "x": 1207.7,
+                        "y": 72.0,
+                        "w": 90.0,
+                        "h": 90.0
+                      },
+                      "local_rect": {
+                        "left": 1207.7,
+                        "top": 558.0,
+                        "w": 90.0,
+                        "h": 90.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        -467.3,
+                        -243.0
+                      ],
+                      "size_delta": [
+                        90.0,
+                        90.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "8974779f8c414c648b290de3cc126175",
+                            "asset": "Assets/rgtexture/ui/ui_btn1.asset",
+                            "name": "ui_btn1",
+                            "sprite_rect": {
+                              "x": 617.0,
+                              "y": 323.0,
+                              "w": 18.0,
+                              "h": 17.0
+                            },
+                            "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                            "border": {
+                              "left": 5.0,
+                              "bottom": 8.0,
+                              "right": 5.0,
+                              "top": 6.0
+                            },
+                            "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                            "needs_crop": true,
+                            "png": "docs\\layout\\crops\\ui_btn1.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 1,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": false
+                        }
+                      ],
+                      "selectable": {
+                        "type": "Button",
+                        "transition": 1,
+                        "interactable": true,
+                        "color_tint": {
+                          "normal": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "highlighted": {
+                            "r": 0.9607843,
+                            "g": 0.9607843,
+                            "b": 0.9607843,
+                            "a": 1.0
+                          },
+                          "pressed": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 1.0
+                          },
+                          "disabled": {
+                            "r": 0.78431374,
+                            "g": 0.78431374,
+                            "b": 0.78431374,
+                            "a": 0.5019608
+                          },
+                          "color_multiplier": 1.0,
+                          "fade_duration": 0.1
+                        },
+                        "target_graphic": {
+                          "fileID": 114083739296819378,
+                          "go_fid": 1711914853252429,
+                          "name": "btn_back"
+                        }
+                      },
+                      "children": [
+                        {
+                          "name": "image",
+                          "active": true,
+                          "depth": 5,
+                          "draw_order": 0,
+                          "rt_fid": 224321827775029018,
+                          "go_fid": 1918264173551851,
+                          "unity_rect": {
+                            "x": 1230.7,
+                            "y": 101.0,
+                            "w": 40.0,
+                            "h": 40.0
+                          },
+                          "local_rect": {
+                            "left": 1230.7,
+                            "top": 579.0,
+                            "w": 40.0,
+                            "h": 40.0
+                          },
+                          "anchor_min": [
+                            0.5,
+                            0.5
+                          ],
+                          "anchor_max": [
+                            0.5,
+                            0.5
+                          ],
+                          "pivot": [
+                            0.5,
+                            0.5
+                          ],
+                          "anchored_pos": [
+                            -2.0,
+                            4.0
+                          ],
+                          "size_delta": [
+                            40.0,
+                            40.0
+                          ],
+                          "scale": [
+                            1.0,
+                            1.0
+                          ],
+                          "visual": [
+                            {
+                              "kind": "Image",
+                              "sprite": {
+                                "guid": "d4dd05f6601d64a4f8ffb9e74c2f5b51",
+                                "asset": "Assets/rgtexture/ui/ui_64.asset",
+                                "name": "ui_64",
+                                "sprite_rect": {
+                                  "x": 943.0,
+                                  "y": 55.0,
+                                  "w": 6.0,
+                                  "h": 12.0
+                                },
+                                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                                "needs_crop": true,
+                                "png": "docs\\layout\\crops\\ui_64.png"
+                              },
+                              "color": {
+                                "r": 0.8,
+                                "g": 0.654902,
+                                "b": 0.5019608,
+                                "a": 1.0
+                              },
+                              "image_type": 0,
+                              "fill_method": 4,
+                              "fill_amount": 1.0,
+                              "fill_origin": 0,
+                              "preserve_aspect": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "full_image",
+              "active": true,
+              "depth": 2,
+              "draw_order": 2,
+              "rt_fid": 224477794280538272,
+              "go_fid": 1587397909062814,
+              "unity_rect": {
+                "x": 99.0,
+                "y": 69.0,
+                "w": 1082.0,
+                "h": 582.0
+              },
+              "local_rect": {
+                "left": 99.0,
+                "top": 69.0,
+                "w": 1082.0,
+                "h": 582.0
+              },
+              "anchor_min": [
+                0.0,
+                0.0
+              ],
+              "anchor_max": [
+                1.0,
+                1.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                -38.0,
+                -38.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "0000000000000000f000000000000000"
+                  },
+                  "color": {
+                    "r": 0.0,
+                    "g": 0.0,
+                    "b": 0.0,
+                    "a": 0.691
+                  },
+                  "image_type": 1,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ],
+              "scroll_rect": {
+                "horizontal": false,
+                "vertical": true,
+                "movement_type": 2,
+                "h_scrollbar_visibility": 2,
+                "v_scrollbar_visibility": 2,
+                "elasticity": 0.1,
+                "deceleration_rate": 0.135,
+                "scroll_sensitivity": 1.0,
+                "inertia": true,
+                "content": {
+                  "fileID": 224832474124979885,
+                  "go_fid": 1694121525821480,
+                  "name": "image"
+                },
+                "viewport": {
+                  "fileID": 224066338149260220,
+                  "go_fid": 1371939378208658,
+                  "name": "viewport"
+                }
+              },
+              "children": [
+                {
+                  "name": "mask",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 0,
+                  "rt_fid": 224784622213810434,
+                  "go_fid": 1875609422105747,
+                  "unity_rect": {
+                    "x": 99.0,
+                    "y": 69.0,
+                    "w": 1082.0,
+                    "h": 582.0
+                  },
+                  "local_rect": {
+                    "left": 99.0,
+                    "top": 69.0,
+                    "w": 1082.0,
+                    "h": 582.0
+                  },
+                  "anchor_min": [
+                    0.0,
+                    0.0
+                  ],
+                  "anchor_max": [
+                    1.0,
+                    1.0
+                  ],
+                  "pivot": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchored_pos": [
+                    0.0,
+                    0.0
+                  ],
+                  "size_delta": [
+                    0.0,
+                    0.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "selectable": {
+                    "type": "Button",
+                    "transition": 1,
+                    "interactable": true,
+                    "color_tint": {
+                      "normal": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                      },
+                      "highlighted": {
+                        "r": 0.9607843,
+                        "g": 0.9607843,
+                        "b": 0.9607843,
+                        "a": 1.0
+                      },
+                      "pressed": {
+                        "r": 0.78431374,
+                        "g": 0.78431374,
+                        "b": 0.78431374,
+                        "a": 1.0
+                      },
+                      "disabled": {
+                        "r": 0.78431374,
+                        "g": 0.78431374,
+                        "b": 0.78431374,
+                        "a": 0.5019608
+                      },
+                      "color_multiplier": 1.0,
+                      "fade_duration": 0.1
+                    },
+                    "target_graphic": {
+                      "fileID": 114603576887721950,
+                      "go_fid": 1587397909062814,
+                      "name": "full_image"
+                    }
+                  }
+                },
+                {
+                  "name": "viewport",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 1,
+                  "rt_fid": 224066338149260220,
+                  "go_fid": 1371939378208658,
+                  "unity_rect": {
+                    "x": 99.0,
+                    "y": 69.0,
+                    "w": 1082.0,
+                    "h": 582.0
+                  },
+                  "local_rect": {
+                    "left": 99.0,
+                    "top": 69.0,
+                    "w": 1082.0,
+                    "h": 582.0
+                  },
+                  "anchor_min": [
+                    0.0,
+                    0.0
+                  ],
+                  "anchor_max": [
+                    1.0,
+                    1.0
+                  ],
+                  "pivot": [
+                    0.0,
+                    1.0
+                  ],
+                  "anchored_pos": [
+                    0.0,
+                    0.0
+                  ],
+                  "size_delta": [
+                    0.0,
+                    0.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "visual": [
+                    {
+                      "kind": "Image",
+                      "sprite": {
+                        "guid": "0000000000000000f000000000000000"
+                      },
+                      "color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                      },
+                      "image_type": 1,
+                      "fill_method": 4,
+                      "fill_amount": 1.0,
+                      "fill_origin": 0,
+                      "preserve_aspect": false
+                    }
+                  ],
+                  "mask": {
+                    "type": "Mask",
+                    "show_mask_graphic": false
+                  },
+                  "children": [
+                    {
+                      "name": "image",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 0,
+                      "rt_fid": 224832474124979885,
+                      "go_fid": 1694121525821480,
+                      "unity_rect": {
+                        "x": 301.0,
+                        "y": -69.0,
+                        "w": 678.0,
+                        "h": 720.0
+                      },
+                      "local_rect": {
+                        "left": 301.0,
+                        "top": 69.0,
+                        "w": 678.0,
+                        "h": 720.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        1.0
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        1.0
+                      ],
+                      "pivot": [
+                        0.5,
+                        1.0
+                      ],
+                      "anchored_pos": [
+                        0.0,
+                        0.0
+                      ],
+                      "size_delta": [
+                        678.0,
+                        720.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Image",
+                          "sprite": {
+                            "guid": "32b23d2b358f32b48baaf09237fe9fdc",
+                            "asset": "Assets/rgtexture/draw/digi-1.asset",
+                            "name": "digi-1",
+                            "sprite_rect": {
+                              "x": 0.0,
+                              "y": 783.0,
+                              "w": 678.0,
+                              "h": 720.0
+                            },
+                            "source_texture_guid": "8351911d41bf41847961904610a65f59",
+                            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\draw\\digi-1.png"
+                          },
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          },
+                          "image_type": 0,
+                          "fill_method": 4,
+                          "fill_amount": 1.0,
+                          "fill_origin": 0,
+                          "preserve_aspect": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "author",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 2,
+                  "rt_fid": 224201141531394087,
+                  "go_fid": 1320256170494724,
+                  "unity_rect": {
+                    "x": 520.0,
+                    "y": 5.0,
+                    "w": 240.0,
+                    "h": 50.0
+                  },
+                  "local_rect": {
+                    "left": 520.0,
+                    "top": 665.0,
+                    "w": 240.0,
+                    "h": 50.0
+                  },
+                  "anchor_min": [
+                    0.5,
+                    0.0
+                  ],
+                  "anchor_max": [
+                    0.5,
+                    0.0
+                  ],
+                  "pivot": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchored_pos": [
+                    0.0,
+                    -39.0
+                  ],
+                  "size_delta": [
+                    240.0,
+                    50.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "visual": [
+                    {
+                      "kind": "Image",
+                      "sprite": {
+                        "guid": "ba048797be8b0334495e66a58222b3c1",
+                        "asset": "Assets/rgtexture/ui/ui_117.asset",
+                        "name": "ui_117",
+                        "sprite_rect": {
+                          "x": 789.0,
+                          "y": 177.0,
+                          "w": 25.0,
+                          "h": 21.0
+                        },
+                        "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                        "border": {
+                          "left": 11.0,
+                          "bottom": 8.0,
+                          "right": 10.0,
+                          "top": 8.0
+                        },
+                        "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                        "needs_crop": true,
+                        "png": "docs\\layout\\crops\\ui_117.png"
+                      },
+                      "color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                      },
+                      "image_type": 1,
+                      "fill_method": 4,
+                      "fill_amount": 1.0,
+                      "fill_origin": 0,
+                      "preserve_aspect": false
+                    }
+                  ],
+                  "children": [
+                    {
+                      "name": "text",
+                      "active": true,
+                      "depth": 4,
+                      "draw_order": 0,
+                      "rt_fid": 224578716238308850,
+                      "go_fid": 1017697238300914,
+                      "unity_rect": {
+                        "x": 560.0,
+                        "y": 15.0,
+                        "w": 160.0,
+                        "h": 30.0
+                      },
+                      "local_rect": {
+                        "left": 560.0,
+                        "top": 675.0,
+                        "w": 160.0,
+                        "h": 30.0
+                      },
+                      "anchor_min": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchor_max": [
+                        0.5,
+                        0.5
+                      ],
+                      "pivot": [
+                        0.5,
+                        0.5
+                      ],
+                      "anchored_pos": [
+                        0.0,
+                        0.0
+                      ],
+                      "size_delta": [
+                        160.0,
+                        30.0
+                      ],
+                      "scale": [
+                        1.0,
+                        1.0
+                      ],
+                      "visual": [
+                        {
+                          "kind": "Text",
+                          "text": "New Text",
+                          "text_style": {
+                            "framework": "UGUI",
+                            "font_guid": "0000000000000000e000000000000000",
+                            "font_size": 24,
+                            "font_style": 0,
+                            "alignment": 4,
+                            "min_size": 2,
+                            "max_size": 40,
+                            "h_overflow": 0,
+                            "v_overflow": 0,
+                            "best_fit": true,
+                            "rich_text": true
+                          },
+                          "color": {
+                            "r": 0.0,
+                            "g": 0.0,
+                            "b": 0.0,
+                            "a": 1.0
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "btn_close",
+              "active": true,
+              "depth": 2,
+              "draw_order": 3,
+              "rt_fid": 224484755779879834,
+              "go_fid": 1733206282342372,
+              "unity_rect": {
+                "x": 1150.0,
+                "y": 620.0,
+                "w": 70.0,
+                "h": 70.0
+              },
+              "local_rect": {
+                "left": 1150.0,
+                "top": 30.0,
+                "w": 70.0,
+                "h": 70.0
+              },
+              "anchor_min": [
+                1.0,
+                1.0
+              ],
+              "anchor_max": [
+                1.0,
+                1.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                -15.0,
+                -15.0
+              ],
+              "size_delta": [
+                70.0,
+                70.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "c0701668ab24d05478ce7783f2ac4135",
+                    "asset": "Assets/rgtexture/ui/ui_btn4.asset",
+                    "name": "ui_btn4",
+                    "sprite_rect": {
+                      "x": 890.0,
+                      "y": 63.0,
+                      "w": 18.0,
+                      "h": 17.0
+                    },
+                    "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                    "border": {
+                      "left": 5.0,
+                      "bottom": 8.0,
+                      "right": 5.0,
+                      "top": 6.0
+                    },
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\ui_btn4.png"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "image_type": 1,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ],
+              "selectable": {
+                "type": "Button",
+                "transition": 1,
+                "interactable": true,
+                "color_tint": {
+                  "normal": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "highlighted": {
+                    "r": 0.9607843,
+                    "g": 0.9607843,
+                    "b": 0.9607843,
+                    "a": 1.0
+                  },
+                  "pressed": {
+                    "r": 0.78431374,
+                    "g": 0.78431374,
+                    "b": 0.78431374,
+                    "a": 1.0
+                  },
+                  "disabled": {
+                    "r": 0.78431374,
+                    "g": 0.78431374,
+                    "b": 0.78431374,
+                    "a": 0.5019608
+                  },
+                  "color_multiplier": 1.0,
+                  "fade_duration": 0.1
+                },
+                "target_graphic": {
+                  "fileID": 114353891062718048,
+                  "go_fid": 1733206282342372,
+                  "name": "btn_close"
+                }
+              },
+              "children": [
+                {
+                  "name": "Image",
+                  "active": true,
+                  "depth": 3,
+                  "draw_order": 0,
+                  "rt_fid": 224696919880513765,
+                  "go_fid": 1217368724061974,
+                  "unity_rect": {
+                    "x": 1170.0,
+                    "y": 643.0,
+                    "w": 30.0,
+                    "h": 30.0
+                  },
+                  "local_rect": {
+                    "left": 1170.0,
+                    "top": 47.0,
+                    "w": 30.0,
+                    "h": 30.0
+                  },
+                  "anchor_min": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchor_max": [
+                    0.5,
+                    0.5
+                  ],
+                  "pivot": [
+                    0.5,
+                    0.5
+                  ],
+                  "anchored_pos": [
+                    0.0,
+                    3.0
+                  ],
+                  "size_delta": [
+                    30.0,
+                    30.0
+                  ],
+                  "scale": [
+                    1.0,
+                    1.0
+                  ],
+                  "visual": [
+                    {
+                      "kind": "Image",
+                      "sprite": {
+                        "guid": "1725ba2d72dbed548b30f808287292e4",
+                        "asset": "Assets/rgtexture/ui/ui_50.asset",
+                        "name": "ui_50",
+                        "sprite_rect": {
+                          "x": 746.0,
+                          "y": 234.0,
+                          "w": 14.0,
+                          "h": 15.0
+                        },
+                        "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                        "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                        "needs_crop": true,
+                        "png": "docs\\layout\\crops\\ui_50.png"
+                      },
+                      "color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                      },
+                      "image_type": 0,
+                      "fill_method": 4,
+                      "fill_amount": 1.0,
+                      "fill_origin": 0,
+                      "preserve_aspect": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280,
+        "h": 720
+      }
+    }
+  ],
+  "degenerate_root_size": [
+    "window_draw"
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\rgprefab\\ui\\reload_clip.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "reload_clip",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 4099118695303065,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        0.0,
+        0.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "c1",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 4709867586078768,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.15,
+            0.15
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "9fc7b92417375f943b9492ef02ecb86b",
+                "asset": "Assets/rgtexture/texture_c5.asset",
+                "name": "texture_c5",
+                "sprite_rect": {
+                  "x": 70.0,
+                  "y": 0.0,
+                  "w": 64.0,
+                  "h": 64.0
+                },
+                "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+              },
+              "color": {
+                "r": 0.14509805,
+                "g": 0.14509805,
+                "b": 0.14509805,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "c1 (1)",
+          "active": true,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 4372920208702427,
+          "go_fid": 1724804207875695,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.15,
+            0.15
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "9fc7b92417375f943b9492ef02ecb86b",
+                "asset": "Assets/rgtexture/texture_c5.asset",
+                "name": "texture_c5",
+                "sprite_rect": {
+                  "x": 70.0,
+                  "y": 0.0,
+                  "w": 64.0,
+                  "h": 64.0
+                },
+                "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+              },
+              "color": {
+                "r": 0.14509805,
+                "g": 0.14509805,
+                "b": 0.14509805,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "c1 (2)",
+          "active": true,
+          "depth": 1,
+          "draw_order": 2,
+          "rt_fid": 4705390221481576,
+          "go_fid": 1618682377417806,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.15,
+            0.15
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "9fc7b92417375f943b9492ef02ecb86b",
+                "asset": "Assets/rgtexture/texture_c5.asset",
+                "name": "texture_c5",
+                "sprite_rect": {
+                  "x": 70.0,
+                  "y": 0.0,
+                  "w": 64.0,
+                  "h": 64.0
+                },
+                "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+              },
+              "color": {
+                "r": 0.14509805,
+                "g": 0.14509805,
+                "b": 0.14509805,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "c1 (3)",
+          "active": true,
+          "depth": 1,
+          "draw_order": 3,
+          "rt_fid": 4256069497284392,
+          "go_fid": 1703437598541787,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.15,
+            0.15
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "9fc7b92417375f943b9492ef02ecb86b",
+                "asset": "Assets/rgtexture/texture_c5.asset",
+                "name": "texture_c5",
+                "sprite_rect": {
+                  "x": 70.0,
+                  "y": 0.0,
+                  "w": 64.0,
+                  "h": 64.0
+                },
+                "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+              },
+              "color": {
+                "r": 0.14509805,
+                "g": 0.14509805,
+                "b": 0.14509805,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "c1 (4)",
+          "active": true,
+          "depth": 1,
+          "draw_order": 4,
+          "rt_fid": 4470112387431263,
+          "go_fid": 1884547391421755,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            0.15,
+            0.15
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "9fc7b92417375f943b9492ef02ecb86b",
+                "asset": "Assets/rgtexture/texture_c5.asset",
+                "name": "texture_c5",
+                "sprite_rect": {
+                  "x": 70.0,
+                  "y": 0.0,
+                  "w": 64.0,
+                  "h": 64.0
+                },
+                "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+              },
+              "color": {
+                "r": 0.14509805,
+                "g": 0.14509805,
+                "b": 0.14509805,
+                "a": 1.0
+              }
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280,
+        "h": 720
+      }
+    }
+  ],
+  "degenerate_root_size": [
+    "reload_clip"
+  ]
+}

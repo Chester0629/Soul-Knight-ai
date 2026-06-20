@@ -201,6 +201,19 @@ private:
     bool m_InSkill = false;       ///< in_skill (this+0x55); ultimate active flag.
 };
 
+/// Cooldown charge as 0..1 for the HUD (A3): `this_skill_time / skill_cd`, which is
+/// `1 - CooldownRemaining()/SkillCd()`; ready == 1.0, just-cast == 0.0. A pure
+/// derived read of the brain's existing getters (does NOT touch its tested timing
+/// logic). The single source the sim bridges into `CombatStats::skillCdProgress`.
+inline float SkillCooldownProgress(const CharSkillC01 &s) {
+    const float cd = s.SkillCd();
+    if (cd <= 0.0F) {
+        return 1.0F; // no cooldown configured -> always "ready"
+    }
+    const float p = 1.0F - s.CooldownRemaining() / cd;
+    return p < 0.0F ? 0.0F : (p > 1.0F ? 1.0F : p);
+}
+
 } // namespace Game
 
 #endif /* GAME_CHAR_SKILL_C01_HPP */

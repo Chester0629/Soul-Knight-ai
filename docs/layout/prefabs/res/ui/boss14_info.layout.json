@@ -1,0 +1,501 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\res\\ui\\boss14_info.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280.0,
+    "h": 720.0
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "boss14_info",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224587765826080250,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "anchor_min": [
+        0.5,
+        0.5
+      ],
+      "anchor_max": [
+        0.5,
+        0.5
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        1280.0,
+        720.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "bg",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224372920208702427,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            1280.0,
+            720.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "Image",
+          "active": true,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 224977153420339851,
+          "go_fid": 1724804207875695,
+          "unity_rect": {
+            "x": 848.0,
+            "y": 160.0,
+            "w": 300.0,
+            "h": 300.0
+          },
+          "local_rect": {
+            "left": 848.0,
+            "top": 260.0,
+            "w": 300.0,
+            "h": 300.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            358.0,
+            -50.0
+          ],
+          "size_delta": [
+            300.0,
+            300.0
+          ],
+          "scale": [
+            -3.0,
+            3.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "bffe50c87c9e34244bb62213bbf5504d",
+                "asset": "Assets/rgtexture/enemy/1-forest/boss_14.asset",
+                "name": "boss_14",
+                "sprite_rect": {
+                  "x": 0.026751041,
+                  "y": 0.07612038,
+                  "w": 49.946495,
+                  "h": 58.86415
+                },
+                "source_texture_guid": "7dc00d79a4114064b90b257c2154d1fb",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\enemy\\1-forest\\boss_14.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 0,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        },
+        {
+          "name": "mask1",
+          "active": true,
+          "depth": 1,
+          "draw_order": 2,
+          "rt_fid": 224002669891404536,
+          "go_fid": 1618682377417806,
+          "unity_rect": {
+            "x": -360.0,
+            "y": 590.0,
+            "w": 2000.0,
+            "h": 500.0
+          },
+          "local_rect": {
+            "left": -360.0,
+            "top": -370.0,
+            "w": 2000.0,
+            "h": 500.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            480.0
+          ],
+          "size_delta": [
+            2000.0,
+            500.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "mask2",
+          "active": true,
+          "depth": 1,
+          "draw_order": 3,
+          "rt_fid": 224632457200066912,
+          "go_fid": 1703437598541787,
+          "unity_rect": {
+            "x": -360.0,
+            "y": -370.0,
+            "w": 2000.0,
+            "h": 500.0
+          },
+          "local_rect": {
+            "left": -360.0,
+            "top": 590.0,
+            "w": 2000.0,
+            "h": 500.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            -480.0
+          ],
+          "size_delta": [
+            2000.0,
+            500.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "name": "Text1",
+          "active": true,
+          "depth": 1,
+          "draw_order": 4,
+          "rt_fid": 224642988549198181,
+          "go_fid": 1884547391421755,
+          "unity_rect": {
+            "x": -10.0,
+            "y": 343.0,
+            "w": 800.0,
+            "h": 240.0
+          },
+          "local_rect": {
+            "left": -10.0,
+            "top": 137.0,
+            "w": 800.0,
+            "h": 240.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            -250.0,
+            103.0
+          ],
+          "size_delta": [
+            800.0,
+            240.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "Grand\\nKinght",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "cde1e2c43e65a1c45b76b181f3a713ff",
+                "font_size": 150,
+                "font_style": 0,
+                "alignment": 4,
+                "min_size": 1,
+                "max_size": 200,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": true,
+                "rich_text": true,
+                "font": "pixel_bold"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "name": "boss_hp",
+          "active": true,
+          "depth": 1,
+          "draw_order": 5,
+          "rt_fid": 224875609422105747,
+          "go_fid": 1099118695303065,
+          "unity_rect": {
+            "x": 590.0,
+            "y": 790.0,
+            "w": 100.0,
+            "h": 100.0
+          },
+          "local_rect": {
+            "left": 590.0,
+            "top": -170.0,
+            "w": 100.0,
+            "h": 100.0
+          },
+          "anchor_min": [
+            0.5,
+            1.0
+          ],
+          "anchor_max": [
+            0.5,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.8
+          ],
+          "anchored_pos": [
+            0.0,
+            150.0
+          ],
+          "size_delta": [
+            100.0,
+            100.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "children": [
+            {
+              "name": "bg",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 224320256170494724,
+              "go_fid": 1243736805655561,
+              "unity_rect": {
+                "x": 435.0,
+                "y": 822.5,
+                "w": 410.0,
+                "h": 35.0
+              },
+              "local_rect": {
+                "left": 435.0,
+                "top": -137.5,
+                "w": 410.0,
+                "h": 35.0
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                410.0,
+                35.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ]
+            },
+            {
+              "name": "hp",
+              "active": true,
+              "depth": 2,
+              "draw_order": 1,
+              "rt_fid": 224089843903986396,
+              "go_fid": 1061268324235159,
+              "unity_rect": {
+                "x": 440.0,
+                "y": 827.5,
+                "w": 400.0,
+                "h": 25.0
+              },
+              "local_rect": {
+                "left": 440.0,
+                "top": -132.5,
+                "w": 400.0,
+                "h": 25.0
+              },
+              "anchor_min": [
+                0.0,
+                0.5
+              ],
+              "anchor_max": [
+                0.0,
+                0.5
+              ],
+              "pivot": [
+                0.0,
+                0.5
+              ],
+              "anchored_pos": [
+                -149.99998,
+                0.0
+              ],
+              "size_delta": [
+                400.0,
+                25.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "f08eb226d7c0898469d8ed5dbcebf0e1",
+                    "asset": "Assets/rgtexture/ui/ui_12.asset",
+                    "name": "ui_12",
+                    "sprite_rect": {
+                      "x": 512.0,
+                      "y": 374.0,
+                      "w": 64.0,
+                      "h": 7.0
+                    },
+                    "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\ui_12.png"
+                  },
+                  "color": {
+                    "r": 0.9117647,
+                    "g": 0.23464532,
+                    "b": 0.23464532,
+                    "a": 1.0
+                  },
+                  "image_type": 0,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280.0,
+        "h": 720.0
+      }
+    }
+  ]
+}

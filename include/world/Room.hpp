@@ -98,6 +98,21 @@ public:
      */
     bool Blocks(glm::vec2 pos, float radius) const;
 
+    /**
+     * @brief Tests whether a point lies inside the room's interior rectangle.
+     *
+     * Uses the axis-aligned interior rect (@ref Center +/- @ref Size / 2) -- the
+     * exact test GameScene uses to decide which room the player occupies. A
+     * position in a corridor (which lives in the inter-room margin, outside every
+     * room rect at the 41-cell block pitch) returns false for every room, so the
+     * clear-room door seal never arms while the player is in a corridor (seam 2:
+     * corridors are neutral).
+     *
+     * @param pos The world-space point to test.
+     * @return true if @p pos is within [Center - Size/2, Center + Size/2].
+     */
+    bool ContainsPoint(glm::vec2 pos) const;
+
 private:
     /// Construct directly from a prebuilt wall set (used by @ref FromRoomGen).
     Room(std::vector<Util::Collider> walls, glm::vec2 center, glm::vec2 size);

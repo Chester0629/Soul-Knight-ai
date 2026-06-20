@@ -1,0 +1,664 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\_RGScene\\Scene_Splash.unity",
+  "coordinate_space": "screen",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. screen_rect: Y-down, origin top-left (screenshot space), absolute on the canvas reference resolution.",
+  "roots": [
+    {
+      "name": "Canvas",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 42,
+      "go_fid": 11,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "screen_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        0.0,
+        0.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        1440.0,
+        810.0
+      ],
+      "scale": [
+        0.012345679,
+        0.012345679
+      ],
+      "children": [
+        {
+          "name": "Image",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 34,
+          "go_fid": 2,
+          "unity_rect": {
+            "x": -81.5,
+            "y": 39.5,
+            "w": 1443.0,
+            "h": 741.0
+          },
+          "screen_rect": {
+            "left": -81.5,
+            "top": -60.5,
+            "w": 1443.0,
+            "h": 741.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            50.0
+          ],
+          "size_delta": [
+            1443.0,
+            741.0
+          ],
+          "scale": [
+            0.5,
+            0.5
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "5e9bf00ef2587144882042bc33bdfec5",
+                "asset": "Assets/Sprite/chillyroom_LOGO2.asset",
+                "name": "chillyroom_LOGO2",
+                "sprite_rect": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "w": 942.0,
+                  "h": 335.0
+                },
+                "source_texture_guid": "32be2b7c1e09aae4d90d59bad5df1405",
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-title (Group 0)-1024x1024-fmt47.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\chillyroom_LOGO2.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 0,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": true
+            }
+          ]
+        },
+        {
+          "name": "Text",
+          "active": false,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 40,
+          "go_fid": 8,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 40.0
+          },
+          "screen_rect": {
+            "left": 0.0,
+            "top": 680.0,
+            "w": 1280.0,
+            "h": 40.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            20.0
+          ],
+          "size_delta": [
+            0.0,
+            40.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "To use the screen recording function, permission to write to external stroage is required.",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "0000000000000000e000000000000000",
+                "font_size": 24,
+                "font_style": 0,
+                "alignment": 1,
+                "min_size": 2,
+                "max_size": 40,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": false,
+                "rich_text": true
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ],
+          "localize": {
+            "term": "",
+            "localize_target": "Localize"
+          }
+        },
+        {
+          "name": "health_game_advice",
+          "active": false,
+          "depth": 1,
+          "draw_order": 2,
+          "rt_fid": 37,
+          "go_fid": 5,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.45,
+            "w": 1280.0,
+            "h": 175.9
+          },
+          "screen_rect": {
+            "left": 0.0,
+            "top": 543.65,
+            "w": 1280.0,
+            "h": 175.9
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            88.3999
+          ],
+          "size_delta": [
+            0.0,
+            175.9
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "children": [
+            {
+              "name": "info",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 39,
+              "go_fid": 7,
+              "unity_rect": {
+                "x": 140.0,
+                "y": 60.45,
+                "w": 1000.0,
+                "h": 120.0
+              },
+              "screen_rect": {
+                "left": 140.0,
+                "top": 539.55,
+                "w": 1000.0,
+                "h": 120.0
+              },
+              "anchor_min": [
+                0.5,
+                0.0
+              ],
+              "anchor_max": [
+                0.5,
+                0.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                120.0
+              ],
+              "size_delta": [
+                1000.0,
+                120.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "游戏健康忠告\\n抵制不良游戏，拒绝盗版游戏。 注意自我保护，谨防受骗上当。 适度游戏益脑，沉迷游戏伤身。 合理安排时间，享受健康生活。",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "0000000000000000e000000000000000",
+                    "font_size": 28,
+                    "font_style": 0,
+                    "alignment": 4,
+                    "min_size": 1,
+                    "max_size": 40,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": false,
+                    "rich_text": true
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            },
+            {
+              "name": "info (1)",
+              "active": true,
+              "depth": 2,
+              "draw_order": 1,
+              "rt_fid": 33,
+              "go_fid": 1,
+              "unity_rect": {
+                "x": 170.0,
+                "y": 0.45,
+                "w": 300.0,
+                "h": 60.0
+              },
+              "screen_rect": {
+                "left": 170.0,
+                "top": 659.55,
+                "w": 300.0,
+                "h": 60.0
+              },
+              "anchor_min": [
+                0.5,
+                0.0
+              ],
+              "anchor_max": [
+                0.5,
+                0.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                -320.0,
+                30.0
+              ],
+              "size_delta": [
+                300.0,
+                60.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "批准文号：粤新广数审[2017]273号\\n出版物号：ISBN 978-7-7979-6404-3",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "0000000000000000e000000000000000",
+                    "font_size": 16,
+                    "font_style": 0,
+                    "alignment": 3,
+                    "min_size": 1,
+                    "max_size": 40,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": false,
+                    "rich_text": true
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            },
+            {
+              "name": "info (2)",
+              "active": true,
+              "depth": 2,
+              "draw_order": 2,
+              "rt_fid": 41,
+              "go_fid": 9,
+              "unity_rect": {
+                "x": 480.0,
+                "y": 0.45,
+                "w": 320.0,
+                "h": 60.0
+              },
+              "screen_rect": {
+                "left": 480.0,
+                "top": 659.55,
+                "w": 320.0,
+                "h": 60.0
+              },
+              "anchor_min": [
+                0.5,
+                0.0
+              ],
+              "anchor_max": [
+                0.5,
+                0.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                30.0
+              ],
+              "size_delta": [
+                320.0,
+                60.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "著作权人：深圳市凉屋游戏科技有限公司\\r\\n出版单位：深圳青宝互动网络股份有限公司",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "0000000000000000e000000000000000",
+                    "font_size": 16,
+                    "font_style": 0,
+                    "alignment": 3,
+                    "min_size": 1,
+                    "max_size": 40,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": false,
+                    "rich_text": true
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            },
+            {
+              "name": "info (3)",
+              "active": true,
+              "depth": 2,
+              "draw_order": 3,
+              "rt_fid": 38,
+              "go_fid": 6,
+              "unity_rect": {
+                "x": 810.0,
+                "y": 0.45,
+                "w": 300.0,
+                "h": 60.0
+              },
+              "screen_rect": {
+                "left": 810.0,
+                "top": 659.55,
+                "w": 300.0,
+                "h": 60.0
+              },
+              "anchor_min": [
+                0.5,
+                0.0
+              ],
+              "anchor_max": [
+                0.5,
+                0.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                320.0,
+                30.0
+              ],
+              "size_delta": [
+                300.0,
+                60.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Text",
+                  "text": "运营单位：深圳市凉屋游戏科技有限公司\\r\\n游戏软著：2017SR015470",
+                  "text_style": {
+                    "framework": "UGUI",
+                    "font_guid": "0000000000000000e000000000000000",
+                    "font_size": 16,
+                    "font_style": 0,
+                    "alignment": 3,
+                    "min_size": 1,
+                    "max_size": 40,
+                    "h_overflow": 0,
+                    "v_overflow": 0,
+                    "best_fit": false,
+                    "rich_text": true
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "running_cat",
+          "active": true,
+          "depth": 1,
+          "draw_order": 3,
+          "rt_fid": 35,
+          "go_fid": 10,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "screen_rect": {
+            "left": 0.0,
+            "top": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "children": [
+            {
+              "name": "cat",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 36,
+              "go_fid": 3,
+              "unity_rect": {
+                "x": -135.0,
+                "y": 185.0,
+                "w": 150.0,
+                "h": 150.0
+              },
+              "screen_rect": {
+                "left": -135.0,
+                "top": 385.0,
+                "w": 150.0,
+                "h": 150.0
+              },
+              "anchor_min": [
+                0.5,
+                0.5
+              ],
+              "anchor_max": [
+                0.5,
+                0.5
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                -700.0,
+                -100.0
+              ],
+              "size_delta": [
+                150.0,
+                150.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "Image",
+                  "sprite": {
+                    "guid": "2558f3d8e1a8702499fd91899dc029b1",
+                    "asset": "Assets/Sprite/pet00_0.asset",
+                    "name": "pet00_0",
+                    "sprite_rect": {
+                      "x": 932.0761,
+                      "y": 0.07611847,
+                      "w": 24.84776,
+                      "h": 18.84776
+                    },
+                    "source_texture_guid": "70ef6936fc4cc7143b804432ae91fec1",
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-character01-1024x1024-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\pet00_0.png"
+                  },
+                  "color": {
+                    "r": 1.0,
+                    "g": 1.0,
+                    "b": 1.0,
+                    "a": 1.0
+                  },
+                  "image_type": 0,
+                  "fill_method": 4,
+                  "fill_amount": 1.0,
+                  "fill_origin": 0,
+                  "preserve_aspect": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280.0,
+        "h": 720.0,
+        "render_mode": 1,
+        "sorting_order": 0,
+        "sorting_layer_id": 0,
+        "override_sorting": 0,
+        "target_display": 0,
+        "plane_distance": 100.0,
+        "render_mode_name": "ScreenSpaceCamera",
+        "sorting_layer_name": "Default",
+        "nested": false
+      }
+    }
+  ],
+  "canvas_draw_order": [
+    0
+  ]
+}

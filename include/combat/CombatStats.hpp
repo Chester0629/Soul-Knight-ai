@@ -60,6 +60,13 @@ struct CombatStats {
     /// Energy-reload accumulator in seconds (RoleAttributePlayer.energy_time, +0x6c).
     float energyTime = 0.0F;
 
+    /// Skill cooldown charge as 0..1 for the HUD (ready = 1.0). NOT a combat value:
+    /// it is a per-frame DISPLAY bridge -- the sim writes it each step from the
+    /// player's CharSkill brain (A3 cooldown reach; the HUD/A4 reads + renders it).
+    /// FromCharacter does not set it (defaults ready); the continuation full-struct
+    /// copy carries it harmlessly (the sim recomputes it every step).
+    float skillCdProgress = 1.0F;
+
     /**
      * @brief Energy regen cadence: +1 energy every 2.0 real seconds.
      *

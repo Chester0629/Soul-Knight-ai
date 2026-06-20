@@ -1,0 +1,836 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280.0" height="720.0" viewBox="0 0 1280.0 720.0" font-family="monospace">
+<rect x="0" y="0" width="1280.0" height="720.0" fill="#1b1b22"/>
+<rect x="-640.0" y="360.0" width="1280.0" height="720.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="371.0" font-size="9" fill="#9fffc8">Canvas</text>
+<rect x="-640.0" y="360.0" width="1280.0" height="720.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="371.0" font-size="9" fill="#9fffc8">title_scene</text>
+<image x="-7.11" y="716.0" width="14.22" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/biaoti_01.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-7.11" y="716.0" width="14.22" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-5.11" y="727.0" font-size="9" fill="#9fffc8">background</text>
+<image x="-7.11" y="716.0" width="14.22" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/biaoti_02.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-7.11" y="716.0" width="14.22" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-5.11" y="727.0" font-size="9" fill="#9fffc8">weijin</text>
+<rect x="633.22" y="360.11" width="6.67" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="635.22" y="371.11" font-size="9" fill="#9fffc8">tips</text>
+<rect x="-7.11" y="1080.0" width="14.22" height="1.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-5.11" y="1091.0" font-size="9" fill="#9fffc8">button_bar</text>
+<image x="-4.72" y="1080.19" width="2.78" height="1.39" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn5.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-4.72" y="1080.19" width="2.78" height="1.39" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-2.7199999999999998" y="1091.19" font-size="9" fill="#9fffc8">btn_new_game</text>
+<rect x="-4.61" y="1080.42" width="2.56" height="0.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-2.6100000000000003" y="1091.42" font-size="9" fill="#9fffc8">Text</text>
+<image x="1.94" y="1080.19" width="2.78" height="1.39" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn5.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="1.94" y="1080.19" width="2.78" height="1.39" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="3.94" y="1091.19" font-size="9" fill="#9fffc8">btn_continue</text>
+<rect x="2.17" y="1080.42" width="2.33" height="0.5" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="4.17" y="1091.42" font-size="9" fill="#9fffc8">last_game</text>
+<rect x="2.17" y="1080.86" width="2.33" height="0.5" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="4.17" y="1091.86" font-size="9" fill="#9fffc8">level_info</text>
+<image x="-1.39" y="1080.19" width="2.78" height="1.39" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn5.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.39" y="1080.19" width="2.78" height="1.39" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6100000000000001" y="1091.19" font-size="9" fill="#9fffc8">btn_multiplayer</text>
+<rect x="-1.28" y="1080.42" width="2.56" height="0.61" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.72" y="1091.42" font-size="9" fill="#9fffc8">Text</text>
+<rect x="-1.28" y="1080.92" width="2.56" height="0.47" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.72" y="1091.92" font-size="9" fill="#9fffc8">Text (1)</text>
+<rect x="-3.33" y="722.5" width="6.67" height="0.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.33" y="733.5" font-size="9" fill="#9fffc8">tap_to_start</text>
+<image x="638.69" y="1078.81" width="0.83" height="0.83" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_108.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="638.69" y="1078.81" width="0.83" height="0.83" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="640.69" y="1089.81" font-size="9" fill="#9fffc8">button_facebook</text>
+<image x="638.69" y="1077.81" width="0.83" height="0.83" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_107.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="638.69" y="1077.81" width="0.83" height="0.83" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="640.69" y="1088.81" font-size="9" fill="#9fffc8">button_twitter</text>
+<rect x="-0.56" y="1081.11" width="1.11" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.44" y="1092.11" font-size="9" fill="#9fffc8">button_quit</text>
+<image x="-1.39" y="1080.64" width="2.78" height="1.39" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn4.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.39" y="1080.64" width="2.78" height="1.39" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6100000000000001" y="1091.64" font-size="9" fill="#9fffc8">btn_quit</text>
+<image x="-0.24" y="1081.07" width="0.49" height="0.52" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_79.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-0.24" y="1081.07" width="0.49" height="0.52" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.76" y="1092.07" font-size="9" fill="#9fffc8">Image</text>
+<image x="-640.0" y="724.0" width="1280.0" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_22.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-640.0" y="724.0" width="1280.0" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="735.0" font-size="9" fill="#9fffc8">window_language</text>
+<rect x="-638.0" y="726.22" width="1277.78" height="3.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="737.22" font-size="9" fill="#9fffc8">Grid</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_English</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Russian</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Chinese</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Chinese_TW</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_German</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_portuguess</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_French</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Japanese</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Korean</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Spanish</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-638.0" y="729.78" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-638.0" y="729.78" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-636.0" y="740.78" font-size="9" fill="#9fffc8">button_Polish</text>
+<rect x="-637.89" y="729.78" width="-0.22" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-635.89" y="740.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-640.0" y="724.0" width="1280.0" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_22.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-640.0" y="724.0" width="1280.0" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="735.0" font-size="9" fill="#9fffc8">window_key</text>
+<image x="-3.0" y="726.0" width="6.0" height="4.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.0" y="726.0" width="6.0" height="4.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.0" y="737.0" font-size="9" fill="#9fffc8">bg</text>
+<rect x="-1.78" y="726.11" width="3.56" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.21999999999999997" y="737.11" font-size="9" fill="#9fffc8">Text</text>
+<image x="-2.5" y="727.22" width="5.0" height="0.89" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_22.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-2.5" y="727.22" width="5.0" height="0.89" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-0.5" y="738.22" font-size="9" fill="#9fffc8">input</text>
+<rect x="-2.39" y="727.3" width="4.78" height="0.74" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-0.3900000000000001" y="738.3" font-size="9" fill="#9fffc8">Text</text>
+<image x="0.44" y="728.56" width="1.33" height="1.11" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="0.44" y="728.56" width="1.33" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="2.44" y="739.56" font-size="9" fill="#9fffc8">btn_yes</text>
+<image x="0.83" y="728.89" width="0.56" height="0.45" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_49.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="0.83" y="728.89" width="0.56" height="0.45" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="2.83" y="739.89" font-size="9" fill="#9fffc8">Image</text>
+<image x="-1.78" y="728.56" width="1.33" height="1.11" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn4.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.78" y="728.56" width="1.33" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.21999999999999997" y="739.56" font-size="9" fill="#9fffc8">btn_no</text>
+<image x="-1.35" y="728.85" width="0.49" height="0.52" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_50.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.35" y="728.85" width="0.49" height="0.52" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6499999999999999" y="739.85" font-size="9" fill="#9fffc8">Image</text>
+<image x="-640.0" y="724.0" width="1280.0" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_3.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-640.0" y="724.0" width="1280.0" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="735.0" font-size="9" fill="#9fffc8">window_multiplayer</text>
+<rect x="-0.56" y="727.44" width="1.11" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.44" y="738.44" font-size="9" fill="#9fffc8">tab0</text>
+<image x="-1.33" y="727.33" width="2.67" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.33" y="727.33" width="2.67" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6699999999999999" y="738.33" font-size="9" fill="#9fffc8">btn_bulid</text>
+<rect x="-1.18" y="727.56" width="2.36" height="0.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.8200000000000001" y="738.56" font-size="9" fill="#9fffc8">Text</text>
+<image x="-1.33" y="728.78" width="2.67" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.33" y="728.78" width="2.67" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6699999999999999" y="739.78" font-size="9" fill="#9fffc8">btn_join</text>
+<rect x="-1.18" y="729.0" width="2.36" height="0.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.8200000000000001" y="740.0" font-size="9" fill="#9fffc8">Text</text>
+<image x="-2.5" y="726.51" width="5.0" height="0.89" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_22.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-2.5" y="726.51" width="5.0" height="0.89" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-0.5" y="737.51" font-size="9" fill="#9fffc8">input</text>
+<rect x="-2.39" y="726.59" width="4.78" height="0.74" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-0.3900000000000001" y="737.59" font-size="9" fill="#9fffc8">Text</text>
+<image x="-1.33" y="728.73" width="2.67" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.33" y="728.73" width="2.67" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6699999999999999" y="739.73" font-size="9" fill="#9fffc8">btn_build</text>
+<image x="-0.28" y="729.17" width="0.56" height="0.45" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_49.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-0.28" y="729.17" width="0.56" height="0.45" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.72" y="740.17" font-size="9" fill="#9fffc8">Image</text>
+<image x="0.28" y="727.79" width="0.56" height="0.56" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_22.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="0.28" y="727.79" width="0.56" height="0.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="2.2800000000000002" y="738.79" font-size="9" fill="#9fffc8">Background</text>
+<image x="0.28" y="727.84" width="0.56" height="0.45" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_49.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="0.28" y="727.84" width="0.56" height="0.45" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="2.2800000000000002" y="738.84" font-size="9" fill="#9fffc8">Checkmark</text>
+<image x="-0.9" y="727.77" width="0.69" height="0.59" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_11.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-0.9" y="727.77" width="0.69" height="0.59" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.1" y="738.77" font-size="9" fill="#9fffc8">Image</text>
+<rect x="-2.44" y="726.11" width="4.89" height="3.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-0.43999999999999995" y="737.11" font-size="9" fill="#9fffc8">grid</text>
+<image x="-1.33" y="730.29" width="2.67" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn4.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-1.33" y="730.29" width="2.67" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="0.6699999999999999" y="741.29" font-size="9" fill="#9fffc8">btn_no</text>
+<image x="-0.24" y="730.69" width="0.49" height="0.52" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_50.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-0.24" y="730.69" width="0.49" height="0.52" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="1.76" y="741.69" font-size="9" fill="#9fffc8">Image</text>
+<image x="636.11" y="725.11" width="3.56" height="5.78" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_63.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="636.11" y="725.11" width="3.56" height="5.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="638.11" y="736.11" font-size="9" fill="#9fffc8">info</text>
+<image x="637.4" y="725.71" width="0.97" height="0.8" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_17.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="637.4" y="725.71" width="0.97" height="0.8" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="639.4" y="736.71" font-size="9" fill="#9fffc8">img1</text>
+<rect x="636.27" y="727.0" width="3.24" height="0.89" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="638.27" y="738.0" font-size="9" fill="#9fffc8">text1</text>
+<image x="637.4" y="728.3" width="0.97" height="0.52" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_70.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="637.4" y="728.3" width="0.97" height="0.52" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="639.4" y="739.3" font-size="9" fill="#9fffc8">img2</text>
+<rect x="636.27" y="729.19" width="3.24" height="1.61" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="638.27" y="740.19" font-size="9" fill="#9fffc8">text2</text>
+<rect x="637.78" y="731.34" width="1.78" height="0.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="639.78" y="742.34" font-size="9" fill="#9fffc8">version</text>
+<image x="-428.79" y="727.38" width="263.64" height="3.45" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_63.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-428.79" y="727.38" width="263.64" height="3.45" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-426.79" y="738.38" font-size="9" fill="#9fffc8">info_tips</text>
+<rect x="-428.63" y="727.56" width="263.32" height="1.12" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-426.63" y="738.56" font-size="9" fill="#9fffc8">text1</text>
+<rect x="-428.63" y="728.67" width="263.32" height="1.34" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-426.63" y="739.67" font-size="9" fill="#9fffc8">text2</text>
+<image x="-640.0" y="724.0" width="1280.0" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_3.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-640.0" y="724.0" width="1280.0" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.0" y="735.0" font-size="9" fill="#9fffc8">window_cloudsave</text>
+<rect x="635.17" y="724.2" width="4.67" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="637.17" y="735.2" font-size="9" fill="#9fffc8">tips</text>
+<rect x="635.17" y="724.2" width="4.67" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="637.17" y="735.2" font-size="9" fill="#9fffc8">tips_1</text>
+<rect x="70.61" y="724.0" width="6.23" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="72.61" y="735.0" font-size="9" fill="#9fffc8">save</text>
+<rect x="73.34" y="730.12" width="2.44" height="0.87" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="75.34" y="741.12" font-size="9" fill="#9fffc8">Text</text>
+<rect x="73.01" y="726.94" width="3.11" height="2.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="75.01" y="737.94" font-size="9" fill="#9fffc8">text</text>
+<rect x="76.83" y="724.0" width="6.22" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="78.83" y="735.0" font-size="9" fill="#9fffc8">load</text>
+<rect x="77.89" y="730.17" width="2.44" height="0.78" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="79.89" y="741.17" font-size="9" fill="#9fffc8">Text</text>
+<rect x="77.56" y="726.94" width="3.11" height="2.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="79.56" y="737.94" font-size="9" fill="#9fffc8">text_has_save</text>
+<image x="-3.56" y="726.33" width="8.89" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_63.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="726.33" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="737.33" font-size="9" fill="#9fffc8">cloud_data</text>
+<rect x="-3.56" y="726.03" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="737.03" font-size="9" fill="#9fffc8">title</text>
+<rect x="-3.56" y="726.33" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="737.33" font-size="9" fill="#9fffc8">picPanel</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">money</text>
+<image x="-3.83" y="727.48" width="0.56" height="0.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_53.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.83" y="727.48" width="0.56" height="0.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.83" y="738.48" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.47" width="0.0" height="0.17" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.47" font-size="9" fill="#9fffc8">text</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_0.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_3.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_4</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_4.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_5</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_5.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_6</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_6.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_7</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_7.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_8</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_8.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_9</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_9.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_10</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_10.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">role_11</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_11.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="727.52" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.52" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="727.67" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="727.67" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.67" font-size="9" fill="#9fffc8">star_4</text>
+<image x="-3.56" y="728.22" width="8.89" height="1.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_63.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="728.22" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="739.22" font-size="9" fill="#9fffc8">local_data</text>
+<rect x="-3.56" y="727.92" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="738.92" font-size="9" fill="#9fffc8">title</text>
+<rect x="-3.56" y="728.22" width="8.89" height="1.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="739.22" font-size="9" fill="#9fffc8">picPanel</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">money</text>
+<image x="-3.83" y="729.37" width="0.56" height="0.33" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_53.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.83" y="729.37" width="0.56" height="0.33" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.83" y="740.37" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.36" width="0.0" height="0.17" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.36" font-size="9" fill="#9fffc8">text</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_0.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_3.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_4</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_4.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_5</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_5.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_6</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_6.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_7</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_7.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_8</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_8.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_9</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_9.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_10</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_10.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">role_11</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.58" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui2_11.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.58" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">img</text>
+<rect x="-3.56" y="729.41" width="0.0" height="0.15" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.41" font-size="9" fill="#9fffc8">stars</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_0</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_1</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_2</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_3</text>
+<image x="-3.56" y="729.56" width="0.0" height="0.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_47.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-3.56" y="729.56" width="0.0" height="0.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-1.56" y="740.56" font-size="9" fill="#9fffc8">star_4</text>
+<image x="-639.67" y="1078.74" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-639.67" y="1078.74" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-637.67" y="1089.74" font-size="9" fill="#9fffc8">button_setting</text>
+<image x="-639.42" y="1078.95" width="0.62" height="0.59" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_93.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-639.42" y="1078.95" width="0.62" height="0.59" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-637.42" y="1089.95" font-size="9" fill="#9fffc8">Image</text>
+<image x="-639.67" y="1077.5" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-639.67" y="1077.5" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-637.67" y="1088.5" font-size="9" fill="#9fffc8">button_ktplay</text>
+<image x="-639.46" y="1077.64" width="0.69" height="0.62" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_109.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-639.46" y="1077.64" width="0.69" height="0.62" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-637.46" y="1088.64" font-size="9" fill="#9fffc8">Image</text>
+<image x="-643.7" y="716.0" width="2.61" height="8.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_3.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-643.7" y="716.0" width="2.61" height="8.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-641.7" y="727.0" font-size="9" fill="#9fffc8">window_setting</text>
+<image x="-640.53" y="716.44" width="6.67" height="1.67" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/biaoti03.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-640.53" y="716.44" width="6.67" height="1.67" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.53" y="727.44" font-size="9" fill="#9fffc8">title</text>
+<image x="-642.48" y="722.72" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn2.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="722.72" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="733.72" font-size="9" fill="#9fffc8">Google_Sign_in</text>
+<image x="-642.19" y="722.84" width="0.52" height="0.66" xlink:href="file:///D:/Soul%20Knight/_reverse/extracted/assets/rgtexture/games_controller_white.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.19" y="722.84" width="0.52" height="0.66" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.19" y="733.84" font-size="9" fill="#9fffc8">Image</text>
+<image x="-642.48" y="719.06" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="719.06" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="730.06" font-size="9" fill="#9fffc8">button_langue</text>
+<image x="-642.22" y="719.2" width="0.59" height="0.62" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_59.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.22" y="719.2" width="0.59" height="0.62" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.22" y="730.2" font-size="9" fill="#9fffc8">Image</text>
+<image x="-642.48" y="721.5" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="721.5" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="732.5" font-size="9" fill="#9fffc8">button_bgm</text>
+<image x="-642.12" y="721.72" width="0.38" height="0.56" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_7.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.12" y="721.72" width="0.38" height="0.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.12" y="732.72" font-size="9" fill="#9fffc8">Image</text>
+<image x="-642.48" y="720.28" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="720.28" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="731.28" font-size="9" fill="#9fffc8">button_effect</text>
+<image x="-642.17" y="720.53" width="0.49" height="0.49" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_8.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.17" y="720.53" width="0.49" height="0.49" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.17" y="731.53" font-size="9" fill="#9fffc8">Image</text>
+<image x="-642.17" y="719.25" width="0.49" height="0.52" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_83.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.17" y="719.25" width="0.49" height="0.52" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.17" y="730.25" font-size="9" fill="#9fffc8">Image</text>
+<rect x="-640.59" y="718.78" width="3.67" height="1.11" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-638.59" y="729.78" font-size="9" fill="#9fffc8">Text</text>
+<image x="-642.48" y="717.83" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="717.83" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="728.83" font-size="9" fill="#9fffc8">button_key</text>
+<image x="-642.22" y="718.01" width="0.59" height="0.56" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_101.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.22" y="718.01" width="0.59" height="0.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.22" y="729.01" font-size="9" fill="#9fffc8">Image</text>
+<image x="-642.48" y="716.59" width="1.11" height="1.0" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_btn1.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.48" y="716.59" width="1.11" height="1.0" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.48" y="727.59" font-size="9" fill="#9fffc8">button_cloud_save</text>
+<image x="-642.22" y="716.77" width="0.59" height="0.56" xlink:href="file:///D:/Soul%20Knight/Soul-Knight-ai/docs/layout/crops/ui_115.png" preserveAspectRatio="none" opacity="0.95"/>
+<rect x="-642.22" y="716.77" width="0.59" height="0.56" fill="none" stroke="#3fe07f" stroke-width="1" opacity="0.5"/>
+<text x="-640.22" y="727.77" font-size="9" fill="#9fffc8">Image</text>
+</svg>

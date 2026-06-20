@@ -1,0 +1,139 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\res\\ui\\ui_loading.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "ui_loading",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224724804207875695,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        1.0,
+        1.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "Image",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224061268324235159,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 540.0,
+            "y": 260.0,
+            "w": 200.0,
+            "h": 200.0
+          },
+          "local_rect": {
+            "left": 540.0,
+            "top": 260.0,
+            "w": 200.0,
+            "h": 200.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            200.0,
+            200.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "b3f4fa5ae78a1fd489e2cea63073ca36",
+                "asset": "Assets/rgtexture/pet/pet00_0.asset",
+                "name": "pet00_0",
+                "sprite_rect": {
+                  "x": 932.0761,
+                  "y": 0.07611847,
+                  "w": 24.84776,
+                  "h": 18.84776
+                },
+                "source_texture_guid": "01d7b1d27b0db6240858afb895e99d8b",
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-character01-1024x1024-fmt13_0.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\pet00_0.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 0,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280,
+        "h": 720
+      }
+    }
+  ],
+  "degenerate_root_size": [
+    "ui_loading"
+  ]
+}

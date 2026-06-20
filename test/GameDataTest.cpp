@@ -67,10 +67,13 @@ TEST(GameDataTest, PlayerTemplateStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);
     const auto &p = gd.PlayerTemplate();
+    // c01 starting stats 6/5/180 (the real values; the JSON previously carried 3/130
+    // placeholders -- per its own "_note: per-character stat overrides pending").
     EXPECT_EQ(p.maxHp, 6);
-    EXPECT_EQ(p.maxArmor, 3);
-    EXPECT_EQ(p.maxEnergy, 130);
-    EXPECT_EQ(p.energy, 130);
+    EXPECT_EQ(p.maxArmor, 5);
+    EXPECT_EQ(p.armor, 5);
+    EXPECT_EQ(p.maxEnergy, 180);
+    EXPECT_EQ(p.energy, 180);
     EXPECT_EQ(p.atk, 5);
     EXPECT_FLOAT_EQ(p.speed, 6.5F);
     EXPECT_FLOAT_EQ(p.skillCd, 2.5F);

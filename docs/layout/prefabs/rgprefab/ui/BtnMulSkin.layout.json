@@ -1,0 +1,203 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\rgprefab\\ui\\BtnMulSkin.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 150.0,
+    "h": 150.0
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "BtnMulSkin",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 224724804207875695,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 150.0,
+        "h": 150.0
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 150.0,
+        "h": 150.0
+      },
+      "anchor_min": [
+        0.0,
+        1.0
+      ],
+      "anchor_max": [
+        0.0,
+        1.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        255.0,
+        -90.0
+      ],
+      "size_delta": [
+        150.0,
+        150.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "visual": [
+        {
+          "kind": "Image",
+          "sprite": {
+            "guid": "9fc7b92417375f943b9492ef02ecb86b",
+            "asset": "Assets/rgtexture/texture_c5.asset",
+            "name": "texture_c5",
+            "sprite_rect": {
+              "x": 70.0,
+              "y": 0.0,
+              "w": 64.0,
+              "h": 64.0
+            },
+            "source_texture_guid": "6d55121a282355a458065b92a891b6bf",
+            "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\texture_c5.png"
+          },
+          "color": {
+            "r": 0.1254902,
+            "g": 0.1254902,
+            "b": 0.1254902,
+            "a": 1.0
+          },
+          "image_type": 0,
+          "fill_method": 4,
+          "fill_amount": 1.0,
+          "fill_origin": 0,
+          "preserve_aspect": false
+        }
+      ],
+      "selectable": {
+        "type": "Button",
+        "transition": 1,
+        "interactable": true,
+        "color_tint": {
+          "normal": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0,
+            "a": 1.0
+          },
+          "highlighted": {
+            "r": 0.9607843,
+            "g": 0.9607843,
+            "b": 0.9607843,
+            "a": 1.0
+          },
+          "pressed": {
+            "r": 0.78431374,
+            "g": 0.78431374,
+            "b": 0.78431374,
+            "a": 1.0
+          },
+          "disabled": {
+            "r": 0.78431374,
+            "g": 0.78431374,
+            "b": 0.78431374,
+            "a": 0.5019608
+          },
+          "color_multiplier": 1.0,
+          "fade_duration": 0.1
+        },
+        "target_graphic": {
+          "fileID": 114703437598541787,
+          "go_fid": 1709254077376921,
+          "name": "BtnMulSkin"
+        }
+      },
+      "children": [
+        {
+          "name": "Image",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 224061268324235159,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": -25.0,
+            "y": -25.0,
+            "w": 200.0,
+            "h": 200.0
+          },
+          "local_rect": {
+            "left": -25.0,
+            "top": -25.0,
+            "w": 200.0,
+            "h": 200.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            200.0,
+            200.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "1071a294e20043d47933440527bed41f",
+                "asset": "Assets/rgtexture/character/c01_4.asset",
+                "name": "c01_4",
+                "sprite_rect": {
+                  "x": 607.0761,
+                  "y": 643.05133,
+                  "w": 24.92388,
+                  "h": 28.921932
+                },
+                "source_texture_guid": "01d7b1d27b0db6240858afb895e99d8b",
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-character01-1024x1024-fmt13_0.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\c01_4.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 0,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 150.0,
+        "h": 150.0
+      }
+    }
+  ]
+}

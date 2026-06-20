@@ -33,6 +33,21 @@ struct WeaponDef {
     float angle = 0.0F;
 };
 
+/**
+ * @brief Energy spent per shot for @p def: `WeaponDef.consume`, floored at 1.
+ *
+ * The SINGLE source of the player firing-gate + energy-spend cost (`GameScene`'s
+ * `m_WeaponEnergyCost`). A `consume` of 0 (or absent/negative) still costs 1 --
+ * mirroring the live equip sites. This is the DERIVE rule a carried weapon must be
+ * re-equipped THROUGH on a new floor (never carried as a raw int, never left at the
+ * default 1): RUN_LOOP_PLAN D3. The live sim weapon path (`Sim::WeaponController`)
+ * never reads `consume`; the only other reader is the scene-dead `WeaponInstance`
+ * (its own test), so this cost is definitively scene-owned.
+ */
+inline int WeaponEnergyCost(const WeaponDef &def) {
+    return def.consume > 0 ? def.consume : 1;
+}
+
 /// Bullet definition (from Resources/data/bullets.json).
 struct BulletDef {
     std::string id;

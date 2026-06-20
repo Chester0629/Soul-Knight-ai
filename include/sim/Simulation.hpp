@@ -9,6 +9,7 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/CharSkillC01.hpp"
 #include "combat/CombatStats.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
@@ -62,6 +63,11 @@ public:
     void SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed);
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
     void EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId, int seed);
+    /// Build (or rebuild) the player's skill brain (A3: fixed c01). The skill is a
+    /// SINGLE owned member, parallel to the weapon -- not an entity, not in any list,
+    /// not via BrainFactory (a bespoke per-hero brain, no base class). @p skillCd /
+    /// @p inSkillTime come from the CharacterDef stat sheet.
+    void SetPlayerSkill(float skillCd, float inSkillTime);
     /// Seed the player's combat vitals (enemy bullets damage these; read back via PlayerStats).
     void SetPlayerStats(const Game::CombatStats &stats);
 
@@ -76,6 +82,9 @@ public:
     EntityView BossView() const;
     const Game::CombatStats &PlayerStats() const { return m_PlayerStats; }
     int PlayerShotsLastAdvance() const { return m_PlayerShotsLastAdvance; }
+    /// The player's skill brain (A3), or empty if SetPlayerSkill was never called.
+    /// Exposed for inspection/tests (InSkill / SkillReady / cooldown getters).
+    const std::optional<Game::CharSkillC01> &PlayerSkill() const { return m_Skill; }
     /// Move out the queued anim/sfx events (empty this cycle; emission is deferred).
     std::vector<SimEvent> DrainEvents();
 
@@ -83,6 +92,7 @@ private:
     void Step();                              // one fixed tick (built across Tasks 3-7).
     void WakeByRoom();                         // awake = (roomId == m_Input.playerRoomId).
     void TickWeapon();                         // Task 3.
+    void TickSkill();                          // A3: activate + cooldown + publish progress.
     void EmitAttackEvents();                   // A: per-controller fire -> AnimTrigger "attack".
     void MoveControllers();                    // Task 5/6.
     void DrainFireIntents();                   // Task 3.
@@ -107,6 +117,9 @@ private:
     std::vector<std::unique_ptr<EnemyController>> m_Enemies;
     std::unique_ptr<BossController> m_Boss;
     std::optional<WeaponController> m_Weapon;
+    /// The player's skill brain (A3: fixed c01). A SINGLE owned member, parallel to
+    /// m_Weapon -- not an entity, not in m_Enemies, not via BrainFactory.
+    std::optional<Game::CharSkillC01> m_Skill;
 
     Game::CombatStats m_PlayerStats{};
     WorldInputs m_Input{};

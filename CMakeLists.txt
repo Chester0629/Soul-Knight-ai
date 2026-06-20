@@ -101,3 +101,79 @@ if(TEST_FILES)
     )
     gtest_discover_tests(SoulKnightTests)
 endif()
+
+# --- Standalone HUD bar render-capability check (Phase 2, Path A) ---
+# Independent GL verification entry point (NOT wired into Hud.cpp/GameScene).
+# Boots a real PTSD context, asserts the baked PNG size contract via
+# Util::Image::GetSize(), renders full/naive-half/compensated-half bars, reads the
+# framebuffer back to measure the fill edges, and saves a screenshot. Opt-in;
+# needs a desktop GL display:
+#   cmake --build build --config Debug --target hud_bar_check
+#   ./build/Debug/hud_bar_check
+add_executable(hud_bar_check EXCLUDE_FROM_ALL
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/hud_bar_check.cpp
+    ${SRC_DIR}/ui/HudLayout.cpp
+)
+if(MSVC)
+    target_compile_options(hud_bar_check PRIVATE /W4)
+else()
+    target_compile_options(hud_bar_check PRIVATE -Wall -Wextra -pedantic)
+endif()
+target_compile_definitions(hud_bar_check PRIVATE
+    RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+target_include_directories(hud_bar_check SYSTEM PRIVATE ${DEPENDENCY_INCLUDE_DIRS})
+target_include_directories(hud_bar_check PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/PTSD/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(hud_bar_check
+    SDL2::SDL2main
+    PTSD
+)
+
+# --- Standalone end-to-end check of the REAL Game::Hud (Phase 3, a4 wiring) ---
+# Drives the actual wired Hud class (loads Canvas.layout.json, builds bg + 3 tinted
+# bars + numbers) and renders it at full/half/quarter vitals to prove the
+# left-anchored bar shrink in the real class + save screenshots. Opt-in; needs GL:
+#   cmake --build build --config Debug --target hud_check
+#   ./build/Debug/hud_check
+add_executable(hud_check EXCLUDE_FROM_ALL
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/hud_check.cpp
+    ${SRC_DIR}/ui/Hud.cpp
+    ${SRC_DIR}/ui/HudLayout.cpp
+)
+if(MSVC)
+    target_compile_options(hud_check PRIVATE /W4)
+else()
+    target_compile_options(hud_check PRIVATE -Wall -Wextra -pedantic)
+endif()
+target_compile_definitions(hud_check PRIVATE
+    RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+target_include_directories(hud_check SYSTEM PRIVATE ${DEPENDENCY_INCLUDE_DIRS})
+target_include_directories(hud_check PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/PTSD/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(hud_check
+    SDL2::SDL2main
+    PTSD
+)
+
+# --- Warning-suppression define, scoped to the game-layer targets only ---
+# MSVC 19.44+ (VS 2022 17.14) deprecated stdext::checked_array_iterator (STL4043),
+# which the vendored spdlog/fmt and std::copy-into-raw-pointer instantiate. Under
+# /W4 that floods every logger-using TU with C4996 (verified: an untouched
+# src/entities/Player.cpp emits 225). This is MSVC's documented suppression for
+# exactly that deprecation -- notice-only, zero codegen impact. It is applied
+# PER-TARGET to only the targets we own and need clean (game + tests + tools that
+# compile our TUs against vendored spdlog/fmt), NOT globally: a global
+# add_compile_definitions would change the compile of vendored PTSD + every fetched
+# dep + any future target, which is out of scope for keeping OUR builds clean. The
+# vendored PTSD library keeps its own (pre-existing) warning behaviour untouched.
+# Remove once spdlog/fmt drop the deprecated API.
+foreach(_clean_target SoulKnight SoulKnightTests hud_bar_check hud_check)
+    if(TARGET ${_clean_target})
+        target_compile_definitions(${_clean_target} PRIVATE
+            _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING)
+    endif()
+endforeach()

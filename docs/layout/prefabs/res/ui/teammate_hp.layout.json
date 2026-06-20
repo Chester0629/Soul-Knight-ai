@@ -1,0 +1,206 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\res\\ui\\teammate_hp.prefab",
+  "coordinate_space": "prefab_local",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. local_rect: Y-down, origin top-left, RELATIVE TO THE PREFAB ROOT (no absolute screen position exists for a Canvas-less prefab; the root's own anchors/pivot/anchoredPosition/sizeDelta/scale are kept verbatim so a caller can place it once its host canvas is known).",
+  "roots": [
+    {
+      "name": "teammate_hp",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 4618682377417806,
+      "go_fid": 1709254077376921,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "local_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280,
+        "h": 720
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        0.0,
+        0.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        0.0
+      ],
+      "size_delta": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "children": [
+        {
+          "name": "bar",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 4061268324235159,
+          "go_fid": 1730242686860875,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "local_rect": {
+            "left": 0.0,
+            "top": 720.0,
+            "w": 0.0,
+            "h": 0.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            0.0,
+            0.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.5,
+            1.5
+          ],
+          "visual": [
+            {
+              "kind": "SpriteRenderer",
+              "sprite": {
+                "guid": "34b16b2b32e43a44e98ab84c8fcaebf2",
+                "asset": "Assets/rgtexture/ui/ui_105.asset",
+                "name": "ui_105",
+                "sprite_rect": {
+                  "x": 577.0,
+                  "y": 304.0,
+                  "w": 42.0,
+                  "h": 13.0
+                },
+                "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                "needs_crop": true,
+                "png": "docs\\layout\\crops\\ui_105.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ],
+          "children": [
+            {
+              "name": "hp",
+              "active": true,
+              "depth": 2,
+              "draw_order": 0,
+              "rt_fid": 4044625135789424,
+              "go_fid": 1724804207875695,
+              "unity_rect": {
+                "x": 0.0,
+                "y": 0.0,
+                "w": 0.0,
+                "h": 0.0
+              },
+              "local_rect": {
+                "left": 0.0,
+                "top": 720.0,
+                "w": 0.0,
+                "h": 0.0
+              },
+              "anchor_min": [
+                0.0,
+                0.0
+              ],
+              "anchor_max": [
+                0.0,
+                0.0
+              ],
+              "pivot": [
+                0.5,
+                0.5
+              ],
+              "anchored_pos": [
+                0.0,
+                0.0
+              ],
+              "size_delta": [
+                0.0,
+                0.0
+              ],
+              "scale": [
+                1.0,
+                1.0
+              ],
+              "visual": [
+                {
+                  "kind": "SpriteRenderer",
+                  "sprite": {
+                    "guid": "2860c30e4ce3f244c9de6a0c248e6960",
+                    "asset": "Assets/rgtexture/ui/ui_106.asset",
+                    "name": "ui_106",
+                    "sprite_rect": {
+                      "x": 852.0,
+                      "y": 163.0,
+                      "w": 26.0,
+                      "h": 7.0
+                    },
+                    "source_texture_guid": "a59a9b3e9b6f2ff428021b0e887e8130",
+                    "atlas_png": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\Texture2D\\SpriteAtlasTexture-ui (Group 0)-1024x512-fmt13.png",
+                    "needs_crop": true,
+                    "png": "docs\\layout\\crops\\ui_106.png"
+                  },
+                  "color": {
+                    "r": 0.8235294,
+                    "g": 0.24705882,
+                    "b": 0.2509804,
+                    "a": 1.0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280,
+        "h": 720
+      }
+    }
+  ],
+  "degenerate_root_size": [
+    "teammate_hp"
+  ]
+}

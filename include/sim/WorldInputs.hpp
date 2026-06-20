@@ -13,6 +13,7 @@ struct WorldInputs {
     glm::vec2 aimDir{1.0F, 0.0F}; ///< unit aim (shell normalizes).
     bool playerAlive = true;
     bool firing = false;
+    bool skill = false; ///< skill/ultimate button this frame (edge-triggered by the shell).
     int playerRoomId = -1; ///< wakes controllers whose roomId matches.
 };
 

@@ -88,4 +88,10 @@ bool Room::Blocks(glm::vec2 pos, float radius) const {
     return false;
 }
 
+bool Room::ContainsPoint(glm::vec2 pos) const {
+    const glm::vec2 hs = m_Size * 0.5f;
+    return pos.x >= m_Center.x - hs.x && pos.x <= m_Center.x + hs.x &&
+           pos.y >= m_Center.y - hs.y && pos.y <= m_Center.y + hs.y;
+}
+
 } // namespace Game

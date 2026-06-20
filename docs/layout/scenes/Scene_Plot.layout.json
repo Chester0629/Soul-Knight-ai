@@ -1,0 +1,264 @@
+{
+  "source": "D:\\Soul Knight\\_reverse\\asset soul\\ExportedProject\\Assets\\_RGScene\\Scene_Plot.unity",
+  "coordinate_space": "screen",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "note": "unity_rect: Y-up, origin bottom-left. screen_rect: Y-down, origin top-left (screenshot space), absolute on the canvas reference resolution.",
+  "roots": [
+    {
+      "name": "Canvas",
+      "active": true,
+      "depth": 0,
+      "draw_order": 0,
+      "rt_fid": 21,
+      "go_fid": 4,
+      "unity_rect": {
+        "x": 0.0,
+        "y": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "screen_rect": {
+        "left": 0.0,
+        "top": 0.0,
+        "w": 1280.0,
+        "h": 720.0
+      },
+      "anchor_min": [
+        0.0,
+        0.0
+      ],
+      "anchor_max": [
+        0.0,
+        0.0
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchored_pos": [
+        0.0,
+        -3.2602344
+      ],
+      "size_delta": [
+        30719.996,
+        17279.998
+      ],
+      "scale": [
+        0.00057870377,
+        0.00057870377
+      ],
+      "children": [
+        {
+          "name": "Image",
+          "active": true,
+          "depth": 1,
+          "draw_order": 0,
+          "rt_fid": 20,
+          "go_fid": 2,
+          "unity_rect": {
+            "x": 428.5,
+            "y": 412.0,
+            "w": 423.0,
+            "h": 238.0
+          },
+          "screen_rect": {
+            "left": 428.5,
+            "top": 70.0,
+            "w": 423.0,
+            "h": 238.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            171.0
+          ],
+          "size_delta": [
+            423.0,
+            238.0
+          ],
+          "scale": [
+            1.5,
+            1.5
+          ],
+          "visual": [
+            {
+              "kind": "Image",
+              "sprite": {
+                "guid": "a79b39f60edff574994ef85a7c46d5ac",
+                "asset": "Assets/rgtexture/juqing/juqing01.asset",
+                "name": "juqing01",
+                "sprite_rect": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "w": 846.0,
+                  "h": 476.0
+                },
+                "source_texture_guid": "806b7138b9efb7648bbe31d565c6afd0",
+                "png": "D:\\Soul Knight\\_reverse\\extracted\\assets\\rgtexture\\juqing\\juqing01.png"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              },
+              "image_type": 0,
+              "fill_method": 4,
+              "fill_amount": 1.0,
+              "fill_origin": 0,
+              "preserve_aspect": false
+            }
+          ]
+        },
+        {
+          "name": "Text",
+          "active": true,
+          "depth": 1,
+          "draw_order": 1,
+          "rt_fid": 22,
+          "go_fid": 6,
+          "unity_rect": {
+            "x": 240.0,
+            "y": 48.0,
+            "w": 800.0,
+            "h": 300.0
+          },
+          "screen_rect": {
+            "left": 240.0,
+            "top": 372.0,
+            "w": 800.0,
+            "h": 300.0
+          },
+          "anchor_min": [
+            0.5,
+            0.5
+          ],
+          "anchor_max": [
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            -162.0
+          ],
+          "size_delta": [
+            800.0,
+            300.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "visual": [
+            {
+              "kind": "Text",
+              "text": "魔法石是维护魔法世界平衡的神圣物品",
+              "text_style": {
+                "framework": "UGUI",
+                "font_guid": "50f9a7d4d4d7fa645911b0d25b413d37",
+                "font_size": 32,
+                "font_style": 0,
+                "alignment": 1,
+                "min_size": 2,
+                "max_size": 40,
+                "h_overflow": 0,
+                "v_overflow": 0,
+                "best_fit": false,
+                "rich_text": true,
+                "font": "LockClock"
+              },
+              "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+              }
+            }
+          ],
+          "localize": {
+            "term": "I_plot1",
+            "localize_target": "Localize"
+          }
+        },
+        {
+          "name": "mubu",
+          "active": true,
+          "depth": 1,
+          "draw_order": 2,
+          "rt_fid": 19,
+          "go_fid": 1,
+          "unity_rect": {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "screen_rect": {
+            "left": 0.0,
+            "top": 0.0,
+            "w": 1280.0,
+            "h": 720.0
+          },
+          "anchor_min": [
+            0.0,
+            0.0
+          ],
+          "anchor_max": [
+            1.0,
+            1.0
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ],
+          "anchored_pos": [
+            0.0,
+            0.0
+          ],
+          "size_delta": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "canvas": {
+        "w": 1280.0,
+        "h": 720.0,
+        "render_mode": 1,
+        "sorting_order": 0,
+        "sorting_layer_id": 1604517305,
+        "override_sorting": 0,
+        "target_display": 0,
+        "plane_distance": 100.0,
+        "render_mode_name": "ScreenSpaceCamera",
+        "sorting_layer_name": "UI",
+        "nested": false
+      }
+    }
+  ],
+  "canvas_draw_order": [
+    0
+  ]
+}
