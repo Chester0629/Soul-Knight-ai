@@ -352,6 +352,9 @@ set(TEST_FILES
     BossAI02Test.cpp
     CharSkillC01Test.cpp
     RoomGenGoldenTest.cpp
+    RoomGenDesignTest.cpp
+    DesignRoomConnectivityTest.cpp
+    BoxDestructionTest.cpp
 
     # Phase 4 Wave A (enemies): faithful per-enemy brains, adversarially verified
     EnemyAI01Test.cpp

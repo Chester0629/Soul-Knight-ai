@@ -22,6 +22,16 @@ void RGRoomX::OpenDoor() {
     m_DoorOpen = true; // *(this+0x6c) = 1
 }
 
+// PORT-ORCHESTRATION (RGRoomX__StartRoom has no recoverable body -- the trigger
+// bottoms out in owner GameObject/Instantiate calls). Models only the recoverable
+// EFFECT of entering the process==1 combat state: process = Active and the doors
+// close. The decision of WHEN (player entered an uncleared room with hostiles) is
+// the orchestrator's (GameScene). Mirror of ClearRoom's process/door transitions.
+void RGRoomX::StartRoom() {
+    m_Process = Process::Active; // *(this+0x10) = 1
+    CloseDoor();                 // door_open = 0
+}
+
 // FAITHFUL: RGRoomX__ClearRoom @ game_full.c:427765
 //
 // Decomp control flow:

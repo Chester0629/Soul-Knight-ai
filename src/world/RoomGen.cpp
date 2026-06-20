@@ -45,6 +45,12 @@ RoomGen::RoomGen(int seed, const std::array<int, 4> &entrance,
     // 1) Seed the deterministic RNG for this room.
     m_Rng.SetRandomSeed(seed);
 
+    // Phase 3 (design-room interior): capture the design-obstacle inputs. Default
+    // (proceduralObstacles=true, empty designSolidCells) is byte-identical to the
+    // pre-Phase-3 build, so every golden/procedural path is unchanged.
+    m_ProceduralObstacles = options.proceduralObstacles;
+    m_DesignSolidCells = options.designSolidCells;
+
     // 2) Badass mode bumps the special-box drop rate (before any size rolls).
     if (options.badassMode) {
         m_SpecialBoxRate = 20;
@@ -360,6 +366,37 @@ void RoomGen::StampBigObstacle(int px, int py, int w, int h) {
 // loops (truncated by the decompiler's count-call bailout) follow the
 // cross-checked reference reconstruction.
 void RoomGen::CreateObstacle() {
+    // Phase 3 design mode (proceduralObstacles==false): SKIP the procedural
+    // Phase A/B placement and instead stamp the prefab's wall markers
+    // (obj_index==0 -> code 1) onto OPEN floor cells only. Never overwrite a
+    // door (11), aisle (-2), or border (-1), so the RoomGen shell + the 5-wide
+    // door band the corridor seam depends on stay intact. Boxes/traps/pads are
+    // deliberately NOT stamped into the grid: they are a collision/trigger
+    // overlay the orchestrator builds, so a box blocks movement (BlocksAny) but
+    // never breaks DOOR REACHABILITY -- ConnectedFloorCells reads this grid and
+    // only obj_index-0 walls are connectivity barriers (decision #2 = b',
+    // Step 0.5 #2). Design stamping is zero-RNG (the shell stages already drew).
+    if (!m_ProceduralObstacles) {
+        for (const auto &c : m_DesignSolidCells) {
+            const int x = c.first;
+            const int y = c.second;
+            if (x >= 0 && x < m_RoomWidth && y >= 0 && y < m_RoomHeight &&
+                Get(x, y) == 0) {
+                Set(x, y, 1);
+            }
+        }
+        // Render pass below (x-major) still builds floor_list from the remaining
+        // open cells -- spawn/connectivity see the design walls as barriers.
+        for (int x = 0; x < m_RoomWidth; ++x) {
+            for (int y = 0; y < m_RoomHeight; ++y) {
+                if (Get(x, y) == 0) {
+                    m_FloorList.emplace_back(x, y);
+                }
+            }
+        }
+        return;
+    }
+
     // ---- Phase A : big obstacles (count driven by wall_level) ---------------
     int bigCount = 0;
     switch (m_WallLevel) {

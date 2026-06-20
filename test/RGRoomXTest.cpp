@@ -102,6 +102,54 @@ TEST(RGRoomXTest, ClearRoomFromClosedStillOpens) {
     EXPECT_TRUE(room.RewardGranted());
 }
 
+// ---- StartRoom (Phase 3 #3a: the Active/locked transition) -----------------
+
+TEST(RGRoomXTest, StartRoomBecomesActiveAndClosesDoors) {
+    // PORT-ORCHESTRATION: StartRoom sets process=Active and closes the doors
+    // (door_open=0). Mirrors the prefab combat-begin transition.
+    RGRoomX room(RGRoomX::kRoomTypeReward);
+    room.OpenDoor(); // faithful initial: doors open (prefab door_open=1)
+    EXPECT_EQ(room.State(), Process::Uncleared);
+    EXPECT_TRUE(room.DoorOpen());
+
+    room.StartRoom();
+    EXPECT_EQ(room.State(), Process::Active);
+    EXPECT_FALSE(room.DoorOpen()) << "entering combat seals the doors";
+}
+
+// The full per-room lifecycle the orchestrator drives: open -> StartRoom (locked)
+// -> ClearRoom (reopened + reward gate). This is the single-source door/lock state.
+TEST(RGRoomXTest, FullLifecycleUnclearedActiveCleared) {
+    RGRoomX room(RGRoomX::kRoomTypeReward);
+    room.OpenDoor(); // initial: Uncleared, doors open
+
+    // Enter combat -> Active, sealed.
+    room.StartRoom();
+    EXPECT_EQ(room.State(), Process::Active);
+    EXPECT_FALSE(room.DoorOpen());
+    EXPECT_FALSE(room.RewardGranted());
+
+    // Cleared -> reopened + reward gate (room_type==1).
+    room.ClearRoom();
+    EXPECT_EQ(room.State(), Process::Cleared);
+    EXPECT_TRUE(room.DoorOpen());
+    EXPECT_TRUE(room.RewardGranted());
+}
+
+TEST(RGRoomXTest, StartRoomDrawsNothing) {
+    RGRoomX room(0);
+    RGRandom ref;
+    room.SetSeed(7);
+    ref.SetRandomSeed(7);
+    room.OpenDoor();
+    room.StartRoom();
+    RGRandom fresh;
+    fresh.SetRandomSeed(7);
+    for (int i = 0; i < 8; ++i) {
+        EXPECT_EQ(ref.Range(0, 1000), fresh.Range(0, 1000));
+    }
+}
+
 // ---- RNG is never touched by the lifecycle (zero-draw bodies) --------------
 
 TEST(RGRoomXTest, LifecycleDrawsNothing) {

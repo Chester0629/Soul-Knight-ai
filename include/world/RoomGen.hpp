@@ -75,6 +75,22 @@ public:
         int roomHeight = 15;      ///< Explicit room height.
         int wallLevel = 1;        ///< Explicit big-obstacle level in [1,3].
         int obstacleLevel = 1;    ///< Explicit small-obstacle level in [1,3].
+
+        // --- Phase 3 design-room interior (decision #2 = b'). Default OFF, so the
+        // procedural path -- and every RoomGen golden -- is byte-identical. ---
+        /// When false, CreateObstacle SKIPS the procedural big/small obstacle
+        /// placement (Phase A/B) and instead stamps @ref designSolidCells; the
+        /// floor-list render pass still runs. Set by the design-room loader for
+        /// r1_* design slots so the prefab interior replaces procedural obstacles.
+        bool proceduralObstacles = true;
+        /// Room-LOCAL (x,y) interior cells to stamp as solid wall (code 1) in
+        /// design mode -- the prefab's obj_index==0 wall markers. Only stamped
+        /// onto currently-open floor cells (never door 11 / aisle -2 / border -1),
+        /// so the RoomGen shell + 5-wide door band stay intact. Boxes/traps/pads
+        /// are NOT here: they are a collision/trigger overlay the orchestrator
+        /// builds, so a box blocks movement but never breaks door reachability
+        /// (ConnectedFloorCells reads this grid; only obj_index-0 walls are barriers).
+        std::vector<std::pair<int, int>> designSolidCells;
     };
 
     /**
@@ -164,6 +180,11 @@ private:
     int m_RoomXOffset = 0;           ///< room_x_offset @0x70.
     int m_RoomYOffset = 0;           ///< room_y_offset @0x74.
     int m_SpecialBoxRate = 0;        ///< special_box_rate @0x78.
+
+    // Phase 3 design-room interior (port-only; not in the original RGRoomX field
+    // layout -- these drive the design-obstacle branch of CreateObstacle).
+    bool m_ProceduralObstacles = true;                   ///< Options.proceduralObstacles.
+    std::vector<std::pair<int, int>> m_DesignSolidCells; ///< Options.designSolidCells (room-local).
 };
 
 } // namespace Game

@@ -185,11 +185,41 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         LOG_INFO("GameData: room_layouts.json absent; rooms will use the default size");
     }
 
+    // Phase 3: design-room INTERIORS (obj_index obstacle layouts). OPTIONAL like
+    // room_layouts -- absence just leaves design slots shell-only, never flips
+    // `ok`. JSON OBJECT keyed by room id. Extracted by extract_design_rooms.py.
+    const json &designRooms = store.Load(dir + "design_rooms.json");
+    if (designRooms.is_object()) {
+        for (auto it = designRooms.begin(); it != designRooms.end(); ++it) {
+            const json &v = it.value();
+            DesignRoomDef d;
+            d.width = GetI(v, "w");
+            d.height = GetI(v, "h");
+            const auto obs = v.find("obstacles");
+            if (obs != v.end() && obs->is_array()) {
+                d.obstacles.reserve(obs->size());
+                for (const json &o : *obs) {
+                    d.obstacles.push_back(
+                        DesignObstacle{GetI(o, "i"), GetI(o, "x"), GetI(o, "y")});
+                }
+            }
+            m_DesignRooms.emplace(it.key(), std::move(d));
+        }
+    } else {
+        LOG_INFO("GameData: design_rooms.json absent; design slots stay shell-only");
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
-             "enemy_guns, {} buffs, {} room layouts",
+             "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
-             m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size());
+             m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
+             m_DesignRooms.size());
     return ok;
+}
+
+const DesignRoomDef *GameData::FindDesignRoom(const std::string &id) const {
+    auto it = m_DesignRooms.find(id);
+    return it == m_DesignRooms.end() ? nullptr : &it->second;
 }
 
 const WeaponDef *GameData::FindWeapon(const std::string &id) const {

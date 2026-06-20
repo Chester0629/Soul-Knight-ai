@@ -68,8 +68,21 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
   (prefab 內裝是 P3 的事);`roomId` 即 P3 的 load handle。special/badass slot 走 type-1
   fallback(**見 §7 顯式債**)。獨立 seed 流 ⇒ 主 random-walk 與下游 golden/combat 決定性
   byte-identical(`DesignSelectionDoesNotPerturbTheWalk`)。
-- **P3 設計房 prefab 內裝載入 + RGRoomX**(前置 P1+P2):在 **P2 已選好的 `r1_N`** 上載該房的
-  LoadRoom JSON(版面/collider 優先)取代程序內裝,與程序房 (RGRoomX random_room) 混排。
+- **P3 設計房內裝載入(b′)+ RGRoomX 生命週期(a)— 實作完成、待驗收**(前置 P1+P2):
+  - **3.1 障礙層(決策 #2=b′)**:RoomGen shell(perimeter/floor/門格)**留著**(對設計房就是
+    忠實——原版也 runtime 生 shell);設計房 slot 把程序障礙(`CreateObstacle` Phase A/B)
+    **關掉**(`Options::proceduralObstacles=false`,**預設 true → golden byte-identical**),改
+    stamp prefab 的 obj_index 障礙:**牆(0)→ grid**(連通屏障+collider,`designSolidCells`);
+    **box(1–4)+ brazier(11)→ 碰撞 overlay**(擋身體、但**不在連通 grid** ⇒ box 不破壞門可達);
+    **trap(5)/pad(6,7)→ 不擋**(deferred)。資料管線:`tools/extract_design_rooms.py` →
+    `Resources/data/design_rooms.json`(108 房 / 4475 障礙)。座標 = 房中心固定 (20,20)、
+    `grid = pos − 20 + (dim−1)/2`(**★CAVEAT,見 §7**)。
+  - **3.2 RGRoomX 生命週期(決策 #3=a)**:`RGRoomX` 接成 per-room **單一真相源**(Uncleared/
+    Active/Cleared + `door_open` + `ClearRoom` reward gate `room_type==1`)。GameScene 的鎖門/
+    DoorSeal **改成 `RGRoomX.door_open` 的 grid 呈現**(`m_LockedRoom` 已移除,無第二可寫真相
+    源)。初始態 = 門開、進房(有敵)`StartRoom` 才鎖、清空 `ClearRoom` 再開。box 破壞接線:
+    sim 子彈擊牆 → `WorldCollision::DamageObstacle` → `RGBox.Hit` → 破壞後移除 collider(破壞
+    前擋、破壞後通);此路徑在 `NullWorldCollision`(combat golden)下永不觸發 ⇒ combat hash 不變。
 - **P4 tileset(正交)**(前置 P3):用切出的正交圖集瓦片替換 floor_tile/wall_tile 佔位圖。
 
 ## 6. 跨階段回歸守則
@@ -95,6 +108,29 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
   RE 確認 floor-1 special 房是否架構獨立後才能判定。
 - **★「忠實 floor-1」帶星號**:§1 北極星的「重現 floor-1 本貌」目前 = **normal 房忠實** /
   **special·badass 房 = type-1 形狀 + 未驗證 loot**。對 special 房尚未達成,須隨上面兩條一起收。
+- **★ P3 實機 clear-flow 驗證債(顯式,deferred — 機制已證、缺實機操作)**:per-room「進房鎖
+  → 殺敵 → `ClearRoom` → 開門 → reward gate」的**實機操作流**尚未在遊戲內驅成 —— naive
+  `SK_AUTOWALK`(直線導航)在密集設計 box 場耗能/卡住,到不了敵房,故 `StartRoom`/`ClearRoom`
+  未在實機觸發。**機制已 `RGRoomXTest` 單測**(StartRoom→Active→門關、ClearRoom→Cleared→開門
+  + room_type==1 reward gate)+ **單一真相源 code 證**(`m_LockedRoom` 已移除、門唯一寫者 RGRoomX);
+  in-game 已驗:box 擋/破壞(`SK_AUTOFIRE` 7-box 射穿)、floor-clear 轉場(`SK_FORCE_CLEAR`
+  Floor 0→1→2→3)。**併入同一條:親手實玩走一次(房→走廊→鄰房 + 進戰鬥房感受鎖門)** —— 與上
+  是同一件事(機制已證、缺真人/實機操作確認),攢著之後一次補。**不擋 P4,但進「完整可玩」收口前必補。**
+- **★ P3 座標映射 = ★CAVEAT(不可 byte 恢復)**:prefab 房中心固定 (20,20)、`grid = pos − 20
+  + (dim−1)/2`,四尺寸 + 門幾何自洽,但 (20,20) 原點與 offset 約定是**推斷非 recovered fact**
+  (同 41-pitch CAVEAT)。實作但**靠實玩驗**;真機 dump 不符以真機為準。code:`extract_design_rooms.py`
+  + `GameScene.cpp` 設計障礙註解。
+- **★ P3 obj_index 8 + brazier 11 碰撞 UNVERIFIED**:`skin_obj`(8,3 例,金色置中,疑 loot)
+  = **保守無 collider 佔位**;`skin_brazier`(11)= **保守 blocker(不可破)**。皆需 special-room
+  RE 確認;code:`GameScene.cpp` 障礙 overlay 註解。
+- **★ P3 box HP = 港版預設(UNVERIFIED)**:`kBoxHp=1`(一發即破);原版 HP 走 owner spawn,
+  不可恢復。展示「破壞前擋破壞後通」契約用;真值恢復後再調。code:`GameScene.cpp:kBoxHp`。
+- **★ P3 trap/pad 效果 deferred**:trap(5)/speed pad(6,7)目前**不擋、無效果**(只佔位),
+  地板陷阱/加減速效果待後續 + 補皮 pass。
+- **★ P3 RGDoor 門實體未搬(#2c deferred)**:prefab 的 4 個 RGDoor 5-寬 collider/視覺未接;
+  門的**格子碰撞**港版已 grid 對齊(code-11 + DoorSeal,現經 RGRoomX 表達),門實體留**補皮 pass**。
+- **★ P3 b_point 出生錨未用**:prefab 每房的 `b_point`(boss/spawn 錨)未接;出生續用
+  `ConnectedFloorCells` 中位格。忠實 follow-up。
 - **多角色身份 / buff**(B5):目前固定 c01;角色選擇 + buff 系統未接。
 - **跨層技能冷卻延續**:每層從 template 重建(starts ready),冷卻不跨層帶。
 - **c01 完整二手**(B1b):技能 brain 已接進 Player,但完整二手回收(full second-hand)未做。

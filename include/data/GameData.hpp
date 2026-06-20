@@ -120,6 +120,25 @@ struct RoomLayoutDef {
     int type = 0; ///< design-room category (floor-1 rooms are all type 1).
 };
 
+/// One prefab obstacle marker inside a design room, in ROOM-LOCAL grid coords
+/// (0..w-1, 0..h-1). @c objIndex is the prefab RGObjectSkin obj_index (Phase-3
+/// Step-0 legend: 0 wall, 1-4 box(destructible), 5 trap, 6/7 speed pad,
+/// 8 skin_obj(ambiguous), 11 brazier). Collision class is decided at wire time.
+struct DesignObstacle {
+    int objIndex = 0;
+    int x = 0;
+    int y = 0;
+};
+
+/// One floor-1 design room's static INTERIOR (Phase 3, from design_rooms.json,
+/// extracted by tools/extract_design_rooms.py). The shell (perimeter/floor/door)
+/// is still RoomGen's; these obstacles replace the procedural obstacle layer.
+struct DesignRoomDef {
+    int width = 0;
+    int height = 0;
+    std::vector<DesignObstacle> obstacles;
+};
+
 /**
  * @class GameData
  * @brief Loads and indexes the generated game-data tables for the game layer.
@@ -171,6 +190,14 @@ public:
     /// absent -- callers fall back to a fixed room size.
     const std::vector<RoomLayoutDef> &RoomLayouts() const { return m_RoomLayouts; }
 
+    /// Phase 3: the floor-1 design-room interior for @p id (e.g. "r1_42"), or
+    /// nullptr when no design table / no such room (slot stays shell-only).
+    const DesignRoomDef *FindDesignRoom(const std::string &id) const;
+    /// All loaded design-room interiors (empty if design_rooms.json is absent).
+    const std::unordered_map<std::string, DesignRoomDef> &DesignRooms() const {
+        return m_DesignRooms;
+    }
+
 private:
     std::vector<WeaponDef> m_Weapons;
     std::vector<BulletDef> m_Bullets;
@@ -178,6 +205,7 @@ private:
     std::vector<EnemyGunDef> m_EnemyGuns;
     std::vector<BuffDef> m_Buffs;
     std::vector<RoomLayoutDef> m_RoomLayouts;
+    std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
     CharacterDef m_PlayerTemplate;
 
     std::unordered_map<std::string, std::size_t> m_WeaponIndex;

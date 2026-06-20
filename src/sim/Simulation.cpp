@@ -192,6 +192,10 @@ void Simulation::IntegrateBullets() {
         b.lifeMs -= kFixedStepMs;
         if (!b.canThrough && m_World->Blocks(b.pos, kBulletRadius)) {
             b.active = false;
+            // Phase 3: a consumed bullet damages a destructible design-room box at
+            // the impact point (no-op for walls / under NullWorldCollision, so the
+            // combat hash is unchanged). Scene-side mutation; sim RNG untouched.
+            m_World->DamageObstacle(b.pos, kBulletRadius);
         }
     }
 }

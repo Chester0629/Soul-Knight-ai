@@ -40,6 +40,11 @@ constexpr float kCellPx = 32.0F;
 // The door band is centred at block 18-22 for ANY room size, so mixed sizes still
 // tile + align. See world/FloorBlock.hpp.
 constexpr int kRoomCells = 15;
+// Phase 3 design-box durability. PORT DEFAULT -- the real value is set by the
+// owner-side prefab/spawn path (RGBox HP @0x0C, not recoverable). 1 = one bullet
+// breaks it; tracked as explicit debt (docs/LEVEL_GEN_PLAN.md). Demonstrates the
+// "blocks before, passable after" contract; tune when the real value is recovered.
+constexpr int kBoxHp = 1;
 constexpr float kRoomPitch = static_cast<float>(FloorBlock::kBlock) * kCellPx;
 // Player must be this close (px) to auto-open a chest / collect a pickup.
 constexpr float kChestOpenRange = 40.0F;
@@ -177,10 +182,41 @@ void GameScene::OnEnter() {
         // change generation. The live per-floor difference is m_FloorSeed; Phase 2
         // reconciles the %5 size-narrowing under randomRoom=false (RUN_LOOP_PLAN section 4b).
         ropt.floorIndex = m_FloorIndex;
+        // --- Phase 3 (3.1): load the design-room interior for this slot. ---
+        // Decision #2 = b': keep RoomGen's shell (perimeter/floor/door-cells),
+        // replace the procedural obstacle layer with the prefab obj_index layout.
+        // obj_index==0 walls go INTO the grid (connectivity barriers + colliders,
+        // via designSolidCells); boxes (1-4) + braziers (11) become a collision
+        // OVERLAY below (block movement, but absent from the connectivity grid so
+        // they never make a door unreachable); traps(5)/pads(6,7) are non-blocking
+        // (deferred skin pass); skin_obj(8) is a no-collider placeholder (collision
+        // UNVERIFIED -- see docs/LEVEL_GEN_PLAN.md s7). The obstacle coords are
+        // already room-LOCAL (extract_design_rooms.py applied the centre-(20,20)
+        // transform -- a CAVEAT reconstruction, validated by in-game play).
+        const DesignRoomDef *design =
+            cell.roomId.empty() ? nullptr : m_Data.FindDesignRoom(cell.roomId);
+        if (design != nullptr) {
+            ropt.proceduralObstacles = false;
+            for (const DesignObstacle &o : design->obstacles) {
+                if (o.objIndex == 0) { // wall -> grid (barrier + collider)
+                    ropt.designSolidCells.emplace_back(o.x, o.y);
+                }
+            }
+        }
         const RoomGen rg(m_FloorSeed + 1 + roomIndex, cell.entrance, ropt);
 
         m_Rooms.push_back(
             std::make_unique<Room>(Room::FromRoomGen(rg, kCellPx, origin)));
+
+        // Phase 3 (#3a): the per-room lifecycle authority. Constructed with the map
+        // slot type (cell.type: 1 normal -> reward on clear, 2/3 special/badass).
+        // Starts Uncleared with doors OPEN (faithful to the prefab door_open=1 /
+        // Step 0.5 #3): the room only locks (StartRoom) when the player enters it
+        // with hostiles, and reopens on ClearRoom. Lifecycle is zero-RNG; the seed
+        // is a parity helper that never perturbs determinism.
+        m_RoomLife.emplace_back(cell.type);
+        m_RoomLife.back().SetSeed(m_FloorSeed + 1 + roomIndex);
+        m_RoomLife.back().OpenDoor(); // doors open until StartRoom
 
         // Corridor-connected floor cells (the door-reachable main region). Spawns
         // anchor here so the player can never start trapped in an obstacle pocket
@@ -213,6 +249,51 @@ void GameScene::OnEnter() {
                 } else {
                     addTile(floorImg, floorSz, x, y, 0.0F); // walkable floor
                 }
+            }
+        }
+
+        // Phase 3 design-obstacle OVERLAY: boxes (obj_index 1-4) + braziers (11)
+        // block movement but stay OFF the connectivity grid (so they never make a
+        // door unreachable -- decision #2/Step 0.5 #2). Each gets a permanent
+        // collider + a placeholder tile (real sprite = deferred skin pass). Walls
+        // (0) are already in the grid/tiled; trap(5)/pad(6,7)/skin_obj(8) are
+        // non-blocking and left visual-only for now (explicit debt: 8 + brazier
+        // collision UNVERIFIED, conservative blocker for 11).
+        if (design != nullptr) {
+            for (const DesignObstacle &o : design->obstacles) {
+                const bool box = o.objIndex >= 1 && o.objIndex <= 4;
+                const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
+                if (!box && !brazier) {
+                    continue;
+                }
+                if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
+                    continue;
+                }
+                const glm::vec2 wpos = Room::CellToWorld(o.x, o.y, rg.Width(),
+                                                         rg.Height(), kCellPx, origin);
+                // Placeholder skin tile (real sprite = deferred skin pass), kept on
+                // the box so a broken box can be hidden.
+                auto tile = std::make_shared<Util::GameObject>();
+                tile->SetDrawable(wallImg);
+                tile->SetZIndex(1.0F);
+                tile->m_Transform.translation = wpos;
+                if (wallSz.x > 0.0F && wallSz.y > 0.0F) {
+                    tile->m_Transform.scale =
+                        glm::vec2(kCellPx / wallSz.x, kCellPx / wallSz.y);
+                }
+                m_RoomTiles.push_back(tile);
+                m_Renderer.AddChild(tile);
+
+                ObstacleBox ob;
+                ob.collider =
+                    Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
+                ob.tile = tile;
+                ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
+                if (box) {
+                    ob.box.SetHp(kBoxHp);
+                    ob.box.SetSeed(m_FloorSeed + 1 + roomIndex);
+                }
+                m_RoomObstacles.push_back(std::move(ob));
             }
         }
 
@@ -369,6 +450,12 @@ void GameScene::OnEnter() {
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
+    // SK_AUTOFIRE test hook (env, NO-OP if unset): when also auto-walking, fire along
+    // the travel direction (see Update). Kept separate so SK_AUTOWALK stays pure
+    // navigation -- no firing, no energy spend.
+    if (std::getenv("SK_AUTOFIRE") != nullptr) {
+        m_AutoFire = true;
+    }
     // SK_AUTOWALK test hook (env, NO-OP if unset): steer the player straight at an
     // orthogonally-adjacent room's centre each frame so the play->corridor->room
     // traversal can be exercised + logged headlessly (the start room's centre is
@@ -461,17 +548,63 @@ bool GameScene::BlocksAny(glm::vec2 pos, float radius) const {
             }
         }
     }
-    // Sealed doors of the active uncleared room block both player and enemies.
-    if (m_LockedRoom >= 0 && m_LockedRoom < static_cast<int>(m_RoomDoors.size())) {
+    // Phase 3 design obstacles (boxes + braziers): block bodies while alive. A box
+    // stops blocking once broken (DamageObstacle sets alive=false). Off the
+    // connectivity grid, so they block bodies without breaking door reachability.
+    if (!m_RoomObstacles.empty()) {
         const Util::Collider circle = Util::Collider::MakeCircle(pos, radius);
-        for (const Util::Collider &door :
-             m_RoomDoors[static_cast<std::size_t>(m_LockedRoom)]) {
-            if (Util::Overlap(door, circle)) {
+        for (const ObstacleBox &ob : m_RoomObstacles) {
+            if (ob.alive && Util::Overlap(ob.collider, circle)) {
                 return true;
             }
         }
     }
+    // Sealed doors: a room seals its door opening EXACTLY while its RGRoomX has
+    // door_open==false (Active/locked). This is a pure VIEW of RGRoomX.door_open
+    // -- the SINGLE authority (#3a); there is no separate writable lock field. A
+    // room is sealed only after StartRoom (Active) and reopens on ClearRoom.
+    {
+        const Util::Collider circle = Util::Collider::MakeCircle(pos, radius);
+        for (std::size_t i = 0;
+             i < m_RoomDoors.size() && i < m_RoomLife.size(); ++i) {
+            if (m_RoomLife[i].DoorOpen()) {
+                continue; // doors open -> not sealed
+            }
+            for (const Util::Collider &door : m_RoomDoors[i]) {
+                if (Util::Overlap(door, circle)) {
+                    return true;
+                }
+            }
+        }
+    }
     return false;
+}
+
+// Phase 3 (#3a): a consumed bullet at @p pos damages a destructible design box
+// there (no-op for walls / permanent braziers / already-broken boxes). Once a box
+// breaks it stops blocking (alive=false) and its placeholder tile is hidden. RGBox
+// is zero-RNG, so this never perturbs determinism; under NullWorldCollision (the
+// combat goldens) Blocks never fires, so this is never reached -> combat hash safe.
+void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
+    const Util::Collider circle = Util::Collider::MakeCircle(pos, radius);
+    for (ObstacleBox &ob : m_RoomObstacles) {
+        if (!ob.alive || !ob.destructible) {
+            continue; // already broken, or a permanent brazier
+        }
+        if (!Util::Overlap(ob.collider, circle)) {
+            continue;
+        }
+        const RGBox::HitResult r = ob.box.Hit(1, /*sourceValid=*/true);
+        if (r.registered && r.shouldDestroy) {
+            ob.alive = false; // stops blocking (passable)
+            if (ob.tile != nullptr) {
+                ob.tile->SetVisible(false); // hide the broken box's placeholder skin
+            }
+            LOG_INFO("RGBox: design box broken at ({:.0f},{:.0f}) -> now passable",
+                     pos.x, pos.y);
+        }
+        break; // one box per bullet impact
+    }
 }
 
 void GameScene::SyncBulletViews() {
@@ -593,6 +726,22 @@ void GameScene::Update(float dtMs) {
     if (forceSkill) {
         in.firing = true; // SK_FORCE_SKILL hook: hold fire so the active-skill mirror is observable.
     }
+    // SK_AUTOFIRE test hook (env, NO-OP if unset): aim + fire along the autowalk
+    // travel direction so a headless run can shoot through a design-box column and
+    // damage the target-room enemy (corroborates box-break / clear-flow in-game).
+    // SEPARATE from SK_AUTOWALK, which stays PURE NAVIGATION (no firing, no energy
+    // spend) -- the clean "can the player walk the floor" semantics. The primary
+    // box-break evidence is BoxDestructionTest; this hook is in-game aid only. NOT
+    // game logic -- a test-input override gated on the dedicated hook.
+    if (m_AutoFire && m_AutoWalk &&
+        m_Player->Stats().energy >= m_WeaponEnergyCost) {
+        const glm::vec2 d = m_AutoWalkTarget - resolved;
+        const float len = std::sqrt(d.x * d.x + d.y * d.y);
+        if (len > 1.0F) {
+            in.aimDir = d / len;
+            in.firing = true;
+        }
+    }
     in.playerAlive = !m_Player->Stats().IsDead();
     in.playerRoomId = playerRoomId;
 
@@ -623,16 +772,43 @@ void GameScene::Update(float dtMs) {
     // sync below so a dying entity's view is still alive to anchor its death effect. ---
     ConsumeSimEvents(resolved);
 
-    // --- Clear-room gating from sim liveness ---
-    m_LockedRoom = (playerRoomId >= 0 && RoomHasLiveHostile(playerRoomId)) ? playerRoomId : -1;
+    // --- Clear-room gating: RGRoomX is the SINGLE authority (#3a) ---
+    // Enter combat: the player is in an Uncleared room that still has hostiles ->
+    // StartRoom (Active + doors close, door_open=0). Clear: an Active room whose
+    // hostiles are all dead -> ClearRoom (Cleared + reward gate room_type==1 +
+    // doors open, door_open=1). The old per-frame m_LockedRoom derivation is GONE;
+    // BlocksAny seals doors purely from RGRoomX.door_open. A room never re-locks
+    // once Cleared (the player can't be trapped in a cleared room).
+    if (playerRoomId >= 0 &&
+        m_RoomLife[static_cast<std::size_t>(playerRoomId)].State() ==
+            RGRoomX::Process::Uncleared &&
+        RoomHasLiveHostile(playerRoomId)) {
+        m_RoomLife[static_cast<std::size_t>(playerRoomId)].StartRoom();
+        LOG_INFO("RGRoomX: room {} StartRoom -> Active (door_open=0, sealed)",
+                 playerRoomId);
+    }
+    for (std::size_t i = 0; i < m_RoomLife.size(); ++i) {
+        if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
+            !RoomHasLiveHostile(static_cast<int>(i))) {
+            m_RoomLife[i].ClearRoom(); // process=Cleared, reward gate, OpenDoor
+            if (m_RoomLife[i].RewardGranted()) {
+                // reward gate FIRED (room_type==1). Gate lands here; the actual
+                // reward CONTENT (loot overlay) is the unverified special-room debt.
+                LOG_INFO("RGRoomX: room {} cleared -> reward gate fired (room_type==1)",
+                         i);
+            }
+        }
+    }
 
     // SK_AUTOWALK: log each room transition (start -> -1 corridor -> neighbour) so
     // the headless run shows real room->corridor->room traversal, that the corridor
     // is neutral (locked=-1 while playerRoom=-1), and that the spawn is not wedged.
     if (m_AutoWalk && playerRoomId != m_LastRoomId) {
+        const bool locked =
+            playerRoomId >= 0 &&
+            !m_RoomLife[static_cast<std::size_t>(playerRoomId)].DoorOpen();
         LOG_INFO("AUTOWALK frame={} room {} -> {} pos=({:.0f},{:.0f}) locked={}",
-                 m_Frame, m_LastRoomId, playerRoomId, resolved.x, resolved.y,
-                 m_LockedRoom);
+                 m_Frame, m_LastRoomId, playerRoomId, resolved.x, resolved.y, locked);
         m_LastRoomId = playerRoomId;
     }
 

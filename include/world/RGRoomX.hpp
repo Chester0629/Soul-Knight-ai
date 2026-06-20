@@ -94,6 +94,19 @@ public:
     void OpenDoor();
 
     /**
+     * @brief Begin combat in this room: process -> Active and the doors close.
+     *
+     * The TRIGGER (a player entering an uncleared room that still has hostiles)
+     * is owner/orchestrator-driven -- @c RGRoomX__StartRoom has NO recoverable
+     * body in the decomp (it bottoms out in owner GameObject/Instantiate calls).
+     * This models only the recoverable EFFECT the @c process==1 state implies and
+     * that @ref ClearRoom mirrors: @c process = Active and the door-close
+     * transition (@ref CloseDoor -> @c door_open = 0). PORT-ORCHESTRATION, not a
+     * byte-recovered body. Idempotent-safe: callers gate on @ref State().
+     */
+    void StartRoom();
+
+    /**
      * @brief Clear the room: mark cleared, gate the reward, open the doors.
      *
      * Faithful to @c RGRoomX__ClearRoom. The recoverable decision/state logic:

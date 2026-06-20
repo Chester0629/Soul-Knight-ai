@@ -33,6 +33,8 @@
 #include "entities/WeaponPickup.hpp"
 #include "ui/Hud.hpp"
 #include "world/MapManager.hpp"
+#include "world/RGBox.hpp"
+#include "world/RGRoomX.hpp"
 #include "world/Room.hpp"
 
 namespace Game {
@@ -67,6 +69,9 @@ public:
 
     /// WorldCollision: a circle at @p pos / @p radius overlaps a wall or sealed door.
     bool Blocks(glm::vec2 pos, float radius) const override { return BlocksAny(pos, radius); }
+    /// WorldCollision: a consumed bullet at @p pos damages a destructible design
+    /// box there; once broken the box stops blocking. No-op on walls/braziers.
+    void DamageObstacle(glm::vec2 pos, float radius) override;
 
 private:
     glm::vec2 AimDirection() const;
@@ -99,8 +104,24 @@ private:
     /// unlike m_RoomDoors they are never sealed/unsealed (seam 2: corridors are
     /// neutral -- they are not part of any room's lock state).
     std::vector<Util::Collider> m_Corridors;
-    /// Index of the active, uncleared room whose doors are sealed, else -1.
-    int m_LockedRoom = -1;
+    /// Phase 3 design-room obstacle (prefab box obj_index 1-4, or brazier 11).
+    /// Blocks movement while @c alive but is NOT on the RoomGen connectivity grid,
+    /// so it blocks a body yet never makes a door unreachable. Boxes are
+    /// destructible (RGBox HP); a brazier is a permanent conservative blocker.
+    struct ObstacleBox {
+        Util::Collider collider;
+        RGBox box;                                    ///< durability (boxes only).
+        std::shared_ptr<Util::GameObject> tile;       ///< placeholder skin, hidden on break.
+        bool destructible = false;                    ///< box -> true; brazier -> false.
+        bool alive = true;                            ///< false once broken (stops blocking).
+    };
+    std::vector<ObstacleBox> m_RoomObstacles;
+    /// Phase 3 (#3a): per-room lifecycle state machine -- the SINGLE authority for
+    /// door/lock state (Uncleared/Active/Cleared + door_open + ClearRoom reward
+    /// gate). Indexed 1:1 with @ref m_Rooms. The sealed-door colliders in
+    /// @ref m_RoomDoors are sealed iff the room's RGRoomX has door_open==false;
+    /// there is NO separate writable lock field (the old m_LockedRoom is gone).
+    std::vector<RGRoomX> m_RoomLife;
 
     Util::ObjectPool<Bullet> m_BulletPool;
 
@@ -169,6 +190,7 @@ private:
     /// m_AutoWalkTarget each frame to drive room->corridor->room traversal headlessly
     /// and log the room transitions. NO-OP in normal play (m_AutoWalk stays false).
     bool m_AutoWalk = false;
+    bool m_AutoFire = false;                ///< SK_AUTOFIRE: fire along autowalk dir (test aid).
     glm::vec2 m_AutoWalkTarget{0.0F, 0.0F}; ///< world centre of the adjacent target room.
     int m_AutoWalkRoom = -1;                ///< index of the target adjacent room.
     int m_LastRoomId = -2;                  ///< last logged playerRoomId (-2 = unset).

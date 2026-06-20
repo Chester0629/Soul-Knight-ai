@@ -35,6 +35,27 @@ TEST(GameDataTest, LoadsFloor1RoomLayouts) {
     }
 }
 
+TEST(GameDataTest, LoadsDesignRoomInteriors) {
+    GameData gd;
+    gd.LoadAll(kResourceRoot);
+    EXPECT_EQ(gd.DesignRooms().size(), 108u); // one interior per floor-1 design room
+    const auto *r1_1 = gd.FindDesignRoom("r1_1");
+    ASSERT_NE(r1_1, nullptr);
+    EXPECT_EQ(r1_1->width, 15);
+    EXPECT_EQ(r1_1->height, 15);
+    // r1_1's interior is the 7x7 wall block: 49 obstacles, all obj_index 0 (wall),
+    // all inside the room-local grid.
+    EXPECT_EQ(r1_1->obstacles.size(), 49u);
+    for (const auto &o : r1_1->obstacles) {
+        EXPECT_EQ(o.objIndex, 0);
+        EXPECT_GE(o.x, 0);
+        EXPECT_LT(o.x, r1_1->width);
+        EXPECT_GE(o.y, 0);
+        EXPECT_LT(o.y, r1_1->height);
+    }
+    EXPECT_EQ(gd.FindDesignRoom("nope"), nullptr);
+}
+
 TEST(GameDataTest, Gun001ScalarStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);
