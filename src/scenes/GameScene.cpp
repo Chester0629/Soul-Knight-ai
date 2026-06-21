@@ -1168,6 +1168,14 @@ void GameScene::DrawPauseOverlay() {
     if (!m_PauseUiBuilt) {
         const std::string root = RESOURCE_DIR;
         const std::string font = root + "/fonts/pixel_bold.ttf";
+        // Full-screen semi-transparent scrim (dim.png is 16x16 black @ alpha 160)
+        // so the frozen world reads as "paused" behind the menu text.
+        auto dim = std::make_shared<Util::GameObject>();
+        dim->SetDrawable(std::make_shared<Util::Image>(root + "/sprites/dim.png"));
+        dim->m_Transform.scale = {80.0F, 45.0F}; // 16px -> 1280x720
+        dim->SetZIndex(70.0F);
+        m_PauseUi.AddChild(dim);
+
         auto title = std::make_shared<Util::GameObject>();
         title->SetDrawable(std::make_shared<Util::Text>(
             font, 56, "PAUSED", Util::Color{255, 255, 255, 255}));
