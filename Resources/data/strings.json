@@ -2,6 +2,7 @@
   "title.start": "點擊開始  (Enter)",
   "title.settings_controls": "S 設置      K 按鍵說明",
   "title.subtitle": "元氣騎士 — 前端流程",
+  "title.warning": "注意：遊戲存檔保存在本地，刪除遊戲將無法恢復。",
 
   "hero.title": "選擇角色",
   "hero.c01": "騎士",

@@ -44,16 +44,20 @@ void TitleScene::Build() {
     const std::string font = root + "/fonts/cjk.ttc";
     Strings::Load(root);
 
-    // Soul Knight logo (biaoti03) up top, a hero figure (c01 idle) centred, a
-    // tap-to-start prompt at the bottom -- the video's login layout.
-    m_Objects.push_back(MakeImage(sprites + "biaoti03.png", {0.0F, 210.0F}, 1.2F, 10.0F));
-    m_Objects.push_back(MakeImage(sprites + "c01_4.png", {0.0F, -10.0F}, 4.0F, 8.0F));
-    m_Objects.push_back(MakeText(font, 24, Strings::Get("title.start"), {0.0F, -210.0F},
-                                 Util::Color{235, 235, 235, 255}, 20.0F));
-    m_Objects.push_back(MakeText(font, 17, Strings::Get("title.settings_controls"),
-                                 {0.0F, -270.0F}, Util::Color{170, 170, 170, 255}, 20.0F));
-    m_Objects.push_back(MakeText(font, 14, Strings::Get("title.subtitle"),
-                                 {0.0F, -320.0F}, Util::Color{150, 150, 150, 255}, 20.0F));
+    // project's login screen: full-screen splash bg (biaoti_01: dark dungeon +
+    // green-spotlit hero) + Soul Knight logo top-left + save-warning top-right +
+    // co-op/settings icons bottom-left + a tap-to-start prompt.
+    // biaoti_01 is 1024x576; x1.25 fills 1280x720 exactly.
+    m_Objects.push_back(MakeImage(sprites + "p_splash_bg.png", {0.0F, 0.0F}, 1.25F, 0.0F));
+    m_Objects.push_back(MakeImage(sprites + "biaoti03.png", {-330.0F, 280.0F}, 0.8F, 10.0F));
+    m_Objects.push_back(MakeText(font, 18, Strings::Get("title.warning"), {175.0F, 330.0F},
+                                 Util::Color{255, 255, 255, 200}, 11.0F));
+    m_Objects.push_back(MakeImage(sprites + "ui_coop.png", {-590.0F, -250.0F}, 3.0F, 10.0F));
+    m_Objects.push_back(MakeImage(sprites + "ui_gear.png", {-590.0F, -315.0F}, 3.0F, 10.0F));
+    m_Objects.push_back(MakeText(font, 24, Strings::Get("title.start"), {0.0F, -250.0F},
+                                 Util::Color{255, 255, 255, 255}, 11.0F));
+    m_Objects.push_back(MakeText(font, 16, Strings::Get("title.settings_controls"),
+                                 {0.0F, -300.0F}, Util::Color{205, 205, 205, 255}, 11.0F));
 
     for (const auto &o : m_Objects) {
         m_Renderer.AddChild(o);
