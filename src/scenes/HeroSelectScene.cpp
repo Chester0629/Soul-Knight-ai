@@ -101,8 +101,9 @@ void HeroSelectScene::ApplyHighlight() {
 void HeroSelectScene::OnEnter() {
     LOG_INFO("HeroSelectScene: A/D switch, Enter confirm, Esc back");
     // SK_SELECT=cNN test hook (env, NO-OP if unset): select that hero + confirm.
-    if (const char *sel = std::getenv("SK_SELECT")) {
-        m_AutoConfirmFrame = 30; // selection applied in Update once built.
+    // (The value is read in Update; here we only arm the auto-confirm.)
+    if (std::getenv("SK_SELECT") != nullptr) {
+        m_AutoConfirmFrame = 30;
     }
 }
 

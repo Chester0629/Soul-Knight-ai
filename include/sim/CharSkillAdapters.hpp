@@ -86,14 +86,18 @@ template <class TBrain>
 class StubSkillAdapter : public CharSkillBase<TBrain> {
 public:
     using CharSkillBase<TBrain>::CharSkillBase;
-    TriggerResult TryTrigger() override {
+    // Qualify the ICharSkill nested return types: under GCC two-phase lookup a
+    // dependent base (CharSkillBase<TBrain>) does not bring them into scope unqualified.
+    ICharSkill::TriggerResult TryTrigger() override {
         if (!this->m_Brain.TryActivateSkill()) {
             return {};
         }
         this->m_Brain.EndSkill(); // spend the cooldown (effect deferred to the subsystem stage)
-        return {TriggerOutcome::Activated, false};
+        return {ICharSkill::TriggerOutcome::Activated, false};
     }
-    AtkEffect RoleAtk(bool /*pressDown*/, bool /*standingOnItem*/) override { return {}; }
+    ICharSkill::AtkEffect RoleAtk(bool /*pressDown*/, bool /*standingOnItem*/) override {
+        return {};
+    }
 };
 
 /// Dispatch a character id -> its (d) skill adapter. All 13 heroes register. C01/C10/

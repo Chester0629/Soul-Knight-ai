@@ -149,7 +149,7 @@ struct DesignRoomDef {
  * @class GameData
  * @brief Loads and indexes the generated game-data tables for the game layer.
  *
- * Reads the @c Resources/data/*.json tables produced by the offline pipeline
+ * Reads the @c Resources/data JSON tables produced by the offline pipeline
  * (via Util::DataStore) into typed, id-keyed definitions. Game systems query
  * these defs instead of touching JSON directly, keeping the data-driven slice
  * "add data, not engineering".
