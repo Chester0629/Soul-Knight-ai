@@ -184,6 +184,30 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
   in-game 已驗:box 擋/破壞(`SK_AUTOFIRE` 7-box 射穿)、floor-clear 轉場(`SK_FORCE_CLEAR`
   Floor 0→1→2→3)。**併入同一條:親手實玩走一次(房→走廊→鄰房 + 進戰鬥房感受鎖門)** —— 與上
   是同一件事(機制已證、缺真人/實機操作確認),攢著之後一次補。**不擋 P4,但進「完整可玩」收口前必補。**
+- **★ 真碰撞 headless driver(`test/RealBodyDriver.hpp` + `RealBodyDriverTest`)= 驗證基建,取代 autowalk false-positive**:
+  - **問題**:headless `SK_AUTOWALK` 的「進房/鎖門」log 來自 `Room::ContainsPoint`(門檻 rect 成員)
+    = **false positive**(身體中心一觸房 rect 即 true,非 body-in-interior;空氣牆即藏於此、靠人手才抓);
+    autowalk **只 LOG 不 ASSERT**。P1/P2 那些「in-game 進房鎖達成」皆建在此弱訊號上。
+  - **解**:driver 用**真 `BlocksAny` 軸分離移動 + 真 `Simulation` combat**,一切「到達/進房/清房/到 boss 房」
+    斷言改用**身體實際位置**(`Room::ContainsPointInset` 深處,**禁用 ContainsPoint 門檻當證據**)。
+    test-side、env 外、**不改遊戲行為**、不擾 sim golden(全套 **1927 綠**、golden/byte-identical **57 不變**)。
+  - **現已真驗(取代/緩解上列舊債的 sim/log 弱驗)**:
+    - **進房 + 鎖門**(`RealBodyEntersAndLocksRoom`):真身體穿門到內部深處 + 門在身後 `DoorOpen()==false`
+      + 被封在內(走不回門外,400-frame > 219-需求 仍出不去)。← 補強「進房→StartRoom 鎖」原僅實玩/log。
+    - **clear-flow 後半 殺敵→開門→reward**(`RealBodyAimsAndKillsEnemy` / `RealBodyClearsRoomAndDoorsReopen`):
+      瞄準真敵開火**擊殺**(補 autofire「打不準」)→ `ClearRoom` → `DoorOpen()==true` + reward gate
+      (room_type==1)+ 可走出。← **解上面「clear-flow 後半待 P5」「P3 實機 clear-flow 驗證債」的 LOGIC 部分**。
+    - **到遠處 boss 房**(`RealBodyReachesBossRoom`):真身體多跳(waypoints)走到 **2-hop 外** boss 房內部
+      + boss alive/會射。← **解上面「進 boss 房受限 single-hop autowalk」的 NAV 部分**。
+    - **真導航繞障礙**(`NavigatesToRoomInterior` / `NavigatesAroundObstacle`):走廊穿越到內部深處;
+      直線撞牆死 vs waypoint 繞行成功(證真路由非直線)。
+  - **仍非 driver 能驗(誠實邊界,留人手/後續)**:
+    - **真·遊戲二進位 / 渲染 / 手感**:driver **複刻** GameScene 的 orchestration(同 leaf 元件 + 同鎖門閘
+      + 空氣牆 inset),**非跑 GameScene 本身** → 遊戲內實機/視覺/手感仍**靠人手**;game-binary 的
+      `SK_AUTOWALK` log 仍是弱 ContainsPoint 訊號(driver 是 test-side 取代,**非**改 game)。
+    - **boss 攻擊 patterns 正確性**:driver 只證 boss **會射**,Fan-近似債(patterns 忠實)仍在(見 B1-P2 條)。
+    - **接觸傷害敵(enemy→player melee)**:contact-damage 子系統 deferred → driver 用子彈擊殺(所有 sim 敵
+      slice-hp 皆可子彈殺),**melee 對玩家的傷害未驗**。
 - **★ P3 座標映射 = ★CAVEAT(不可 byte 恢復)**:prefab 房中心固定 (20,20)、`grid = pos − 20
   + (dim−1)/2`,四尺寸 + 門幾何自洽,但 (20,20) 原點與 offset 約定是**推斷非 recovered fact**
   (同 41-pitch CAVEAT)。實作但**靠實玩驗**;真機 dump 不符以真機為準。code:`extract_design_rooms.py`

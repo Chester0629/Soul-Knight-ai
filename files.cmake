@@ -342,6 +342,7 @@ set(TEST_FILES
     CorridorNeutralityTest.cpp
     DoorSealTest.cpp
     DoorTransitionTest.cpp
+    RealBodyDriverTest.cpp
     DamageTest.cpp
     LootTableTest.cpp
     LootIntegrationTest.cpp
