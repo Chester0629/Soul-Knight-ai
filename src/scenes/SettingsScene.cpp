@@ -15,6 +15,7 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 
 namespace Game {
@@ -22,7 +23,6 @@ namespace Game {
 std::array<int, 3> SettingsScene::s_Volumes = {80, 80, 80};
 
 namespace {
-constexpr std::array<const char *, 3> kRowLabels = {"MASTER", "BGM", "SFX"};
 constexpr float kRowY[3] = {90.0F, 0.0F, -90.0F};
 constexpr float kBarX = 120.0F;   // bar centre x.
 constexpr float kBarW = 360.0F;   // bar width (px) at 100%.
@@ -51,12 +51,15 @@ std::shared_ptr<Util::GameObject> MakeBar(const std::string &png, glm::vec2 pos,
 void SettingsScene::Build() {
     const std::string root = RESOURCE_DIR;
     const std::string sprites = root + "/sprites/";
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
+    const char *kKeys[] = {"settings.master", "settings.bgm", "settings.sfx"};
 
-    m_Renderer.AddChild(MakeText(font, 38, "SETTINGS", {0.0F, 220.0F},
-                                 Util::Color{255, 255, 255, 255}, 20.0F));
+    m_Renderer.AddChild(MakeText(font, 38, Strings::Get("settings.title"),
+                                 {0.0F, 220.0F}, Util::Color{255, 255, 255, 255}, 20.0F));
     for (std::size_t i = 0; i < 3; ++i) {
-        m_Renderer.AddChild(MakeText(font, 24, kRowLabels[i], {-360.0F, kRowY[i]},
+        m_Renderer.AddChild(MakeText(font, 24, Strings::Get(kKeys[i]),
+                                     {-360.0F, kRowY[i]},
                                      Util::Color{235, 235, 235, 255}, 21.0F));
         // grey track + blue fill (energy bar sprite reused for the slider).
         m_Renderer.AddChild(MakeBar(sprites + "ui_12_armor.png",
@@ -69,8 +72,7 @@ void SettingsScene::Build() {
     m_Marker = MakeText(font, 24, ">", {-410.0F, kRowY[0]},
                         Util::Color{255, 220, 60, 255}, 23.0F);
     m_Renderer.AddChild(m_Marker);
-    m_Renderer.AddChild(MakeText(font, 18,
-                                 "W/S: row   A/D: adjust   ESC: back",
+    m_Renderer.AddChild(MakeText(font, 18, Strings::Get("settings.hint"),
                                  {0.0F, -240.0F}, Util::Color{220, 220, 220, 255}, 20.0F));
     m_Built = true;
 }

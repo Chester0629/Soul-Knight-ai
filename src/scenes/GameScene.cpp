@@ -15,6 +15,7 @@
 #include "game/FloorClear.hpp"
 #include "game/RunController.hpp"
 
+#include "data/Strings.hpp"
 #include "scenes/SettingsScene.hpp"
 
 #include "world/FloorBlock.hpp"
@@ -1172,7 +1173,8 @@ void GameScene::DrawPauseOverlay() {
     }
     if (!m_PauseUiBuilt) {
         const std::string root = RESOURCE_DIR;
-        const std::string font = root + "/fonts/pixel_bold.ttf";
+        const std::string font = root + "/fonts/cjk.ttc";
+        Strings::Load(root);
         // Full-screen semi-transparent scrim (dim.png is 16x16 black @ alpha 160)
         // so the frozen world reads as "paused" behind the menu text.
         auto dim = std::make_shared<Util::GameObject>();
@@ -1183,14 +1185,14 @@ void GameScene::DrawPauseOverlay() {
 
         auto title = std::make_shared<Util::GameObject>();
         title->SetDrawable(std::make_shared<Util::Text>(
-            font, 56, "PAUSED", Util::Color{255, 255, 255, 255}));
+            font, 56, Strings::Get("pause.title"), Util::Color{255, 255, 255, 255}));
         title->m_Transform.translation = {0.0F, 80.0F};
         title->SetZIndex(80.0F);
         m_PauseUi.AddChild(title);
 
         auto hint = std::make_shared<Util::GameObject>();
         hint->SetDrawable(std::make_shared<Util::Text>(
-            font, 22, "ESC: RESUME      M: MAIN MENU", Util::Color{220, 220, 220, 255}));
+            font, 22, Strings::Get("pause.hint"), Util::Color{220, 220, 220, 255}));
         hint->m_Transform.translation = {0.0F, -10.0F};
         hint->SetZIndex(80.0F);
         m_PauseUi.AddChild(hint);

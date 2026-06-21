@@ -16,6 +16,7 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 #include "game/RunState.hpp"
 
@@ -48,7 +49,8 @@ std::shared_ptr<Util::GameObject> MakeImg(const std::string &path, glm::vec2 pos
 void SettlementScene::Build() {
     const std::string root = RESOURCE_DIR;
     const std::string sprites = root + "/sprites/";
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
 
     const bool victory = (m_Outcome == Outcome::Victory);
     const Util::Color gold{255, 220, 60, 255};
@@ -59,8 +61,9 @@ void SettlementScene::Build() {
     // Dynamic settlement drawn on a dark backdrop (project's "Settlement screen.png"
     // is a baked mockup with static numbers + a fixed Chinese title, so it cannot be
     // a live bg). The track + real FLOOR/TIME below mirror the video's structure.
-    m_Objects.push_back(MakeText(font, 52, victory ? "VICTORY" : "GAME OVER",
-                                 {0.0F, 250.0F}, victory ? gold : red));
+    m_Objects.push_back(MakeText(
+        font, 52, Strings::Get(victory ? "settle.victory" : "settle.defeat"),
+        {0.0F, 250.0F}, victory ? gold : red));
 
     // Floor-progress track: kChapterFloors nodes; the reached floor carries a hero
     // marker (the video's "1-1 ... flag" track). reached = floor within the chapter.
@@ -83,14 +86,17 @@ void SettlementScene::Build() {
     char timebuf[16];
     std::snprintf(timebuf, sizeof(timebuf), "%d:%02d", static_cast<int>(sec) / 60,
                   static_cast<int>(sec) % 60);
-    m_Objects.push_back(MakeText(font, 26, "FLOOR  1-" + std::to_string(reached + 1),
+    m_Objects.push_back(MakeText(font, 26,
+                                 Strings::Get("settle.floor") + "  1-" +
+                                     std::to_string(reached + 1),
                                  {-150.0F, -30.0F}, white));
-    m_Objects.push_back(MakeText(font, 26, std::string("TIME  ") + timebuf,
+    m_Objects.push_back(MakeText(font, 26,
+                                 Strings::Get("settle.time") + "  " + timebuf,
                                  {-150.0F, -80.0F}, white));
     m_Objects.push_back(MakeImg(sprites + "box02.png", {230.0F, -55.0F}, {2.2F, 2.2F}, 20.0F));
 
     m_Objects.push_back(
-        MakeText(font, 18, "R: new run     Esc: quit", {0.0F, -210.0F}, white));
+        MakeText(font, 18, Strings::Get("settle.hint"), {0.0F, -210.0F}, white));
 
     for (const auto &o : m_Objects) {
         m_Renderer.AddChild(o);

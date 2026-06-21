@@ -1,0 +1,47 @@
+{
+  "title.start": "點擊開始  (Enter)",
+  "title.settings_controls": "S 設置      K 按鍵說明",
+  "title.subtitle": "元氣騎士 — 前端流程",
+
+  "hero.title": "選擇角色",
+  "hero.c01": "騎士",
+  "hero.c02": "遊俠",
+  "hero.c03": "法師",
+  "hero.hint": "A/D 切換      Enter 確認      Esc 返回",
+
+  "talent.title": "選擇天賦",
+  "talent.hp": "生命 +4",
+  "talent.armor": "護甲 +1",
+  "talent.energy": "能量 +100",
+  "talent.hint": "A/D 或 1/2/3 選擇      Enter 確認",
+
+  "settle.victory": "通關！",
+  "settle.defeat": "游戲結束",
+  "settle.floor": "樓層",
+  "settle.time": "時間",
+  "settle.hint": "R 新遊戲      Esc 離開",
+
+  "settings.title": "設置",
+  "settings.master": "主音量",
+  "settings.bgm": "音樂",
+  "settings.sfx": "音效",
+  "settings.hint": "W/S 選列      A/D 調整      Esc 返回",
+
+  "keys.title": "按鍵說明",
+  "keys.move": "移動",
+  "keys.aim": "瞄準",
+  "keys.fire": "射擊",
+  "keys.skill": "技能",
+  "keys.switch": "切換武器",
+  "keys.pause": "暫停",
+  "keys.move_v": "W A S D",
+  "keys.aim_v": "滑鼠",
+  "keys.fire_v": "左鍵",
+  "keys.skill_v": "K",
+  "keys.switch_v": "Q",
+  "keys.pause_v": "ESC",
+  "keys.back": "Esc 返回",
+
+  "pause.title": "暫停",
+  "pause.hint": "Esc 繼續        M 主選單"
+}

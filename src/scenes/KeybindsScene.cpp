@@ -14,17 +14,19 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 
 namespace Game {
 namespace {
+// {label_key, value_key} into strings.json (localized in Build via Strings::Get).
 const std::array<std::pair<const char *, const char *>, 6> kBinds = {{
-    {"MOVE", "W A S D"},
-    {"AIM", "MOUSE"},
-    {"FIRE", "LEFT CLICK"},
-    {"SKILL", "K"},
-    {"SWITCH WEAPON", "Q"},
-    {"PAUSE", "ESC"},
+    {"keys.move", "keys.move_v"},
+    {"keys.aim", "keys.aim_v"},
+    {"keys.fire", "keys.fire_v"},
+    {"keys.skill", "keys.skill_v"},
+    {"keys.switch", "keys.switch_v"},
+    {"keys.pause", "keys.pause_v"},
 }};
 
 std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
@@ -40,19 +42,20 @@ std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
 
 void KeybindsScene::Build() {
     const std::string root = RESOURCE_DIR;
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
 
-    m_Objects.push_back(MakeText(font, 38, "CONTROLS", {0.0F, 240.0F},
+    m_Objects.push_back(MakeText(font, 38, Strings::Get("keys.title"), {0.0F, 240.0F},
                                  Util::Color{255, 255, 255, 255}, 20.0F));
     float y = 140.0F;
     for (const auto &b : kBinds) {
-        m_Objects.push_back(MakeText(font, 24, b.first, {-220.0F, y},
+        m_Objects.push_back(MakeText(font, 24, Strings::Get(b.first), {-220.0F, y},
                                      Util::Color{235, 235, 235, 255}, 21.0F));
-        m_Objects.push_back(MakeText(font, 24, b.second, {180.0F, y},
+        m_Objects.push_back(MakeText(font, 24, Strings::Get(b.second), {180.0F, y},
                                      Util::Color{255, 220, 60, 255}, 21.0F));
         y -= 56.0F;
     }
-    m_Objects.push_back(MakeText(font, 18, "ESC: back", {0.0F, -260.0F},
+    m_Objects.push_back(MakeText(font, 18, Strings::Get("keys.back"), {0.0F, -260.0F},
                                  Util::Color{220, 220, 220, 255}, 20.0F));
     for (const auto &o : m_Objects) {
         m_Renderer.AddChild(o);

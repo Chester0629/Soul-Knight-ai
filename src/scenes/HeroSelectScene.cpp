@@ -13,6 +13,7 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 
 namespace Game {
@@ -34,12 +35,14 @@ std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
 void HeroSelectScene::Build() {
     const std::string root = RESOURCE_DIR;
     const std::string sprites = root + "/sprites/";
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
 
     // Roster: only c01/c02 have faithful skill brains today; c03 is a stub but
     // playable (gate+cooldown). Easy to extend with more ids/names + sprites.
     m_CharIds = {"c01", "c02", "c03"};
-    m_Names = {"KNIGHT", "ROGUE", "WIZARD"};
+    m_Names = {Strings::Get("hero.c01"), Strings::Get("hero.c02"),
+               Strings::Get("hero.c03")};
     const float xs[] = {-340.0F, 0.0F, 340.0F};
 
     // Room backdrop (the hub bg, scaled to roughly fill the 1280x720 screen).
@@ -55,7 +58,7 @@ void HeroSelectScene::Build() {
         m_Renderer.AddChild(bg);
     }
 
-    m_Renderer.AddChild(MakeText(font, 34, "SELECT HERO", {0.0F, 260.0F},
+    m_Renderer.AddChild(MakeText(font, 34, Strings::Get("hero.title"), {0.0F, 260.0F},
                                  Util::Color{255, 255, 255, 255}, 20.0F));
 
     for (std::size_t i = 0; i < m_CharIds.size(); ++i) {
@@ -76,7 +79,7 @@ void HeroSelectScene::Build() {
     nameObj->SetZIndex(20.0F);
     m_Renderer.AddChild(nameObj);
 
-    m_Renderer.AddChild(MakeText(font, 18, "A/D: switch    ENTER: confirm    ESC: back",
+    m_Renderer.AddChild(MakeText(font, 18, Strings::Get("hero.hint"),
                                  {0.0F, -280.0F}, Util::Color{220, 220, 220, 255}, 20.0F));
     m_Built = true;
 }

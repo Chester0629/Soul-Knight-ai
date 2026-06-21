@@ -3,6 +3,7 @@ set(SRC_FILES
 
     # Phase 2 game-layer data model
     data/GameData.cpp
+    data/Strings.cpp
 
     # Phase 3 faithful core logic (ported from 1.7.10 RE)
     data/RGRandom.cpp
@@ -168,6 +169,7 @@ set(INCLUDE_FILES
 
     # Phase 2 game-layer data model
     data/GameData.hpp
+    data/Strings.hpp
 
     # Phase 3 faithful core logic (ported from 1.7.10 RE)
     data/RGRandom.hpp

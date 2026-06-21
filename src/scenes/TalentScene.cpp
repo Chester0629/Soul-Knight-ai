@@ -13,6 +13,7 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 
 namespace Game {
@@ -44,19 +45,20 @@ std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
 
 void TalentScene::Build() {
     const std::string root = RESOURCE_DIR;
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
     const float xs[] = {-360.0F, 0.0F, 360.0F};
+    const char *kKeys[] = {"talent.hp", "talent.armor", "talent.energy"};
 
-    m_Renderer.AddChild(MakeText(font, 40, "CHOOSE TALENT", {0.0F, 220.0F},
+    m_Renderer.AddChild(MakeText(font, 40, Strings::Get("talent.title"), {0.0F, 220.0F},
                                  Util::Color{255, 255, 255, 255}, 20.0F));
     for (std::size_t i = 0; i < kTalents.size(); ++i) {
-        auto card = MakeText(font, 26, kTalents[i].label, {xs[i], 0.0F},
+        auto card = MakeText(font, 26, Strings::Get(kKeys[i]), {xs[i], 0.0F},
                              Util::Color{255, 220, 60, 255}, 21.0F);
         m_Cards.push_back(card);
         m_Renderer.AddChild(card);
     }
-    m_Renderer.AddChild(MakeText(font, 18,
-                                 "A/D or 1/2/3: choose     ENTER: confirm",
+    m_Renderer.AddChild(MakeText(font, 18, Strings::Get("talent.hint"),
                                  {0.0F, -240.0F}, Util::Color{220, 220, 220, 255}, 20.0F));
     m_Built = true;
 }

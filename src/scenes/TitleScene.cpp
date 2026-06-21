@@ -13,6 +13,7 @@
 #include "Util/Text.hpp"
 #include "Util/TransformUtils.hpp"
 
+#include "data/Strings.hpp"
 #include "game/RunController.hpp"
 
 namespace Game {
@@ -40,18 +41,18 @@ std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
 void TitleScene::Build() {
     const std::string root = RESOURCE_DIR;
     const std::string sprites = root + "/sprites/";
-    const std::string font = root + "/fonts/pixel_bold.ttf";
+    const std::string font = root + "/fonts/cjk.ttc";
+    Strings::Load(root);
 
     // Soul Knight logo (biaoti03) up top, a hero figure (c01 idle) centred, a
-    // tap-to-start prompt at the bottom -- the video's login layout. (Real dark
-    // bg art / green-spotlight figure / gear+version come in the visual pass.)
+    // tap-to-start prompt at the bottom -- the video's login layout.
     m_Objects.push_back(MakeImage(sprites + "biaoti03.png", {0.0F, 210.0F}, 1.2F, 10.0F));
     m_Objects.push_back(MakeImage(sprites + "c01_4.png", {0.0F, -10.0F}, 4.0F, 8.0F));
-    m_Objects.push_back(MakeText(font, 24, "PRESS ENTER TO START", {0.0F, -210.0F},
+    m_Objects.push_back(MakeText(font, 24, Strings::Get("title.start"), {0.0F, -210.0F},
                                  Util::Color{235, 235, 235, 255}, 20.0F));
-    m_Objects.push_back(MakeText(font, 16, "S: SETTINGS     K: CONTROLS",
+    m_Objects.push_back(MakeText(font, 17, Strings::Get("title.settings_controls"),
                                  {0.0F, -270.0F}, Util::Color{170, 170, 170, 255}, 20.0F));
-    m_Objects.push_back(MakeText(font, 14, "Soul Knight -- front-end flow",
+    m_Objects.push_back(MakeText(font, 14, Strings::Get("title.subtitle"),
                                  {0.0F, -320.0F}, Util::Color{150, 150, 150, 255}, 20.0F));
 
     for (const auto &o : m_Objects) {
