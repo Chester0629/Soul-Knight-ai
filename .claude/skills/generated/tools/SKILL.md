@@ -1,11 +1,11 @@
 ---
 name: tools
-description: "Skill for the Tools area of Soul-Knight-ai. 107 symbols across 12 files."
+description: "Skill for the Tools area of Soul-Knight-ai. 117 symbols across 14 files."
 ---
 
 # Tools
 
-107 symbols | 12 files | Cohesion: 91%
+117 symbols | 14 files | Cohesion: 91%
 
 ## When to Use
 
@@ -21,12 +21,12 @@ description: "Skill for the Tools area of Soul-Knight-ai. 107 symbols across 12 
 | `tools/render_layout.py` | _font, draw_texts, measure, collect_slider_fills, render_root (+12) |
 | `tools/build_gamedata.py` | add, load_group, parse_weapon_catalog, parse_droptables, write (+5) |
 | `tools/build_fonts_manifest.py` | load_guid_map, collect_font_guids, find_png, bitmap_atlas, read_char_table (+2) |
+| `tools/extract_tiles.py` | build_guid_index, find_prefab, prefab_sprite_guid, sprite_rect_and_texture, crop_sprite (+1) |
 | `tools/validate_data.py` | load, need, expect_keys, numeric, count_unresolved (+1) |
 | `tools/hud_check.cpp` | IsBarRed, SaveShot, HpBarSpan, Stats, main |
 | `tools/hud_bar_check.cpp` | MakeBar, LitSpan, SaveScreenshot, main |
+| `tools/extract_design_rooms.py` | room_x, extract_room, walk, main |
 | `tools/bake_hud_bars.py` | find, resolve, main |
-| `tools/gen_tiles.py` | floor_tile, wall_tile, main |
-| `tools/import_assets.py` | copy_category, build_sprite_manifest, main |
 
 ## Entry Points
 
@@ -76,7 +76,7 @@ Start here when exploring this area:
 | `Main → _font` | intra_community | 4 |
 | `Main → Measure` | intra_community | 4 |
 | `Detect_scroll_rect → Find_scalar` | intra_community | 4 |
-| `Detect_mask → Find_scalar` | intra_community | 4 |
+| `Resolve → Find_scalar` | cross_community | 3 |
 
 ## Connected Areas
 

@@ -1,67 +1,67 @@
 ---
 name: sim
-description: "Skill for the Sim area of Soul-Knight-ai. 52 symbols across 16 files."
+description: "Skill for the Sim area of Soul-Knight-ai. 111 symbols across 21 files."
 ---
 
 # Sim
 
-52 symbols | 16 files | Cohesion: 88%
+111 symbols | 21 files | Cohesion: 94%
 
 ## When to Use
 
-- Working with code in `src/`
-- Understanding how Normalize, TEST, RotateDeg work
+- Working with code in `include/`
+- Understanding how BossFanCount, Normalize, TEST work
 - Modifying sim-related functionality
 
 ## Key Files
 
 | File | Symbols |
 |------|---------|
+| `include/sim/BossBrainAdapters.hpp` | BossFanCount, AttackTick, AttackTick, AttackTick, ShootCd (+37) |
 | `src/sim/Simulation.cpp` | MoveControllers, WakeByRoom, TickWeapon, EmitAttackEvents, DrainFireIntents (+9) |
+| `include/sim/EnemyBrainAdapters.hpp` | CdShootAdapter, IntShootAdapter, MoveOnlyAdapter, EnemyAI01Adapter, EnemyAI02Adapter (+5) |
 | `include/sim/Scheduler.hpp` | SecondsToTicks, Invoke, InvokeRepeating, Cancel, Tick (+1) |
+| `src/sim/BrainFactory.cpp` | EnemyParams, MakeEnemy, MakeEnemyPtr, MakeBoss, MakeBossPtr (+1) |
 | `src/sim/BossController.cpp` | ChaseDir, OnShootTick, OnWanderTick, Activate, BossController |
-| `src/sim/BrainFactory.cpp` | EnemyParams, MakeEnemy, MakeEnemyPtr, MakeBoss, MakeWeapon |
 | `src/sim/EnemyController.cpp` | OnScoutTick, OnShootTick, Activate, EnemyController |
-| `include/sim/BrainFactory.hpp` | MakeEnemy, MakeBoss, MakeWeapon, MakeEnemyPtr |
+| `include/sim/BrainFactory.hpp` | MakeEnemy, MakeBoss, MakeWeapon, MakeBossPtr |
 | `include/sim/SimMath.hpp` | Normalize, RotateDeg, CirclesOverlap |
-| `src/sim/FireSystem.cpp` | MakeBullet, Expand |
-| `include/sim/FixedClock.hpp` | Advance, RemainderMs |
-| `test/BrainFactoryTest.cpp` | TEST |
+| `include/sim/IBossBrain.hpp` | IBossBrain, BossBrainBase |
 
 ## Entry Points
 
 Start here when exploring this area:
 
+- **`BossFanCount`** (Function) — `include/sim/BossBrainAdapters.hpp:49`
 - **`Normalize`** (Function) — `include/sim/SimMath.hpp:21`
-- **`TEST`** (Function) — `test/BrainFactoryTest.cpp:16`
+- **`TEST`** (Function) — `test/BrainFactoryTest.cpp:18`
+- **`MakeEnemyBrain`** (Function) — `include/sim/EnemyBrainAdapters.hpp:161`
 - **`RotateDeg`** (Function) — `include/sim/SimMath.hpp:13`
-- **`CirclesOverlap`** (Function) — `include/sim/SimMath.hpp:28`
-- **`TEST`** (Function) — `test/SimMathTest.cpp:11`
 
 ## Key Symbols
 
 | Symbol | Type | File | Line |
 |--------|------|------|------|
-| `Normalize` | Function | `include/sim/SimMath.hpp` | 21 |
-| `TEST` | Function | `test/BrainFactoryTest.cpp` | 16 |
-| `RotateDeg` | Function | `include/sim/SimMath.hpp` | 13 |
-| `CirclesOverlap` | Function | `include/sim/SimMath.hpp` | 28 |
-| `TEST` | Function | `test/SimMathTest.cpp` | 11 |
-| `TEST` | Function | `test/SchedulerTest.cpp` | 10 |
-| `TEST` | Function | `test/FixedClockTest.cpp` | 9 |
-| `TEST` | Function | `test/SimPodsTest.cpp` | 12 |
-| `SecondsToTicks` | Method | `include/sim/Scheduler.hpp` | 21 |
-| `Invoke` | Method | `include/sim/Scheduler.hpp` | 25 |
-| `InvokeRepeating` | Method | `include/sim/Scheduler.hpp` | 29 |
-| `ChaseDir` | Method | `src/sim/BossController.cpp` | 20 |
-| `OnShootTick` | Method | `src/sim/BossController.cpp` | 32 |
-| `OnWanderTick` | Method | `src/sim/BossController.cpp` | 55 |
-| `Activate` | Method | `src/sim/BossController.cpp` | 68 |
-| `OnScoutTick` | Method | `src/sim/EnemyController.cpp` | 55 |
-| `OnShootTick` | Method | `src/sim/EnemyController.cpp` | 65 |
-| `Activate` | Method | `src/sim/EnemyController.cpp` | 91 |
-| `MoveControllers` | Method | `src/sim/Simulation.cpp` | 137 |
-| `WakeByRoom` | Method | `src/sim/Simulation.cpp` | 53 |
+| `BossAI01Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 57 |
+| `BossAI02Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 85 |
+| `BossAI03Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 112 |
+| `BossAI04Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 137 |
+| `BossAI05Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 163 |
+| `BossAI06Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 192 |
+| `BossAI07Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 222 |
+| `BossAI08Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 254 |
+| `BossAI09Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 279 |
+| `BossAI10Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 303 |
+| `BossAI11Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 332 |
+| `BossAI12Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 360 |
+| `BossAI13Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 387 |
+| `BossAI14Adapter` | Class | `include/sim/BossBrainAdapters.hpp` | 416 |
+| `IBossBrain` | Class | `include/sim/IBossBrain.hpp` | 33 |
+| `BossBrainBase` | Class | `include/sim/IBossBrain.hpp` | 82 |
+| `CdShootAdapter` | Class | `include/sim/EnemyBrainAdapters.hpp` | 37 |
+| `IntShootAdapter` | Class | `include/sim/EnemyBrainAdapters.hpp` | 51 |
+| `MoveOnlyAdapter` | Class | `include/sim/EnemyBrainAdapters.hpp` | 65 |
+| `EnemyAI01Adapter` | Class | `include/sim/EnemyBrainAdapters.hpp` | 78 |
 
 ## Execution Flows
 
@@ -81,6 +81,6 @@ Start here when exploring this area:
 
 ## How to Explore
 
-1. `gitnexus_context({name: "Normalize"})` — see callers and callees
+1. `gitnexus_context({name: "BossFanCount"})` — see callers and callees
 2. `gitnexus_query({query: "sim"})` — find related execution flows
 3. Read key files listed above for implementation details

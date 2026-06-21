@@ -305,6 +305,8 @@ set(INCLUDE_FILES
     sim/WeaponController.hpp
     sim/IWeaponBrain.hpp
     sim/WeaponBrainAdapters.hpp
+    sim/ICharSkill.hpp
+    sim/CharSkillAdapters.hpp
 
     # Phase 2 combat logic
     combat/CombatStats.hpp
@@ -490,6 +492,9 @@ set(TEST_FILES
 
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
+
+    # B1-P4a char/skill: (d) ICharSkill dispatch + charId seam + C01/C02 faithful
+    CharSkillDispatchTest.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): RunState/continuation + perFloorSeed
     RunLoopTest.cpp

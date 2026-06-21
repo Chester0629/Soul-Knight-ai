@@ -16,6 +16,7 @@
 using Game::AllHostilesDead;
 using Game::CombatStats;
 using Game::GameData;
+using Game::IsBossFloor;
 using Game::MapManager;
 using Game::PerFloorSeed;
 using Game::PlayerContinuation;
@@ -72,6 +73,40 @@ TEST(RunLoopPerFloorSeed, DerivedSeedWindowsDoNotOverlap) {
         const int hiNext = PerFloorSeed(runSeed, floor + 1);
         EXPECT_GT(hiNext - lo, kMaxDerivedOffset)
             << "floor " << floor << " derived-seed window reaches into floor " << (floor + 1);
+    }
+}
+
+// =====================================================================
+// Pure logic A1b: IsBossFloor -- the chapter boss-floor predicate.
+//   A chapter is kChapterFloors (5) floors: index 0..3 are mob floors,
+//   index 4 is the boss floor; the cycle repeats (9, 14, ...). This is the
+//   single source consumed by GameScene (boss-spawn gate) and RunController
+//   (settlement routing); the routing reads it on the PRE-increment index.
+// =====================================================================
+
+TEST(RunLoopIsBossFloor, MobFloorsAreNotBossFloors) {
+    EXPECT_FALSE(IsBossFloor(0));
+    EXPECT_FALSE(IsBossFloor(1));
+    EXPECT_FALSE(IsBossFloor(2));
+    EXPECT_FALSE(IsBossFloor(3));
+}
+
+TEST(RunLoopIsBossFloor, LastFloorOfEachChapterIsBoss) {
+    EXPECT_TRUE(IsBossFloor(4));   // chapter 1 boss
+    EXPECT_TRUE(IsBossFloor(9));   // chapter 2 boss
+    EXPECT_TRUE(IsBossFloor(14));  // chapter 3 boss
+}
+
+TEST(RunLoopIsBossFloor, ExactlyOneBossPerChapterBlock) {
+    for (int chapter = 0; chapter < 4; ++chapter) {
+        int bossCount = 0;
+        for (int f = chapter * Game::kChapterFloors;
+             f < (chapter + 1) * Game::kChapterFloors; ++f) {
+            if (IsBossFloor(f)) {
+                ++bossCount;
+            }
+        }
+        EXPECT_EQ(bossCount, 1) << "chapter " << chapter << " must have exactly one boss floor";
     }
 }
 

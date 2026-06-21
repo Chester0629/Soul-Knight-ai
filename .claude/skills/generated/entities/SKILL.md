@@ -1,11 +1,11 @@
 ---
 name: entities
-description: "Skill for the Entities area of Soul-Knight-ai. 28 symbols across 18 files."
+description: "Skill for the Entities area of Soul-Knight-ai. 29 symbols across 19 files."
 ---
 
 # Entities
 
-28 symbols | 18 files | Cohesion: 93%
+29 symbols | 19 files | Cohesion: 90%
 
 ## When to Use
 
@@ -56,7 +56,7 @@ Start here when exploring this area:
 | `GetCollider` | Method | `src/entities/Bullet.cpp` | 97 |
 | `GetCollider` | Method | `src/entities/Chest.cpp` | 22 |
 | `GetCollider` | Method | `src/entities/WeaponPickup.cpp` | 23 |
-| `BlocksAny` | Method | `src/scenes/GameScene.cpp` | 328 |
+| `DamageObstacle` | Method | `src/scenes/GameScene.cpp` | 661 |
 | `Blocks` | Method | `src/world/Room.cpp` | 80 |
 | `Think` | Method | `src/entities/Boss.cpp` | 44 |
 | `Think` | Method | `src/entities/Enemy.cpp` | 32 |

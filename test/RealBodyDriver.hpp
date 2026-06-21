@@ -67,6 +67,7 @@ public:
     static constexpr float kAutoWalkSpeed = 300.0F;                  // px/s
     static constexpr float kStepMs = 20.0F; // one fixed sim step per frame
     static constexpr float kPickupRange = 28.0F; // GameScene pickup proximity (kPickupRange)
+    static constexpr float kSkillDashPx = 80.0F; // (B1-P4a) C02 dash impulse distance (owner-applied)
 
     explicit RealBodyDriver(int seed) : m_Sim(seed, this) {}
 
@@ -127,6 +128,14 @@ public:
         m_Sim.EquipWeapon(def, def.id.empty() ? "Gun001" : def.id, seed);
         m_EnergyCost = Game::WeaponEnergyCost(def);
     }
+    /// (B1-P4a) Dispatch the player skill brain by character id. C01 mirror / C02 dash
+    /// are faithful; c03..c13 are gate+cooldown-only stubs.
+    void EquipSkill(const std::string &charId, float skillCd, float inSkillTime) {
+        m_Sim.SetPlayerSkill(charId, skillCd, inSkillTime);
+        m_SkillEquipped = true;
+    }
+    /// Hold/release the skill button for subsequent Frame()s.
+    void SetSkillHeld(bool held) { m_SkillHeld = held; }
     /// Drop a weapon pickup at @p pos. Walking within kPickupRange auto-equips it
     /// (mirrors GameScene's proximity pickup -> EquipWeapon, the real walk-over chain).
     /// The body must navigate to it under real collision -- nothing equips until then.
@@ -215,8 +224,29 @@ public:
             in.aimDir = al > 0.0F ? a / al : glm::vec2{1.0F, 0.0F};
             in.firing = true;
         }
+        in.skill = m_SkillHeld; // (B1-P4a) skill button -> sim TickSkill activation
         m_Sim.SetPlayerStats(m_Player);
         m_Sim.Advance(kStepMs, in);
+        // (B1-P4a) owner-side: apply a C02 dash impulse the sim signalled (skill_dash
+        // event). The sim's player position is an INPUT, so the dash is applied here
+        // (the GameScene/owner's job), collision-checked like normal movement.
+        if (m_SkillEquipped) {
+            for (const Game::Sim::SimEvent &ev : m_Sim.DrainEvents()) {
+                if (ev.name != "skill_dash" || ev.entityId != Game::Sim::Simulation::kPlayerViewId) {
+                    continue;
+                }
+                const glm::vec2 ad = aimTarget - m_Pos;
+                const float adl = std::sqrt(ad.x * ad.x + ad.y * ad.y);
+                const glm::vec2 dir = adl > 0.0F ? ad / adl : glm::vec2{1.0F, 0.0F};
+                const glm::vec2 step = dir * kSkillDashPx;
+                if (!Blocks(glm::vec2{m_Pos.x + step.x, m_Pos.y}, kRadius)) {
+                    m_Pos.x += step.x;
+                }
+                if (!Blocks(glm::vec2{m_Pos.x, m_Pos.y + step.y}, kRadius)) {
+                    m_Pos.y += step.y;
+                }
+            }
+        }
         m_Player.hp = m_Sim.PlayerStats().hp;
         m_Player.armor = m_Sim.PlayerStats().armor;
         for (int s = 0; s < m_Sim.PlayerShotsLastAdvance(); ++s) {
@@ -439,6 +469,8 @@ private:
     int m_EnergyCost = 1;
     std::string m_CurrentWeaponId;
     int m_EquipSeq = 0;
+    bool m_SkillEquipped = false; // (B1-P4a) a skill brain was dispatched.
+    bool m_SkillHeld = false;     // (B1-P4a) skill button held this/next Frame.
 };
 
 } // namespace sktest

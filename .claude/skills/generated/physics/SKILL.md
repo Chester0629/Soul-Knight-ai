@@ -49,8 +49,6 @@ Start here when exploring this area:
 | Flow | Type | Steps |
 |------|------|-------|
 | `Update → CellRange` | intra_community | 3 |
-| `Add → CellRange` | intra_community | 3 |
-| `Remove → CellRange` | intra_community | 3 |
 
 ## How to Explore
 

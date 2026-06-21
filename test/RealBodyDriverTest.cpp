@@ -257,4 +257,52 @@ TEST(RealBodyDriverTest, RealBodyPicksUpBurstGunFiresAcrossTicksAndKills) {
     EXPECT_EQ(d.LiveEnemyCount(room), 0);
 }
 
+// --- B1-P4a: character skill through the full body loop ----------------------
+// C01 (mirror) and C02 (dash) are the two faithful skills; the driver proves each
+// produces its REAL effect under the body-driven loop (mirror = extra bullets that
+// kill; dash = owner-applied forward body displacement).
+
+TEST(RealBodyDriverTest, C01SkillMirrorsShotsThroughBodyLoopAndKills) {
+    Game::GameData gd;
+    ASSERT_TRUE(gd.LoadAll(kResourceRoot));
+    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::WeaponDef *gun = gd.FindWeapon("Gun001");
+    ASSERT_NE(edef, nullptr);
+    ASSERT_NE(gun, nullptr);
+
+    RealBodyDriver d(31);
+    const int room = d.AddRoom({0.0F, 0.0F}, 15, {0, 0, 0, 0}, 0);
+    const glm::vec2 center = d.RoomCenter(room);
+    const glm::vec2 enemyPos = center + glm::vec2{60.0F, 0.0F};
+    d.AddEnemy(room, *edef, enemyPos, 1);
+    d.EquipPlayer(*gun, 5);
+    d.EquipSkill("c01", 5.0F, 5.0F); // long active window -> the mirror persists
+    d.SetPlayer(center);
+    d.SetSkillHeld(true);
+
+    // One fire+skill frame: while in_skill the second hand mirrors the shot.
+    d.Frame(d.PlayerPos(), /*moving=*/false, /*firing=*/true, enemyPos);
+    EXPECT_EQ(d.PlayerBulletCount(), 2) << "C01 in_skill mirror -> primary + second-hand shot";
+
+    ASSERT_EQ(d.LiveEnemyCount(room), 1);
+    EXPECT_TRUE(d.ClearRoomCombat(room, 400)) << "mirrored fire clears the room";
+    EXPECT_EQ(d.LiveEnemyCount(room), 0);
+}
+
+TEST(RealBodyDriverTest, C02SkillDashesBodyForward) {
+    RealBodyDriver d(33);
+    const int room = d.AddRoom({0.0F, 0.0F}, 21, {0, 0, 0, 0}, 0); // big room: dash has space
+    const glm::vec2 center = d.RoomCenter(room);
+    d.EquipSkill("c02", 5.0F, 0.0F);
+    d.SetPlayer(center + glm::vec2{-120.0F, 0.0F});
+    d.SetSkillHeld(true);
+
+    const glm::vec2 before = d.PlayerPos();
+    const glm::vec2 target = center + glm::vec2{200.0F, 0.0F}; // dash/move toward +x
+    d.Frame(target, /*moving=*/true, /*firing=*/false, target);
+    const float dx = d.PlayerPos().x - before.x;
+    EXPECT_GT(dx, 50.0F) << "C02 dash impulse jumps the body forward (a plain walk step is ~6px)";
+    EXPECT_TRUE(d.BodyDeepInside(room)) << "dashed body stays inside the room (collision-checked)";
+}
+
 // NOLINTEND(readability-magic-numbers)

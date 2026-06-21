@@ -40,6 +40,10 @@ namespace Game {
 struct PlayerContinuation {
     CombatStats stats;    ///< full combat-vitals copy (hp/armor/energy + max + accumulators).
     std::string weaponId; ///< equipped WeaponDef id, re-equipped on the next floor.
+    /// Selected character id ("c01".."c13"), re-dispatched to the skill brain on the
+    /// next floor (B1-P4a charId seam). Defaults to "c01"; the HeroRoom picker that
+    /// sets a non-c01 value is B5 -- until then every run carries the c01 default.
+    std::string charId = "c01";
 };
 
 /**
@@ -77,6 +81,26 @@ constexpr int kFloorSeedStride = 1000003;
  */
 inline int PerFloorSeed(int runSeed, int floorIndex) {
     return runSeed + floorIndex * kFloorSeedStride;
+}
+
+/// Floors per chapter. A chapter is 4 mob floors (index 0..3) + 1 boss
+/// floor (index 4); clearing the boss floor ends the chapter -> settlement.
+///
+/// PORT-LEVEL DESIGN CHOICE, *not* byte-recovered: the original binary uses one
+/// continuous floor counter (RGGameProcess.this_index) 1..16 with a hard 16-floor
+/// cap and a 5-floor *cycle* (this_index%5==1, 1-based, is a boss/prep floor),
+/// and there is NO inter-chapter settlement screen (the "Statements" results scene
+/// only loads at the 16-cap or on death). floor->boss assignment is NOT recoverable
+/// (no boss_list; LEVEL_GEN_PLAN.md). We keep the cycle PERIOD (5) but deliberately
+/// re-phase the boss to the *last* floor of the block (index%5==4) so a chapter
+/// reads as "4 mobs -> boss -> settlement". Single source of the chapter length +
+/// boss-floor predicate, consumed by GameScene (boss-spawn gate) and RunController
+/// (settlement routing).
+constexpr int kChapterFloors = 5;
+
+/// True on the chapter's last floor (boss floor): indices 4, 9, 14, ...
+inline bool IsBossFloor(int floorIndex) {
+    return floorIndex % kChapterFloors == kChapterFloors - 1;
 }
 
 } // namespace Game

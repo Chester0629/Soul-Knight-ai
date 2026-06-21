@@ -57,7 +57,7 @@ Start here when exploring this area:
 | Area | Connections |
 |------|-------------|
 | Data | 4 calls |
-| World | 1 calls |
+| Test | 1 calls |
 | Scenes | 1 calls |
 
 ## How to Explore

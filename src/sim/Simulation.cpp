@@ -4,6 +4,7 @@
 
 #include "combat/Damage.hpp"
 #include "sim/BrainFactory.hpp"
+#include "sim/CharSkillAdapters.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
 
@@ -84,10 +85,10 @@ void Simulation::TickWeapon() {
     // gun with its own cadence, fired via a 0.1s-delayed Invoke ("Hand2Atk"), with the
     // actual hand transform + animation -- all owner/presentation, the truncated
     // get_transform tail-call the brain does not model. Full c01 fidelity = B1b.
-    if (m_Skill.has_value() && shots > 0) {
-        const Game::CharSkillC01::AtkDecision d =
+    if (m_Skill != nullptr && shots > 0) {
+        const ICharSkill::AtkEffect d =
             m_Skill->RoleAtk(/*pressDown=*/m_Input.firing, /*standingOnItem=*/false);
-        if (d.mirrorSecondHand && d.secondHandAttackValue) {
+        if (d.mirrorSecondHand && d.secondHandValue) {
             constexpr float kSecondHandOffsetPx = 12.0F; // placeholder hand offset (B1b: real transform).
             // Copy the primary shots first: push_back below may reallocate the buffer.
             const std::vector<FireIntent> primary(
@@ -106,21 +107,29 @@ void Simulation::TickWeapon() {
 }
 
 void Simulation::TickSkill() {
-    if (!m_Skill.has_value()) {
+    if (m_Skill == nullptr) {
         return;
     }
-    // Activation (RoleSkill gate): the skill button this step tries to enter the
-    // ultimate. Idempotent -- TryActivateSkill no-ops if on cooldown or already in
-    // skill, so a held / multi-step-constant input cannot re-cast.
+    // Activation (edge trigger): the skill button this step tries to enter the
+    // ultimate via the (d) adapter. Idempotent -- the brain gates on cooldown/
+    // in_skill, so a held / multi-step-constant input cannot re-cast.
     if (m_Input.skill) {
-        m_Skill->TryActivateSkill();
+        const ICharSkill::TriggerResult r = m_Skill->TryTrigger();
+        if (r.dashImpulse) {
+            // C02: the ultimate is a forward dash. The sim surfaces the impulse as an
+            // event the owner (GameScene/driver) applies to player movement -- the
+            // sim's player position is an INPUT, not sim-owned. Effect-bearing skill
+            // output without perturbing the bullet/entity replay traces.
+            m_Events.push_back(
+                SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "skill_dash"});
+        }
     }
-    // Per-frame Update: cooldown counts UP (NOT frozen while in_skill) + the active
-    // in_skill_time window counts down and auto-ends (CharSkillC01::Tick).
+    // Per-frame Update: cooldown counts UP (NOT frozen while in_skill) + (for windowed
+    // heroes) the active window counts down and auto-ends (ICharSkill::Tick).
     m_Skill->Tick(kFixedStepMs);
     // A3 cooldown bridge: publish the 0..1 charge into the player stats the shell
     // pulls back each frame (-> CombatStats::skillCdProgress -> HUD; A4 renders it).
-    m_PlayerStats.skillCdProgress = SkillCooldownProgress(*m_Skill);
+    m_PlayerStats.skillCdProgress = m_Skill->CooldownProgress();
 }
 
 // A: turn each controller's latched shot into an "attack" AnimTrigger keyed by its view id
@@ -345,11 +354,11 @@ void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weap
                              int seed) {
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed)); // cold rebuild
 }
-void Simulation::SetPlayerSkill(float skillCd, float inSkillTime) {
-    // A3: fixed c01. Single owned member (parallel to m_Weapon) -- not an entity, not
-    // via BrainFactory (a bespoke per-hero brain, no base class). Multi-character
-    // dispatch is B5. The skill starts READY (CharSkillC01 ctor).
-    m_Skill.emplace(skillCd, inSkillTime);
+void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime) {
+    // B1-P4a (d) dispatch: charId -> per-hero ICharSkill adapter. C01 (mirror) + C02
+    // (dash) are faithful; c03..c13 are gate+cooldown-only stubs. The skill starts
+    // READY (each brain ctor). Single owned member, parallel to m_Weapon.
+    m_Skill = MakeCharSkill(charId, skillCd, inSkillTime);
 }
 
 } // namespace Game::Sim

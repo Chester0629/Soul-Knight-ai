@@ -1,11 +1,11 @@
 ---
 name: util
-description: "Skill for the Util area of Soul-Knight-ai. 111 symbols across 44 files."
+description: "Skill for the Util area of Soul-Knight-ai. 113 symbols across 45 files."
 ---
 
 # Util
 
-111 symbols | 44 files | Cohesion: 92%
+113 symbols | 45 files | Cohesion: 92%
 
 ## When to Use
 
@@ -17,7 +17,7 @@ description: "Skill for the Util area of Soul-Knight-ai. 111 symbols across 44 f
 
 | File | Symbols |
 |------|---------|
-| `PTSD/include/Util/Input.hpp` | GetScrollDistance, GetCursorPosition, IfScroll, IsMouseMoving, SetCursorPosition (+4) |
+| `PTSD/include/Util/Input.hpp` | GetScrollDistance, GetCursorPosition, IsKeyPressed, IfScroll, IsMouseMoving (+5) |
 | `PTSD/include/Util/ObjectPool.hpp` | Acquire, Release, FreeCount, ActiveCount, Capacity (+1) |
 | `PTSD/src/Util/FilledImage.cpp` | VerticalBottomFilledQuad, FilledImage, SetFraction, RebuildQuad, InitProgram (+1) |
 | `PTSD/include/Util/Collider.hpp` | Min, Max, OverlapAABB, OverlapAABBCircle, Overlap (+1) |
@@ -69,15 +69,6 @@ Start here when exploring this area:
 |------|------|-------|
 | `FilledImage → GetMissingImageTextureSDLSurface` | cross_community | 3 |
 | `FilledImage → VerticalBottomFilledQuad` | intra_community | 3 |
-| `Draw → GetElapsedTimeMs` | intra_community | 3 |
-| `Draw → GetDeltaTimeMs` | cross_community | 3 |
-| `Draw → Play` | intra_community | 3 |
-
-## Connected Areas
-
-| Area | Connections |
-|------|-------------|
-| Scenes | 2 calls |
 
 ## How to Explore
 

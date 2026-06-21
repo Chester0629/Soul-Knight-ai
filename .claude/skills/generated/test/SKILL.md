@@ -1,73 +1,89 @@
 ---
 name: test
-description: "Skill for the Test area of Soul-Knight-ai. 68 symbols across 20 files."
+description: "Skill for the Test area of Soul-Knight-ai. 150 symbols across 34 files."
 ---
 
 # Test
 
-68 symbols | 20 files | Cohesion: 100%
+150 symbols | 34 files | Cohesion: 90%
 
 ## When to Use
 
-- Working with code in `PTSD/`
-- Understanding how TEST, TEST, TEST work
+- Working with code in `test/`
+- Understanding how TEST, TEST, m work
 - Modifying test-related functionality
 
 ## Key Files
 
 | File | Symbols |
 |------|---------|
+| `test/RealBodyDriver.hpp` | AddEnemy, AddBoss, EquipPlayer, SetPlayer, Blocks (+20) |
+| `test/FloorConnectivityTest.cpp` | Walkable, BuildRoomSized, Floor1DesignPool, InteriorCell, Code (+7) |
 | `PTSD/include/Core/Camera2D.hpp` | SetPosition, GetPosition, SetZoom, GetZoom, Follow (+6) |
-| `PTSD/test/SceneManagerTest.cpp` | TEST, Update, TestScene, OnEnter, OnExit (+5) |
 | `PTSD/include/Core/SceneManager.hpp` | Push, Pop, Replace, Clear, Update (+4) |
+| `PTSD/test/SceneManagerTest.cpp` | TEST, Update, OnEnter, OnExit, OnPause (+4) |
+| `include/world/FloorBlock.hpp` | OffsetX, OffsetY, Build, At, ConnectedFloorCells (+2) |
+| `test/BoxDestructionTest.cpp` | BreakableBoxWorld, Blocks, DamageObstacle, Alive, FirePlusX (+1) |
+| `test/DoorSealTest.cpp` | MakeRoom, MakeRoomWH, BlockWorld, AddFlanks, BasePair (+1) |
+| `test/DoorTransitionTest.cpp` | MakeCleanRoom, BlockWorld, AddFlanks, BlockedBy, WalkIntoRoom (+1) |
 | `test/RoomGenGoldenTest.cpp` | Fnv1a, GridHash, FloorHash, ExplicitRoom, CheckGolden (+1) |
-| `test/WeaponInstanceTest.cpp` | MakeWeapon, Seeded, Angle2D, w, ws |
-| `test/SimulationTest.cpp` | RightWall, Idle, TEST |
-| `test/RGMazeTest.cpp` | OpenGrid, SetWall, TEST |
-| `PTSD/test/Camera2DTest.cpp` | ApplyView, TEST |
-| `include/sim/WorldCollision.hpp` | WorldCollision, NullWorldCollision |
-| `test/FireSystemTest.cpp` | AngleDeg, TEST |
 
 ## Entry Points
 
 Start here when exploring this area:
 
-- **`TEST`** (Function) — `PTSD/test/Camera2DTest.cpp:22`
-- **`TEST`** (Function) — `PTSD/test/SceneManagerTest.cpp:47`
-- **`TEST`** (Function) — `test/RoomGenGoldenTest.cpp:106`
-- **`w`** (Function) — `test/WeaponInstanceTest.cpp:42`
-- **`ws`** (Function) — `test/WeaponInstanceTest.cpp:75`
+- **`TEST`** (Function) — `test/FloorBlockTest.cpp:75`
+- **`TEST`** (Function) — `test/FloorConnectivityTest.cpp:192`
+- **`m`** (Function) — `test/FloorConnectivityTest.cpp:343`
+- **`TEST`** (Function) — `test/RoomGenDesignTest.cpp:54`
+- **`TEST`** (Function) — `test/RealBodyDriverTest.cpp:40`
 
 ## Key Symbols
 
 | Symbol | Type | File | Line |
 |--------|------|------|------|
-| `Scene` | Class | `PTSD/include/Core/Scene.hpp` | 22 |
-| `GameScene` | Class | `include/scenes/GameScene.hpp` | 49 |
 | `WorldCollision` | Class | `include/sim/WorldCollision.hpp` | 9 |
-| `NullWorldCollision` | Class | `include/sim/WorldCollision.hpp` | 16 |
+| `NullWorldCollision` | Class | `include/sim/WorldCollision.hpp` | 23 |
+| `RealBodyDriver` | Class | `test/RealBodyDriver.hpp` | 56 |
+| `TEST` | Function | `test/FloorBlockTest.cpp` | 75 |
+| `TEST` | Function | `test/FloorConnectivityTest.cpp` | 192 |
+| `m` | Function | `test/FloorConnectivityTest.cpp` | 343 |
+| `TEST` | Function | `test/RoomGenDesignTest.cpp` | 54 |
+| `TEST` | Function | `test/RealBodyDriverTest.cpp` | 40 |
 | `TEST` | Function | `PTSD/test/Camera2DTest.cpp` | 22 |
 | `TEST` | Function | `PTSD/test/SceneManagerTest.cpp` | 47 |
+| `TEST` | Function | `test/CorridorNeutralityTest.cpp` | 48 |
+| `WeaponEnergyCost` | Function | `include/data/GameData.hpp` | 46 |
+| `floor` | Function | `src/scenes/GameScene.cpp` | 131 |
+| `TEST` | Function | `test/EnemyBrainDispatchTest.cpp` | 58 |
+| `TEST` | Function | `test/BoxDestructionTest.cpp` | 61 |
+| `TEST` | Function | `test/DoorSealTest.cpp` | 106 |
+| `TEST` | Function | `test/DoorTransitionTest.cpp` | 201 |
 | `TEST` | Function | `test/RoomGenGoldenTest.cpp` | 106 |
 | `w` | Function | `test/WeaponInstanceTest.cpp` | 42 |
 | `ws` | Function | `test/WeaponInstanceTest.cpp` | 75 |
-| `TEST` | Function | `test/FireSystemTest.cpp` | 21 |
-| `TEST` | Function | `test/RGRoomXEndlessTest.cpp` | 27 |
-| `TEST` | Function | `test/RGMazeTest.cpp` | 31 |
-| `TEST` | Function | `test/EnemyAI07Test.cpp` | 17 |
-| `TEST` | Function | `test/EnemyAITest.cpp` | 34 |
-| `TEST` | Function | `test/EnemyControllerTest.cpp` | 27 |
-| `TEST` | Function | `test/RoomGenTest.cpp` | 43 |
-| `TEST` | Function | `test/SimulationTest.cpp` | 31 |
-| `SetPosition` | Method | `PTSD/include/Core/Camera2D.hpp` | 26 |
-| `GetPosition` | Method | `PTSD/include/Core/Camera2D.hpp` | 28 |
-| `SetZoom` | Method | `PTSD/include/Core/Camera2D.hpp` | 31 |
 
 ## Execution Flows
 
 | Flow | Type | Steps |
 |------|------|-------|
-| `TEST → Fnv1a` | intra_community | 4 |
+| `TEST → Set` | cross_community | 6 |
+| `M → Set` | cross_community | 5 |
+| `M → CreateFloor` | cross_community | 5 |
+| `M → CreateWall` | cross_community | 5 |
+| `TEST → Set` | cross_community | 5 |
+| `TEST → CreateFloor` | cross_community | 5 |
+| `TEST → CreateWall` | cross_community | 5 |
+| `TEST → SizeFromIndex` | cross_community | 5 |
+| `TEST → ComputeBaseLevel` | cross_community | 5 |
+| `TEST → Set` | cross_community | 5 |
+
+## Connected Areas
+
+| Area | Connections |
+|------|-------------|
+| World | 22 calls |
+| Entities | 3 calls |
 
 ## How to Explore
 

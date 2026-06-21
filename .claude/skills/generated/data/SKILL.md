@@ -1,11 +1,11 @@
 ---
 name: data
-description: "Skill for the Data area of Soul-Knight-ai. 37 symbols across 8 files."
+description: "Skill for the Data area of Soul-Knight-ai. 42 symbols across 9 files."
 ---
 
 # Data
 
-37 symbols | 8 files | Cohesion: 87%
+42 symbols | 9 files | Cohesion: 88%
 
 ## When to Use
 
@@ -17,49 +17,50 @@ description: "Skill for the Data area of Soul-Knight-ai. 37 symbols across 8 fil
 
 | File | Symbols |
 |------|---------|
-| `include/data/GameData.hpp` | FindWeapon, FindBullet, FindEnemy, FindEnemyGun, FindBuff (+8) |
+| `include/data/GameData.hpp` | FindWeapon, FindBullet, FindEnemy, FindEnemyGun, FindBuff (+11) |
 | `src/data/RGRandom.cpp` | InitState, NextState, NextFloat01, EnsureSeeded, SetRandomSeed (+1) |
 | `src/data/GameData.cpp` | GetI, GetF, GetS, LoadAll, FindWeapon (+1) |
 | `src/data/LootTable.cpp` | GetI, ReadDropId, LoadAll, GetTier, Roll |
 | `include/data/LootTable.hpp` | LoadAll, Roll, GetTier, TierCount |
+| `test/DesignRoomConnectivityTest.cpp` | BuildDesign, TEST |
 | `test/GameDataTest.cpp` | TEST |
-| `test/LootTableTest.cpp` | TEST |
 | `test/LootIntegrationTest.cpp` | TEST |
+| `test/LootTableTest.cpp` | TEST |
 
 ## Entry Points
 
 Start here when exploring this area:
 
 - **`TEST`** (Function) — `test/GameDataTest.cpp:13`
-- **`TEST`** (Function) — `test/LootTableTest.cpp:21`
 - **`TEST`** (Function) — `test/LootIntegrationTest.cpp:17`
-- **`FindWeapon`** (Method) — `include/data/GameData.hpp:134`
-- **`FindBullet`** (Method) — `include/data/GameData.hpp:148`
+- **`TEST`** (Function) — `test/LootTableTest.cpp:21`
+- **`TEST`** (Function) — `test/DesignRoomConnectivityTest.cpp:45`
+- **`FindWeapon`** (Method) — `include/data/GameData.hpp:163`
 
 ## Key Symbols
 
 | Symbol | Type | File | Line |
 |--------|------|------|------|
 | `TEST` | Function | `test/GameDataTest.cpp` | 13 |
-| `TEST` | Function | `test/LootTableTest.cpp` | 21 |
 | `TEST` | Function | `test/LootIntegrationTest.cpp` | 17 |
-| `FindWeapon` | Method | `include/data/GameData.hpp` | 134 |
-| `FindBullet` | Method | `include/data/GameData.hpp` | 148 |
-| `FindEnemy` | Method | `include/data/GameData.hpp` | 149 |
-| `FindEnemyGun` | Method | `include/data/GameData.hpp` | 150 |
-| `FindBuff` | Method | `include/data/GameData.hpp` | 151 |
-| `PlayerTemplate` | Method | `include/data/GameData.hpp` | 152 |
-| `Bullets` | Method | `include/data/GameData.hpp` | 155 |
-| `Enemies` | Method | `include/data/GameData.hpp` | 156 |
-| `EnemyGuns` | Method | `include/data/GameData.hpp` | 157 |
-| `Buffs` | Method | `include/data/GameData.hpp` | 158 |
-| `InitState` | Method | `src/data/RGRandom.cpp` | 28 |
-| `NextState` | Method | `src/data/RGRandom.cpp` | 42 |
-| `NextFloat01` | Method | `src/data/RGRandom.cpp` | 53 |
-| `EnsureSeeded` | Method | `src/data/RGRandom.cpp` | 59 |
-| `SetRandomSeed` | Method | `src/data/RGRandom.cpp` | 71 |
-| `Range` | Method | `src/data/RGRandom.cpp` | 77 |
+| `TEST` | Function | `test/LootTableTest.cpp` | 21 |
+| `TEST` | Function | `test/DesignRoomConnectivityTest.cpp` | 45 |
+| `FindWeapon` | Method | `include/data/GameData.hpp` | 163 |
+| `FindBullet` | Method | `include/data/GameData.hpp` | 177 |
+| `FindEnemy` | Method | `include/data/GameData.hpp` | 178 |
+| `FindEnemyGun` | Method | `include/data/GameData.hpp` | 179 |
+| `FindBuff` | Method | `include/data/GameData.hpp` | 180 |
+| `PlayerTemplate` | Method | `include/data/GameData.hpp` | 181 |
+| `Bullets` | Method | `include/data/GameData.hpp` | 184 |
+| `Enemies` | Method | `include/data/GameData.hpp` | 185 |
+| `EnemyGuns` | Method | `include/data/GameData.hpp` | 186 |
+| `Buffs` | Method | `include/data/GameData.hpp` | 187 |
+| `RoomLayouts` | Method | `include/data/GameData.hpp` | 190 |
+| `FindDesignRoom` | Method | `include/data/GameData.hpp` | 194 |
+| `ResolveDropWeapon` | Method | `include/data/GameData.hpp` | 175 |
+| `Weapons` | Method | `include/data/GameData.hpp` | 183 |
 | `LoadAll` | Method | `include/data/LootTable.hpp` | 62 |
+| `Roll` | Method | `include/data/LootTable.hpp` | 76 |
 
 ## Execution Flows
 
@@ -67,6 +68,12 @@ Start here when exploring this area:
 |------|------|-------|
 | `Range → InitState` | intra_community | 4 |
 | `Range → NextState` | intra_community | 3 |
+
+## Connected Areas
+
+| Area | Connections |
+|------|-------------|
+| Test | 2 calls |
 
 ## How to Explore
 

@@ -9,7 +9,6 @@
 
 #include <glm/glm.hpp>
 
-#include "combat/CharSkillC01.hpp"
 #include "combat/CombatStats.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
@@ -19,6 +18,7 @@
 #include "sim/FireIntent.hpp"
 #include "sim/FireSystem.hpp"
 #include "sim/FixedClock.hpp"
+#include "sim/ICharSkill.hpp"
 #include "sim/Scheduler.hpp"
 #include "sim/SimEvent.hpp"
 #include "sim/WeaponController.hpp"
@@ -64,11 +64,12 @@ public:
                  const std::string &bossId = "BossAI01");
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
     void EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId, int seed);
-    /// Build (or rebuild) the player's skill brain (A3: fixed c01). The skill is a
-    /// SINGLE owned member, parallel to the weapon -- not an entity, not in any list,
-    /// not via BrainFactory (a bespoke per-hero brain, no base class). @p skillCd /
-    /// @p inSkillTime come from the CharacterDef stat sheet.
-    void SetPlayerSkill(float skillCd, float inSkillTime);
+    /// Build (or rebuild) the player's skill brain via (d) dispatch (B1-P4a). @p charId
+    /// ("c01".."c13") selects the per-hero adapter (MakeCharSkill); unknown -> c01.
+    /// @p skillCd / @p inSkillTime come from the CharacterDef stat sheet (one shared
+    /// player_template today -- per-char overrides pending). The skill is a SINGLE
+    /// owned member parallel to the weapon.
+    void SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime);
     /// Seed the player's combat vitals (enemy bullets damage these; read back via PlayerStats).
     void SetPlayerStats(const Game::CombatStats &stats);
 
@@ -83,9 +84,9 @@ public:
     EntityView BossView() const;
     const Game::CombatStats &PlayerStats() const { return m_PlayerStats; }
     int PlayerShotsLastAdvance() const { return m_PlayerShotsLastAdvance; }
-    /// The player's skill brain (A3), or empty if SetPlayerSkill was never called.
-    /// Exposed for inspection/tests (InSkill / SkillReady / cooldown getters).
-    const std::optional<Game::CharSkillC01> &PlayerSkill() const { return m_Skill; }
+    /// The player's skill brain (the (d) ICharSkill), or nullptr if SetPlayerSkill was
+    /// never called. Exposed for inspection/tests (InSkill / SkillReady / cooldown).
+    const ICharSkill *PlayerSkill() const { return m_Skill.get(); }
     /// Move out the queued anim/sfx events (empty this cycle; emission is deferred).
     std::vector<SimEvent> DrainEvents();
 
@@ -118,9 +119,9 @@ private:
     std::vector<std::unique_ptr<EnemyController>> m_Enemies;
     std::unique_ptr<BossController> m_Boss;
     std::optional<WeaponController> m_Weapon;
-    /// The player's skill brain (A3: fixed c01). A SINGLE owned member, parallel to
-    /// m_Weapon -- not an entity, not in m_Enemies, not via BrainFactory.
-    std::optional<Game::CharSkillC01> m_Skill;
+    /// The player's skill brain via (d) dispatch (B1-P4a). A SINGLE owned member,
+    /// parallel to m_Weapon -- charId selects the per-hero adapter (MakeCharSkill).
+    std::unique_ptr<ICharSkill> m_Skill;
 
     Game::CombatStats m_PlayerStats{};
     WorldInputs m_Input{};

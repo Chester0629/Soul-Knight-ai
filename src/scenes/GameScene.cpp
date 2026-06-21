@@ -407,7 +407,11 @@ void GameScene::OnEnter() {
             const auto &fc = spawnCells[spawnCells.size() / 2];
             const glm::vec2 spawn = Room::CellToWorld(
                 fc.first, fc.second, rg.Width(), rg.Height(), kCellPx, origin);
-            if (roomIndex == bossRoom) {
+            if (roomIndex == bossRoom && IsBossFloor(m_FloorIndex)) {
+                // Chapter gate: the boss only spawns on the chapter's LAST floor
+                // (IsBossFloor, RunState.hpp); on mob floors (index 0..3) the
+                // would-be boss room falls into the else-branch below and spawns
+                // one ordinary mob, so the floor stays populated and clearable.
                 // BossMaker-lite (B1-P2, policy C): pick the boss from a
                 // representative roster of FIRING bosses across distinct attack-
                 // dispatch shapes -- AI01 (chase + ungated ChooseAttack), AI08
@@ -502,16 +506,20 @@ void GameScene::OnEnter() {
         m_CurrentWeaponId = equipWeaponId;
     } // else: unknown id -> leave the default (never deref a null FindWeapon).
 
-    // --- A3: equip the player skill brain (fixed c01) from the character stat sheet.
-    // skillCd / inSkillTime come from PlayerTemplate (CharacterDef). Single sim member
-    // like the weapon; rebuilt per floor from the template (starts ready) -- cross-floor
-    // skill-cooldown continuation is out of A3 scope (multi-character dispatch is B5).
-    m_Sim->SetPlayerSkill(m_Data.PlayerTemplate().skillCd, m_Data.PlayerTemplate().inSkillTime);
+    // --- B1-P4a: dispatch the player skill brain by character id (charId seam).
+    // skillCd / inSkillTime come from PlayerTemplate (CharacterDef; one shared template
+    // -- per-char overrides pending). charId is carried across floors (defaults "c01"
+    // until the HeroRoom picker, B5). C01/C02 effects are faithful; c03..c13 are
+    // gate+cooldown-only stubs. Rebuilt per floor (starts ready).
+    const std::string charId = m_Carried ? m_Carried->charId : std::string("c01");
+    m_Sim->SetPlayerSkill(charId, m_Data.PlayerTemplate().skillCd,
+                          m_Data.PlayerTemplate().inSkillTime);
 
     // --- Forward run loop (step 2a) setup ---
     // Arm the clear check only after >= 1 hostile has existed, read from the sim's
-    // AUTHORITATIVE state (not the render mirrors). A boss spawns every floor, so
-    // this is normally true; the guard stops a degenerate floor from auto-skipping.
+    // AUTHORITATIVE state (not the render mirrors). Mob floors (no boss) arm via the
+    // EnemyViews() term -- every non-start room spawns one mob -- so the boss is NOT
+    // the load-bearing armer; the guard stops a degenerate floor from auto-skipping.
     m_HadHostiles = m_Sim->HasBoss() || !m_Sim->EnemyViews().empty();
     // SK_FORCE_CLEAR=K test hook (env, NO-OP if unset): force the clear path on frame
     // K of THIS floor, to drive the play->clear->next-floor transition headlessly.

@@ -87,9 +87,9 @@ TEST(SkillPipelineTest, ProgressClampedAndZeroCdAlwaysReady) {
 
 TEST(SkillPipelineTest, SimActivatesProgressReachesPlayerStatsAndGatesRecast) {
     Simulation sim(1, &g_NullWorld);
-    sim.SetPlayerSkill(/*cd=*/2.0F, /*window=*/1.0F);
+    sim.SetPlayerSkill("c01", /*cd=*/2.0F, /*window=*/1.0F);
     sim.Advance(kFixedStepMs, Idle());
-    ASSERT_TRUE(sim.PlayerSkill().has_value());
+    ASSERT_NE(sim.PlayerSkill(), nullptr);
     EXPECT_FLOAT_EQ(sim.PlayerStats().skillCdProgress, 1.0F); // starts ready, progress reaches stats
     EXPECT_FALSE(sim.PlayerSkill()->InSkill());
 
@@ -126,7 +126,7 @@ TEST(SkillPipelineTest, SkillMirrorsPlayerShotsWhileActiveAndIsEnergyFree) {
     def.atk = 4;
     def.deviation = 0;
     sim.EquipWeapon(def, "Gun001", 808);
-    sim.SetPlayerSkill(5.0F, 5.0F); // long window -> stays active
+    sim.SetPlayerSkill("c01", 5.0F, 5.0F); // long window -> stays active
 
     WorldInputs in = Idle();
     in.firing = true;
@@ -145,7 +145,7 @@ TEST(SkillPipelineTest, NoMirrorWhenSkillInactive) {
     def.atk = 4;
     def.deviation = 0;
     sim.EquipWeapon(def, "Gun001", 808);
-    sim.SetPlayerSkill(5.0F, 5.0F);
+    sim.SetPlayerSkill("c01", 5.0F, 5.0F);
 
     WorldInputs in = Idle();
     in.firing = true; // fire, but NO skill input -> not in_skill -> no mirror
