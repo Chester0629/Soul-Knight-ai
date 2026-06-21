@@ -287,14 +287,24 @@ void GameScene::OnEnter() {
             m_Renderer.AddChild(tile);
         };
         const float faceScale = kCellPx / 16.0F; // p_face is 16x8 -> half-cell tall
+        // Pseudo-random floor variant per cell: a bit-mixing hash of (x, y, floor
+        // seed) -> scattered, no visible stripes; deterministic, and (since runSeed
+        // is now random per run) it also varies run-to-run. Used for room+corridor.
+        const auto floorVariant = [&](int cx, int cy) -> std::size_t {
+            std::uint32_t h = static_cast<std::uint32_t>(cx) * 374761393u +
+                              static_cast<std::uint32_t>(cy) * 668265263u +
+                              static_cast<std::uint32_t>(m_FloorSeed) * 2246822519u;
+            h = (h ^ (h >> 13)) * 1274126177u;
+            h ^= h >> 16;
+            return static_cast<std::size_t>(h % 6u);
+        };
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
                 if (Room::IsSolidCell(rg.At(x, y))) {
                     addTile(wallImg, wallSz, x, y, 0.5F);   // wall TOP (w001 cap)
                 } else {
-                    const std::size_t fv = static_cast<std::size_t>(
-                        ((x * 7 + y * 131) % 6 + 6) % 6);
-                    addTile(floorImgs[fv], floorSz, x, y, 0.0F); // ice floor variant
+                    addTile(floorImgs[floorVariant(x, y)], floorSz, x, y,
+                            0.0F); // ice floor variant
                     // Front face: a wall directly NORTH (y+1, +y is up) shows its
                     // south-facing face over this floor cell's TOP half (project's
                     // NorthFace/SouthFace; w004 16x8, +TILE_SIZE/4 up, Y-sorted so
@@ -426,7 +436,8 @@ void GameScene::OnEnter() {
             const FloorBlock::Rect s = FloorBlock::CorridorStrip(dir, rg);
             for (int bx = s.x0; bx <= s.x1; ++bx) {
                 for (int by = s.y0; by <= s.y1; ++by) {
-                    addBlockTile(floorImgs[0], floorSz, bx, by, 0.0F); // walkable ice
+                    addBlockTile(floorImgs[floorVariant(bx, by)], floorSz, bx, by,
+                                 0.0F); // walkable ice (varied)
                 }
             }
             const bool horiz = (dir == FloorBlock::DIR_EAST ||

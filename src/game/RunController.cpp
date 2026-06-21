@@ -1,6 +1,8 @@
 #include "game/RunController.hpp"
 
+#include <cstdlib>
 #include <memory>
+#include <random>
 
 #include "scenes/GameScene.hpp"
 #include "scenes/HeroSelectScene.hpp"
@@ -79,6 +81,14 @@ void RunController::GoToKeybinds() {
 
 void RunController::BeginRun(const std::string &charId) {
     m_State.selectedCharId = charId;
+    // Fresh RANDOM map each run (the whole-run seed drives every floor's layout via
+    // PerFloorSeed). SK_SEED=<int> overrides it for reproducible / headless runs.
+    if (const char *s = std::getenv("SK_SEED")) {
+        m_State.runSeed = std::atoi(s);
+    } else {
+        std::random_device rd;
+        m_State.runSeed = static_cast<int>(rd());
+    }
     ResetRunState(); // floor 0 / template / Playing / talents 0 (keeps runSeed + charId).
     // Chapter-start talent pick (the video's "select talent") goes BEFORE floor 0;
     // TalentScene::ChooseTalent then builds the floor.
