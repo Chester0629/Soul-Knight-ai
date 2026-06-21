@@ -180,7 +180,10 @@ void GameScene::OnEnter() {
     // (keeps SK-ai's generated grid; only the draw changes): f101 floor + w001
     // wall-top + a w004 front-FACE on walls that border floor to their south, so
     // walls read as 3D instead of flat single blocks. (project Tile.cpp.)
-    auto floorImg = std::make_shared<Util::Image>(root + "/sprites/p_floor.png");
+    // Ice-cave biome: SK-ai's own clean light-ice floor (16x16, opaque -- closer to
+    // the reference video than project's darker f5xx) + project's faux-3D WALLS
+    // (w001 ice-chunk top + w004 teal front-face) so walls read 3D, not flat blocks.
+    auto floorImg = std::make_shared<Util::Image>(root + "/sprites/tiles/floor.png");
     auto wallImg = std::make_shared<Util::Image>(root + "/sprites/p_wall.png");
     auto faceImg = std::make_shared<Util::Image>(root + "/sprites/p_face.png");
     const glm::vec2 floorSz = floorImg->GetSize();
@@ -282,7 +285,7 @@ void GameScene::OnEnter() {
                 if (Room::IsSolidCell(rg.At(x, y))) {
                     addTile(wallImg, wallSz, x, y, 0.5F);   // wall TOP (w001 cap)
                 } else {
-                    addTile(floorImg, floorSz, x, y, 0.0F); // walkable floor (f101)
+                    addTile(floorImg, floorSz, x, y, 0.0F); // ice floor (f, opaque)
                     // Front face: a wall directly NORTH (y+1, +y is up) shows its
                     // south-facing face over this floor cell's TOP half (project's
                     // NorthFace/SouthFace; w004 16x8, +TILE_SIZE/4 up, Y-sorted so
