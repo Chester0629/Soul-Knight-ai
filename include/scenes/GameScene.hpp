@@ -127,6 +127,20 @@ private:
 
     Hud m_Hud;
 
+    // --- Boss banner (in-game UI to match the reference video): top-centre boss
+    // name + red HP bar, shown only while a live boss is on the floor (chapter
+    // boss floor). Screen-space, drawn after the HUD. Built lazily; the fill is
+    // re-anchored each frame from BossView().hp/maxHp. Player HUD stays untouched.
+    Util::Renderer m_BossUi;
+    std::shared_ptr<Util::GameObject> m_BossNameObj;
+    std::shared_ptr<Util::GameObject> m_BossBarBg;
+    std::shared_ptr<Util::GameObject> m_BossBarFill;
+    bool m_BossUiBuilt = false;
+    std::string m_BossName; ///< id of the boss spawned this floor (display label).
+    float m_BossBarFullW = 0.0F;
+    /// Draw the boss banner (no-op unless a live boss exists). Screen-space.
+    void DrawBossBar();
+
     /// Per-floor base seed = PerFloorSeed(runSeed, floorIndex). Roots every
     /// deterministic stream this floor owns (combat crit rolls, the enemy AI
     /// stream, MapManager/RoomGen, enemy/boss/weapon seeds). Differs per floor so

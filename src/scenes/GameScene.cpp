@@ -19,7 +19,9 @@
 
 #include "Util/Animation.hpp"
 #include "Util/Collider.hpp"
+#include "Util/Color.hpp"
 #include "Util/Image.hpp"
+#include "Util/Text.hpp"
 #include "Util/Input.hpp"
 #include "Util/SFX.hpp"
 #include "Util/Keycode.hpp"
@@ -438,6 +440,7 @@ void GameScene::OnEnter() {
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex,
                                m_FloorSeed + 9000, bossId);
+                m_BossName = bossId; // display label for the boss banner (G3).
                 LOG_INFO("BossMaker-lite: room {} spawned {} (type {})", roomIndex,
                          bossId, cell.type);
             } else {
@@ -1088,6 +1091,63 @@ void GameScene::Render() {
     m_Renderer.Update();
     Util::SetActiveViewMatrix(glm::mat4(1.0F)); // screen-space from here on
     m_Hud.Draw(m_Player->Stats());
+    DrawBossBar();
+}
+
+void GameScene::DrawBossBar() {
+    if (!m_Sim || !m_Sim->HasBoss()) {
+        return; // no boss on this floor (mob floors 0..3).
+    }
+    const auto bv = m_Sim->BossView();
+    if (!bv.alive) {
+        return; // boss dead -> banner gone.
+    }
+    const float kW = 520.0F; // bar width (px), centred at screen top.
+    const float kH = 18.0F;  // bar height (px).
+    const float kY = 296.0F; // bar centre y (screen-space, +y up).
+    if (!m_BossUiBuilt) {
+        const std::string root = RESOURCE_DIR;
+        const std::string sprites = root + "/sprites/";
+        const std::string font = root + "/fonts/pixel_bold.ttf";
+        m_BossBarFullW = kW;
+
+        m_BossNameObj = std::make_shared<Util::GameObject>();
+        m_BossNameObj->SetDrawable(std::make_shared<Util::Text>(
+            font, 22, m_BossName.empty() ? std::string("BOSS") : m_BossName,
+            Util::Color{255, 255, 255, 255}));
+        m_BossNameObj->m_Transform.translation = {0.0F, kY + 28.0F};
+        m_BossNameObj->SetZIndex(60.0F);
+        m_BossUi.AddChild(m_BossNameObj);
+
+        // Grey empty bar (ui_12_armor, native 64x7) stretched to the slot.
+        m_BossBarBg = std::make_shared<Util::GameObject>();
+        m_BossBarBg->SetDrawable(
+            std::make_shared<Util::Image>(sprites + "ui_12_armor.png"));
+        m_BossBarBg->m_Transform.translation = {0.0F, kY};
+        m_BossBarBg->m_Transform.scale = {kW / 64.0F, kH / 7.0F};
+        m_BossBarBg->SetZIndex(60.0F);
+        m_BossUi.AddChild(m_BossBarBg);
+
+        // Red fill (ui_12_hp), left-anchored, width = fraction (set each frame).
+        m_BossBarFill = std::make_shared<Util::GameObject>();
+        m_BossBarFill->SetDrawable(
+            std::make_shared<Util::Image>(sprites + "ui_12_hp.png"));
+        m_BossBarFill->m_Transform.translation = {0.0F, kY};
+        m_BossBarFill->m_Transform.scale = {kW / 64.0F, kH / 7.0F};
+        m_BossBarFill->SetZIndex(61.0F);
+        m_BossUi.AddChild(m_BossBarFill);
+        m_BossUiBuilt = true;
+    }
+
+    float frac = bv.maxHp > 0 ? static_cast<float>(bv.hp) / static_cast<float>(bv.maxHp)
+                              : 0.0F;
+    frac = frac < 0.0F ? 0.0F : (frac > 1.0F ? 1.0F : frac);
+    // Left-anchored shrink: left edge fixed at -kW/2, width = kW*frac.
+    m_BossBarFill->m_Transform.scale.x = (m_BossBarFullW * frac) / 64.0F;
+    m_BossBarFill->m_Transform.translation.x =
+        -m_BossBarFullW / 2.0F + (m_BossBarFullW * frac) / 2.0F;
+
+    m_BossUi.Update(); // caller already set the identity (screen-space) view.
 }
 
 } // namespace Game
