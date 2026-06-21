@@ -15,6 +15,8 @@
 #include "game/FloorClear.hpp"
 #include "game/RunController.hpp"
 
+#include "scenes/SettingsScene.hpp"
+
 #include "world/FloorBlock.hpp"
 
 #include "Util/Animation.hpp"
@@ -87,6 +89,9 @@ std::vector<std::string> EffectFrames(const std::string &root, const std::string
 void PlaySfx(const std::string &root, const std::string &file) {
     // Mix_Chunk is cached in Util::SFX's AssetStore, so re-loading by path is cheap.
     Util::SFX sfx(root + "/audio/" + file);
+    // Apply the SettingsScene volume (master x sfx, 0..100 each) -> SDL_mixer 0..128.
+    const auto &v = SettingsScene::s_Volumes;
+    sfx.SetVolume(128 * v[0] * v[2] / 10000);
     sfx.Play();
 }
 } // namespace
