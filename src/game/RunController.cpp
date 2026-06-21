@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "scenes/EndScene.hpp"
 #include "scenes/GameScene.hpp"
+#include "scenes/SettlementScene.hpp"
 
 namespace Game {
 
@@ -34,10 +34,13 @@ void RunController::StartRun() {
 }
 
 void RunController::OnPlayerDied() {
-    m_State.phase = RunState::Phase::Ended;
+    // Death -> Defeat settlement (shown on the floor we died on; NOT advanced).
     // Replace (not Push) so the dead GameScene is exited, not leaked under the
-    // EndScene. Deferred while the dying scene's Update runs (same as a clear).
-    m_Scenes.Replace(std::make_shared<EndScene>(this));
+    // results screen. Deferred while the dying scene's Update runs (same as a clear).
+    const int deathFloor = m_State.floorIndex;
+    m_State.phase = RunState::Phase::Ended;
+    m_Scenes.Replace(std::make_shared<SettlementScene>(
+        this, SettlementScene::Outcome::Defeat, deathFloor));
 }
 
 void RunController::AdvanceFloor(const PlayerContinuation &snapshot) {
@@ -52,8 +55,19 @@ void RunController::OnFloorCleared(const PlayerContinuation &snapshot) {
     // by the SceneManager (we are inside its Update via the signalling GameScene), so
     // the old scene + its m_Player are not torn down until after this returns -- the
     // snapshot is safely in RunState by then. The next GameScene loads it on OnEnter.
+    // Chapter routing: was the floor we JUST cleared the chapter's boss floor?
+    // Capture BEFORE AdvanceFloor (which increments floorIndex). If so the chapter
+    // is done -> Victory settlement; otherwise advance to the next (mob) floor.
+    const int clearedFloor = m_State.floorIndex;
+    const bool wasBossFloor = IsBossFloor(clearedFloor);
     AdvanceFloor(snapshot);
-    m_Scenes.Replace(BuildFloorScene());
+    if (wasBossFloor) {
+        m_State.phase = RunState::Phase::Ended;
+        m_Scenes.Replace(std::make_shared<SettlementScene>(
+            this, SettlementScene::Outcome::Victory, clearedFloor));
+    } else {
+        m_Scenes.Replace(BuildFloorScene());
+    }
 }
 
 } // namespace Game

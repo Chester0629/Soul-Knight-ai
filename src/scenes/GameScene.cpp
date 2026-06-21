@@ -933,7 +933,7 @@ void GameScene::Update(float dtMs) {
     SyncBulletViews();
 
     // --- Player death (step 2b): no longer an app quit -- signal the controller to
-    // Replace this floor with a minimal EndScene. Captured-while-alive + deferred,
+    // Replace this floor with the Defeat SettlementScene. Captured-while-alive + deferred,
     // same timing as a floor clear. The death check runs BEFORE the clear check, so a
     // dead player never triggers a floor transition. m_Transitioning is shared so we
     // signal exactly once (death takes precedence). ---
@@ -941,7 +941,8 @@ void GameScene::Update(float dtMs) {
         if (m_Run != nullptr) {
             if (!m_Transitioning) {
                 m_Transitioning = true;
-                LOG_INFO("Player died on floor {} -> EndScene", m_FloorIndex);
+                LOG_INFO("Player died on floor {} -> SettlementScene(Defeat)",
+                         m_FloorIndex);
                 m_Run->OnPlayerDied();
             }
         } else {

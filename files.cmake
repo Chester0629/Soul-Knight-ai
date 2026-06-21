@@ -152,6 +152,7 @@ set(SRC_FILES
     ui/HudLayout.cpp
     scenes/GameScene.cpp
     scenes/EndScene.cpp
+    scenes/SettlementScene.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): run-level state + controller
     game/RunController.cpp
@@ -326,6 +327,7 @@ set(INCLUDE_FILES
     ui/HudLayout.hpp
     scenes/GameScene.hpp
     scenes/EndScene.hpp
+    scenes/SettlementScene.hpp
 
     # Engine port -- run loop (Line 2, Phase 1)
     game/RunState.hpp
