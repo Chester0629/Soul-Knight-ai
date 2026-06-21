@@ -90,16 +90,26 @@ public:
     }
 
     /// Forward the frame to the owned scene stack (the main loop calls these).
-    void Update(float dtMs) { m_Scenes.Update(dtMs); }
+    /// Accumulates run time while a run is in progress (Playing) for the settlement
+    /// stat; reset to 0 when the first floor of a chapter starts (@ref ChooseTalent).
+    void Update(float dtMs) {
+        if (m_State.phase == RunState::Phase::Playing) {
+            m_RunTimeMs += static_cast<double>(dtMs);
+        }
+        m_Scenes.Update(dtMs);
+    }
     void Render() { m_Scenes.Render(); }
 
     const RunState &State() const { return m_State; }
+    /// Elapsed chapter play time in milliseconds (for the settlement screen).
+    double RunTimeMs() const { return m_RunTimeMs; }
 
 private:
     /// Build the `GameScene` for the current floor (seed + index + carried).
     std::shared_ptr<Core::Scene> BuildFloorScene();
 
     RunState m_State;
+    double m_RunTimeMs = 0.0; ///< accumulated chapter play time (settlement stat).
     /// Declared LAST: destroyed FIRST, so the scenes are torn down while `*this`
     /// is still alive (D1 lifetime invariant).
     Core::SceneManager m_Scenes;

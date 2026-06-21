@@ -96,6 +96,7 @@ void RunController::ChooseTalent(int dMaxHp, int dArmor, int dEnergy) {
     m_State.talentBonusMaxHp = dMaxHp;
     m_State.talentBonusArmor = dArmor;
     m_State.talentBonusEnergy = dEnergy;
+    m_RunTimeMs = 0.0; // start the chapter clock at floor 0 (excludes menu time).
     auto floor0 = BuildFloorScene();
     if (m_Scenes.Empty()) {
         m_Scenes.Push(floor0);

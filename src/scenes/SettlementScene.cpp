@@ -1,5 +1,6 @@
 #include "scenes/SettlementScene.hpp"
 
+#include <cstdio>
 #include <cstdlib>
 #include <string>
 
@@ -8,6 +9,7 @@
 #include "Core/Context.hpp"
 
 #include "Util/Color.hpp"
+#include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
@@ -31,30 +33,64 @@ std::shared_ptr<Util::GameObject> MakeText(const std::string &font, int size,
 }
 } // namespace
 
+namespace {
+std::shared_ptr<Util::GameObject> MakeImg(const std::string &path, glm::vec2 pos,
+                                          glm::vec2 scale, float z) {
+    auto obj = std::make_shared<Util::GameObject>();
+    obj->SetDrawable(std::make_shared<Util::Image>(path));
+    obj->m_Transform.translation = pos;
+    obj->m_Transform.scale = scale;
+    obj->SetZIndex(z);
+    return obj;
+}
+} // namespace
+
 void SettlementScene::Build() {
     const std::string root = RESOURCE_DIR;
-    // pixel_bold.ttf is the EndScene font (ASCII). CJK title + the video's stats
-    // panel / floor-track / reward-chest are the visual-polish pass (CJK font + bg).
+    const std::string sprites = root + "/sprites/";
     const std::string font = root + "/fonts/pixel_bold.ttf";
 
     const bool victory = (m_Outcome == Outcome::Victory);
     const Util::Color gold{255, 220, 60, 255};
     const Util::Color red{255, 90, 90, 255};
     const Util::Color white{235, 235, 235, 255};
+    const Util::Color grey{125, 125, 125, 255};
 
-    const int chapter = m_FloorIndex / kChapterFloors + 1;
-    const int floorInChapter = m_FloorIndex % kChapterFloors + 1;
+    // Dynamic settlement drawn on a dark backdrop (project's "Settlement screen.png"
+    // is a baked mockup with static numbers + a fixed Chinese title, so it cannot be
+    // a live bg). The track + real FLOOR/TIME below mirror the video's structure.
+    m_Objects.push_back(MakeText(font, 52, victory ? "VICTORY" : "GAME OVER",
+                                 {0.0F, 250.0F}, victory ? gold : red));
 
-    m_Objects.push_back(MakeText(font, 48, victory ? "VICTORY" : "GAME OVER",
-                                 {0.0F, 120.0F}, victory ? gold : red));
-    m_Objects.push_back(MakeText(
-        font, 22,
-        victory ? "Chapter " + std::to_string(chapter) + " cleared!"
-                : "Fell on floor " + std::to_string(chapter) + "-" +
-                      std::to_string(floorInChapter),
-        {0.0F, 40.0F}, white));
+    // Floor-progress track: kChapterFloors nodes; the reached floor carries a hero
+    // marker (the video's "1-1 ... flag" track). reached = floor within the chapter.
+    const int reached = m_FloorIndex % kChapterFloors;
+    const float x0 = -240.0F;
+    const float dx = 120.0F;
+    const float ty = 120.0F;
+    for (int i = 0; i < kChapterFloors; ++i) {
+        const float nx = x0 + dx * static_cast<float>(i);
+        m_Objects.push_back(MakeImg(sprites + "box02.png", {nx, ty}, {0.7F, 0.7F}, 10.0F));
+        m_Objects.push_back(MakeText(font, 16, "1-" + std::to_string(i + 1),
+                                     {nx, ty - 36.0F}, i <= reached ? white : grey));
+    }
+    m_Objects.push_back(MakeImg(sprites + "c01_4.png",
+                                {x0 + dx * static_cast<float>(reached), ty + 40.0F},
+                                {1.6F, 1.6F}, 12.0F));
+
+    // Stats: real values only (floor reached + chapter play time); a reward chest.
+    const double sec = (m_Run != nullptr) ? m_Run->RunTimeMs() / 1000.0 : 0.0;
+    char timebuf[16];
+    std::snprintf(timebuf, sizeof(timebuf), "%d:%02d", static_cast<int>(sec) / 60,
+                  static_cast<int>(sec) % 60);
+    m_Objects.push_back(MakeText(font, 26, "FLOOR  1-" + std::to_string(reached + 1),
+                                 {-150.0F, -30.0F}, white));
+    m_Objects.push_back(MakeText(font, 26, std::string("TIME  ") + timebuf,
+                                 {-150.0F, -80.0F}, white));
+    m_Objects.push_back(MakeImg(sprites + "box02.png", {230.0F, -55.0F}, {2.2F, 2.2F}, 20.0F));
+
     m_Objects.push_back(
-        MakeText(font, 18, "R: new run     Esc: quit", {0.0F, -60.0F}, white));
+        MakeText(font, 18, "R: new run     Esc: quit", {0.0F, -210.0F}, white));
 
     for (const auto &o : m_Objects) {
         m_Renderer.AddChild(o);
