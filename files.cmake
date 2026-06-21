@@ -298,6 +298,8 @@ set(INCLUDE_FILES
     sim/EnemyController.hpp
     sim/BrainFactory.hpp
     sim/BossController.hpp
+    sim/IBossBrain.hpp
+    sim/BossBrainAdapters.hpp
     sim/WorldInputs.hpp
     sim/Simulation.hpp
     sim/WeaponController.hpp
@@ -479,6 +481,7 @@ set(TEST_FILES
     EnemyBrainDispatchTest.cpp
     BrainFactoryTest.cpp
     BossControllerTest.cpp
+    BossBrainDispatchTest.cpp
     SimulationTest.cpp
     WeaponControllerTest.cpp
 

@@ -34,6 +34,13 @@ public:
     /// the owner must store it stably (e.g. unique_ptr) -- the controller is move-deleted.
     static BossController MakeBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int seed);
 
+    /// (d) dispatch: heap-construct a BossController driving the @p bossId brain
+    /// ("BossAI01".."BossAI14"; unknown -> BossAI01 fallback). BossController is
+    /// move-deleted, so make_unique forwards the ctor args (no move).
+    static std::unique_ptr<BossController> MakeBossPtr(const std::string &bossId,
+                                                       float baseShootCd, glm::vec2 spawn,
+                                                       int maxHp, int seed);
+
     /// Build a WeaponController from a WeaponDef. @p weaponId selects the gun brain
     /// ("Gun016" -> HeatMinigun, else Single). Returned by value (prvalue).
     static WeaponController MakeWeapon(const Game::WeaponDef &def,

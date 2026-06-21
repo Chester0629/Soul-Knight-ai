@@ -60,7 +60,8 @@ public:
     /// Spawn an EnemyAI01 enemy (slice hp) in @p roomId; Activated immediately (asleep).
     void AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId, int seed);
     /// Spawn the single boss in @p roomId; Activated immediately (asleep).
-    void SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed);
+    void SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed,
+                 const std::string &bossId = "BossAI01");
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
     void EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId, int seed);
     /// Build (or rebuild) the player's skill brain (A3: fixed c01). The skill is a

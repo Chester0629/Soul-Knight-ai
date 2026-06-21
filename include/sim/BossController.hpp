@@ -1,21 +1,25 @@
 #ifndef GAME_SIM_BOSSCONTROLLER_HPP
 #define GAME_SIM_BOSSCONTROLLER_HPP
 
+#include <memory>
 #include <vector>
 
 #include <glm/glm.hpp>
 
-#include "combat/BossAI01.hpp"
 #include "sim/EntityState.hpp"
 #include "sim/FireIntent.hpp"
+#include "sim/IBossBrain.hpp"
 #include "sim/Scheduler.hpp"
 
 namespace Game::Sim {
 
-/// Drives the BossAI01 boss: moves per BossAI01's RunReflection decision (chase /
-/// strafe / retreat) on a think cadence, and fires a brain-selected fan on its shoot
-/// cadence (halved once on angry). BossAI01 is the sole RNG stream. Move/copy deleted
-/// (this-capturing scheduler callbacks).
+/// Drives a boss through the (d) @ref IBossBrain dispatch layer (B1-P2): moves
+/// per the brain's move decision (chase / strafe / retreat for BossAI01, wander
+/// for the rest) on a think cadence, and fires a brain-selected pattern on its
+/// shoot cadence. The brain is the sole RNG stream. Move/copy deleted
+/// (this-capturing scheduler callbacks). The default ctor builds a BossAI01
+/// adapter so the legacy path stays byte-identical; the injecting ctor takes any
+/// dispatched brain (B1-P2 roster).
 class BossController {
 public:
     static constexpr int kFanEven = 3;
@@ -26,7 +30,14 @@ public:
     static constexpr float kBulletSpeedPxPerSec = 300.0F;
     static constexpr float kBulletLifeMs = 1500.0F;
 
+    /// Legacy/default: builds the BossAI01 adapter internally (byte-identical to
+    /// the pre-(d) controller -- the determinism gate).
     BossController(float baseShootCd, glm::vec2 spawn, int maxHp, int seed);
+
+    /// (d) dispatch: drive an injected brain (the B1-P2 boss roster). @p brain is
+    /// seeded here with @p seed; @p baseShootCd is the controller's base cadence.
+    BossController(std::unique_ptr<IBossBrain> brain, float baseShootCd,
+                   glm::vec2 spawn, int maxHp, int seed);
 
     BossController(BossController &&) = delete;
     BossController &operator=(BossController &&) = delete;
@@ -36,7 +47,7 @@ public:
 
     void SetTarget(glm::vec2 target) { m_Target = target; }
 
-    /// Apply post-hit HP; enters the angry phase once at < 50% (BossAI01.OnHurt).
+    /// Apply post-hit HP; enters the angry phase once at < 50% (brain OnHurt).
     void OnHurt(int hpAfter, int maxHp);
 
     /// Unit chase direction toward the target (zero -> {1,0}).
@@ -44,13 +55,14 @@ public:
 
     void Kill();
 
-    bool Angry() const { return m_Brain.Angry(); }
-    float ShootCdSeconds() const { return m_Brain.ShootCd(); }
+    bool Angry() const { return m_Brain->Angry(); }
+    float ShootCdSeconds() const { return m_Brain->ShootCd(); }
     const EntityState &State() const { return m_State; }
     EntityState &MutableState() { return m_State; }
-    BossAI01 &Brain() { return m_Brain; }
-    /// F2: the per-cycle move decision (chase / strafe / retreat) the boss moves along;
-    /// {0,0} before the first think tick. Consumed by Simulation::MoveControllers.
+    /// The (d) interface the controller drives (exposes the RngRange probe for tests).
+    IBossBrain &Brain() { return *m_Brain; }
+    /// F2: the per-cycle move decision (chase / strafe / retreat / wander) the boss moves
+    /// along; {0,0} before the first think tick. Consumed by Simulation::MoveControllers.
     glm::vec2 MoveDir() const { return m_MoveDir; }
     /// A (presentation): true iff the boss fired since the last call; reading clears the
     /// latch. Simulation drains it per step to emit a boss "attack" AnimTrigger SimEvent.
@@ -64,10 +76,11 @@ private:
     void OnShootTick();
     void OnWanderTick();
 
-    BossAI01 m_Brain;
+    std::unique_ptr<IBossBrain> m_Brain;
+    float m_BaseShootCd; ///< controller base cadence, fed to the brain's AttackTick.
     EntityState m_State;
     glm::vec2 m_Target{0.0F, 0.0F};
-    glm::vec2 m_MoveDir{0.0F, 0.0F}; ///< F2: RunReflection move decision; consumed by MoveControllers.
+    glm::vec2 m_MoveDir{0.0F, 0.0F}; ///< F2: move decision; consumed by MoveControllers.
     bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
 
     Scheduler *m_Scheduler = nullptr;

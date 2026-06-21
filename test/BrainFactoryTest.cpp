@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "combat/BossAI01.hpp"
 #include "combat/EnemyAI01.hpp"
 #include "data/GameData.hpp"
 #include "sim/BossController.hpp"
@@ -44,7 +45,11 @@ TEST(BrainFactoryTest, MakeBossSeedsAndSpawns) {
     Game::Sim::BossController b = BrainFactory::MakeBoss(2.0F, glm::vec2{4.0F, 5.0F}, 600, 9);
     EXPECT_FLOAT_EQ(b.State().pos.x, 4.0F);
     EXPECT_FLOAT_EQ(b.ShootCdSeconds(), 2.0F);
-    EXPECT_TRUE(b.Brain().Seeded());
+    // Seeded with 9 via the (d) BossAI01 adapter (default id): the brain's first RNG
+    // draw matches a 9-seeded reference (Brain() is now IBossBrain, probed via RngRange).
+    Game::BossAI01 ref(2.0F);
+    ref.SetSeed(9);
+    EXPECT_EQ(b.Brain().RngRange(0, 1000), ref.Rng().Range(0, 1000));
 }
 
 TEST(BrainFactoryTest, MakeWeaponSingleFromDef) {

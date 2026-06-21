@@ -408,12 +408,34 @@ void GameScene::OnEnter() {
             const glm::vec2 spawn = Room::CellToWorld(
                 fc.first, fc.second, rg.Width(), rg.Height(), kCellPx, origin);
             if (roomIndex == bossRoom) {
+                // BossMaker-lite (B1-P2, policy C): pick the boss from a
+                // representative roster of FIRING bosses across distinct attack-
+                // dispatch shapes -- AI01 (chase + ungated ChooseAttack), AI08
+                // (param-gated ChooseAttack), AI11 (field-gated ShootReflection),
+                // AI06 (summon-parent), AI12 (composite-half) -- proving the (d)
+                // boss dispatch in-game. The pick is a pure DETERMINISTIC function
+                // of (room type, boss-room index): it draws NOTHING from the
+                // per-floor RNG, so golden/combat determinism is untouched. The
+                // dispatch (BrainFactory -> (d) adapter) routes the id to the
+                // matching brain; AI06 summon / AI12 composite-HP are no-op (debt
+                // s7). floor->boss is NOT recoverable (no boss_list; the dump is
+                // chapter-3) -> reversible C downgrade pending a chapter-1 dump.
+                static constexpr std::array<const char *, 5> kBossRosterC = {
+                    "BossAI01", "BossAI08", "BossAI11", "BossAI06", "BossAI12"};
+                const std::size_t bpick =
+                    (static_cast<std::size_t>(cell.type) +
+                     static_cast<std::size_t>(bossRoom)) %
+                    kBossRosterC.size();
+                const char *const bossId = kBossRosterC[bpick];
                 auto boss = std::make_shared<Boss>(root, spawn, /*maxHp=*/500,
                                                    /*shootCd=*/2.0F,
                                                    m_FloorSeed + 9000);
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
-                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex, m_FloorSeed + 9000);
+                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex,
+                               m_FloorSeed + 9000, bossId);
+                LOG_INFO("BossMaker-lite: room {} spawned {} (type {})", roomIndex,
+                         bossId, cell.type);
             } else {
                 // EnemyMaker-lite (B1-P1, policy C): pick ONE enemy per room from
                 // a representative SHOOTER roster (AI11 = ice; AI06 turret; AI07

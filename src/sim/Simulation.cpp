@@ -330,8 +330,11 @@ void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId
     ec->Activate(m_Scheduler, m_FireIntents);        // asleep until WakeByRoom().
     m_Enemies.push_back(std::move(ec));
 }
-void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed) {
-    m_Boss = std::make_unique<BossController>(baseShootCd, spawn, maxHp, seed);
+void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed,
+                         const std::string &bossId) {
+    // (d) dispatch: BrainFactory routes bossId -> its brain adapter. The default
+    // "BossAI01" keeps the legacy path byte-identical.
+    m_Boss = BrainFactory::MakeBossPtr(bossId, baseShootCd, spawn, maxHp, seed);
     m_Boss->MutableState().roomId = roomId;
     m_Boss->Activate(m_Scheduler, m_FireIntents); // asleep until WakeByRoom().
 }

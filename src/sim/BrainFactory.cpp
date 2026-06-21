@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "sim/BossBrainAdapters.hpp"
 #include "sim/EnemyBrainAdapters.hpp"
 #include "sim/SimConfig.hpp"
 
@@ -36,6 +37,14 @@ BossController BrainFactory::MakeBoss(float baseShootCd, glm::vec2 spawn, int ma
     // prvalue: BossController is move-deleted, so C++17 guaranteed elision constructs
     // it directly into the caller's storage (no move/copy ctor required).
     return BossController(baseShootCd, spawn, maxHp, seed);
+}
+
+std::unique_ptr<BossController> BrainFactory::MakeBossPtr(const std::string &bossId,
+                                                         float baseShootCd, glm::vec2 spawn,
+                                                         int maxHp, int seed) {
+    // (d) dispatch: pick the boss brain adapter by id, inject into the controller.
+    return std::make_unique<BossController>(MakeBossBrain(bossId, baseShootCd), baseShootCd,
+                                            spawn, maxHp, seed);
 }
 
 WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,

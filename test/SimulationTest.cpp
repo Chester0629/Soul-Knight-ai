@@ -221,6 +221,27 @@ TEST(SimulationTest, BossChasesPlayerAndFiresFan) {
     EXPECT_GE(sim.Bullets().size(), 3U);
 }
 
+// B1-P2: a (d)-dispatched NON-AI01 boss (the GameScene C-roster path) wakes,
+// moves per its brain decision, and fires enemy bullets through the FULL sim
+// pipeline -- the authoritative in-game behaviour (the scene mirrors the sim).
+TEST(SimulationTest, DispatchedNonAI01BossFiresThroughSim) {
+    Simulation sim(20240607, &g_NullWorld);
+    sim.SetBoss(/*baseShootCd=*/0.2F, glm::vec2{200.0F, 0.0F}, /*maxHp=*/500, /*roomId=*/3,
+                /*seed=*/9000, "BossAI11"); // field-gated ShootReflection shooter
+    ASSERT_TRUE(sim.HasBoss());
+    EXPECT_EQ(sim.BossView().maxHp, 500);
+
+    WorldInputs in = Idle();
+    in.playerPos = glm::vec2{0.0F, 0.0F};
+    in.playerRoomId = 3; // wake the boss
+    for (int i = 0; i < 120; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_NE(sim.BossView().pos.x, 200.0F); // moved off spawn (brain move decision)
+    ASSERT_FALSE(sim.Bullets().empty());     // the dispatched BossAI11 fired
+    EXPECT_EQ(sim.Bullets().front().camp, 1);
+}
+
 TEST(SimulationTest, BossReplayIsByteIdentical) {
     auto run = [](int seed) {
         Simulation sim(seed, &g_NullWorld);

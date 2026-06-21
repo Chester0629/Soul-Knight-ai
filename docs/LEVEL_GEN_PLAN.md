@@ -115,6 +115,33 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
   - **AI05 brain 未 port**(`enemies.json` 16 def vs 15 brain);**floors 2–N roster = placeholder**(多樓層 deferred)。
   - clear-flow **後半(殺敵→ClearRoom→開門)** + 親手實玩仍待 **P5**(需瞄準 combat input,autowalk/autofire 打不準敵人)。
 
+- **★ B1-P2 boss roster — (d) dispatch 立妥、spawn 走 C 代表性(可逆債)**:
+  - **dispatch = (d) function-adapter**(`IBossBrain` + `BossBrainBase<T>` + per-boss adapter,brain
+    源碼**零改動**);**全 14 標準 fighting boss**(BossAI01–14)註冊進 `MakeBossBrain`;`BossController`
+    持 `unique_ptr<IBossBrain>`,**BossAI01 逐字 forward = byte-identical**(`BossControllerTest` +
+    `SimulationTest.BossReplayIsByteIdentical` 綠,golden/combat hash 不變)。
+  - **boss 真實攻擊 patterns 未做 = Fan-近似(phase A)**:每隻 boss 的 roll→attack jumptable
+    **owner-truncated(全 boss 皆然)**,故攻擊一律 `FirePattern::Fan`。**接線結構已備**(adapter 回
+    `AttackResult.pattern` enum → controller 寫進 `FireIntent.pattern` → FireSystem 渲染),待
+    **dedicated FireSystem-patterns 階段**補 Burst/Charge/Parabola 實作 + adapter 回真 enum,**不重接**
+    (服務 boss + P3 武器,做一次)。
+  - **特殊機制未做(後續階段)**:**AI06 召喚**(`BossAI06Child`)、**AI12 複合 HP**(`BossAI12Parent`
+    雙體合一)—— 其 fighting brain(BossAI06/BossAI12)已註冊**會射子彈**,召喚/複合 HP **no-op**;
+    **`BossAI06Child`/`BossAI12Parent` 不作獨立 boss 註冊**(非 fighting brain)。**Nian/NianLantern =
+    event-boss 無 def**(同 enemy AI05 反例,event-boss 債,不註冊)。
+  - **can_shoot/move 簡化(owner-side 債)**:gated boss 的 adapter 每 shoot-tick **開 can_shoot 閘**
+    使其按 cadence 開火(真·anim-gated cadence = owner-side 債)。**BossAI03 無公開 can_shoot opener**
+    (anim EndAtkNN 才設)→ 本階段 **move-only**(不射,排除出 spawn roster,`GatedAI03DispatchesMoveOnly`
+    記錄)。**BossAI04/07/14 stationary**(無 move method / rooted octopus → `(0,0)`,sim 退回 chase)。
+  - **floor→boss 指派 = C 代表性可逆降級**:**無 `boss_list`**(MapManager 無此 key)、`bosses.json`
+    **無 chapter/floor 欄**、dump 是 **chapter-3** → floor→boss **不可恢復**。spawn 用 C roster
+    `{AI01, AI08, AI11, AI06, AI12}`(涵蓋不同攻擊-dispatch 型態 + 2 特殊),per-floor 按
+    **(room-type + boss-room index) 純決定性挑**(不抽 RNG、不擾 perFloorSeed)。待 **chapter-1 dump**。
+  - **實玩**:boss 房放真·非-AI01 dispatch boss(實玩 log = `BossMaker-lite: room 4 spawned BossAI11`);
+    **dispatch boss 會射 Fan 經完整 sim** 已驗(`SimulationTest.DispatchedNonAI01BossFiresThroughSim`、
+    `RosterCBossesAllFire`)。**進 boss 房截圖** 受限於 single-hop autowalk(只到相鄰房、到不了最遠 boss 房)
+    = 既有 #4/P5 headless-nav 債,**非回歸**(boss-fire 已於 sim 層驗證)。
+
 - **★ P4 tileset — 純視覺債(`tools/extract_tiles.py` + `GameScene` 渲染)**:
   - **floor/wall biome = biome 6 冰雪(已釘死,HIGH — P4-RE)**:floor-1 = world 1
     (`AB:level-1` bundle)= **biome 6**(`floor601`/`wall601`,淺藍雪地)。證據:biome 集**按 world
