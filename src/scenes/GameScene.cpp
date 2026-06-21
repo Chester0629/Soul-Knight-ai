@@ -545,6 +545,9 @@ void GameScene::OnEnter() {
     if (const char *fc = std::getenv("SK_FORCE_CLEAR")) {
         m_ForceClearFrame = std::atol(fc);
     }
+    if (const char *pf = std::getenv("SK_PAUSE")) {
+        m_PauseFrame = std::atol(pf); // force the pause overlay at update K (headless).
+    }
     if (const char *fd = std::getenv("SK_FORCE_DIE")) {
         m_ForceDieFrame = std::atol(fd);
     }
@@ -758,8 +761,23 @@ bool GameScene::RoomHasLiveHostile(int roomId) const {
 }
 
 void GameScene::Update(float dtMs) {
-    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
+    if (Util::Input::IfExit()) { // window close -> quit the app.
         Core::Context::GetInstance()->SetExit(true);
+        return;
+    }
+    ++m_UpdateCalls;
+    if (m_PauseFrame >= 0 && m_UpdateCalls == m_PauseFrame) {
+        m_Paused = true; // SK_PAUSE=K test hook (NO-OP unless set).
+    }
+    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE)) { // ESC toggles pause.
+        m_Paused = !m_Paused;
+    }
+    if (m_Paused) {
+        // Frozen: only the pause-menu input runs; the sim/camera/clear/death checks
+        // below are skipped, so the world holds still behind the overlay.
+        if (Util::Input::IsKeyDown(Util::Keycode::M) && m_Run != nullptr) {
+            m_Run->ShowTitle(); // abandon the run -> main menu.
+        }
         return;
     }
 
@@ -1103,6 +1121,32 @@ void GameScene::Render() {
     Util::SetActiveViewMatrix(glm::mat4(1.0F)); // screen-space from here on
     m_Hud.Draw(m_Player->Stats());
     DrawBossBar();
+    DrawPauseOverlay();
+}
+
+void GameScene::DrawPauseOverlay() {
+    if (!m_Paused) {
+        return;
+    }
+    if (!m_PauseUiBuilt) {
+        const std::string root = RESOURCE_DIR;
+        const std::string font = root + "/fonts/pixel_bold.ttf";
+        auto title = std::make_shared<Util::GameObject>();
+        title->SetDrawable(std::make_shared<Util::Text>(
+            font, 56, "PAUSED", Util::Color{255, 255, 255, 255}));
+        title->m_Transform.translation = {0.0F, 80.0F};
+        title->SetZIndex(80.0F);
+        m_PauseUi.AddChild(title);
+
+        auto hint = std::make_shared<Util::GameObject>();
+        hint->SetDrawable(std::make_shared<Util::Text>(
+            font, 22, "ESC: RESUME      M: MAIN MENU", Util::Color{220, 220, 220, 255}));
+        hint->m_Transform.translation = {0.0F, -10.0F};
+        hint->SetZIndex(80.0F);
+        m_PauseUi.AddChild(hint);
+        m_PauseUiBuilt = true;
+    }
+    m_PauseUi.Update(); // caller already set the screen-space (identity) view.
 }
 
 void GameScene::DrawBossBar() {

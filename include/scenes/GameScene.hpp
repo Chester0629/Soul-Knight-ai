@@ -141,6 +141,17 @@ private:
     /// Draw the boss banner (no-op unless a live boss exists). Screen-space.
     void DrawBossBar();
 
+    // --- Pause (ESC): freeze the sim + show an overlay (the video's pause menu).
+    // Handled in-scene (not a pushed scene) so the frozen game stays visible behind
+    // the overlay. Esc resumes, M abandons to the main menu.
+    bool m_Paused = false;
+    Util::Renderer m_PauseUi;
+    bool m_PauseUiBuilt = false;
+    int m_UpdateCalls = 0;    ///< counts every Update (even while paused), for SK_PAUSE.
+    long m_PauseFrame = -1;   ///< SK_PAUSE=K test hook: force pause at update K. -1 = off.
+    /// Draw the pause overlay (no-op unless m_Paused). Screen-space.
+    void DrawPauseOverlay();
+
     /// Per-floor base seed = PerFloorSeed(runSeed, floorIndex). Roots every
     /// deterministic stream this floor owns (combat crit rolls, the enemy AI
     /// stream, MapManager/RoomGen, enemy/boss/weapon seeds). Differs per floor so

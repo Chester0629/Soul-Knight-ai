@@ -92,8 +92,8 @@ void SettlementScene::Update(float /*dtMs*/) {
                       (autoFire && m_AutoAction == AutoAction::Quit);
 
     if (restart && m_Run != nullptr) {
-        LOG_INFO("SettlementScene: restart -> new run (floor 0)");
-        m_Run->StartRun(); // Replaces this scene with a fresh floor-0 GameScene.
+        LOG_INFO("SettlementScene: restart -> title (new run via the full flow)");
+        m_Run->ShowTitle(); // back to Title -> HeroSelect -> Talent -> floor 0.
         return;
     }
     if (quit) {

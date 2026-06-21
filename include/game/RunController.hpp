@@ -48,6 +48,9 @@ public:
     void ShowTitle();
     /// Title -> hero pick: Replace the active scene with the HeroSelectScene.
     void GoToCharacterSelect();
+    /// Title -> settings / controls help (each returns to the title on Esc).
+    void GoToSettings();
+    void GoToKeybinds();
     /// Hero pick confirmed: remember @p charId, reset run progress, then show the
     /// chapter-start TalentScene (the floor is built once a talent is chosen).
     void BeginRun(const std::string &charId);

@@ -4,6 +4,8 @@
 
 #include "scenes/GameScene.hpp"
 #include "scenes/HeroSelectScene.hpp"
+#include "scenes/KeybindsScene.hpp"
+#include "scenes/SettingsScene.hpp"
 #include "scenes/SettlementScene.hpp"
 #include "scenes/TalentScene.hpp"
 #include "scenes/TitleScene.hpp"
@@ -54,6 +56,24 @@ void RunController::GoToCharacterSelect() {
         m_Scenes.Push(sel);
     } else {
         m_Scenes.Replace(sel);
+    }
+}
+
+void RunController::GoToSettings() {
+    auto s = std::make_shared<SettingsScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(s);
+    } else {
+        m_Scenes.Replace(s);
+    }
+}
+
+void RunController::GoToKeybinds() {
+    auto k = std::make_shared<KeybindsScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(k);
+    } else {
+        m_Scenes.Replace(k);
     }
 }
 

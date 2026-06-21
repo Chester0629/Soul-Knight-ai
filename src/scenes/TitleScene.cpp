@@ -49,8 +49,10 @@ void TitleScene::Build() {
     m_Objects.push_back(MakeImage(sprites + "c01_4.png", {0.0F, -10.0F}, 4.0F, 8.0F));
     m_Objects.push_back(MakeText(font, 24, "PRESS ENTER TO START", {0.0F, -210.0F},
                                  Util::Color{235, 235, 235, 255}, 20.0F));
+    m_Objects.push_back(MakeText(font, 16, "S: SETTINGS     K: CONTROLS",
+                                 {0.0F, -270.0F}, Util::Color{170, 170, 170, 255}, 20.0F));
     m_Objects.push_back(MakeText(font, 14, "Soul Knight -- front-end flow",
-                                 {0.0F, -300.0F}, Util::Color{150, 150, 150, 255}, 20.0F));
+                                 {0.0F, -320.0F}, Util::Color{150, 150, 150, 255}, 20.0F));
 
     for (const auto &o : m_Objects) {
         m_Renderer.AddChild(o);
@@ -60,10 +62,9 @@ void TitleScene::Build() {
 
 void TitleScene::OnEnter() {
     LOG_INFO("TitleScene: press Enter/Space to start");
-    if (const char *act = std::getenv("SK_TITLE")) {
-        if (std::string(act) == "start") {
-            m_AutoStartFrame = 20;
-        }
+    // SK_TITLE=start|settings|keybinds: auto-dispatch that action (headless).
+    if (std::getenv("SK_TITLE") != nullptr) {
+        m_AutoStartFrame = 20;
     }
 }
 
@@ -71,12 +72,31 @@ void TitleScene::OnExit() { LOG_INFO("TitleScene: OnExit (entering hero select)"
 
 void TitleScene::Update(float /*dtMs*/) {
     ++m_Frame;
-    const bool autoStart = (m_AutoStartFrame >= 0 && m_Frame >= m_AutoStartFrame);
-    const bool start = Util::Input::IsKeyDown(Util::Keycode::RETURN) ||
-                       Util::Input::IsKeyDown(Util::Keycode::SPACE) || autoStart;
-    if (start && m_Run != nullptr) {
+    if (m_AutoStartFrame >= 0 && m_Frame >= m_AutoStartFrame && m_Run != nullptr) {
+        const char *a = std::getenv("SK_TITLE");
+        const std::string s = (a != nullptr) ? a : "start";
+        if (s == "settings") {
+            m_Run->GoToSettings();
+        } else if (s == "keybinds") {
+            m_Run->GoToKeybinds();
+        } else {
+            m_Run->GoToCharacterSelect();
+        }
+        return;
+    }
+    if ((Util::Input::IsKeyDown(Util::Keycode::RETURN) ||
+         Util::Input::IsKeyDown(Util::Keycode::SPACE)) &&
+        m_Run != nullptr) {
         LOG_INFO("TitleScene: start -> hero select");
         m_Run->GoToCharacterSelect(); // deferred Replace from inside Update.
+        return;
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::S) && m_Run != nullptr) {
+        m_Run->GoToSettings();
+        return;
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::K) && m_Run != nullptr) {
+        m_Run->GoToKeybinds();
     }
 }
 
