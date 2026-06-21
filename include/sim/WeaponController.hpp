@@ -1,6 +1,7 @@
 #ifndef GAME_SIM_WEAPONCONTROLLER_HPP
 #define GAME_SIM_WEAPONCONTROLLER_HPP
 
+#include <memory>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -8,6 +9,7 @@
 #include "combat/Gun001.hpp"
 #include "combat/Gun016.hpp"
 #include "sim/FireIntent.hpp"
+#include "sim/IWeaponBrain.hpp"
 
 namespace Game::Sim {
 
@@ -33,6 +35,9 @@ public:
         // keeps the single-shot path. Independent of kind (HeatMinigun takes precedence).
         int count = 1;
         float fanSpreadDeg = 0.0F;
+        // (d) brain path: raw per-pellet fan step (WeaponDef.angle), needed by the
+        // gun-brain Fan adapters (distinct from fanSpreadDeg, the legacy total span).
+        float fanStepDeg = 0.0F;
         // Single (Gun001):
         float baseAngle = 5.0F;
         float recoil = 0.0F;
@@ -44,15 +49,23 @@ public:
 
     WeaponController(const Params &params, int seed);
 
-    /// Advance one fixed tick. If @p firing and the fire-rate cooldown elapsed,
-    /// append one Single FireIntent (scattered, player camp 0) to @p out.
-    void Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
-              std::vector<FireIntent> &out);
+    /// (d) dispatch ctor (B1-P3): drive a per-gun IWeaponBrain. The fire-rate
+    /// cooldown gate stays here (passed to the brain as FireContext.canFire);
+    /// the brain owns the pattern + any heat/charge/burst state.
+    WeaponController(std::unique_ptr<IWeaponBrain> brain, const Params &params, int seed);
 
-    float HeatTime() const { return m_HeatTime; } ///< for tests.
+    /// Advance one fixed tick. Appends this tick's FireIntents (scattered, baked
+    /// dir) to @p out. @return the number of trigger PULLS resolved this tick (for
+    /// energy accounting): 1 when a pull fires (a Fan pull is 1, not its pellet
+    /// count), 0 when idle/charging.
+    int Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
+             std::vector<FireIntent> &out);
+
+    float HeatTime() const { return m_Brain ? m_Brain->HeatTime() : m_HeatTime; } ///< for tests.
 
 private:
     Params m_Params;
+    std::unique_ptr<IWeaponBrain> m_Brain; ///< (d) gun brain; null on the legacy path.
     Gun001 m_Gun001;
     Gun016 m_Gun016;
     int m_CooldownTicks = 0;

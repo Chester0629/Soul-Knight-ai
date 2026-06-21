@@ -58,6 +58,8 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.itemValue = GetI(e, "item_value");
             d.count = GetI(e, "count");
             d.angle = GetF(e, "angle");
+            d.maxTime = GetF(e, "max_time");  // B1-P3: Charge ratio cap (charge guns).
+            d.aCount = GetI(e, "a_count");    // B1-P3: charge burst / arrow count.
             m_WeaponIndex[d.id] = m_Weapons.size();
             m_Weapons.push_back(std::move(d));
         }

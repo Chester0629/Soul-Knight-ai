@@ -66,6 +66,7 @@ public:
     static constexpr float kLockArmInset = kCellPx + kRadius + 1.0F; // 49px
     static constexpr float kAutoWalkSpeed = 300.0F;                  // px/s
     static constexpr float kStepMs = 20.0F; // one fixed sim step per frame
+    static constexpr float kPickupRange = 28.0F; // GameScene pickup proximity (kPickupRange)
 
     explicit RealBodyDriver(int seed) : m_Sim(seed, this) {}
 
@@ -126,6 +127,14 @@ public:
         m_Sim.EquipWeapon(def, def.id.empty() ? "Gun001" : def.id, seed);
         m_EnergyCost = Game::WeaponEnergyCost(def);
     }
+    /// Drop a weapon pickup at @p pos. Walking within kPickupRange auto-equips it
+    /// (mirrors GameScene's proximity pickup -> EquipWeapon, the real walk-over chain).
+    /// The body must navigate to it under real collision -- nothing equips until then.
+    void AddWeaponPickup(glm::vec2 pos, const Game::WeaponDef &def) {
+        m_Pickups.push_back(PickupRec{pos, def, false});
+    }
+    bool PickupTaken(std::size_t idx) const { return m_Pickups[idx].taken; }
+    const std::string &CurrentWeaponId() const { return m_CurrentWeaponId; }
     /// Place the body and seed combat vitals (high energy so firing never starves).
     void SetPlayer(glm::vec2 pos) {
         m_Pos = pos;
@@ -184,6 +193,15 @@ public:
             resolved.y = after.y;
         }
         m_Pos = resolved;
+
+        // Proximity pickup -> equip (mirrors GameScene pickup-equip; the real walk-over).
+        for (PickupRec &pk : m_Pickups) {
+            if (!pk.taken && glm::distance(m_Pos, pk.pos) <= kPickupRange) {
+                EquipPlayer(pk.def, 1000 + m_EquipSeq++);
+                m_CurrentWeaponId = pk.def.id;
+                pk.taken = true;
+            }
+        }
 
         const int prid = PlayerRoomId(); // ContainsPoint membership -> sim WAKE input
 
@@ -247,6 +265,18 @@ public:
         return !RoomHasLiveHostile(roomId);
     }
 
+    /// Like ClearRoomCombat but PULSES the trigger (releases 1 frame in 4) so
+    /// edge-triggered guns (Burst rising-edge, Charge windup->release) re-fire
+    /// instead of stalling under a continuous hold. Auto-fire guns are unaffected.
+    bool ClearRoomCombatPulsed(int roomId, int maxFrames) {
+        for (int f = 0; f < maxFrames && RoomHasLiveHostile(roomId); ++f) {
+            const glm::vec2 tgt = NearestHostilePos(roomId);
+            const bool fire = (f % 4 != 0); // release every 4th frame -> re-arm the edge
+            Frame(tgt, /*moving=*/true, fire, tgt);
+        }
+        return !RoomHasLiveHostile(roomId);
+    }
+
     // --- queries -------------------------------------------------------------
     glm::vec2 PlayerPos() const { return m_Pos; }
     glm::vec2 RoomCenter(int roomId) const { return m_Rooms[static_cast<std::size_t>(roomId)].room.Center(); }
@@ -306,6 +336,17 @@ public:
         }
         return n;
     }
+    /// Live player bullets (camp 0) -- the in-flight pattern this tick. Used to
+    /// assert the REAL fan width / burst sub-shot count from the body-driven loop.
+    int PlayerBulletCount() const {
+        int n = 0;
+        for (const auto &b : m_Sim.Bullets()) {
+            if (b.camp == 0) {
+                ++n;
+            }
+        }
+        return n;
+    }
     const Game::CombatStats &Player() const { return m_Player; }
 
 private:
@@ -316,6 +357,11 @@ private:
         std::vector<Util::Collider> doorSeal;
         Game::RGRoomX life;
         int size = 15;
+    };
+    struct PickupRec {
+        glm::vec2 pos{0.0F, 0.0F};
+        Game::WeaponDef def;
+        bool taken = false;
     };
 
     static glm::vec2 BlockWorld(int bx, int by, glm::vec2 origin) {
@@ -386,10 +432,13 @@ private:
 
     std::vector<RoomRec> m_Rooms;
     std::vector<Util::Collider> m_Walls; // standalone obstacles (tests)
+    std::vector<PickupRec> m_Pickups;    // walk-over weapon pickups (tests)
     Game::Sim::Simulation m_Sim;
     glm::vec2 m_Pos{0.0F, 0.0F};
     Game::CombatStats m_Player{};
     int m_EnergyCost = 1;
+    std::string m_CurrentWeaponId;
+    int m_EquipSeq = 0;
 };
 
 } // namespace sktest

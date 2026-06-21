@@ -31,6 +31,12 @@ struct WeaponDef {
     /// Fixed fan step in degrees between adjacent bullets (subclass field).
     /// RE models this as float (RGWeapon fire_angle); kept float for fidelity.
     float angle = 0.0F;
+    /// Charge-ratio cap (weapons.json max_time): the divisor for charge guns
+    /// (Gun007/GunHeroBow/GunMagicBow); 0 if absent. B1-P3 loader hole closed.
+    float maxTime = 0.0F;
+    /// Charge burst / arrow count (weapons.json a_count): Gun007 maxCount,
+    /// GunHeroBow arrow count; 0 if absent. B1-P3 loader hole closed.
+    int aCount = 0;
 };
 
 /**

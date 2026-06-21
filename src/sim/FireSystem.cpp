@@ -49,9 +49,25 @@ void FireSystem::Expand(const FireIntent &intent, std::uint32_t &nextId,
         out.push_back(MakeBullet(intent, intent.dir, nextId));
         return;
     }
-    // Single -- and Burst/Charge/Parabola, which are reserved for later cycles and
-    // currently emit one bullet along dir.
-    // TODO(engine-port Plan 2+): implement Burst / Charge / Parabola spawn shapes.
+    if (intent.pattern == FirePattern::Charge) {
+        // B1-P3 Charge primitive: a single charge-release bullet whose speed is the
+        // base speed scaled by the accrued chargeRatio. Pure stateless geometry --
+        // NO RNG draw (the charge-gun brain, e.g. Gun005, takes zero draws; the
+        // ratio is baked into the intent by the driver). The charge ACCUMULATION
+        // and release detection live in the driver/adapter, not here. (Charge-scaled
+        // bullet COUNT/SIZE -- Gun007 -- is a later 3.2 extension; Charge fires one
+        // bullet here.) Burst is NOT a FireSystem branch: a burst is the driver
+        // emitting one Single sub-shot per tick across ticks (decision B), so it
+        // renders through the Single path below -- a same-tick Expand burst would be
+        // unfaithful to the guns' time-spaced salvo.
+        BulletState b = MakeBullet(intent, intent.dir, nextId);
+        b.vel = intent.dir * (intent.speedPxPerSec * intent.chargeRatio);
+        out.push_back(b);
+        return;
+    }
+    // Single -- and Burst/Parabola, which currently emit one bullet along dir.
+    // (Burst is driver-multi-tick: each sub-shot arrives here as a Single. Parabola
+    // is deferred -- 0 guns need it.)
     out.push_back(MakeBullet(intent, intent.dir, nextId));
 }
 

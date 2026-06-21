@@ -16,8 +16,53 @@ WeaponController::WeaponController(const Params &params, int seed)
     m_Gun016.SetSeed(seed);
 }
 
-void WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
+// (d) dispatch ctor: own a per-gun IWeaponBrain. The legacy Gun001/Gun016 members
+// are still seeded (inert here) so the object is fully constructed either way.
+WeaponController::WeaponController(std::unique_ptr<IWeaponBrain> brain, const Params &params,
+                                  int seed)
+    : m_Params(params), m_Brain(std::move(brain)) {
+    if (m_Brain != nullptr) {
+        m_Brain->SetSeed(seed);
+    }
+    m_Gun001.SetSeed(seed);
+    m_Gun016.SetSeed(seed);
+}
+
+int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
                            std::vector<FireIntent> &out) {
+    // --- (d) brain path: the gun brain owns the pattern + heat/charge/burst state.
+    // The fire-rate cooldown gate stays here and is passed as FireContext.canFire
+    // (Single/Fan respect it; Burst/Charge are edge-triggered and ignore it).
+    if (m_Brain != nullptr) {
+        if (m_CooldownTicks > 0) {
+            --m_CooldownTicks;
+        }
+        IWeaponBrain::FireContext ctx;
+        ctx.firing = firing;
+        ctx.canFire = (m_CooldownTicks == 0);
+        ctx.origin = origin;
+        ctx.aim = aimDir;
+        ctx.fixedStepSeconds = kFixedStepSeconds;
+        ctx.baseAngle = m_Params.baseAngle;
+        ctx.recoil = m_Params.recoil;
+        ctx.bulletSpeedPxPerSec = m_Params.bulletSpeedPxPerSec;
+        ctx.lifeMs = m_Params.lifeMs;
+        ctx.damage = m_Params.damage;
+        ctx.critical = m_Params.critical;
+        ctx.repel = m_Params.repel;
+        ctx.canThrough = m_Params.canThrough;
+        ctx.pierce = m_Params.pierce;
+        ctx.camp = 0;
+        ctx.count = m_Params.count;
+        ctx.stepAngle = m_Params.fanStepDeg;
+        const int pulls = m_Brain->Tick(ctx, out);
+        if (pulls > 0) {
+            m_CooldownTicks = (std::max)(1, Scheduler::SecondsToTicks(m_Params.fireIntervalSeconds));
+        }
+        return pulls;
+    }
+
+    // --- legacy path (Params-driven; WeaponControllerTest regression anchor) ---
     // Heat model (Gun016): ramp while firing toward heatMaxTime, cool toward 0 when
     // released. The ramp/cool step is the fixed timestep (FAITHFUL: Gun016 heat tick).
     if (m_Params.kind == Kind::HeatMinigun) {
@@ -33,7 +78,7 @@ void WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
         --m_CooldownTicks;
     }
     if (!firing || m_CooldownTicks > 0) {
-        return;
+        return 0;
     }
     FireIntent intent;
     intent.origin = origin;
@@ -66,6 +111,7 @@ void WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
     }
     out.push_back(intent);
     m_CooldownTicks = (std::max)(1, Scheduler::SecondsToTicks(m_Params.fireIntervalSeconds));
+    return 1; // one pull resolved (the data-Fan path is one pull, count pellets).
 }
 
 } // namespace Game::Sim

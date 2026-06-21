@@ -142,6 +142,36 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
     `RosterCBossesAllFire`)。**進 boss 房截圖** 受限於 single-hop autowalk(只到相鄰房、到不了最遠 boss 房)
     = 既有 #4/P5 headless-nav 債,**非回歸**(boss-fire 已於 sim 層驗證)。
 
+- **★ B1-P3 武器 roster — (d) dispatch 立妥、真 pattern 從 brain+data 恢復(命脈:brain 零改)**:
+  `IWeaponBrain` + per-gun adapter(`WeaponBrainAdapters.hpp`)經 `BrainFactory::MakeWeapon` dispatch
+  **全 21 有-data 槍**;**brain 源碼零改**(只呼 public method,`git diff Gun*` 空)。legacy WeaponController
+  Params 路徑保留為 byte-identical regression anchor。FireSystem 保持 **0-RNG**(scatter 全 brain-side
+  baked 進 `dir`);既有 Single/Fan + Gun001/016 路徑 byte-identical(replay traces 不變)。pattern:
+  Single×8 / Fan×5(brain-driven,N 個 Single intent,**energy per-pull 非 per-pellet**)/ Burst×4
+  (跨 tick:WeaponController poll 即 driver,**未注 Scheduler**)/ Charge×3(蓄力→釋放,FireSystem
+  `Charge` 分支依 ratio 縮放速度)。實機驗:`RealBodyDriverTest.RealBodyPicksUp{Fan,Burst}Gun*`
+  (真身體撿槍→開火→真 pattern→殺敵)。**債**:
+  - **report#3 `weapon_NNN → Gun*` = modulo-stub(可逆,待 RE)**:`ResolveDropWeapon` 取尾數 `% 46`,
+    droptables 167 個 weapon_NNN 無 authored Gun* 對照表 → loot 解析到代表性槍非 data-correct。`GameData.cpp:ResolveDropWeapon`。
+  - **孤兒 Gun013 註冊但 loot 不可達**:有 brain、weapons.json 無此 id(編號跳過)→ 註冊 adapter 但無 data row。
+  - **GunMultiBullet → Gun019Adapter(委派)**:本身無 fire body(委派 Gun019 形狀);per-bullet stat
+    override(attack/speed/crit/pierce 選擇子)**未套**。
+  - **Gun006Paw 不發彈**:companion-sword buff,owner/melee-side,非彈幕 → 註冊但 Tick 永不 emit。
+  - **零星 owner-truncated 硬洞(優雅降級)**:recoil(owner+0x20)未恢復 → `recoil=0`(cone==deviation);
+    GunThrow ≥6-bullet spread = 不可恢復 `DAT_` → 0;Gun014 旋轉 base-angle 除數 owner-fed → 不旋轉;
+    Gun018 per-pellet counter(0x94)owner-driven → 只 Attack-stage scatter;Gun016 heatBaseAngle 真源
+    = per-class recoil base 非 JSON → slice 預設;Gun017 drone / GunStaffWizard phase / GunWaken awaken
+    閘皆 owner-bool → 不模(常射)。
+  - **burst inter-shot delay = 1/tick placeholder**:`has_delay`/`max_delay` data 已存、loader 未接(可後接);
+    每 sub-shot 一 tick 暫代真時距。
+  - **Gun011 end-shoot pellet 未模**:釋放尾彈是 owner-timed 第二 pull,未接。
+  - **charge maxCharge/aCount**:`max_time`/`a_count` 已接 loader(`WeaponDef.maxTime/aCount`);Gun005
+    maxCharge 用 ctor 預設(非 max_time);Gun007/HeroBow 的 owner cap fallback。
+  - **Parabola / homing / orbit / growth 延後**:`bullets.json` 有 gravity/y_speed/angle_speed/start_size
+    等軌跡 scalar,loader 未接(0 槍需 Parabola)。RGBox/ItemWishingWell 額外 loot 源、pickup/chest sprite
+    亦延後。
+  - **boss Fan-approx 續延**(見 B1-P2 條);既有債延續。
+
 - **★ P4 tileset — 純視覺債(`tools/extract_tiles.py` + `GameScene` 渲染)**:
   - **floor/wall biome = biome 6 冰雪(已釘死,HIGH — P4-RE)**:floor-1 = world 1
     (`AB:level-1` bundle)= **biome 6**(`floor601`/`wall601`,淺藍雪地)。證據:biome 集**按 world

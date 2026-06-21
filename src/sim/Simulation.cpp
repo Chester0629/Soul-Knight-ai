@@ -66,10 +66,13 @@ void Simulation::TickWeapon() {
         return;
     }
     const std::size_t before = m_FireIntents.size();
-    m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
-    const std::size_t shots = m_FireIntents.size() - before;
-    m_PlayerShotsLastAdvance += static_cast<int>(shots); // primary hand only -> energy spend.
-    for (std::size_t i = 0; i < shots; ++i) { // A: one "fire" cue per player shot (muzzle flash).
+    const int pulls =
+        m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
+    const std::size_t shots = m_FireIntents.size() - before; // intents (pellets) added this step.
+    // B1-P3: energy + the muzzle cue are PER-PULL, not per-intent -- a Fan pull is one
+    // pull (one energy, one flash) regardless of how many pellets it spawned.
+    m_PlayerShotsLastAdvance += pulls; // primary hand only -> energy spend.
+    for (int i = 0; i < pulls; ++i) {  // A: one "fire" cue per pull (muzzle flash).
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
     }
 

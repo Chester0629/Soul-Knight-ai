@@ -6,6 +6,7 @@
 #include "sim/BossBrainAdapters.hpp"
 #include "sim/EnemyBrainAdapters.hpp"
 #include "sim/SimConfig.hpp"
+#include "sim/WeaponBrainAdapters.hpp"
 
 namespace Game::Sim {
 
@@ -50,28 +51,28 @@ std::unique_ptr<BossController> BrainFactory::MakeBossPtr(const std::string &bos
 WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
                                           const std::string &weaponId, int seed) {
     WeaponController::Params p; // p.fireIntervalSeconds defaults to the slice base (0.15s).
-    p.kind = (weaponId == "Gun016") ? WeaponController::Kind::HeatMinigun
-                                     : WeaponController::Kind::Single;
     // weaponSpeed is a fire-rate MULTIPLIER (RGWeapon); the true base cadence is
     // OWNER/animation-driven (Plan 4). Until wired, scale the slice base by it so a
     // faster weaponSpeed shortens the interval. Guard a zero/negative multiplier.
     p.fireIntervalSeconds /= (std::max)(0.01F, def.weaponSpeed);
     p.bulletSpeedPxPerSec = def.bulletSpeed * kDataSpeedToPxPerSec;
     p.damage = def.atk;
-    // deviation feeds ONLY the Single (Gun001) cone. The Gun016/HeatMinigun path reads
-    // heatBaseAngle, whose faithful source is a per-weapon-class recoil base (owner+0x30),
-    // NOT this JSON field -- so it stays a slice default; do not route deviation into it.
+    // deviation is the scatter base angle the gun-brain adapters widen by recoil.
     p.baseAngle = static_cast<float>(def.deviation);
+    p.recoil = 0.0F; // owner recoil multiplier (owner+0x20) unrecovered; 0 -> cone == deviation (debt).
     p.critical = def.critical;
     p.repel = def.repel;
     p.canThrough = def.canThrough != 0;
     p.pierce = def.throughCount;
-    // Multi-shot: WeaponDef.count bullets fanned over (count-1) * angle-step total degrees.
-    // FireSystem expands the Fan; count <= 1 leaves the single-shot path untouched. Gun016
-    // stays a heat single-stream (kind takes precedence over count in WeaponController::Tick).
-    p.count = def.count > 1 ? def.count : 1;
-    p.fanSpreadDeg = def.angle * static_cast<float>(p.count - 1);
-    return WeaponController(p, seed); // prvalue
+    // Fan data: raw count + per-pellet step (def.angle) for the (d) Fan adapters;
+    // fanSpreadDeg kept for the legacy data-Fan regression path.
+    p.count = def.count;
+    p.fanStepDeg = def.angle;
+    p.fanSpreadDeg = def.angle * static_cast<float>((def.count > 1 ? def.count : 1) - 1);
+    // (d) dispatch: pick the per-gun brain adapter by id (Gun001 fallback). The
+    // brain returns the gun's REAL FirePattern; the cooldown/canFire gate stays in
+    // WeaponController. Only Gun001+Gun016 were wired before; now all 21 dispatch.
+    return WeaponController(MakeWeaponBrain(weaponId, def), p, seed); // prvalue
 }
 
 } // namespace Game::Sim

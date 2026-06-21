@@ -303,6 +303,8 @@ set(INCLUDE_FILES
     sim/WorldInputs.hpp
     sim/Simulation.hpp
     sim/WeaponController.hpp
+    sim/IWeaponBrain.hpp
+    sim/WeaponBrainAdapters.hpp
 
     # Phase 2 combat logic
     combat/CombatStats.hpp
@@ -485,6 +487,9 @@ set(TEST_FILES
     BossBrainDispatchTest.cpp
     SimulationTest.cpp
     WeaponControllerTest.cpp
+
+    # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
+    WeaponBrainTest.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): RunState/continuation + perFloorSeed
     RunLoopTest.cpp
