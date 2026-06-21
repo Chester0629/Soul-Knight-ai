@@ -176,9 +176,13 @@ void GameScene::OnEnter() {
     // (f601/w601, the snow tiles -- the obstacle_list config's biome 7 was brown);
     // obstacles come from the authoritative obstacle_list[obj_index] chain (common
     // atlas, theme-independent). Extracted by tools/extract_tiles.py.
-    auto floorImg =
-        std::make_shared<Util::Image>(root + "/sprites/tiles/floor.png");
-    auto wallImg = std::make_shared<Util::Image>(root + "/sprites/tiles/wall.png");
+    // Map TILES re-skinned to the hand-written project's faux-3D composition
+    // (keeps SK-ai's generated grid; only the draw changes): f101 floor + w001
+    // wall-top + a w004 front-FACE on walls that border floor to their south, so
+    // walls read as 3D instead of flat single blocks. (project Tile.cpp.)
+    auto floorImg = std::make_shared<Util::Image>(root + "/sprites/p_floor.png");
+    auto wallImg = std::make_shared<Util::Image>(root + "/sprites/p_wall.png");
+    auto faceImg = std::make_shared<Util::Image>(root + "/sprites/p_face.png");
     const glm::vec2 floorSz = floorImg->GetSize();
     const glm::vec2 wallSz = wallImg->GetSize();
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list,
@@ -272,12 +276,31 @@ void GameScene::OnEnter() {
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
         };
+        const float faceScale = kCellPx / 16.0F; // p_face is 16x8 -> half-cell tall
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
                 if (Room::IsSolidCell(rg.At(x, y))) {
-                    addTile(wallImg, wallSz, x, y, 1.0F);  // wall / obstacle
+                    addTile(wallImg, wallSz, x, y, 0.5F);   // wall TOP (w001 cap)
                 } else {
-                    addTile(floorImg, floorSz, x, y, 0.0F); // walkable floor
+                    addTile(floorImg, floorSz, x, y, 0.0F); // walkable floor (f101)
+                    // Front face: a wall directly NORTH (y+1, +y is up) shows its
+                    // south-facing face over this floor cell's TOP half (project's
+                    // NorthFace/SouthFace; w004 16x8, +TILE_SIZE/4 up, Y-sorted so
+                    // the player occludes it correctly).
+                    if (y + 1 < rg.Height() && Room::IsSolidCell(rg.At(x, y + 1))) {
+                        const glm::vec2 base = Room::CellToWorld(
+                            x, y, rg.Width(), rg.Height(), kCellPx, origin);
+                        const float fy = base.y + kCellPx * 0.25F;
+                        float fz = 50.0F - fy / 64.0F;
+                        fz = fz < 2.0F ? 2.0F : (fz > 98.0F ? 98.0F : fz);
+                        auto face = std::make_shared<Util::GameObject>();
+                        face->SetDrawable(faceImg);
+                        face->m_Transform.scale = glm::vec2(faceScale, faceScale);
+                        face->m_Transform.translation = {base.x, fy};
+                        face->SetZIndex(fz);
+                        m_RoomTiles.push_back(face);
+                        m_Renderer.AddChild(face);
+                    }
                 }
             }
         }
