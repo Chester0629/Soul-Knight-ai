@@ -180,10 +180,9 @@ void GameScene::OnEnter() {
     // (keeps SK-ai's generated grid; only the draw changes): f101 floor + w001
     // wall-top + a w004 front-FACE on walls that border floor to their south, so
     // walls read as 3D instead of flat single blocks. (project Tile.cpp.)
-    // Ice-cave biome with project's tiles: floor = project f501..f506 (6 variants,
-    // picked per-cell for variety). Each is 16x24 with a TRANSPARENT TOP LIP, so it
-    // is drawn uniform-scaled + bottom-aligned (addFloorAt) instead of squished to a
-    // cell square. Walls = project w001 top + w004 teal front-face (faux-3D depth).
+    // Ice biome: floor = f601..f606 (6 clean 16x16 variants, picked per-cell by a
+    // deterministic position hash for a varied/random look). Walls = project w001
+    // top + w004 teal front-face (faux-3D depth). Breakable box skin = objects2_30.
     std::array<std::shared_ptr<Util::Image>, 6> floorImgs;
     for (int i = 0; i < 6; ++i) {
         floorImgs[static_cast<std::size_t>(i)] = std::make_shared<Util::Image>(
@@ -191,7 +190,9 @@ void GameScene::OnEnter() {
     }
     auto wallImg = std::make_shared<Util::Image>(root + "/sprites/p_wall.png");
     auto faceImg = std::make_shared<Util::Image>(root + "/sprites/p_face.png");
+    auto box30Img = std::make_shared<Util::Image>(root + "/sprites/objects2_30.png");
     const glm::vec2 wallSz = wallImg->GetSize();
+    const glm::vec2 floorSz = floorImgs[0]->GetSize();
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list,
     // P4-RE). Floor-1 uses {0,1,2,3,4,5,6,7,8,11}; 9/10 stay null (unused).
     std::array<std::shared_ptr<Util::Image>, 12> objImg{};
@@ -283,20 +284,6 @@ void GameScene::OnEnter() {
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
         };
-        // Floor draw for the f5xx tiles (16x24, transparent-top lip): uniform scale
-        // (16->kCellPx) + bottom-align (+kCellPx/4 up) so the opaque bottom 16px
-        // fills the cell and the transparent top overlaps the cell above. Used for
-        // both room and corridor floor cells.
-        const auto addFloorAt = [&](const std::shared_ptr<Util::Image> &img,
-                                    glm::vec2 base) {
-            auto t = std::make_shared<Util::GameObject>();
-            t->SetDrawable(img);
-            t->m_Transform.scale = glm::vec2(kCellPx / 16.0F, kCellPx / 16.0F);
-            t->m_Transform.translation = {base.x, base.y + kCellPx * 0.25F};
-            t->SetZIndex(0.0F);
-            m_RoomTiles.push_back(t);
-            m_Renderer.AddChild(t);
-        };
         const float faceScale = kCellPx / 16.0F; // p_face is 16x8 -> half-cell tall
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
@@ -305,9 +292,7 @@ void GameScene::OnEnter() {
                 } else {
                     const std::size_t fv = static_cast<std::size_t>(
                         ((x * 7 + y * 131) % 6 + 6) % 6);
-                    addFloorAt(floorImgs[fv], Room::CellToWorld(
-                                                  x, y, rg.Width(), rg.Height(),
-                                                  kCellPx, origin)); // ice floor variant
+                    addTile(floorImgs[fv], floorSz, x, y, 0.0F); // ice floor variant
                     // Front face: a wall directly NORTH (y+1, +y is up) shows its
                     // south-facing face over this floor cell's TOP half (project's
                     // NorthFace/SouthFace; w004 16x8, +TILE_SIZE/4 up, Y-sorted so
@@ -365,10 +350,12 @@ void GameScene::OnEnter() {
                     objImg[oi] == nullptr) {
                     continue; // 0 is the grid wall; 9/10 unused -> null
                 }
-                auto tile = addObjSprite(objImg[oi], o.x, o.y);
-
                 const bool box = o.objIndex >= 1 && o.objIndex <= 4;
                 const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
+                // Breakable wooden box uses objects2_30 (intact); it swaps to
+                // objects2_31 on break (DamageObstacle). Others keep their list skin.
+                auto tile = addObjSprite(box ? box30Img : objImg[oi], o.x, o.y);
+
                 if (box || brazier) {
                     const glm::vec2 wpos = Room::CellToWorld(
                         o.x, o.y, rg.Width(), rg.Height(), kCellPx, origin);
@@ -437,7 +424,7 @@ void GameScene::OnEnter() {
             const FloorBlock::Rect s = FloorBlock::CorridorStrip(dir, rg);
             for (int bx = s.x0; bx <= s.x1; ++bx) {
                 for (int by = s.y0; by <= s.y1; ++by) {
-                    addFloorAt(floorImgs[0], blockToWorld(bx, by)); // walkable ice
+                    addBlockTile(floorImgs[0], floorSz, bx, by, 0.0F); // walkable ice
                 }
             }
             const bool horiz = (dir == FloorBlock::DIR_EAST ||
@@ -809,7 +796,9 @@ void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
         if (r.registered && r.shouldDestroy) {
             ob.alive = false; // stops blocking (passable)
             if (ob.tile != nullptr) {
-                ob.tile->SetVisible(false); // hide the broken box's placeholder skin
+                // Show the broken-box skin (objects2_31) instead of hiding it.
+                ob.tile->SetDrawable(std::make_shared<Util::Image>(
+                    std::string(RESOURCE_DIR) + "/sprites/objects2_31.png"));
             }
             LOG_INFO("RGBox: design box broken at ({:.0f},{:.0f}) -> now passable",
                      pos.x, pos.y);
