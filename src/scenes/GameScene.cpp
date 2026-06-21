@@ -389,9 +389,24 @@ void GameScene::OnEnter() {
             m_Renderer.AddChild(tile);
         };
         const auto addCorridorWall = [&](int bx, int by) {
-            addBlockTile(wallImg, wallSz, bx, by, 1.0F);
+            addBlockTile(wallImg, wallSz, bx, by, 0.5F); // wall TOP (matches rooms)
             m_Corridors.push_back(Util::Collider::MakeAABB(
                 blockToWorld(bx, by), glm::vec2{kCellPx, kCellPx}));
+        };
+        // Front face for a corridor floor cell (bx,by) that has a wall to its NORTH
+        // (the horizontal-corridor north flank) -- same w004 face as the rooms.
+        const auto addCorridorFace = [&](int bx, int by) {
+            const glm::vec2 base = blockToWorld(bx, by);
+            const float fy = base.y + kCellPx * 0.25F;
+            float fz = 50.0F - fy / 64.0F;
+            fz = fz < 2.0F ? 2.0F : (fz > 98.0F ? 98.0F : fz);
+            auto face = std::make_shared<Util::GameObject>();
+            face->SetDrawable(faceImg);
+            face->m_Transform.scale = glm::vec2(kCellPx / 16.0F, kCellPx / 16.0F);
+            face->m_Transform.translation = {base.x, fy};
+            face->SetZIndex(fz);
+            m_RoomTiles.push_back(face);
+            m_Renderer.AddChild(face);
         };
         for (int dir = 0; dir < 4; ++dir) {
             if (cell.entrance[static_cast<std::size_t>(dir)] != 1) {
@@ -407,8 +422,9 @@ void GameScene::OnEnter() {
                                 dir == FloorBlock::DIR_WEST);
             if (horiz) { // flank the long (x) sides with walls
                 for (int bx = s.x0; bx <= s.x1; ++bx) {
-                    addCorridorWall(bx, s.y0 - 1);
-                    addCorridorWall(bx, s.y1 + 1);
+                    addCorridorWall(bx, s.y0 - 1); // south flank: top only
+                    addCorridorWall(bx, s.y1 + 1); // north flank: top + face below
+                    addCorridorFace(bx, s.y1);     // face over the corridor floor edge
                 }
             } else { // flank the long (y) sides with walls
                 for (int by = s.y0; by <= s.y1; ++by) {
