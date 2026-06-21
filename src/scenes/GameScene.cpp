@@ -511,8 +511,13 @@ void GameScene::OnEnter() {
     // -- per-char overrides pending). charId is carried across floors (defaults "c01"
     // until the HeroRoom picker, B5). C01/C02 effects are faithful; c03..c13 are
     // gate+cooldown-only stubs. Rebuilt per floor (starts ready).
-    const std::string charId = m_Carried ? m_Carried->charId : std::string("c01");
-    m_Sim->SetPlayerSkill(charId, m_Data.PlayerTemplate().skillCd,
+    // floor 0 (no carried): use the hero picked in HeroSelectScene (RunState.
+    // selectedCharId), threaded via the RunController back-pointer; later floors
+    // carry the charId in the continuation snapshot. Defaults to "c01" if unowned.
+    m_CharId = m_Carried ? m_Carried->charId
+                         : (m_Run != nullptr ? m_Run->State().selectedCharId
+                                             : std::string("c01"));
+    m_Sim->SetPlayerSkill(m_CharId, m_Data.PlayerTemplate().skillCd,
                           m_Data.PlayerTemplate().inSkillTime);
 
     // --- Forward run loop (step 2a) setup ---
@@ -1019,7 +1024,8 @@ void GameScene::Update(float dtMs) {
             CombatStats &st = m_Player->Stats();
             st.hp = std::max(1, st.hp - 1);
         }
-        const PlayerContinuation snapshot{m_Player->Stats(), m_CurrentWeaponId};
+        const PlayerContinuation snapshot{m_Player->Stats(), m_CurrentWeaponId,
+                                          m_CharId};
         LOG_INFO("Floor {} CLEARED -> snapshot hp={} armor={} energy={} weapon='{}' (next floor {})",
                  m_FloorIndex, snapshot.stats.hp, snapshot.stats.armor,
                  snapshot.stats.energy, snapshot.weaponId, m_FloorIndex + 1);

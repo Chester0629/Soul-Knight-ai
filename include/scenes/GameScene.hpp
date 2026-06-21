@@ -165,6 +165,10 @@ private:
     /// the weapon-id carry vehicle: it replaces the id being implicit in the
     /// EquipWeapon calls (RUN_LOOP_PLAN section 2 / D3 supplement 4).
     std::string m_CurrentWeaponId;
+    /// The hero id this floor is playing (floor 0: RunState.selectedCharId; later
+    /// floors: the carried charId). Set in OnEnter, snapshotted at floor-clear so
+    /// the picked hero CARRIES across floors instead of reverting to the "c01" default.
+    std::string m_CharId = "c01";
 
     // --- Forward run loop (step 2a): whole-floor clear -> transition ---
     /// True once >= 1 hostile has existed on this floor (set in OnEnter). Arms the

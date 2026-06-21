@@ -2,6 +2,7 @@
 #define GAME_RUN_CONTROLLER_HPP
 
 #include <memory>
+#include <string>
 
 #include "Core/Scene.hpp"
 #include "Core/SceneManager.hpp"
@@ -41,6 +42,16 @@ public:
     /// stack. Uses `Empty() ? Push : Replace` so the SAME entry handles cold start
     /// and a later restart (from a future EndScene) without leaking a scene.
     void StartRun();
+
+    /// Front-end flow (the cold-start entry). Put the TitleScene on the stack
+    /// (Push if empty / Replace otherwise -- same dual handling as StartRun).
+    void ShowTitle();
+    /// Title -> hero pick: Replace the active scene with the HeroSelectScene.
+    void GoToCharacterSelect();
+    /// Hero pick confirmed: remember @p charId, reset run progress (floor 0 /
+    /// template / Playing, keeping runSeed + this pick), then put floor 0 on the
+    /// stack. The flow analog of StartRun but entered from the picker.
+    void BeginRun(const std::string &charId);
 
     /// Reset the per-run progress to a FRESH run -- floor 0, continuation snapshot
     /// CLEARED, phase Playing -- while KEEPING `runSeed`. PURE state mutation,

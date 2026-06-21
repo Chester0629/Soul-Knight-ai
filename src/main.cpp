@@ -36,10 +36,11 @@ void SaveFramePng(const char *path, int w, int h) {
 int main(int, char **) {
     auto context = Core::Context::GetInstance();
 
-    // The RunController owns the SceneManager + RunState and puts floor 0 on the
-    // stack (replacing the old single `scenes.Push(make_shared<GameScene>())`).
+    // The RunController owns the SceneManager + RunState. Cold start now opens the
+    // front-end flow at the TitleScene (Title -> HeroSelect -> floor 0); the old
+    // direct `StartRun()` (straight to floor 0) is still used by the in-run restart.
     Game::RunController run;
-    run.StartRun();
+    run.ShowTitle();
 
     // --- Test / observability hooks (env-gated; NO effect unless set) ---
     // These do not change normal interactive play; they exist so the real game

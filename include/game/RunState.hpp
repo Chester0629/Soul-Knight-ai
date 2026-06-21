@@ -60,6 +60,9 @@ struct RunState {
     int floorIndex = 0;            ///< 0-based; the port analog of RGGameProcess this_index (+0x14).
     enum class Phase { Playing, Ended } phase = Phase::Playing;
     std::optional<PlayerContinuation> carried; ///< empty on floor 0 (template); set after floor 0.
+    /// Hero picked in HeroSelectScene; drives floor-0 player skill (and sprite, post
+    /// re-skin). Default "c01"; survives ResetRunState (a restart keeps the pick).
+    std::string selectedCharId = "c01";
 };
 
 /// Stride between consecutive floors' base seeds. A large prime so each floor's

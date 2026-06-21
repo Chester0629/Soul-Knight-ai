@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "scenes/GameScene.hpp"
+#include "scenes/HeroSelectScene.hpp"
 #include "scenes/SettlementScene.hpp"
+#include "scenes/TitleScene.hpp"
 
 namespace Game {
 
@@ -29,6 +31,35 @@ void RunController::StartRun() {
     } else {
         // Restart path (from the EndScene): Replace so the previous top (the
         // EndScene) is exited, never stacked-over-and-leaked.
+        m_Scenes.Replace(floor0);
+    }
+}
+
+void RunController::ShowTitle() {
+    auto title = std::make_shared<TitleScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(title);
+    } else {
+        m_Scenes.Replace(title);
+    }
+}
+
+void RunController::GoToCharacterSelect() {
+    auto sel = std::make_shared<HeroSelectScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(sel);
+    } else {
+        m_Scenes.Replace(sel);
+    }
+}
+
+void RunController::BeginRun(const std::string &charId) {
+    m_State.selectedCharId = charId;
+    ResetRunState(); // floor 0 / template / Playing (keeps runSeed + selectedCharId).
+    auto floor0 = BuildFloorScene();
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(floor0);
+    } else {
         m_Scenes.Replace(floor0);
     }
 }
