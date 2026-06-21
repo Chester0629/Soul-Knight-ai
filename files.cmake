@@ -339,6 +339,7 @@ set(TEST_FILES
     FloorConnectivityTest.cpp
     CorridorNeutralityTest.cpp
     DoorSealTest.cpp
+    DoorTransitionTest.cpp
     DamageTest.cpp
     LootTableTest.cpp
     LootIntegrationTest.cpp

@@ -51,6 +51,15 @@ constexpr float kChestOpenRange = 40.0F;
 constexpr float kPickupRange = 28.0F;
 // SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
 constexpr float kAutoWalkSpeed = 300.0F;
+// Inset (px) from a room edge before the clear-room door lock may arm. The door-
+// seal cells occupy the outermost cell ring, and a room's interior rect edge
+// coincides with that ring's outer face for ANY room size (rect_edge == -16*w ==
+// door-cell outer face). So a body whose CENTRE is within one cell (kCellPx) + its
+// radius (kPlayerRadius) of an edge OVERLAPS the seal the instant it snaps shut and
+// is pinned at the threshold -- the "air wall" (doc'd: door-seal arms at threshold).
+// Arming only once the centre is past that band closes the seal BEHIND the player.
+// +1px clears the inclusive circle-vs-AABB tangency at the exact boundary.
+constexpr float kLockArmInset = kCellPx + kPlayerRadius + 1.0F; // 49px
 
 glm::vec2 Normalize(glm::vec2 v) {
     const float len = std::sqrt(v.x * v.x + v.y * v.y);
@@ -822,9 +831,18 @@ void GameScene::Update(float dtMs) {
     // doors open, door_open=1). The old per-frame m_LockedRoom derivation is GONE;
     // BlocksAny seals doors purely from RGRoomX.door_open. A room never re-locks
     // once Cleared (the player can't be trapped in a cleared room).
+    //
+    // ARM TIMING (air-wall fix): the seal must arm only once the player's body is
+    // PAST the door-seal band, never while it still overlaps the entry door cell.
+    // playerRoomId stays a plain ContainsPoint test (above) so enemy WAKE timing
+    // -- driven by in.playerRoomId into the sim -- is byte-unchanged (golden/combat
+    // hash safe); only this LOCK gate is inset to kLockArmInset px deep. Entering
+    // the rect (wake) and committing deep enough to lock are now two thresholds.
     if (playerRoomId >= 0 &&
         m_RoomLife[static_cast<std::size_t>(playerRoomId)].State() ==
             RGRoomX::Process::Uncleared &&
+        m_Rooms[static_cast<std::size_t>(playerRoomId)]->ContainsPointInset(
+            resolved, kLockArmInset) &&
         RoomHasLiveHostile(playerRoomId)) {
         m_RoomLife[static_cast<std::size_t>(playerRoomId)].StartRoom();
         LOG_INFO("RGRoomX: room {} StartRoom -> Active (door_open=0, sealed)",

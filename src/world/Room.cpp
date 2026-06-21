@@ -94,4 +94,10 @@ bool Room::ContainsPoint(glm::vec2 pos) const {
            pos.y >= m_Center.y - hs.y && pos.y <= m_Center.y + hs.y;
 }
 
+bool Room::ContainsPointInset(glm::vec2 pos, float inset) const {
+    const glm::vec2 hs = m_Size * 0.5f - glm::vec2(inset, inset);
+    return pos.x >= m_Center.x - hs.x && pos.x <= m_Center.x + hs.x &&
+           pos.y >= m_Center.y - hs.y && pos.y <= m_Center.y + hs.y;
+}
+
 } // namespace Game

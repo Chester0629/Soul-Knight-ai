@@ -113,6 +113,29 @@ public:
      */
     bool ContainsPoint(glm::vec2 pos) const;
 
+    /**
+     * @brief Tests whether a point lies @p inset px inside the interior rect on
+     *        every side (the rect shrunk by @p inset).
+     *
+     * Same axis-aligned rect as @ref ContainsPoint, but each edge is pulled in by
+     * @p inset, so a true result means the point is at least @p inset px clear of
+     * the NEAREST edge. @c inset==0 is exactly @ref ContainsPoint.
+     *
+     * Used to gate the clear-room door lock: the door-seal cells sit on the
+     * outermost cell ring (the rect edge coincides with the door cell's outer
+     * face for any room size), so arming the seal while the player's body still
+     * overlaps that ring pins it at the threshold (the "air wall"). Arming only
+     * once the body's CENTRE is past the seal band -- @p inset = one door cell +
+     * the body radius -- lets the seal close BEHIND the player instead of on it.
+     * Direction- and size-independent: an entering body is always nearest the
+     * edge it crossed, so the all-sides shrink binds on that edge.
+     *
+     * @param pos   The world-space point to test.
+     * @param inset Per-edge inset in px (>= 0). Negative values are not expected.
+     * @return true if @p pos is within [Center - Size/2 + inset, Center + Size/2 - inset].
+     */
+    bool ContainsPointInset(glm::vec2 pos, float inset) const;
+
 private:
     /// Construct directly from a prebuilt wall set (used by @ref FromRoomGen).
     Room(std::vector<Util::Collider> walls, glm::vec2 center, glm::vec2 size);
