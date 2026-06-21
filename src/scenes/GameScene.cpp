@@ -191,6 +191,8 @@ void GameScene::OnEnter() {
     auto wallImg = std::make_shared<Util::Image>(root + "/sprites/p_wall.png");
     auto faceImg = std::make_shared<Util::Image>(root + "/sprites/p_face.png");
     auto box30Img = std::make_shared<Util::Image>(root + "/sprites/objects2_30.png");
+    m_DoorClosedImg = std::make_shared<Util::Image>(root + "/sprites/p_door_closed.png");
+    m_DoorOpenImg = std::make_shared<Util::Image>(root + "/sprites/p_door_open.png");
     const glm::vec2 wallSz = wallImg->GetSize();
     const glm::vec2 floorSz = floorImgs[0]->GetSize();
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list,
@@ -449,13 +451,23 @@ void GameScene::OnEnter() {
         // the code-11 cells would leave the 5-wide aisle band open and the locked
         // room would contain nobody -- the seal must span the whole opening.
         std::vector<Util::Collider> doors;
+        std::vector<DoorTile> doorTiles;
         for (const auto &c : FloorBlock::DoorSealCells(rg)) {
-            doors.push_back(Util::Collider::MakeAABB(
-                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(),
-                                  kCellPx, origin),
-                glm::vec2{kCellPx, kCellPx}));
+            const glm::vec2 wp = Room::CellToWorld(c.first, c.second, rg.Width(),
+                                                   rg.Height(), kCellPx, origin);
+            doors.push_back(Util::Collider::MakeAABB(wp, glm::vec2{kCellPx, kCellPx}));
+            // Door sprite at the seal cell (starts OPEN -- rooms begin door_open=1).
+            auto d = std::make_shared<Util::GameObject>();
+            d->SetDrawable(m_DoorOpenImg);
+            d->m_Transform.scale = glm::vec2(kCellPx / 16.0F, kCellPx / 16.0F);
+            d->m_Transform.translation = wp;
+            d->SetZIndex(0.2F);
+            m_Renderer.AddChild(d);
+            doorTiles.push_back(DoorTile{d, wp});
         }
         m_RoomDoors.push_back(std::move(doors));
+        m_RoomDoorTiles.push_back(std::move(doorTiles));
+        m_RoomDoorState.push_back(1); // start open
 
         // Put the player on a corridor-connected floor cell of the start room
         // (spawning at the origin can land in a wall, and a raw FloorList cell can
@@ -641,6 +653,9 @@ void GameScene::OnEnter() {
     }
     if (const char *pf = std::getenv("SK_PAUSE")) {
         m_PauseFrame = std::atol(pf); // force the pause overlay at update K (headless).
+    }
+    if (std::getenv("SK_FORCE_DOORS") != nullptr) {
+        m_ForceDoorsClosed = true; // headless: show every door closed (NO-OP unset).
     }
     if (const char *fd = std::getenv("SK_FORCE_DIE")) {
         m_ForceDieFrame = std::atol(fd);
@@ -1212,6 +1227,7 @@ void GameScene::SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, floa
 }
 
 void GameScene::Render() {
+    SyncDoors(); // door sprites follow each room's lock state (closed/open)
     Util::SetActiveViewMatrix(m_Camera.GetViewMatrix());
     m_Renderer.Update();
     Util::SetActiveViewMatrix(glm::mat4(1.0F)); // screen-space from here on
@@ -1252,6 +1268,38 @@ void GameScene::DrawPauseOverlay() {
         m_PauseUiBuilt = true;
     }
     m_PauseUi.Update(); // caller already set the screen-space (identity) view.
+}
+
+void GameScene::SyncDoors() {
+    // Per room, when its lock state changes, swap every door sprite: OPEN -> ww002
+    // (16x16, floor-level Z); CLOSED -> ww001 (16x32 -> 2 cells tall, bottom-aligned,
+    // Y-sorted so it occludes the player like a wall). Cached so it only re-skins on
+    // a transition, not every frame.
+    for (std::size_t i = 0;
+         i < m_RoomDoorTiles.size() && i < m_RoomLife.size(); ++i) {
+        const char open = (m_ForceDoorsClosed ? 0 : (m_RoomLife[i].DoorOpen() ? 1 : 0));
+        if (i < m_RoomDoorState.size() && m_RoomDoorState[i] == open) {
+            continue;
+        }
+        for (const DoorTile &d : m_RoomDoorTiles[i]) {
+            if (open != 0) {
+                d.obj->SetDrawable(m_DoorOpenImg);
+                d.obj->m_Transform.scale = glm::vec2(kCellPx / 16.0F, kCellPx / 16.0F);
+                d.obj->m_Transform.translation = d.base;
+                d.obj->SetZIndex(0.2F);
+            } else {
+                d.obj->SetDrawable(m_DoorClosedImg);
+                d.obj->m_Transform.scale = glm::vec2(kCellPx / 16.0F, kCellPx / 16.0F);
+                d.obj->m_Transform.translation = {d.base.x, d.base.y + kCellPx * 0.5F};
+                float z = 50.0F - d.base.y / 64.0F;
+                z = z < 2.0F ? 2.0F : (z > 98.0F ? 98.0F : z);
+                d.obj->SetZIndex(z);
+            }
+        }
+        if (i < m_RoomDoorState.size()) {
+            m_RoomDoorState[i] = open;
+        }
+    }
 }
 
 void GameScene::DrawBossBar() {

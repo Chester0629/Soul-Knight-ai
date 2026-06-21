@@ -15,6 +15,7 @@
 #include "Core/Scene.hpp"
 
 #include "Util/GameObject.hpp"
+#include "Util/Image.hpp"
 #include "Util/ObjectPool.hpp"
 #include "Util/Renderer.hpp"
 
@@ -126,6 +127,20 @@ private:
     Util::ObjectPool<Bullet> m_BulletPool;
 
     Hud m_Hud;
+
+    // --- Door SPRITES (project ww001 closed / ww002 open) at each room's seal cells,
+    // toggled to match RGRoomX.door_open (locked room -> closed). Parallel to
+    // m_RoomDoors (which are the colliders). Render-only view of the lock state.
+    struct DoorTile {
+        std::shared_ptr<Util::GameObject> obj;
+        glm::vec2 base{0.0F, 0.0F}; ///< cell-centre world pos.
+    };
+    std::vector<std::vector<DoorTile>> m_RoomDoorTiles;
+    std::vector<char> m_RoomDoorState; ///< cached open(1)/closed(0)/uninit(-1) per room.
+    std::shared_ptr<Util::Image> m_DoorClosedImg;
+    std::shared_ptr<Util::Image> m_DoorOpenImg;
+    bool m_ForceDoorsClosed = false; ///< SK_FORCE_DOORS test hook (NO-OP unless set).
+    void SyncDoors(); ///< toggle door sprites to each room's current lock state.
 
     // --- Boss banner (in-game UI to match the reference video): top-centre boss
     // name + red HP bar, shown only while a live boss is on the floor (chapter
