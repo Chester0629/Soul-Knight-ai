@@ -63,6 +63,14 @@ struct RunState {
     /// Hero picked in HeroSelectScene; drives floor-0 player skill (and sprite, post
     /// re-skin). Default "c01"; survives ResetRunState (a restart keeps the pick).
     std::string selectedCharId = "c01";
+
+    /// Chapter-start talent (the video's "select talent" screen) chosen in
+    /// TalentScene. Applied ONCE to the floor-0 player (template) in GameScene; the
+    /// boosted vitals then carry forward via the floor-clear snapshot. Reset to 0 by
+    /// ResetRunState so each run/chapter picks fresh.
+    int talentBonusMaxHp = 0;
+    int talentBonusArmor = 0;
+    int talentBonusEnergy = 0;
 };
 
 /// Stride between consecutive floors' base seeds. A large prime so each floor's

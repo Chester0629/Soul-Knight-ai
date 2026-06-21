@@ -500,6 +500,17 @@ void GameScene::OnEnter() {
     // mis-cost the whole floor if this DERIVE were skipped (RUN_LOOP_PLAN D3).
     if (m_Carried) {
         m_Player->Stats() = m_Carried->stats; // continue hp/armor/energy (Player.hpp:33 mutable ref)
+    } else if (m_Run != nullptr) {
+        // floor 0: apply the chapter-start talent (TalentScene) ONCE to the template
+        // vitals; the boosted stats then carry forward via the floor-clear snapshot.
+        auto &st = m_Player->Stats();
+        const RunState &rs = m_Run->State();
+        st.maxHp += rs.talentBonusMaxHp;
+        st.hp += rs.talentBonusMaxHp;
+        st.maxArmor += rs.talentBonusArmor;
+        st.armor += rs.talentBonusArmor;
+        st.maxEnergy += rs.talentBonusEnergy;
+        st.energy += rs.talentBonusEnergy;
     }
     const std::string equipWeaponId =
         m_Carried ? m_Carried->weaponId : std::string("Gun001");

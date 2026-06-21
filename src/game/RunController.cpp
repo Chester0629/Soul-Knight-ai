@@ -5,6 +5,7 @@
 #include "scenes/GameScene.hpp"
 #include "scenes/HeroSelectScene.hpp"
 #include "scenes/SettlementScene.hpp"
+#include "scenes/TalentScene.hpp"
 #include "scenes/TitleScene.hpp"
 
 namespace Game {
@@ -20,6 +21,9 @@ void RunController::ResetRunState() {
     m_State.floorIndex = 0;
     m_State.carried.reset();
     m_State.phase = RunState::Phase::Playing;
+    m_State.talentBonusMaxHp = 0;
+    m_State.talentBonusArmor = 0;
+    m_State.talentBonusEnergy = 0;
 }
 
 void RunController::StartRun() {
@@ -55,7 +59,23 @@ void RunController::GoToCharacterSelect() {
 
 void RunController::BeginRun(const std::string &charId) {
     m_State.selectedCharId = charId;
-    ResetRunState(); // floor 0 / template / Playing (keeps runSeed + selectedCharId).
+    ResetRunState(); // floor 0 / template / Playing / talents 0 (keeps runSeed + charId).
+    // Chapter-start talent pick (the video's "select talent") goes BEFORE floor 0;
+    // TalentScene::ChooseTalent then builds the floor.
+    auto talent = std::make_shared<TalentScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(talent);
+    } else {
+        m_Scenes.Replace(talent);
+    }
+}
+
+void RunController::ChooseTalent(int dMaxHp, int dArmor, int dEnergy) {
+    // Record the picked talent (applied once to the floor-0 player in GameScene),
+    // then start the chapter at floor 0.
+    m_State.talentBonusMaxHp = dMaxHp;
+    m_State.talentBonusArmor = dArmor;
+    m_State.talentBonusEnergy = dEnergy;
     auto floor0 = BuildFloorScene();
     if (m_Scenes.Empty()) {
         m_Scenes.Push(floor0);

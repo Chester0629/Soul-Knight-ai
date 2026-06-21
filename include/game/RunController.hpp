@@ -48,10 +48,12 @@ public:
     void ShowTitle();
     /// Title -> hero pick: Replace the active scene with the HeroSelectScene.
     void GoToCharacterSelect();
-    /// Hero pick confirmed: remember @p charId, reset run progress (floor 0 /
-    /// template / Playing, keeping runSeed + this pick), then put floor 0 on the
-    /// stack. The flow analog of StartRun but entered from the picker.
+    /// Hero pick confirmed: remember @p charId, reset run progress, then show the
+    /// chapter-start TalentScene (the floor is built once a talent is chosen).
     void BeginRun(const std::string &charId);
+    /// Talent chosen in TalentScene: record the stat bonus (applied once to the
+    /// floor-0 player in GameScene) and start the chapter at floor 0.
+    void ChooseTalent(int dMaxHp, int dArmor, int dEnergy);
 
     /// Reset the per-run progress to a FRESH run -- floor 0, continuation snapshot
     /// CLEARED, phase Playing -- while KEEPING `runSeed`. PURE state mutation,

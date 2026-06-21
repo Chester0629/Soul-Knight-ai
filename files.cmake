@@ -155,6 +155,7 @@ set(SRC_FILES
     scenes/SettlementScene.cpp
     scenes/TitleScene.cpp
     scenes/HeroSelectScene.cpp
+    scenes/TalentScene.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): run-level state + controller
     game/RunController.cpp
@@ -332,6 +333,7 @@ set(INCLUDE_FILES
     scenes/SettlementScene.hpp
     scenes/TitleScene.hpp
     scenes/HeroSelectScene.hpp
+    scenes/TalentScene.hpp
 
     # Engine port -- run loop (Line 2, Phase 1)
     game/RunState.hpp
