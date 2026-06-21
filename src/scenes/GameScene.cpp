@@ -454,7 +454,21 @@ void GameScene::OnEnter() {
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex,
                                m_FloorSeed + 9000, bossId);
-                m_BossName = bossId; // display label for the boss banner (G3).
+                // Friendly banner name (curated display map; the original's names
+                // come from a different build, e.g. "Snowman_King"). Off-roster ids
+                // fall back to the raw id.
+                m_BossName = bossId;
+                if (std::string(bossId) == "BossAI01") {
+                    m_BossName = "ROBOT KING";
+                } else if (std::string(bossId) == "BossAI06") {
+                    m_BossName = "THE SUMMONER";
+                } else if (std::string(bossId) == "BossAI08") {
+                    m_BossName = "STONE GUARDIAN";
+                } else if (std::string(bossId) == "BossAI11") {
+                    m_BossName = "SNOWMAN KING";
+                } else if (std::string(bossId) == "BossAI12") {
+                    m_BossName = "MECHA TWINS";
+                }
                 LOG_INFO("BossMaker-lite: room {} spawned {} (type {})", roomIndex,
                          bossId, cell.type);
             } else {
@@ -478,8 +492,19 @@ void GameScene::OnEnter() {
                     rdef = edef; // defensive: fall back to AI01
                 }
                 if (rdef != nullptr) {
+                    // Per-type enemy sprite (G-polish): map the AI id "EnemyAINN"
+                    // -> the "enemyNN" sprite set (all exist with >= 6 frames);
+                    // anything unexpected falls back to "bat".
+                    std::string espr = "bat";
+                    {
+                        const std::string &eid = rdef->id;
+                        const std::size_t p = eid.find_last_not_of("0123456789");
+                        if (p != std::string::npos && p + 1 < eid.size()) {
+                            espr = "enemy" + eid.substr(p + 1);
+                        }
+                    }
                     auto enemy = std::make_shared<Enemy>(*rdef, root, spawn, 450.0F,
-                                                         260.0F);
+                                                         260.0F, espr);
                     enemy->AI().SetSeed(m_FloorSeed + 1000 + roomIndex);
                     enemy->AI().SetKinematic(rdef->kinematic != 0);
                     enemy->SetRoomId(roomIndex);

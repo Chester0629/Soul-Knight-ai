@@ -33,9 +33,12 @@ public:
      * @param spawnPos      The world-space spawn position.
      * @param detectRange   Distance at which the enemy notices the player.
      * @param attackRange   Distance at which the enemy stops and shoots.
+     * @param spriteName    sprite-set basename (e.g. "enemy11"); frames are
+     *                      <spriteName>_0..N. Defaults to "bat" (back-compat).
      */
     Enemy(const EnemyDef &def, const std::string &resourceRoot,
-          glm::vec2 spawnPos, float detectRange, float attackRange);
+          glm::vec2 spawnPos, float detectRange, float attackRange,
+          const std::string &spriteName = "bat");
 
     /**
      * @brief Run the AI for this step and return its decision.
