@@ -26,8 +26,10 @@ namespace Game {
  */
 class Boss : public Util::GameObject {
 public:
+    /// @param spriteName sprite-set basename for this boss (e.g. "boss11"); the
+    ///        frames are <spriteName>_0..N. Defaults to "boss01" (back-compat).
     Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
-         float shootCd, int seed);
+         float shootCd, int seed, const std::string &spriteName = "boss01");
 
     /// Advance one step. @return chase direction; sets @p outShoot on a shoot
     /// tick and @p outAttack to the chosen attack index (varies the fan).

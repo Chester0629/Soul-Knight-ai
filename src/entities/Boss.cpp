@@ -14,12 +14,13 @@ constexpr float kBossZIndex = 6.0F;
 constexpr float kBossScale = 1.5F;
 constexpr int kBossFrames = 6;
 
-std::vector<std::string> BossFrames(const std::string &resourceRoot) {
+std::vector<std::string> BossFrames(const std::string &resourceRoot,
+                                    const std::string &spriteName) {
     std::vector<std::string> frames;
     frames.reserve(kBossFrames);
     for (int i = 0; i < kBossFrames; ++i) {
-        frames.push_back(resourceRoot + "/sprites/boss01_" + std::to_string(i) +
-                         ".png");
+        frames.push_back(resourceRoot + "/sprites/" + spriteName + "_" +
+                         std::to_string(i) + ".png");
     }
     return frames;
 }
@@ -31,10 +32,10 @@ glm::vec2 Norm(glm::vec2 v) {
 } // namespace
 
 Boss::Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
-           float shootCd, int seed)
+           float shootCd, int seed, const std::string &spriteName)
     : m_Boss(shootCd), m_Stats{maxHp, maxHp, 0, 0, 0, 0},
-      m_Anim(std::make_shared<Util::Animation>(BossFrames(resourceRoot), true,
-                                               150, true)) {
+      m_Anim(std::make_shared<Util::Animation>(
+          BossFrames(resourceRoot, spriteName), true, 150, true)) {
     m_Boss.SetSeed(seed);
     SetDrawable(m_Anim);
     SetZIndex(kBossZIndex);
