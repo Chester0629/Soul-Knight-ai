@@ -357,6 +357,12 @@ void GameScene::OnEnter() {
                 if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
                     continue;
                 }
+                // Floor-only: the procedural shell can place a wall where the design's
+                // local coords expected floor, so an obstacle (esp. a pad/trap) would
+                // render ON the wall. Skip any obstacle whose grid cell is solid.
+                if (Room::IsSolidCell(rg.At(o.x, o.y))) {
+                    continue;
+                }
                 const std::size_t oi = static_cast<std::size_t>(o.objIndex);
                 if (o.objIndex <= 0 || oi >= objImg.size() ||
                     objImg[oi] == nullptr) {
@@ -552,29 +558,38 @@ void GameScene::OnEnter() {
                 LOG_INFO("BossMaker-lite: room {} spawned {} (type {})", roomIndex,
                          bossId, cell.type);
             } else {
-                // EnemyMaker-lite (B1-P1, policy C): pick ONE enemy per room from
-                // a representative SHOOTER roster (AI11 = ice; AI06 turret; AI07
-                // int-shoot; + AI04 melee accent that chases but does not damage
-                // yet -- contact-damage subsystem is deferred). The pick is a pure
-                // DETERMINISTIC function of (room type, index) -- it draws NOTHING
-                // from the per-floor RNG, so golden/combat determinism is untouched.
-                // count = 1 (the real EnemyMaker this_count is owner-side: debt s7).
-                // The dispatch (BrainFactory -> (d) adapter) routes the id to the
-                // matching brain; the floor-1 FAITHFUL roster is deferred (s7).
+                // EnemyMaker-lite: spawn SEVERAL enemies per room (was 1), like the
+                // real game. count = 3..5 by room type (1 normal / 2 special / 3
+                // badass), capped by the room's connected floor cells, spread across
+                // them. Each enemy gets a DISTINCT roster pick + seed -- all derived
+                // (no per-floor RNG draw), so determinism is preserved. Roster: AI11
+                // ice / AI06 turret / AI07 int-shoot / AI04 melee accent / AI01.
                 static constexpr std::array<const char *, 5> kRosterC = {
                     "EnemyAI01", "EnemyAI11", "EnemyAI07", "EnemyAI06", "EnemyAI04"};
-                const std::size_t pick =
-                    (static_cast<std::size_t>(cell.type) +
-                     static_cast<std::size_t>(roomIndex)) %
-                    kRosterC.size();
-                const EnemyDef *rdef = m_Data.FindEnemy(kRosterC[pick]);
-                if (rdef == nullptr) {
-                    rdef = edef; // defensive: fall back to AI01
+                int count = 2 + static_cast<int>(cell.type);
+                if (count > static_cast<int>(spawnCells.size())) {
+                    count = static_cast<int>(spawnCells.size());
                 }
-                if (rdef != nullptr) {
-                    // Per-type enemy sprite (G-polish): map the AI id "EnemyAINN"
-                    // -> the "enemyNN" sprite set (all exist with >= 6 frames);
-                    // anything unexpected falls back to "bat".
+                for (int j = 0; j < count; ++j) {
+                    // Spread the j-th enemy across the connected floor cells.
+                    const auto &sc =
+                        spawnCells[(spawnCells.size() * (static_cast<std::size_t>(j) + 1)) /
+                                   (static_cast<std::size_t>(count) + 1)];
+                    const glm::vec2 epos = Room::CellToWorld(
+                        sc.first, sc.second, rg.Width(), rg.Height(), kCellPx, origin);
+                    const std::size_t pick =
+                        (static_cast<std::size_t>(cell.type) +
+                         static_cast<std::size_t>(roomIndex) +
+                         static_cast<std::size_t>(j)) %
+                        kRosterC.size();
+                    const EnemyDef *rdef = m_Data.FindEnemy(kRosterC[pick]);
+                    if (rdef == nullptr) {
+                        rdef = edef; // defensive: fall back to AI01
+                    }
+                    if (rdef == nullptr) {
+                        continue;
+                    }
+                    // Per-type enemy sprite: "EnemyAINN" -> "enemyNN" (else "bat").
                     std::string espr = "bat";
                     {
                         const std::string &eid = rdef->id;
@@ -583,17 +598,17 @@ void GameScene::OnEnter() {
                             espr = "enemy" + eid.substr(p + 1);
                         }
                     }
-                    auto enemy = std::make_shared<Enemy>(*rdef, root, spawn, 450.0F,
+                    const int eseed = m_FloorSeed + 1000 + roomIndex * 32 + j;
+                    auto enemy = std::make_shared<Enemy>(*rdef, root, epos, 450.0F,
                                                          260.0F, espr);
-                    enemy->AI().SetSeed(m_FloorSeed + 1000 + roomIndex);
+                    enemy->AI().SetSeed(eseed);
                     enemy->AI().SetKinematic(rdef->kinematic != 0);
                     enemy->SetRoomId(roomIndex);
                     m_Enemies.push_back(enemy);
-                    m_Sim->AddEnemy(*rdef, spawn, roomIndex,
-                                    m_FloorSeed + 1000 + roomIndex);
-                    LOG_INFO("EnemyMaker-lite: room {} spawned {} (type {})",
-                             roomIndex, rdef->id, cell.type);
+                    m_Sim->AddEnemy(*rdef, epos, roomIndex, eseed);
                 }
+                LOG_INFO("EnemyMaker-lite: room {} spawned {} enemies (type {})",
+                         roomIndex, count, cell.type);
             }
         }
 
