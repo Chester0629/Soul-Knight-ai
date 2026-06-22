@@ -45,6 +45,7 @@
 #include "combat/CombatStats.hpp"
 #include "data/GameData.hpp"
 #include "sim/Simulation.hpp"
+#include "sim/SkillDash.hpp"
 #include "sim/WorldCollision.hpp"
 #include "sim/WorldInputs.hpp"
 #include "world/FloorBlock.hpp"
@@ -67,7 +68,6 @@ public:
     static constexpr float kAutoWalkSpeed = 300.0F;                  // px/s
     static constexpr float kStepMs = 20.0F; // one fixed sim step per frame
     static constexpr float kPickupRange = 28.0F; // GameScene pickup proximity (kPickupRange)
-    static constexpr float kSkillDashPx = 80.0F; // (B1-P4a) C02 dash impulse distance (owner-applied)
 
     explicit RealBodyDriver(int seed) : m_Sim(seed, this) {}
 
@@ -235,16 +235,10 @@ public:
                 if (ev.name != "skill_dash" || ev.entityId != Game::Sim::Simulation::kPlayerViewId) {
                     continue;
                 }
-                const glm::vec2 ad = aimTarget - m_Pos;
-                const float adl = std::sqrt(ad.x * ad.x + ad.y * ad.y);
-                const glm::vec2 dir = adl > 0.0F ? ad / adl : glm::vec2{1.0F, 0.0F};
-                const glm::vec2 step = dir * kSkillDashPx;
-                if (!Blocks(glm::vec2{m_Pos.x + step.x, m_Pos.y}, kRadius)) {
-                    m_Pos.x += step.x;
-                }
-                if (!Blocks(glm::vec2{m_Pos.x, m_Pos.y + step.y}, kRadius)) {
-                    m_Pos.y += step.y;
-                }
+                // SHARED owner-side apply: the EXACT function the GameScene owner calls
+                // on the skill_dash event (single source -- no duplicated dash math here).
+                Game::Sim::ApplyDash(*this, m_Pos, aimTarget - m_Pos,
+                                     Game::Sim::kSkillDashPx, kRadius);
             }
         }
         m_Player.hp = m_Sim.PlayerStats().hp;

@@ -64,20 +64,31 @@ TEST(CharSkillDispatchTest, DispatchSelectsPerHeroAdapter) {
     EXPECT_TRUE(sim.PlayerSkill()->SkillReady());
 }
 
-// --- C01 is FAITHFUL: while in_skill the second hand mirrors the shot (2 bullets) --
-TEST(CharSkillDispatchTest, C01MirrorsShotWhileActive) {
+// --- C01 is FAITHFUL: while in_skill the second hand mirrors the shot, 0.1s LATER ----
+TEST(CharSkillDispatchTest, C01MirrorsShotAfterDelay) {
     Simulation sim(55, &g_NullWorld);
     sim.EquipWeapon(SingleGun(), "Gun001", 808);
     sim.SetPlayerSkill("c01", 5.0F, 5.0F); // long window -> stays active
 
-    WorldInputs in = Idle();
-    in.firing = true;
-    in.skill = true; // activate + fire same step
-    sim.Advance(kFixedStepMs, in);
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    fire.skill = true; // activate + fire same step
+    sim.Advance(kFixedStepMs, fire); // tick 1: primary fires; second hand scheduled +5 ticks
     EXPECT_TRUE(sim.PlayerSkill()->InSkill());
-    EXPECT_EQ(sim.Bullets().size(), 2U);        // primary + mirror
-    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1); // mirror is energy-free
+    EXPECT_EQ(sim.Bullets().size(), 1U)         // primary only -- second hand deferred 0.1s
+        << "the faithful c01 second hand fires 0.1s (5 ticks) later, not the same frame";
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1); // primary energy
     EXPECT_FALSE(HasSkillDash(sim));            // C01 does not dash
+
+    WorldInputs hold = Idle();
+    hold.skill = true;
+    for (int i = 0; i < 4; ++i) {               // ticks 2..5: still before the delay
+        sim.Advance(kFixedStepMs, hold);
+        EXPECT_EQ(sim.Bullets().size(), 1U) << "before the 5-tick delay: still just the primary";
+    }
+    sim.Advance(kFixedStepMs, hold);            // tick 6: the deferred second hand fires
+    EXPECT_EQ(sim.Bullets().size(), 2U);        // primary + mirror
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 0); // the deferred mirror is energy-free
 }
 
 // --- C02 is FAITHFUL (distinct): the ultimate is an instant dash (event), NO mirror --
@@ -122,11 +133,18 @@ TEST(CharSkillDispatchTest, UnknownCharIdFallsBackToC01) {
     Simulation sim(3, &g_NullWorld);
     sim.EquipWeapon(SingleGun(), "Gun001", 808);
     sim.SetPlayerSkill("c99", 5.0F, 5.0F); // unknown -> c01 fallback (mirror)
-    WorldInputs in = Idle();
-    in.firing = true;
-    in.skill = true;
-    sim.Advance(kFixedStepMs, in);
-    EXPECT_EQ(sim.Bullets().size(), 2U); // behaves as c01 (mirror)
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    fire.skill = true;
+    sim.Advance(kFixedStepMs, fire);
+    EXPECT_EQ(sim.Bullets().size(), 1U) // c01 fallback: primary only this tick (2nd hand deferred 0.1s)
+        << "c01 fallback defers the second hand 0.1s like real c01";
+    WorldInputs hold = Idle();
+    hold.skill = true;
+    for (int i = 0; i < 5; ++i) {        // advance past the 5-tick delay
+        sim.Advance(kFixedStepMs, hold);
+    }
+    EXPECT_EQ(sim.Bullets().size(), 2U); // behaves as c01 -> the second hand mirrors 0.1s later
 }
 
 // NOLINTEND(readability-magic-numbers)

@@ -112,13 +112,13 @@ TEST(SkillPipelineTest, SimActivatesProgressReachesPlayerStatsAndGatesRecast) {
 }
 
 // ===================================================================
-// C01 skill effect (to the degree the sim supports): while in_skill, the second
-// hand MIRRORS the primary attack -> a FREE duplicate shot (no extra energy).
-// (Fidelity: same-gun same-frame duplicate; the faithful separate second gun +
-// 0.1s Invoke + hand transform/anim is B1b.)
+// C01 skill effect: while in_skill, the second hand MIRRORS the primary attack, but
+// the FAITHFUL c01 second hand fires 0.1s (kHand2AttackDelay -> 5 fixed ticks) LATER
+// via the sim Scheduler -- NOT the same frame -- and is energy-free across the delay.
+// (The hand transform/anim is owner presentation; offset stays a placeholder.)
 // ===================================================================
 
-TEST(SkillPipelineTest, SkillMirrorsPlayerShotsWhileActiveAndIsEnergyFree) {
+TEST(SkillPipelineTest, SecondHandMirrorsAfterDelayAndIsEnergyFree) {
     Simulation sim(55, &g_NullWorld);
     Game::WeaponDef def{};
     def.weaponSpeed = 1.0F;
@@ -128,13 +128,27 @@ TEST(SkillPipelineTest, SkillMirrorsPlayerShotsWhileActiveAndIsEnergyFree) {
     sim.EquipWeapon(def, "Gun001", 808);
     sim.SetPlayerSkill("c01", 5.0F, 5.0F); // long window -> stays active
 
-    WorldInputs in = Idle();
-    in.firing = true;
-    in.skill = true; // activate + fire the same step
-    sim.Advance(kFixedStepMs, in); // 1 step: skill activates (TickSkill) then weapon fires (TickWeapon)
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    fire.skill = true; // activate + fire the same step
+    sim.Advance(kFixedStepMs, fire); // tick 1: skill active, primary fires; 2nd hand scheduled +5 ticks
     EXPECT_TRUE(sim.PlayerSkill()->InSkill());
-    EXPECT_EQ(sim.Bullets().size(), 2U);        // primary + second-hand mirror
-    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1); // mirror is FREE -> energy counts the primary only
+    EXPECT_EQ(sim.Bullets().size(), 1U)        // primary ONLY -- the second hand is deferred 0.1s
+        << "the faithful c01 second hand fires 0.1s (5 ticks) later, not the same frame";
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1); // primary energy spend
+
+    // Hold the skill active but STOP firing, so no new primary shots while the delay elapses.
+    WorldInputs hold = Idle();
+    hold.skill = true;
+    for (int i = 0; i < 4; ++i) {              // ticks 2..5: still before the 0.1s mark
+        sim.Advance(kFixedStepMs, hold);
+        EXPECT_EQ(sim.Bullets().size(), 1U) << "before the 5-tick delay elapses: still just the primary";
+    }
+    sim.Advance(kFixedStepMs, hold);           // tick 6 == fire tick + 5: the second hand fires
+    EXPECT_EQ(sim.Bullets().size(), 2U)        // primary + deferred second-hand mirror
+        << "the second hand mirrors the shot 0.1s later";
+    EXPECT_EQ(sim.PlayerShotsLastAdvance(), 0) // the deferred mirror draws NO energy
+        << "the second hand is energy-free (only the primary spent energy, 5 ticks earlier)";
 }
 
 TEST(SkillPipelineTest, NoMirrorWhenSkillInactive) {

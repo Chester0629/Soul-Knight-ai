@@ -172,6 +172,52 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
     亦延後。
   - **boss Fan-approx 續延**(見 B1-P2 條);既有債延續。
 
+- **★ B1-P4a 角色技能 owner-side 折回（原 P4a 債項，本輪 `b1-p4a-baseline` 完成；命脈:26 brain 0 改）**:
+  - **【已實作 W1 — C02 GameScene dash 接線】**:sim emit `skill_dash` event(`Simulation::TickSkill`,C02
+    `RoleSkillEnd→dashImpulse`)→ GameScene `ConsumeSimEvents` **owner-apply**。抽**共用** free function
+    `Game::Sim::ApplyDash(WorldCollision&, glm::vec2& body, aimDir, dist, radius)`(`include/sim/SkillDash.hpp`):
+    **driver + GameScene 單一 source**(`RealBodyDriver` 移除本地 `kSkillDashPx`、同引 `Sim::kSkillDashPx`);
+    軸分離 + `wc.Blocks` **collision-gate** —— 朝牆 dash 被 clamp、**不 tunnel**(空氣牆教訓)。GameScene 套
+    **authoritative** `m_Player->m_Transform.translation`(**非** by-value playerPos 複本),走與走路同一
+    `BlocksAny` 閘。測:`SkillDashTest`(開闊 delta≈80 / aim 正規化 / **朝牆 clamp**)+
+    `RealBodyDriverTest.{C02SkillDashesBodyForward, C02DashIntoWallIsClampedNoTunnel}`(真 Room collision)。
+  - **【已實作 W2 — C01 真二手】**:`Simulation::TickWeapon` 同幀複製 → **sim-internal Scheduler 延遲 5 ticks**
+    (`m_Scheduler.Invoke(SecondsToTicks(CharSkillC01::kHand2AttackDelay=0.1s), cb)`)。cb value-copy 那幀
+    primary `FireIntent`、0.1s 後 append。**0 new RNG / 0 new WeaponController**(`FireSystem::Expand` 本即
+    RNG-free、bullet id 為確定性 `nextId++`);**energy-free 跨延遲**(deferred intents 不餵
+    `m_PlayerShotsLastAdvance`)。全程 `m_Skill`-gated → 無技能不排程 → `SimulationTest` replay
+    **byte-identical**。**CharSkillC01 brain 0 改**(只讀 public `kHand2AttackDelay`)。測改延遲斷言:
+    `SkillPipelineTest.SecondHandMirrorsAfterDelayAndIsEnergyFree`、
+    `CharSkillDispatchTest.{C01MirrorsShotAfterDelay, UnknownCharIdFallsBackToC01}`、
+    `RealBodyDriverTest.C01SkillMirrorsShotsThroughBodyLoopAndKills`(tick<5→1 子彈、tick≥5→2、
+    mirror 幀 `PlayerShotsLastAdvance==0`)。全套 **1952 綠**。
+  - **【殘留債(精確邊界)】**
+    - **★ C02 dash「計算」vs「GameScene wiring」驗證邊界不同**:dash **計算**(`ApplyDash`:位移 + collision-clamp)
+      由 driver/單元**完整自動測涵蓋**(共用同函式 → driver-green = GameScene 的*計算*正確)。但 GameScene
+      **那行 wiring**(skill_dash 分支實際被呼到 + 傳 authoritative translation)**單元測涵蓋不到**(GameScene
+      需 GL,無法 headless 實例化)。**本輪 binary-playtest 實況(精確)**:headless game-binary **跑不到 GameScene**
+      —— 開機停 **TitleScene(需互動 Enter/Space;無 auto-start hook)**,且 charId **預設 c01、無 c02 選角路徑**
+      (`SK_FORCE_SKILL` 僅在 `GameScene::OnEnter` 內生效)→ **c02-dash 的 in-binary 觀測本輪未取得**。
+      **已驗(in-binary)**:game target 以新碼**重建後開機/連結/執行乾淨**(exit 0、GL OK on RTX 4060 Ti、
+      TitleScene 出圖、`/tmp/sk_p4a_new.png`,無 crash/assert/link error)。**待補**:c02-dash GameScene in-binary
+      觀測,需(a)desktop 手動跑 + Enter 進場、(b)c02 選角路徑(B5 HeroRoom,或最小 `SK_*` char/auto-start hook)。
+      —— **不寫成「C02 已驗」、亦不寫成「仍需實玩」泛稱;此為精確待補。**
+    - **kSkillDashPx=80**:placeholder,**非 RE-recovered**。C02 真效果 = `C02Controller__RoleSkillEnd`
+      (game_full.c:156134)`GetForce(dir, mag)` 速度衝量 + `-0.15` 摩擦遞減;decomp 只 capture `-0.15`(摩擦)
+      與 `50`(strengthen cost),**`mag` 運算元截斷**(brain `RoleSkillEndDecision` 僅 bool)→ 80px 固定步
+      = owner 手調 stand-in。**可逆債**,他日 RE 補真 mag(改 `Sim::kSkillDashPx` 單點)。
+    - **C01 第二手 muzzle = `kSecondHandOffsetPx`=12px**:presentation placeholder(`get_transform` 截斷、
+      非 RE-recoverable);真二手後仍需 spawn-origin offset → **保留**(`Simulation::TickWeapon` 延遲 cb 內)。
+    - **C01 mirror spread**:現為 primary 的 delayed value-copy(**同 spread**);獨立 roll 無 decomp 據 →
+      **可逆債**(`CharSkillC01` 已有 `SetSeed`/RngRange,他日接)。
+  - **【forward rule(給 S1–S5)】**
+    - owner-applied 效果(sim emit / owner apply):**driver-green ≠ GameScene-correct**,除非 owner 與 driver
+      **共用同一 apply 函式**(`ApplyDash` 為先例)。
+    - 每子系統 **Step 0 先分類** sim-internal vs owner-applied。
+    - owner-applied 的 apply **數學抽 shared helper、掛 `WorldCollision`、collision-gate**;GameScene
+      **那行 wiring 另以 binary playtest 驗 presence**(注意現況:binary 需 desktop + Enter 進場 + 對應選角
+      路徑才驗得到該 owner 路徑;無對應 hook 則記**精確待補**,不寫「已驗」)。
+
 - **★ P4 tileset — 純視覺債(`tools/extract_tiles.py` + `GameScene` 渲染)**:
   - **floor/wall biome = biome 6 冰雪(已釘死,HIGH — P4-RE)**:floor-1 = world 1
     (`AB:level-1` bundle)= **biome 6**(`floor601`/`wall601`,淺藍雪地)。證據:biome 集**按 world
@@ -255,5 +301,6 @@ RGAisle/RoomGen 可恢復數學 + 最有據推斷** 定的設計決定,不是 re
   `ConnectedFloorCells` 中位格。忠實 follow-up。
 - **多角色身份 / buff**(B5):目前固定 c01;角色選擇 + buff 系統未接。
 - **跨層技能冷卻延續**:每層從 template 重建(starts ready),冷卻不跨層帶。
-- **c01 完整二手**(B1b):技能 brain 已接進 Player,但完整二手回收(full second-hand)未做。
+- **c01 完整二手**(B1b → B1-P4a 折回:時序部分**已完成**):sim-internal 5-tick(0.1s)延遲二手**已上**
+  (見上 §7「B1-P4a」條);殘留 = 第二把槍獨立 cadence / 真手部視覺 transform / 獨立 spread roll(該條詳列)。
 - **多樓層萃取未做**:只重現 floor-1;章節環境、boss 樓層 %5 週期、16 層 cap 都未做。

@@ -280,9 +280,11 @@ TEST(RealBodyDriverTest, C01SkillMirrorsShotsThroughBodyLoopAndKills) {
     d.SetPlayer(center);
     d.SetSkillHeld(true);
 
-    // One fire+skill frame: while in_skill the second hand mirrors the shot.
+    // One fire+skill frame: the REAL c01 second hand fires 0.1s (5 ticks) LATER, so this
+    // tick shows the primary only -- the deferred mirror joins on a later tick, and its
+    // extra DPS still clears the room across the body-driven combat loop.
     d.Frame(d.PlayerPos(), /*moving=*/false, /*firing=*/true, enemyPos);
-    EXPECT_EQ(d.PlayerBulletCount(), 2) << "C01 in_skill mirror -> primary + second-hand shot";
+    EXPECT_EQ(d.PlayerBulletCount(), 1) << "primary only; the second hand is deferred 0.1s (5 ticks)";
 
     ASSERT_EQ(d.LiveEnemyCount(room), 1);
     EXPECT_TRUE(d.ClearRoomCombat(room, 400)) << "mirrored fire clears the room";
@@ -303,6 +305,29 @@ TEST(RealBodyDriverTest, C02SkillDashesBodyForward) {
     const float dx = d.PlayerPos().x - before.x;
     EXPECT_GT(dx, 50.0F) << "C02 dash impulse jumps the body forward (a plain walk step is ~6px)";
     EXPECT_TRUE(d.BodyDeepInside(room)) << "dashed body stays inside the room (collision-checked)";
+}
+
+// --- B1-P4a W1 SCAR: a C02 dash toward a wall is CLAMPED by real collision --------
+// The owner-side dash (shared ApplyDash) must be wall-gated EXACTLY like walking: a
+// dash whose full step lands past a wall is refused, never tunnelling through it (the
+// air-wall lesson -- an owner displacement that skips the collision gate teleports the
+// body through sealed geometry). Driven through the real sim + real Room collision.
+TEST(RealBodyDriverTest, C02DashIntoWallIsClampedNoTunnel) {
+    RealBodyDriver d(34);
+    const int room = d.AddRoom({0.0F, 0.0F}, 21, {0, 0, 0, 0}, 0); // big open room
+    const glm::vec2 center = d.RoomCenter(room);
+    // A wall whose near face sits 32px ahead (+x) of the body: an 80px dash would land
+    // the body deep past it, so the collision gate must refuse the step.
+    d.AddWall(center + glm::vec2{48.0F, 0.0F}, glm::vec2{32.0F, 200.0F});
+    d.EquipSkill("c02", 5.0F, 0.0F);
+    d.SetPlayer(center);
+    d.SetSkillHeld(true);
+
+    const glm::vec2 aim = center + glm::vec2{200.0F, 0.0F}; // dash toward +x, into the wall
+    d.Frame(aim, /*moving=*/false, /*firing=*/false, aim);
+    EXPECT_LT(d.PlayerPos().x + RealBodyDriver::kRadius, center.x + 32.0F)
+        << "C02 dash must not tunnel through the wall (clamped by real collision)";
+    EXPECT_TRUE(d.BodyDeepInside(room)) << "clamped body stays inside the room";
 }
 
 // NOLINTEND(readability-magic-numbers)

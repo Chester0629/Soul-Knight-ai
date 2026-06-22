@@ -295,6 +295,7 @@ set(INCLUDE_FILES
     sim/FireSystem.hpp
     sim/SimEvent.hpp
     sim/WorldCollision.hpp
+    sim/SkillDash.hpp
     sim/EnemyController.hpp
     sim/BrainFactory.hpp
     sim/BossController.hpp
@@ -495,6 +496,9 @@ set(TEST_FILES
 
     # B1-P4a char/skill: (d) ICharSkill dispatch + charId seam + C01/C02 faithful
     CharSkillDispatchTest.cpp
+
+    # B1-P4a W1: shared owner-side dash-apply (ApplyDash) -- open-ground + wall clamp
+    SkillDashTest.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): RunState/continuation + perFloorSeed
     RunLoopTest.cpp

@@ -17,6 +17,8 @@
 
 #include "world/FloorBlock.hpp"
 
+#include "sim/SkillDash.hpp"
+
 #include "Util/Animation.hpp"
 #include "Util/Collider.hpp"
 #include "Util/Image.hpp"
@@ -1055,6 +1057,16 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
         } else if (e.name == "death") {
             SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
             PlaySfx(root, isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav");
+        } else if (e.name == "skill_dash") {
+            // W1 (B1-P4a): the C02 ultimate is a forward dash the sim surfaces as an
+            // event for the owner to apply (the sim's player position is an INPUT, not
+            // sim-owned). Apply it to the AUTHORITATIVE player transform -- NOT the
+            // by-value playerPos copy -- through the SAME BlocksAny wall gate as walking
+            // (the shared ApplyDash), so a dash toward a wall is clamped, never tunnels.
+            if (isPlayer) {
+                Sim::ApplyDash(*this, m_Player->m_Transform.translation, AimDirection(),
+                               Sim::kSkillDashPx, kPlayerRadius);
+            }
         }
     }
 }

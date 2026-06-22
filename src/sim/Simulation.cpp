@@ -1,7 +1,10 @@
 #include "sim/Simulation.hpp"
 
 #include <algorithm>
+#include <utility>
+#include <vector>
 
+#include "combat/CharSkillC01.hpp"
 #include "combat/Damage.hpp"
 #include "sim/BrainFactory.hpp"
 #include "sim/CharSkillAdapters.hpp"
@@ -77,31 +80,47 @@ void Simulation::TickWeapon() {
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
     }
 
-    // --- C01 skill effect (to the degree the sim supports; honest fidelity flag) ---
+    // --- C01 skill effect: the second hand mirrors the primary attack 0.1s LATER ---
     // While the ultimate is active, the second hand MIRRORS the primary attack
-    // (CharSkillC01::RoleAtk -> mirrorSecondHand). Modeled as a FREE duplicate of this
-    // step's primary shots, offset perpendicular to aim as a stand-in for the second
-    // hand's position. NOT FAITHFUL-COMPLETE: the real c01 second hand is a SEPARATE
-    // gun with its own cadence, fired via a 0.1s-delayed Invoke ("Hand2Atk"), with the
-    // actual hand transform + animation -- all owner/presentation, the truncated
-    // get_transform tail-call the brain does not model. Full c01 fidelity = B1b.
+    // (CharSkillC01::RoleAtk -> mirrorSecondHand). FAITHFUL timing: the real c01 second
+    // hand is fired via a 0.1s-delayed Invoke ("Hand2Atk", kHand2AttackDelay), NOT a
+    // same-frame clone -- so we copy THIS step's primary shots and schedule them on the
+    // deterministic sim Scheduler kHand2AttackDelay (-> 5 fixed ticks) later. (The
+    // separate-gun cadence + the actual hand transform/animation remain owner/
+    // presentation; the perpendicular offset is a presentation placeholder for the
+    // second-hand muzzle position -- not RE-recoverable, the get_transform tail-call is
+    // truncated. Full c01 hand-visual fidelity = B1b.)
     if (m_Skill != nullptr && shots > 0) {
         const ICharSkill::AtkEffect d =
             m_Skill->RoleAtk(/*pressDown=*/m_Input.firing, /*standingOnItem=*/false);
         if (d.mirrorSecondHand && d.secondHandValue) {
-            constexpr float kSecondHandOffsetPx = 12.0F; // placeholder hand offset (B1b: real transform).
-            // Copy the primary shots first: push_back below may reallocate the buffer.
-            const std::vector<FireIntent> primary(
+            constexpr float kSecondHandOffsetPx = 12.0F; // placeholder hand offset (presentation).
+            // Build the mirrored intents from THIS step's primary shots, offset
+            // perpendicular to aim as the second-hand muzzle stand-in (value-copied, so
+            // NO new RNG draw and no dependency on the buffer after this step).
+            std::vector<FireIntent> mirror(
                 m_FireIntents.begin() + static_cast<std::ptrdiff_t>(before),
                 m_FireIntents.begin() + static_cast<std::ptrdiff_t>(before + shots));
-            for (FireIntent mirror : primary) {
-                const glm::vec2 perp{-mirror.dir.y, mirror.dir.x};
-                mirror.origin += perp * kSecondHandOffsetPx;
-                m_FireIntents.push_back(mirror);
-                m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
+            for (FireIntent &mi : mirror) {
+                const glm::vec2 perp{-mi.dir.y, mi.dir.x};
+                mi.origin += perp * kSecondHandOffsetPx;
             }
-            // The mirror is a FREE bonus: intentionally NOT added to
-            // m_PlayerShotsLastAdvance, so the second hand does not double energy spend.
+            // Fire them kHand2AttackDelay (0.1s -> 5 fixed ticks) LATER via the
+            // deterministic Scheduler. The callback appends the deferred intents (drained
+            // that later step into bullets) and emits the second-hand muzzle cue THEN.
+            // Energy-free across the delay: the deferred intents are NEVER added to
+            // m_PlayerShotsLastAdvance, so the second hand does not double the energy
+            // spend. The whole path is m_Skill-gated, so with no skill set nothing is
+            // scheduled and the SimulationTest replay stays byte-identical.
+            m_Scheduler.Invoke(
+                Scheduler::SecondsToTicks(Game::CharSkillC01::kHand2AttackDelay),
+                [this, mirror = std::move(mirror)]() {
+                    for (const FireIntent &mi : mirror) {
+                        m_FireIntents.push_back(mi);
+                        m_Events.push_back(
+                            SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "fire"});
+                    }
+                });
         }
     }
 }
