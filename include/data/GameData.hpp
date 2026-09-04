@@ -112,6 +112,7 @@ struct EnemyGunDef {
 
 /// Character/player stat block (from Resources/data/characters.json).
 struct CharacterDef {
+    std::string id;          ///< charId ("c01".."c13"); empty for the shared template.
     int camp = 0;
     float speed = 0.0F;
     float speedRate = 0.0F;
@@ -213,6 +214,11 @@ public:
     const BuffDef *FindBuff(const std::string &id) const;
     const CharacterDef &PlayerTemplate() const { return m_PlayerTemplate; }
 
+    /// Per-character roster with real base stats (FAITHFUL @ c##.prefab). Empty
+    /// only on a checkout without the prefab source (then PlayerTemplate is used).
+    const CharacterDef *FindCharacter(const std::string &id) const;
+    const std::vector<CharacterDef> &Characters() const { return m_Characters; }
+
     const std::vector<WeaponDef> &Weapons() const { return m_Weapons; }
     const std::vector<BulletDef> &Bullets() const { return m_Bullets; }
     const std::vector<EnemyDef> &Enemies() const { return m_Enemies; }
@@ -239,12 +245,14 @@ private:
     std::vector<RoomLayoutDef> m_RoomLayouts;
     std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
     CharacterDef m_PlayerTemplate;
+    std::vector<CharacterDef> m_Characters;
 
     std::unordered_map<std::string, std::size_t> m_WeaponIndex;
     std::unordered_map<std::string, std::size_t> m_BulletIndex;
     std::unordered_map<std::string, std::size_t> m_EnemyIndex;
     std::unordered_map<std::string, std::size_t> m_EnemyGunIndex;
     std::unordered_map<std::string, std::size_t> m_BuffIndex;
+    std::unordered_map<std::string, std::size_t> m_CharacterIndex;
 };
 
 } // namespace Game

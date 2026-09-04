@@ -114,16 +114,17 @@ TEST(GameDataTest, PlayerTemplateStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);
     const auto &p = gd.PlayerTemplate();
-    // c01 starting stats 6/5/180 (the real values; the JSON previously carried 3/130
-    // placeholders -- per its own "_note: per-character stat overrides pending").
+    // c01 (Knight) faithful base stats from c##.prefab RoleAttributePlayer, now the
+    // default template after the PER-CHARACTER RE-KEY (the old shared template was a
+    // hand-patched mix: atk 5 / skill_cd 2.5; the real c01 is atk 4 / skill_cd 10).
     EXPECT_EQ(p.maxHp, 6);
     EXPECT_EQ(p.maxArmor, 5);
     EXPECT_EQ(p.armor, 5);
     EXPECT_EQ(p.maxEnergy, 180);
     EXPECT_EQ(p.energy, 180);
-    EXPECT_EQ(p.atk, 5);
+    EXPECT_EQ(p.atk, 4);               // FAITHFUL: c01 atk (was 5)
     EXPECT_FLOAT_EQ(p.speed, 6.5F);
-    EXPECT_FLOAT_EQ(p.skillCd, 2.5F);
+    EXPECT_FLOAT_EQ(p.skillCd, 10.0F); // FAITHFUL: c01 skill_cd (was 2.5)
 }
 
 TEST(GameDataTest, BuffArmorLoaded) {

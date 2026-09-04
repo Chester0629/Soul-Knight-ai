@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -167,6 +168,55 @@ def _csv_reward_value(v) -> list[int]:
     return [0, 0, 0, 0]
 
 
+CHAR_PREFAB_DIR = (ROOT.parent / "_reverse" / "asset soul" / "ExportedProject"
+                   / "Assets" / "res" / "player")
+_ROLE_ATTR_GUID = "1cc4d5e63f0cda8b54f46f007fad7f83"
+_CHAR_FIELDS = ("camp", "speed", "speed_rate", "max_hp", "hp", "deviation",
+                "critical", "max_armor", "armor", "max_energy", "_energy", "atk",
+                "skill_cd", "in_skill_time", "fire_rate")
+
+
+def _prefab_role_attr(text: str) -> dict:
+    """Extract the RoleAttributePlayer component's scalar fields from a player
+    prefab YAML -- the component is the one whose MonoScript references its guid."""
+    block = next((c for c in re.split(r"(?m)^--- ", text) if _ROLE_ATTR_GUID in c), None)
+    if block is None:
+        return {}
+    out = {}
+    for key in _CHAR_FIELDS:
+        m = re.search(rf"(?m)^\s*{re.escape(key)}:\s*(-?[0-9.]+)\s*$", block)
+        if m:
+            out[key] = float(m.group(1)) if "." in m.group(1) else int(m.group(1))
+    return out
+
+
+def build_character_roster():
+    """PER-CHARACTER RE-KEY: one roster entry per playable character (c01..c13)
+    with its REAL base stats, read from the c##.prefab RoleAttributePlayer
+    components (FAITHFUL). Supersedes the single shared RoleAttributePlayer.json
+    template + bare id list. Returns None when the prefab source is absent (a
+    checkout without the sibling _reverse/ tree) so the caller can fall back."""
+    if not CHAR_PREFAB_DIR.is_dir():
+        return None
+    roster = []
+    for f in sorted(CHAR_PREFAB_DIR.glob("c[0-9]*.prefab")):
+        cid = f.stem
+        if not re.fullmatch(r"c\d+", cid):
+            continue
+        stats = _prefab_role_attr(f.read_text(encoding="utf-8", errors="ignore"))
+        if stats:
+            roster.append({"id": cid, **stats})
+    if not roster:
+        return None
+    tmpl = next((e for e in roster if e["id"] == "c01"), roster[0])
+    return {
+        "player_template": {k: v for k, v in tmpl.items() if k != "id"},
+        "roster": roster,
+        "_note": "per-character stats from c##.prefab RoleAttributePlayer (FAITHFUL); "
+                 "was one shared template + id list",
+    }
+
+
 def build_enemy_species_table() -> list[dict]:
     """ENEMY RE-KEY: one entry PER SPECIES (prefab_name), from the ground-truth
     ``enemies.csv`` (145 rows: every mob + boss prefab, both spawned FROM one of
@@ -283,17 +333,22 @@ def main() -> int:
     counts["bosses"] = write("bosses", build_table(bosses, idx, prefer=("Bullet",)))
     counts["buffs"] = write("buffs", build_table(buffs, idx))
 
-    # characters: player template + roster ids (per-char stats = RE TODO)
-    player = json.loads((SRC_MB / "RoleAttributePlayer.json").read_text(encoding="utf-8"))
-    roster = sorted(p.stem.replace("Controller", "").lower()
-                    for p in SRC_MB.glob("C[0-9]*Controller.json"))
-    characters = {
-        "player_template": clean(player, idx, "RoleAttributePlayer"),
-        "roster": roster,
-        "_note": "per-character stat overrides pending (1.7.10 IL2CPP RE track)",
-    }
+    # characters: per-character roster with REAL stats from the c##.prefab
+    # RoleAttributePlayer components (was a single shared template + bare id list).
+    characters = build_character_roster()
+    if characters is None:
+        # fallback: prefab source absent (checkout without _reverse/) -> keep the
+        # old single-shared-template behaviour so the pipeline still runs.
+        player = json.loads((SRC_MB / "RoleAttributePlayer.json").read_text(encoding="utf-8"))
+        roster_ids = sorted(p.stem.replace("Controller", "").lower()
+                            for p in SRC_MB.glob("C[0-9]*Controller.json"))
+        characters = {
+            "player_template": clean(player, idx, "RoleAttributePlayer"),
+            "roster": roster_ids,
+            "_note": "per-character stat overrides pending (prefab source absent)",
+        }
     write("characters", characters)
-    counts["characters_roster"] = len(roster)
+    counts["characters_roster"] = len(characters["roster"])
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

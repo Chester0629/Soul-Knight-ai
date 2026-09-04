@@ -494,6 +494,9 @@ set(TEST_FILES
     # ENEMY RE-KEY: per-species data-driven enemy/boss stats (enemies.csv, 145 rows)
     EnemyStatsTest.cpp
 
+    # PER-CHARACTER RE-KEY: real per-character stats (c##.prefab, 13 chars)
+    CharacterStatsTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

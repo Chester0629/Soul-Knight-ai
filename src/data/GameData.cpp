@@ -178,6 +178,44 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         ok = false;
     }
 
+    // PER-CHARACTER RE-KEY: load the roster of real per-character stat blocks
+    // (FAITHFUL @ c##.prefab RoleAttributePlayer). Old builds stored `roster` as a
+    // bare id list; entries are objects now. The default template is then
+    // re-pointed at c01 (Knight) so PlayerTemplate() is the faithful default.
+    m_Characters.clear();
+    m_CharacterIndex.clear();
+    if (auto rit = characters.find("roster");
+        rit != characters.end() && rit->is_array()) {
+        for (const json &c : *rit) {
+            if (!c.is_object()) {
+                continue; // legacy bare-id-string entry -> no per-char stats
+            }
+            CharacterDef d;
+            d.id = c.value("id", std::string());
+            d.camp = GetI(c, "camp");
+            d.speed = GetF(c, "speed");
+            d.speedRate = GetF(c, "speed_rate");
+            d.maxHp = GetI(c, "max_hp");
+            d.hp = GetI(c, "hp");
+            d.maxArmor = GetI(c, "max_armor");
+            d.armor = GetI(c, "armor");
+            d.maxEnergy = GetI(c, "max_energy");
+            d.energy = GetI(c, "_energy");
+            d.atk = GetI(c, "atk");
+            d.critical = GetI(c, "critical");
+            d.skillCd = GetF(c, "skill_cd");
+            d.inSkillTime = GetF(c, "in_skill_time");
+            d.fireRate = GetF(c, "fire_rate");
+            if (!d.id.empty()) {
+                m_CharacterIndex[d.id] = m_Characters.size();
+                m_Characters.push_back(d);
+            }
+        }
+    }
+    if (const CharacterDef *knight = FindCharacter("c01")) {
+        m_PlayerTemplate = *knight; // faithful default (was a hand-patched mix)
+    }
+
     // Floor room sizes (Phase-2 size pool). OPTIONAL: absence is not a load
     // failure -- the caller (GameScene) falls back to a fixed room size -- so this
     // never flips `ok`. Extracted from the RE dump by tools/extract_room_layouts.py.
@@ -266,6 +304,10 @@ const BulletDef *GameData::FindBullet(const std::string &id) const {
 const EnemyDef *GameData::FindEnemy(const std::string &id) const {
     auto it = m_EnemyIndex.find(id);
     return it == m_EnemyIndex.end() ? nullptr : &m_Enemies[it->second];
+}
+const CharacterDef *GameData::FindCharacter(const std::string &id) const {
+    auto it = m_CharacterIndex.find(id);
+    return it == m_CharacterIndex.end() ? nullptr : &m_Characters[it->second];
 }
 const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const {
     // Linear scan: ~145 species, called only at spawn-roster setup time (not
