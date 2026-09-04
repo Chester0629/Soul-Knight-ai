@@ -66,8 +66,17 @@ struct BulletDef {
 };
 
 /// Enemy AI/behaviour definition (from Resources/data/enemies.json).
+///
+/// ENEMY RE-KEY: as of the per-species pipeline (tools/build_gamedata.py,
+/// enemies.csv ground truth), @c id is the PREFAB name (e.g. "boss01",
+/// "e_succulent") -- one real species per entry, 145 total -- and @c enemyClass
+/// is the shared AI-class dispatch key (e.g. "BossAI01", "EnemyAI07") those 16
+/// brain templates are keyed by. GameData::FindEnemy looks up by @c id (species);
+/// GameData::FindEnemyByClass looks up a representative species by @c enemyClass
+/// for callers that only know the class (e.g. a class-keyed spawner roster).
 struct EnemyDef {
     std::string id;
+    std::string enemyClass; ///< FAITHFUL: enemy_class @ enemies.csv (AI dispatch key).
     int aiLevel = 0;
     float shootCd = 0.0F;    ///< seconds between shots
     float friction = 0.0F;
@@ -77,6 +86,16 @@ struct EnemyDef {
     int rewardRate = 0;
     float buffImmune = 0.0F;
     int kinematic = 0;       ///< 1 = turret-style: immovable, ignores knockback
+    // --- Real per-species combat stats (FAITHFUL @ enemies.csv; new) ----------
+    int maxHp = 0;        ///< FAITHFUL: ra_max_hp @ enemies.csv.
+    int hp = 0;           ///< FAITHFUL: ra_hp @ enemies.csv (starting hp; usually == maxHp).
+    int atk = 0;          ///< FAITHFUL: damage @ enemies.csv (often 0: the real hit comes
+                          ///< from the enemy's bullet/EnemyGunDef, not a flat body atk).
+    float speed = 0.0F;   ///< FAITHFUL: ra_speed @ enemies.csv.
+    float speedRate = 0.0F; ///< FAITHFUL: ra_speed_rate @ enemies.csv.
+    int camp = 0;         ///< FAITHFUL: ra_camp @ enemies.csv (0 = player, 1 = enemy).
+    int critical = 0;     ///< FAITHFUL: ra_critical @ enemies.csv.
+    int deviation = 0;    ///< FAITHFUL: ra_deviation @ enemies.csv.
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -182,7 +201,14 @@ public:
     const WeaponDef *ResolveDropWeapon(const std::string &dropId) const;
 
     const BulletDef *FindBullet(const std::string &id) const;
+    /// Look up a species by its prefab id (e.g. "e_succulent", "boss01").
     const EnemyDef *FindEnemy(const std::string &id) const;
+    /// Look up a REPRESENTATIVE species for an AI-class (e.g. "EnemyAI07",
+    /// "BossAI01"): the first enemies.csv row with that @c enemyClass, in load
+    /// order. For callers that only have a class-keyed roster (e.g. the
+    /// EnemyMaker-lite spawner) and need a real, data-driven stand-in species
+    /// rather than inventing one. Returns nullptr if no species uses that class.
+    const EnemyDef *FindEnemyByClass(const std::string &enemyClass) const;
     const EnemyGunDef *FindEnemyGun(const std::string &id) const;
     const BuffDef *FindBuff(const std::string &id) const;
     const CharacterDef &PlayerTemplate() const { return m_PlayerTemplate; }

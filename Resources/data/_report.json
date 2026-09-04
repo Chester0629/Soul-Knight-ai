@@ -3,7 +3,7 @@
     "weapons": 46,
     "enemy_guns": 10,
     "bullets": 25,
-    "enemies": 16,
+    "enemies": 145,
     "bosses": 16,
     "buffs": 12,
     "characters_roster": 13,
@@ -11,7 +11,7 @@
     "droptable_levels": 7
   },
   "pathid_index_size": 127,
-  "unresolved_ref_count": 399,
+  "unresolved_ref_count": 359,
   "unresolved_refs_sample": [
     {
       "owner": "Gun001",

@@ -356,8 +356,13 @@ int Simulation::Advance(float dtMs, const WorldInputs &in) {
 void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId, int seed) {
     std::unique_ptr<EnemyController> ec = BrainFactory::MakeEnemyPtr(def, spawn, seed);
     ec->MutableState().roomId = roomId;
-    ec->MutableState().stats.hp = kSliceEnemyHp;    // EnemyDef has no hp; seed the slice value.
-    ec->MutableState().stats.maxHp = kSliceEnemyHp; // (EnemyController leaves stats.hp == 0).
+    // ENEMY RE-KEY: FAITHFUL @ enemies.csv -- seed the real per-species maxHp when
+    // the def carries one; kSliceEnemyHp is only the fallback for a def with no
+    // species data (e.g. a default-constructed test EnemyDef{}), so old tests that
+    // pass an empty EnemyDef{} keep their old flat-HP behaviour unchanged.
+    const int seedHp = def.maxHp > 0 ? def.maxHp : kSliceEnemyHp;
+    ec->MutableState().stats.hp = seedHp;
+    ec->MutableState().stats.maxHp = seedHp;
     ec->Activate(m_Scheduler, m_FireIntents);        // asleep until WakeByRoom().
     m_Enemies.push_back(std::move(ec));
 }

@@ -92,6 +92,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         for (const auto &e : enemies) {
             EnemyDef d;
             d.id = GetS(e, "id");
+            d.enemyClass = GetS(e, "enemy_class");
             d.aiLevel = GetI(e, "ai_level");
             d.shootCd = GetF(e, "shoot_cd");
             d.friction = GetF(e, "friction");
@@ -101,6 +102,15 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.rewardRate = GetI(e, "reward_rate");
             d.buffImmune = GetF(e, "buff_immune");
             d.kinematic = GetI(e, "kinematic");
+            // FAITHFUL @ enemies.csv -- real per-species combat stats.
+            d.maxHp = GetI(e, "max_hp");
+            d.hp = GetI(e, "hp");
+            d.atk = GetI(e, "atk");
+            d.speed = GetF(e, "speed");
+            d.speedRate = GetF(e, "speed_rate");
+            d.camp = GetI(e, "camp");
+            d.critical = GetI(e, "critical");
+            d.deviation = GetI(e, "deviation");
             m_EnemyIndex[d.id] = m_Enemies.size();
             m_Enemies.push_back(std::move(d));
         }
@@ -256,6 +266,16 @@ const BulletDef *GameData::FindBullet(const std::string &id) const {
 const EnemyDef *GameData::FindEnemy(const std::string &id) const {
     auto it = m_EnemyIndex.find(id);
     return it == m_EnemyIndex.end() ? nullptr : &m_Enemies[it->second];
+}
+const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const {
+    // Linear scan: ~145 species, called only at spawn-roster setup time (not
+    // per-frame), so a dedicated class index is not worth the bookkeeping.
+    for (const EnemyDef &d : m_Enemies) {
+        if (d.enemyClass == enemyClass) {
+            return &d;
+        }
+    }
+    return nullptr;
 }
 const EnemyGunDef *GameData::FindEnemyGun(const std::string &id) const {
     auto it = m_EnemyGunIndex.find(id);

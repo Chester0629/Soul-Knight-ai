@@ -16,7 +16,11 @@ TEST(GameDataTest, LoadsAllTablesWithExpectedCounts) {
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
     EXPECT_EQ(gd.Weapons().size(), 46u);
     EXPECT_EQ(gd.Bullets().size(), 25u);
-    EXPECT_EQ(gd.Enemies().size(), 16u);
+    // ENEMY RE-KEY: enemies.json used to carry 16 AI-CLASS templates (one row per
+    // EnemyAI*.json/BossAI*.json dump); it is now 145 real SPECIES rows straight
+    // from enemies.csv (every enemy/boss loaded flat HP=3/500 before this -- the
+    // bug the re-key fixes). See EnemyStatsTest.cpp for the fidelity assertions.
+    EXPECT_EQ(gd.Enemies().size(), 145u);
     EXPECT_EQ(gd.EnemyGuns().size(), 10u);
     EXPECT_EQ(gd.Buffs().size(), 12u);
 }
@@ -78,14 +82,22 @@ TEST(GameDataTest, Bullet01ScalarStats) {
     EXPECT_EQ(b->camp, 0);
 }
 
-TEST(GameDataTest, EnemyAI01ScalarStats) {
+// ENEMY RE-KEY: FindEnemy("EnemyAI01") no longer resolves -- enemies are indexed
+// by species prefab id now, not AI-class. FindEnemyByClass resolves a
+// REPRESENTATIVE species (the first enemies.csv row for that class: e_alien01),
+// so the values below are e_alien01's real per-species stats (FAITHFUL @
+// enemies.csv), not the old EnemyAI01.json class-template values (shootCd was
+// 2.0/friction 0.6 -- those were copied onto every AI01 species alike).
+TEST(GameDataTest, EnemyAI01RepresentativeSpeciesScalarStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);
-    const auto *e = gd.FindEnemy("EnemyAI01");
+    const auto *e = gd.FindEnemyByClass("EnemyAI01");
     ASSERT_NE(e, nullptr);
+    EXPECT_EQ(e->id, "e_alien01");
     EXPECT_EQ(e->aiLevel, 3);
-    EXPECT_FLOAT_EQ(e->shootCd, 2.0F);
-    EXPECT_FLOAT_EQ(e->friction, 0.6F);
+    EXPECT_FLOAT_EQ(e->shootCd, 1.5F);
+    EXPECT_FLOAT_EQ(e->friction, 0.9F);
+    EXPECT_EQ(e->maxHp, 25);
 }
 
 TEST(GameDataTest, EnemyGun001ScalarStats) {

@@ -522,3 +522,4 @@ imgui.ini
 .venv/
 CMakeCache.txt
 CMakeFiles/
+.codegraph/

@@ -491,6 +491,9 @@ set(TEST_FILES
     SimulationTest.cpp
     WeaponControllerTest.cpp
 
+    # ENEMY RE-KEY: per-species data-driven enemy/boss stats (enemies.csv, 145 rows)
+    EnemyStatsTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

@@ -25,9 +25,14 @@ using Game::Sim::EnemyController;
 
 namespace {
 
+// ENEMY RE-KEY: brain dispatch now keys off def.enemyClass (a species' shared
+// AI-class), not def.id (now the species prefab id). This helper still takes an
+// AI-class string (its callers pass "EnemyAI01" etc.) -- set BOTH fields so it
+// keeps dispatching correctly and stays a valid (if synthetic) EnemyDef.
 Game::EnemyDef Def(const std::string &id, bool kinematic = false) {
     Game::EnemyDef d{};
     d.id = id;
+    d.enemyClass = id;
     d.scoutRate = 0.1F;
     d.shootCd = 0.1F;
     d.friction = 0.9F;

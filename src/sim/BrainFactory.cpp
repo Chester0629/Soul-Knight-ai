@@ -12,8 +12,12 @@ namespace Game::Sim {
 
 EnemyController::Params BrainFactory::EnemyParams(const Game::EnemyDef &def) {
     EnemyController::Params p;
-    p.speed = 60.0F;     // slice default (EnemyDef has no per-enemy speed)
-    p.speedRate = 0.0F;  // slice default (EnemyDef has no speed_rate field)
+    // ENEMY RE-KEY: EnemyDef now carries a real per-species speed (FAITHFUL @
+    // enemies.csv). A def with no species data (e.g. a default-constructed test
+    // EnemyDef{}, or a future gap in the table) has speed==0 -- keep the old
+    // slice default (60) rather than freezing the enemy in place.
+    p.speed = def.speed > 0.0F ? def.speed : 60.0F;
+    p.speedRate = def.speedRate;
     p.friction = def.friction;
     p.scoutRateSeconds = def.scoutRate;
     p.shootCdSeconds = def.shootCd;
@@ -22,14 +26,15 @@ EnemyController::Params BrainFactory::EnemyParams(const Game::EnemyDef &def) {
 }
 
 EnemyController BrainFactory::MakeEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int seed) {
-    // (d) dispatch: pick the brain adapter by enemy id (def.id == "EnemyAIxx").
-    return EnemyController(MakeEnemyBrain(def.id), EnemyParams(def), spawn,
+    // (d) dispatch: pick the brain adapter by AI CLASS (def.enemyClass ==
+    // "EnemyAIxx"), not by species id -- many species (def.id) share one class.
+    return EnemyController(MakeEnemyBrain(def.enemyClass), EnemyParams(def), spawn,
                           seed); // prvalue -> C++17 guaranteed elision
 }
 
 std::unique_ptr<EnemyController> BrainFactory::MakeEnemyPtr(const Game::EnemyDef &def,
                                                             glm::vec2 spawn, int seed) {
-    return std::make_unique<EnemyController>(MakeEnemyBrain(def.id), EnemyParams(def),
+    return std::make_unique<EnemyController>(MakeEnemyBrain(def.enemyClass), EnemyParams(def),
                                              spawn, seed);
 }
 

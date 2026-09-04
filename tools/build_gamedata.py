@@ -24,6 +24,7 @@ Run:  python tools/build_gamedata.py
 """
 from __future__ import annotations
 
+import csv
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -33,6 +34,13 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC_MB = ROOT / "1.07" / "MonoBehaviour"
 SRC_TXT = ROOT / "1.07" / "TextAsset"
 OUT = ROOT / "Resources" / "data"
+
+# ENEMY RE-KEY ground truth: the decompiled-original per-species enemy/boss stat
+# table (145 rows: prefab_name is the per-SPECIES key, e.g. "boss01"/"e_succulent";
+# enemy_class is the shared AI-class, e.g. "BossAI01"/"EnemyAI07"). Lives in the
+# sibling _reverse checkout (analysis output, not engine source), so this is a
+# READ-only cross-repo reference -- never written to.
+CSV_ENEMIES = ROOT.parent / "_reverse" / "analysis" / "data_tables" / "enemies.csv"
 
 # Unity bookkeeping keys we never want in our tables.
 _DROP_KEYS = {"m_GameObject", "m_Script", "m_Enabled", "m_Name"}
@@ -124,6 +132,90 @@ def parse_weapon_catalog() -> list[dict]:
     return out
 
 
+def _csv_int(v, default: int = 0) -> int:
+    v = (v or "").strip()
+    if not v:
+        return default
+    try:
+        return int(float(v))
+    except ValueError:
+        return default
+
+
+def _csv_float(v, default: float = 0.0) -> float:
+    v = (v or "").strip()
+    if not v:
+        return default
+    try:
+        return float(v)
+    except ValueError:
+        return default
+
+
+def _csv_reward_value(v) -> list[int]:
+    """Decode packed reward_value hex (Unity int[4], little-endian) -> 4-int list.
+    enemies.csv stores it as 32 hex chars (4 x int32 LE); empty/malformed -> zeros.
+    The data validator requires enemies to carry exactly 4 reward_value entries."""
+    s = (v or "").strip()
+    if len(s) == 32:
+        try:
+            b = bytes.fromhex(s)
+            return [int.from_bytes(b[i:i + 4], "little", signed=True)
+                    for i in range(0, 16, 4)]
+        except ValueError:
+            pass
+    return [0, 0, 0, 0]
+
+
+def build_enemy_species_table() -> list[dict]:
+    """ENEMY RE-KEY: one entry PER SPECIES (prefab_name), from the ground-truth
+    ``enemies.csv`` (145 rows: every mob + boss prefab, both spawned FROM one of
+    16 shared AI-class templates -- BossAI01-13 + EnemyAI01-15/Shark). Supersedes
+    the old per-AI-CLASS table (16 entries, one per EnemyAI*.json template): the
+    class-level fields (ai_level/shoot_cd/friction/scout_rate/consume/e_size/
+    reward_rate/buff_immune/kinematic) are the SAME columns the old path read,
+    just sourced per real species instead of copied from the class template, PLUS
+    the real combat stats (max_hp/hp/atk/speed/speed_rate/camp/critical/deviation)
+    the old path never carried at all (every enemy loaded flat HP=3, every boss
+    flat HP=500 -- the bug this table fixes).
+    id = prefab_name (species key); enemy_class = the AI-class dispatch key, so a
+    class-keyed spawner can still resolve a representative species (see
+    GameData::FindEnemyByClass in the C++ loader).
+    """
+    if not CSV_ENEMIES.is_file():
+        print(f"  ! enemies.csv not found at {CSV_ENEMIES}; enemies.json falls back "
+              f"to the old per-AI-class table", file=sys.stderr)
+        return []
+    out = []
+    with CSV_ENEMIES.open(encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            out.append({
+                "id": row["prefab_name"],
+                "enemy_class": row["enemy_class"],
+                "ai_level": _csv_int(row.get("ai_level")),
+                "shoot_cd": _csv_float(row.get("shoot_cd")),
+                "friction": _csv_float(row.get("friction")),
+                "scout_rate": _csv_float(row.get("scout_rate")),
+                "consume": _csv_int(row.get("consume")),
+                "e_size": _csv_int(row.get("e_size")),
+                "reward_rate": _csv_int(row.get("reward_rate")),
+                # FAITHFUL @ enemies.csv -- packed int[4] LE reward payload.
+                "reward_value": _csv_reward_value(row.get("reward_value")),
+                "buff_immune": _csv_float(row.get("buff_immune")),
+                "kinematic": _csv_int(row.get("kinematic")),
+                # FAITHFUL @ enemies.csv -- real per-species combat stats (new).
+                "max_hp": _csv_int(row.get("ra_max_hp")),
+                "hp": _csv_int(row.get("ra_hp")),
+                "atk": _csv_int(row.get("damage")),
+                "speed": _csv_float(row.get("ra_speed")),
+                "speed_rate": _csv_float(row.get("ra_speed_rate")),
+                "camp": _csv_int(row.get("ra_camp")),
+                "critical": _csv_int(row.get("ra_critical")),
+                "deviation": _csv_int(row.get("ra_deviation")),
+            })
+    return out
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -179,7 +271,15 @@ def main() -> int:
     counts["weapons"] = write("weapons", build_table(guns, idx, prefer=("Bullet",)))
     counts["enemy_guns"] = write("enemy_guns", build_table(eguns, idx, prefer=("Bullet",)))
     counts["bullets"] = write("bullets", build_table(bullets, idx))
-    counts["enemies"] = write("enemies", build_table(enemies, idx, prefer=("RoleAttribute",)))
+    # ENEMY RE-KEY: enemies.json is now ONE ENTRY PER SPECIES (from the RE'd
+    # enemies.csv ground truth), not one per AI-class template. Falls back to the
+    # old per-AI-class table (16 entries) if the CSV is unavailable (e.g. a
+    # checkout without the sibling _reverse/ dir), so the pipeline still runs.
+    species = build_enemy_species_table()
+    if species:
+        counts["enemies"] = write("enemies", species)
+    else:
+        counts["enemies"] = write("enemies", build_table(enemies, idx, prefer=("RoleAttribute",)))
     counts["bosses"] = write("bosses", build_table(bosses, idx, prefer=("Bullet",)))
     counts["buffs"] = write("buffs", build_table(buffs, idx))
 

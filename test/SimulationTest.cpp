@@ -339,7 +339,9 @@ TEST(SimulationTest, HitResolutionReplayIsByteIdentical) {
 TEST(SimulationTest, EndToEndPlayerEnemyBulletsCollisionByteIdentical) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    // ENEMY RE-KEY: enemies are indexed by species prefab id now, not AI-class;
+    // FindEnemyByClass resolves a representative species (e_alien01) for AI01.
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
@@ -377,7 +379,8 @@ TEST(SimulationTest, EndToEndPlayerEnemyBulletsCollisionByteIdentical) {
     EXPECT_EQ(a, b); // byte-identical replay
 
     // Sanity: two different seeds must diverge somewhere over 150 steps.
-    // Enemy dies in 1 shot (hp=3, atk=15), so the combat trace is seed-independent;
+    // The combat trace above is not a good divergence probe (a fixed weapon vs a
+    // fixed-hp species resolves too similarly run-to-run to be seed-revealing);
     // use a wander-only run (no weapon, far spawn) to confirm the RNG streams differ.
     auto wanderRun = [&](int runSeed) {
         Simulation sim(runSeed, &g_NullWorld);
@@ -410,7 +413,10 @@ TEST(SimulationTest, EmitsPlayerFireEnemyHurtAndDeathEvents) {
     using Game::Sim::SimEventType;
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    // ENEMY RE-KEY: FindEnemyByClass resolves AI01's representative species
+    // (e_alien01, real maxHp=25) -- FindEnemy("EnemyAI01") no longer matches
+    // anything (enemies are keyed by species prefab id now).
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
@@ -426,7 +432,9 @@ TEST(SimulationTest, EmitsPlayerFireEnemyHurtAndDeathEvents) {
     bool sawFire = false;
     bool sawHurt = false;
     bool sawDeath = false;
-    for (int i = 0; i < 60; ++i) { // 60 * 20ms = 1.2s; the hp-3 enemy dies in one Gun001 shot.
+    // 60 * 20ms = 1.2s; e_alien01 (real maxHp=25, FAITHFUL @ enemies.csv) takes 2
+    // Gun001 hits (atk=15) to die -- plenty of time at Gun001's ~0.15s cadence.
+    for (int i = 0; i < 60; ++i) {
         sim.Advance(20.0F, in);
         for (const SimEvent &e : sim.DrainEvents()) {
             EXPECT_EQ(e.type, SimEventType::AnimTrigger);

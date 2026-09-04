@@ -26,6 +26,10 @@ using sktest::RealBodyDriver;
 // are the real verifications that replace the autowalk-log weak checks.
 // =============================================================================
 
+// ENEMY RE-KEY: GameData::FindEnemy is now keyed by species prefab id (e.g.
+// "e_alien01"), not AI-class -- FindEnemyByClass below resolves "EnemyAI01" to
+// its representative species (real per-species maxHp etc., FAITHFUL @
+// enemies.csv) so these driver tests keep exercising the same AI01 brain path.
 namespace {
 constexpr float kPitch = RealBodyDriver::kPitch; // 1312
 
@@ -79,7 +83,7 @@ TEST(RealBodyDriverTest, NavigatesAroundObstacle) {
 TEST(RealBodyDriverTest, RealBodyEntersAndLocksRoom) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     ASSERT_NE(edef, nullptr);
 
     RealBodyDriver d(7);
@@ -104,7 +108,7 @@ TEST(RealBodyDriverTest, RealBodyEntersAndLocksRoom) {
 TEST(RealBodyDriverTest, RealBodyAimsAndKillsEnemy) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
@@ -125,7 +129,7 @@ TEST(RealBodyDriverTest, RealBodyAimsAndKillsEnemy) {
 TEST(RealBodyDriverTest, RealBodyClearsRoomAndDoorsReopen) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *wdef = gd.FindWeapon("Gun001");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
@@ -186,7 +190,7 @@ TEST(RealBodyDriverTest, RealBodyReachesBossRoom) {
 TEST(RealBodyDriverTest, RealBodyPicksUpFanGunFiresFanAndKills) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *fan = gd.FindWeapon("Gun002");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(fan, nullptr);
@@ -222,7 +226,7 @@ TEST(RealBodyDriverTest, RealBodyPicksUpFanGunFiresFanAndKills) {
 TEST(RealBodyDriverTest, RealBodyPicksUpBurstGunFiresAcrossTicksAndKills) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *burst = gd.FindWeapon("Gun004");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(burst, nullptr);
@@ -265,7 +269,7 @@ TEST(RealBodyDriverTest, RealBodyPicksUpBurstGunFiresAcrossTicksAndKills) {
 TEST(RealBodyDriverTest, C01SkillMirrorsShotsThroughBodyLoopAndKills) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    const Game::EnemyDef *edef = gd.FindEnemy("EnemyAI01");
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *gun = gd.FindWeapon("Gun001");
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(gun, nullptr);

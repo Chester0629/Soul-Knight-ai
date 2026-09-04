@@ -160,7 +160,9 @@ void GameScene::OnEnter() {
                  mapOpt.designRooms.size(), roomLog);
     }
 
-    const EnemyDef *edef = m_Data.FindEnemy("EnemyAI01");
+    // ENEMY RE-KEY: enemies are now indexed by species prefab id, not AI-class, so
+    // resolve "EnemyAI01" via a representative species (FindEnemyByClass).
+    const EnemyDef *edef = m_Data.FindEnemyByClass("EnemyAI01");
     // Phase 4 (pure visual): real floor-1 ICE tileset. floor/wall come from biome 6
     // (f601/w601, the snow tiles -- the obstacle_list config's biome 7 was brown);
     // obstacles come from the authoritative obstacle_list[obj_index] chain (common
@@ -433,15 +435,24 @@ void GameScene::OnEnter() {
                      static_cast<std::size_t>(bossRoom)) %
                     kBossRosterC.size();
                 const char *const bossId = kBossRosterC[bpick];
-                auto boss = std::make_shared<Boss>(root, spawn, /*maxHp=*/500,
+                // ENEMY RE-KEY: real per-boss-species maxHp (FAITHFUL @ enemies.csv),
+                // not the old flat 500 every boss shared. FindEnemyByClass resolves
+                // bossId (an AI-class, e.g. "BossAI01") to its representative species
+                // (e.g. "boss01"); fall back to the old slice value only if that class
+                // has no species row (should not happen for this fixed roster).
+                const EnemyDef *bossDef = m_Data.FindEnemyByClass(bossId);
+                const int bossMaxHp = (bossDef != nullptr && bossDef->maxHp > 0)
+                                          ? bossDef->maxHp
+                                          : 500;
+                auto boss = std::make_shared<Boss>(root, spawn, bossMaxHp,
                                                    /*shootCd=*/2.0F,
                                                    m_FloorSeed + 9000);
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
-                m_Sim->SetBoss(2.0F, spawn, /*maxHp=*/500, roomIndex,
+                m_Sim->SetBoss(2.0F, spawn, bossMaxHp, roomIndex,
                                m_FloorSeed + 9000, bossId);
-                LOG_INFO("BossMaker-lite: room {} spawned {} (type {})", roomIndex,
-                         bossId, cell.type);
+                LOG_INFO("BossMaker-lite: room {} spawned {} maxHp={} (type {})", roomIndex,
+                         bossId, bossMaxHp, cell.type);
             } else {
                 // EnemyMaker-lite (B1-P1, policy C): pick ONE enemy per room from
                 // a representative SHOOTER roster (AI11 = ice; AI06 turret; AI07
@@ -452,13 +463,21 @@ void GameScene::OnEnter() {
                 // count = 1 (the real EnemyMaker this_count is owner-side: debt s7).
                 // The dispatch (BrainFactory -> (d) adapter) routes the id to the
                 // matching brain; the floor-1 FAITHFUL roster is deferred (s7).
+                // ENEMY RE-KEY: the roster is still 5 AI-CLASS slots (the real
+                // floor-1 room->enemy spawn pool is not recoverable from the dump --
+                // see docs/LEVEL_GEN_PLAN.md; no per-room enemy list survived), but
+                // each slot now resolves to a REAL SPECIES (FindEnemyByClass) instead
+                // of the flat-stat class placeholder, so hp/speed/etc are faithful.
+                // TODO(faithful-spawn-pool): replace this deterministic class roster
+                // with the real per-room species distribution if a floor-1 spawn
+                // table is ever recovered from a chapter-1 dump.
                 static constexpr std::array<const char *, 5> kRosterC = {
                     "EnemyAI01", "EnemyAI11", "EnemyAI07", "EnemyAI06", "EnemyAI04"};
                 const std::size_t pick =
                     (static_cast<std::size_t>(cell.type) +
                      static_cast<std::size_t>(roomIndex)) %
                     kRosterC.size();
-                const EnemyDef *rdef = m_Data.FindEnemy(kRosterC[pick]);
+                const EnemyDef *rdef = m_Data.FindEnemyByClass(kRosterC[pick]);
                 if (rdef == nullptr) {
                     rdef = edef; // defensive: fall back to AI01
                 }
