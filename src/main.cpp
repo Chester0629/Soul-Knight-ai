@@ -1,6 +1,7 @@
 #include <cstdlib> // std::getenv, std::atol
 #include <cstring> // std::memcpy
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <GL/glew.h>
@@ -45,7 +46,17 @@ int main(int, char **) {
     // The RunController owns the SceneManager + RunState and puts floor 0 on the
     // stack (replacing the old single `scenes.Push(make_shared<GameScene>())`).
     Game::RunController run;
-    run.StartRun();
+    // Entry flow (B6/B5): main menu -> hero select -> run. Headless hooks (env,
+    // NO-OP unless set): SK_START_CHAR=cNN starts a run as that hero directly;
+    // SK_SKIP_MENU=1 starts as the default hero -- both skip the two screens so
+    // smoke runs / log proofs land straight in gameplay.
+    if (const char *hero = std::getenv("SK_START_CHAR"); hero != nullptr && *hero != '\0') {
+        run.StartRun(std::string(hero));
+    } else if (std::getenv("SK_SKIP_MENU") != nullptr) {
+        run.StartRun();
+    } else {
+        run.ShowMenu();
+    }
 
     // --- Test / observability hooks (env-gated; NO effect unless set) ---
     // These do not change normal interactive play; they exist so the real game

@@ -1,5 +1,6 @@
 {
   "player_template": {
+    "name": "Knight",
     "camp": 0,
     "speed": 6.5,
     "speed_rate": 0.5,
@@ -19,6 +20,7 @@
   "roster": [
     {
       "id": "c01",
+      "name": "Knight",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -37,6 +39,7 @@
     },
     {
       "id": "c02",
+      "name": "Rogue",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -55,6 +58,7 @@
     },
     {
       "id": "c03",
+      "name": "Wizard",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -73,6 +77,7 @@
     },
     {
       "id": "c04",
+      "name": "Assassin",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -91,6 +96,7 @@
     },
     {
       "id": "c05",
+      "name": "Alchemist",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -109,6 +115,7 @@
     },
     {
       "id": "c06",
+      "name": "Engineer",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -127,6 +134,7 @@
     },
     {
       "id": "c07",
+      "name": "Vampire",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -145,6 +153,7 @@
     },
     {
       "id": "c08",
+      "name": "Paladin",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -163,6 +172,7 @@
     },
     {
       "id": "c09",
+      "name": "Elf",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -181,6 +191,7 @@
     },
     {
       "id": "c10",
+      "name": "Werewolf",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -199,6 +210,7 @@
     },
     {
       "id": "c11",
+      "name": "Priest",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -217,6 +229,7 @@
     },
     {
       "id": "c12",
+      "name": "Druid",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,
@@ -235,6 +248,7 @@
     },
     {
       "id": "c13",
+      "name": "c13",
       "camp": 0,
       "speed": 6.5,
       "speed_rate": 0.5,

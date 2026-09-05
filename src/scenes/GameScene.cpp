@@ -111,7 +111,14 @@ void GameScene::OnEnter() {
 
     // PER-CHARACTER: build the player from the selected character's real stats.
     // charId is carried across floors (default "c01"/Knight until HeroRoom, B5).
-    const std::string charId = m_Carried ? m_Carried->charId : std::string("c01");
+    // B5: the hero comes from the continuation (floors 1+), else from the run's
+    // chosen hero (RunState::charId, set by the picker); "c01" only for a scene
+    // built without a RunController (tests).
+    const std::string charId =
+        m_Carried ? m_Carried->charId
+                  : (m_Run != nullptr ? m_Run->State().charId : std::string("c01"));
+    m_CharId = charId;
+    LOG_INFO("GameScene: hero {} on floor {}", charId, m_FloorIndex);
     const CharacterDef *cdef = m_Data.FindCharacter(charId);
     m_Player = std::make_shared<Player>(
         cdef != nullptr ? *cdef : m_Data.PlayerTemplate(), root,
@@ -1074,7 +1081,9 @@ void GameScene::Update(float dtMs) {
             CombatStats &st = m_Player->Stats();
             st.hp = std::max(1, st.hp - 1);
         }
-        const PlayerContinuation snapshot{m_Player->Stats(), m_CurrentWeaponId};
+        // B5: carry the hero too -- without it the snapshot's charId defaulted to
+        // "c01" and a picked hero reverted to Knight on the very next floor.
+        const PlayerContinuation snapshot{m_Player->Stats(), m_CurrentWeaponId, m_CharId};
         LOG_INFO("Floor {} CLEARED -> snapshot hp={} armor={} energy={} weapon='{}' (next floor {})",
                  m_FloorIndex, snapshot.stats.hp, snapshot.stats.armor,
                  snapshot.stats.energy, snapshot.weaponId, m_FloorIndex + 1);

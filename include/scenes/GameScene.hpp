@@ -144,6 +144,9 @@ private:
     /// (`m_Run->OnFloorCleared(...)`); the controller outlives this scene (D1), and
     /// the scene's dtor never dereferences it.
     RunController *m_Run;
+    /// The hero this floor runs (B5): from the continuation on floors 1+, else the
+    /// run's chosen hero (RunState::charId). Written into the floor-clear snapshot.
+    std::string m_CharId = "c01";
     /// Deterministic stream for combat rolls (crit). The original rolls crit on
     /// Unity's global RNG; a seeded per-run stream keeps our combat replayable.
     RGRandom m_Rng;

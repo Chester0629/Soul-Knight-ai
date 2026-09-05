@@ -197,6 +197,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             }
             CharacterDef d;
             d.id = c.value("id", std::string());
+            d.name = c.value("name", std::string()); // B5 hero select display name
             d.camp = GetI(c, "camp");
             d.speed = GetF(c, "speed");
             d.speedRate = GetF(c, "speed_rate");

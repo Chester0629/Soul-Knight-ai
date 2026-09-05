@@ -118,6 +118,7 @@ struct EnemyGunDef {
 /// Character/player stat block (from Resources/data/characters.json).
 struct CharacterDef {
     std::string id;          ///< charId ("c01".."c13"); empty for the shared template.
+    std::string name;        ///< display name (FAITHFUL @ i2 localization, English); "" if unknown
     int camp = 0;
     float speed = 0.0F;
     float speedRate = 0.0F;

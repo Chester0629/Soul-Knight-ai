@@ -2,8 +2,10 @@
 
 #include <memory>
 
+#include "scenes/CharSelectScene.hpp"
 #include "scenes/EndScene.hpp"
 #include "scenes/GameScene.hpp"
+#include "scenes/MenuScene.hpp"
 
 namespace Game {
 
@@ -30,6 +32,29 @@ void RunController::StartRun() {
         // Restart path (from the EndScene): Replace so the previous top (the
         // EndScene) is exited, never stacked-over-and-leaked.
         m_Scenes.Replace(floor0);
+    }
+}
+
+void RunController::StartRun(const std::string &charId) {
+    SetHero(charId);
+    StartRun();
+}
+
+void RunController::ShowMenu() {
+    auto menu = std::make_shared<MenuScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(menu);
+    } else {
+        m_Scenes.Replace(menu); // from EndScene / hero select: exit that screen
+    }
+}
+
+void RunController::ShowCharSelect() {
+    auto pick = std::make_shared<CharSelectScene>(this);
+    if (m_Scenes.Empty()) {
+        m_Scenes.Push(pick);
+    } else {
+        m_Scenes.Replace(pick);
     }
 }
 

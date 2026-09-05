@@ -152,6 +152,8 @@ set(SRC_FILES
     ui/HudLayout.cpp
     scenes/GameScene.cpp
     scenes/EndScene.cpp
+    scenes/MenuScene.cpp
+    scenes/CharSelectScene.cpp
 
     # Engine port -- run loop (Line 2, Phase 1): run-level state + controller
     game/RunController.cpp
@@ -505,6 +507,9 @@ set(TEST_FILES
 
     # CHAPTER PROGRESSION: per-chapter biome mob pools + boss rosters
     ChapterProgressionTest.cpp
+
+    # B5/B6 ENTRY FLOW: hero-select model, i2 names, RunState hero
+    CharSelectTest.cpp
 
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp

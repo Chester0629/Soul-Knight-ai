@@ -190,6 +190,22 @@ def _prefab_role_attr(text: str) -> dict:
     return out
 
 
+_I2_NAME_RE = re.compile(
+    r"Term: Character(\d+)_name_skin0\n(?:[^\n]*\n){0,6}?\s*Languages:\n\s*- ([^\n]+)")
+
+
+def _i2_hero_names() -> dict:
+    """{N: English name} from the i2 localization bundle's Character<N>_name_skin0
+    terms (English is language slot 0) -- FAITHFUL @ I2Languages.prefab. Empty when
+    the AssetRipper source is absent (names then fall back to the id)."""
+    p = (ROOT.parent / "_reverse" / "asset soul" / "ExportedProject" / "Assets" / "i2"
+         / "resources" / "I2Languages.prefab")
+    if not p.is_file():
+        return {}
+    text = p.read_text(encoding="utf-8", errors="ignore")
+    return {int(m.group(1)): m.group(2).strip() for m in _I2_NAME_RE.finditer(text)}
+
+
 def build_character_roster():
     """PER-CHARACTER RE-KEY: one roster entry per playable character (c01..c13)
     with its REAL base stats, read from the c##.prefab RoleAttributePlayer
@@ -198,6 +214,7 @@ def build_character_roster():
     checkout without the sibling _reverse/ tree) so the caller can fall back."""
     if not CHAR_PREFAB_DIR.is_dir():
         return None
+    names = _i2_hero_names()
     roster = []
     for f in sorted(CHAR_PREFAB_DIR.glob("c[0-9]*.prefab")):
         cid = f.stem
@@ -205,7 +222,8 @@ def build_character_roster():
             continue
         stats = _prefab_role_attr(f.read_text(encoding="utf-8", errors="ignore"))
         if stats:
-            roster.append({"id": cid, **stats})
+            # name: FAITHFUL @ i2 Character<N>_name_skin0 (English); id if unknown.
+            roster.append({"id": cid, "name": names.get(int(cid[1:]), cid), **stats})
     if not roster:
         return None
     tmpl = next((e for e in roster if e["id"] == "c01"), roster[0])

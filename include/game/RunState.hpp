@@ -60,6 +60,10 @@ struct RunState {
     int floorIndex = 0;            ///< 0-based; the port analog of RGGameProcess this_index (+0x14).
     enum class Phase { Playing, Ended } phase = Phase::Playing;
     std::optional<PlayerContinuation> carried; ///< empty on floor 0 (template); set after floor 0.
+    /// The run's chosen hero (B5 picker; RunController::SetHero). Floor 0 reads it
+    /// (no continuation yet); later floors carry it in PlayerContinuation::charId.
+    /// KEPT across ResetRunState so an EndScene restart replays the same hero.
+    std::string charId = "c01";
 };
 
 /// Stride between consecutive floors' base seeds. A large prime so each floor's

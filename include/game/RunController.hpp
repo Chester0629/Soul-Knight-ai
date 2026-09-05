@@ -2,6 +2,7 @@
 #define GAME_RUN_CONTROLLER_HPP
 
 #include <memory>
+#include <string>
 
 #include "Core/Scene.hpp"
 #include "Core/SceneManager.hpp"
@@ -41,6 +42,17 @@ public:
     /// stack. Uses `Empty() ? Push : Replace` so the SAME entry handles cold start
     /// and a later restart (from a future EndScene) without leaking a scene.
     void StartRun();
+
+    /// B5: choose the run's hero -- PURE (unit-testable). @ref StartRun and
+    /// @ref ResetRunState KEEP it, so a restart replays the same hero.
+    void SetHero(const std::string &charId) { m_State.charId = charId; }
+    /// B5: @ref SetHero then @ref StartRun (the hero-select confirm path).
+    void StartRun(const std::string &charId);
+    /// B6/B5 entry flow: main menu (title art) -> hero select -> StartRun(charId).
+    /// Both use `Empty() ? Push : Replace` so they work from a cold start AND from
+    /// another screen (EndScene / each other) without leaking a scene.
+    void ShowMenu();
+    void ShowCharSelect();
 
     /// Reset the per-run progress to a FRESH run -- floor 0, continuation snapshot
     /// CLEARED, phase Playing -- while KEEPING `runSeed`. PURE state mutation,
