@@ -129,6 +129,16 @@ struct CharacterDef {
     float fireRate = 0.0F;
 };
 
+/// Per-entity sprite animation set (from Resources/data/sprites.json): the
+/// FAITHFUL prefab -> Animator -> clip -> frame chain resolved from the
+/// AssetRipper project. Frames are bare PNG names under Resources/sprites/.
+struct SpriteSet {
+    std::string id;
+    std::string defaultState;  ///< the Animator's default (idle) state
+    int sampleRate = 0;        ///< clip fps; frame interval = 1000 / sampleRate
+    std::unordered_map<std::string, std::vector<std::string>> states;
+};
+
 /// Status-effect definition (from Resources/data/buffs.json).
 struct BuffDef {
     std::string id;
@@ -219,6 +229,17 @@ public:
     const CharacterDef *FindCharacter(const std::string &id) const;
     const std::vector<CharacterDef> &Characters() const { return m_Characters; }
 
+    /// SPRITE MANIFEST (sprites.json): the FAITHFUL prefab -> Animator -> clip ->
+    /// frame chain per entity id. nullptr => entity keeps its placeholder art.
+    const SpriteSet *FindSprites(const std::string &id) const;
+    /// Full frame paths (root/sprites/<png>) for @p state, else the entity's
+    /// default (idle) state, else a deterministic fallback; empty if unknown id.
+    std::vector<std::string> SpriteFrames(const std::string &id,
+                                          const std::string &resourceRoot,
+                                          const std::string &state = "") const;
+    /// Frame interval from the clip's sample rate (1000 / fps), or @p fallbackMs.
+    int SpriteIntervalMs(const std::string &id, int fallbackMs) const;
+
     const std::vector<WeaponDef> &Weapons() const { return m_Weapons; }
     const std::vector<BulletDef> &Bullets() const { return m_Bullets; }
     const std::vector<EnemyDef> &Enemies() const { return m_Enemies; }
@@ -246,6 +267,7 @@ private:
     std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
+    std::vector<SpriteSet> m_Sprites;
 
     std::unordered_map<std::string, std::size_t> m_WeaponIndex;
     std::unordered_map<std::string, std::size_t> m_BulletIndex;
@@ -253,6 +275,7 @@ private:
     std::unordered_map<std::string, std::size_t> m_EnemyGunIndex;
     std::unordered_map<std::string, std::size_t> m_BuffIndex;
     std::unordered_map<std::string, std::size_t> m_CharacterIndex;
+    std::unordered_map<std::string, std::size_t> m_SpriteIndex;
 };
 
 } // namespace Game

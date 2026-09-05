@@ -497,6 +497,9 @@ set(TEST_FILES
     # PER-CHARACTER RE-KEY: real per-character stats (c##.prefab, 13 chars)
     CharacterStatsTest.cpp
 
+    # SPRITE MANIFEST: per-entity animation frames (prefab -> Animator -> clip)
+    SpriteManifestTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

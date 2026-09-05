@@ -1,0 +1,4973 @@
+{
+  "boss07": {
+    "controller": "boss07",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ],
+      "x_ide": [
+        "boss07_0.png",
+        "boss07_1.png",
+        "boss07_2.png",
+        "boss07_3.png"
+      ],
+      "x_dead": [
+        "boss07_11.png"
+      ]
+    }
+  },
+  "boss08": {
+    "controller": "boss08",
+    "default": "ide",
+    "sample_rate": 12,
+    "states": {
+      "ide": [
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_6.png",
+        "boss08_7.png",
+        "boss08_7.png"
+      ],
+      "run": [
+        "boss08_0.png",
+        "boss08_1.png",
+        "boss08_2.png",
+        "boss08_3.png",
+        "boss08_3.png"
+      ],
+      "dead": [
+        "boss08_8.png"
+      ],
+      "atk1": [
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_6.png",
+        "boss08_7.png",
+        "boss08_4.png"
+      ],
+      "atk2": [
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_6.png",
+        "boss08_7.png",
+        "boss08_6.png",
+        "boss08_7.png"
+      ],
+      "atk3": [
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_6.png",
+        "boss08_7.png",
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_6.png",
+        "boss08_7.png"
+      ],
+      "atk4": [
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_4.png",
+        "boss08_5.png",
+        "boss08_7.png",
+        "boss08_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "e_boar01": {
+    "controller": "boar01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy27_4.png",
+        "enemy27_5.png",
+        "enemy27_5.png"
+      ],
+      "run": [
+        "enemy27_0.png",
+        "enemy27_1.png",
+        "enemy27_2.png",
+        "enemy27_3.png"
+      ],
+      "dead": [
+        "enemy27_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_boar02": {
+    "controller": "boar02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy28_4.png",
+        "enemy28_5.png",
+        "enemy28_5.png"
+      ],
+      "run": [
+        "enemy28_0.png",
+        "enemy28_1.png",
+        "enemy28_2.png",
+        "enemy28_3.png"
+      ],
+      "dead": [
+        "enemy28_6.png"
+      ],
+      "atk": [
+        "enemy28_0.png",
+        "enemy28_1.png",
+        "enemy28_2.png",
+        "enemy28_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc01": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc02": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc03": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc04": {
+    "controller": "orc02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy23_4.png",
+        "enemy23_5.png",
+        "enemy23_6.png",
+        "enemy23_7.png"
+      ],
+      "run": [
+        "enemy23_0.png",
+        "enemy23_1.png",
+        "enemy23_2.png",
+        "enemy23_3.png"
+      ],
+      "dead": [
+        "enemy23_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc05": {
+    "controller": "orc02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy23_4.png",
+        "enemy23_5.png",
+        "enemy23_6.png",
+        "enemy23_7.png"
+      ],
+      "run": [
+        "enemy23_0.png",
+        "enemy23_1.png",
+        "enemy23_2.png",
+        "enemy23_3.png"
+      ],
+      "dead": [
+        "enemy23_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc06": {
+    "controller": "orc02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy23_4.png",
+        "enemy23_5.png",
+        "enemy23_6.png",
+        "enemy23_7.png"
+      ],
+      "run": [
+        "enemy23_0.png",
+        "enemy23_1.png",
+        "enemy23_2.png",
+        "enemy23_3.png"
+      ],
+      "dead": [
+        "enemy23_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc07": {
+    "controller": "orc03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy26_4.png",
+        "enemy26_5.png",
+        "enemy26_6.png",
+        "enemy26_7.png"
+      ],
+      "run": [
+        "enemy26_0.png",
+        "enemy26_1.png",
+        "enemy26_2.png",
+        "enemy26_3.png"
+      ],
+      "dead": [
+        "enemy26_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_orc08": {
+    "controller": "orc04",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy25_4.png",
+        "enemy25_5.png",
+        "enemy25_6.png",
+        "enemy25_7.png"
+      ],
+      "run": [
+        "enemy25_0.png",
+        "enemy25_1.png",
+        "enemy25_2.png",
+        "enemy25_3.png"
+      ],
+      "dead": [
+        "enemy25_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_shark": {
+    "controller": "shark",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy45_0.png",
+        "enemy45_1.png",
+        "enemy45_2.png",
+        "enemy45_3.png"
+      ],
+      "run": [
+        "enemy45_4.png",
+        "enemy45_5.png",
+        "enemy45_6.png",
+        "enemy45_7.png"
+      ],
+      "dead": [
+        "enemy45_8.png"
+      ],
+      "atk": [
+        "enemy45_1.png",
+        "enemy45_2.png",
+        "enemy45_1.png",
+        "enemy45_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_snowman_temp": {
+    "controller": "snowman_small",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy46_4.png",
+        "enemy46_5.png"
+      ],
+      "run": [
+        "enemy46_0.png",
+        "enemy46_1.png",
+        "enemy46_2.png",
+        "enemy46_3.png"
+      ],
+      "dead": [
+        "enemy46_6.png"
+      ],
+      "yeti01_atk": [
+        "enemy46_1.png",
+        "enemy46_2.png",
+        "enemy46_3.png",
+        "enemy46_0.png",
+        "enemy46_1.png",
+        "enemy46_5.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_succulent": {
+    "controller": "succulent",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy20_4.png",
+        "enemy20_5.png",
+        "enemy20_5.png"
+      ],
+      "atk": [
+        "enemy20_0.png",
+        "enemy20_1.png",
+        "enemy20_2.png",
+        "enemy20_3.png"
+      ],
+      "dead": [
+        "enemy20_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_boar02": {
+    "controller": "boar02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy28_4.png",
+        "enemy28_5.png",
+        "enemy28_5.png"
+      ],
+      "run": [
+        "enemy28_0.png",
+        "enemy28_1.png",
+        "enemy28_2.png",
+        "enemy28_3.png"
+      ],
+      "dead": [
+        "enemy28_6.png"
+      ],
+      "atk": [
+        "enemy28_0.png",
+        "enemy28_1.png",
+        "enemy28_2.png",
+        "enemy28_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_boar03": {
+    "controller": "shark",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy45_0.png",
+        "enemy45_1.png",
+        "enemy45_2.png",
+        "enemy45_3.png"
+      ],
+      "run": [
+        "enemy45_4.png",
+        "enemy45_5.png",
+        "enemy45_6.png",
+        "enemy45_7.png"
+      ],
+      "dead": [
+        "enemy45_8.png"
+      ],
+      "atk": [
+        "enemy45_1.png",
+        "enemy45_2.png",
+        "enemy45_1.png",
+        "enemy45_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc01": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc02": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc03": {
+    "controller": "orc01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy22_4.png",
+        "enemy22_5.png",
+        "enemy22_6.png",
+        "enemy22_7.png"
+      ],
+      "run": [
+        "enemy22_0.png",
+        "enemy22_1.png",
+        "enemy22_2.png",
+        "enemy22_3.png"
+      ],
+      "dead": [
+        "enemy22_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc04": {
+    "controller": "orc02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy23_4.png",
+        "enemy23_5.png",
+        "enemy23_6.png",
+        "enemy23_7.png"
+      ],
+      "run": [
+        "enemy23_0.png",
+        "enemy23_1.png",
+        "enemy23_2.png",
+        "enemy23_3.png"
+      ],
+      "dead": [
+        "enemy23_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc06": {
+    "controller": "orc02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy23_4.png",
+        "enemy23_5.png",
+        "enemy23_6.png",
+        "enemy23_7.png"
+      ],
+      "run": [
+        "enemy23_0.png",
+        "enemy23_1.png",
+        "enemy23_2.png",
+        "enemy23_3.png"
+      ],
+      "dead": [
+        "enemy23_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc07": {
+    "controller": "orc03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy26_4.png",
+        "enemy26_5.png",
+        "enemy26_6.png",
+        "enemy26_7.png"
+      ],
+      "run": [
+        "enemy26_0.png",
+        "enemy26_1.png",
+        "enemy26_2.png",
+        "enemy26_3.png"
+      ],
+      "dead": [
+        "enemy26_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_orc08": {
+    "controller": "orc04",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy25_4.png",
+        "enemy25_5.png",
+        "enemy25_6.png",
+        "enemy25_7.png"
+      ],
+      "run": [
+        "enemy25_0.png",
+        "enemy25_1.png",
+        "enemy25_2.png",
+        "enemy25_3.png"
+      ],
+      "dead": [
+        "enemy25_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_succulent": {
+    "controller": "succulent",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy20_4.png",
+        "enemy20_5.png",
+        "enemy20_5.png"
+      ],
+      "atk": [
+        "enemy20_0.png",
+        "enemy20_1.png",
+        "enemy20_2.png",
+        "enemy20_3.png"
+      ],
+      "dead": [
+        "enemy20_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "boss09": {
+    "controller": "boss09",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss09_4.png",
+        "boss09_5.png",
+        "boss09_6.png",
+        "boss09_7.png"
+      ],
+      "run": [
+        "boss09_0.png",
+        "boss09_1.png",
+        "boss09_2.png",
+        "boss09_3.png",
+        "boss09_0.png",
+        "boss09_1.png",
+        "boss09_2.png",
+        "boss09_3.png"
+      ],
+      "dead": [
+        "boss09_8.png"
+      ],
+      "atk1": [
+        "boss09_11.png",
+        "boss09_12.png",
+        "boss09_13.png",
+        "boss09_12.png",
+        "boss09_14.png",
+        "boss09_4.png"
+      ],
+      "atk2": [
+        "boss09_1.png",
+        "boss09_11.png",
+        "boss09_11.png",
+        "boss09_12.png",
+        "boss09_13.png",
+        "boss09_13.png",
+        "boss09_12.png",
+        "boss09_5.png"
+      ],
+      "atk3": [
+        "boss09_4.png",
+        "boss09_17.png",
+        "boss09_11.png",
+        "boss09_14.png",
+        "boss09_12.png",
+        "boss09_4.png"
+      ],
+      "atk4": [
+        "boss09_11.png",
+        "boss09_12.png",
+        "boss09_17.png",
+        "boss09_12.png",
+        "boss09_14.png",
+        "boss09_4.png"
+      ],
+      "atk5": [
+        "boss09_1.png",
+        "boss09_11.png",
+        "boss09_11.png",
+        "boss09_12.png",
+        "boss09_13.png",
+        "boss09_13.png",
+        "boss09_12.png",
+        "boss09_5.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss10": {
+    "controller": "boss10",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "dead": [
+        "boss10_6.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ]
+    }
+  },
+  "boss13": {
+    "controller": "boss13",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss13_4.png",
+        "boss13_5.png",
+        "boss13_6.png",
+        "boss13_7.png"
+      ],
+      "run": [
+        "boss13_0.png",
+        "boss13_1.png",
+        "boss13_2.png",
+        "boss13_3.png",
+        "boss13_0.png",
+        "boss13_1.png",
+        "boss13_2.png",
+        "boss13_3.png"
+      ],
+      "dead": [
+        "boss13_8.png"
+      ],
+      "atk4": [
+        "boss13_5.png",
+        "boss13_5.png",
+        "boss13_7.png",
+        "boss13_5.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "e_crystal": {
+    "controller": "e_crystal",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "atk": [
+        "enemy36_1.png",
+        "enemy36_0.png"
+      ],
+      "dead": [
+        "enemy36_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner01": {
+    "controller": "miner01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy31_4.png",
+        "enemy31_5.png"
+      ],
+      "enemy01_run": [
+        "enemy31_0.png",
+        "enemy31_1.png",
+        "enemy31_2.png",
+        "enemy31_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy31_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner02": {
+    "controller": "miner01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy31_4.png",
+        "enemy31_5.png"
+      ],
+      "enemy01_run": [
+        "enemy31_0.png",
+        "enemy31_1.png",
+        "enemy31_2.png",
+        "enemy31_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy31_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner03": {
+    "controller": "miner02",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy33_4.png",
+        "enemy33_5.png"
+      ],
+      "enemy01_run": [
+        "enemy33_4.png",
+        "enemy33_5.png"
+      ],
+      "enemy01_dead": [
+        "enemy33_7.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner04": {
+    "controller": "miner03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy32_4.png",
+        "enemy32_5.png"
+      ],
+      "run": [
+        "enemy32_0.png",
+        "enemy32_1.png",
+        "enemy32_2.png",
+        "enemy32_3.png"
+      ],
+      "dead": [
+        "enemy32_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner05": {
+    "controller": "miner03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy32_4.png",
+        "enemy32_5.png"
+      ],
+      "run": [
+        "enemy32_0.png",
+        "enemy32_1.png",
+        "enemy32_2.png",
+        "enemy32_3.png"
+      ],
+      "dead": [
+        "enemy32_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_miner06": {
+    "controller": "miner04",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy33_1.png",
+        "enemy33_2.png"
+      ],
+      "enemy01_run": [
+        "enemy33_1.png",
+        "enemy33_2.png"
+      ],
+      "enemy01_dead": [
+        "enemy33_0.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_spider03": {
+    "controller": "spider03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy30_4.png",
+        "enemy30_5.png"
+      ],
+      "run": [
+        "enemy30_0.png",
+        "enemy30_1.png",
+        "enemy30_2.png",
+        "enemy30_3.png"
+      ],
+      "dead": [
+        "enemy30_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_spider04": {
+    "controller": "spider04",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy37_4.png",
+        "enemy37_5.png"
+      ],
+      "run": [
+        "enemy37_0.png",
+        "enemy37_1.png",
+        "enemy37_2.png",
+        "enemy37_3.png"
+      ],
+      "dead": [
+        "enemy37_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_yeti01": {
+    "controller": "yeti01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy34_4.png",
+        "enemy34_5.png",
+        "enemy34_6.png",
+        "enemy34_7.png"
+      ],
+      "run": [
+        "enemy34_0.png",
+        "enemy34_1.png",
+        "enemy34_2.png",
+        "enemy34_3.png"
+      ],
+      "dead": [
+        "enemy34_8.png"
+      ],
+      "atk": [
+        "enemy34_2.png",
+        "enemy34_0.png",
+        "enemy34_1.png",
+        "enemy34_1.png",
+        "enemy34_2.png",
+        "enemy34_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_yeti02": {
+    "controller": "yeti02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy35_4.png",
+        "enemy35_5.png",
+        "enemy35_6.png",
+        "enemy35_7.png"
+      ],
+      "run": [
+        "enemy35_0.png",
+        "enemy35_1.png",
+        "enemy35_2.png",
+        "enemy35_3.png"
+      ],
+      "dead": [
+        "enemy35_8.png"
+      ],
+      "atk": [
+        "enemy35_4.png",
+        "enemy35_3.png",
+        "enemy35_5.png",
+        "enemy35_5.png",
+        "enemy35_0.png",
+        "enemy35_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_crystal": {
+    "controller": "e_crystal",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "atk": [
+        "enemy36_1.png",
+        "enemy36_0.png"
+      ],
+      "dead": [
+        "enemy36_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner01": {
+    "controller": "miner01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy31_4.png",
+        "enemy31_5.png"
+      ],
+      "enemy01_run": [
+        "enemy31_0.png",
+        "enemy31_1.png",
+        "enemy31_2.png",
+        "enemy31_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy31_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner02": {
+    "controller": "miner01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy31_4.png",
+        "enemy31_5.png"
+      ],
+      "enemy01_run": [
+        "enemy31_0.png",
+        "enemy31_1.png",
+        "enemy31_2.png",
+        "enemy31_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy31_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner03": {
+    "controller": "miner02",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy33_4.png",
+        "enemy33_5.png"
+      ],
+      "enemy01_run": [
+        "enemy33_4.png",
+        "enemy33_5.png"
+      ],
+      "enemy01_dead": [
+        "enemy33_7.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner04": {
+    "controller": "miner03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy32_4.png",
+        "enemy32_5.png"
+      ],
+      "run": [
+        "enemy32_0.png",
+        "enemy32_1.png",
+        "enemy32_2.png",
+        "enemy32_3.png"
+      ],
+      "dead": [
+        "enemy32_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner05": {
+    "controller": "miner03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy32_4.png",
+        "enemy32_5.png"
+      ],
+      "run": [
+        "enemy32_0.png",
+        "enemy32_1.png",
+        "enemy32_2.png",
+        "enemy32_3.png"
+      ],
+      "dead": [
+        "enemy32_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_miner06": {
+    "controller": "miner04",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy33_1.png",
+        "enemy33_2.png"
+      ],
+      "enemy01_run": [
+        "enemy33_1.png",
+        "enemy33_2.png"
+      ],
+      "enemy01_dead": [
+        "enemy33_0.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_spider03": {
+    "controller": "spider03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy30_4.png",
+        "enemy30_5.png"
+      ],
+      "run": [
+        "enemy30_0.png",
+        "enemy30_1.png",
+        "enemy30_2.png",
+        "enemy30_3.png"
+      ],
+      "dead": [
+        "enemy30_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_spider04": {
+    "controller": "spider04",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy37_4.png",
+        "enemy37_5.png"
+      ],
+      "run": [
+        "enemy37_0.png",
+        "enemy37_1.png",
+        "enemy37_2.png",
+        "enemy37_3.png"
+      ],
+      "dead": [
+        "enemy37_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_yeti01": {
+    "controller": "yeti01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy34_4.png",
+        "enemy34_5.png",
+        "enemy34_6.png",
+        "enemy34_7.png"
+      ],
+      "run": [
+        "enemy34_0.png",
+        "enemy34_1.png",
+        "enemy34_2.png",
+        "enemy34_3.png"
+      ],
+      "dead": [
+        "enemy34_8.png"
+      ],
+      "atk": [
+        "enemy34_2.png",
+        "enemy34_0.png",
+        "enemy34_1.png",
+        "enemy34_1.png",
+        "enemy34_2.png",
+        "enemy34_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_yeti02": {
+    "controller": "yeti02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy35_4.png",
+        "enemy35_5.png",
+        "enemy35_6.png",
+        "enemy35_7.png"
+      ],
+      "run": [
+        "enemy35_0.png",
+        "enemy35_1.png",
+        "enemy35_2.png",
+        "enemy35_3.png"
+      ],
+      "dead": [
+        "enemy35_8.png"
+      ],
+      "atk": [
+        "enemy35_4.png",
+        "enemy35_3.png",
+        "enemy35_5.png",
+        "enemy35_5.png",
+        "enemy35_0.png",
+        "enemy35_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "boss01": {
+    "controller": "boss01",
+    "default": "ide",
+    "sample_rate": 12,
+    "states": {
+      "ide": [
+        "boss01_4.png",
+        "boss01_5.png",
+        "boss01_4.png"
+      ],
+      "run": [
+        "boss01_0.png",
+        "boss01_1.png",
+        "boss01_2.png",
+        "boss01_3.png",
+        "boss01_0.png"
+      ],
+      "dead": [
+        "boss01_6.png"
+      ],
+      "atk1": [
+        "boss01_4.png",
+        "boss01_0.png",
+        "boss01_0.png",
+        "boss01_1.png",
+        "boss01_1.png",
+        "boss01_4.png",
+        "boss01_4.png"
+      ],
+      "atk2": [
+        "boss01_4.png",
+        "boss01_0.png",
+        "boss01_0.png",
+        "boss01_4.png"
+      ],
+      "atk3": [
+        "boss01_4.png",
+        "boss01_0.png",
+        "boss01_4.png"
+      ],
+      "atk4": [
+        "boss01_4.png",
+        "boss01_0.png",
+        "boss01_0.png",
+        "boss01_1.png",
+        "boss01_0.png",
+        "boss01_0.png",
+        "boss01_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss02": {
+    "controller": "boss02",
+    "default": "ide",
+    "sample_rate": 12,
+    "states": {
+      "ide": [
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_4.png"
+      ],
+      "run": [
+        "boss02_0.png",
+        "boss02_1.png",
+        "boss02_2.png",
+        "boss02_3.png",
+        "boss02_0.png"
+      ],
+      "dead": [
+        "boss02_8.png"
+      ],
+      "atk1": [
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_4.png",
+        "boss02_5.png"
+      ],
+      "atk3": [
+        "boss02_5.png",
+        "boss02_4.png",
+        "boss02_7.png",
+        "boss02_5.png",
+        "boss02_6.png",
+        "boss02_7.png",
+        "boss02_4.png"
+      ],
+      "atk4": [
+        "boss02_4.png",
+        "boss02_5.png",
+        "boss02_5.png",
+        "boss02_5.png",
+        "boss02_5.png",
+        "boss02_5.png",
+        "boss02_4.png",
+        "boss02_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "e_giant": {
+    "controller": "giant01",
+    "default": "giant_ide",
+    "sample_rate": 8,
+    "states": {
+      "giant_ide": [
+        "enemy06_4.png",
+        "enemy06_5.png"
+      ],
+      "giant_run": [
+        "enemy06_0.png",
+        "enemy06_1.png",
+        "enemy06_2.png",
+        "enemy06_3.png",
+        "enemy06_0.png"
+      ],
+      "dead": [
+        "enemy06_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight01": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight02": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight03": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight04": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight05": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_knight06": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_wizard01": {
+    "controller": "wizard01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy05_0.png",
+        "enemy05_5.png"
+      ],
+      "run": [
+        "enemy05_0.png",
+        "enemy05_1.png",
+        "enemy05_2.png",
+        "enemy05_3.png"
+      ],
+      "dead": [
+        "enemy05_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_giant": {
+    "controller": "giant01",
+    "default": "giant_ide",
+    "sample_rate": 8,
+    "states": {
+      "giant_ide": [
+        "enemy06_4.png",
+        "enemy06_5.png"
+      ],
+      "giant_run": [
+        "enemy06_0.png",
+        "enemy06_1.png",
+        "enemy06_2.png",
+        "enemy06_3.png",
+        "enemy06_0.png"
+      ],
+      "dead": [
+        "enemy06_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight01": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight02": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight03": {
+    "controller": "knight01",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy03_4.png",
+        "enemy03_5.png"
+      ],
+      "enemy01_run": [
+        "enemy03_0.png",
+        "enemy03_1.png",
+        "enemy03_2.png",
+        "enemy03_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy03_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight04": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight05": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_knight06": {
+    "controller": "knight02",
+    "default": "enemy02_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy02_ide": [
+        "enemy04_4.png",
+        "enemy04_5.png"
+      ],
+      "enemy02_run": [
+        "enemy04_0.png",
+        "enemy04_1.png",
+        "enemy04_2.png",
+        "enemy04_3.png"
+      ],
+      "enemy02_dead": [
+        "enemy04_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_wizard": {
+    "controller": "wizard01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy05_0.png",
+        "enemy05_5.png"
+      ],
+      "run": [
+        "enemy05_0.png",
+        "enemy05_1.png",
+        "enemy05_2.png",
+        "enemy05_3.png"
+      ],
+      "dead": [
+        "enemy05_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "boss03": {
+    "controller": "boss03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss03_4.png",
+        "boss03_5.png",
+        "boss03_6.png",
+        "boss03_7.png"
+      ],
+      "run": [
+        "boss03_0.png",
+        "boss03_1.png",
+        "boss03_2.png",
+        "boss03_3.png"
+      ],
+      "dead": [
+        "boss03_8.png"
+      ],
+      "atk1": [
+        "boss03_4.png",
+        "boss03_1.png",
+        "boss03_2.png",
+        "boss03_3.png",
+        "boss03_4.png",
+        "boss03_5.png"
+      ],
+      "atk2": [
+        "boss03_0.png",
+        "boss03_1.png",
+        "boss03_3.png",
+        "boss03_1.png",
+        "boss03_0.png"
+      ],
+      "atk3": [
+        "boss03_4.png",
+        "boss03_5.png",
+        "boss03_6.png",
+        "boss03_7.png",
+        "boss03_0.png",
+        "boss03_1.png",
+        "boss03_3.png",
+        "boss03_4.png",
+        "boss03_5.png"
+      ],
+      "atk4": [
+        "boss03_4.png",
+        "boss03_5.png",
+        "boss03_6.png",
+        "boss03_7.png",
+        "boss03_1.png",
+        "boss03_2.png",
+        "boss03_4.png"
+      ],
+      "atk5": [
+        "boss03_4.png",
+        "boss03_3.png",
+        "boss03_1.png",
+        "boss03_3.png",
+        "boss03_4.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss04": {
+    "controller": "boss04",
+    "default": "ide",
+    "sample_rate": 12,
+    "states": {
+      "ide": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png"
+      ],
+      "run": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png"
+      ],
+      "atk1": [
+        "boss04_5.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_6.png",
+        "boss04_5.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_6.png",
+        "boss04_5.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_6.png",
+        "boss04_5.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_8.png"
+      ],
+      "atk2": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png"
+      ],
+      "atk3": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png"
+      ],
+      "atk4": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png"
+      ],
+      "atk5": [
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png",
+        "boss04_5.png",
+        "boss04_6.png",
+        "boss04_7.png",
+        "boss04_8.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ]
+    }
+  },
+  "e_hammer": {
+    "controller": "hammer",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy16_4.png",
+        "enemy16_5.png",
+        "enemy16_6.png",
+        "enemy16_7.png"
+      ],
+      "run": [
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png"
+      ],
+      "dead": [
+        "enemy16_8.png"
+      ],
+      "atk2": [
+        "enemy16_4.png",
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png",
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png",
+        "enemy16_0.png",
+        "enemy16_2.png",
+        "enemy16_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_shaman": {
+    "controller": "shaman",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy15_4.png",
+        "enemy15_5.png"
+      ],
+      "run": [
+        "enemy15_0.png",
+        "enemy15_1.png",
+        "enemy15_2.png",
+        "enemy15_3.png"
+      ],
+      "dead": [
+        "enemy15_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton01": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton02": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton02_temp": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton03": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton04": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton05": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_skeleton06": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_spider01": {
+    "controller": "spider01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy09_4.png",
+        "enemy09_5.png",
+        "enemy09_5.png"
+      ],
+      "run": [
+        "enemy09_0.png",
+        "enemy09_1.png",
+        "enemy09_2.png",
+        "enemy09_3.png"
+      ],
+      "dead": [
+        "enemy09_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_spider02": {
+    "controller": "spider02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy09_11.png",
+        "enemy09_12.png",
+        "enemy09_12.png"
+      ],
+      "run": [
+        "enemy09_7.png",
+        "enemy09_8.png",
+        "enemy09_9.png",
+        "enemy09_10.png"
+      ],
+      "dead": [
+        "enemy09_13.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_hammer": {
+    "controller": "hammer",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy16_4.png",
+        "enemy16_5.png",
+        "enemy16_6.png",
+        "enemy16_7.png"
+      ],
+      "run": [
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png"
+      ],
+      "dead": [
+        "enemy16_8.png"
+      ],
+      "atk2": [
+        "enemy16_4.png",
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png",
+        "enemy16_0.png",
+        "enemy16_1.png",
+        "enemy16_2.png",
+        "enemy16_3.png",
+        "enemy16_0.png",
+        "enemy16_2.png",
+        "enemy16_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_shaman": {
+    "controller": "shaman",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy15_4.png",
+        "enemy15_5.png"
+      ],
+      "run": [
+        "enemy15_0.png",
+        "enemy15_1.png",
+        "enemy15_2.png",
+        "enemy15_3.png"
+      ],
+      "dead": [
+        "enemy15_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton01": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton02": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton03": {
+    "controller": "skeleton01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy07_4.png",
+        "enemy07_5.png",
+        "enemy07_6.png",
+        "enemy07_7.png"
+      ],
+      "run": [
+        "enemy07_0.png",
+        "enemy07_1.png",
+        "enemy07_2.png",
+        "enemy07_3.png"
+      ],
+      "dead": [
+        "enemy07_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton04": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton05": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_skeleton06": {
+    "controller": "skeleton02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy08_4.png",
+        "enemy08_5.png",
+        "enemy08_6.png",
+        "enemy08_7.png"
+      ],
+      "run": [
+        "enemy08_0.png",
+        "enemy08_1.png",
+        "enemy08_2.png",
+        "enemy08_3.png"
+      ],
+      "dead": [
+        "enemy08_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_spider01": {
+    "controller": "spider01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy09_4.png",
+        "enemy09_5.png",
+        "enemy09_5.png"
+      ],
+      "run": [
+        "enemy09_0.png",
+        "enemy09_1.png",
+        "enemy09_2.png",
+        "enemy09_3.png"
+      ],
+      "dead": [
+        "enemy09_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_spider02": {
+    "controller": "spider02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy09_11.png",
+        "enemy09_12.png",
+        "enemy09_12.png"
+      ],
+      "run": [
+        "enemy09_7.png",
+        "enemy09_8.png",
+        "enemy09_9.png",
+        "enemy09_10.png"
+      ],
+      "dead": [
+        "enemy09_13.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "boss05": {
+    "controller": "boss05",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss05_4.png",
+        "boss05_5.png",
+        "boss05_4.png"
+      ],
+      "run": [
+        "boss05_0.png",
+        "boss05_1.png",
+        "boss05_2.png",
+        "boss05_3.png"
+      ],
+      "dead": [
+        "boss05_6.png"
+      ],
+      "atk1": [
+        "boss05_11.png",
+        "boss05_10.png",
+        "boss05_9.png",
+        "boss05_8.png",
+        "boss05_7.png",
+        "boss05_5.png"
+      ],
+      "atk2": [
+        "boss05_9.png",
+        "boss05_8.png",
+        "boss05_9.png",
+        "boss05_10.png",
+        "boss05_11.png",
+        "boss05_10.png"
+      ],
+      "atk3": [
+        "boss05_11.png",
+        "boss05_10.png",
+        "boss05_9.png",
+        "boss05_8.png",
+        "boss05_7.png",
+        "boss05_4.png",
+        "boss05_7.png",
+        "boss05_11.png",
+        "boss05_6.png",
+        "boss05_6.png"
+      ],
+      "atk4": [
+        "boss05_11.png",
+        "boss05_8.png",
+        "boss05_9.png",
+        "boss05_10.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss06": {
+    "controller": "boss06",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "e_alien01": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_alien02": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_alien03": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_golem01": {
+    "controller": "golem",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy11_4.png",
+        "enemy11_5.png"
+      ],
+      "run": [
+        "enemy11_0.png",
+        "enemy11_1.png",
+        "enemy11_2.png",
+        "enemy11_3.png"
+      ],
+      "dead": [
+        "enemy11_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_golem02": {
+    "controller": "golem",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy11_4.png",
+        "enemy11_5.png"
+      ],
+      "run": [
+        "enemy11_0.png",
+        "enemy11_1.png",
+        "enemy11_2.png",
+        "enemy11_3.png"
+      ],
+      "dead": [
+        "enemy11_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_tentacle": {
+    "controller": "tentacle",
+    "default": "show",
+    "sample_rate": 8,
+    "states": {
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_tentacle_temp": {
+    "controller": "tentacle",
+    "default": "show",
+    "sample_rate": 8,
+    "states": {
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_ufo": {
+    "controller": "ufo",
+    "default": "ide",
+    "sample_rate": 60,
+    "states": {
+      "ide": [
+        "enemy10_7.png"
+      ],
+      "dead": [
+        "enemy10_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_worm01": {
+    "controller": "worm",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy12_4.png",
+        "enemy12_5.png"
+      ],
+      "run": [
+        "enemy12_0.png",
+        "enemy12_1.png",
+        "enemy12_2.png",
+        "enemy12_3.png"
+      ],
+      "dead": [
+        "enemy12_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_alien01": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_alien02": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_alien03": {
+    "controller": "alien01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy10_4.png",
+        "enemy10_5.png"
+      ],
+      "run": [
+        "enemy10_0.png",
+        "enemy10_1.png",
+        "enemy10_2.png",
+        "enemy10_3.png"
+      ],
+      "dead": [
+        "enemy10_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_golem01": {
+    "controller": "golem",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy11_4.png",
+        "enemy11_5.png"
+      ],
+      "run": [
+        "enemy11_0.png",
+        "enemy11_1.png",
+        "enemy11_2.png",
+        "enemy11_3.png"
+      ],
+      "dead": [
+        "enemy11_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_golem02": {
+    "controller": "golem",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy11_4.png",
+        "enemy11_5.png"
+      ],
+      "run": [
+        "enemy11_0.png",
+        "enemy11_1.png",
+        "enemy11_2.png",
+        "enemy11_3.png"
+      ],
+      "dead": [
+        "enemy11_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_ufo": {
+    "controller": "ufo",
+    "default": "ide",
+    "sample_rate": 60,
+    "states": {
+      "ide": [
+        "enemy10_7.png"
+      ],
+      "dead": [
+        "enemy10_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_worm": {
+    "controller": "worm",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy12_4.png",
+        "enemy12_5.png"
+      ],
+      "run": [
+        "enemy12_0.png",
+        "enemy12_1.png",
+        "enemy12_2.png",
+        "enemy12_3.png"
+      ],
+      "dead": [
+        "enemy12_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "boss11": {
+    "controller": "boss11",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss11_7.png"
+      ],
+      "run": [
+        "boss11_7.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png",
+        "boss11_7.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png"
+      ],
+      "dead": [
+        "boss11_5.png"
+      ],
+      "atk1": [
+        "boss11_1.png",
+        "boss11_2.png",
+        "boss11_2.png",
+        "boss11_0.png",
+        "boss11_0.png"
+      ],
+      "atk2": [
+        "boss11_9.png",
+        "boss11_10.png",
+        "boss11_7.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png"
+      ],
+      "atk3": [
+        "boss11_7.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png",
+        "boss11_8.png",
+        "boss11_9.png",
+        "boss11_10.png"
+      ],
+      "ide_down": [
+        "boss11_11.png",
+        "boss11_12.png",
+        "boss11_13.png",
+        "boss11_14.png"
+      ],
+      "out": [
+        "boss11_7.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss12_1": {
+    "controller": "boss12_1",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss12_1_0.png",
+        "boss12_1_1.png",
+        "boss12_1_2.png",
+        "boss12_1_3.png"
+      ],
+      "dead": [
+        "boss12_1_12.png"
+      ],
+      "atk1": [
+        "boss12_1_4.png",
+        "boss12_1_5.png",
+        "boss12_1_5.png",
+        "boss12_1_7.png",
+        "boss12_1_8.png",
+        "boss12_1_9.png",
+        "boss12_1_2.png"
+      ],
+      "atk2": [
+        "boss12_1_4.png",
+        "boss12_1_5.png",
+        "boss12_1_6.png",
+        "boss12_1_7.png",
+        "boss12_1_8.png",
+        "boss12_1_9.png",
+        "boss12_1_6.png",
+        "boss12_1_7.png",
+        "boss12_1_8.png",
+        "boss12_1_9.png",
+        "boss12_1_6.png",
+        "boss12_1_7.png",
+        "boss12_1_8.png",
+        "boss12_1_9.png",
+        "boss12_1_6.png",
+        "boss12_1_7.png",
+        "boss12_1_8.png",
+        "boss12_1_9.png",
+        "boss12_1_2.png"
+      ],
+      "atk3": [
+        "boss12_1_0.png",
+        "boss12_1_1.png",
+        "boss12_1_2.png",
+        "boss12_1_3.png",
+        "boss12_1_2.png"
+      ],
+      "atk4": [
+        "boss12_1_0.png",
+        "boss12_1_1.png",
+        "boss12_1_3.png",
+        "boss12_1_8.png",
+        "boss12_1_1.png",
+        "boss12_1_2.png",
+        "boss12_1_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "boss12_2": {
+    "controller": "boss12_2",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "boss12_2_0.png",
+        "boss12_2_1.png",
+        "boss12_2_2.png",
+        "boss12_2_3.png"
+      ],
+      "dead": [
+        "boss12_2_12.png"
+      ],
+      "atk1": [
+        "boss12_2_4.png",
+        "boss12_2_5.png",
+        "boss12_2_5.png",
+        "boss12_2_6.png",
+        "boss12_2_8.png",
+        "boss12_2_9.png",
+        "boss12_2_10.png"
+      ],
+      "atk2": [
+        "boss12_2_4.png",
+        "boss12_2_5.png",
+        "boss12_2_6.png",
+        "boss12_2_7.png",
+        "boss12_2_8.png",
+        "boss12_2_9.png",
+        "boss12_2_6.png",
+        "boss12_2_7.png",
+        "boss12_2_8.png",
+        "boss12_2_9.png",
+        "boss12_2_6.png",
+        "boss12_2_7.png",
+        "boss12_2_8.png",
+        "boss12_2_9.png",
+        "boss12_2_6.png",
+        "boss12_2_7.png",
+        "boss12_2_8.png",
+        "boss12_2_9.png",
+        "boss12_2_2.png"
+      ],
+      "atk3": [
+        "boss12_2_0.png",
+        "boss12_2_1.png",
+        "boss12_2_2.png",
+        "boss12_2_3.png",
+        "boss12_2_2.png"
+      ],
+      "atk4": [
+        "boss12_2_0.png",
+        "boss12_2_1.png",
+        "boss12_2_3.png",
+        "boss12_2_8.png",
+        "boss12_2_4.png",
+        "boss12_2_2.png",
+        "boss12_2_3.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ],
+      "char_angry": [
+        "biaoqing_0.png",
+        "biaoqing_1.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png",
+        "biaoqing_2.png",
+        "biaoqing_3.png"
+      ]
+    }
+  },
+  "e_creeper": {
+    "controller": "creeper",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy13_4.png",
+        "enemy13_5.png"
+      ],
+      "run": [
+        "enemy13_0.png",
+        "enemy13_1.png",
+        "enemy13_2.png",
+        "enemy13_3.png"
+      ],
+      "dead": [
+        "enemy13_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_creeper_fly": {
+    "controller": "creeper_fly",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy14_3.png",
+        "enemy14_0.png",
+        "enemy14_1.png",
+        "enemy14_2.png"
+      ],
+      "dead": [
+        "enemy14_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_fireknight01": {
+    "controller": "knight03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy43_4.png",
+        "enemy43_5.png"
+      ],
+      "run": [
+        "enemy43_0.png",
+        "enemy43_1.png",
+        "enemy43_2.png",
+        "enemy43_3.png"
+      ],
+      "dead": [
+        "enemy43_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_fireknight02": {
+    "controller": "knight03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy43_4.png",
+        "enemy43_5.png"
+      ],
+      "run": [
+        "enemy43_0.png",
+        "enemy43_1.png",
+        "enemy43_2.png",
+        "enemy43_3.png"
+      ],
+      "dead": [
+        "enemy43_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_fireknight03": {
+    "controller": "knight04",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png"
+      ],
+      "enemy01_run": [
+        "enemy44_0.png",
+        "enemy44_1.png",
+        "enemy44_2.png",
+        "enemy44_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy44_8.png"
+      ],
+      "atk": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png"
+      ],
+      "atk2": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_0.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mosquito": {
+    "controller": "mosquito",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy38_0.png",
+        "enemy38_1.png",
+        "enemy38_2.png",
+        "enemy38_3.png"
+      ],
+      "dead": [
+        "enemy38_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mummy01": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mummy02": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mummy03": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mummy04": {
+    "controller": "e_mummy02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy40_4.png",
+        "enemy40_5.png"
+      ],
+      "run": [
+        "enemy40_0.png",
+        "enemy40_1.png",
+        "enemy40_2.png",
+        "enemy40_3.png"
+      ],
+      "dead": [
+        "enemy40_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_mummy05": {
+    "controller": "e_mummy02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy40_4.png",
+        "enemy40_5.png"
+      ],
+      "run": [
+        "enemy40_0.png",
+        "enemy40_1.png",
+        "enemy40_2.png",
+        "enemy40_3.png"
+      ],
+      "dead": [
+        "enemy40_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_spider05": {
+    "controller": "spider05",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy41_4.png",
+        "enemy41_5.png",
+        "enemy41_6.png",
+        "enemy41_7.png"
+      ],
+      "run": [
+        "enemy41_0.png",
+        "enemy41_1.png",
+        "enemy41_2.png",
+        "enemy41_3.png"
+      ],
+      "dead": [
+        "enemy41_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_tortoise": {
+    "controller": "e_tortoise",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy39_4.png",
+        "enemy39_7.png"
+      ],
+      "run": [
+        "enemy39_0.png",
+        "enemy39_1.png",
+        "enemy39_2.png",
+        "enemy39_3.png"
+      ],
+      "dead": [
+        "enemy39_8.png"
+      ],
+      "atk": [
+        "enemy39_5.png",
+        "enemy39_6.png",
+        "enemy39_5.png",
+        "enemy39_4.png",
+        "enemy39_7.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_creeper": {
+    "controller": "creeper",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy13_4.png",
+        "enemy13_5.png"
+      ],
+      "run": [
+        "enemy13_0.png",
+        "enemy13_1.png",
+        "enemy13_2.png",
+        "enemy13_3.png"
+      ],
+      "dead": [
+        "enemy13_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_creeper_fly": {
+    "controller": "creeper_fly",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy14_3.png",
+        "enemy14_0.png",
+        "enemy14_1.png",
+        "enemy14_2.png"
+      ],
+      "dead": [
+        "enemy14_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_fireknight": {
+    "controller": "knight03",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy43_4.png",
+        "enemy43_5.png"
+      ],
+      "run": [
+        "enemy43_0.png",
+        "enemy43_1.png",
+        "enemy43_2.png",
+        "enemy43_3.png"
+      ],
+      "dead": [
+        "enemy43_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_fireknight2": {
+    "controller": "knight04",
+    "default": "enemy01_ide",
+    "sample_rate": 8,
+    "states": {
+      "enemy01_ide": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png"
+      ],
+      "enemy01_run": [
+        "enemy44_0.png",
+        "enemy44_1.png",
+        "enemy44_2.png",
+        "enemy44_3.png"
+      ],
+      "enemy01_dead": [
+        "enemy44_8.png"
+      ],
+      "atk": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png"
+      ],
+      "atk2": [
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_0.png",
+        "enemy44_5.png",
+        "enemy44_6.png",
+        "enemy44_7.png",
+        "enemy44_4.png",
+        "enemy44_5.png",
+        "enemy44_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mosquito": {
+    "controller": "mosquito",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy38_0.png",
+        "enemy38_1.png",
+        "enemy38_2.png",
+        "enemy38_3.png"
+      ],
+      "dead": [
+        "enemy38_4.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mummy01": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mummy02": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mummy03": {
+    "controller": "e_mummy01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy42_4.png",
+        "enemy42_5.png"
+      ],
+      "run": [
+        "enemy42_0.png",
+        "enemy42_1.png",
+        "enemy42_2.png",
+        "enemy42_3.png"
+      ],
+      "dead": [
+        "enemy42_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mummy04": {
+    "controller": "e_mummy02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy40_4.png",
+        "enemy40_5.png"
+      ],
+      "run": [
+        "enemy40_0.png",
+        "enemy40_1.png",
+        "enemy40_2.png",
+        "enemy40_3.png"
+      ],
+      "dead": [
+        "enemy40_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_mummy05": {
+    "controller": "e_mummy02",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy40_4.png",
+        "enemy40_5.png"
+      ],
+      "run": [
+        "enemy40_0.png",
+        "enemy40_1.png",
+        "enemy40_2.png",
+        "enemy40_3.png"
+      ],
+      "dead": [
+        "enemy40_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_spider05": {
+    "controller": "spider05",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy41_4.png",
+        "enemy41_5.png",
+        "enemy41_6.png",
+        "enemy41_7.png"
+      ],
+      "run": [
+        "enemy41_0.png",
+        "enemy41_1.png",
+        "enemy41_2.png",
+        "enemy41_3.png"
+      ],
+      "dead": [
+        "enemy41_8.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_tortoise": {
+    "controller": "e_tortoise",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy39_4.png",
+        "enemy39_7.png"
+      ],
+      "run": [
+        "enemy39_0.png",
+        "enemy39_1.png",
+        "enemy39_2.png",
+        "enemy39_3.png"
+      ],
+      "dead": [
+        "enemy39_8.png"
+      ],
+      "atk": [
+        "enemy39_5.png",
+        "enemy39_6.png",
+        "enemy39_5.png",
+        "enemy39_4.png",
+        "enemy39_7.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_battery01": {
+    "controller": "battery01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "dead": [
+        "enemy02_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_chest1": {
+    "controller": "e_chest1",
+    "default": "e_chest_sleep",
+    "sample_rate": 8,
+    "states": {
+      "e_chest_sleep": [
+        "enemy18_15.png"
+      ],
+      "e_chest_ide": [
+        "enemy18_12.png",
+        "enemy18_13.png"
+      ],
+      "e_chest_run": [
+        "enemy18_8.png",
+        "enemy18_9.png",
+        "enemy18_10.png",
+        "enemy18_11.png"
+      ],
+      "e_chest_dead": [
+        "enemy18_14.png"
+      ],
+      "e_chest2_sleep": [
+        "enemy18_7.png"
+      ],
+      "e_chest2_ide": [
+        "enemy18_4.png",
+        "enemy18_5.png"
+      ],
+      "e_chest2_run": [
+        "enemy18_0.png",
+        "enemy18_1.png",
+        "enemy18_2.png",
+        "enemy18_3.png"
+      ],
+      "e_chest2_dead": [
+        "enemy18_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_chest2": {
+    "controller": "e_chest2",
+    "default": "e_chest_sleep",
+    "sample_rate": 8,
+    "states": {
+      "e_chest_sleep": [
+        "enemy18_7.png"
+      ],
+      "e_chest_ide": [
+        "enemy18_4.png",
+        "enemy18_5.png"
+      ],
+      "e_chest_run": [
+        "enemy18_0.png",
+        "enemy18_1.png",
+        "enemy18_2.png",
+        "enemy18_3.png"
+      ],
+      "e_chest_dead": [
+        "enemy18_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "e_slime01": {
+    "controller": "slime01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy01_4.png",
+        "enemy01_5.png"
+      ],
+      "run": [
+        "enemy01_0.png",
+        "enemy01_1.png",
+        "enemy01_2.png",
+        "enemy01_3.png"
+      ],
+      "dead": [
+        "enemy01_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_battery01": {
+    "controller": "battery01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "dead": [
+        "enemy02_2.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "ex_slime01": {
+    "controller": "slime01",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "enemy01_4.png",
+        "enemy01_5.png"
+      ],
+      "run": [
+        "enemy01_0.png",
+        "enemy01_1.png",
+        "enemy01_2.png",
+        "enemy01_3.png"
+      ],
+      "dead": [
+        "enemy01_6.png"
+      ],
+      "char_dizzy": [
+        "biaoqing_9.png",
+        "biaoqing_9.png"
+      ],
+      "char_tap_dead": [
+        "biaoqing_11.png"
+      ]
+    }
+  },
+  "c01": {
+    "controller": "char_0_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c01_4.png",
+        "c01_5.png",
+        "c01_6.png",
+        "c01_7.png"
+      ],
+      "run": [
+        "c01_0.png",
+        "c01_1.png",
+        "c01_2.png",
+        "c01_3.png"
+      ],
+      "dead": [
+        "c01_8.png"
+      ]
+    }
+  },
+  "c02": {
+    "controller": "char_1_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c02_4.png",
+        "c02_5.png",
+        "c02_6.png",
+        "c02_7.png"
+      ],
+      "run": [
+        "c02_0.png",
+        "c02_1.png",
+        "c02_2.png",
+        "c02_3.png"
+      ],
+      "dead": [
+        "c02_12.png"
+      ],
+      "skill": [
+        "c02_0.png",
+        "c02_8.png",
+        "c02_9.png",
+        "c02_10.png",
+        "c02_11.png",
+        "c02_2.png"
+      ]
+    }
+  },
+  "c03": {
+    "controller": "char_2_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c03_4.png",
+        "c03_5.png",
+        "c03_6.png",
+        "c03_7.png"
+      ],
+      "run": [
+        "c03_0.png",
+        "c03_1.png",
+        "c03_2.png",
+        "c03_3.png"
+      ],
+      "dead": [
+        "c03_8.png"
+      ]
+    }
+  },
+  "c04": {
+    "controller": "char_3_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c04_4.png",
+        "c04_5.png",
+        "c04_6.png",
+        "c04_7.png"
+      ],
+      "run": [
+        "c04_0.png",
+        "c04_1.png",
+        "c04_2.png",
+        "c04_3.png"
+      ],
+      "dead": [
+        "c04_8.png"
+      ]
+    }
+  },
+  "c05": {
+    "controller": "char_4_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c05_4.png",
+        "c05_5.png",
+        "c05_6.png",
+        "c05_7.png"
+      ],
+      "run": [
+        "c05_0.png",
+        "c05_1.png",
+        "c05_2.png",
+        "c05_3.png"
+      ],
+      "dead": [
+        "c05_8.png"
+      ]
+    }
+  },
+  "c06": {
+    "controller": "char_5_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c06_4.png",
+        "c06_5.png",
+        "c06_6.png",
+        "c06_7.png"
+      ],
+      "run": [
+        "c06_0.png",
+        "c06_1.png",
+        "c06_2.png",
+        "c06_3.png"
+      ],
+      "dead": [
+        "c06_8.png"
+      ]
+    }
+  },
+  "c07": {
+    "controller": "char_6_skin_5",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c07_s5_4.png",
+        "c07_s5_5.png",
+        "c07_s5_6.png",
+        "c07_s5_7.png"
+      ],
+      "run": [
+        "c07_s5_0.png",
+        "c07_s5_1.png",
+        "c07_s5_2.png",
+        "c07_s5_3.png"
+      ],
+      "dead": [
+        "c07_s5_8.png"
+      ]
+    }
+  },
+  "c08": {
+    "controller": "char_7_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c08_4.png",
+        "c08_5.png",
+        "c08_6.png",
+        "c08_7.png"
+      ],
+      "run": [
+        "c08_0.png",
+        "c08_1.png",
+        "c08_2.png",
+        "c08_3.png"
+      ],
+      "dead": [
+        "c08_8.png"
+      ]
+    }
+  },
+  "c09": {
+    "controller": "char_8_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c09_4.png",
+        "c09_5.png",
+        "c09_6.png",
+        "c09_7.png"
+      ],
+      "run": [
+        "c09_0.png",
+        "c09_1.png",
+        "c09_2.png",
+        "c09_3.png"
+      ],
+      "dead": [
+        "c09_10.png"
+      ],
+      "char09_skill": [
+        "c09_8.png",
+        "c09_9.png"
+      ]
+    }
+  },
+  "c10": {
+    "controller": "char_9_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c10_4.png",
+        "c10_5.png",
+        "c10_6.png",
+        "c10_7.png"
+      ],
+      "run": [
+        "c10_0.png",
+        "c10_1.png",
+        "c10_2.png",
+        "c10_3.png"
+      ],
+      "dead": [
+        "c10_8.png"
+      ],
+      "skill_ide": [
+        "c10_2_4.png",
+        "c10_2_5.png",
+        "c10_2_6.png",
+        "c10_2_7.png"
+      ],
+      "skill_run": [
+        "c10_2_0.png",
+        "c10_2_1.png",
+        "c10_2_2.png",
+        "c10_2_3.png"
+      ],
+      "skill": [
+        "nothing.png",
+        "effect_08_24.png",
+        "effect_08_25.png",
+        "effect_08_26.png",
+        "effect_08_27.png",
+        "effect_08_27.png"
+      ]
+    }
+  },
+  "c11": {
+    "controller": "char_10_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c11_4.png",
+        "c11_5.png",
+        "c11_6.png",
+        "c11_7.png"
+      ],
+      "run": [
+        "c11_0.png",
+        "c11_1.png",
+        "c11_2.png",
+        "c11_3.png"
+      ],
+      "dead": [
+        "c11_8.png"
+      ]
+    }
+  },
+  "c12": {
+    "controller": "char_11_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c12_4.png",
+        "c12_5.png",
+        "c12_6.png",
+        "c12_7.png"
+      ],
+      "run": [
+        "c12_0.png",
+        "c12_1.png",
+        "c12_2.png",
+        "c12_3.png"
+      ],
+      "dead": [
+        "c12_8.png"
+      ]
+    }
+  },
+  "c13": {
+    "controller": "char_9_skin_0",
+    "default": "ide",
+    "sample_rate": 8,
+    "states": {
+      "ide": [
+        "c10_4.png",
+        "c10_5.png",
+        "c10_6.png",
+        "c10_7.png"
+      ],
+      "run": [
+        "c10_0.png",
+        "c10_1.png",
+        "c10_2.png",
+        "c10_3.png"
+      ],
+      "dead": [
+        "c10_8.png"
+      ],
+      "skill_ide": [
+        "c10_2_4.png",
+        "c10_2_5.png",
+        "c10_2_6.png",
+        "c10_2_7.png"
+      ],
+      "skill_run": [
+        "c10_2_0.png",
+        "c10_2_1.png",
+        "c10_2_2.png",
+        "c10_2_3.png"
+      ],
+      "skill": [
+        "nothing.png",
+        "effect_08_24.png",
+        "effect_08_25.png",
+        "effect_08_26.png",
+        "effect_08_27.png",
+        "effect_08_27.png"
+      ]
+    }
+  }
+}

@@ -21,10 +21,14 @@ std::vector<std::string> MakeBatFrames(const std::string &resourceRoot) {
 } // namespace
 
 Enemy::Enemy(const EnemyDef &def, const std::string &resourceRoot,
-             glm::vec2 spawnPos, float detectRange, float attackRange)
+             glm::vec2 spawnPos, float detectRange, float attackRange,
+             std::vector<std::string> frames, int frameIntervalMs)
     : m_AI(def, detectRange, attackRange),
-      m_Anim(std::make_shared<Util::Animation>(MakeBatFrames(resourceRoot),
-                                               true, 120, true)) {
+      // SPRITE MANIFEST: the species' real frames (sprites.json) when the caller
+      // resolved them; the bat placeholder only when no manifest entry exists.
+      m_Anim(std::make_shared<Util::Animation>(
+          frames.empty() ? MakeBatFrames(resourceRoot) : frames, true,
+          frameIntervalMs, true)) {
     SetDrawable(m_Anim);
     SetZIndex(5);
     m_Transform.translation = spawnPos;

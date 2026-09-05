@@ -31,10 +31,14 @@ glm::vec2 Norm(glm::vec2 v) {
 } // namespace
 
 Boss::Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
-           float shootCd, int seed)
+           float shootCd, int seed, std::vector<std::string> frames,
+           int frameIntervalMs)
     : m_Boss(shootCd), m_Stats{maxHp, maxHp, 0, 0, 0, 0},
-      m_Anim(std::make_shared<Util::Animation>(BossFrames(resourceRoot), true,
-                                               150, true)) {
+      // SPRITE MANIFEST: this boss's real frames when resolved; the boss01
+      // placeholder only when no manifest entry exists.
+      m_Anim(std::make_shared<Util::Animation>(
+          frames.empty() ? BossFrames(resourceRoot) : frames, true,
+          frameIntervalMs, true)) {
     m_Boss.SetSeed(seed);
     SetDrawable(m_Anim);
     SetZIndex(kBossZIndex);

@@ -21,11 +21,15 @@ std::vector<std::string> C01Frames(const std::string &root) {
 constexpr float kPixelsPerSpeedUnit = 30.0F;
 } // namespace
 
-Player::Player(const CharacterDef &def, const std::string &resourceRoot)
+Player::Player(const CharacterDef &def, const std::string &resourceRoot,
+               std::vector<std::string> frames, int frameIntervalMs)
     : m_Stats(CombatStats::FromCharacter(def)),
       m_Speed(def.speed * kPixelsPerSpeedUnit),
-      m_Anim(std::make_shared<Util::Animation>(C01Frames(resourceRoot), true, 80,
-                                               true, 100)) {
+      // SPRITE MANIFEST: the selected character's real idle frames (sprites.json;
+      // c01 idle is c01_4..7). The c01_0..8 placeholder only without a manifest.
+      m_Anim(std::make_shared<Util::Animation>(
+          frames.empty() ? C01Frames(resourceRoot) : frames, true,
+          frameIntervalMs, true, 100)) {
     SetDrawable(m_Anim);
     SetZIndex(5.0F);
     m_Transform.translation = {0.0F, 0.0F};

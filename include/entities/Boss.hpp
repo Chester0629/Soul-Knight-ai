@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -27,7 +28,8 @@ namespace Game {
 class Boss : public Util::GameObject {
 public:
     Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
-         float shootCd, int seed);
+         float shootCd, int seed, std::vector<std::string> frames = {},
+         int frameIntervalMs = 150);
 
     /// Advance one step. @return chase direction; sets @p outShoot on a shoot
     /// tick and @p outAttack to the chosen attack index (varies the fan).

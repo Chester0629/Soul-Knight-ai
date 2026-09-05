@@ -23,7 +23,8 @@ namespace Game {
  */
 class Player : public Util::GameObject {
 public:
-    Player(const CharacterDef &def, const std::string &resourceRoot);
+    Player(const CharacterDef &def, const std::string &resourceRoot,
+           std::vector<std::string> frames = {}, int frameIntervalMs = 80);
 
     /// WASD movement for this step.
     void Update(float dtMs) override;

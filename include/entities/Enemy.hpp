@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 
@@ -35,7 +36,8 @@ public:
      * @param attackRange   Distance at which the enemy stops and shoots.
      */
     Enemy(const EnemyDef &def, const std::string &resourceRoot,
-          glm::vec2 spawnPos, float detectRange, float attackRange);
+          glm::vec2 spawnPos, float detectRange, float attackRange,
+          std::vector<std::string> frames = {}, int frameIntervalMs = 120);
 
     /**
      * @brief Run the AI for this step and return its decision.

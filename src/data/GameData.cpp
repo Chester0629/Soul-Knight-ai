@@ -216,6 +216,41 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         m_PlayerTemplate = *knight; // faithful default (was a hand-patched mix)
     }
 
+    // SPRITE MANIFEST (OPTIONAL, never flips `ok`): per-entity animation frames
+    // from sprites.json -- the FAITHFUL prefab -> Animator -> clip -> frame chain.
+    // Absent on a checkout without the AssetRipper source; entities then keep
+    // their placeholder art.
+    m_Sprites.clear();
+    m_SpriteIndex.clear();
+    const json &sprites = store.Load(dir + "sprites.json");
+    if (sprites.is_object()) {
+        for (auto it = sprites.begin(); it != sprites.end(); ++it) {
+            const json &e = it.value();
+            if (!e.is_object()) {
+                continue;
+            }
+            SpriteSet s;
+            s.id = it.key();
+            s.defaultState = e.value("default", std::string());
+            s.sampleRate = GetI(e, "sample_rate");
+            if (auto st = e.find("states"); st != e.end() && st->is_object()) {
+                for (auto sit = st->begin(); sit != st->end(); ++sit) {
+                    std::vector<std::string> frames;
+                    if (sit->is_array()) {
+                        for (const json &f : *sit) {
+                            if (f.is_string()) {
+                                frames.push_back(f.get<std::string>());
+                            }
+                        }
+                    }
+                    s.states[sit.key()] = std::move(frames);
+                }
+            }
+            m_SpriteIndex[s.id] = m_Sprites.size();
+            m_Sprites.push_back(std::move(s));
+        }
+    }
+
     // Floor room sizes (Phase-2 size pool). OPTIONAL: absence is not a load
     // failure -- the caller (GameScene) falls back to a fixed room size -- so this
     // never flips `ok`. Extracted from the RE dump by tools/extract_room_layouts.py.
@@ -308,6 +343,56 @@ const EnemyDef *GameData::FindEnemy(const std::string &id) const {
 const CharacterDef *GameData::FindCharacter(const std::string &id) const {
     auto it = m_CharacterIndex.find(id);
     return it == m_CharacterIndex.end() ? nullptr : &m_Characters[it->second];
+}
+const SpriteSet *GameData::FindSprites(const std::string &id) const {
+    auto it = m_SpriteIndex.find(id);
+    return it == m_SpriteIndex.end() ? nullptr : &m_Sprites[it->second];
+}
+std::vector<std::string> GameData::SpriteFrames(const std::string &id,
+                                                const std::string &resourceRoot,
+                                                const std::string &state) const {
+    const SpriteSet *s = FindSprites(id);
+    if (s == nullptr) {
+        return {};
+    }
+    auto pick = [s](const std::string &name) -> const std::vector<std::string> * {
+        auto it = s->states.find(name);
+        return (it != s->states.end() && !it->second.empty()) ? &it->second : nullptr;
+    };
+    const std::vector<std::string> *frames = nullptr;
+    // Requested state, else the Animator default (idle), else the usual base
+    // states, else the lexicographically FIRST state with frames -- deterministic
+    // on purpose (never unordered_map iteration order; the sim is seeded/golden).
+    for (const std::string &name :
+         {state, s->defaultState, std::string("ide"), std::string("run")}) {
+        if (!name.empty() && (frames = pick(name)) != nullptr) {
+            break;
+        }
+    }
+    if (frames == nullptr) {
+        const std::string *best = nullptr;
+        for (const auto &kv : s->states) {
+            if (!kv.second.empty() && (best == nullptr || kv.first < *best)) {
+                best = &kv.first;
+            }
+        }
+        if (best != nullptr) {
+            frames = &s->states.at(*best);
+        }
+    }
+    if (frames == nullptr) {
+        return {};
+    }
+    std::vector<std::string> out;
+    out.reserve(frames->size());
+    for (const std::string &f : *frames) {
+        out.push_back(resourceRoot + "/sprites/" + f);
+    }
+    return out;
+}
+int GameData::SpriteIntervalMs(const std::string &id, int fallbackMs) const {
+    const SpriteSet *s = FindSprites(id);
+    return (s != nullptr && s->sampleRate > 0) ? 1000 / s->sampleRate : fallbackMs;
 }
 const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const {
     // Linear scan: ~145 species, called only at spawn-roster setup time (not

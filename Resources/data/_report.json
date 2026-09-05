@@ -7,6 +7,7 @@
     "bosses": 16,
     "buffs": 12,
     "characters_roster": 13,
+    "sprite_entities": 156,
     "weapon_catalog": 90,
     "droptable_levels": 7
   },

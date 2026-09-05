@@ -217,6 +217,150 @@ def build_character_roster():
     }
 
 
+EP_ASSETS = ROOT.parent / "_reverse" / "asset soul" / "ExportedProject" / "Assets"
+_GUID_RE = re.compile(r"^guid: ([0-9a-f]{32})", re.M)
+_DOC_RE = re.compile(r"(?m)^--- !u!\d+ &(\d+)\s*\n")
+# Which m_Sprite curve is the entity's body when a clip animates several sprites
+# (body + hand + ...). Lower index = preferred.
+_PRIMARY_PATHS = ("img", "img/body", "body", "")
+
+
+def _guid_index() -> dict:
+    """guid -> asset Path (the .meta path minus '.meta') for every asset in the
+    AssetRipper project. One pass over ~6.5k .meta files; resolves controller,
+    clip and sprite references alike."""
+    idx = {}
+    for meta in EP_ASSETS.rglob("*.meta"):
+        try:
+            head = meta.read_text(encoding="utf-8", errors="ignore")[:200]
+        except OSError:
+            continue
+        m = _GUID_RE.search(head)
+        if m:
+            idx[m.group(1)] = meta.with_suffix("")
+    return idx
+
+
+def _yaml_docs(text: str):
+    """Yield (anchor_id, body) per '--- !u!N &ID' document of a Unity YAML file."""
+    heads = list(_DOC_RE.finditer(text))
+    for i, h in enumerate(heads):
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        yield h.group(1), text[h.end():end]
+
+
+def _controller_states(ctrl_path: Path, pid: str):
+    """(base_name, default_state, {state: motion_clip_guid}) from an
+    AnimatorController: each AnimatorState doc carries m_Name + m_Motion, and the
+    first (Base Layer) state machine's m_DefaultState anchors the idle state."""
+    text = ctrl_path.read_text(encoding="utf-8", errors="ignore")
+    base, default_anchor, states = "", None, {}
+    for anchor, body in _yaml_docs(text):
+        if body.startswith("AnimatorController:"):
+            m = re.search(r"m_Name: (.+)", body)
+            base = m.group(1).strip() if m else ""
+        elif body.startswith("AnimatorStateMachine:") and default_anchor is None:
+            m = re.search(r"m_DefaultState: \{fileID: (\d+)\}", body)
+            if m:
+                default_anchor = m.group(1)
+        elif body.startswith("AnimatorState:"):
+            n = re.search(r"m_Name: (.+)", body)
+            g = re.search(r"m_Motion: \{fileID: \d+, guid: ([0-9a-f]{32})", body)
+            if n and g:
+                states[anchor] = (n.group(1).strip(), g.group(1))
+
+    def strip(name: str) -> str:  # 'hammer_ide' -> 'ide', 'c01_run' -> 'run'
+        for pre in (base + "_", pid + "_"):
+            if len(pre) > 1 and name.startswith(pre):
+                return name[len(pre):]
+        return name
+
+    default = strip(states[default_anchor][0]) if default_anchor in states else ""
+    return base, default, {strip(n): g for (n, g) in states.values()}
+
+
+def _anim_frames(anim_path: Path, idx: dict, sprite_dir: Path):
+    """Ordered sprite PNG names of a clip's primary m_Sprite curve + its sample
+    rate. Returns (frames, sample_rate, unresolved_count)."""
+    text = anim_path.read_text(encoding="utf-8", errors="ignore")
+    sr = re.search(r"m_SampleRate: (\d+)", text)
+    sample_rate = int(sr.group(1)) if sr else 0
+    sec = re.search(r"m_PPtrCurves:\n(.*?)\n  m_SampleRate:", text, re.S)
+    if not sec:
+        return [], sample_rate, 0
+    curves = []
+    for block in re.split(r"\n  - curve:\n", "\n" + sec.group(1))[1:]:
+        attr = re.search(r"attribute: (\S+)", block)
+        if not attr or attr.group(1) != "m_Sprite":
+            continue
+        path = re.search(r"path: (.*)", block)
+        keys = block.split("\n    attribute:")[0]  # keyframes precede 'attribute:'
+        guids = re.findall(r"guid: ([0-9a-f]{32})", keys)
+        curves.append((path.group(1).strip() if path else "", guids))
+    if not curves:
+        return [], sample_rate, 0
+    curves.sort(key=lambda c: _PRIMARY_PATHS.index(c[0]) if c[0] in _PRIMARY_PATHS else 99)
+    frames, missing = [], 0
+    for g in curves[0][1]:
+        p = idx.get(g)
+        if p is None:
+            missing += 1
+            continue
+        name = p.stem + ".png"  # 'enemy27_0.asset' -> 'enemy27_0.png'
+        if not (sprite_dir / name).is_file():
+            missing += 1
+        frames.append(name)
+    return frames, sample_rate, missing
+
+
+def build_sprite_manifest():
+    """SPRITE MANIFEST: prefab -> Animator -> states -> clips -> ordered sprite
+    frames (FAITHFUL; enemy sprites are atlas-named 'enemyNN_<frame>', so the
+    only way to know which frames a species uses is this reference chain, which
+    the raw 1.07 dump lost (fileID: 0) but the AssetRipper project resolved).
+    Emits {id: {controller, default, sample_rate, states: {state: [png, ...]}}}
+    for every enemy/elite/boss prefab under res/enemy/** and the 13 player
+    prefabs. Returns None when the AssetRipper source is absent."""
+    if not EP_ASSETS.is_dir():
+        return None
+    idx = _guid_index()
+    sprite_dir = OUT.parent / "sprites"
+    prefabs = sorted(EP_ASSETS.glob("res/enemy/**/*.prefab")) + [
+        p for p in sorted(EP_ASSETS.glob("res/player/c[0-9]*.prefab"))
+        if re.fullmatch(r"c\d+", p.stem)
+    ]
+    manifest, skipped, unresolved = {}, [], 0
+    for pf in prefabs:
+        pid = pf.stem
+        text = pf.read_text(encoding="utf-8", errors="ignore")
+        g = re.search(r"m_Controller: \{fileID: \d+, guid: ([0-9a-f]{32})", text)
+        ctrl = idx.get(g.group(1)) if g else None
+        if ctrl is None or not ctrl.is_file():
+            skipped.append(pid)
+            continue
+        base, default, states = _controller_states(ctrl, pid)
+        out_states, sample_rate = {}, 0
+        for sname, mg in states.items():
+            anim = idx.get(mg)
+            if anim is None or not anim.is_file():
+                continue
+            frames, sr, miss = _anim_frames(anim, idx, sprite_dir)
+            unresolved += miss
+            if frames:
+                out_states[sname] = frames
+                sample_rate = sample_rate or sr
+        if out_states:
+            manifest[pid] = {"controller": base, "default": default,
+                             "sample_rate": sample_rate, "states": out_states}
+        else:
+            skipped.append(pid)
+    print(f"  sprites: {len(manifest)} entities, {len(skipped)} skipped "
+          f"(no controller/frames), {unresolved} unresolved frames")
+    if skipped:
+        print(f"    skipped: {skipped[:12]}{' ...' if len(skipped) > 12 else ''}")
+    return manifest
+
+
 def build_enemy_species_table() -> list[dict]:
     """ENEMY RE-KEY: one entry PER SPECIES (prefab_name), from the ground-truth
     ``enemies.csv`` (145 rows: every mob + boss prefab, both spawned FROM one of
@@ -349,6 +493,13 @@ def main() -> int:
         }
     write("characters", characters)
     counts["characters_roster"] = len(characters["roster"])
+
+    # SPRITE MANIFEST: prefab -> Animator -> clips -> ordered sprite frames, so
+    # entities can load their REAL per-species art by id (was hardcoded bat/
+    # boss01/c01 for everything). Skipped when the AssetRipper source is absent.
+    manifest = build_sprite_manifest()
+    if manifest is not None:
+        counts["sprite_entities"] = write("sprites", manifest)
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()
