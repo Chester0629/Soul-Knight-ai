@@ -61,6 +61,11 @@ public:
     /// dead floor (RUN_LOOP_PLAN step 2b constraint).
     void ResetRunState();
 
+    /// B4 results counters -- PURE accumulators the floors feed each frame / kill
+    /// (RGGameProcess.kill_count / start_time analogs). Cleared by ResetRunState.
+    void RecordKill() { ++m_State.stats.kills; }
+    void RecordTime(float dtMs) { m_State.stats.timeMs += dtMs; }
+
     /// Player died: mark the run `Ended` and `Replace` the active scene with a
     /// minimal `EndScene`. Requested from the dying `GameScene`'s `Update`, so the
     /// `Replace` is DEFERRED (same transition timing as a floor clear). Death is no

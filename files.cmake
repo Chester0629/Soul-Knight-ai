@@ -511,6 +511,9 @@ set(TEST_FILES
     # B5/B6 ENTRY FLOW: hero-select model, i2 names, RunState hero
     CharSelectTest.cpp
 
+    # B4 RESULTS: RunStats counters, level_list label, clock text
+    RunStatsTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

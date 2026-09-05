@@ -2,6 +2,7 @@
 #define GAME_END_SCENE_HPP
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "Core/Scene.hpp"
@@ -9,26 +10,32 @@
 #include "Util/GameObject.hpp"
 #include "Util/Renderer.hpp"
 
+#include "data/GameData.hpp"
+
 namespace Game {
 class RunController; // forward: back-pointer only; full type included in EndScene.cpp.
 
 /**
  * @class EndScene
- * @brief Minimal run-end screen (Phase-1 step 2b): one line of end text + two
- *        choices -- **R: new run**, **Esc/Q: quit**. Replaces the old "death = quit
- *        the app" behaviour with a visible end state that can restart.
+ * @brief B4 results screen -- the port of the original's Statements scene
+ *        (`_RGScene/Statements.unity`, driven by UIStatement): title
+ *        (i2 I_gameover / I_victory), the level label from UIStatement.level_list
+ *        ("1-1".."3-6"), the hero's portrait in the ui2_0 frame, and the
+ *        counters the original shows -- clock (ui_10, "h:mm:ss"), kills (ui_11),
+ *        coins (ui_5) and this run's gems (ui_52, "+N") -- read from RunState's
+ *        RunStats. Every sprite is the original's (resolved through the scene's
+ *        guids); the numbers are the run's REAL counters (coins/gems are 0 until
+ *        the economy is ported -- shown as 0, never faked).
  *
- * Greenfield `Core::Scene`. Render-only (screen-space text), owns no combat state.
- * Holds a `RunController*` to drive the two actions:
- *   - restart -> `run->StartRun()` which **Replaces** this EndScene (the stack is
- *     non-empty) with a FRESH floor-0 `GameScene` -- a brand-new run from the
- *     character template, NOT a continuation of the dead floor. Never `Push` (that
- *     would leave this EndScene leaked at the bottom of the stack).
- *   - quit -> `Context::SetExit(true)`.
+ * Input, following UIStatement.Update (Submit / Cancel / Escape all fire
+ * OnBtnClick, which leaves for the hub): **Enter / Space / click / Esc -> main
+ * menu** (the port's hub stand-in). Port conveniences: **R** restarts a fresh run
+ * as the same hero, **Q** quits.
  *
- * The polished death / results / reborn UI is a separate, later UI line; this is a
- * deliberate minimal placeholder. Text GameObjects are built lazily on first
- * `Render` (`Util::Text` needs a live GL context).
+ * Holds a `RunController*` to drive the actions; `ShowMenu` / `StartRun` both
+ * **Replace** this scene (the stack is non-empty), never `Push`. GameObjects are
+ * built lazily on first `Render` (`Util::Text` / `Util::Image` need a live GL
+ * context).
  */
 class EndScene : public Core::Scene {
 public:
@@ -43,18 +50,19 @@ private:
     void Build();
 
     RunController *m_Run;
+    GameData m_Data;
     Util::Renderer m_Renderer;
-    std::vector<std::shared_ptr<Util::GameObject>> m_Texts;
+    std::vector<std::shared_ptr<Util::GameObject>> m_Objects;
     bool m_Built = false;
 
     // --- Headless test hook (env-gated, NO-OP by default) ---
     /// Frames since OnEnter, for SK_ENDSCENE.
     int m_Frame = 0;
-    /// SK_ENDSCENE=restart|quit auto-picks the action after a few frames so the
-    /// death->EndScene->restart/quit path can be driven without input. -1 = wait
-    /// for real input (normal play).
+    /// SK_ENDSCENE=restart|quit|menu auto-picks the action after a few frames so the
+    /// death->EndScene->restart/quit/menu path can be driven without input. -1 =
+    /// wait for real input (normal play).
     int m_AutoActionFrame = -1;
-    enum class AutoAction { None, Restart, Quit } m_AutoAction = AutoAction::None;
+    enum class AutoAction { None, Restart, Quit, Menu } m_AutoAction = AutoAction::None;
 };
 } // namespace Game
 

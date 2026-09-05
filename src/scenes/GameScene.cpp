@@ -808,6 +808,9 @@ void GameScene::Update(float dtMs) {
     }
 
     ++m_Frame; // drives the SK_FORCE_CLEAR / SK_FORCE_DIE test hooks.
+    if (m_Run != nullptr) {
+        m_Run->RecordTime(dtMs); // B4: run clock (RGGameProcess.start_time analog)
+    }
     // SK_FORCE_DIE=K test hook (env, NO-OP if unset): kill the player on frame K to
     // drive the death->EndScene path headlessly (no combat needed). Runs BEFORE the
     // death check below.
@@ -1120,6 +1123,9 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
         } else if (e.name == "death") {
             SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
             PlaySfx(root, isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav");
+            if (m_Run != nullptr && !isPlayer) {
+                m_Run->RecordKill(); // B4: RGGameProcess.kill_count analog
+            }
         } else if (e.name == "skill_dash") {
             // W1 (B1-P4a): the C02 ultimate is a forward dash the sim surfaces as an
             // event for the owner to apply (the sim's player position is an INPUT, not

@@ -20,6 +20,8 @@ void RunController::ResetRunState() {
     m_State.floorIndex = 0;
     m_State.carried.reset();
     m_State.phase = RunState::Phase::Playing;
+    m_State.stats = RunStats{}; // B4: fresh counters per run
+    m_State.outcome = RunState::Outcome::None;
 }
 
 void RunController::StartRun() {
@@ -60,6 +62,7 @@ void RunController::ShowCharSelect() {
 
 void RunController::OnPlayerDied() {
     m_State.phase = RunState::Phase::Ended;
+    m_State.outcome = RunState::Outcome::Dead;
     // Replace (not Push) so the dead GameScene is exited, not leaked under the
     // EndScene. Deferred while the dying scene's Update runs (same as a clear).
     m_Scenes.Replace(std::make_shared<EndScene>(this));
