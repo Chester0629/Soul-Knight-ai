@@ -17,6 +17,12 @@ namespace {
 // Used only by the SK_SHOT test hook below; mirrors tools/hud_bar_check.cpp's saver.
 void SaveFramePng(const char *path, int w, int h) {
     std::vector<unsigned char> px(static_cast<std::size_t>(w) * h * 4);
+    // Read explicitly from the DEFAULT framebuffer's back buffer: the ImGui GL3
+    // backend / the renderer can leave another FBO or read buffer bound, which made
+    // the previous capture read an empty target. Finish pending draws first.
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glReadBuffer(GL_BACK);
+    glFinish();
     glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, px.data());
     std::vector<unsigned char> flipped(px.size());
     const std::size_t stride = static_cast<std::size_t>(w) * 4;
