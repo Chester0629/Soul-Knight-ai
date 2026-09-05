@@ -503,6 +503,9 @@ set(TEST_FILES
     # WEAPON RE-KEY: per-prefab weapon stats + class dispatch + icon/bullet sprites
     WeaponStatsTest.cpp
 
+    # CHAPTER PROGRESSION: per-chapter biome mob pools + boss rosters
+    ChapterProgressionTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

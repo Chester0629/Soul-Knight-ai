@@ -80,6 +80,8 @@ struct BulletDef {
 struct EnemyDef {
     std::string id;
     std::string enemyClass; ///< FAITHFUL: enemy_class @ enemies.csv (AI dispatch key).
+    std::string biome;      ///< AssetRipper biome folder ("1-ice", ...); "" = chapter-agnostic
+    int chapter = 0;        ///< 1..3 from the biome folder's leading digit; 0 = any
     int aiLevel = 0;
     float shootCd = 0.0F;    ///< seconds between shots
     float friction = 0.0F;
@@ -178,6 +180,12 @@ struct DesignRoomDef {
     std::vector<DesignObstacle> obstacles;
 };
 
+/// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
+/// The original picks one of two biome variants per chapter (selection rule not
+/// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
+/// the first of each later pair (2-castle, 3-alien). Chapters wrap after 3.
+const char *ChapterBiome(int chapter);
+
 /**
  * @class GameData
  * @brief Loads and indexes the generated game-data tables for the game layer.
@@ -221,6 +229,15 @@ public:
     const BulletDef *FindBullet(const std::string &id) const;
     /// Look up a species by its prefab id (e.g. "e_succulent", "boss01").
     const EnemyDef *FindEnemy(const std::string &id) const;
+
+    /// CHAPTER PROGRESSION (FAITHFUL @ ExportedProject res/enemy/<biome>/):
+    /// the base e_* species of the chapter's biome + the chapter-agnostic root
+    /// mobs (no bosses, ex_ elites, summoned *_temp parts, chest mimics, or
+    /// minerals), sorted by id -- deterministic for the seeded spawn pick.
+    std::vector<const EnemyDef *> ChapterMobPool(int chapter) const;
+    /// The chapter's bossNN prefabs (helper parts like boss06_c / boss12_parent
+    /// excluded), sorted by id.
+    std::vector<const EnemyDef *> ChapterBossPool(int chapter) const;
     /// Look up a REPRESENTATIVE species for an AI-class (e.g. "EnemyAI07",
     /// "BossAI01"): the first enemies.csv row with that @c enemyClass, in load
     /// order. For callers that only have a class-keyed roster (e.g. the

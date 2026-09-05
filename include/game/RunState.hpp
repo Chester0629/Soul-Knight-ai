@@ -103,6 +103,13 @@ inline bool IsBossFloor(int floorIndex) {
     return floorIndex % kChapterFloors == kChapterFloors - 1;
 }
 
+/// 1-based chapter of a floor: 0..4 -> 1, 5..9 -> 2, 10..14 -> 3, then it wraps
+/// (the original caps at 16 floors; the port keeps running). Consumed by
+/// GameScene to pick the chapter's biome mob pool + boss roster (GameData).
+inline int ChapterOf(int floorIndex) {
+    return (floorIndex / kChapterFloors) % 3 + 1;
+}
+
 } // namespace Game
 
 #endif /* GAME_RUN_STATE_HPP */

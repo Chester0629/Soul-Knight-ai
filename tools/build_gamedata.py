@@ -440,12 +440,24 @@ def build_enemy_species_table() -> list[dict]:
         print(f"  ! enemies.csv not found at {CSV_ENEMIES}; enemies.json falls back "
               f"to the old per-AI-class table", file=sys.stderr)
         return []
+    # CHAPTER/BIOME: the AssetRipper biome folder each prefab lives in
+    # (res/enemy/<biome>/<prefab>.prefab; the root folder = chapter-agnostic).
+    # The folder's leading digit is the chapter (1-forest/1-ice, 2-castle/
+    # 2-graveyard, 3-alien/3-volcano) -- FAITHFUL @ ExportedProject; the raw dump
+    # kept no floor->enemy/boss list (LEVEL_GEN_PLAN.md).
+    biome_of = {}
+    if EP_ASSETS.is_dir():
+        for p in (EP_ASSETS / "res" / "enemy").rglob("*.prefab"):
+            biome_of[p.stem] = p.parent.name if p.parent.name != "enemy" else ""
     out = []
     with CSV_ENEMIES.open(encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
+            biome = biome_of.get(row["prefab_name"], "")
             out.append({
                 "id": row["prefab_name"],
                 "enemy_class": row["enemy_class"],
+                "biome": biome,
+                "chapter": int(biome[0]) if biome[:1].isdigit() else 0,
                 "ai_level": _csv_int(row.get("ai_level")),
                 "shoot_cd": _csv_float(row.get("shoot_cd")),
                 "friction": _csv_float(row.get("friction")),

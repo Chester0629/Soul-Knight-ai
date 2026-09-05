@@ -434,26 +434,34 @@ void GameScene::OnEnter() {
                 // matching brain; AI06 summon / AI12 composite-HP are no-op (debt
                 // s7). floor->boss is NOT recoverable (no boss_list; the dump is
                 // chapter-3) -> reversible C downgrade pending a chapter-1 dump.
-                static constexpr std::array<const char *, 5> kBossRosterC = {
-                    "BossAI01", "BossAI08", "BossAI11", "BossAI06", "BossAI12"};
-                const std::size_t bpick =
-                    (static_cast<std::size_t>(cell.type) +
-                     static_cast<std::size_t>(bossRoom)) %
-                    kBossRosterC.size();
-                const char *const bossId = kBossRosterC[bpick];
-                // ENEMY RE-KEY: real per-boss-species maxHp (FAITHFUL @ enemies.csv),
-                // not the old flat 500 every boss shared. FindEnemyByClass resolves
-                // bossId (an AI-class, e.g. "BossAI01") to its representative species
-                // (e.g. "boss01"); fall back to the old slice value only if that class
-                // has no species row (should not happen for this fixed roster).
-                const EnemyDef *bossDef = m_Data.FindEnemyByClass(bossId);
+                // CHAPTER PROGRESSION: pick from THIS chapter's real boss roster
+                // (its biome folder's bossNN prefabs, FAITHFUL @ ExportedProject:
+                // ch1 ice = boss09/10/13, ch2 castle = boss01/02, ch3 alien =
+                // boss05/06) instead of a fixed cross-chapter 5-slot roster. The
+                // pick stays a pure DETERMINISTIC function of (room type, boss-room
+                // index) -- nothing is drawn from the per-floor RNG.
+                const std::vector<const EnemyDef *> bossPool =
+                    m_Data.ChapterBossPool(ChapterOf(m_FloorIndex));
+                const EnemyDef *bossDef =
+                    bossPool.empty()
+                        ? m_Data.FindEnemyByClass("BossAI01") // defensive fallback
+                        : bossPool[(static_cast<std::size_t>(cell.type) +
+                                    static_cast<std::size_t>(bossRoom)) %
+                                   bossPool.size()];
+                // bossId = the AI class (the sim's brain-dispatch key). The PREFAB id
+                // keys the real maxHp (ENEMY RE-KEY) and the sprite manifest -- which
+                // is prefab-keyed: passing the class here in B2-P3 had left bosses on
+                // the boss01 placeholder frames.
+                const std::string bossId =
+                    bossDef != nullptr ? bossDef->enemyClass : std::string("BossAI01");
+                const std::string bossPrefab = bossDef != nullptr ? bossDef->id : bossId;
                 const int bossMaxHp = (bossDef != nullptr && bossDef->maxHp > 0)
                                           ? bossDef->maxHp
                                           : 500;
                 auto boss = std::make_shared<Boss>(
                     root, spawn, bossMaxHp, /*shootCd=*/2.0F, m_FloorSeed + 9000,
-                    m_Data.SpriteFrames(bossId, root),
-                    m_Data.SpriteIntervalMs(bossId, 150));
+                    m_Data.SpriteFrames(bossPrefab, root),
+                    m_Data.SpriteIntervalMs(bossPrefab, 150));
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, bossMaxHp, roomIndex,
@@ -478,16 +486,21 @@ void GameScene::OnEnter() {
                 // TODO(faithful-spawn-pool): replace this deterministic class roster
                 // with the real per-room species distribution if a floor-1 spawn
                 // table is ever recovered from a chapter-1 dump.
-                static constexpr std::array<const char *, 5> kRosterC = {
-                    "EnemyAI01", "EnemyAI11", "EnemyAI07", "EnemyAI06", "EnemyAI04"};
-                const std::size_t pick =
-                    (static_cast<std::size_t>(cell.type) +
-                     static_cast<std::size_t>(roomIndex)) %
-                    kRosterC.size();
-                const EnemyDef *rdef = m_Data.FindEnemyByClass(kRosterC[pick]);
-                if (rdef == nullptr) {
-                    rdef = edef; // defensive: fall back to AI01
-                }
+                // CHAPTER PROGRESSION: spawn from THIS chapter's biome mob pool
+                // (every base e_* species of its biome folder + the chapter-agnostic
+                // root mobs, FAITHFUL @ ExportedProject) instead of a fixed 5-slot
+                // AI-class roster that mixed chapters (e_hammer, a chapter-2 graveyard
+                // mob, used to spawn on floor 1). Same deterministic (room type,
+                // index) pick; the exact per-room species DISTRIBUTION is still
+                // TODO(faithful-spawn-pool) -- no spawn table survived the dump.
+                const std::vector<const EnemyDef *> mobPool =
+                    m_Data.ChapterMobPool(ChapterOf(m_FloorIndex));
+                const EnemyDef *rdef =
+                    mobPool.empty()
+                        ? edef // defensive: fall back to AI01's species
+                        : mobPool[(static_cast<std::size_t>(cell.type) +
+                                   static_cast<std::size_t>(roomIndex)) %
+                                  mobPool.size()];
                 if (rdef != nullptr) {
                     auto enemy = std::make_shared<Enemy>(
                         *rdef, root, spawn, 450.0F, 260.0F,

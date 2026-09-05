@@ -96,6 +96,8 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             EnemyDef d;
             d.id = GetS(e, "id");
             d.enemyClass = GetS(e, "enemy_class");
+            d.biome = GetS(e, "biome");   // CHAPTER PROGRESSION
+            d.chapter = GetI(e, "chapter");
             d.aiLevel = GetI(e, "ai_level");
             d.shootCd = GetF(e, "shoot_cd");
             d.friction = GetF(e, "friction");
@@ -411,6 +413,68 @@ std::vector<std::string> GameData::SpriteFrames(const std::string &id,
 int GameData::SpriteIntervalMs(const std::string &id, int fallbackMs) const {
     const SpriteSet *s = FindSprites(id);
     return (s != nullptr && s->sampleRate > 0) ? 1000 / s->sampleRate : fallbackMs;
+}
+const char *ChapterBiome(int chapter) {
+    switch (((chapter - 1) % 3 + 3) % 3) {
+    case 0:
+        return "1-ice";
+    case 1:
+        return "2-castle";
+    default:
+        return "3-alien";
+    }
+}
+
+namespace {
+/// e_* base mobs only: no bosses, no ex_ elites, no summoned *_temp parts, no
+/// chest mimics (e_chest*) and no static minerals.
+bool IsBaseMobId(const std::string &id) {
+    if (id.rfind("e_", 0) != 0 || id.rfind("e_chest", 0) == 0) {
+        return false;
+    }
+    return id.size() < 5 || id.compare(id.size() - 5, 5, "_temp") != 0;
+}
+/// bossNN exactly -- not the boss06_c / boss12_parent / boss12_1 helper parts.
+bool IsBossId(const std::string &id) {
+    if (id.rfind("boss", 0) != 0 || id.size() == 4) {
+        return false;
+    }
+    for (std::size_t i = 4; i < id.size(); ++i) {
+        if (id[i] < '0' || id[i] > '9') {
+            return false;
+        }
+    }
+    return true;
+}
+/// Insert keeping the pool sorted by id (pools are tiny; avoids <algorithm>).
+void InsertSorted(std::vector<const EnemyDef *> &pool, const EnemyDef *d) {
+    auto pos = pool.begin();
+    while (pos != pool.end() && (*pos)->id < d->id) {
+        ++pos;
+    }
+    pool.insert(pos, d);
+}
+} // namespace
+
+std::vector<const EnemyDef *> GameData::ChapterMobPool(int chapter) const {
+    const std::string biome = ChapterBiome(chapter);
+    std::vector<const EnemyDef *> pool;
+    for (const EnemyDef &d : m_Enemies) {
+        if (IsBaseMobId(d.id) && (d.chapter == 0 || d.biome == biome)) {
+            InsertSorted(pool, &d);
+        }
+    }
+    return pool;
+}
+std::vector<const EnemyDef *> GameData::ChapterBossPool(int chapter) const {
+    const std::string biome = ChapterBiome(chapter);
+    std::vector<const EnemyDef *> pool;
+    for (const EnemyDef &d : m_Enemies) {
+        if (IsBossId(d.id) && d.biome == biome) {
+            InsertSorted(pool, &d);
+        }
+    }
+    return pool;
 }
 const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const {
     // Linear scan: ~145 species, called only at spawn-roster setup time (not

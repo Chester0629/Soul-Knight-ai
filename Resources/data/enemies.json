@@ -2,6 +2,8 @@
   {
     "id": "boss01",
     "enemy_class": "BossAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 2,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -29,6 +31,8 @@
   {
     "id": "boss02",
     "enemy_class": "BossAI02",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 2,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -56,6 +60,8 @@
   {
     "id": "boss03",
     "enemy_class": "BossAI03",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 2,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -83,6 +89,8 @@
   {
     "id": "boss04",
     "enemy_class": "BossAI04",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 2,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -110,6 +118,8 @@
   {
     "id": "boss05",
     "enemy_class": "BossAI05",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 1,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -137,6 +147,8 @@
   {
     "id": "boss06",
     "enemy_class": "BossAI06",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 1,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -164,6 +176,8 @@
   {
     "id": "boss07",
     "enemy_class": "BossAI07",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -191,6 +205,8 @@
   {
     "id": "boss08",
     "enemy_class": "BossAI08",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -218,6 +234,8 @@
   {
     "id": "boss09",
     "enemy_class": "BossAI09",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.5,
     "friction": 0.0,
@@ -245,6 +263,8 @@
   {
     "id": "boss10",
     "enemy_class": "BossAI10",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 1,
     "shoot_cd": 1.5,
     "friction": 0.0,
@@ -272,6 +292,8 @@
   {
     "id": "boss11",
     "enemy_class": "BossAI11",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 1,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -299,6 +321,8 @@
   {
     "id": "boss12_1",
     "enemy_class": "BossAI12",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 1,
     "shoot_cd": 1.5,
     "friction": 0.2,
@@ -326,6 +350,8 @@
   {
     "id": "boss12_2",
     "enemy_class": "BossAI12",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 1,
     "shoot_cd": 1.5,
     "friction": 0.2,
@@ -353,6 +379,8 @@
   {
     "id": "boss13",
     "enemy_class": "BossAI13",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.5,
     "friction": 0.0,
@@ -380,6 +408,8 @@
   {
     "id": "e_alien01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.5,
     "friction": 0.9,
@@ -407,6 +437,8 @@
   {
     "id": "e_alien02",
     "enemy_class": "EnemyAI03",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -434,6 +466,8 @@
   {
     "id": "e_alien03",
     "enemy_class": "EnemyAI02",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -461,6 +495,8 @@
   {
     "id": "e_battery01",
     "enemy_class": "EnemyAI01",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -488,6 +524,8 @@
   {
     "id": "e_boar01",
     "enemy_class": "EnemyAI04",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -515,6 +553,8 @@
   {
     "id": "e_boar02",
     "enemy_class": "EnemyAI09",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -542,6 +582,8 @@
   {
     "id": "e_chest1",
     "enemy_class": "EnemyAI08",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -569,6 +611,8 @@
   {
     "id": "e_chest2",
     "enemy_class": "EnemyAI08",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -596,6 +640,8 @@
   {
     "id": "e_creeper",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -623,6 +669,8 @@
   {
     "id": "e_creeper_fly",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -650,6 +698,8 @@
   {
     "id": "e_crystal",
     "enemy_class": "EnemyAI11",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -677,6 +727,8 @@
   {
     "id": "e_fireknight01",
     "enemy_class": "EnemyAI02",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.9,
@@ -704,6 +756,8 @@
   {
     "id": "e_fireknight02",
     "enemy_class": "EnemyAI02",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.9,
@@ -731,6 +785,8 @@
   {
     "id": "e_fireknight03",
     "enemy_class": "EnemyAI15",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -758,6 +814,8 @@
   {
     "id": "e_giant",
     "enemy_class": "EnemyAI03",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 5.0,
     "friction": 0.6,
@@ -785,6 +843,8 @@
   {
     "id": "e_golem01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -812,6 +872,8 @@
   {
     "id": "e_golem02",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -839,6 +901,8 @@
   {
     "id": "e_hammer",
     "enemy_class": "EnemyAI07",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -866,6 +930,8 @@
   {
     "id": "e_knight01",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -893,6 +959,8 @@
   {
     "id": "e_knight02",
     "enemy_class": "EnemyAI02",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -920,6 +988,8 @@
   {
     "id": "e_knight03",
     "enemy_class": "EnemyAI03",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -947,6 +1017,8 @@
   {
     "id": "e_knight04",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -974,6 +1046,8 @@
   {
     "id": "e_knight05",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1001,6 +1075,8 @@
   {
     "id": "e_knight06",
     "enemy_class": "EnemyAI02",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1028,6 +1104,8 @@
   {
     "id": "e_miner01",
     "enemy_class": "EnemyAI02",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1055,6 +1133,8 @@
   {
     "id": "e_miner02",
     "enemy_class": "EnemyAI02",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.9,
@@ -1082,6 +1162,8 @@
   {
     "id": "e_miner03",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.6,
@@ -1109,6 +1191,8 @@
   {
     "id": "e_miner04",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1136,6 +1220,8 @@
   {
     "id": "e_miner05",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1163,6 +1249,8 @@
   {
     "id": "e_miner06",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.6,
@@ -1190,6 +1278,8 @@
   {
     "id": "e_mosquito",
     "enemy_class": "EnemyAI03",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1217,6 +1307,8 @@
   {
     "id": "e_mummy01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1244,6 +1336,8 @@
   {
     "id": "e_mummy02",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1271,6 +1365,8 @@
   {
     "id": "e_mummy03",
     "enemy_class": "EnemyAI13",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1298,6 +1394,8 @@
   {
     "id": "e_mummy04",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1325,6 +1423,8 @@
   {
     "id": "e_mummy05",
     "enemy_class": "EnemyAI03",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1352,6 +1452,8 @@
   {
     "id": "e_orc01",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1379,6 +1481,8 @@
   {
     "id": "e_orc02",
     "enemy_class": "EnemyAI02",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.9,
@@ -1406,6 +1510,8 @@
   {
     "id": "e_orc03",
     "enemy_class": "EnemyAI03",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1433,6 +1539,8 @@
   {
     "id": "e_orc04",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -1460,6 +1568,8 @@
   {
     "id": "e_orc05",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -1487,6 +1597,8 @@
   {
     "id": "e_orc06",
     "enemy_class": "EnemyAI02",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1514,6 +1626,8 @@
   {
     "id": "e_orc07",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -1541,6 +1655,8 @@
   {
     "id": "e_orc08",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.7,
@@ -1568,6 +1684,8 @@
   {
     "id": "e_shaman",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -1595,6 +1713,8 @@
   {
     "id": "e_shark",
     "enemy_class": "EnemyAIShark",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.9,
@@ -1622,6 +1742,8 @@
   {
     "id": "e_skeleton01",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1649,6 +1771,8 @@
   {
     "id": "e_skeleton02",
     "enemy_class": "EnemyAI02",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1676,6 +1800,8 @@
   {
     "id": "e_skeleton02_temp",
     "enemy_class": "EnemyAI02",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1703,6 +1829,8 @@
   {
     "id": "e_skeleton03",
     "enemy_class": "EnemyAI03",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1730,6 +1858,8 @@
   {
     "id": "e_skeleton04",
     "enemy_class": "EnemyAI02",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1757,6 +1887,8 @@
   {
     "id": "e_skeleton05",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -1784,6 +1916,8 @@
   {
     "id": "e_skeleton06",
     "enemy_class": "EnemyAI03",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.7,
@@ -1811,6 +1945,8 @@
   {
     "id": "e_slime01",
     "enemy_class": "EnemyAI04",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -1838,6 +1974,8 @@
   {
     "id": "e_snowman_temp",
     "enemy_class": "EnemyAI10",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.75,
     "friction": 0.9,
@@ -1865,6 +2003,8 @@
   {
     "id": "e_spider01",
     "enemy_class": "EnemyAI04",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -1892,6 +2032,8 @@
   {
     "id": "e_spider02",
     "enemy_class": "EnemyAI04",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -1919,6 +2061,8 @@
   {
     "id": "e_spider03",
     "enemy_class": "EnemyAI04",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -1946,6 +2090,8 @@
   {
     "id": "e_spider04",
     "enemy_class": "EnemyAI04",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -1973,6 +2119,8 @@
   {
     "id": "e_spider05",
     "enemy_class": "EnemyAI14",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -2000,6 +2148,8 @@
   {
     "id": "e_succulent",
     "enemy_class": "EnemyAI06",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 5.0,
     "friction": 0.9,
@@ -2027,6 +2177,8 @@
   {
     "id": "e_tentacle",
     "enemy_class": "EnemyAI06",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 5.0,
     "friction": 0.9,
@@ -2054,6 +2206,8 @@
   {
     "id": "e_tentacle_temp",
     "enemy_class": "EnemyAI06",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 5.0,
     "friction": 0.9,
@@ -2081,6 +2235,8 @@
   {
     "id": "e_tortoise",
     "enemy_class": "EnemyAI12",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -2108,6 +2264,8 @@
   {
     "id": "e_ufo",
     "enemy_class": "EnemyAI03",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.7,
@@ -2135,6 +2293,8 @@
   {
     "id": "e_wizard01",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -2162,6 +2322,8 @@
   {
     "id": "e_worm01",
     "enemy_class": "EnemyAI04",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -2189,6 +2351,8 @@
   {
     "id": "e_yeti01",
     "enemy_class": "EnemyAI10",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2216,6 +2380,8 @@
   {
     "id": "e_yeti02",
     "enemy_class": "EnemyAI10",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.6,
@@ -2243,6 +2409,8 @@
   {
     "id": "ex_alien01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.5,
     "friction": 0.9,
@@ -2270,6 +2438,8 @@
   {
     "id": "ex_alien02",
     "enemy_class": "EnemyAI03",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2297,6 +2467,8 @@
   {
     "id": "ex_alien03",
     "enemy_class": "EnemyAI02",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -2324,6 +2496,8 @@
   {
     "id": "ex_battery01",
     "enemy_class": "EnemyAI01",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -2351,6 +2525,8 @@
   {
     "id": "ex_boar02",
     "enemy_class": "EnemyAI09",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -2378,6 +2554,8 @@
   {
     "id": "ex_boar03",
     "enemy_class": "EnemyAI09",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.8,
@@ -2405,6 +2583,8 @@
   {
     "id": "ex_creeper",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2432,6 +2612,8 @@
   {
     "id": "ex_creeper_fly",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2459,6 +2641,8 @@
   {
     "id": "ex_crystal",
     "enemy_class": "EnemyAI11",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.8,
@@ -2486,6 +2670,8 @@
   {
     "id": "ex_fireknight",
     "enemy_class": "EnemyAI02",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 0.0,
     "friction": 0.8,
@@ -2513,6 +2699,8 @@
   {
     "id": "ex_fireknight2",
     "enemy_class": "EnemyAI15",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.0,
@@ -2540,6 +2728,8 @@
   {
     "id": "ex_giant",
     "enemy_class": "EnemyAI03",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 5.0,
     "friction": 0.6,
@@ -2567,6 +2757,8 @@
   {
     "id": "ex_golem01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2594,6 +2786,8 @@
   {
     "id": "ex_golem02",
     "enemy_class": "EnemyAI01",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2621,6 +2815,8 @@
   {
     "id": "ex_hammer",
     "enemy_class": "EnemyAI07",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -2648,6 +2844,8 @@
   {
     "id": "ex_knight01",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2675,6 +2873,8 @@
   {
     "id": "ex_knight02",
     "enemy_class": "EnemyAI02",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -2702,6 +2902,8 @@
   {
     "id": "ex_knight03",
     "enemy_class": "EnemyAI03",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2729,6 +2931,8 @@
   {
     "id": "ex_knight04",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -2756,6 +2960,8 @@
   {
     "id": "ex_knight05",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2783,6 +2989,8 @@
   {
     "id": "ex_knight06",
     "enemy_class": "EnemyAI02",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -2810,6 +3018,8 @@
   {
     "id": "ex_miner01",
     "enemy_class": "EnemyAI02",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -2837,6 +3047,8 @@
   {
     "id": "ex_miner02",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -2864,6 +3076,8 @@
   {
     "id": "ex_miner03",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -2891,6 +3105,8 @@
   {
     "id": "ex_miner04",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -2918,6 +3134,8 @@
   {
     "id": "ex_miner05",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 4.0,
     "friction": 0.9,
@@ -2945,6 +3163,8 @@
   {
     "id": "ex_miner06",
     "enemy_class": "EnemyAI01",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -2972,6 +3192,8 @@
   {
     "id": "ex_mosquito",
     "enemy_class": "EnemyAI03",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -2999,6 +3221,8 @@
   {
     "id": "ex_mummy01",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3026,6 +3250,8 @@
   {
     "id": "ex_mummy02",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3053,6 +3279,8 @@
   {
     "id": "ex_mummy03",
     "enemy_class": "EnemyAI13",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3080,6 +3308,8 @@
   {
     "id": "ex_mummy04",
     "enemy_class": "EnemyAI01",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3107,6 +3337,8 @@
   {
     "id": "ex_mummy05",
     "enemy_class": "EnemyAI03",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3134,6 +3366,8 @@
   {
     "id": "ex_orc01",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3161,6 +3395,8 @@
   {
     "id": "ex_orc02",
     "enemy_class": "EnemyAI02",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3188,6 +3424,8 @@
   {
     "id": "ex_orc03",
     "enemy_class": "EnemyAI03",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.5,
     "friction": 0.9,
@@ -3215,6 +3453,8 @@
   {
     "id": "ex_orc04",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -3242,6 +3482,8 @@
   {
     "id": "ex_orc06",
     "enemy_class": "EnemyAI02",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3269,6 +3511,8 @@
   {
     "id": "ex_orc07",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.7,
@@ -3296,6 +3540,8 @@
   {
     "id": "ex_orc08",
     "enemy_class": "EnemyAI01",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.7,
@@ -3323,6 +3569,8 @@
   {
     "id": "ex_shaman",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -3350,6 +3598,8 @@
   {
     "id": "ex_skeleton01",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3377,6 +3627,8 @@
   {
     "id": "ex_skeleton02",
     "enemy_class": "EnemyAI02",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3404,6 +3656,8 @@
   {
     "id": "ex_skeleton03",
     "enemy_class": "EnemyAI03",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3431,6 +3685,8 @@
   {
     "id": "ex_skeleton04",
     "enemy_class": "EnemyAI02",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3458,6 +3714,8 @@
   {
     "id": "ex_skeleton05",
     "enemy_class": "EnemyAI01",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.7,
@@ -3485,6 +3743,8 @@
   {
     "id": "ex_skeleton06",
     "enemy_class": "EnemyAI03",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.7,
@@ -3512,6 +3772,8 @@
   {
     "id": "ex_slime01",
     "enemy_class": "EnemyAI04",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3539,6 +3801,8 @@
   {
     "id": "ex_spider01",
     "enemy_class": "EnemyAI04",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3566,6 +3830,8 @@
   {
     "id": "ex_spider02",
     "enemy_class": "EnemyAI04",
+    "biome": "2-graveyard",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3593,6 +3859,8 @@
   {
     "id": "ex_spider03",
     "enemy_class": "EnemyAI04",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3620,6 +3888,8 @@
   {
     "id": "ex_spider04",
     "enemy_class": "EnemyAI04",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3647,6 +3917,8 @@
   {
     "id": "ex_spider05",
     "enemy_class": "EnemyAI14",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3674,6 +3946,8 @@
   {
     "id": "ex_succulent",
     "enemy_class": "EnemyAI06",
+    "biome": "1-forest",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -3701,6 +3975,8 @@
   {
     "id": "ex_tortoise",
     "enemy_class": "EnemyAI12",
+    "biome": "3-volcano",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 0.0,
     "friction": 0.8,
@@ -3728,6 +4004,8 @@
   {
     "id": "ex_ufo",
     "enemy_class": "EnemyAI03",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.7,
@@ -3755,6 +4033,8 @@
   {
     "id": "ex_wizard",
     "enemy_class": "EnemyAI01",
+    "biome": "2-castle",
+    "chapter": 2,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -3782,6 +4062,8 @@
   {
     "id": "ex_worm",
     "enemy_class": "EnemyAI04",
+    "biome": "3-alien",
+    "chapter": 3,
     "ai_level": 3,
     "shoot_cd": 1.0,
     "friction": 0.8,
@@ -3809,6 +4091,8 @@
   {
     "id": "ex_yeti01",
     "enemy_class": "EnemyAI10",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.9,
@@ -3836,6 +4120,8 @@
   {
     "id": "ex_yeti02",
     "enemy_class": "EnemyAI10",
+    "biome": "1-ice",
+    "chapter": 1,
     "ai_level": 3,
     "shoot_cd": 2.0,
     "friction": 0.6,
@@ -3863,6 +4149,8 @@
   {
     "id": "mineral_crystal",
     "enemy_class": "EnemyAI05",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
@@ -3890,6 +4178,8 @@
   {
     "id": "mineral_gold",
     "enemy_class": "EnemyAI05",
+    "biome": "",
+    "chapter": 0,
     "ai_level": 3,
     "shoot_cd": 3.0,
     "friction": 0.9,
