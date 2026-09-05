@@ -361,6 +361,66 @@ def build_sprite_manifest():
     return manifest
 
 
+CSV_WEAPONS = ROOT.parent / "_reverse" / "analysis" / "data_tables" / "weapons.csv"
+_WEAPON_INT = ("weapon_type", "atk", "critical", "deviation", "consume", "can_through",
+               "through_count", "is_melee", "need_lock", "item_level", "item_value",
+               "count", "a_count")
+_WEAPON_FLOAT = ("repel", "bullet_speed", "atk_move_speed", "angle", "max_time")
+_SPRITE_REF_RE = re.compile(r"m_Sprite: \{fileID: 21300000, guid: ([0-9a-f]{32})")
+_GUID_IN_REF_RE = re.compile(r"guid: ([0-9a-f]{32})")
+
+
+def _prefab_sprite_png(prefab: Path, idx: dict, sprite_dir: Path) -> str:
+    """PNG name of a prefab's first SpriteRenderer sprite ('' if unresolved)."""
+    try:
+        m = _SPRITE_REF_RE.search(prefab.read_text(encoding="utf-8", errors="ignore"))
+    except OSError:
+        return ""
+    p = idx.get(m.group(1)) if m else None
+    if p is None:
+        return ""
+    name = p.stem + ".png"
+    return name if (sprite_dir / name).is_file() else ""
+
+
+def build_weapon_table():
+    """WEAPON RE-KEY: one entry PER PREFAB (194) from weapons.csv -- real per-item
+    stats (the old table was 46 class templates; its Gun001 row was silently
+    weapon_043, atk 15, while the real starter weapon_000 is atk 3 / consume 0)
+    -- plus weapon_class (the gun-brain dispatch key), the prefab's icon sprite
+    and its bullet prefab's sprite, both resolved through the AssetRipper guid
+    index. Returns None when the sources are absent so the caller can fall back."""
+    if not CSV_WEAPONS.is_file() or not EP_ASSETS.is_dir():
+        return None
+    idx = _guid_index()
+    sprite_dir = OUT.parent / "sprites"
+    wdir = EP_ASSETS / "res" / "weapon"
+    out = []
+    with CSV_WEAPONS.open(encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            pid = row["prefab_name"]
+            rec = {"id": pid, "weapon_class": (row.get("weapon_class") or "").strip()}
+            for k in _WEAPON_INT:
+                rec[k] = _csv_int(row.get(k))
+            for k in _WEAPON_FLOAT:
+                rec[k] = _csv_float(row.get(k))
+            rec["weapon_speed"] = _csv_float(row.get("weapon_speed"), 1.0)
+            # FAITHFUL @ <prefab>.prefab SpriteRenderer -> pickup icon.
+            rec["icon"] = _prefab_sprite_png(wdir / f"{pid}.prefab", idx, sprite_dir)
+            # FAITHFUL @ weapons.csv bullet -> bullet prefab -> its sprite.
+            rec["bullet_prefab"], rec["bullet_sprite"] = "", ""
+            m = _GUID_IN_REF_RE.search(row.get("bullet") or "")
+            bp = idx.get(m.group(1)) if m else None
+            if bp is not None and bp.suffix == ".prefab" and bp.is_file():
+                rec["bullet_prefab"] = bp.stem
+                rec["bullet_sprite"] = _prefab_sprite_png(bp, idx, sprite_dir)
+            out.append(rec)
+    n_icon = sum(1 for r in out if r["icon"])
+    n_bs = sum(1 for r in out if r["bullet_sprite"])
+    print(f"  weapons: {len(out)} prefabs, {n_icon} icons, {n_bs} bullet sprites resolved")
+    return out
+
+
 def build_enemy_species_table() -> list[dict]:
     """ENEMY RE-KEY: one entry PER SPECIES (prefab_name), from the ground-truth
     ``enemies.csv`` (145 rows: every mob + boss prefab, both spawned FROM one of
@@ -462,7 +522,13 @@ def main() -> int:
 
     print("Transpiling 1.07 -> Resources/data ...")
     counts = {}
-    counts["weapons"] = write("weapons", build_table(guns, idx, prefer=("Bullet",)))
+    # WEAPON RE-KEY: weapons.json is ONE ENTRY PER PREFAB (194, from the RE'd
+    # weapons.csv + AssetRipper sprites), not 46 class templates. Falls back to
+    # the old class table if the sources are unavailable so the pipeline runs.
+    weapons = build_weapon_table()
+    if weapons is None:
+        weapons = build_table(guns, idx, prefer=("Bullet",))
+    counts["weapons"] = write("weapons", weapons)
     counts["enemy_guns"] = write("enemy_guns", build_table(eguns, idx, prefer=("Bullet",)))
     counts["bullets"] = write("bullets", build_table(bullets, idx))
     # ENEMY RE-KEY: enemies.json is now ONE ENTRY PER SPECIES (from the RE'd

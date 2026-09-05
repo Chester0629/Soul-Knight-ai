@@ -1,6 +1,6 @@
 {
   "counts": {
-    "weapons": 46,
+    "weapons": 194,
     "enemy_guns": 10,
     "bullets": 25,
     "enemies": 145,
@@ -12,207 +12,207 @@
     "droptable_levels": 7
   },
   "pathid_index_size": 127,
-  "unresolved_ref_count": 359,
+  "unresolved_ref_count": 215,
   "unresolved_refs_sample": [
     {
-      "owner": "Gun001",
+      "owner": "EGun001",
       "field": "audio_clip",
-      "pathid": 1826340476550598763
+      "pathid": 2144691907625522199
     },
     {
-      "owner": "Gun001",
+      "owner": "EGun001",
       "field": "bullet",
-      "pathid": -5815667621678913623
+      "pathid": 4243032287337353236
     },
     {
-      "owner": "Gun002",
+      "owner": "EGun002",
       "field": "audio_clip",
-      "pathid": -1500053710922025673
+      "pathid": -1448364804562760397
     },
     {
-      "owner": "Gun002",
+      "owner": "EGun002",
       "field": "bullet",
-      "pathid": 3574166900669557007
+      "pathid": 1210703010186921258
     },
     {
-      "owner": "Gun003",
+      "owner": "EGun003",
       "field": "audio_clip",
-      "pathid": -1273511569000823963
+      "pathid": 3770509944329589916
     },
     {
-      "owner": "Gun003",
+      "owner": "EGun003",
       "field": "bullet",
-      "pathid": -8468283346068941140
+      "pathid": -4639916721810376167
     },
     {
-      "owner": "Gun004",
-      "field": "audio_clip",
-      "pathid": -6825057062157277178
-    },
-    {
-      "owner": "Gun004",
+      "owner": "EGun004",
       "field": "bullet",
-      "pathid": 4476309171788894871
+      "pathid": -4080013794761358945
     },
     {
-      "owner": "Gun005",
-      "field": "audio_clip",
-      "pathid": 3645468420890962499
-    },
-    {
-      "owner": "Gun005",
-      "field": "bullet",
-      "pathid": -3064521018216460322
-    },
-    {
-      "owner": "Gun005",
-      "field": "clip_hold",
-      "pathid": -269502273301923333
-    },
-    {
-      "owner": "Gun005",
+      "owner": "EGun004",
       "field": "s_ide",
-      "pathid": -8992348752369135813
+      "pathid": 6376099290593951189
     },
     {
-      "owner": "Gun005",
+      "owner": "EGun004",
       "field": "s_atk",
-      "pathid": -3085745885772110447
+      "pathid": 7009801530381368923
     },
     {
-      "owner": "Gun005",
-      "field": "reload_obj",
-      "pathid": 8255406042087529936
+      "owner": "EGun005",
+      "field": "audio_clip",
+      "pathid": -6157145428504221030
     },
     {
-      "owner": "Gun006",
+      "owner": "EGun005",
+      "field": "bullet",
+      "pathid": -4423587090207888863
+    },
+    {
+      "owner": "EGun005",
+      "field": "aim",
+      "pathid": -8537142051568961631
+    },
+    {
+      "owner": "EGun006",
+      "field": "audio_clip",
+      "pathid": -8489294477021106069
+    },
+    {
+      "owner": "EGun006",
+      "field": "bullet",
+      "pathid": -3361246727156836530
+    },
+    {
+      "owner": "EGun006",
+      "field": "atk2_bullets",
+      "pathid": 5289248027382727229
+    },
+    {
+      "owner": "EGun006",
+      "field": "atk2_bullets",
+      "pathid": 3531261202003067347
+    },
+    {
+      "owner": "EGun006",
+      "field": "atk2_bullets",
+      "pathid": -1962414025316494928
+    },
+    {
+      "owner": "EGun006",
+      "field": "atk3_bullet",
+      "pathid": -936899383277922842
+    },
+    {
+      "owner": "EGun008",
+      "field": "audio_clip",
+      "pathid": -6157145428504221030
+    },
+    {
+      "owner": "EGun008",
+      "field": "bullet",
+      "pathid": 3439579882666292161
+    },
+    {
+      "owner": "EGun008",
+      "field": "atk2_bullet",
+      "pathid": -4423587090207888863
+    },
+    {
+      "owner": "EGun008",
+      "field": "aim",
+      "pathid": -8537142051568961631
+    },
+    {
+      "owner": "EGun009",
+      "field": "audio_clip",
+      "pathid": -4411472295632381939
+    },
+    {
+      "owner": "EGun009",
+      "field": "bullet",
+      "pathid": -4639916721810376167
+    },
+    {
+      "owner": "EGun010",
       "field": "audio_clip",
       "pathid": -5320813973430249721
     },
     {
-      "owner": "Gun006",
+      "owner": "EGun010",
       "field": "bullet",
-      "pathid": 2515942999916920918
+      "pathid": -8745970134703351462
     },
     {
-      "owner": "Gun007",
+      "owner": "EGun011",
       "field": "audio_clip",
-      "pathid": -6825057062157277178
+      "pathid": 3150488904984120107
     },
     {
-      "owner": "Gun007",
+      "owner": "EGun011",
       "field": "bullet",
-      "pathid": -4430648454794119013
+      "pathid": 6615520912446901405
     },
     {
-      "owner": "Gun007",
-      "field": "clip_hold",
-      "pathid": -3258056879945356288
-    },
-    {
-      "owner": "Gun007",
-      "field": "clip_big",
-      "pathid": 4316199098600088263
-    },
-    {
-      "owner": "Gun007",
-      "field": "reload_obj",
-      "pathid": 8255406042087529936
-    },
-    {
-      "owner": "Gun008",
+      "owner": "BulletBat",
       "field": "audio_clip",
-      "pathid": 3867011873097407371
+      "pathid": 7494592237317156370
     },
     {
-      "owner": "Gun008",
+      "owner": "BulletBat",
+      "field": "hit_object",
+      "pathid": 823895981258909257
+    },
+    {
+      "owner": "BulletBoom",
+      "field": "explode",
+      "pathid": 1916746441838400250
+    },
+    {
+      "owner": "BulletBottle",
+      "field": "hit_object",
+      "pathid": 4415217883253891945
+    },
+    {
+      "owner": "BulletBottle",
       "field": "bullet",
-      "pathid": -51672555820174415
+      "pathid": -1415349492265021333
     },
     {
-      "owner": "Gun009",
+      "owner": "BulletBottle",
       "field": "audio_clip",
-      "pathid": -1500053710922025673
+      "pathid": -1487583298571570170
     },
     {
-      "owner": "Gun009",
-      "field": "bullet",
-      "pathid": 6947118191126760465
-    },
-    {
-      "owner": "Gun010",
+      "owner": "BulletEPoly",
       "field": "audio_clip",
-      "pathid": 1299091947137512254
+      "pathid": 7714463989765790460
     },
     {
-      "owner": "Gun010",
-      "field": "bullet",
-      "pathid": -3665147622579418574
-    },
-    {
-      "owner": "Gun011",
-      "field": "audio_clip",
-      "pathid": -1394743294411731189
-    },
-    {
-      "owner": "Gun011",
-      "field": "bullet",
-      "pathid": 3860298820906669509
-    },
-    {
-      "owner": "Gun011",
-      "field": "clip_end_shoot",
-      "pathid": 1826340476550598763
-    },
-    {
-      "owner": "Gun011",
-      "field": "bullet_end",
-      "pathid": -5815667621678913623
-    },
-    {
-      "owner": "Gun012",
+      "owner": "BulletGreenLight",
       "field": "audio_clip",
       "pathid": 5778059149852892030
     },
     {
-      "owner": "Gun012",
-      "field": "bullet",
-      "pathid": 7795273937686030166
-    },
-    {
-      "owner": "Gun014",
+      "owner": "BulletPolymerization",
       "field": "audio_clip",
-      "pathid": 7064950869084921188
+      "pathid": 7714463989765790460
     },
     {
-      "owner": "Gun014",
-      "field": "bullet",
-      "pathid": 7065293626662853372
-    },
-    {
-      "owner": "Gun015",
+      "owner": "BulletThunder",
       "field": "audio_clip",
-      "pathid": 9208900048884022347
+      "pathid": 1420409875615434846
     },
     {
-      "owner": "Gun015",
-      "field": "bullet",
-      "pathid": 3017872680849492045
+      "owner": "BulletThunder",
+      "field": "thunder",
+      "pathid": -2864713471259152331
     },
     {
-      "owner": "Gun016",
-      "field": "audio_clip",
-      "pathid": -1394743294411731189
-    },
-    {
-      "owner": "Gun016",
-      "field": "bullet",
-      "pathid": 4476309171788894871
-    },
-    {
-      "owner": "Gun017",
-      "field": "audio_clip",
-      "pathid": -1500053710922025673
+      "owner": "BossAI01",
+      "field": "clip_dead",
+      "pathid": -585019104860311462
     }
   ]
 }

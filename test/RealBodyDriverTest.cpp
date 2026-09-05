@@ -209,7 +209,8 @@ TEST(RealBodyDriverTest, RealBodyPicksUpFanGunFiresFanAndKills) {
     // Real-collision walk onto the pickup -> auto-equip on overlap.
     ASSERT_TRUE(d.NavigateTo(pickupPos, RealBodyDriver::kPickupRange * 0.5F, 300));
     EXPECT_TRUE(d.PickupTaken(0)) << "walking over the pickup must equip it";
-    EXPECT_EQ(d.CurrentWeaponId(), std::string("Gun002"));
+    // WEAPON RE-KEY: the equipped id is the PREFAB (Gun002 -> weapon_020), not the class.
+    EXPECT_EQ(d.CurrentWeaponId(), fan->id);
     EXPECT_TRUE(d.BodyDeepInside(room)) << "deep-interior (inset) assert, not threshold";
 
     // One controlled fire frame at the enemy -> the REAL fan pattern appears in flight.
@@ -243,7 +244,8 @@ TEST(RealBodyDriverTest, RealBodyPicksUpBurstGunFiresAcrossTicksAndKills) {
 
     ASSERT_TRUE(d.NavigateTo(pickupPos, RealBodyDriver::kPickupRange * 0.5F, 300));
     EXPECT_TRUE(d.PickupTaken(0));
-    EXPECT_EQ(d.CurrentWeaponId(), std::string("Gun004"));
+    // WEAPON RE-KEY: the equipped id is the PREFAB (Gun004 -> weapon_003), not the class.
+    EXPECT_EQ(d.CurrentWeaponId(), burst->id);
 
     // First firing frame: a BURST is TIME-SPACED -- one sub-shot this tick, not the
     // whole salvo at once (the defining property of Burst vs a same-tick volley).

@@ -10,7 +10,10 @@ namespace Game {
 
 /// Player weapon definition (from Resources/data/weapons.json).
 struct WeaponDef {
-    std::string id;
+    std::string id;            ///< prefab id (weapon_NNN) after the WEAPON RE-KEY
+    std::string weaponClass;   ///< gun-brain dispatch key (Gun001..); FAITHFUL @ weapons.csv
+    std::string icon;          ///< pickup icon PNG under Resources/sprites; '' = placeholder
+    std::string bulletSprite;  ///< this weapon's bullet PNG; '' = default bullet_0
     int weaponType = 0;
     int atk = 0;
     float repel = 0.0F;      ///< knockback
@@ -197,7 +200,11 @@ public:
      */
     bool LoadAll(const std::string &resourceRoot);
 
+    /// Exact prefab id (weapon_NNN); a CLASS id (Gun001..) resolves to the first
+    /// prefab of that class in table order (the faithful default of the family,
+    /// e.g. Gun001 -> weapon_000, the starter).
     const WeaponDef *FindWeapon(const std::string &id) const;
+    const WeaponDef *FindWeaponByClass(const std::string &weaponClass) const;
 
     /**
      * @brief Resolve a loot drop id (e.g. "weapon_002") to a WeaponDef.

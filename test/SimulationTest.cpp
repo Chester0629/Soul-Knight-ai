@@ -432,9 +432,11 @@ TEST(SimulationTest, EmitsPlayerFireEnemyHurtAndDeathEvents) {
     bool sawFire = false;
     bool sawHurt = false;
     bool sawDeath = false;
-    // 60 * 20ms = 1.2s; e_alien01 (real maxHp=25, FAITHFUL @ enemies.csv) takes 2
-    // Gun001 hits (atk=15) to die -- plenty of time at Gun001's ~0.15s cadence.
-    for (int i = 0; i < 60; ++i) {
+    // 200 * 20ms = 4s; e_alien01 (real maxHp=25, FAITHFUL @ enemies.csv) takes 9
+    // hits from the FAITHFUL starter weapon_000 (Gun001 -> atk 3 after the WEAPON
+    // RE-KEY; the old class template had silently been weapon_043 at atk 15) --
+    // ~26 shots at the ~0.15s cadence, so the death event lands with margin.
+    for (int i = 0; i < 200; ++i) {
         sim.Advance(20.0F, in);
         for (const SimEvent &e : sim.DrainEvents()) {
             EXPECT_EQ(e.type, SimEventType::AnimTrigger);

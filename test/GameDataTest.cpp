@@ -14,7 +14,7 @@ const char *kResourceRoot = RESOURCE_DIR;
 TEST(GameDataTest, LoadsAllTablesWithExpectedCounts) {
     GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
-    EXPECT_EQ(gd.Weapons().size(), 46u);
+    EXPECT_EQ(gd.Weapons().size(), 194u); // WEAPON RE-KEY: one per prefab (was 46 class templates)
     EXPECT_EQ(gd.Bullets().size(), 25u);
     // ENEMY RE-KEY: enemies.json used to carry 16 AI-CLASS templates (one row per
     // EnemyAI*.json/BossAI*.json dump); it is now 145 real SPECIES rows straight
@@ -63,13 +63,17 @@ TEST(GameDataTest, LoadsDesignRoomInteriors) {
 TEST(GameDataTest, Gun001ScalarStats) {
     GameData gd;
     gd.LoadAll(kResourceRoot);
+    // WEAPON RE-KEY: a class id resolves to the family's first prefab,
+    // weapon_000 -- the faithful starter (atk 3, fires free). The old 46-row
+    // template for "Gun001" had silently been weapon_043 (atk 15 / consume 5).
     const auto *w = gd.FindWeapon("Gun001");
     ASSERT_NE(w, nullptr);
-    EXPECT_EQ(w->atk, 15);
-    EXPECT_FLOAT_EQ(w->bulletSpeed, 32.0F);
+    EXPECT_EQ(w->id, "weapon_000");
+    EXPECT_EQ(w->atk, 3);
+    EXPECT_FLOAT_EQ(w->bulletSpeed, 36.0F);
     EXPECT_FLOAT_EQ(w->repel, 2.0F);
     EXPECT_EQ(w->deviation, 5);
-    EXPECT_EQ(w->consume, 5);
+    EXPECT_EQ(w->consume, 0);
 }
 
 TEST(GameDataTest, Bullet01ScalarStats) {

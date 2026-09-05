@@ -746,6 +746,17 @@ void GameScene::SyncBulletViews() {
         if (found == m_BulletViews.end()) {
             view = m_BulletPool.Acquire();
             view->Init(b.pos, b.vel, kBulletLifeMs, b.damage, b.camp); // arms the sprite; not Update()d.
+            // WEAPON RE-KEY: a player bullet wears its weapon's real bullet art
+            // (weapons.json bullet_sprite); enemy/unknown keeps the bullet_0
+            // default. Set on every acquire: pooled views are reused across weapons.
+            std::string bulletPng = "bullet_0.png";
+            if (b.camp == 0) {
+                if (const WeaponDef *w = m_Data.FindWeapon(m_CurrentWeaponId);
+                    w != nullptr && !w->bulletSprite.empty()) {
+                    bulletPng = w->bulletSprite;
+                }
+            }
+            view->SetSprite(std::string(RESOURCE_DIR) + "/sprites/" + bulletPng);
             m_Renderer.AddChild(view);
             m_BulletViews.emplace(b.id, view);
         } else {

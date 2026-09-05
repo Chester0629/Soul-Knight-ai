@@ -14,9 +14,11 @@ constexpr float kPickupZIndex = 3.0F;
 WeaponPickup::WeaponPickup(const std::string &resourceRoot, glm::vec2 pos,
                            const WeaponDef *def)
     : m_Def(def) {
-    // Placeholder weapon-icon sprite until per-weapon sprites are mapped (#3).
-    SetDrawable(std::make_shared<Util::Image>(resourceRoot +
-                                              "/sprites/weapons_9.png"));
+    // WEAPON RE-KEY: the weapon's real icon (weapons.json icon, resolved from its
+    // prefab's SpriteRenderer); the weapons_9 placeholder only when unresolved.
+    const std::string icon =
+        (def != nullptr && !def->icon.empty()) ? def->icon : std::string("weapons_9.png");
+    SetDrawable(std::make_shared<Util::Image>(resourceRoot + "/sprites/" + icon));
     SetZIndex(kPickupZIndex);
     m_Transform.translation = pos;
 }

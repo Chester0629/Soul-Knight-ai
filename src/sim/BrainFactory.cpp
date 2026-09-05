@@ -77,7 +77,10 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     // (d) dispatch: pick the per-gun brain adapter by id (Gun001 fallback). The
     // brain returns the gun's REAL FirePattern; the cooldown/canFire gate stays in
     // WeaponController. Only Gun001+Gun016 were wired before; now all 21 dispatch.
-    return WeaponController(MakeWeaponBrain(weaponId, def), p, seed); // prvalue
+    // WEAPON RE-KEY: weaponId may now be a PREFAB id (weapon_043); the gun brain
+    // is selected by the def's class (Gun001..), falling back to the raw id.
+    const std::string &brainId = def.weaponClass.empty() ? weaponId : def.weaponClass;
+    return WeaponController(MakeWeaponBrain(brainId, def), p, seed); // prvalue
 }
 
 } // namespace Game::Sim

@@ -500,6 +500,9 @@ set(TEST_FILES
     # SPRITE MANIFEST: per-entity animation frames (prefab -> Animator -> clip)
     SpriteManifestTest.cpp
 
+    # WEAPON RE-KEY: per-prefab weapon stats + class dispatch + icon/bullet sprites
+    WeaponStatsTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

@@ -39,16 +39,19 @@ TEST(LootIntegrationTest, RollResolvesToRealWeaponDeterministically) {
 }
 
 // The weapon_NNN trailing-number resolver (stand-in until the #3 map exists).
-TEST(LootIntegrationTest, ResolveDropWeaponParsesTrailingNumber) {
+TEST(LootIntegrationTest, ResolveDropWeaponResolvesExactPrefab) {
     GameData data;
     data.LoadAll(RESOURCE_DIR);
     if (data.Weapons().empty()) {
         GTEST_SKIP() << "weapons table not available";
     }
+    // WEAPON RE-KEY: weapons.json is keyed by prefab, so a droptable id resolves
+    // to that exact weapon. (This test used to assert the old `3 % size` index
+    // into 46 class templates -- i.e. it pinned the arbitrary-drop bug.)
     const WeaponDef *w = data.ResolveDropWeapon("weapon_003");
     ASSERT_NE(w, nullptr);
-    const std::size_t expected = 3 % data.Weapons().size();
-    EXPECT_EQ(w, &data.Weapons()[expected]);
+    EXPECT_EQ(w->id, "weapon_003");
+    EXPECT_EQ(w, data.FindWeapon("weapon_003"));
 }
 
 // An exact Gun* id still resolves directly (FindWeapon path).

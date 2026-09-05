@@ -30,6 +30,11 @@ Bullet::Bullet(const std::string &resourceRoot) {
     SetVisible(false);
 }
 
+void Bullet::SetSprite(const std::string &path) {
+    // Util::Image surfaces are cached by path (AssetStore), so this is cheap.
+    SetDrawable(std::make_shared<Util::Image>(path));
+}
+
 void Bullet::Init(glm::vec2 pos, glm::vec2 velocityPxPerSec, float lifetimeMs,
                   int damage, int camp) {
     Init(pos, velocityPxPerSec, lifetimeMs, damage, camp, 0.0F, 0, false, 0);

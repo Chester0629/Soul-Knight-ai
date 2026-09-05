@@ -37,6 +37,10 @@ public:
      */
     explicit Bullet(const std::string &resourceRoot);
 
+    /// Swap the bullet art (full PNG path). Pooled views are reused across
+    /// weapons, so the scene sets this on every acquire.
+    void SetSprite(const std::string &path);
+
     /**
      * @brief (Re)initializes the bullet for reuse from an object pool.
      *

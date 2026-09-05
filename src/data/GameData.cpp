@@ -41,6 +41,9 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         for (const auto &e : weapons) {
             WeaponDef d;
             d.id = GetS(e, "id");
+            d.weaponClass = GetS(e, "weapon_class"); // WEAPON RE-KEY
+            d.icon = GetS(e, "icon");
+            d.bulletSprite = GetS(e, "bullet_sprite");
             d.weaponType = GetI(e, "weapon_type");
             d.atk = GetI(e, "atk");
             d.repel = GetF(e, "repel");
@@ -309,7 +312,22 @@ const DesignRoomDef *GameData::FindDesignRoom(const std::string &id) const {
 
 const WeaponDef *GameData::FindWeapon(const std::string &id) const {
     auto it = m_WeaponIndex.find(id);
-    return it == m_WeaponIndex.end() ? nullptr : &m_Weapons[it->second];
+    if (it != m_WeaponIndex.end()) {
+        return &m_Weapons[it->second];
+    }
+    // WEAPON RE-KEY: callers that still pass a class id ("Gun001", the floor-0
+    // default equip, tests) get that family's first prefab in table order.
+    return FindWeaponByClass(id);
+}
+const WeaponDef *GameData::FindWeaponByClass(const std::string &weaponClass) const {
+    // Linear scan: 194 prefabs, only on equip/drop -- not per frame. Table order
+    // is weapons.csv order, so the pick is deterministic (Gun001 -> weapon_000).
+    for (const WeaponDef &w : m_Weapons) {
+        if (w.weaponClass == weaponClass) {
+            return &w;
+        }
+    }
+    return nullptr;
 }
 const WeaponDef *GameData::ResolveDropWeapon(const std::string &dropId) const {
     if (const WeaponDef *exact = FindWeapon(dropId)) {
@@ -318,9 +336,9 @@ const WeaponDef *GameData::ResolveDropWeapon(const std::string &dropId) const {
     if (m_Weapons.empty()) {
         return nullptr;
     }
-    // Parse the trailing run of digits (e.g. "weapon_002" -> 2) and index it
-    // (mod) into the loaded weapons. Deterministic stand-in until the
-    // weapon_NNN -> Gun* map is produced by the data pipeline (report #3).
+    // WEAPON RE-KEY: weapons.json is keyed by prefab (weapon_NNN), so the exact
+    // lookup above now resolves every droptable id. This digit-mod path only
+    // covers an id absent from the table (defensive; it was the old stand-in).
     int n = 0;
     std::size_t i = dropId.size();
     while (i > 0 && dropId[i - 1] >= '0' && dropId[i - 1] <= '9') {
