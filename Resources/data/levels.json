@@ -1,0 +1,4032 @@
+[
+  {
+    "id": "A1",
+    "level": "1-1",
+    "chapter": 1,
+    "stage": 1,
+    "variant": "A",
+    "biome": "1-forest",
+    "chest_level": 1,
+    "map_long": 3,
+    "camera_bg": [
+      0.019607844,
+      0.12156863,
+      0.15686275
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall_bush1",
+        "top": "objects2_50",
+        "face": "objects2_55"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall_tree1",
+        "sprite": "objects2_68",
+        "alt": "objects2_69"
+      },
+      {
+        "prefab": "box02",
+        "sprite": "objects2_31",
+        "alt": "objects2_30"
+      },
+      {
+        "prefab": "cask_red_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_32"
+      },
+      {
+        "prefab": "cask_green_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_34"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_04",
+        "sprite": "objects2_57",
+        "alt": "objects2_56"
+      },
+      {
+        "prefab": "obj22_05",
+        "sprite": "objects2_62",
+        "alt": "objects2_63"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier03",
+        "sprite": "objects2_38",
+        "alt": "objects2_39"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_orc01",
+      "e_orc02",
+      "e_orc03",
+      "e_boar01",
+      "e_boar01"
+    ],
+    "ex_enemies": [
+      "ex_orc02"
+    ]
+  },
+  {
+    "id": "A2",
+    "level": "1-2",
+    "chapter": 1,
+    "stage": 2,
+    "variant": "A",
+    "biome": "1-forest",
+    "chest_level": 1,
+    "map_long": 3,
+    "camera_bg": [
+      0.019607844,
+      0.12156863,
+      0.15686275
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall_bush1",
+        "top": "objects2_50",
+        "face": "objects2_55"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall_tree1",
+        "sprite": "objects2_68",
+        "alt": "objects2_69"
+      },
+      {
+        "prefab": "box02",
+        "sprite": "objects2_31",
+        "alt": "objects2_30"
+      },
+      {
+        "prefab": "cask_red_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_32"
+      },
+      {
+        "prefab": "cask_green_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_34"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_04",
+        "sprite": "objects2_57",
+        "alt": "objects2_56"
+      },
+      {
+        "prefab": "obj22_05",
+        "sprite": "objects2_62",
+        "alt": "objects2_63"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier03",
+        "sprite": "objects2_38",
+        "alt": "objects2_39"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_orc01",
+      "e_orc02",
+      "e_orc03",
+      "e_boar01",
+      "e_boar01",
+      "e_orc04",
+      "e_orc05",
+      "e_orc06",
+      "e_boar02",
+      "e_boar02"
+    ],
+    "ex_enemies": [
+      "ex_orc02",
+      "ex_orc05"
+    ]
+  },
+  {
+    "id": "A3",
+    "level": "1-3",
+    "chapter": 1,
+    "stage": 3,
+    "variant": "A",
+    "biome": "1-forest",
+    "chest_level": 2,
+    "map_long": 3,
+    "camera_bg": [
+      0.019607844,
+      0.12156863,
+      0.15686275
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall_bush1",
+        "top": "objects2_50",
+        "face": "objects2_55"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall_tree1",
+        "sprite": "objects2_68",
+        "alt": "objects2_69"
+      },
+      {
+        "prefab": "box02",
+        "sprite": "objects2_31",
+        "alt": "objects2_30"
+      },
+      {
+        "prefab": "cask_red_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_32"
+      },
+      {
+        "prefab": "cask_green_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_34"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_04",
+        "sprite": "objects2_57",
+        "alt": "objects2_56"
+      },
+      {
+        "prefab": "obj22_05",
+        "sprite": "objects2_62",
+        "alt": "objects2_63"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier03",
+        "sprite": "objects2_38",
+        "alt": "objects2_39"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_orc01",
+      "e_orc02",
+      "e_orc03",
+      "e_boar01",
+      "e_boar01",
+      "e_orc04",
+      "e_orc05",
+      "e_orc06",
+      "e_boar02",
+      "e_boar02",
+      "e_orc07",
+      "e_orc07"
+    ],
+    "ex_enemies": [
+      "ex_orc02",
+      "ex_orc05",
+      "ex_orc07"
+    ]
+  },
+  {
+    "id": "A4",
+    "level": "1-4",
+    "chapter": 1,
+    "stage": 4,
+    "variant": "A",
+    "biome": "1-forest",
+    "chest_level": 2,
+    "map_long": 3,
+    "camera_bg": [
+      0.019607844,
+      0.12156863,
+      0.15686275
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall_bush1",
+        "top": "objects2_50",
+        "face": "objects2_55"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall502",
+        "sprite": "w503",
+        "alt": "w504"
+      },
+      {
+        "prefab": "box02",
+        "sprite": "objects2_31",
+        "alt": "objects2_30"
+      },
+      {
+        "prefab": "cask_red_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_32"
+      },
+      {
+        "prefab": "cask_green_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_34"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_05",
+        "sprite": "objects2_48",
+        "alt": "objects2_49"
+      },
+      {
+        "prefab": "obj22_05",
+        "sprite": "objects2_62",
+        "alt": "objects2_63"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier03",
+        "sprite": "objects2_38",
+        "alt": "objects2_39"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_orc01",
+      "e_orc02",
+      "e_orc03",
+      "e_boar01",
+      "e_boar01",
+      "e_orc04",
+      "e_orc05",
+      "e_orc06",
+      "e_boar02",
+      "e_boar02",
+      "e_orc07",
+      "e_orc07",
+      "e_orc08",
+      "e_succulent",
+      "e_succulent"
+    ],
+    "ex_enemies": [
+      "ex_orc02",
+      "ex_orc05",
+      "ex_orc07",
+      "ex_boar02"
+    ]
+  },
+  {
+    "id": "A5",
+    "level": "1-5",
+    "chapter": 1,
+    "stage": 5,
+    "variant": "A",
+    "biome": "1-forest",
+    "chest_level": 2,
+    "map_long": 4,
+    "camera_bg": [
+      0.019607844,
+      0.12156863,
+      0.15686275
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall_bush1",
+        "top": "objects2_50",
+        "face": "objects2_55"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall502",
+        "sprite": "w503",
+        "alt": "w504"
+      },
+      {
+        "prefab": "box02",
+        "sprite": "objects2_31",
+        "alt": "objects2_30"
+      },
+      {
+        "prefab": "cask_red_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_32"
+      },
+      {
+        "prefab": "cask_green_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_34"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_05",
+        "sprite": "objects2_48",
+        "alt": "objects2_49"
+      },
+      {
+        "prefab": "obj22_05",
+        "sprite": "objects2_62",
+        "alt": "objects2_63"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier03",
+        "sprite": "objects2_38",
+        "alt": "objects2_39"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r1_boss1",
+        "r1_boss2",
+        "r1_boss5"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_orc01",
+      "e_orc02",
+      "e_orc03",
+      "e_boar01",
+      "e_boar01",
+      "e_orc04",
+      "e_orc05",
+      "e_orc06",
+      "e_boar02",
+      "e_boar02",
+      "e_orc07",
+      "e_orc07",
+      "e_orc08",
+      "e_orc08",
+      "e_succulent",
+      "e_succulent"
+    ],
+    "ex_enemies": [
+      "ex_orc02",
+      "ex_orc05",
+      "ex_orc07",
+      "ex_orc08",
+      "ex_boar02"
+    ]
+  },
+  {
+    "id": "B1",
+    "level": "1-1",
+    "chapter": 1,
+    "stage": 1,
+    "variant": "B",
+    "biome": "1-ice",
+    "chest_level": 1,
+    "map_long": 3,
+    "camera_bg": [
+      0.02670848,
+      0.102704056,
+      0.19117647
+    ],
+    "floors": [
+      "f601",
+      "f602",
+      "f603",
+      "f604",
+      "f605",
+      "f606"
+    ],
+    "walls": [
+      {
+        "prefab": "wall602",
+        "top": "w603",
+        "face": "w604"
+      },
+      {
+        "prefab": "wall601",
+        "top": "w601",
+        "face": "w602"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall603",
+        "sprite": "objects4_1",
+        "alt": "objects4_0"
+      },
+      {
+        "prefab": "box04",
+        "sprite": "objects4_2",
+        "alt": "objects4_3"
+      },
+      {
+        "prefab": "cask_red_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_7"
+      },
+      {
+        "prefab": "cask_blue_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_11"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_06",
+        "sprite": "objects4_22",
+        "alt": "objects4_23"
+      },
+      {
+        "prefab": "obj22_06",
+        "sprite": "objects4_5",
+        "alt": "objects4_4"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_miner01",
+      "e_miner02",
+      "e_miner03",
+      "e_yeti01",
+      "e_yeti01"
+    ],
+    "ex_enemies": [
+      "ex_miner03"
+    ]
+  },
+  {
+    "id": "B2",
+    "level": "1-2",
+    "chapter": 1,
+    "stage": 2,
+    "variant": "B",
+    "biome": "1-ice",
+    "chest_level": 1,
+    "map_long": 3,
+    "camera_bg": [
+      0.02670848,
+      0.102704056,
+      0.19117647
+    ],
+    "floors": [
+      "f601",
+      "f602",
+      "f603",
+      "f604",
+      "f605",
+      "f606"
+    ],
+    "walls": [
+      {
+        "prefab": "wall602",
+        "top": "w603",
+        "face": "w604"
+      },
+      {
+        "prefab": "wall601",
+        "top": "w601",
+        "face": "w602"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall603",
+        "sprite": "objects4_1",
+        "alt": "objects4_0"
+      },
+      {
+        "prefab": "box04",
+        "sprite": "objects4_2",
+        "alt": "objects4_3"
+      },
+      {
+        "prefab": "cask_red_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_7"
+      },
+      {
+        "prefab": "cask_blue_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_11"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_06",
+        "sprite": "objects4_22",
+        "alt": "objects4_23"
+      },
+      {
+        "prefab": "obj22_06",
+        "sprite": "objects4_5",
+        "alt": "objects4_4"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_miner01",
+      "e_miner02",
+      "e_miner03",
+      "e_miner04",
+      "e_miner05",
+      "e_miner06",
+      "e_yeti01",
+      "e_yeti01",
+      "e_spider03",
+      "e_spider03"
+    ],
+    "ex_enemies": [
+      "ex_miner03",
+      "ex_miner06"
+    ]
+  },
+  {
+    "id": "B3",
+    "level": "1-3",
+    "chapter": 1,
+    "stage": 3,
+    "variant": "B",
+    "biome": "1-ice",
+    "chest_level": 2,
+    "map_long": 3,
+    "camera_bg": [
+      0.02670848,
+      0.102704056,
+      0.19117647
+    ],
+    "floors": [
+      "f601",
+      "f602",
+      "f603",
+      "f604",
+      "f605",
+      "f606"
+    ],
+    "walls": [
+      {
+        "prefab": "wall602",
+        "top": "w603",
+        "face": "w604"
+      },
+      {
+        "prefab": "wall601",
+        "top": "w601",
+        "face": "w602"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall603",
+        "sprite": "objects4_1",
+        "alt": "objects4_0"
+      },
+      {
+        "prefab": "box04",
+        "sprite": "objects4_2",
+        "alt": "objects4_3"
+      },
+      {
+        "prefab": "cask_red_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_7"
+      },
+      {
+        "prefab": "cask_blue_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_11"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_06",
+        "sprite": "objects4_22",
+        "alt": "objects4_23"
+      },
+      {
+        "prefab": "obj22_06",
+        "sprite": "objects4_5",
+        "alt": "objects4_4"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_miner01",
+      "e_miner02",
+      "e_miner03",
+      "e_miner04",
+      "e_miner05",
+      "e_miner06",
+      "e_yeti01",
+      "e_yeti01",
+      "e_spider03",
+      "e_spider03",
+      "e_crystal",
+      "e_spider04"
+    ],
+    "ex_enemies": [
+      "ex_miner03",
+      "ex_miner06",
+      "ex_spider03",
+      "ex_spider04",
+      "ex_crystal"
+    ]
+  },
+  {
+    "id": "B4",
+    "level": "1-4",
+    "chapter": 1,
+    "stage": 4,
+    "variant": "B",
+    "biome": "1-ice",
+    "chest_level": 2,
+    "map_long": 3,
+    "camera_bg": [
+      0.02670848,
+      0.102704056,
+      0.19117647
+    ],
+    "floors": [
+      "f601",
+      "f602",
+      "f603",
+      "f604",
+      "f605",
+      "f606"
+    ],
+    "walls": [
+      {
+        "prefab": "wall602",
+        "top": "w603",
+        "face": "w604"
+      },
+      {
+        "prefab": "wall601",
+        "top": "w601",
+        "face": "w602"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall603",
+        "sprite": "objects4_1",
+        "alt": "objects4_0"
+      },
+      {
+        "prefab": "box04",
+        "sprite": "objects4_2",
+        "alt": "objects4_3"
+      },
+      {
+        "prefab": "cask_red_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_7"
+      },
+      {
+        "prefab": "cask_blue_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_11"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_06",
+        "sprite": "objects4_22",
+        "alt": "objects4_23"
+      },
+      {
+        "prefab": "obj22_06",
+        "sprite": "objects4_5",
+        "alt": "objects4_4"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_miner01",
+      "e_miner02",
+      "e_miner03",
+      "e_miner04",
+      "e_miner05",
+      "e_miner06",
+      "e_yeti01",
+      "e_yeti01",
+      "e_spider03",
+      "e_spider03",
+      "e_crystal",
+      "e_spider04",
+      "e_yeti02",
+      "e_yeti02",
+      "e_crystal"
+    ],
+    "ex_enemies": [
+      "ex_miner03",
+      "ex_miner06",
+      "ex_spider03",
+      "ex_spider04",
+      "ex_crystal",
+      "ex_yeti01"
+    ]
+  },
+  {
+    "id": "B5",
+    "level": "1-5",
+    "chapter": 1,
+    "stage": 5,
+    "variant": "B",
+    "biome": "1-ice",
+    "chest_level": 2,
+    "map_long": 4,
+    "camera_bg": [
+      0.02670848,
+      0.102704056,
+      0.19117647
+    ],
+    "floors": [
+      "f601",
+      "f602",
+      "f603",
+      "f604",
+      "f605",
+      "f606"
+    ],
+    "walls": [
+      {
+        "prefab": "wall602",
+        "top": "w603",
+        "face": "w604"
+      },
+      {
+        "prefab": "wall601",
+        "top": "w601",
+        "face": "w602"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall603",
+        "sprite": "objects4_1",
+        "alt": "objects4_0"
+      },
+      {
+        "prefab": "box04",
+        "sprite": "objects4_2",
+        "alt": "objects4_3"
+      },
+      {
+        "prefab": "cask_red_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_7"
+      },
+      {
+        "prefab": "cask_blue_3",
+        "sprite": "objects4_6",
+        "alt": "objects4_11"
+      },
+      {
+        "prefab": "cask_blue_2",
+        "sprite": "objects2_31",
+        "alt": "objects2_33"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_06",
+        "sprite": "objects4_22",
+        "alt": "objects4_23"
+      },
+      {
+        "prefab": "obj22_06",
+        "sprite": "objects4_5",
+        "alt": "objects4_4"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r1_boss3",
+        "r1_boss4",
+        "r1_boss6"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_miner01",
+      "e_miner02",
+      "e_miner03",
+      "e_miner04",
+      "e_miner05",
+      "e_miner06",
+      "e_yeti01",
+      "e_yeti01",
+      "e_spider03",
+      "e_spider03",
+      "e_crystal",
+      "e_spider04",
+      "e_yeti02",
+      "e_yeti02",
+      "e_crystal"
+    ],
+    "ex_enemies": [
+      "ex_miner03",
+      "ex_miner06",
+      "ex_spider03",
+      "ex_spider04",
+      "ex_crystal",
+      "ex_yeti01"
+    ]
+  },
+  {
+    "id": "C1",
+    "level": "2-1",
+    "chapter": 2,
+    "stage": 1,
+    "variant": "C",
+    "biome": "2-castle",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.051092118,
+      0.051470578,
+      0.051470578
+    ],
+    "floors": [
+      "f201",
+      "f202",
+      "f203",
+      "f204",
+      "f205",
+      "f206"
+    ],
+    "walls": [
+      {
+        "prefab": "wall201",
+        "top": "w201",
+        "face": "w202"
+      },
+      {
+        "prefab": "wall202",
+        "top": "w201",
+        "face": "w203"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall201",
+        "sprite": "w201",
+        "alt": "w202"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_01",
+        "sprite": "objects1_9",
+        "alt": ""
+      },
+      {
+        "prefab": "obj22_01",
+        "sprite": "objects1_25",
+        "alt": "objects1_26"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_knight01",
+      "e_knight02",
+      "e_knight03",
+      "e_slime01",
+      "e_slime01",
+      "e_knight04",
+      "e_knight05",
+      "e_knight06"
+    ],
+    "ex_enemies": [
+      "ex_knight02",
+      "ex_slime01"
+    ]
+  },
+  {
+    "id": "C2",
+    "level": "2-2",
+    "chapter": 2,
+    "stage": 2,
+    "variant": "C",
+    "biome": "2-castle",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.051092118,
+      0.051470578,
+      0.051470578
+    ],
+    "floors": [
+      "f201",
+      "f202",
+      "f203",
+      "f204",
+      "f205",
+      "f206"
+    ],
+    "walls": [
+      {
+        "prefab": "wall201",
+        "top": "w201",
+        "face": "w202"
+      },
+      {
+        "prefab": "wall202",
+        "top": "w201",
+        "face": "w203"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall201",
+        "sprite": "w201",
+        "alt": "w202"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_01",
+        "sprite": "objects1_9",
+        "alt": ""
+      },
+      {
+        "prefab": "obj22_01",
+        "sprite": "objects1_25",
+        "alt": "objects1_26"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_knight01",
+      "e_knight02",
+      "e_knight03",
+      "e_knight04",
+      "e_knight05",
+      "e_knight06",
+      "e_slime01",
+      "e_slime01",
+      "e_wizard01",
+      "e_wizard01"
+    ],
+    "ex_enemies": [
+      "ex_knight02",
+      "ex_knight06"
+    ]
+  },
+  {
+    "id": "C3",
+    "level": "2-3",
+    "chapter": 2,
+    "stage": 3,
+    "variant": "C",
+    "biome": "2-castle",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.051092118,
+      0.051470578,
+      0.051470578
+    ],
+    "floors": [
+      "f201",
+      "f202",
+      "f203",
+      "f204",
+      "f205",
+      "f206"
+    ],
+    "walls": [
+      {
+        "prefab": "wall201",
+        "top": "w201",
+        "face": "w202"
+      },
+      {
+        "prefab": "wall202",
+        "top": "w201",
+        "face": "w203"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall201",
+        "sprite": "w201",
+        "alt": "w202"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_01",
+        "sprite": "objects1_9",
+        "alt": ""
+      },
+      {
+        "prefab": "obj22_01",
+        "sprite": "objects1_25",
+        "alt": "objects1_26"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_knight01",
+      "e_knight02",
+      "e_knight03",
+      "e_knight04",
+      "e_knight05",
+      "e_knight06",
+      "e_wizard01",
+      "e_wizard01",
+      "e_slime01",
+      "e_slime01"
+    ],
+    "ex_enemies": [
+      "ex_knight02",
+      "ex_knight06",
+      "ex_wizard",
+      "ex_slime01"
+    ]
+  },
+  {
+    "id": "C4",
+    "level": "2-4",
+    "chapter": 2,
+    "stage": 4,
+    "variant": "C",
+    "biome": "2-castle",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.051092118,
+      0.051470578,
+      0.051470578
+    ],
+    "floors": [
+      "f101",
+      "f102",
+      "f103",
+      "f104",
+      "f105",
+      "f106"
+    ],
+    "walls": [
+      {
+        "prefab": "wall101",
+        "top": "w101",
+        "face": "w102"
+      },
+      {
+        "prefab": "wall102",
+        "top": "w101",
+        "face": "w103"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall101",
+        "sprite": "w101",
+        "alt": "w102"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_01",
+        "sprite": "objects1_9",
+        "alt": ""
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_knight01",
+      "e_knight02",
+      "e_knight03",
+      "e_knight04",
+      "e_knight05",
+      "e_knight06",
+      "e_wizard01",
+      "e_wizard01",
+      "e_slime01",
+      "e_battery01",
+      "e_battery01",
+      "e_slime01",
+      "e_giant"
+    ],
+    "ex_enemies": [
+      "ex_battery01",
+      "ex_slime01",
+      "ex_knight06",
+      "ex_giant",
+      "ex_wizard"
+    ]
+  },
+  {
+    "id": "C5",
+    "level": "2-5",
+    "chapter": 2,
+    "stage": 5,
+    "variant": "C",
+    "biome": "2-castle",
+    "chest_level": 4,
+    "map_long": 4,
+    "camera_bg": [
+      0.051092118,
+      0.051470578,
+      0.051470578
+    ],
+    "floors": [
+      "f101",
+      "f102",
+      "f103",
+      "f104",
+      "f105",
+      "f106"
+    ],
+    "walls": [
+      {
+        "prefab": "wall101",
+        "top": "w101",
+        "face": "w102"
+      },
+      {
+        "prefab": "wall102",
+        "top": "w101",
+        "face": "w103"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall101",
+        "sprite": "w101",
+        "alt": "w102"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_01",
+        "sprite": "objects1_9",
+        "alt": ""
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r2_boss1",
+        "r2_boss2"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_knight01",
+      "e_knight02",
+      "e_knight03",
+      "e_knight04",
+      "e_knight05",
+      "e_knight06",
+      "e_wizard01",
+      "e_wizard01",
+      "e_giant",
+      "e_battery01",
+      "e_battery01",
+      "e_giant",
+      "e_slime01"
+    ],
+    "ex_enemies": [
+      "ex_battery01",
+      "ex_slime01",
+      "ex_knight06",
+      "ex_giant",
+      "ex_wizard"
+    ]
+  },
+  {
+    "id": "D1",
+    "level": "2-1",
+    "chapter": 2,
+    "stage": 1,
+    "variant": "D",
+    "biome": "2-graveyard",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.08823532,
+      0.05709344,
+      0.08608761
+    ],
+    "floors": [
+      "f305",
+      "f304",
+      "f303",
+      "f302",
+      "f301",
+      "f306"
+    ],
+    "walls": [
+      {
+        "prefab": "wall301",
+        "top": "w301",
+        "face": "w302"
+      },
+      {
+        "prefab": "wall302",
+        "top": "w301",
+        "face": "w303"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall301",
+        "sprite": "w301",
+        "alt": "w302"
+      },
+      {
+        "prefab": "box03",
+        "sprite": "objects1_19",
+        "alt": "objects1_20"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_02",
+        "sprite": "objects1_14",
+        "alt": "texiao_01"
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_skeleton01",
+      "e_skeleton02",
+      "e_skeleton03",
+      "e_skeleton04",
+      "e_skeleton05",
+      "e_skeleton06",
+      "e_slime01",
+      "e_slime01"
+    ],
+    "ex_enemies": [
+      "ex_spider01",
+      "ex_skeleton04",
+      "ex_skeleton01",
+      "ex_wizard"
+    ]
+  },
+  {
+    "id": "D2",
+    "level": "2-2",
+    "chapter": 2,
+    "stage": 2,
+    "variant": "D",
+    "biome": "2-graveyard",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.08823532,
+      0.05709344,
+      0.08608761
+    ],
+    "floors": [
+      "f305",
+      "f304",
+      "f303",
+      "f302",
+      "f301",
+      "f306"
+    ],
+    "walls": [
+      {
+        "prefab": "wall301",
+        "top": "w301",
+        "face": "w302"
+      },
+      {
+        "prefab": "wall302",
+        "top": "w301",
+        "face": "w303"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall301",
+        "sprite": "w301",
+        "alt": "w302"
+      },
+      {
+        "prefab": "box03",
+        "sprite": "objects1_19",
+        "alt": "objects1_20"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_02",
+        "sprite": "objects1_14",
+        "alt": "texiao_01"
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_skeleton01",
+      "e_skeleton02",
+      "e_skeleton03",
+      "e_skeleton04",
+      "e_skeleton05",
+      "e_skeleton06",
+      "e_shaman",
+      "e_shaman",
+      "e_battery01",
+      "e_battery01"
+    ],
+    "ex_enemies": [
+      "ex_spider01",
+      "ex_skeleton04",
+      "ex_skeleton01",
+      "ex_battery01"
+    ]
+  },
+  {
+    "id": "D3",
+    "level": "2-3",
+    "chapter": 2,
+    "stage": 3,
+    "variant": "D",
+    "biome": "2-graveyard",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.08823532,
+      0.05709344,
+      0.08608761
+    ],
+    "floors": [
+      "f305",
+      "f304",
+      "f303",
+      "f302",
+      "f301",
+      "f306"
+    ],
+    "walls": [
+      {
+        "prefab": "wall301",
+        "top": "w301",
+        "face": "w302"
+      },
+      {
+        "prefab": "wall302",
+        "top": "w301",
+        "face": "w303"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall301",
+        "sprite": "w301",
+        "alt": "w302"
+      },
+      {
+        "prefab": "box03",
+        "sprite": "objects1_19",
+        "alt": "objects1_20"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_02",
+        "sprite": "objects1_14",
+        "alt": "texiao_01"
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_skeleton01",
+      "e_skeleton02",
+      "e_skeleton03",
+      "e_skeleton04",
+      "e_skeleton05",
+      "e_skeleton06",
+      "e_shaman",
+      "e_shaman",
+      "e_spider01",
+      "e_battery01",
+      "e_battery01",
+      "e_spider01",
+      "e_spider02",
+      "e_hammer"
+    ],
+    "ex_enemies": [
+      "ex_spider01",
+      "ex_skeleton04",
+      "ex_skeleton01",
+      "ex_battery01",
+      "ex_hammer"
+    ]
+  },
+  {
+    "id": "D4",
+    "level": "2-4",
+    "chapter": 2,
+    "stage": 4,
+    "variant": "D",
+    "biome": "2-graveyard",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.08823532,
+      0.05709344,
+      0.08608761
+    ],
+    "floors": [
+      "f305",
+      "f304",
+      "f303",
+      "f302",
+      "f301",
+      "f306"
+    ],
+    "walls": [
+      {
+        "prefab": "wall303",
+        "top": "w304",
+        "face": "w302"
+      },
+      {
+        "prefab": "wall304",
+        "top": "w304",
+        "face": "w303"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall303",
+        "sprite": "w304",
+        "alt": "w302"
+      },
+      {
+        "prefab": "box03",
+        "sprite": "objects1_19",
+        "alt": "objects1_20"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_02",
+        "sprite": "objects1_14",
+        "alt": "texiao_01"
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_skeleton01",
+      "e_skeleton02",
+      "e_skeleton03",
+      "e_skeleton04",
+      "e_skeleton05",
+      "e_skeleton06",
+      "e_shaman",
+      "e_shaman",
+      "e_spider01",
+      "e_battery01",
+      "e_battery01",
+      "e_spider01",
+      "e_spider02",
+      "e_hammer"
+    ],
+    "ex_enemies": [
+      "ex_spider01",
+      "ex_skeleton04",
+      "ex_skeleton01",
+      "ex_battery01",
+      "ex_hammer"
+    ]
+  },
+  {
+    "id": "D5",
+    "level": "2-5",
+    "chapter": 2,
+    "stage": 5,
+    "variant": "D",
+    "biome": "2-graveyard",
+    "chest_level": 4,
+    "map_long": 4,
+    "camera_bg": [
+      0.08823532,
+      0.05709344,
+      0.08608761
+    ],
+    "floors": [
+      "f305",
+      "f304",
+      "f303",
+      "f302",
+      "f301",
+      "f306"
+    ],
+    "walls": [
+      {
+        "prefab": "wall303",
+        "top": "w304",
+        "face": "w302"
+      },
+      {
+        "prefab": "wall304",
+        "top": "w304",
+        "face": "w303"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall303",
+        "sprite": "w304",
+        "alt": "w302"
+      },
+      {
+        "prefab": "box03",
+        "sprite": "objects1_19",
+        "alt": "objects1_20"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_02",
+        "sprite": "objects1_14",
+        "alt": "texiao_01"
+      },
+      {
+        "prefab": "obj22_02",
+        "sprite": "objects1_27",
+        "alt": "objects1_28"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r2_boss3",
+        "r2_boss4"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_skeleton01",
+      "e_skeleton02",
+      "e_skeleton03",
+      "e_skeleton04",
+      "e_skeleton05",
+      "e_skeleton06",
+      "e_shaman",
+      "e_shaman",
+      "e_hammer",
+      "e_battery01",
+      "e_hammer",
+      "e_spider01",
+      "e_spider02",
+      "e_hammer"
+    ],
+    "ex_enemies": [
+      "ex_spider01",
+      "ex_skeleton04",
+      "ex_skeleton01",
+      "ex_battery01",
+      "ex_hammer"
+    ]
+  },
+  {
+    "id": "E1",
+    "level": "3-1",
+    "chapter": 3,
+    "stage": 1,
+    "variant": "E",
+    "biome": "3-alien",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f401",
+      "f403",
+      "f404",
+      "f402",
+      "f405",
+      "f406"
+    ],
+    "walls": [
+      {
+        "prefab": "wall401",
+        "top": "w402",
+        "face": "w403"
+      },
+      {
+        "prefab": "wall402",
+        "top": "w402",
+        "face": "w404"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall403",
+        "sprite": "w408",
+        "alt": "w405"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_03",
+        "sprite": "objects2_0",
+        "alt": "objects2_1"
+      },
+      {
+        "prefab": "obj22_03",
+        "sprite": "objects2_12",
+        "alt": "objects2_11"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_alien01",
+      "e_alien02",
+      "e_alien03",
+      "e_battery01",
+      "e_battery01",
+      "e_worm01",
+      "e_ufo"
+    ],
+    "ex_enemies": [
+      "ex_alien01",
+      "ex_worm",
+      "ex_battery01"
+    ]
+  },
+  {
+    "id": "E2",
+    "level": "3-2",
+    "chapter": 3,
+    "stage": 2,
+    "variant": "E",
+    "biome": "3-alien",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f401",
+      "f403",
+      "f404",
+      "f402",
+      "f405",
+      "f406"
+    ],
+    "walls": [
+      {
+        "prefab": "wall401",
+        "top": "w402",
+        "face": "w403"
+      },
+      {
+        "prefab": "wall402",
+        "top": "w402",
+        "face": "w404"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall403",
+        "sprite": "w408",
+        "alt": "w405"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_03",
+        "sprite": "objects2_0",
+        "alt": "objects2_1"
+      },
+      {
+        "prefab": "obj22_03",
+        "sprite": "objects2_12",
+        "alt": "objects2_11"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_alien01",
+      "e_alien02",
+      "e_alien03",
+      "e_creeper_fly",
+      "e_creeper",
+      "e_worm01",
+      "e_ufo"
+    ],
+    "ex_enemies": [
+      "ex_alien01",
+      "ex_worm",
+      "ex_creeper_fly"
+    ]
+  },
+  {
+    "id": "E3",
+    "level": "3-3",
+    "chapter": 3,
+    "stage": 3,
+    "variant": "E",
+    "biome": "3-alien",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f401",
+      "f403",
+      "f404",
+      "f402",
+      "f405",
+      "f406"
+    ],
+    "walls": [
+      {
+        "prefab": "wall401",
+        "top": "w402",
+        "face": "w403"
+      },
+      {
+        "prefab": "wall402",
+        "top": "w402",
+        "face": "w404"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall403",
+        "sprite": "w408",
+        "alt": "w405"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_03",
+        "sprite": "objects2_0",
+        "alt": "objects2_1"
+      },
+      {
+        "prefab": "obj22_03",
+        "sprite": "objects2_12",
+        "alt": "objects2_11"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_alien01",
+      "e_alien02",
+      "e_alien03",
+      "e_creeper_fly",
+      "e_creeper",
+      "e_golem01",
+      "e_golem02",
+      "e_worm01",
+      "e_ufo"
+    ],
+    "ex_enemies": [
+      "ex_alien01",
+      "ex_creeper",
+      "ex_creeper_fly",
+      "ex_golem01"
+    ]
+  },
+  {
+    "id": "E4",
+    "level": "3-4",
+    "chapter": 3,
+    "stage": 4,
+    "variant": "E",
+    "biome": "3-alien",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f401",
+      "f403",
+      "f404",
+      "f402",
+      "f405",
+      "f406"
+    ],
+    "walls": [
+      {
+        "prefab": "wall401",
+        "top": "w402",
+        "face": "w403"
+      },
+      {
+        "prefab": "wall402",
+        "top": "w402",
+        "face": "w404"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall403",
+        "sprite": "w408",
+        "alt": "w405"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_03",
+        "sprite": "objects2_0",
+        "alt": "objects2_1"
+      },
+      {
+        "prefab": "obj22_03",
+        "sprite": "objects2_12",
+        "alt": "objects2_11"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_alien01",
+      "e_alien02",
+      "e_alien03",
+      "e_creeper_fly",
+      "e_creeper",
+      "e_golem01",
+      "e_golem02",
+      "e_worm01",
+      "e_ufo",
+      "e_tentacle"
+    ],
+    "ex_enemies": [
+      "ex_worm",
+      "ex_alien01",
+      "ex_creeper",
+      "ex_creeper_fly",
+      "ex_golem01"
+    ]
+  },
+  {
+    "id": "E5",
+    "level": "3-5",
+    "chapter": 3,
+    "stage": 5,
+    "variant": "E",
+    "biome": "3-alien",
+    "chest_level": 4,
+    "map_long": 4,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f401",
+      "f403",
+      "f404",
+      "f402",
+      "f405",
+      "f406"
+    ],
+    "walls": [
+      {
+        "prefab": "wall401",
+        "top": "w402",
+        "face": "w403"
+      },
+      {
+        "prefab": "wall402",
+        "top": "w402",
+        "face": "w404"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall403",
+        "sprite": "w408",
+        "alt": "w405"
+      },
+      {
+        "prefab": "box01",
+        "sprite": "box01",
+        "alt": "box02"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_green_1",
+        "sprite": "objects1_33",
+        "alt": "objects1_32"
+      },
+      {
+        "prefab": "cask_blue_1",
+        "sprite": "objects1_35",
+        "alt": "objects1_34"
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_down",
+        "sprite": "objects1_83",
+        "alt": ""
+      },
+      {
+        "prefab": "obj11_03",
+        "sprite": "objects2_0",
+        "alt": "objects2_1"
+      },
+      {
+        "prefab": "obj22_03",
+        "sprite": "objects2_12",
+        "alt": "objects2_11"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r3_boss2",
+        "r3_boss1"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_alien01",
+      "e_alien02",
+      "e_alien03",
+      "e_creeper_fly",
+      "e_creeper",
+      "e_golem01",
+      "e_golem02",
+      "e_worm01",
+      "e_ufo",
+      "e_tentacle"
+    ],
+    "ex_enemies": [
+      "ex_alien01",
+      "ex_creeper",
+      "ex_creeper_fly",
+      "ex_worm",
+      "ex_golem01"
+    ]
+  },
+  {
+    "id": "F1",
+    "level": "3-1",
+    "chapter": 3,
+    "stage": 1,
+    "variant": "F",
+    "biome": "3-volcano",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f701",
+      "f702",
+      "f703",
+      "f704",
+      "f705",
+      "f706"
+    ],
+    "walls": [
+      {
+        "prefab": "wall701",
+        "top": "w701",
+        "face": "w702"
+      },
+      {
+        "prefab": "wall702",
+        "top": "w703",
+        "face": "w704"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall703",
+        "sprite": "objects4_10",
+        "alt": "objects4_9"
+      },
+      {
+        "prefab": "box05",
+        "sprite": "objects4_26",
+        "alt": "objects4_13"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_07",
+        "sprite": "objects4_38",
+        "alt": "objects4_39"
+      },
+      {
+        "prefab": "obj22_10",
+        "sprite": "objects4_29",
+        "alt": "objects4_30"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_mummy01",
+      "e_mummy02",
+      "e_mummy03",
+      "e_mosquito",
+      "e_mosquito",
+      "e_mummy05",
+      "e_mummy04"
+    ],
+    "ex_enemies": [
+      "ex_mosquito"
+    ]
+  },
+  {
+    "id": "F2",
+    "level": "3-2",
+    "chapter": 3,
+    "stage": 2,
+    "variant": "F",
+    "biome": "3-volcano",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f701",
+      "f702",
+      "f703",
+      "f704",
+      "f705",
+      "f706"
+    ],
+    "walls": [
+      {
+        "prefab": "wall701",
+        "top": "w701",
+        "face": "w702"
+      },
+      {
+        "prefab": "wall702",
+        "top": "w703",
+        "face": "w704"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall703",
+        "sprite": "objects4_10",
+        "alt": "objects4_9"
+      },
+      {
+        "prefab": "box05",
+        "sprite": "objects4_26",
+        "alt": "objects4_13"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_07",
+        "sprite": "objects4_38",
+        "alt": "objects4_39"
+      },
+      {
+        "prefab": "obj22_10",
+        "sprite": "objects4_29",
+        "alt": "objects4_30"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_mummy01",
+      "e_mummy02",
+      "e_mummy03",
+      "e_mummy04",
+      "e_mummy05",
+      "e_mosquito",
+      "e_mosquito",
+      "e_fireknight02",
+      "e_fireknight01"
+    ],
+    "ex_enemies": [
+      "ex_mosquito",
+      "ex_mummy04"
+    ]
+  },
+  {
+    "id": "F3",
+    "level": "3-3",
+    "chapter": 3,
+    "stage": 3,
+    "variant": "F",
+    "biome": "3-volcano",
+    "chest_level": 3,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f701",
+      "f702",
+      "f703",
+      "f704",
+      "f705",
+      "f706"
+    ],
+    "walls": [
+      {
+        "prefab": "wall701",
+        "top": "w701",
+        "face": "w702"
+      },
+      {
+        "prefab": "wall702",
+        "top": "w703",
+        "face": "w704"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall703",
+        "sprite": "objects4_10",
+        "alt": "objects4_9"
+      },
+      {
+        "prefab": "box05",
+        "sprite": "objects4_26",
+        "alt": "objects4_13"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_07",
+        "sprite": "objects4_38",
+        "alt": "objects4_39"
+      },
+      {
+        "prefab": "obj22_10",
+        "sprite": "objects4_29",
+        "alt": "objects4_30"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_tortoise",
+      "e_mummy02",
+      "e_mummy03",
+      "e_mummy04",
+      "e_mummy05",
+      "e_mosquito",
+      "e_mosquito",
+      "e_spider05",
+      "e_spider05",
+      "e_fireknight01",
+      "e_fireknight02"
+    ],
+    "ex_enemies": [
+      "ex_mosquito",
+      "ex_mummy04",
+      "ex_fireknight"
+    ]
+  },
+  {
+    "id": "F4",
+    "level": "3-4",
+    "chapter": 3,
+    "stage": 4,
+    "variant": "F",
+    "biome": "3-volcano",
+    "chest_level": 4,
+    "map_long": 3,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f701",
+      "f702",
+      "f703",
+      "f704",
+      "f705",
+      "f706"
+    ],
+    "walls": [
+      {
+        "prefab": "wall701",
+        "top": "w701",
+        "face": "w702"
+      },
+      {
+        "prefab": "wall702",
+        "top": "w703",
+        "face": "w704"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall703",
+        "sprite": "objects4_10",
+        "alt": "objects4_9"
+      },
+      {
+        "prefab": "box05",
+        "sprite": "objects4_26",
+        "alt": "objects4_13"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_07",
+        "sprite": "objects4_38",
+        "alt": "objects4_39"
+      },
+      {
+        "prefab": "obj22_10",
+        "sprite": "objects4_29",
+        "alt": "objects4_30"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r_transgete"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_fireknight01",
+      "e_fireknight02",
+      "e_fireknight03",
+      "e_mummy02",
+      "e_mummy03",
+      "e_mosquito",
+      "e_mummy04",
+      "e_mummy04",
+      "e_mummy05",
+      "e_spider05",
+      "e_spider05",
+      "e_tortoise",
+      "e_tortoise"
+    ],
+    "ex_enemies": [
+      "ex_mosquito",
+      "ex_mummy04",
+      "ex_fireknight2",
+      "ex_fireknight",
+      "ex_tortoise"
+    ]
+  },
+  {
+    "id": "F5",
+    "level": "3-5",
+    "chapter": 3,
+    "stage": 5,
+    "variant": "F",
+    "biome": "3-volcano",
+    "chest_level": 4,
+    "map_long": 4,
+    "camera_bg": [
+      0.06293254,
+      0.08823532,
+      0.08300026
+    ],
+    "floors": [
+      "f701",
+      "f702",
+      "f703",
+      "f704",
+      "f705",
+      "f706"
+    ],
+    "walls": [
+      {
+        "prefab": "wall701",
+        "top": "w701",
+        "face": "w702"
+      },
+      {
+        "prefab": "wall702",
+        "top": "w703",
+        "face": "w704"
+      }
+    ],
+    "obstacles": [
+      {
+        "prefab": "wall703",
+        "sprite": "objects4_10",
+        "alt": "objects4_9"
+      },
+      {
+        "prefab": "box05",
+        "sprite": "objects4_26",
+        "alt": "objects4_13"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "cask_write_1",
+        "sprite": "objects1_86",
+        "alt": "objects1_85"
+      },
+      {
+        "prefab": "cask_red_1",
+        "sprite": "objects1_31",
+        "alt": "objects1_30"
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "speed_up",
+        "sprite": "objects1_82",
+        "alt": ""
+      },
+      {
+        "prefab": "sting01",
+        "sprite": "objects1_0",
+        "alt": "objects1_1"
+      },
+      {
+        "prefab": "obj11_07",
+        "sprite": "objects4_38",
+        "alt": "objects4_39"
+      },
+      {
+        "prefab": "obj22_10",
+        "sprite": "objects4_29",
+        "alt": "objects4_30"
+      },
+      {
+        "prefab": "signs01",
+        "sprite": "objects_common_35",
+        "alt": ""
+      },
+      {
+        "prefab": "brazier01",
+        "sprite": "objects1_4",
+        "alt": "objects1_5"
+      }
+    ],
+    "rooms": {
+      "start": [
+        "r_start"
+      ],
+      "type1": [
+        "r_chest",
+        "r_sell"
+      ],
+      "type2": [
+        "r3_boss3",
+        "r3_boss4"
+      ],
+      "type3": [
+        "r_mercenary",
+        "r_mineral",
+        "r_statue"
+      ]
+    },
+    "enemies": [
+      "e_fireknight03",
+      "e_fireknight03",
+      "e_fireknight01",
+      "e_mummy04",
+      "e_mummy03",
+      "e_spider05",
+      "e_spider05",
+      "e_tortoise",
+      "e_tortoise",
+      "e_mummy05"
+    ],
+    "ex_enemies": [
+      "ex_mosquito",
+      "ex_mummy04",
+      "ex_fireknight2",
+      "ex_fireknight",
+      "ex_spider05"
+    ]
+  },
+  {
+    "id": "G1",
+    "level": "3-6",
+    "chapter": 3,
+    "stage": 1,
+    "variant": "G",
+    "biome": "end",
+    "chest_level": 4,
+    "map_long": 1,
+    "camera_bg": [
+      0.09411765,
+      0.5294118,
+      0.6745098
+    ],
+    "floors": [
+      "f501",
+      "f502",
+      "f503",
+      "f504",
+      "f505",
+      "f506"
+    ],
+    "walls": [
+      {
+        "prefab": "wall502",
+        "top": "w503",
+        "face": "w504"
+      },
+      {
+        "prefab": "wall504",
+        "top": "w505",
+        "face": "w506"
+      }
+    ],
+    "obstacles": [],
+    "rooms": {
+      "start": [
+        "r_start_no_event"
+      ],
+      "type1": [],
+      "type2": [
+        "r_end"
+      ],
+      "type3": []
+    },
+    "enemies": [],
+    "ex_enemies": []
+  }
+]

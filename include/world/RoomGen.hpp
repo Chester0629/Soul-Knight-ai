@@ -145,6 +145,11 @@ public:
      *         ordering matches the original's x-major, y-minor scan.
      */
     const std::vector<std::pair<int, int>> &FloorList() const { return m_FloorList; }
+    /// MAP M1: the floor tile VARIANT CreateFloor's pass 3 rolled for a cell -- an
+    /// index into MapManager.floor_list (0..3). The draws were always reproduced
+    /// (stream fidelity); the value is now kept so the biome floor renders with its
+    /// real variety instead of one tile. Out of range -> 0.
+    int FloorVariantAt(int x, int y) const;
 
 private:
     // --- Faithful pipeline stages (named after the original methods). ----------
@@ -177,6 +182,7 @@ private:
     std::array<int, 4> m_Entrance{}; ///< entrance[] @0x38.
     std::vector<int> m_Map;          ///< map @0x3C (flat, x*height+y).
     std::vector<std::pair<int, int>> m_FloorList; ///< floor_list @0x40.
+    std::vector<int> m_FloorVariant; ///< MAP M1: pass-3 variant per cell (x*height+y).
     int m_RoomXOffset = 0;           ///< room_x_offset @0x70.
     int m_RoomYOffset = 0;           ///< room_y_offset @0x74.
     int m_SpecialBoxRate = 0;        ///< special_box_rate @0x78.

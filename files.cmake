@@ -518,6 +518,9 @@ set(TEST_FILES
     # B3 ECONOMY: enemy death rewards, coin magnet, run coin counter
     EnemyRewardTest.cpp
 
+    # MAP M1: level table, biome variant, EnemyMaker budget
+    LevelTableTest.cpp
+
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
 

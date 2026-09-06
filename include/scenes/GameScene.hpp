@@ -102,7 +102,25 @@ private:
     std::vector<std::shared_ptr<CoinPickup>> m_Coins;
     /// B3: species per sim enemy index (parallel to m_Enemies) for the death reward roll.
     std::vector<const EnemyDef *> m_EnemyDefs;
+    /// MAP M1: the original EnemyMaker spawns in PARTS -- `this_count` (= level*3)
+    /// enemies per wave, the next wave 0.8 s after the previous one is dead
+    /// (EnemyMaker.CreatePart / EnemyDead -> Invoke("CreatePart", 0.8f)). One queue
+    /// per room: the species still to spawn and the room's spawn points.
+    struct SpawnWaves {
+        std::vector<std::string> pending;
+        std::vector<glm::vec2> points;
+        int waveSize = 3;
+        float timerMs = -1.0F; ///< -1 = idle; counts down the 0.8 s CreatePart delay
+        int serial = 0;        ///< spawn ordinal (seed spread + point spread)
+    };
+    std::vector<SpawnWaves> m_Waves; ///< indexed by room
+    /// Instantiate one enemy of species @p id at @p at in room @p roomIndex.
+    void SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, int serial);
+    /// Spawn the next part of a room's queue (up to waveSize).
+    void SpawnNextWave(int roomIndex);
+    bool PendingWaves() const;
     const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
+    const LevelDef *m_Level = nullptr;    ///< MAP M1: this floor's MapManager level (may be null).
     /// B3: the reward-roll stream (RGEController.rg_random analog), seeded per floor.
     RGRandom m_RewardRng;
     /// Door-gap colliders per room (sealed while the room is locked).

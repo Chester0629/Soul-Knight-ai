@@ -267,18 +267,34 @@ void RoomGen::CreateFloor() {
     //   2) if edge >= 4       -> Range(0,4)
     //   3) ALWAYS             -> Range(2,4)
     // (1) and (2) are mutually exclusive, so each cell draws 1 or 2 values.
+    m_FloorVariant.assign(static_cast<std::size_t>(w) * static_cast<std::size_t>(h), 0);
     for (int x = 0; x < w; ++x) {
         for (int y = 0; y < h; ++y) {
             const int cls = edge[nIdx(x, y)];
+            // MAP M1: keep the rolled value. Which of the two draws the original
+            // assigns to the cell is not recoverable from the branch structure;
+            // the port takes the classification draw when one was made, else the
+            // always-draw (2..3). Draw COUNT + ORDER are unchanged (stream fidelity).
+            int variant = -1;
             if (cls >= 1 && cls <= 2) {
-                (void)m_Rng.Range(0, 4);
+                variant = m_Rng.Range(0, 4);
             }
             if (cls >= 4) {
-                (void)m_Rng.Range(0, 4);
+                variant = m_Rng.Range(0, 4);
             }
-            (void)m_Rng.Range(2, 4);
+            const int always = m_Rng.Range(2, 4);
+            m_FloorVariant[nIdx(x, y)] = variant >= 0 ? variant : always;
         }
     }
+}
+
+int RoomGen::FloorVariantAt(int x, int y) const {
+    if (x < 0 || y < 0 || x >= m_RoomWidth || y >= m_RoomHeight) {
+        return 0;
+    }
+    const std::size_t i = static_cast<std::size_t>(x) * static_cast<std::size_t>(m_RoomHeight) +
+                          static_cast<std::size_t>(y);
+    return i < m_FloorVariant.size() ? m_FloorVariant[i] : 0;
 }
 
 // FAITHFUL: RGRoomX__CreateWall @ rva 0x4FDB6C

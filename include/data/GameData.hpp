@@ -184,6 +184,50 @@ struct DesignRoomDef {
     std::vector<DesignObstacle> obstacles;
 };
 
+/// MAP M1: one wall prefab of MapManager.wall_list -- its top tile + front face.
+struct LevelWallDef {
+    std::string prefab;
+    std::string top;  ///< sprite stem, e.g. "w601" (Resources/sprites/tiles/<top>.png)
+    std::string face; ///< the wall's front face sprite, e.g. "w602"
+};
+
+/// MAP M1: one MapManager.obstacle_list[obj_index] entry (RGObjectSkin skin).
+struct LevelObstacleDef {
+    std::string prefab; ///< e.g. "box04", "brazier01"
+    std::string sprite; ///< main sprite stem (tiles/<sprite>.png)
+    std::string alt;    ///< second sprite (broken box / lit face), "" if none
+};
+
+/**
+ * @struct LevelDef
+ * @brief One floor of the original run, FAITHFUL @ res/map_manager/map_<V><N>.prefab
+ *        (the MapManager component): level label, chest tier, walk length, the
+ *        biome tileset (6 floor variants + 2 walls), the 12-slot obstacle skin
+ *        table, the room prefab pools by type, the WEIGHTED enemy spawn pool
+ *        (enemy_list; duplicates are the weights) and the elite pool. Variants
+ *        A/B = chapter 1 (forest / ice), C/D = chapter 2 (castle / graveyard),
+ *        E/F = chapter 3 (alien / volcano), G1 = the 3-6 end level.
+ */
+struct LevelDef {
+    std::string id;      ///< "B3" = variant B, stage 3
+    std::string level;   ///< "1-3"
+    int chapter = 0;
+    int stage = 0;       ///< 1..5 within the chapter (6 for G1)
+    char variant = 'A';
+    std::string biome;   ///< "1-ice", ... (matches EnemyDef::biome)
+    int chestLevel = 0;  ///< MapManager.chest_level -> RGChest level
+    int mapLong = 0;     ///< MapManager.map_long
+    float cameraBg[3] = {0.0F, 0.0F, 0.0F};
+    std::vector<std::string> floors;          ///< 6 floor sprite stems (floor_list)
+    std::vector<LevelWallDef> walls;          ///< wall_list
+    std::vector<LevelObstacleDef> obstacles;  ///< obstacle_list[12]
+    struct Rooms {
+        std::vector<std::string> start, type1, type2, type3;
+    } rooms;
+    std::vector<std::string> enemies;   ///< enemy_list (weighted spawn pool)
+    std::vector<std::string> exEnemies; ///< ex_enemy_list (elites)
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -280,6 +324,11 @@ public:
     /// Phase 3: the floor-1 design-room interior for @p id (e.g. "r1_42"), or
     /// nullptr when no design table / no such room (slot stays shell-only).
     const DesignRoomDef *FindDesignRoom(const std::string &id) const;
+
+    /// MAP M1: the level table (levels.json). Empty when the table is absent.
+    const std::vector<LevelDef> &Levels() const { return m_Levels; }
+    /// MAP M1: level by id ("B3"); nullptr when unknown.
+    const LevelDef *FindLevel(const std::string &id) const;
     /// All loaded design-room interiors (empty if design_rooms.json is absent).
     const std::unordered_map<std::string, DesignRoomDef> &DesignRooms() const {
         return m_DesignRooms;
@@ -293,6 +342,7 @@ private:
     std::vector<BuffDef> m_Buffs;
     std::vector<RoomLayoutDef> m_RoomLayouts;
     std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
+    std::vector<LevelDef> m_Levels;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
     std::vector<SpriteSet> m_Sprites;

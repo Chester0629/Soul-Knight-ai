@@ -500,6 +500,120 @@ def build_enemy_species_table() -> list[dict]:
     return out
 
 
+
+# ---------------------------------------------------------------------------
+# LEVEL TABLE (map work M1): one entry per res/map_manager/map_<V><N>.prefab.
+# The MapManager component of each level prefab carries EVERYTHING a floor is
+# built from -- FAITHFUL @ MapManager.cs fields: level ("1-1".."3-6"), chest_level,
+# map_long, type0..3_list (room prefab pools), floor_list (6 floor tile variants),
+# wall_list (2 wall prefabs, top + face sprite), obstacle_list[12] (RGObjectSkin
+# obj_index -> prefab), enemy_list (the spawn pool, duplicates = weight) and
+# ex_enemy_list (elites). Six variants: A forest / B ice (chapter 1), C castle /
+# D graveyard (chapter 2), E alien / F volcano (chapter 3), G = the 3-6 end level.
+# ---------------------------------------------------------------------------
+MAP_MANAGER_DIR = EP_ASSETS / "res" / "map_manager"
+_MAPMGR_GUID = "c14938fcf6fbe9ff500498cac2802223"
+_VARIANT_BIOME = {"A": "1-forest", "B": "1-ice", "C": "2-castle", "D": "2-graveyard",
+                  "E": "3-alien", "F": "3-volcano", "G": "end"}
+
+
+def _mm_list(seg: str, key: str, idx: dict) -> list:
+    """Names (asset stems) of a serialized GameObject[] field, in order."""
+    m = re.search(r"\n  " + key + r":\s*\n((?:  - .*\n)+)", seg)
+    if not m:
+        return []
+    out = []
+    for g in _GUID_IN_REF_RE.findall(m.group(1)):
+        p = idx.get(g)
+        out.append(p.stem if p is not None else g[:8])
+    return out
+
+
+def _mm_scalar(seg: str, key: str):
+    m = re.search(r"\n  " + key + r": (.*)", seg)
+    return m.group(1).strip() if m else None
+
+
+def _prefab_sprites(path, idx: dict) -> list:
+    """Sprite stems of every SpriteRenderer in @p path (shadows dropped), in order."""
+    if path is None:
+        return []
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return []
+    out = []
+    for g in _SPRITE_REF_RE.findall(text):
+        p = idx.get(g)
+        if p is not None and not p.stem.startswith("shadow"):
+            out.append(p.stem)
+    return out
+
+
+def build_level_table():
+    """Returns the level list, or None when the AssetRipper source is absent."""
+    if not MAP_MANAGER_DIR.is_dir():
+        return None
+    idx = _guid_index()
+    # prefab name -> Path (first hit), for the floor/wall/obstacle sprite lookups
+    by_name = {}
+    for p in EP_ASSETS.rglob("*.prefab"):
+        by_name.setdefault(p.stem, p)
+    levels = []
+    for f in sorted(MAP_MANAGER_DIR.glob("map_[A-G][0-9].prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        i = text.find("guid: " + _MAPMGR_GUID)
+        if i < 0:
+            continue
+        seg = text[i:]
+        end = seg.find("\n--- !u!")
+        seg = seg[: end if end > 0 else len(seg)]
+        level = _mm_scalar(seg, "level")
+        map_long = int(_mm_scalar(seg, "map_long") or 0)
+        if not level or level in ("None", "'-'", "-") or map_long <= 0:
+            continue  # map_A0 = the empty template
+        variant = f.stem[4]
+        stage = int(f.stem[5])
+        chapter = int(level.split("-")[0])
+        walls = []
+        for w in _mm_list(seg, "wall_list", idx):
+            sp = _prefab_sprites(by_name.get(w), idx)
+            walls.append({"prefab": w, "top": sp[0] if sp else "", "face": sp[1] if len(sp) > 1 else ""})
+        obstacles = []
+        for o in _mm_list(seg, "obstacle_list", idx):
+            sp = _prefab_sprites(by_name.get(o), idx)
+            obstacles.append({"prefab": o, "sprite": sp[0] if sp else "",
+                              "alt": sp[1] if len(sp) > 1 else ""})
+        floors = []
+        for fl in _mm_list(seg, "floor_list", idx):
+            sp = _prefab_sprites(by_name.get(fl), idx)
+            floors.append(sp[0] if sp else "")
+        bg = re.search(r"camera_bg: {r: ([\d.]+), g: ([\d.]+), b: ([\d.]+)", seg)
+        levels.append({
+            "id": f.stem[4:],
+            "level": level,
+            "chapter": chapter,
+            "stage": stage,
+            "variant": variant,
+            "biome": _VARIANT_BIOME.get(variant, ""),
+            "chest_level": int(_mm_scalar(seg, "chest_level") or 0),
+            "map_long": map_long,
+            "camera_bg": [float(x) for x in bg.groups()] if bg else [0.0, 0.0, 0.0],
+            "floors": floors,
+            "walls": walls,
+            "obstacles": obstacles,
+            "rooms": {
+                "start": _mm_list(seg, "type0_list", idx),
+                "type1": _mm_list(seg, "type1_list", idx),
+                "type2": _mm_list(seg, "type2_list", idx),
+                "type3": _mm_list(seg, "type3_list", idx),
+            },
+            "enemies": _mm_list(seg, "enemy_list", idx),
+            "ex_enemies": _mm_list(seg, "ex_enemy_list", idx),
+        })
+    return levels or None
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -596,6 +710,10 @@ def main() -> int:
     manifest = build_sprite_manifest()
     if manifest is not None:
         counts["sprite_entities"] = write("sprites", manifest)
+
+    levels = build_level_table()
+    if levels is not None:
+        counts["levels"] = write("levels", levels)
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

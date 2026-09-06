@@ -306,12 +306,80 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         LOG_INFO("GameData: design_rooms.json absent; design slots stay shell-only");
     }
 
+    // MAP M1: levels.json -- the recovered MapManager table (31 levels). Absence
+    // leaves the scene on its pre-M1 fixed ice tileset / class roster, never
+    // flips `ok`.
+    const json &levels = store.Load(dir + "levels.json");
+    if (levels.is_array()) {
+        const auto strList = [](const json &v, const char *key) {
+            std::vector<std::string> out;
+            const auto it = v.find(key);
+            if (it != v.end() && it->is_array()) {
+                for (const json &s : *it) {
+                    if (s.is_string()) {
+                        out.push_back(s.get<std::string>());
+                    }
+                }
+            }
+            return out;
+        };
+        for (const json &v : levels) {
+            LevelDef d;
+            d.id = GetS(v, "id");
+            d.level = GetS(v, "level");
+            d.chapter = GetI(v, "chapter");
+            d.stage = GetI(v, "stage");
+            const std::string var = GetS(v, "variant");
+            d.variant = var.empty() ? 'A' : var[0];
+            d.biome = GetS(v, "biome");
+            d.chestLevel = GetI(v, "chest_level");
+            d.mapLong = GetI(v, "map_long");
+            if (const auto bg = v.find("camera_bg"); bg != v.end() && bg->is_array()) {
+                for (std::size_t k = 0; k < 3 && k < bg->size(); ++k) {
+                    d.cameraBg[k] = (*bg)[k].is_number() ? (*bg)[k].get<float>() : 0.0F;
+                }
+            }
+            d.floors = strList(v, "floors");
+            if (const auto ws = v.find("walls"); ws != v.end() && ws->is_array()) {
+                for (const json &w : *ws) {
+                    d.walls.push_back(LevelWallDef{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face")});
+                }
+            }
+            if (const auto os = v.find("obstacles"); os != v.end() && os->is_array()) {
+                for (const json &o : *os) {
+                    d.obstacles.push_back(
+                        LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"), GetS(o, "alt")});
+                }
+            }
+            if (const auto rs = v.find("rooms"); rs != v.end() && rs->is_object()) {
+                d.rooms.start = strList(*rs, "start");
+                d.rooms.type1 = strList(*rs, "type1");
+                d.rooms.type2 = strList(*rs, "type2");
+                d.rooms.type3 = strList(*rs, "type3");
+            }
+            d.enemies = strList(v, "enemies");
+            d.exEnemies = strList(v, "ex_enemies");
+            m_Levels.push_back(std::move(d));
+        }
+    } else {
+        LOG_INFO("GameData: levels.json absent; floors use the fixed pre-M1 tileset/roster");
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
              m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
              m_DesignRooms.size());
     return ok;
+}
+
+const LevelDef *GameData::FindLevel(const std::string &id) const {
+    for (const LevelDef &l : m_Levels) {
+        if (l.id == id) {
+            return &l;
+        }
+    }
+    return nullptr;
 }
 
 const DesignRoomDef *GameData::FindDesignRoom(const std::string &id) const {

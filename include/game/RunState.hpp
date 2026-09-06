@@ -137,6 +137,25 @@ inline int ChapterOf(int floorIndex) {
     return (floorIndex / kChapterFloors) % 3 + 1;
 }
 
+/// MAP M1: the biome VARIANT a run plays for a chapter. The original ships two
+/// MapManager sets per chapter (A forest / B ice, C castle / D graveyard, E alien
+/// / F volcano) and picks one per run; the selection rule did not survive the
+/// dump, so the port derives it from the run seed (PORT CHOICE): deterministic,
+/// replayable, both variants reachable.
+inline char BiomeVariantFor(int runSeed, int chapter) {
+    const unsigned mix = static_cast<unsigned>(runSeed) * 2654435761u + static_cast<unsigned>(chapter) * 40503u;
+    const int bit = static_cast<int>((mix >> 13) & 1u);
+    return static_cast<char>('A' + 2 * (chapter - 1) + bit);
+}
+
+/// MAP M1: the level-table id for a 0-based floor: variant letter + 1-based stage
+/// within the chapter ("B3"). Chapters wrap after 3 (ChapterOf).
+inline std::string LevelIdFor(int runSeed, int floorIndex) {
+    const int chapter = ChapterOf(floorIndex);
+    const int stage = floorIndex % kChapterFloors + 1;
+    return std::string(1, BiomeVariantFor(runSeed, chapter)) + std::to_string(stage);
+}
+
 /// Number of floors the original run spans (RGGameProcess.this_index 1..16 cap);
 /// also the length of the Statements scene's level_list.
 constexpr int kOriginalFloorCount = 16;
