@@ -121,6 +121,22 @@ private:
     bool PendingWaves() const;
     const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
     const LevelDef *m_Level = nullptr;    ///< MAP M1: this floor's MapManager level (may be null).
+    // --- MAP M2: the transfer gate (res/item/transfer_gate.prefab, RGTransferGate).
+    // The original never auto-advances: the player walks INTO the gate. It stands in
+    // the type-2 special room (r_transgete, MapManager.type2_list) on mob floors and
+    // appears in the boss room once the boss is dead on boss floors (type2_list =
+    // r*_boss*). Usable once its room holds no live hostile / pending part. ---
+    int m_GateRoom = -1;
+    glm::vec2 m_GatePos{0.0F, 0.0F};
+    bool m_GateActive = false;
+    std::shared_ptr<Util::GameObject> m_Gate;      ///< effect04_5..12 loop (transfer_gate_1)
+    std::shared_ptr<Util::GameObject> m_GateLight; ///< texiao_01 glow under it
+    /// SK_GATE_TELEPORT=K test hook (env, -1 = off): put the player on the gate on
+    /// frame K so the gate transition can be driven headlessly. NO-OP in normal play.
+    long m_GateTeleportFrame = -1;
+    /// SK_GATE_BESIDE=K test hook: put the player 64 px below the gate on frame K
+    /// (outside the trigger) so the open gate can be screenshotted. NO-OP in play.
+    long m_GateBesideFrame = -1;
     /// B3: the reward-roll stream (RGEController.rg_random analog), seeded per floor.
     RGRandom m_RewardRng;
     /// Door-gap colliders per room (sealed while the room is locked).

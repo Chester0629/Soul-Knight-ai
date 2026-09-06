@@ -54,6 +54,10 @@ constexpr float kRoomPitch = static_cast<float>(FloorBlock::kBlock) * kCellPx;
 // Player must be this close (px) to auto-open a chest / collect a pickup.
 constexpr float kChestOpenRange = 40.0F;
 constexpr float kPickupRange = 28.0F;
+/// MAP M2: transfer_gate.prefab trigger BoxCollider2D 3x3 units -> ~1.5 units half
+/// extent = 22 px + the player body; the gate fires when the player's centre is
+/// inside that box.
+constexpr float kGateTriggerPx = 30.0F;
 // SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
 constexpr float kAutoWalkSpeed = 300.0F;
 // Inset (px) from a room edge before the clear-room door lock may arm. The door-
@@ -184,6 +188,22 @@ void GameScene::OnEnter() {
         }
     }
 
+    // MAP M2: where the transfer gate stands. Boss floor: the boss room (the gate
+    // appears once the boss dies). Mob floor: the walk's type-2 special room
+    // (MapManager.type2_list = r_transgete); if the walk rolled none, the room
+    // farthest from the start plays the gate room.
+    m_GateRoom = bossRoom;
+    if (!IsBossFloor(m_FloorIndex)) {
+        for (std::size_t i = 0; i < floor.Rooms().size(); ++i) {
+            if (floor.Rooms()[i].type == 2) {
+                m_GateRoom = static_cast<int>(i);
+                break;
+            }
+        }
+    }
+    m_GateActive = false;
+    m_Gate = nullptr;
+    m_GateLight = nullptr;
     {
         std::string roomLog; // slot -> r1_N (size) -- the realised design selection.
         for (const RoomCell &c : floor.Rooms()) {
@@ -310,6 +330,12 @@ void GameScene::OnEnter() {
         // -- RoomGen::FloorList can include cells isolated from every exit. Same
         // source FloorConnectivityTest anchors its reachability assertion on.
         const auto spawnCells = FloorBlock::ConnectedFloorCells(rg);
+        if (roomIndex == m_GateRoom && !spawnCells.empty()) {
+            // The gate at the room's b_point (its centre): the middle connected cell.
+            const auto &gc = spawnCells[spawnCells.size() / 2];
+            m_GatePos = Room::CellToWorld(gc.first, gc.second, rg.Width(), rg.Height(),
+                                          kCellPx, origin);
+        }
 
         // Tile every cell so the floor is actually drawn: a floor sprite under
         // walkable cells (floor/aisle/door), a wall sprite on solid cells.
@@ -538,6 +564,14 @@ void GameScene::OnEnter() {
                                m_FloorSeed + 9000, bossId);
                 LOG_INFO("BossMaker-lite: room {} spawned {} maxHp={} (type {})", roomIndex,
                          bossId, bossMaxHp, cell.type);
+            } else if (cell.type != 1) {
+                // MAP M2: every special room prefab (r_start, r_transgete, r_chest,
+                // r_sell, r_statue, r_mercenary, r_mineral, the boss rooms) carries an
+                // EnemyMaker with level 0 -> StartEnemyMaker spawns NOTHING. Only the
+                // r1_* normal rooms (type 1) fight. (type3_list = mercenary/mineral/
+                // statue event rooms, not a badass tier.)
+                LOG_INFO("EnemyMaker: room {} (type {}) special prefab -> level 0, no spawns",
+                         roomIndex, cell.type);
             } else {
                 // MAP M1: the original EnemyMaker over the level's REAL spawn pool.
                 // FAITHFUL @ MapManager.enemy_list (weighted: duplicates are the
@@ -567,9 +601,17 @@ void GameScene::OnEnter() {
                         return d != nullptr ? d->consume : 1;
                     },
                     points, maker);
-                if (cell.type == 3 && m_Level != nullptr && !m_Level->exEnemies.empty()) {
-                    ids.push_back(m_Level->exEnemies[static_cast<std::size_t>(
-                        maker.Range(0, static_cast<int>(m_Level->exEnemies.size())))]);
+                // Elites: EnemyMaker.badass_rate promotes a pick to ex_enemy_list. The
+                // rate is a private field that did not survive decompilation --
+                // PORT CHOICE: stage * 3 % per pick (chapter-scaled), labelled so a
+                // recovered value can replace it in one place.
+                if (m_Level != nullptr && !m_Level->exEnemies.empty()) {
+                    for (std::string &id : ids) {
+                        if (maker.Range(0, 100) < stage * 3) {
+                            id = m_Level->exEnemies[static_cast<std::size_t>(
+                                maker.Range(0, static_cast<int>(m_Level->exEnemies.size())))];
+                        }
+                    }
                 }
                 // Spawn points: the room's connected floor cells, spread evenly.
                 SpawnWaves &wv = m_Waves[static_cast<std::size_t>(roomIndex)];
@@ -648,6 +690,12 @@ void GameScene::OnEnter() {
     }
     if (const char *fk = std::getenv("SK_FORCE_KILL")) {
         m_ForceKillFrame = std::atol(fk);
+    }
+    if (const char *gt = std::getenv("SK_GATE_TELEPORT")) {
+        m_GateTeleportFrame = std::atol(gt);
+    }
+    if (const char *gb = std::getenv("SK_GATE_BESIDE")) {
+        m_GateBesideFrame = std::atol(gb);
     }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
@@ -884,6 +932,12 @@ void GameScene::Update(float dtMs) {
     }
     if (m_ForceKillFrame >= 0 && m_Frame == m_ForceKillFrame && m_Sim) {
         m_Sim->KillAllHostiles(); // SK_FORCE_KILL test hook: NO-OP unless set
+    }
+    if (m_GateTeleportFrame >= 0 && m_Frame == m_GateTeleportFrame) {
+        m_Player->m_Transform.translation = m_GatePos; // SK_GATE_TELEPORT test hook
+    }
+    if (m_GateBesideFrame >= 0 && m_Frame == m_GateBesideFrame) {
+        m_Player->m_Transform.translation = m_GatePos + glm::vec2{0.0F, -64.0F}; // SK_GATE_BESIDE
     }
 
     // --- Player movement with axis-separated wall sliding (stays scene-side) ---
@@ -1181,18 +1235,52 @@ void GameScene::Update(float dtMs) {
     // and requests a DEFERRED Replace -- the SceneManager tears this scene (and
     // m_Player) down only after this Update returns, so the snapshot is safe.
     const bool forceClear = (m_ForceClearFrame >= 0 && m_Frame >= m_ForceClearFrame);
-    const bool cleared = m_HadHostiles && FloorCleared(*m_Sim) && !PendingWaves();
-    // B3 PORT CHOICE: the original never auto-advances -- the player walks to the
-    // transfer gate, so every drop is collectable. The port advances on clear, so
-    // pull the remaining coins / energy to the player first (RGCoin.find_target
-    // latched) and hold the transition until they are all collected.
-    if (cleared && !forceClear && !m_Coins.empty()) {
-        for (auto &c : m_Coins) {
-            c->Attract();
+    // MAP M2: FAITHFUL floor exit -- the player walks into the transfer gate
+    // (RGTransferGate.ItemTrigger -> RGGameProcess.NextScene). The gate opens once
+    // its room has no live hostile and no pending part (boss floors: the boss is
+    // dead). Drops left behind are left behind, as in the original. The old
+    // auto-advance-on-clear is gone; SK_FORCE_CLEAR still forces the exit.
+    if (!m_GateActive && m_GateRoom >= 0 && !RoomHasLiveHostile(m_GateRoom) &&
+        (static_cast<std::size_t>(m_GateRoom) >= m_Waves.size() ||
+         m_Waves[static_cast<std::size_t>(m_GateRoom)].pending.empty()) &&
+        (!IsBossFloor(m_FloorIndex) || m_HadHostiles)) {
+        const std::string root(RESOURCE_DIR);
+        m_GateActive = true;
+        m_GateLight = std::make_shared<Util::GameObject>();
+        auto lightImg = std::make_shared<Util::Image>(root + "/sprites/texiao_01.png");
+        m_GateLight->SetDrawable(lightImg);
+        m_GateLight->m_Transform.translation = m_GatePos;
+        {   // light child: 2 x 3 world units (1 unit = kCellPx) regardless of atlas size
+            const glm::vec2 sz = lightImg->GetSize();
+            m_GateLight->m_Transform.scale = {2.0F * kCellPx / std::max(1.0F, sz.x),
+                                              3.0F * kCellPx / std::max(1.0F, sz.y)};
         }
-        return;
+        m_GateLight->SetZIndex(1.5F);
+        m_Renderer.AddChild(m_GateLight);
+        m_Gate = std::make_shared<Util::GameObject>();
+        // FAITHFUL @ transfer_gate_1.controller: effect04_5..12, 8 fps loop; img 2.5x3.5.
+        std::vector<std::string> gateFrames;
+        for (int i = 5; i <= 12; ++i) {
+            gateFrames.push_back(root + "/sprites/effect04_" + std::to_string(i) + ".png");
+        }
+        m_Gate->SetDrawable(std::make_shared<Util::Animation>(gateFrames, true, 125, true));
+        m_Gate->m_Transform.translation = m_GatePos;
+        {   // img child: 2.5 x 3.5 world units (transfer_gate.prefab localScale)
+            const glm::vec2 sz = Util::Image(gateFrames.front()).GetSize();
+            m_Gate->m_Transform.scale = {2.5F * kCellPx / std::max(1.0F, sz.x),
+                                         3.5F * kCellPx / std::max(1.0F, sz.y)};
+        }
+        m_Gate->SetZIndex(2.0F);
+        m_Renderer.AddChild(m_Gate);
+        LOG_INFO("TransferGate: open in room {} at ({:.0f},{:.0f})", m_GateRoom, m_GatePos.x,
+                 m_GatePos.y);
     }
-    if (!m_Transitioning && m_Run != nullptr && (cleared || forceClear)) {
+    const bool gateEntered =
+        m_GateActive && glm::distance(playerPos, m_GatePos) <= kGateTriggerPx;
+    if (gateEntered && !m_Transitioning) {
+        LOG_INFO("TransferGate: entered -> next floor");
+    }
+    if (!m_Transitioning && m_Run != nullptr && (gateEntered || forceClear)) {
         m_Transitioning = true; // signal exactly once
         if (forceClear) {
             // Test hook only: bleed 1 hp so cross-floor hp-continuation is observable
