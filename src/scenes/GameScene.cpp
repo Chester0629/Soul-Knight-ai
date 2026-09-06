@@ -417,9 +417,21 @@ void GameScene::OnEnter() {
         // source FloorConnectivityTest anchors its reachability assertion on.
         const auto spawnCells = FloorBlock::ConnectedFloorCells(rg);
         if (roomIndex == m_GateRoom && !spawnCells.empty()) {
-            // The gate at the room's b_point (its centre): the middle connected cell.
-            const auto &gc = spawnCells[spawnCells.size() / 2];
-            m_GatePos = Room::CellToWorld(gc.first, gc.second, rg.Width(), rg.Height(),
+            // The gate stands at the room's b_point = its geometric centre cell
+            // ((w-1)/2, (h-1)/2); if that cell is not open floor, the nearest
+            // connected floor cell to it.
+            const int gx = (rg.Width() - 1) / 2;
+            const int gy = (rg.Height() - 1) / 2;
+            std::pair<int, int> best = spawnCells[spawnCells.size() / 2];
+            int bestD = 1 << 30;
+            for (const auto &c : spawnCells) {
+                const int d = (c.first - gx) * (c.first - gx) + (c.second - gy) * (c.second - gy);
+                if (d < bestD) {
+                    bestD = d;
+                    best = c;
+                }
+            }
+            m_GatePos = Room::CellToWorld(best.first, best.second, rg.Width(), rg.Height(),
                                           kCellPx, origin);
         }
 
@@ -1348,7 +1360,15 @@ void GameScene::Update(float dtMs) {
                 const std::string root(RESOURCE_DIR);
                 const BossChestDef *bc =
                     m_BossDef != nullptr ? m_Data.FindBossChest(m_BossDef->id) : nullptr;
-                auto chest = std::make_shared<Chest>(root, bv.pos, bc != nullptr ? bc->level : 2,
+                // The chest drops where the boss died; the gate opens at the room's
+                // b_point (centre). A boss that dies on the centre would bury its
+                // chest under the portal -- PORT CHOICE: nudge the chest two cells
+                // below the gate when the two would overlap.
+                glm::vec2 chestPos = bv.pos;
+                if (glm::distance(chestPos, m_GatePos) < 2.0F * kCellPx) {
+                    chestPos = m_GatePos + glm::vec2(0.0F, -2.0F * kCellPx);
+                }
+                auto chest = std::make_shared<Chest>(root, chestPos, bc != nullptr ? bc->level : 2,
                                                      Chest::Kind::Boss);
                 if (bc != nullptr) {
                     chest->SetGuaranteed(bc->weapons);
