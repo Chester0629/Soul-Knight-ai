@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 #include <cstdlib>
 #include <memory>
 #include <string>
@@ -282,6 +283,13 @@ void GameScene::OnEnter() {
     const glm::vec2 floorSz = floorImgs.front()->GetSize();
     const glm::vec2 wallSz = wallImg->GetSize();
     const glm::vec2 wallFaceSz = wallFaceImg->GetSize();
+    // M3d shadows: the original's wall/prop shadow0 is an OPAQUE black 16x24 block
+    // tinted by a multiply material the port has no equivalent for, so it is not
+    // drawn; shadow2 (the alpha ellipse from the character atlas, pivot (0.5,0))
+    // goes under props, boxes and door bars.
+    auto shadowImg2 = std::make_shared<Util::Image>(root + "/sprites/shadow2.png");
+    auto doorBaseImg = std::make_shared<Util::Image>(root + "/sprites/door02.png");
+    auto doorBarImg = std::make_shared<Util::Image>(root + "/sprites/door01.png");
     (void)wallSz;
     (void)wallFaceSz;
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list).
@@ -478,6 +486,22 @@ void GameScene::OnEnter() {
             m_Renderer.AddChild(tile);
             return tile;
         };
+        // Shadow under a cell object: shadow0 pivot (0.5,0.3) -> its centre sits
+        // 0.2 * 24 px * 2 above the cell's bottom edge; shadow2 pivot (0.5,0).
+        const auto addShadow = [&](const std::shared_ptr<Util::Image> &img, int cx, int cy,
+                                   float pivotY) {
+            auto sh = std::make_shared<Util::GameObject>();
+            sh->SetDrawable(img);
+            const glm::vec2 sz = img->GetSize();
+            const float scale = kCellPx / 16.0F;
+            sh->m_Transform.scale = glm::vec2(scale, scale);
+            sh->m_Transform.translation =
+                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin) +
+                glm::vec2(0.0F, sz.y * scale * (0.5F - pivotY) - kCellPx * 0.5F);
+            sh->SetZIndex(0.9F - sh->m_Transform.translation.y * 1e-5F);
+            m_RoomTiles.push_back(sh);
+            m_Renderer.AddChild(sh);
+        };
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
                 if (Room::IsSolidCell(rg.At(x, y))) {
@@ -554,6 +578,7 @@ void GameScene::OnEnter() {
                     objImg[oi] == nullptr) {
                     continue; // 0 is the grid wall; 9/10 unused -> null
                 }
+                addShadow(shadowImg2, o.x, o.y, 0.0F); // alpha ellipse under the prop
                 auto tile = addObjSprite(objImg[oi], o.x, o.y);
                 tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
                 if (objAltImg[oi] != nullptr) {
@@ -609,6 +634,9 @@ void GameScene::OnEnter() {
                     m_SkinCache.emplace(stem, img);
                     return img;
                 };
+                if (sk->kind != "pad") {
+                    addShadow(shadowImg2, o.x, o.y, 0.0F);
+                }
                 auto tile = addObjSprite(skinImg(sk->sprite), o.x, o.y);
                 tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
                 if (!sk->alt.empty()) {
@@ -722,6 +750,37 @@ void GameScene::OnEnter() {
                 glm::vec2{kCellPx, kCellPx}));
         }
         m_RoomDoors.push_back(std::move(doors));
+        // M3d FAITHFUL doors @ r1_*.prefab aisle_*/door: five pieces (d1..d5) across
+        // the door band, each a door02 base with a door01 bar one unit up whose
+        // shadow + bar are enabled only while the doors are closed (door_close2 /
+        // door_open clips). Base always visible; bar shown while sealed.
+        for (const auto &c : FloorBlock::DoorSealCells(rg)) {
+            if (rg.At(c.first, c.second) != -2) {
+                continue; // d1..d5 sit on the five aisle cells; the code-11 flanks are the frame
+            }
+            auto base = addObjSprite(doorBaseImg, c.first, c.second);
+            base->SetZIndex(1.15F - base->m_Transform.translation.y * 1e-5F);
+            DoorPiece piece;
+            piece.room = roomIndex;
+            piece.shadow = std::make_shared<Util::GameObject>();
+            piece.shadow->SetDrawable(shadowImg2);
+            piece.shadow->m_Transform.scale = {0.0F, 0.0F};
+            piece.shadow->m_Transform.translation =
+                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin) +
+                glm::vec2(0.0F, shadowImg2->GetSize().y * (kCellPx / 16.0F) * 0.5F - kCellPx * 0.5F);
+            piece.shadow->SetZIndex(1.16F - piece.shadow->m_Transform.translation.y * 1e-5F);
+            m_Renderer.AddChild(piece.shadow);
+            piece.bar = std::make_shared<Util::GameObject>();
+            piece.bar->SetDrawable(doorBarImg);
+            piece.bar->m_Transform.scale = {0.0F, 0.0F}; // hidden: doors start open
+            piece.bar->m_Transform.translation =
+                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin) +
+                glm::vec2(0.0F, doorBarImg->GetSize().y * (kCellPx / 16.0F) * 0.5F - kCellPx * 0.5F +
+                                    kCellPx); // d at (0, 1): one unit above the base
+            piece.bar->SetZIndex(1.25F - piece.bar->m_Transform.translation.y * 1e-5F);
+            m_Renderer.AddChild(piece.bar);
+            m_DoorPieces.push_back(std::move(piece));
+        }
 
         // Put the player on a corridor-connected floor cell of the start room
         // (spawning at the origin can land in a wall, and a raw FloorList cell can
@@ -984,6 +1043,12 @@ void GameScene::OnEnter() {
     if (const char *sb = std::getenv("SK_SHOP_BUY")) {
         m_ShopBuyFrame = std::atol(sb);
     }
+    if (const char *rt = std::getenv("SK_ROOM_TELEPORT")) {
+        m_RoomTeleportFrame = std::atol(rt);
+        if (const char *comma = std::strchr(rt, ',')) {
+            m_RoomTeleportRoom = std::atoi(comma + 1);
+        }
+    }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
@@ -1227,6 +1292,12 @@ void GameScene::Update(float dtMs) {
     if (m_GateTeleportFrame >= 0 && m_Frame == m_GateTeleportFrame) {
         m_Player->m_Transform.translation = m_GatePos; // SK_GATE_TELEPORT test hook
     }
+    if (m_RoomTeleportFrame >= 0 && m_Frame == m_RoomTeleportFrame && m_RoomTeleportRoom >= 0 &&
+        static_cast<std::size_t>(m_RoomTeleportRoom) < m_Waves.size() &&
+        !m_Waves[static_cast<std::size_t>(m_RoomTeleportRoom)].points.empty()) {
+        const auto &pts = m_Waves[static_cast<std::size_t>(m_RoomTeleportRoom)].points;
+        m_Player->m_Transform.translation = pts[pts.size() / 2]; // SK_ROOM_TELEPORT
+    }
     if (m_GateBesideFrame >= 0 && m_Frame == m_GateBesideFrame) {
         m_Player->m_Transform.translation = m_GatePos + glm::vec2{0.0F, -64.0F}; // SK_GATE_BESIDE
     }
@@ -1385,6 +1456,18 @@ void GameScene::Update(float dtMs) {
                 LOG_INFO("RGRoomX: room {} cleared -> reward gate fired (room_type==1)",
                          i);
             }
+        }
+    }
+
+    // M3d: door bars follow RGRoomX.door_open (RGDoor.CloseDoor / OpenDoor).
+    for (DoorPiece &p : m_DoorPieces) {
+        const bool sealed = p.room >= 0 && static_cast<std::size_t>(p.room) < m_RoomLife.size() &&
+                            !m_RoomLife[static_cast<std::size_t>(p.room)].DoorOpen();
+        if (sealed != p.shown) {
+            p.shown = sealed;
+            const float sc = sealed ? kCellPx / 16.0F : 0.0F;
+            p.bar->m_Transform.scale = {sc, sc};
+            p.shadow->m_Transform.scale = {sc, sc};
         }
     }
 

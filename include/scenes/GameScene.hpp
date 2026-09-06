@@ -153,6 +153,20 @@ private:
     RGRandom m_RewardRng;
     /// Door-gap colliders per room (sealed while the room is locked).
     std::vector<std::vector<Util::Collider>> m_RoomDoors;
+    /// M3d: the door pieces of every door band (RGDoor d1..d5: door02 base, door01
+    /// bar + shadow that only show while the room is sealed -- door_close2 raises
+    /// the bar to +1 unit and enables it, door_open lowers and disables it).
+    struct DoorPiece {
+        int room = -1;
+        std::shared_ptr<Util::GameObject> bar;
+        std::shared_ptr<Util::GameObject> shadow;
+        bool shown = false;
+    };
+    std::vector<DoorPiece> m_DoorPieces;
+    /// SK_ROOM_TELEPORT="K,R" test hook: on frame K put the player in room R (its
+    /// first spawn point) so a locked room can be screenshotted. NO-OP in play.
+    long m_RoomTeleportFrame = -1;
+    int m_RoomTeleportRoom = -1;
     /// Permanent corridor flank-wall colliders across the whole floor (the strip
     /// is walled on its long sides, open at both ends). Always block movement;
     /// unlike m_RoomDoors they are never sealed/unsealed (seam 2: corridors are
