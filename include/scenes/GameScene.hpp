@@ -15,6 +15,7 @@
 #include "Core/Scene.hpp"
 
 #include "Util/GameObject.hpp"
+#include "Util/Image.hpp"
 #include "Util/ObjectPool.hpp"
 #include "Util/Renderer.hpp"
 
@@ -121,6 +122,8 @@ private:
     bool PendingWaves() const;
     const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
     const LevelDef *m_Level = nullptr;    ///< MAP M1: this floor's MapManager level (may be null).
+    /// MAP M3: sprite cache for room-object skins (tiles/<stem>.png), by stem.
+    std::unordered_map<std::string, std::shared_ptr<Util::Image>> m_SkinCache;
     // --- MAP M2: the transfer gate (res/item/transfer_gate.prefab, RGTransferGate).
     // The original never auto-advances: the player walks INTO the gate. It stands in
     // the type-2 special room (r_transgete, MapManager.type2_list) on mob floors and

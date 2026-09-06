@@ -366,12 +366,47 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         LOG_INFO("GameData: levels.json absent; floors use the fixed pre-M1 tileset/roster");
     }
 
+    // MAP M3: boss_rooms.json -- the 14 r<C>_boss<N> layouts + the prefab skin table.
+    const json &bossRooms = store.Load(dir + "boss_rooms.json");
+    if (bossRooms.is_object()) {
+        if (const auto rooms = bossRooms.find("rooms"); rooms != bossRooms.end() && rooms->is_object()) {
+            for (auto it = rooms->begin(); it != rooms->end(); ++it) {
+                BossRoomDef d;
+                d.id = it.key();
+                d.width = GetI(it.value(), "w", 21);
+                d.height = GetI(it.value(), "h", 21);
+                if (const auto objs = it.value().find("objects"); objs != it.value().end() && objs->is_array()) {
+                    for (const json &o : *objs) {
+                        d.objects.push_back(BossRoomObject{GetS(o, "p"), GetI(o, "x"), GetI(o, "y")});
+                    }
+                }
+                m_BossRooms.emplace(it.key(), std::move(d));
+            }
+        }
+        if (const auto pf = bossRooms.find("prefabs"); pf != bossRooms.end() && pf->is_object()) {
+            for (auto it = pf->begin(); it != pf->end(); ++it) {
+                m_PrefabSkins.emplace(it.key(), PrefabSkin{GetS(it.value(), "sprite"), GetS(it.value(), "alt"),
+                                                           GetF(it.value(), "alt_dy"), GetS(it.value(), "kind")});
+            }
+        }
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
              m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
              m_DesignRooms.size());
     return ok;
+}
+
+const BossRoomDef *GameData::FindBossRoom(const std::string &id) const {
+    auto it = m_BossRooms.find(id);
+    return it == m_BossRooms.end() ? nullptr : &it->second;
+}
+
+const PrefabSkin *GameData::FindPrefabSkin(const std::string &prefab) const {
+    auto it = m_PrefabSkins.find(prefab);
+    return it == m_PrefabSkins.end() ? nullptr : &it->second;
 }
 
 const LevelDef *GameData::FindLevel(const std::string &id) const {

@@ -230,6 +230,30 @@ struct LevelDef {
     std::vector<std::string> exEnemies; ///< ex_enemy_list (elites)
 };
 
+/// MAP M3: one object of a boss-room prefab (rgprefab/rooms/r<C>_boss<N>): a
+/// direct prefab instance placed in the room's wall_group, in room-local cells.
+struct BossRoomObject {
+    std::string prefab; ///< "box02", "wall_tree1", "brazier03", ...
+    int x = 0;
+    int y = 0;
+};
+
+/// MAP M3: a boss room layout, FAITHFUL @ rgprefab/rooms/r<C>_boss<N>.prefab.
+struct BossRoomDef {
+    std::string id; ///< "r1_boss1"
+    int width = 21;
+    int height = 21;
+    std::vector<BossRoomObject> objects;
+};
+
+/// MAP M3: how a room-object prefab is drawn / collides (boss_rooms.json "prefabs").
+struct PrefabSkin {
+    std::string sprite; ///< main sprite stem (tiles/<sprite>.png), "" if unresolved
+    std::string alt;    ///< w2 overlay stem, "" if none
+    float altDy = 0.0F; ///< w2 local y in units
+    std::string kind;   ///< "wall" (grid solid) / "box" (destructible) / "solid" / "pad"
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -331,6 +355,11 @@ public:
     const std::vector<LevelDef> &Levels() const { return m_Levels; }
     /// MAP M1: level by id ("B3"); nullptr when unknown.
     const LevelDef *FindLevel(const std::string &id) const;
+    /// MAP M3: boss room layout by prefab id ("r1_boss1"); nullptr when unknown.
+    const BossRoomDef *FindBossRoom(const std::string &id) const;
+    /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
+    const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
+    const std::unordered_map<std::string, BossRoomDef> &BossRooms() const { return m_BossRooms; }
     /// All loaded design-room interiors (empty if design_rooms.json is absent).
     const std::unordered_map<std::string, DesignRoomDef> &DesignRooms() const {
         return m_DesignRooms;
@@ -345,6 +374,8 @@ private:
     std::vector<RoomLayoutDef> m_RoomLayouts;
     std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
     std::vector<LevelDef> m_Levels;
+    std::unordered_map<std::string, BossRoomDef> m_BossRooms;
+    std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
     std::vector<SpriteSet> m_Sprites;

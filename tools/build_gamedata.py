@@ -636,6 +636,88 @@ def build_level_table():
     return levels or None
 
 
+
+# ---------------------------------------------------------------------------
+# BOSS ROOM LAYOUTS (map work M3): rgprefab/rooms/r<C>_boss<N>.prefab. Unlike the
+# res/room r1_* design rooms (RGObjectSkin obj_index markers), a boss room's
+# wall_group holds direct prefab INSTANCES (box02, wall_tree1, brazier03, rail,
+# ...). The room is 21x21 centred on (20,20): cell = pos - 10. Each object is
+# exported by prefab name; the prefab's sprites (main + w2 overlay + dy) are
+# resolved once into the "prefabs" table so the scene can draw them.
+# ---------------------------------------------------------------------------
+BOSS_ROOM_DIR = EP_ASSETS / "rgprefab" / "rooms"
+_DOC_TYPED_RE = re.compile(r"(?m)^--- !u!(\d+) &(\d+)\s*\n")
+_ROOM_GROUPS = ("wall_group", "floor_group", "enemy_group", "b_point",
+                "aisle_s", "aisle_w", "aisle_e", "aisle_n")
+
+
+def _prefab_kind(name: str) -> str:
+    """Collision class of a boss-room object (PORT classification by prefab
+    family; the prefab colliders are: walls/boxes 1x1, rails/stones solid,
+    carpet/speed pads triggers)."""
+    if name.startswith("wall"):
+        return "wall"
+    if name.startswith("box"):
+        return "box"
+    if name.startswith(("carpet", "speed_")):
+        return "pad"
+    return "solid"  # brazier / rail / stone / mineral / obj11 / obj22 / cask
+
+
+def build_boss_rooms():
+    if not BOSS_ROOM_DIR.is_dir():
+        return None
+    idx = _guid_index()
+    by_name = {}
+    for p in EP_ASSETS.rglob("*.prefab"):
+        by_name.setdefault(p.stem, p)
+    rooms = {}
+    prefabs = {}
+    for f in sorted(BOSS_ROOM_DIR.glob("r[0-9]_boss[0-9].prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        rw = re.search(r"room_width: (\d+)", text)
+        rh = re.search(r"room_height: (\d+)", text)
+        w = int(rw.group(1)) if rw else 21
+        h = int(rh.group(1)) if rh else 21
+        names, pos, parent, tf2go = {}, {}, {}, {}
+        heads = list(_DOC_TYPED_RE.finditer(text))
+        typed = []
+        for hi, hm in enumerate(heads):
+            end = heads[hi + 1].start() if hi + 1 < len(heads) else len(text)
+            typed.append((hm.group(2), hm.group(1), text[hm.end():end]))
+        for pid, ty, body in typed:
+            if ty == "1":
+                m = re.search(r"m_Name: (.*)", body)
+                names[pid] = m.group(1).strip() if m else ""
+            elif ty == "4":
+                go = re.search(r"m_GameObject: \{fileID: (\d+)\}", body)
+                p = re.search(r"m_LocalPosition: \{x: ([-\d.e]+), y: ([-\d.e]+)", body)
+                fa = re.search(r"m_Father: \{fileID: (\d+)\}", body)
+                if go:
+                    pos[go.group(1)] = (float(p.group(1)), float(p.group(2))) if p else None
+                    parent[go.group(1)] = fa.group(1) if fa else None
+                    tf2go[pid] = go.group(1)
+        objects = []
+        for go, n in names.items():
+            pgo = tf2go.get(parent.get(go) or "", "")
+            if names.get(pgo, "") != "wall_group":
+                continue
+            base = re.sub(r" \(\d+\)$", "", n).strip("'").strip()
+            if base in _ROOM_GROUPS or pos.get(go) is None:
+                continue
+            x, y = pos[go]
+            cx = int(round(x - 20 + (w - 1) / 2.0))
+            cy = int(round(y - 20 + (h - 1) / 2.0))
+            objects.append({"p": base, "x": cx, "y": cy})
+            if base not in prefabs:
+                sp = _prefab_sprites(by_name.get(base), idx)
+                prefabs[base] = {"sprite": sp[0] if sp else "", "alt": sp[1] if len(sp) > 1 else "",
+                                 "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base)}
+        objects.sort(key=lambda o: (o["x"], o["y"], o["p"]))
+        rooms[f.stem] = {"w": w, "h": h, "objects": objects}
+    return {"rooms": rooms, "prefabs": prefabs} if rooms else None
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -736,6 +818,10 @@ def main() -> int:
     levels = build_level_table()
     if levels is not None:
         counts["levels"] = write("levels", levels)
+    boss_rooms = build_boss_rooms()
+    if boss_rooms is not None:
+        write("boss_rooms", boss_rooms)
+        counts["boss_rooms"] = len(boss_rooms["rooms"])
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

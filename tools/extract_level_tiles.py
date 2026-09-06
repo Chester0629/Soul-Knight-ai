@@ -40,6 +40,8 @@ def main() -> int:
         print(f"RE dump not found: {AS}")
         return 2
     levels = json.load(open(LEVELS, encoding="utf-8"))
+    boss_path = os.path.join(REPO, "Resources", "data", "boss_rooms.json")
+    boss = json.load(open(boss_path, encoding="utf-8")) if os.path.exists(boss_path) else {"prefabs": {}}
     names = set()
     for lv in levels:
         names.update(n for n in lv["floors"] if n)
@@ -47,6 +49,8 @@ def main() -> int:
             names.update(n for n in (w["top"], w["face"]) if n)
         for o in lv["obstacles"]:
             names.update(n for n in (o["sprite"], o["alt"]) if n)
+    for pf in boss.get("prefabs", {}).values():
+        names.update(n for n in (pf.get("sprite", ""), pf.get("alt", "")) if n)
     # sprite name -> .asset path (rgtexture only) and texture guid -> png path
     assets = {}
     for p in glob.glob(os.path.join(AS, "rgtexture", "**", "*.asset"), recursive=True):

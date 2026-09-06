@@ -322,6 +322,30 @@ void GameScene::OnEnter() {
         if (startShell || specialShell) {
             ropt.proceduralObstacles = false; // bare floor, nothing inside
         }
+        // MAP M3: the boss room is one of the level's type2_list prefabs
+        // (r1_boss1 ...), FAITHFUL @ rgprefab/rooms: 21x21 with its real object
+        // layout. Pick is deterministic from the floor seed (MapManager draws the
+        // type-2 pool index from its RGRandom; the exact draw is not recoverable).
+        const BossRoomDef *bossLayout = nullptr;
+        if (bossShell && m_Level != nullptr && !m_Level->rooms.type2.empty()) {
+            const int n = static_cast<int>(m_Level->rooms.type2.size());
+            const std::string bid = m_Level->rooms.type2[static_cast<std::size_t>(
+                ((m_FloorSeed % n) + n) % n)];
+            bossLayout = m_Data.FindBossRoom(bid);
+            if (bossLayout != nullptr) {
+                ropt.roomWidth = bossLayout->width;
+                ropt.roomHeight = bossLayout->height;
+                ropt.proceduralObstacles = false;
+                for (const BossRoomObject &o : bossLayout->objects) {
+                    const PrefabSkin *sk = m_Data.FindPrefabSkin(o.prefab);
+                    if (sk != nullptr && sk->kind == "wall") {
+                        ropt.designSolidCells.emplace_back(o.x, o.y);
+                    }
+                }
+                LOG_INFO("BossRoom: room {} uses {} ({}x{}, {} objects)", roomIndex, bid,
+                         bossLayout->width, bossLayout->height, bossLayout->objects.size());
+            }
+        }
         // Thread the real floor index for fidelity. NOTE: this is INERT here --
         // RoomGen reads floorIndex ONLY inside its randomRoom==true branch
         // (RoomGen.cpp:53-69) and we build with randomRoom=false, so it does not
@@ -340,8 +364,9 @@ void GameScene::OnEnter() {
         // already room-LOCAL (extract_design_rooms.py applied the centre-(20,20)
         // transform -- a CAVEAT reconstruction, validated by in-game play).
         const DesignRoomDef *design =
-            (cell.roomId.empty() || startShell || specialShell) ? nullptr
-                                                               : m_Data.FindDesignRoom(cell.roomId);
+            (cell.roomId.empty() || startShell || specialShell || bossLayout != nullptr)
+                ? nullptr
+                : m_Data.FindDesignRoom(cell.roomId);
         if (design != nullptr) {
             ropt.proceduralObstacles = false;
             for (const DesignObstacle &o : design->obstacles) {
@@ -429,6 +454,9 @@ void GameScene::OnEnter() {
                     const bool designWall = std::find(ropt.designSolidCells.begin(),
                                                       ropt.designSolidCells.end(),
                                                       std::make_pair(x, y)) != ropt.designSolidCells.end();
+                    if (designWall && bossLayout != nullptr) {
+                        continue; // MAP M3: the boss-room object pass draws this wall's skin
+                    }
                     if (designWall && objImg[0] != nullptr) {
                         auto dw = addObjSprite(objImg[0], x, y);
                         dw->SetZIndex(1.3F - dw->m_Transform.translation.y * 1e-5F);
@@ -506,6 +534,55 @@ void GameScene::OnEnter() {
                     ob.tile = tile;
                     ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
                     if (box) {
+                        ob.box.SetHp(kBoxHp);
+                        ob.box.SetSeed(m_FloorSeed + 1 + roomIndex);
+                    }
+                    m_RoomObstacles.push_back(std::move(ob));
+                }
+            }
+        }
+
+        // --- MAP M3: boss-room objects -- every prefab instance of the layout, drawn
+        //     with its real skin (main + w2 overlay), bottom-anchored and y-sorted;
+        //     boxes are destructible blockers, "solid" props permanent blockers,
+        //     pads walkable, walls already in the grid (designSolidCells). ---
+        if (bossLayout != nullptr) {
+            for (const BossRoomObject &o : bossLayout->objects) {
+                if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
+                    continue;
+                }
+                const int cellCode = rg.At(o.x, o.y);
+                if (cellCode == -1 || cellCode == -2 || cellCode == 11) {
+                    continue; // never on the border / aisle / door band
+                }
+                const PrefabSkin *sk = m_Data.FindPrefabSkin(o.prefab);
+                if (sk == nullptr || sk->sprite.empty()) {
+                    continue; // unresolved prefab (obj22_house, rail ...): nothing drawn
+                }
+                auto skinImg = [&](const std::string &stem) -> std::shared_ptr<Util::Image> {
+                    auto it = m_SkinCache.find(stem);
+                    if (it != m_SkinCache.end()) {
+                        return it->second;
+                    }
+                    auto img = std::make_shared<Util::Image>(root + "/sprites/tiles/" + stem + ".png");
+                    m_SkinCache.emplace(stem, img);
+                    return img;
+                };
+                auto tile = addObjSprite(skinImg(sk->sprite), o.x, o.y);
+                tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                if (!sk->alt.empty()) {
+                    auto top = addObjSprite(skinImg(sk->alt), o.x, o.y);
+                    top->m_Transform.translation.y += sk->altDy * kCellPx;
+                    top->SetZIndex(1.31F - tile->m_Transform.translation.y * 1e-5F);
+                }
+                if (sk->kind == "box" || sk->kind == "solid") {
+                    const glm::vec2 wpos = Room::CellToWorld(o.x, o.y, rg.Width(), rg.Height(),
+                                                             kCellPx, origin);
+                    ObstacleBox ob;
+                    ob.collider = Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
+                    ob.tile = tile;
+                    ob.destructible = sk->kind == "box";
+                    if (ob.destructible) {
                         ob.box.SetHp(kBoxHp);
                         ob.box.SetSeed(m_FloorSeed + 1 + roomIndex);
                     }
