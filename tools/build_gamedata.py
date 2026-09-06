@@ -718,6 +718,29 @@ def build_boss_rooms():
     return {"rooms": rooms, "prefabs": prefabs} if rooms else None
 
 
+
+# BOSS CHESTS (M3b): res/item/chest_boss<NN>.prefab -- RGChestBoss with level (drop
+# tier) and object_list = the boss's signature weapon prefab (CreateBossWeapon).
+def build_boss_chests():
+    d = EP_ASSETS / "res" / "item"
+    if not d.is_dir():
+        return None
+    idx = _guid_index()
+    out = {}
+    for f in sorted(d.glob("chest_boss*.prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        lvl = re.search(r"\n  level: (\d+)", text)
+        m = re.search(r"object_list:\n((?:  - .*\n)+)", text)
+        weapons = []
+        if m:
+            for g in _GUID_IN_REF_RE.findall(m.group(1)):
+                p = idx.get(g)
+                if p is not None:
+                    weapons.append(p.stem)
+        out[f.stem] = {"level": int(lvl.group(1)) if lvl else 2, "weapons": weapons}
+    return out or None
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -822,6 +845,10 @@ def main() -> int:
     if boss_rooms is not None:
         write("boss_rooms", boss_rooms)
         counts["boss_rooms"] = len(boss_rooms["rooms"])
+    boss_chests = build_boss_chests()
+    if boss_chests is not None:
+        write("boss_chests", boss_chests)
+        counts["boss_chests"] = len(boss_chests)
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

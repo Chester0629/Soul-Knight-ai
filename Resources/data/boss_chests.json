@@ -1,0 +1,66 @@
+{
+  "chest_boss01": {
+    "level": 2,
+    "weapons": [
+      "weapon_077"
+    ]
+  },
+  "chest_boss02": {
+    "level": 2,
+    "weapons": [
+      "weapon_145"
+    ]
+  },
+  "chest_boss03": {
+    "level": 2,
+    "weapons": [
+      "weapon_116"
+    ]
+  },
+  "chest_boss04": {
+    "level": 2,
+    "weapons": [
+      "weapon_141"
+    ]
+  },
+  "chest_boss07": {
+    "level": 2,
+    "weapons": [
+      "weapon_134"
+    ]
+  },
+  "chest_boss08": {
+    "level": 2,
+    "weapons": [
+      "weapon_123"
+    ]
+  },
+  "chest_boss09": {
+    "level": 2,
+    "weapons": [
+      "weapon_122"
+    ]
+  },
+  "chest_boss10": {
+    "level": 2,
+    "weapons": [
+      "weapon_127"
+    ]
+  },
+  "chest_boss13": {
+    "level": 2,
+    "weapons": [
+      "weapon_175"
+    ]
+  },
+  "chest_boss14": {
+    "level": 2,
+    "weapons": [
+      "weapon_176"
+    ]
+  },
+  "chest_bossnian": {
+    "level": 2,
+    "weapons": []
+  }
+}

@@ -52,4 +52,20 @@ TEST(BossRoomTest, PrefabSkinsResolveCratesAndWalls) {
     EXPECT_EQ(gd.FindPrefabSkin("no_such_prefab"), nullptr);
 }
 
+TEST(BossChestTest, BossChestsCarryTierAndSignatureWeapon) {
+    Game::GameData gd;
+    gd.LoadAll(kResourceRoot);
+    const Game::BossChestDef *c1 = gd.FindBossChest("boss01");
+    ASSERT_NE(c1, nullptr);
+    EXPECT_EQ(c1->id, "chest_boss01");
+    EXPECT_EQ(c1->level, 2);
+    ASSERT_EQ(c1->weapons.size(), 1u);
+    EXPECT_EQ(c1->weapons[0], "weapon_077");
+    EXPECT_NE(gd.FindWeapon("weapon_077"), nullptr);
+    const Game::BossChestDef *c10 = gd.FindBossChest("boss10");
+    ASSERT_NE(c10, nullptr);
+    EXPECT_EQ(c10->weapons, std::vector<std::string>{"weapon_127"});
+    EXPECT_EQ(gd.FindBossChest("boss05"), nullptr); // no chest_boss05 prefab in 1.7.10
+}
+
 } // namespace

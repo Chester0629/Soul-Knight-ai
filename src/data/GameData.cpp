@@ -391,12 +391,37 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         }
     }
 
+    // M3b: boss_chests.json
+    const json &bossChests = store.Load(dir + "boss_chests.json");
+    if (bossChests.is_object()) {
+        for (auto it = bossChests.begin(); it != bossChests.end(); ++it) {
+            BossChestDef d;
+            d.id = it.key();
+            d.level = GetI(it.value(), "level", 2);
+            if (const auto ws = it.value().find("weapons"); ws != it.value().end() && ws->is_array()) {
+                for (const json &w : *ws) {
+                    if (w.is_string()) {
+                        d.weapons.push_back(w.get<std::string>());
+                    }
+                }
+            }
+            m_BossChests.emplace(it.key(), std::move(d));
+        }
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
              m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
              m_DesignRooms.size());
     return ok;
+}
+
+const BossChestDef *GameData::FindBossChest(const std::string &bossPrefab) const {
+    // "boss01" -> "chest_boss01" (prefab naming); "bossnian" -> "chest_bossnian".
+    const std::string id = bossPrefab.rfind("boss", 0) == 0 ? "chest_" + bossPrefab : bossPrefab;
+    auto it = m_BossChests.find(id);
+    return it == m_BossChests.end() ? nullptr : &it->second;
 }
 
 const BossRoomDef *GameData::FindBossRoom(const std::string &id) const {

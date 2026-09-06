@@ -130,6 +130,7 @@ private:
     // appears in the boss room once the boss is dead on boss floors (type2_list =
     // r*_boss*). Usable once its room holds no live hostile / pending part. ---
     int m_GateRoom = -1;
+    bool m_BossChestPending = false; ///< M3b (reserved: boss chest spawned on death)
     glm::vec2 m_GatePos{0.0F, 0.0F};
     bool m_GateActive = false;
     std::shared_ptr<Util::GameObject> m_Gate;      ///< effect04_5..12 loop (transfer_gate_1)

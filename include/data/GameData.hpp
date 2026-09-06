@@ -254,6 +254,14 @@ struct PrefabSkin {
     std::string kind;   ///< "wall" (grid solid) / "box" (destructible) / "solid" / "pad"
 };
 
+/// M3b: a boss's chest (res/item/chest_boss<NN>.prefab, RGChestBoss): its drop
+/// tier and the signature weapon prefab it always contains (CreateBossWeapon).
+struct BossChestDef {
+    std::string id; ///< "chest_boss01"
+    int level = 2;
+    std::vector<std::string> weapons; ///< weapons.json ids ("weapon_077")
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -360,6 +368,8 @@ public:
     /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
     const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
     const std::unordered_map<std::string, BossRoomDef> &BossRooms() const { return m_BossRooms; }
+    /// M3b: the chest a boss prefab ("boss01") leaves behind; nullptr when none.
+    const BossChestDef *FindBossChest(const std::string &bossPrefab) const;
     /// All loaded design-room interiors (empty if design_rooms.json is absent).
     const std::unordered_map<std::string, DesignRoomDef> &DesignRooms() const {
         return m_DesignRooms;
@@ -376,6 +386,7 @@ private:
     std::vector<LevelDef> m_Levels;
     std::unordered_map<std::string, BossRoomDef> m_BossRooms;
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
+    std::unordered_map<std::string, BossChestDef> m_BossChests;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
     std::vector<SpriteSet> m_Sprites;

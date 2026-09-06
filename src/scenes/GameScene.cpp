@@ -188,19 +188,39 @@ void GameScene::OnEnter() {
         }
     }
 
-    // MAP M2: where the transfer gate stands. Boss floor: the boss room (the gate
-    // appears once the boss dies). Mob floor: the walk's type-2 special room
-    // (MapManager.type2_list = r_transgete); if the walk rolled none, the room
-    // farthest from the start plays the gate room.
-    m_GateRoom = bossRoom;
-    if (!IsBossFloor(m_FloorIndex)) {
+    // M3b ROOM ROLES. The original places, besides map_long normal rooms, one of
+    // each MapManager pool: type0 r_start, type1 r_chest/r_sell (reward), type2
+    // r_transgete / r*_boss* (exit), type3 r_mercenary/r_mineral/r_statue (event).
+    // The port's walk only rolls 0..1 special slots, so roles are assigned here
+    // by distance from the start: farthest = exit (gate / boss room), next =
+    // reward room, next = event room, the rest normal. Slot codes: 1 normal,
+    // 2 exit, 3 event, 4 reward.
+    std::vector<int> slotType(floor.Rooms().size(), 1);
+    {
+        std::vector<std::pair<int, int>> byDist; // (-dist, index)
         for (std::size_t i = 0; i < floor.Rooms().size(); ++i) {
-            if (floor.Rooms()[i].type == 2) {
-                m_GateRoom = static_cast<int>(i);
-                break;
+            if (static_cast<int>(i) == floor.StartIndex()) {
+                continue;
             }
+            const int dx = floor.Rooms()[i].gridX - startGx;
+            const int dy = floor.Rooms()[i].gridY - startGy;
+            byDist.emplace_back(-((dx < 0 ? -dx : dx) + (dy < 0 ? -dy : dy)), static_cast<int>(i));
+        }
+        std::sort(byDist.begin(), byDist.end());
+        if (!byDist.empty()) {
+            slotType[static_cast<std::size_t>(byDist[0].second)] = 2;
+        }
+        if (byDist.size() > 1) {
+            slotType[static_cast<std::size_t>(byDist[1].second)] = 4;
+        }
+        if (byDist.size() > 2) {
+            slotType[static_cast<std::size_t>(byDist[2].second)] = 3;
         }
     }
+    // MAP M2: the transfer gate stands in the exit room (boss floors: the boss room,
+    // gate appears once the boss dies).
+    m_GateRoom = bossRoom;
+    m_BossChestPending = false;
     m_GateActive = false;
     m_Gate = nullptr;
     m_GateLight = nullptr;
@@ -291,6 +311,7 @@ void GameScene::OnEnter() {
     m_Waves.assign(floor.Rooms().size(), SpawnWaves{});
     int roomIndex = 0;
     for (const RoomCell &cell : floor.Rooms()) {
+        const int slot = slotType[static_cast<std::size_t>(roomIndex)];
         const glm::vec2 origin{
             static_cast<float>(cell.gridX - startGx) * kRoomPitch,
             static_cast<float>(cell.gridY - startGy) * kRoomPitch};
@@ -302,7 +323,7 @@ void GameScene::OnEnter() {
         const bool haveSize = cell.width > 0 && cell.height > 0;
         ropt.roomWidth = haveSize ? cell.width : kRoomCells;
         ropt.roomHeight = haveSize ? cell.height : kRoomCells;
-        ropt.wallLevel = cell.type >= 2 ? 2 : 1; // richer obstacles in special rooms
+        ropt.wallLevel = slot >= 2 ? 2 : 1; // richer obstacles in special rooms
         ropt.obstacleLevel = 1;
         // MAP M2: special rooms are EMPTY SHELLS at their prefab size -- r_start
         // 15x15, r_transgete / r_mercenary / r_mineral / r_statue 11x11 (the
@@ -311,7 +332,7 @@ void GameScene::OnEnter() {
         // the normal-room layout until their 21x21 prefabs are extracted (M3).
         const bool bossShell = roomIndex == bossRoom && IsBossFloor(m_FloorIndex);
         const bool startShell = roomIndex == floor.StartIndex();
-        const bool specialShell = (cell.type == 2 || cell.type == 3) && !bossShell;
+        const bool specialShell = (slot == 2 || slot == 3 || slot == 4) && !bossShell;
         if (startShell) {
             ropt.roomWidth = 15;
             ropt.roomHeight = 15;
@@ -386,7 +407,7 @@ void GameScene::OnEnter() {
         // Step 0.5 #3): the room only locks (StartRoom) when the player enters it
         // with hostiles, and reopens on ClearRoom. Lifecycle is zero-RNG; the seed
         // is a parity helper that never perturbs determinism.
-        m_RoomLife.emplace_back(cell.type);
+        m_RoomLife.emplace_back(slot == 4 ? 2 : slot); // reward room: no clear-reward gate
         m_RoomLife.back().SetSeed(m_FloorSeed + 1 + roomIndex);
         m_RoomLife.back().OpenDoor(); // doors open until StartRoom
 
@@ -724,7 +745,7 @@ void GameScene::OnEnter() {
                 const EnemyDef *bossDef =
                     bossPool.empty()
                         ? m_Data.FindEnemyByClass("BossAI01") // defensive fallback
-                        : bossPool[(static_cast<std::size_t>(cell.type) +
+                        : bossPool[(static_cast<std::size_t>(slot) +
                                     static_cast<std::size_t>(bossRoom)) %
                                    bossPool.size()];
                 // bossId = the AI class (the sim's brain-dispatch key). The PREFAB id
@@ -747,15 +768,15 @@ void GameScene::OnEnter() {
                 m_Sim->SetBoss(2.0F, spawn, bossMaxHp, roomIndex,
                                m_FloorSeed + 9000, bossId);
                 LOG_INFO("BossMaker-lite: room {} spawned {} maxHp={} (type {})", roomIndex,
-                         bossId, bossMaxHp, cell.type);
-            } else if (cell.type != 1) {
+                         bossId, bossMaxHp, slot);
+            } else if (slot != 1) {
                 // MAP M2: every special room prefab (r_start, r_transgete, r_chest,
                 // r_sell, r_statue, r_mercenary, r_mineral, the boss rooms) carries an
                 // EnemyMaker with level 0 -> StartEnemyMaker spawns NOTHING. Only the
                 // r1_* normal rooms (type 1) fight. (type3_list = mercenary/mineral/
                 // statue event rooms, not a badass tier.)
                 LOG_INFO("EnemyMaker: room {} (type {}) special prefab -> level 0, no spawns",
-                         roomIndex, cell.type);
+                         roomIndex, slot);
             } else {
                 // MAP M1: the original EnemyMaker over the level's REAL spawn pool.
                 // FAITHFUL @ MapManager.enemy_list (weighted: duplicates are the
@@ -809,22 +830,23 @@ void GameScene::OnEnter() {
                 wv.waveSize = std::max(1, level * 3);
                 SpawnNextWave(roomIndex);
                 LOG_INFO("EnemyMaker: room {} (type {}) level {} points {} -> {} planned, wave size {}",
-                         roomIndex, cell.type, level, points, ids.size(), wv.waveSize);
+                         roomIndex, slot, level, points, ids.size(), wv.waveSize);
             }
         }
 
-        // Place a chest in every non-start room on a floor cell (tier = room
-        // type, so special/badass rooms roll richer loot).
-        if (roomIndex != floor.StartIndex() && !spawnCells.empty()) {
-            const auto &cc = spawnCells[spawnCells.size() / 4];
+        // M3b FAITHFUL chests: only the REWARD room (type1_list r_chest) holds a
+        // chest -- chest_room_reward at its b_point (RGChestRoomReward, drop tier
+        // = MapManager.chest_level). Boss chests appear where the boss dies
+        // (RGChestBoss). Normal rooms hold none.
+        if (slot == 4 && !spawnCells.empty()) {
+            const auto &cc = spawnCells[spawnCells.size() / 2];
             const glm::vec2 cpos = Room::CellToWorld(
                 cc.first, cc.second, rg.Width(), rg.Height(), kCellPx, origin);
-            // MAP M1: chest tier = MapManager.chest_level of the level (RGChest.level),
-            // no longer the room type.
             auto chest = std::make_shared<Chest>(
-                root, cpos, m_Level != nullptr ? m_Level->chestLevel : cell.type);
+                root, cpos, m_Level != nullptr ? m_Level->chestLevel : 1, Chest::Kind::RoomReward);
             m_Chests.push_back(chest);
             m_Renderer.AddChild(chest);
+            LOG_INFO("Chest: reward room {} -> chest_room_reward (tier {})", roomIndex, chest->Tier());
         }
         ++roomIndex;
     }
@@ -1320,6 +1342,23 @@ void GameScene::Update(float dtMs) {
             m_Renderer.RemoveChild(m_Bosses[0]);
             m_Bosses[0] = nullptr;
             LOG_INFO("Boss defeated!");
+            // M3b: RGChestBoss -- the boss's chest (chest_boss<NN>: tier + its
+            // signature weapon) drops where the boss fell.
+            {
+                const std::string root(RESOURCE_DIR);
+                const BossChestDef *bc =
+                    m_BossDef != nullptr ? m_Data.FindBossChest(m_BossDef->id) : nullptr;
+                auto chest = std::make_shared<Chest>(root, bv.pos, bc != nullptr ? bc->level : 2,
+                                                     Chest::Kind::Boss);
+                if (bc != nullptr) {
+                    chest->SetGuaranteed(bc->weapons);
+                }
+                m_Chests.push_back(chest);
+                m_Renderer.AddChild(chest);
+                LOG_INFO("Chest: boss chest {} (tier {}, {} signature weapon(s))",
+                         bc != nullptr ? bc->id : std::string("chest_boss?"), chest->Tier(),
+                         bc != nullptr ? bc->weapons.size() : 0u);
+            }
         }
     }
 
@@ -1353,13 +1392,25 @@ void GameScene::Update(float dtMs) {
             continue;
         }
         chest->Open();
+        // RGChestBoss: CreateBossWeapon (object_list, guaranteed) + CreateSampleWeapon
+        // (a roll); RGChest / RGChestRoomReward: the tier roll (GetWeapon).
+        std::vector<const WeaponDef *> drops;
+        for (const std::string &wid : chest->Guaranteed()) {
+            if (const WeaponDef *g = m_Data.FindWeapon(wid)) {
+                drops.push_back(g);
+            }
+        }
         const std::string dropId = m_Loot.Roll(chest->Tier(), m_Rng);
         if (const WeaponDef *def = m_Data.ResolveDropWeapon(dropId)) {
+            drops.push_back(def);
+        }
+        for (std::size_t di = 0; di < drops.size(); ++di) {
+            const float dx = (static_cast<float>(di) - 0.5F * static_cast<float>(drops.size() - 1)) * kCellPx;
             auto pickup = std::make_shared<WeaponPickup>(
-                std::string(RESOURCE_DIR),
-                chest->Position() + glm::vec2(0.0F, -kCellPx), def);
+                std::string(RESOURCE_DIR), chest->Position() + glm::vec2(dx, -kCellPx), drops[di]);
             m_Pickups.push_back(pickup);
             m_Renderer.AddChild(pickup);
+            LOG_INFO("Chest: opened -> {}", drops[di]->id);
         }
     }
 
