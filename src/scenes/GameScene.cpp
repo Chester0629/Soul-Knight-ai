@@ -304,6 +304,24 @@ void GameScene::OnEnter() {
         ropt.roomHeight = haveSize ? cell.height : kRoomCells;
         ropt.wallLevel = cell.type >= 2 ? 2 : 1; // richer obstacles in special rooms
         ropt.obstacleLevel = 1;
+        // MAP M2: special rooms are EMPTY SHELLS at their prefab size -- r_start
+        // 15x15, r_transgete / r_mercenary / r_mineral / r_statue 11x11 (the
+        // r1_* design layouts belong to normal rooms only; the type-1 fallback
+        // had put crates and speed pads into the portal room). Boss rooms keep
+        // the normal-room layout until their 21x21 prefabs are extracted (M3).
+        const bool bossShell = roomIndex == bossRoom && IsBossFloor(m_FloorIndex);
+        const bool startShell = roomIndex == floor.StartIndex();
+        const bool specialShell = (cell.type == 2 || cell.type == 3) && !bossShell;
+        if (startShell) {
+            ropt.roomWidth = 15;
+            ropt.roomHeight = 15;
+        } else if (specialShell) {
+            ropt.roomWidth = 11;
+            ropt.roomHeight = 11;
+        }
+        if (startShell || specialShell) {
+            ropt.proceduralObstacles = false; // bare floor, nothing inside
+        }
         // Thread the real floor index for fidelity. NOTE: this is INERT here --
         // RoomGen reads floorIndex ONLY inside its randomRoom==true branch
         // (RoomGen.cpp:53-69) and we build with randomRoom=false, so it does not
@@ -322,7 +340,8 @@ void GameScene::OnEnter() {
         // already room-LOCAL (extract_design_rooms.py applied the centre-(20,20)
         // transform -- a CAVEAT reconstruction, validated by in-game play).
         const DesignRoomDef *design =
-            cell.roomId.empty() ? nullptr : m_Data.FindDesignRoom(cell.roomId);
+            (cell.roomId.empty() || startShell || specialShell) ? nullptr
+                                                               : m_Data.FindDesignRoom(cell.roomId);
         if (design != nullptr) {
             ropt.proceduralObstacles = false;
             for (const DesignObstacle &o : design->obstacles) {
@@ -452,6 +471,15 @@ void GameScene::OnEnter() {
                 if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
                     continue;
                 }
+                // Decorations live on INTERIOR cells only: the prefab's obj layout is
+                // stamped over RoomGen's shell, so a marker that lands on the border
+                // (-1), a corridor/aisle cell (-2) or the door band (11) is dropped --
+                // exactly like the obj_index-0 walls, which are only stamped onto open
+                // floor. (Drawing them there put crystals across doors and over walls.)
+                const int cellCode = rg.At(o.x, o.y);
+                if (cellCode == -1 || cellCode == -2 || cellCode == 11) {
+                    continue;
+                }
                 const std::size_t oi = static_cast<std::size_t>(o.objIndex);
                 if (o.objIndex <= 0 || oi >= objImg.size() ||
                     objImg[oi] == nullptr) {
@@ -510,8 +538,31 @@ void GameScene::OnEnter() {
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
         };
+        // Corridor sprites use the SAME rule as room tiles: pivot (0.5,0), 2x native
+        // size, bottom on the cell bottom edge, z sorted by -y -- so corridor floors
+        // and flank walls line up with the perimeter walls instead of squashed
+        // 32x32 tiles clashing with the 16x24 walls.
+        const auto addBlockSprite = [&](const std::shared_ptr<Util::Image> &img, int bx, int by,
+                                        float zBase) {
+            auto tile = std::make_shared<Util::GameObject>();
+            tile->SetDrawable(img);
+            const glm::vec2 sz = img->GetSize();
+            const float scale = kCellPx / 16.0F;
+            tile->m_Transform.scale = glm::vec2(scale, scale);
+            tile->m_Transform.translation =
+                blockToWorld(bx, by) + glm::vec2(0.0F, sz.y * scale * 0.5F - kCellPx * 0.5F);
+            tile->SetZIndex(zBase - tile->m_Transform.translation.y * 1e-5F);
+            m_RoomTiles.push_back(tile);
+            m_Renderer.AddChild(tile);
+            return tile;
+        };
         const auto addCorridorWall = [&](int bx, int by) {
-            addBlockTile(wallImg, wallSz, bx, by, 1.0F);
+            addBlockSprite(floorImgs.front(), bx, by, 0.1F); // ground under the wall
+            addBlockSprite(wallImg, bx, by, 1.2F);
+            if (wallFaceImg != wallImg) {
+                auto face = addBlockSprite(wallFaceImg, bx, by, 1.21F);
+                face->m_Transform.translation.y += wallFaceDy * kCellPx;
+            }
             m_Corridors.push_back(Util::Collider::MakeAABB(
                 blockToWorld(bx, by), glm::vec2{kCellPx, kCellPx}));
         };
@@ -522,7 +573,7 @@ void GameScene::OnEnter() {
             const FloorBlock::Rect s = FloorBlock::CorridorStrip(dir, rg);
             for (int bx = s.x0; bx <= s.x1; ++bx) {
                 for (int by = s.y0; by <= s.y1; ++by) {
-                    addBlockTile(floorImgs.front(), floorSz, bx, by, 0.0F); // walkable (MAP M1: variant 0 in corridors)
+                    addBlockSprite(floorImgs.front(), bx, by, 0.1F); // walkable corridor floor
                 }
             }
             const bool horiz = (dir == FloorBlock::DIR_EAST ||
