@@ -1,0 +1,85 @@
+{
+  "pots": {
+    "dumplings": {
+      "hp": 1,
+      "energy": 40,
+      "value": 22,
+      "name": "item_dumplings",
+      "sprite": "objects_common_22"
+    },
+    "energy_pot": {
+      "hp": 0,
+      "energy": 80,
+      "value": 20,
+      "name": "item_energy_pot",
+      "sprite": "objects_common_20"
+    },
+    "energy_pot_big": {
+      "hp": 0,
+      "energy": 150,
+      "value": 30,
+      "name": "item_energy_pot_L",
+      "sprite": "objects_common_21"
+    },
+    "health_pot": {
+      "hp": 2,
+      "energy": 0,
+      "value": 25,
+      "name": "item_health_pot",
+      "sprite": "objects_common_18"
+    },
+    "health_pot_big": {
+      "hp": 4,
+      "energy": 0,
+      "value": 40,
+      "name": "item_health_pot_L",
+      "sprite": "objects_common_19"
+    },
+    "health_pot_box": {
+      "hp": 2,
+      "energy": 0,
+      "value": 25,
+      "name": "item_health_pot",
+      "sprite": "objects_common_18"
+    },
+    "restore_pot": {
+      "hp": 1,
+      "energy": 40,
+      "value": 22,
+      "name": "item_restore_pot",
+      "sprite": "objects_common_20"
+    },
+    "restore_pot_big": {
+      "hp": 2,
+      "energy": 80,
+      "value": 35,
+      "name": "item_restore_pot_big",
+      "sprite": "objects_common_21"
+    }
+  },
+  "machines": {
+    "vending_machine_i": {
+      "price": 10,
+      "items": [
+        "energy_pot_big",
+        "energy_pot",
+        "health_pot_big",
+        "health_pot"
+      ],
+      "sprite": "objects3_10",
+      "display": "objects3_13"
+    },
+    "vending_machine_w": {
+      "price": 12,
+      "items": [],
+      "sprite": "objects3_11",
+      "display": "objects3_14"
+    },
+    "water_dispenser": {
+      "price": 0,
+      "items": [],
+      "sprite": "c06_4",
+      "display": ""
+    }
+  }
+}

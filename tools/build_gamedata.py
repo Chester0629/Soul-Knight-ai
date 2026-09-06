@@ -741,6 +741,52 @@ def build_boss_chests():
     return out or None
 
 
+
+# SHOP (M3c): the pots (res/item/*_pot*.prefab: RGEnergyPot / RGHealthPot /
+# RGBothPot health, energy, item_value) and the r_sell machines
+# (rgprefab/room/event/vending_machine_i|w: ObjectVendingMachine item_value +
+# object_list; water_dispenser: ItemWaterDispenser item_value 0).
+def build_shop_table():
+    item_dir = EP_ASSETS / "res" / "item"
+    ev_dir = EP_ASSETS / "rgprefab" / "room" / "event"
+    if not item_dir.is_dir() or not ev_dir.is_dir():
+        return None
+    idx = _guid_index()
+    pots = {}
+    for f in sorted(item_dir.glob("*.prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        if "item_value:" not in text or f.stem.startswith("chest"):
+            continue
+        hp = re.search(r"\n  health: (\d+)", text)
+        en = re.search(r"\n  energy: (\d+)", text)
+        val = re.search(r"\n  item_value: (\d+)", text)
+        name = re.search(r"\n  item_name: (\S+)", text)
+        if hp is None and en is None:
+            continue
+        sp = _prefab_sprites(f, idx)
+        pots[f.stem] = {"hp": int(hp.group(1)) if hp else 0, "energy": int(en.group(1)) if en else 0,
+                        "value": int(val.group(1)) if val else 0,
+                        "name": name.group(1) if name else f.stem, "sprite": sp[0] if sp else ""}
+    machines = {}
+    for stem in ("vending_machine_i", "vending_machine_w", "water_dispenser"):
+        f = ev_dir / (stem + ".prefab")
+        if not f.is_file():
+            continue
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        val = re.search(r"\n  item_value: (\d+)", text)
+        m = re.search(r"object_list:\n((?:  - .*\n)+)", text)
+        items = []
+        if m:
+            for g in _GUID_IN_REF_RE.findall(m.group(1)):
+                p = idx.get(g)
+                if p is not None:
+                    items.append(p.stem)
+        sp = _prefab_sprites(f, idx)
+        machines[stem] = {"price": int(val.group(1)) if val else 0, "items": items,
+                          "sprite": sp[0] if sp else "", "display": sp[1] if len(sp) > 1 else ""}
+    return {"pots": pots, "machines": machines} if pots and machines else None
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -849,6 +895,10 @@ def main() -> int:
     if boss_chests is not None:
         write("boss_chests", boss_chests)
         counts["boss_chests"] = len(boss_chests)
+    shop = build_shop_table()
+    if shop is not None:
+        write("shop", shop)
+        counts["shop_pots"] = len(shop["pots"])
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

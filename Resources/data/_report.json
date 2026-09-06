@@ -11,6 +11,7 @@
     "levels": 31,
     "boss_rooms": 14,
     "boss_chests": 11,
+    "shop_pots": 8,
     "weapon_catalog": 90,
     "droptable_levels": 7
   },

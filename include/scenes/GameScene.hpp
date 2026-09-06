@@ -30,6 +30,7 @@
 #include "entities/Bullet.hpp"
 #include "entities/Chest.hpp"
 #include "entities/CoinPickup.hpp"
+#include "entities/VendingMachine.hpp"
 #include "entities/Enemy.hpp"
 #include "entities/Player.hpp"
 #include "entities/WeaponPickup.hpp"
@@ -99,6 +100,13 @@ private:
     std::vector<std::shared_ptr<Chest>> m_Chests;
     /// Dropped weapon pickups awaiting collection.
     std::vector<std::shared_ptr<WeaponPickup>> m_Pickups;
+    /// M3c: the shop room's machines (r_sell: vending_machine_i / _w, water_dispenser).
+    std::vector<std::shared_ptr<VendingMachine>> m_Machines;
+    /// SK_SHOP_BUY=K test hook (env, -1 = off): on frame K stand at the first machine
+    /// and buy. NO-OP in normal play.
+    long m_ShopBuyFrame = -1;
+    /// Try to buy from @p m (use key / SK_SHOP_BUY). Applies the pot / drops the weapon.
+    void Purchase(VendingMachine &m);
     /// B3: dropped coins / energy orbs (enemy death rewards) awaiting collection.
     std::vector<std::shared_ptr<CoinPickup>> m_Coins;
     /// B3: species per sim enemy index (parallel to m_Enemies) for the death reward roll.

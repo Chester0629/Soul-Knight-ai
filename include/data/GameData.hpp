@@ -262,6 +262,25 @@ struct BossChestDef {
     std::vector<std::string> weapons; ///< weapons.json ids ("weapon_077")
 };
 
+/// M3c: a consumable pot (RGEnergyPot / RGHealthPot / RGBothPot fields).
+struct PotDef {
+    std::string id;     ///< "energy_pot"
+    int hp = 0;         ///< health restored
+    int energy = 0;     ///< energy restored
+    int value = 0;      ///< item_value (its price when sold on its own)
+    std::string name;   ///< i2 term (item_energy_pot)
+    std::string sprite; ///< objects_common_N stem
+};
+
+/// M3c: a shop machine (ObjectVendingMachine / ItemWaterDispenser prefab).
+struct MachineDef {
+    std::string id;                 ///< "vending_machine_i"
+    int price = 0;                  ///< item_value: coins per use
+    std::vector<std::string> items; ///< object_list (pots); empty = weapon sample
+    std::string sprite;             ///< body sprite stem
+    std::string display;            ///< display frame sprite stem
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -368,6 +387,9 @@ public:
     /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
     const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
     const std::unordered_map<std::string, BossRoomDef> &BossRooms() const { return m_BossRooms; }
+    /// M3c: shop tables (shop.json).
+    const PotDef *FindPot(const std::string &id) const;
+    const MachineDef *FindMachine(const std::string &id) const;
     /// M3b: the chest a boss prefab ("boss01") leaves behind; nullptr when none.
     const BossChestDef *FindBossChest(const std::string &bossPrefab) const;
     /// All loaded design-room interiors (empty if design_rooms.json is absent).
@@ -387,6 +409,8 @@ private:
     std::unordered_map<std::string, BossRoomDef> m_BossRooms;
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
     std::unordered_map<std::string, BossChestDef> m_BossChests;
+    std::unordered_map<std::string, PotDef> m_Pots;
+    std::unordered_map<std::string, MachineDef> m_Machines;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
     std::vector<SpriteSet> m_Sprites;

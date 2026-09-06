@@ -67,6 +67,14 @@ public:
     void RecordTime(float dtMs) { m_State.stats.timeMs += dtMs; }
     /// B3: a collected coin (RGCoin.GetItem -> RGGameProcess.coin_value += value).
     void AddCoins(int value) { m_State.stats.coins += value; }
+    /// M3c: pay @p price from the run's coins; false (nothing spent) when short.
+    bool SpendCoins(int price) {
+        if (price > m_State.stats.coins) {
+            return false;
+        }
+        m_State.stats.coins -= price;
+        return true;
+    }
 
     /// Player died: mark the run `Ended` and `Replace` the active scene with a
     /// minimal `EndScene`. Requested from the dying `GameScene`'s `Update`, so the

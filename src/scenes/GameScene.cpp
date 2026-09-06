@@ -340,6 +340,14 @@ void GameScene::OnEnter() {
             ropt.roomWidth = 11;
             ropt.roomHeight = 11;
         }
+        // M3c: the reward slot draws r_chest OR r_sell (MapManager.type1_list);
+        // the pick is the floor seed's parity (PORT CHOICE -- the pool draw is
+        // not recoverable). r_sell is 19x13.
+        const bool sellRoom = slot == 4 && ((m_FloorSeed / 3) % 2 == 1);
+        if (sellRoom) {
+            ropt.roomWidth = 19;
+            ropt.roomHeight = 13;
+        }
         if (startShell || specialShell) {
             ropt.proceduralObstacles = false; // bare floor, nothing inside
         }
@@ -850,7 +858,65 @@ void GameScene::OnEnter() {
         // chest -- chest_room_reward at its b_point (RGChestRoomReward, drop tier
         // = MapManager.chest_level). Boss chests appear where the boss dies
         // (RGChestBoss). Normal rooms hold none.
-        if (slot == 4 && !spawnCells.empty()) {
+        if (slot == 4 && sellRoom && !spawnCells.empty()) {
+            // M3c SHOP (r_sell): vending_machine_i (a random pot from its
+            // object_list for item_value coins), vending_machine_w (a sample weapon
+            // from the level's chest tier for item_value coins) and the free
+            // water_dispenser, in a row across the upper half (the prefab has no
+            // fixed slots; MapManager places them at run time -- PORT layout).
+            RGRandom shopRng;
+            shopRng.SetRandomSeed(m_FloorSeed + 3000);
+            const int cx = (rg.Width() - 1) / 2;
+            const int cy = (rg.Height() - 1) / 2 + 2;
+            const auto place = [&](const char *id, int dxCells) {
+                const MachineDef *md = m_Data.FindMachine(id);
+                if (md == nullptr) {
+                    return;
+                }
+                VendingMachine::Kind kind = VendingMachine::Kind::Water;
+                std::string stock;
+                std::string stockSprite;
+                if (std::string(id) == "vending_machine_i") {
+                    kind = VendingMachine::Kind::Item;
+                    if (!md->items.empty()) {
+                        stock = md->items[static_cast<std::size_t>(
+                            shopRng.Range(0, static_cast<int>(md->items.size())))];
+                        if (const PotDef *pd = m_Data.FindPot(stock)) {
+                            stockSprite = pd->sprite;
+                        }
+                    }
+                } else if (std::string(id) == "vending_machine_w") {
+                    kind = VendingMachine::Kind::Weapon;
+                    const std::string dropId = m_Loot.Roll(
+                        m_Level != nullptr ? m_Level->chestLevel : 1, shopRng);
+                    if (const WeaponDef *wd = m_Data.ResolveDropWeapon(dropId)) {
+                        stock = wd->id;
+                        stockSprite = wd->icon.size() > 4 ? wd->icon.substr(0, wd->icon.size() - 4) : "";
+                    }
+                }
+                const glm::vec2 at = Room::CellToWorld(cx + dxCells, cy, rg.Width(), rg.Height(),
+                                                       kCellPx, origin);
+                auto m = std::make_shared<VendingMachine>(root, at, kind, md->price, md->sprite,
+                                                          md->display, stock, stockSprite);
+                m_Machines.push_back(m);
+                m_Renderer.AddChild(m);
+                if (m->Display()) {
+                    m_Renderer.AddChild(m->Display());
+                }
+                if (m->Icon()) {
+                    m_Renderer.AddChild(m->Icon());
+                }
+                m_Renderer.AddChild(m->PriceTag());
+                m_RoomObstacles.push_back(ObstacleBox{
+                    Util::Collider::MakeAABB(at, glm::vec2{2.0F * kCellPx, kCellPx}), RGBox{}, nullptr,
+                    false, true});
+                LOG_INFO("Shop: {} at room {} sells '{}' for {} coins", id, roomIndex, stock, md->price);
+            };
+            place("vending_machine_i", -4);
+            place("water_dispenser", 0);
+            place("vending_machine_w", 4);
+        }
+        if (slot == 4 && !sellRoom && !spawnCells.empty()) {
             const auto &cc = spawnCells[spawnCells.size() / 2];
             const glm::vec2 cpos = Room::CellToWorld(
                 cc.first, cc.second, rg.Width(), rg.Height(), kCellPx, origin);
@@ -914,6 +980,9 @@ void GameScene::OnEnter() {
     }
     if (const char *gb = std::getenv("SK_GATE_BESIDE")) {
         m_GateBesideFrame = std::atol(gb);
+    }
+    if (const char *sb = std::getenv("SK_SHOP_BUY")) {
+        m_ShopBuyFrame = std::atol(sb);
     }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
@@ -1469,6 +1538,29 @@ void GameScene::Update(float dtMs) {
         }
     }
 
+    // --- M3c: shop machines -- stand in the 2x2 trigger and press the use key
+    //     (E; the original's item button) to buy. SK_SHOP_BUY=K teleports to the
+    //     first machine and buys on frame K (headless proof). ---
+    {
+        const bool useKey = Util::Input::IsKeyDown(Util::Keycode::E);
+        const bool hookBuy = m_ShopBuyFrame >= 0 && m_Frame == m_ShopBuyFrame && !m_Machines.empty();
+        if (hookBuy) {
+            const char *mi = std::getenv("SK_SHOP_MACHINE"); // which machine (default 0)
+            const std::size_t k = std::min(m_Machines.size() - 1,
+                                           static_cast<std::size_t>(mi != nullptr ? std::atol(mi) : 0));
+            m_Player->m_Transform.translation = m_Machines[k]->Position() + glm::vec2(0.0F, -40.0F);
+        }
+        if (useKey || hookBuy) {
+            const glm::vec2 pp = m_Player->Position();
+            for (auto &m : m_Machines) {
+                if (!m->Sold() && glm::distance(pp, m->Position()) <= 2.0F * kCellPx) {
+                    Purchase(*m);
+                    break;
+                }
+            }
+        }
+    }
+
     // --- A: age out transient presentation effects (they self-animate on wall-clock) ---
     for (auto it = m_Effects.begin(); it != m_Effects.end();) {
         it->second -= dtMs;
@@ -1609,6 +1701,48 @@ bool GameScene::PendingWaves() const {
         }
     }
     return false;
+}
+
+void GameScene::Purchase(VendingMachine &m) {
+    if (m_Run == nullptr) {
+        return;
+    }
+    // FAITHFUL: ObjectVendingMachine.ItemTrigger -- pay item_value from
+    // RGGameProcess.coin_value; I_no_money ("Not enough money") otherwise.
+    if (!m_Run->SpendCoins(m.Price())) {
+        LOG_INFO("Shop: not enough money ({} < {})", m_Run->State().stats.coins, m.Price());
+        return;
+    }
+    CombatStats &st = m_Player->Stats();
+    switch (m.GetKind()) {
+    case VendingMachine::Kind::Item: {
+        if (const PotDef *pd = m_Data.FindPot(m.Stock())) {
+            // RGHealthPot / RGEnergyPot / RGBothPot.ItemTrigger: restore, clamped to max.
+            st.hp = std::min(st.maxHp, st.hp + pd->hp);
+            st.energy = std::min(st.maxEnergy, st.energy + pd->energy);
+            LOG_INFO("Shop: bought {} for {} (+{} hp, +{} energy) -> hp {} energy {}", pd->id, m.Price(),
+                     pd->hp, pd->energy, st.hp, st.energy);
+        }
+        break;
+    }
+    case VendingMachine::Kind::Weapon: {
+        if (const WeaponDef *wd = m_Data.FindWeapon(m.Stock())) {
+            auto pickup = std::make_shared<WeaponPickup>(
+                std::string(RESOURCE_DIR), m.Position() + glm::vec2(0.0F, -1.5F * kCellPx), wd);
+            m_Pickups.push_back(pickup);
+            m_Renderer.AddChild(pickup);
+            LOG_INFO("Shop: bought weapon {} for {}", wd->id, m.Price());
+        }
+        break;
+    }
+    case VendingMachine::Kind::Water:
+        // ItemWaterDispenser.ItemTrigger body did not survive (a Talk coroutine);
+        // PORT CHOICE: a free full energy refill, once.
+        st.energy = st.maxEnergy;
+        LOG_INFO("Shop: water dispenser -> energy {}", st.energy);
+        break;
+    }
+    m.MarkSold();
 }
 
 void GameScene::SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos) {

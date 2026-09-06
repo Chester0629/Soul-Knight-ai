@@ -409,12 +409,56 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         }
     }
 
+    // M3c: shop.json
+    const json &shop = store.Load(dir + "shop.json");
+    if (shop.is_object()) {
+        if (const auto pots = shop.find("pots"); pots != shop.end() && pots->is_object()) {
+            for (auto it = pots->begin(); it != pots->end(); ++it) {
+                PotDef d;
+                d.id = it.key();
+                d.hp = GetI(it.value(), "hp");
+                d.energy = GetI(it.value(), "energy");
+                d.value = GetI(it.value(), "value");
+                d.name = GetS(it.value(), "name");
+                d.sprite = GetS(it.value(), "sprite");
+                m_Pots.emplace(it.key(), std::move(d));
+            }
+        }
+        if (const auto ms = shop.find("machines"); ms != shop.end() && ms->is_object()) {
+            for (auto it = ms->begin(); it != ms->end(); ++it) {
+                MachineDef d;
+                d.id = it.key();
+                d.price = GetI(it.value(), "price");
+                d.sprite = GetS(it.value(), "sprite");
+                d.display = GetS(it.value(), "display");
+                if (const auto items = it.value().find("items"); items != it.value().end() && items->is_array()) {
+                    for (const json &i : *items) {
+                        if (i.is_string()) {
+                            d.items.push_back(i.get<std::string>());
+                        }
+                    }
+                }
+                m_Machines.emplace(it.key(), std::move(d));
+            }
+        }
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
              m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
              m_DesignRooms.size());
     return ok;
+}
+
+const PotDef *GameData::FindPot(const std::string &id) const {
+    auto it = m_Pots.find(id);
+    return it == m_Pots.end() ? nullptr : &it->second;
+}
+
+const MachineDef *GameData::FindMachine(const std::string &id) const {
+    auto it = m_Machines.find(id);
+    return it == m_Machines.end() ? nullptr : &it->second;
 }
 
 const BossChestDef *GameData::FindBossChest(const std::string &bossPrefab) const {

@@ -147,6 +147,7 @@ set(SRC_FILES
     entities/Chest.cpp
     entities/WeaponPickup.cpp
     entities/CoinPickup.cpp
+    entities/VendingMachine.cpp
     world/Room.cpp
     world/FloorBlock.cpp
     ui/Hud.cpp
@@ -521,6 +522,7 @@ set(TEST_FILES
     # MAP M1: level table, biome variant, EnemyMaker budget
     LevelTableTest.cpp
     BossRoomTest.cpp
+    ShopTest.cpp
 
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
