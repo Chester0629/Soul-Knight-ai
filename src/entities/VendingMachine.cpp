@@ -2,7 +2,10 @@
 
 #include <memory>
 
+#include "Util/Animation.hpp"
 #include "Util/Color.hpp"
+
+#include <vector>
 
 namespace Game {
 
@@ -21,7 +24,18 @@ VendingMachine::VendingMachine(const std::string &resourceRoot, glm::vec2 pos, K
     : m_Kind(kind), m_Price(price), m_Stock(stockId) {
     auto body = std::make_shared<Util::Image>(resourceRoot + "/sprites/" + bodySprite + ".png");
     const glm::vec2 sz = body->GetSize();
-    SetDrawable(body);
+    if (kind == Kind::Water) {
+        // FAITHFUL @ water_dispenser.prefab: its Animator is rganim/npc/naughty_boy_1
+        // (state postman_ide: naughtyboy_1_4..7) -- in 1.7.10 the "dispenser" is the
+        // naughty-boy NPC vendor, not a machine sprite.
+        std::vector<std::string> frames;
+        for (int i = 4; i <= 7; ++i) {
+            frames.push_back(resourceRoot + "/sprites/naughtyboy_1_" + std::to_string(i) + ".png");
+        }
+        SetDrawable(std::make_shared<Util::Animation>(frames, true, 150, true));
+    } else {
+        SetDrawable(body);
+    }
     SetZIndex(kZBody);
     m_Transform.scale = {kScale, kScale};
     // Bottom-anchored like every room object: the prefab pivot is (0.5, 0).
