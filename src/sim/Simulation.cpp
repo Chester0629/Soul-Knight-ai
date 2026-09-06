@@ -134,6 +134,10 @@ void Simulation::TickSkill() {
     // in_skill, so a held / multi-step-constant input cannot re-cast.
     if (m_Input.skill) {
         const ICharSkill::TriggerResult r = m_Skill->TryTrigger();
+        if (r.outcome == ICharSkill::TriggerOutcome::Activated) {
+            // M3e: statue blessings (BuffStatue.UseSkill) hang off the skill press.
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "skill_use"});
+        }
         if (r.dashImpulse) {
             // C02: the ultimate is a forward dash. The sim surfaces the impulse as an
             // event the owner (GameScene/driver) applies to player movement -- the

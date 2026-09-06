@@ -22,6 +22,7 @@ void RunController::ResetRunState() {
     m_State.phase = RunState::Phase::Playing;
     m_State.stats = RunStats{}; // B4: fresh counters per run
     m_State.outcome = RunState::Outcome::None;
+    m_State.statueIndex = 0;
 }
 
 void RunController::StartRun() {

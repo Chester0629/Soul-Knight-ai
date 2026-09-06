@@ -100,6 +100,17 @@ private:
     std::vector<std::shared_ptr<Chest>> m_Chests;
     /// Dropped weapon pickups awaiting collection.
     std::vector<std::shared_ptr<WeaponPickup>> m_Pickups;
+    /// M3e: the event room's statue (r_statue: statue_0N, TalkStatue item_value 15).
+    struct StatueSpot {
+        int index = 0;         ///< statue_index 1..7
+        glm::vec2 pos{0.0F, 0.0F};
+        bool used = false;
+        std::shared_ptr<Util::Text> tag;
+    };
+    StatueSpot m_Statue;
+    float m_StatueCdMs = 0.0F; ///< BuffStatue.cd countdown for the blessing
+    /// SK_STATUE_WORSHIP=K test hook: stand at the statue and worship on frame K.
+    long m_StatueWorshipFrame = -1;
     /// M3c: the shop room's machines (r_sell: vending_machine_i / _w, water_dispenser).
     std::vector<std::shared_ptr<VendingMachine>> m_Machines;
     /// SK_SHOP_BUY=K test hook (env, -1 = off): on frame K stand at the first machine
@@ -181,6 +192,7 @@ private:
         RGBox box;                                    ///< durability (boxes only).
         std::shared_ptr<Util::GameObject> tile;       ///< placeholder skin, hidden on break.
         bool destructible = false;                    ///< box -> true; brazier -> false.
+        int breakCoins = 0;                           ///< M3e minerals: copper coins dropped on break.
         bool alive = true;                            ///< false once broken (stops blocking).
     };
     std::vector<ObstacleBox> m_RoomObstacles;

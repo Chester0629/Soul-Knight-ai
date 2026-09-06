@@ -57,4 +57,14 @@ TEST(ShopTest, SpendCoinsOnlyWhenAffordable) {
     EXPECT_TRUE(run.SpendCoins(0));
 }
 
+TEST(StatueTest, WorshipIndexPersistsAcrossFloorsAndResetsPerRun) {
+    Game::RunController run(9);
+    EXPECT_EQ(run.State().statueIndex, 0);
+    run.SetStatue(6);
+    run.AdvanceFloor(Game::PlayerContinuation{});
+    EXPECT_EQ(run.State().statueIndex, 6);
+    run.ResetRunState();
+    EXPECT_EQ(run.State().statueIndex, 0);
+}
+
 } // namespace

@@ -84,6 +84,8 @@ struct RunState {
     std::string charId = "c01";
     /// B4: run-long counters shown by the results screen. Reset per run.
     RunStats stats;
+    /// M3e: the worshipped statue (RGGameProcess.statue_index, 1..7; 0 = none).
+    int statueIndex = 0;
     /// B4: how the run ended (title of the results screen: I_gameover / I_victory).
     /// None while Playing.
     enum class Outcome { None, Dead, Victory } outcome = Outcome::None;

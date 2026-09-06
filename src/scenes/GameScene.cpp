@@ -59,6 +59,13 @@ constexpr float kPickupRange = 28.0F;
 /// extent = 22 px + the player body; the gate fires when the player's centre is
 /// inside that box.
 constexpr float kGateTriggerPx = 30.0F;
+/// M3e statues: statue_0N.prefab (TalkStatue, item_value 15, statue_index N). The
+/// prefab body sprites: 1->objects3_0, 2->3, 3->2, 4->1, 5->4, 6->5, 7->3. Names
+/// follow the i2 statue_* term order (PORT mapping index->term; the prefab
+/// string_name fields are empty in the dump).
+constexpr int kStatueBodySprite[8] = {0, 0, 3, 2, 1, 4, 5, 3};
+const char *const kStatueName[8] = {"", "Knight", "Priest", "Assassin", "Rabbit", "Elf", "Thief", "Sorcerer"};
+constexpr int kStatueCost = 15;
 // SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
 constexpr float kAutoWalkSpeed = 300.0F;
 // Inset (px) from a room edge before the clear-room door lock may arm. The door-
@@ -975,6 +982,85 @@ void GameScene::OnEnter() {
             place("water_dispenser", 0);
             place("vending_machine_w", 4);
         }
+        // M3e EVENT ROOM (slot 3, MapManager.type3_list = r_mercenary / r_mineral /
+        // r_statue). r_mercenary (hire an NPC) is not ported: the slot draws the
+        // statue or the mineral room (PORT CHOICE by floor seed; SK_EVENT_ROOM=
+        // statue|mineral overrides for proofs).
+        if (slot == 3 && !spawnCells.empty()) {
+            const char *forced = std::getenv("SK_EVENT_ROOM");
+            const bool statueRoom = forced != nullptr ? std::string(forced) == "statue"
+                                                      : ((m_FloorSeed / 5) % 2 == 0);
+            const int cx = (rg.Width() - 1) / 2;
+            const int cy = (rg.Height() - 1) / 2;
+            if (statueRoom) {
+                // statue_0N: base objects3_6 on the cell, body at +1.1 units, light at
+                // +0.69 (the prefab's child offsets); one statue per room, N by seed.
+                const int idx = 1 + ((m_FloorSeed / 7) % 7 + 7) % 7;
+                m_Statue.index = idx;
+                m_Statue.pos = Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin);
+                auto base = addObjSprite(m_SkinCache.count("objects3_6") != 0
+                                             ? m_SkinCache["objects3_6"]
+                                             : (m_SkinCache["objects3_6"] = std::make_shared<Util::Image>(
+                                                    root + "/sprites/objects3_6.png")),
+                                         cx, cy);
+                base->SetZIndex(1.3F - base->m_Transform.translation.y * 1e-5F);
+                const std::string bodyStem = "objects3_" + std::to_string(kStatueBodySprite[idx]);
+                auto bodyImg = std::make_shared<Util::Image>(root + "/sprites/" + bodyStem + ".png");
+                auto body = addObjSprite(bodyImg, cx, cy);
+                body->m_Transform.translation.y += 1.1F * kCellPx;
+                body->SetZIndex(1.31F - base->m_Transform.translation.y * 1e-5F);
+                auto lightImg = std::make_shared<Util::Image>(root + "/sprites/objects3_7.png");
+                auto light = addObjSprite(lightImg, cx, cy);
+                light->m_Transform.translation.y += 0.69F * kCellPx;
+                light->SetZIndex(1.32F - base->m_Transform.translation.y * 1e-5F);
+                m_RoomObstacles.push_back(ObstacleBox{
+                    Util::Collider::MakeAABB(m_Statue.pos, glm::vec2{kCellPx, kCellPx}), RGBox{}, nullptr,
+                    false, true, 0});
+                m_Statue.tag = std::make_shared<Util::Text>(root + "/fonts/pixel_bold.ttf", 14,
+                                                            std::string(kStatueName[idx]) + "  " +
+                                                                std::to_string(kStatueCost) + " G",
+                                                            Util::Color{255, 230, 120, 255});
+                auto tagObj = std::make_shared<Util::GameObject>();
+                tagObj->SetDrawable(m_Statue.tag);
+                tagObj->m_Transform.translation = m_Statue.pos + glm::vec2(0.0F, 2.6F * kCellPx);
+                tagObj->SetZIndex(1.34F);
+                m_RoomTiles.push_back(tagObj);
+                m_Renderer.AddChild(tagObj);
+                LOG_INFO("Event room {}: statue_{:02d} ({}) -- worship for {} coins", roomIndex, idx,
+                         kStatueName[idx], kStatueCost);
+            } else {
+                // r_mineral: mineral_crystal / mineral_gold (res/enemy, EnemyAI05 shells:
+                // hp 40, mineral_count 10). The mineral_obj drop prefab did not
+                // resolve -> PORT: 10 copper coins per mineral. Six ore nodes in a
+                // ring (the prefab has no slots; MapManager places them at run time).
+                const int ring[6][2] = {{-3, 2}, {3, 2}, {-3, -2}, {3, -2}, {0, 3}, {0, -3}};
+                for (int k = 0; k < 6; ++k) {
+                    const int mx = cx + ring[k][0];
+                    const int my = cy + ring[k][1];
+                    if (mx < 1 || my < 1 || mx >= rg.Width() - 1 || my >= rg.Height() - 1 ||
+                        Room::IsSolidCell(rg.At(mx, my))) {
+                        continue;
+                    }
+                    const bool gold = (k % 2) == 1;
+                    const std::string stem = gold ? "objects1_77" : "objects1_80";
+                    auto img = std::make_shared<Util::Image>(root + "/sprites/" + stem + ".png");
+                    addShadow(shadowImg2, mx, my, 0.0F);
+                    auto tile = addObjSprite(img, mx, my);
+                    tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                    ObstacleBox ob;
+                    ob.collider = Util::Collider::MakeAABB(
+                        Room::CellToWorld(mx, my, rg.Width(), rg.Height(), kCellPx, origin),
+                        glm::vec2{kCellPx, kCellPx});
+                    ob.tile = tile;
+                    ob.destructible = true;
+                    ob.box.SetHp(40); // FAITHFUL: ra_max_hp 40
+                    ob.box.SetSeed(m_FloorSeed + 1 + roomIndex + k);
+                    ob.breakCoins = 10; // FAITHFUL count: mineral_count 10
+                    m_RoomObstacles.push_back(std::move(ob));
+                }
+                LOG_INFO("Event room {}: mineral room (6 ore nodes, hp 40, 10 coins each)", roomIndex);
+            }
+        }
         if (slot == 4 && !sellRoom && !spawnCells.empty()) {
             const auto &cc = spawnCells[spawnCells.size() / 2];
             const glm::vec2 cpos = Room::CellToWorld(
@@ -1042,6 +1128,14 @@ void GameScene::OnEnter() {
     }
     if (const char *sb = std::getenv("SK_SHOP_BUY")) {
         m_ShopBuyFrame = std::atol(sb);
+    }
+    if (const char *sw = std::getenv("SK_STATUE_WORSHIP")) {
+        m_StatueWorshipFrame = std::atol(sw);
+    }
+    if (const char *sc = std::getenv("SK_COINS")) {
+        if (m_Run != nullptr) {
+            m_Run->AddCoins(std::atoi(sc)); // test aid: seed the run's coins
+        }
     }
     if (const char *rt = std::getenv("SK_ROOM_TELEPORT")) {
         m_RoomTeleportFrame = std::atol(rt);
@@ -1200,6 +1294,18 @@ void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
         const RGBox::HitResult r = ob.box.Hit(1, /*sourceValid=*/true);
         if (r.registered && r.shouldDestroy) {
             ob.alive = false; // stops blocking (passable)
+            if (ob.breakCoins > 0) {
+                // M3e mineral node: its ore (mineral_count) as copper coins.
+                const std::string rootDir(RESOURCE_DIR);
+                for (int c = 0; c < ob.breakCoins; ++c) {
+                    const float ang = m_RewardRng.Range(0.0F, 6.2831853F);
+                    auto coin = std::make_shared<CoinPickup>(rootDir, ob.collider.center, RewardKind::Copper,
+                                                             glm::vec2{std::cos(ang), std::sin(ang)});
+                    m_Coins.push_back(coin);
+                    m_Renderer.AddChild(coin);
+                }
+                LOG_INFO("Mineral: broke -> {} copper coins", ob.breakCoins);
+            }
             if (ob.tile != nullptr) {
                 ob.tile->SetVisible(false); // hide the broken box's placeholder skin
             }
@@ -1644,6 +1750,32 @@ void GameScene::Update(float dtMs) {
         }
     }
 
+    // --- M3e: worship the statue (TalkStatue.ItemTrigger: pay item_value, set
+    //     RGGameProcess.statue_index). E in range, or SK_STATUE_WORSHIP=K. ---
+    if (m_Statue.index > 0 && !m_Statue.used && m_Run != nullptr) {
+        const bool hook = m_StatueWorshipFrame >= 0 && m_Frame == m_StatueWorshipFrame;
+        if (hook) {
+            m_Player->m_Transform.translation = m_Statue.pos + glm::vec2(0.0F, -40.0F);
+        }
+        if ((hook || Util::Input::IsKeyDown(Util::Keycode::E)) &&
+            glm::distance(m_Player->Position(), m_Statue.pos) <= 2.0F * kCellPx) {
+            if (m_Run->SpendCoins(kStatueCost)) {
+                m_Statue.used = true;
+                m_Run->SetStatue(m_Statue.index);
+                if (m_Statue.tag) {
+                    m_Statue.tag->SetText(std::string("BLESSED: ") + kStatueName[m_Statue.index]);
+                }
+                LOG_INFO("Statue: worshipped statue_{:02d} ({}) -> statue_index {}", m_Statue.index,
+                         kStatueName[m_Statue.index], m_Statue.index);
+            } else {
+                LOG_INFO("Statue: not enough money ({} < {})", m_Run->State().stats.coins, kStatueCost);
+            }
+        }
+    }
+    if (m_StatueCdMs > 0.0F) {
+        m_StatueCdMs -= dtMs;
+    }
+
     // --- A: age out transient presentation effects (they self-animate on wall-clock) ---
     for (auto it = m_Effects.begin(); it != m_Effects.end();) {
         it->second -= dtMs;
@@ -1894,6 +2026,35 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
             }
             if (!isPlayer) {
                 SpawnReward(isBoss, e.entityId, pos); // B3: RGEController.GetReward
+            }
+        } else if (e.name == "skill_use") {
+            // M3e BuffStatue.UseSkill: the worshipped statue's blessing on each skill
+            // press, gated by its cd. Priest (statue_index 2, BuffStatue02 cd 8):
+            // regain energy; Thief (6): coins from the enemies in the room. The
+            // other five (knight summon, daggers, shockwave, missiles, rabbit) need
+            // their bullet/summon subsystems -- logged, not applied (PORT gap).
+            const int si = m_Run != nullptr ? m_Run->State().statueIndex : 0;
+            if (si > 0 && m_StatueCdMs <= 0.0F) {
+                CombatStats &st = m_Player->Stats();
+                if (si == 2) {
+                    m_StatueCdMs = 8000.0F;
+                    st.energy = std::min(st.maxEnergy, st.energy + 20); // amount: PORT (unrecovered)
+                    LOG_INFO("Statue: Priest blessing -> energy {}", st.energy);
+                } else if (si == 6) {
+                    m_StatueCdMs = 8000.0F;
+                    int gained = 0;
+                    for (const auto &ev : evs) {
+                        if (ev.alive) {
+                            ++gained;
+                        }
+                    }
+                    if (gained > 0) {
+                        m_Run->AddCoins(gained);
+                    }
+                    LOG_INFO("Statue: Thief blessing -> +{} coins", gained);
+                } else {
+                    LOG_INFO("Statue: {} blessing not ported (statue_index {})", kStatueName[si], si);
+                }
             }
         } else if (e.name == "skill_dash") {
             // W1 (B1-P4a): the C02 ultimate is a forward dash the sim surfaces as an
