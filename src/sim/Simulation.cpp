@@ -385,4 +385,15 @@ void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float 
     m_Skill = MakeCharSkill(charId, skillCd, inSkillTime);
 }
 
+void Simulation::KillAllHostiles() {
+    for (auto &e : m_Enemies) {
+        if (!e->State().dead) {
+            e->MutableState().stats.hp = 0;
+        }
+    }
+    if (m_Boss != nullptr && !m_Boss->State().dead) {
+        m_Boss->MutableState().stats.hp = 0;
+    }
+}
+
 } // namespace Game::Sim

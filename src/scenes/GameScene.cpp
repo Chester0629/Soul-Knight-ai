@@ -14,6 +14,8 @@
 
 #include "game/FloorClear.hpp"
 #include "game/RunController.hpp"
+#include "game/EnemyReward.hpp"
+#include "entities/CoinPickup.hpp"
 
 #include "world/FloorBlock.hpp"
 
@@ -107,6 +109,7 @@ void GameScene::OnEnter() {
 
     // Root every deterministic stream this floor owns in the per-floor seed.
     m_Rng.SetRandomSeed(m_FloorSeed);
+    m_RewardRng.SetRandomSeed(m_FloorSeed + 7000); // B3: own window, never perturbs combat
     m_Sim.emplace(m_FloorSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
 
     // PER-CHARACTER: build the player from the selected character's real stats.
@@ -462,6 +465,7 @@ void GameScene::OnEnter() {
                 const std::string bossId =
                     bossDef != nullptr ? bossDef->enemyClass : std::string("BossAI01");
                 const std::string bossPrefab = bossDef != nullptr ? bossDef->id : bossId;
+                m_BossDef = bossDef;
                 const int bossMaxHp = (bossDef != nullptr && bossDef->maxHp > 0)
                                           ? bossDef->maxHp
                                           : 500;
@@ -517,6 +521,7 @@ void GameScene::OnEnter() {
                     enemy->AI().SetKinematic(rdef->kinematic != 0);
                     enemy->SetRoomId(roomIndex);
                     m_Enemies.push_back(enemy);
+                    m_EnemyDefs.push_back(rdef);
                     m_Sim->AddEnemy(*rdef, spawn, roomIndex,
                                     m_FloorSeed + 1000 + roomIndex);
                     LOG_INFO("EnemyMaker-lite: room {} spawned {} (type {})",
@@ -580,6 +585,9 @@ void GameScene::OnEnter() {
     }
     if (const char *fd = std::getenv("SK_FORCE_DIE")) {
         m_ForceDieFrame = std::atol(fd);
+    }
+    if (const char *fk = std::getenv("SK_FORCE_KILL")) {
+        m_ForceKillFrame = std::atol(fk);
     }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
@@ -817,6 +825,9 @@ void GameScene::Update(float dtMs) {
     if (m_ForceDieFrame >= 0 && m_Frame >= m_ForceDieFrame) {
         m_Player->Stats().hp = 0;
     }
+    if (m_ForceKillFrame >= 0 && m_Frame == m_ForceKillFrame && m_Sim) {
+        m_Sim->KillAllHostiles(); // SK_FORCE_KILL test hook: NO-OP unless set
+    }
 
     // --- Player movement with axis-separated wall sliding (stays scene-side) ---
     const glm::vec2 before = m_Player->Position();
@@ -1050,6 +1061,26 @@ void GameScene::Update(float dtMs) {
         }
     }
 
+    // --- B3: coins / energy orbs scatter, then home on the player and are collected
+    //     (RGCoin.FixedUpdate + GetItem: coin_value += value / RGEnergy: energy refill). ---
+    for (auto it = m_Coins.begin(); it != m_Coins.end();) {
+        if ((*it)->Update(dtMs, playerPos)) {
+            if ((*it)->Kind() == RewardKind::Energy) {
+                CombatStats &st = m_Player->Stats();
+                st.energy = std::min(st.maxEnergy, st.energy + (*it)->Value());
+            } else if (m_Run != nullptr) {
+                m_Run->AddCoins((*it)->Value());
+            }
+            LOG_INFO("Pickup: {} +{} (coins now {})",
+                     (*it)->Kind() == RewardKind::Energy ? "energy" : "coin", (*it)->Value(),
+                     m_Run != nullptr ? m_Run->State().stats.coins : 0);
+            m_Renderer.RemoveChild(*it);
+            it = m_Coins.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
     // --- A: age out transient presentation effects (they self-animate on wall-clock) ---
     for (auto it = m_Effects.begin(); it != m_Effects.end();) {
         it->second -= dtMs;
@@ -1076,6 +1107,16 @@ void GameScene::Update(float dtMs) {
     // m_Player) down only after this Update returns, so the snapshot is safe.
     const bool forceClear = (m_ForceClearFrame >= 0 && m_Frame >= m_ForceClearFrame);
     const bool cleared = m_HadHostiles && FloorCleared(*m_Sim);
+    // B3 PORT CHOICE: the original never auto-advances -- the player walks to the
+    // transfer gate, so every drop is collectable. The port advances on clear, so
+    // pull the remaining coins / energy to the player first (RGCoin.find_target
+    // latched) and hold the transition until they are all collected.
+    if (cleared && !forceClear && !m_Coins.empty()) {
+        for (auto &c : m_Coins) {
+            c->Attract();
+        }
+        return;
+    }
     if (!m_Transitioning && m_Run != nullptr && (cleared || forceClear)) {
         m_Transitioning = true; // signal exactly once
         if (forceClear) {
@@ -1092,6 +1133,38 @@ void GameScene::Update(float dtMs) {
                  snapshot.stats.energy, snapshot.weaponId, m_FloorIndex + 1);
         m_Run->OnFloorCleared(snapshot); // carry + ++floorIndex + deferred Replace
     }
+}
+
+void GameScene::SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos) {
+    const EnemyDef *def = nullptr;
+    if (isBoss) {
+        def = m_BossDef;
+    } else if (entityId < m_EnemyDefs.size()) {
+        def = m_EnemyDefs[entityId];
+    }
+    if (def == nullptr) {
+        return;
+    }
+    // FAITHFUL: RGEController.GetReward -- rg_random.Range(0,100) < reward_rate, then
+    // reward_value[4] counts of [gold, silver, copper, energy].
+    const std::vector<RewardDrop> drops = RollEnemyReward(*def, m_RewardRng);
+    if (drops.empty()) {
+        return;
+    }
+    const std::string root(RESOURCE_DIR);
+    int coinsTotal = 0;
+    int energyTotal = 0;
+    for (const RewardDrop &d : drops) {
+        // Scatter direction: a deterministic angle per drop (RGCoin.GetForce).
+        const float ang = m_RewardRng.Range(0.0F, 6.2831853F);
+        auto coin = std::make_shared<CoinPickup>(root, pos, d.kind,
+                                                 glm::vec2{std::cos(ang), std::sin(ang)});
+        m_Coins.push_back(coin);
+        m_Renderer.AddChild(coin);
+        (d.kind == RewardKind::Energy ? energyTotal : coinsTotal) += d.value;
+    }
+    LOG_INFO("Reward: {} dropped {} pickups (coins {} energy {})", def->id, drops.size(),
+             coinsTotal, energyTotal);
 }
 
 void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
@@ -1125,6 +1198,9 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
             PlaySfx(root, isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav");
             if (m_Run != nullptr && !isPlayer) {
                 m_Run->RecordKill(); // B4: RGGameProcess.kill_count analog
+            }
+            if (!isPlayer) {
+                SpawnReward(isBoss, e.entityId, pos); // B3: RGEController.GetReward
             }
         } else if (e.name == "skill_dash") {
             // W1 (B1-P4a): the C02 ultimate is a forward dash the sim surfaces as an
@@ -1161,7 +1237,7 @@ void GameScene::Render() {
     Util::SetActiveViewMatrix(m_Camera.GetViewMatrix());
     m_Renderer.Update();
     Util::SetActiveViewMatrix(glm::mat4(1.0F)); // screen-space from here on
-    m_Hud.Draw(m_Player->Stats());
+    m_Hud.Draw(m_Player->Stats(), m_Run != nullptr ? m_Run->State().stats.coins : 0);
 }
 
 } // namespace Game

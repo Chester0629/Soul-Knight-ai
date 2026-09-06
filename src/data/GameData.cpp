@@ -105,6 +105,12 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.consume = GetI(e, "consume");
             d.eSize = GetI(e, "e_size");
             d.rewardRate = GetI(e, "reward_rate");
+            if (e.contains("reward_value") && e["reward_value"].is_array()) {
+                const auto &rv = e["reward_value"];
+                for (std::size_t k = 0; k < 4 && k < rv.size(); ++k) {
+                    d.rewardValue[k] = rv[k].is_number() ? rv[k].get<int>() : 0;
+                }
+            }
             d.buffImmune = GetF(e, "buff_immune");
             d.kinematic = GetI(e, "kinematic");
             // FAITHFUL @ enemies.csv -- real per-species combat stats.

@@ -47,7 +47,7 @@ public:
      *
      * @param player Snapshot of the player's combat vitals to display.
      */
-    void Draw(const CombatStats &player);
+    void Draw(const CombatStats &player, int coins = 0);
 
 private:
     /// One vitals bar: its full-width transform (fraction 1), the fill drawable,
@@ -79,6 +79,12 @@ private:
     std::shared_ptr<Util::GameObject> m_SkillIcon;
     std::shared_ptr<Util::GameObject> m_SkillMaskObj;
     std::shared_ptr<Util::FilledImage> m_SkillMask;
+
+    // --- B3: coin counter, top-right (Scene_Game info_bar/coin: ui_31 icon + number) ---
+    std::shared_ptr<Util::GameObject> m_CoinIcon;
+    std::shared_ptr<Util::Text> m_CoinText;
+    std::shared_ptr<Util::GameObject> m_CoinTextObj;
+    int m_LastCoins = -1;
 
     bool m_Built = false; ///< Lazy-init attempted (success or not) -- try once.
     bool m_Ready = false; ///< Build() fully succeeded -> Draw renders; else no-op.

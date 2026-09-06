@@ -88,7 +88,10 @@ struct EnemyDef {
     float scoutRate = 0.0F;
     int consume = 0;         ///< spawn budget cost
     int eSize = 0;
-    int rewardRate = 0;
+    int rewardRate = 0;         ///< FAITHFUL: reward_rate @ enemies.csv (% drop chance).
+    /// FAITHFUL: reward_value @ enemies.csv (Unity int[4]) -- drop COUNTS per kind:
+    /// [gold coin_0, silver coin_1, copper coin_2, energy] (see game/EnemyReward.hpp).
+    int rewardValue[4] = {0, 0, 0, 0};
     float buffImmune = 0.0F;
     int kinematic = 0;       ///< 1 = turret-style: immovable, ignores knockback
     // --- Real per-species combat stats (FAITHFUL @ enemies.csv; new) ----------

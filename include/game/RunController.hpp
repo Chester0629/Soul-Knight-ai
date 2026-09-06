@@ -65,6 +65,8 @@ public:
     /// (RGGameProcess.kill_count / start_time analogs). Cleared by ResetRunState.
     void RecordKill() { ++m_State.stats.kills; }
     void RecordTime(float dtMs) { m_State.stats.timeMs += dtMs; }
+    /// B3: a collected coin (RGCoin.GetItem -> RGGameProcess.coin_value += value).
+    void AddCoins(int value) { m_State.stats.coins += value; }
 
     /// Player died: mark the run `Ended` and `Replace` the active scene with a
     /// minimal `EndScene`. Requested from the dying `GameScene`'s `Update`, so the

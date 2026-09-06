@@ -45,6 +45,11 @@ public:
         int roomId = -1;
     };
 
+    /// TEST HOOK (SK_FORCE_KILL): zero every live hostile's hp so the next step's
+    /// Cull emits their death events -- drives the reward / kill-count paths
+    /// headlessly. Not game logic; never called in normal play.
+    void KillAllHostiles();
+
     static constexpr std::uint32_t kBossViewId = 0xB055;   ///< sentinel id for the boss view.
     static constexpr std::uint32_t kPlayerViewId = 0xF00D; ///< sentinel id for the player in SimEvents
                                                            ///< (enemy view ids are small indices 0..N).

@@ -28,6 +28,7 @@
 #include "entities/Boss.hpp"
 #include "entities/Bullet.hpp"
 #include "entities/Chest.hpp"
+#include "entities/CoinPickup.hpp"
 #include "entities/Enemy.hpp"
 #include "entities/Player.hpp"
 #include "entities/WeaponPickup.hpp"
@@ -97,6 +98,13 @@ private:
     std::vector<std::shared_ptr<Chest>> m_Chests;
     /// Dropped weapon pickups awaiting collection.
     std::vector<std::shared_ptr<WeaponPickup>> m_Pickups;
+    /// B3: dropped coins / energy orbs (enemy death rewards) awaiting collection.
+    std::vector<std::shared_ptr<CoinPickup>> m_Coins;
+    /// B3: species per sim enemy index (parallel to m_Enemies) for the death reward roll.
+    std::vector<const EnemyDef *> m_EnemyDefs;
+    const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
+    /// B3: the reward-roll stream (RGEController.rg_random analog), seeded per floor.
+    RGRandom m_RewardRng;
     /// Door-gap colliders per room (sealed while the room is locked).
     std::vector<std::vector<Util::Collider>> m_RoomDoors;
     /// Permanent corridor flank-wall colliders across the whole floor (the strip
@@ -144,6 +152,9 @@ private:
     /// (`m_Run->OnFloorCleared(...)`); the controller outlives this scene (D1), and
     /// the scene's dtor never dereferences it.
     RunController *m_Run;
+    /// B3: roll the killed hostile's reward (RGEController.GetReward) and drop the
+    /// coins / energy at @p pos with a deterministic scatter.
+    void SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos);
     /// The hero this floor runs (B5): from the continuation on floors 1+, else the
     /// run's chosen hero (RunState::charId). Written into the floor-clear snapshot.
     std::string m_CharId = "c01";
@@ -186,6 +197,9 @@ private:
     /// SK_FORCE_DIE=K test hook (env, -1 = off): kill the player on frame K to drive
     /// the death->EndScene path headlessly. NO-OP in normal play.
     long m_ForceDieFrame = -1;
+    /// SK_FORCE_KILL=K test hook (env, -1 = off): kill every hostile on frame K to
+    /// drive the death-reward / kill-count paths headlessly. NO-OP in normal play.
+    long m_ForceKillFrame = -1;
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;

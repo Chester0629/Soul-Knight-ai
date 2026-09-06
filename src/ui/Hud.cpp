@@ -181,10 +181,32 @@ void Hud::Build(const CombatStats &player) {
     m_SkillMaskObj->SetZIndex(kZSkillMask);
     m_Renderer.AddChild(m_SkillMaskObj);
 
+    // --- B3: coin counter. FAITHFUL @ Scene_Game.unity info_bar/coin: the ui_31
+    //     coin icon with the count beside it, parked at the canvas top-right
+    //     (info_bar anchors (1,1); coin at (-140,-30), icon -80 from the number).
+    //     PTSD screen space: centre origin, +y up, 1280x720. ---
+    {
+        const Util::Color white{255, 255, 255, 255};
+        const std::string font = root + "/fonts/pixel_bold.ttf";
+        m_CoinIcon = std::make_shared<Util::GameObject>();
+        m_CoinIcon->SetDrawable(std::make_shared<Util::Image>(root + "/sprites/ui_31.png"));
+        m_CoinIcon->m_Transform.translation = {470.0F, 320.0F};
+        m_CoinIcon->m_Transform.scale = {2.5F, 2.5F};
+        m_CoinIcon->SetZIndex(kZPanel);
+        m_Renderer.AddChild(m_CoinIcon);
+        m_CoinText = std::make_shared<Util::Text>(font, 22, "0", white);
+        m_CoinTextObj = std::make_shared<Util::GameObject>();
+        m_CoinTextObj->SetDrawable(m_CoinText);
+        m_CoinTextObj->m_Transform.translation = {530.0F, 320.0F};
+        m_CoinTextObj->SetZIndex(kZText);
+        m_Renderer.AddChild(m_CoinTextObj);
+        m_LastCoins = 0;
+    }
+
     m_Ready = true;
 }
 
-void Hud::Draw(const CombatStats &player) {
+void Hud::Draw(const CombatStats &player, int coins) {
     if (!m_Built) {
         Build(player);  // one-shot lazy init (needs a live GL context).
         m_Built = true; // attempted -- never retried (avoids per-frame reload).
@@ -204,6 +226,10 @@ void Hud::Draw(const CombatStats &player) {
         {&m_Armor, player.armor, player.maxArmor},
         {&m_Energy, player.energy, player.maxEnergy},
     };
+    if (m_CoinText && coins != m_LastCoins) {
+        m_CoinText->SetText(std::to_string(coins));
+        m_LastCoins = coins;
+    }
     for (const auto &u : updates) {
         u.bar->fill->m_Transform =
             FractionFillLeftAnchor(u.bar->full, Fraction(u.cur, u.maxValue), u.bar->texW);

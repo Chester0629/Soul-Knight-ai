@@ -81,10 +81,50 @@ int main(int, char **) {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Capture the completed frame from the back buffer *before* the swap.
+        // Capture the shot frame. Reading the default framebuffer of a window that
+        // is covered / unfocused fails the GL pixel-ownership test on Windows and
+        // yields an all-black image (the "blank SK_SHOT" symptom), so re-render the
+        // scene into an offscreen FBO -- which always owns its pixels -- and read that.
         if (shotPath != nullptr && maxFrames > 0 && frame == maxFrames - 1) {
-            SaveFramePng(shotPath, static_cast<int>(context->GetWindowWidth()),
-                         static_cast<int>(context->GetWindowHeight()));
+            const int w = static_cast<int>(context->GetWindowWidth());
+            const int h = static_cast<int>(context->GetWindowHeight());
+            GLuint fbo = 0;
+            GLuint tex = 0;
+            glGenFramebuffers(1, &fbo);
+            glGenTextures(1, &tex);
+            glBindTexture(GL_TEXTURE_2D, tex);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) {
+                glViewport(0, 0, w, h);
+                glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+                glClear(GL_COLOR_BUFFER_BIT);
+                run.Render(); // second render of the same frame, into the FBO
+                glFinish();
+                std::vector<unsigned char> px(static_cast<std::size_t>(w) * h * 4);
+                glReadBuffer(GL_COLOR_ATTACHMENT0);
+                glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, px.data());
+                std::vector<unsigned char> flipped(px.size());
+                const std::size_t stride = static_cast<std::size_t>(w) * 4;
+                for (int y = 0; y < h; ++y) {
+                    std::memcpy(&flipped[static_cast<std::size_t>(y) * stride],
+                                &px[static_cast<std::size_t>(h - 1 - y) * stride], stride);
+                }
+                SDL_Surface *surf = SDL_CreateRGBSurfaceWithFormatFrom(
+                    flipped.data(), w, h, 32, static_cast<int>(stride), SDL_PIXELFORMAT_RGBA32);
+                if (surf != nullptr) {
+                    IMG_SavePNG(surf, shotPath);
+                    SDL_FreeSurface(surf);
+                }
+            } else {
+                SaveFramePng(shotPath, w, h); // fallback: the old back-buffer read
+            }
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glDeleteFramebuffers(1, &fbo);
+            glDeleteTextures(1, &tex);
         }
 
         context->Update();

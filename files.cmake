@@ -146,6 +146,7 @@ set(SRC_FILES
     entities/Boss.cpp
     entities/Chest.cpp
     entities/WeaponPickup.cpp
+    entities/CoinPickup.cpp
     world/Room.cpp
     world/FloorBlock.cpp
     ui/Hud.cpp
@@ -513,6 +514,9 @@ set(TEST_FILES
 
     # B4 RESULTS: RunStats counters, level_list label, clock text
     RunStatsTest.cpp
+
+    # B3 ECONOMY: enemy death rewards, coin magnet, run coin counter
+    EnemyRewardTest.cpp
 
     # B1-P3 weapons: (d) IWeaponBrain dispatch + FireSystem Burst/Charge primitive
     WeaponBrainTest.cpp
