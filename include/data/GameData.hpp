@@ -189,6 +189,7 @@ struct LevelWallDef {
     std::string prefab;
     std::string top;  ///< sprite stem, e.g. "w601" (Resources/sprites/tiles/<top>.png)
     std::string face; ///< the wall's front face sprite, e.g. "w602"
+    float faceDy = 0.0F; ///< w2 child local y (units) -- 0 for walls
 };
 
 /// MAP M1: one MapManager.obstacle_list[obj_index] entry (RGObjectSkin skin).
@@ -196,6 +197,7 @@ struct LevelObstacleDef {
     std::string prefab; ///< e.g. "box04", "brazier01"
     std::string sprite; ///< main sprite stem (tiles/<sprite>.png)
     std::string alt;    ///< second sprite (broken box / lit face), "" if none
+    float altDy = 0.0F; ///< w2 child local y (units): 0.5 = a crate's top sits half a unit up
 };
 
 /**

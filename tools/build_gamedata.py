@@ -550,6 +550,26 @@ def _prefab_sprites(path, idx: dict) -> list:
     return out
 
 
+def _prefab_w2_dy(path) -> float:
+    """Local y of the prefab's 'w2' child (the wall face / box top overlay), in
+    units; 0 when absent. wall601: 0, box04: 0.5 (the crate top sits half a unit up)."""
+    if path is None:
+        return 0.0
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return 0.0
+    go = None
+    for m in re.finditer(r"--- !u!1 &(\d+)\n(?:.*\n){0,12}?  m_Name: w2\n", text):
+        go = m.group(1)
+        break
+    if go is None:
+        return 0.0
+    m = re.search(r"--- !u!4 &\d+\nTransform:\n(?:.*\n){0,6}?  m_GameObject: \{fileID: " + go +
+                  r"\}\n(?:.*\n){0,3}?  m_LocalPosition: \{x: [-\d.e]+, y: ([-\d.e]+)", text)
+    return float(m.group(1)) if m else 0.0
+
+
 def build_level_table():
     """Returns the level list, or None when the AssetRipper source is absent."""
     if not MAP_MANAGER_DIR.is_dir():
@@ -578,12 +598,14 @@ def build_level_table():
         walls = []
         for w in _mm_list(seg, "wall_list", idx):
             sp = _prefab_sprites(by_name.get(w), idx)
-            walls.append({"prefab": w, "top": sp[0] if sp else "", "face": sp[1] if len(sp) > 1 else ""})
+            walls.append({"prefab": w, "top": sp[0] if sp else "", "face": sp[1] if len(sp) > 1 else "",
+                          "face_dy": _prefab_w2_dy(by_name.get(w))})
         obstacles = []
         for o in _mm_list(seg, "obstacle_list", idx):
             sp = _prefab_sprites(by_name.get(o), idx)
             obstacles.append({"prefab": o, "sprite": sp[0] if sp else "",
-                              "alt": sp[1] if len(sp) > 1 else ""})
+                              "alt": sp[1] if len(sp) > 1 else "",
+                              "alt_dy": _prefab_w2_dy(by_name.get(o))})
         floors = []
         for fl in _mm_list(seg, "floor_list", idx):
             sp = _prefab_sprites(by_name.get(fl), idx)

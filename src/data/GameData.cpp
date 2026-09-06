@@ -342,13 +342,14 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.floors = strList(v, "floors");
             if (const auto ws = v.find("walls"); ws != v.end() && ws->is_array()) {
                 for (const json &w : *ws) {
-                    d.walls.push_back(LevelWallDef{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face")});
+                    d.walls.push_back(LevelWallDef{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face"),
+                                                   GetF(w, "face_dy")});
                 }
             }
             if (const auto os = v.find("obstacles"); os != v.end() && os->is_array()) {
                 for (const json &o : *os) {
-                    d.obstacles.push_back(
-                        LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"), GetS(o, "alt")});
+                    d.obstacles.push_back(LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"),
+                                                           GetS(o, "alt"), GetF(o, "alt_dy")});
                 }
             }
             if (const auto rs = v.find("rooms"); rs != v.end() && rs->is_object()) {

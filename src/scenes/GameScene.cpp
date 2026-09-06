@@ -237,28 +237,49 @@ void GameScene::OnEnter() {
     if (floorImgs.empty()) {
         floorImgs.push_back(std::make_shared<Util::Image>(root + "/sprites/tiles/floor.png"));
     }
-    const std::string wallTop =
-        (m_Level != nullptr && !m_Level->walls.empty() && !m_Level->walls[0].top.empty())
-            ? "tiles/" + m_Level->walls[0].top
-            : std::string("tiles/wall");
-    const std::string wallFace =
-        (m_Level != nullptr && !m_Level->walls.empty() && !m_Level->walls[0].face.empty())
-            ? "tiles/" + m_Level->walls[0].face
-            : wallTop;
+    // MapManager.wall_list holds the basic wall + a decorated variant (CreateWall rolls
+    // Range(0,100) per tile; the threshold did not survive). Draw the basic wall:
+    // the prefab whose name ends in "1" (wall601, wall201, wall_bush1 ...), else [0].
+    const LevelWallDef *wallDef = nullptr;
+    if (m_Level != nullptr && !m_Level->walls.empty()) {
+        wallDef = &m_Level->walls[0];
+        for (const LevelWallDef &w : m_Level->walls) {
+            if (!w.prefab.empty() && w.prefab.back() == '1') {
+                wallDef = &w;
+                break;
+            }
+        }
+    }
+    const std::string wallTop = (wallDef != nullptr && !wallDef->top.empty())
+                                    ? "tiles/" + wallDef->top
+                                    : std::string("tiles/wall");
+    const std::string wallFace = (wallDef != nullptr && !wallDef->face.empty())
+                                     ? "tiles/" + wallDef->face
+                                     : wallTop;
     auto wallImg = std::make_shared<Util::Image>(root + "/sprites/" + wallTop + ".png");
     auto wallFaceImg = std::make_shared<Util::Image>(root + "/sprites/" + wallFace + ".png");
+    const float wallFaceDy = wallDef != nullptr ? wallDef->faceDy : 0.0F;
     const glm::vec2 floorSz = floorImgs.front()->GetSize();
     const glm::vec2 wallSz = wallImg->GetSize();
     const glm::vec2 wallFaceSz = wallFaceImg->GetSize();
+    (void)wallSz;
+    (void)wallFaceSz;
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list).
     // MAP M1: from THIS level's obstacle_list; pre-M1 obj_N crops as fallback.
     std::array<std::shared_ptr<Util::Image>, 12> objImg{};
-    for (int i : {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}) {
+    std::array<std::shared_ptr<Util::Image>, 12> objAltImg{}; // the prefab's w2 overlay (crate top ...)
+    std::array<float, 12> objAltDy{};
+    for (int i : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}) {
         const std::size_t oi = static_cast<std::size_t>(i);
         if (m_Level != nullptr && oi < m_Level->obstacles.size() &&
             !m_Level->obstacles[oi].sprite.empty()) {
             objImg[oi] = std::make_shared<Util::Image>(
                 root + "/sprites/tiles/" + m_Level->obstacles[oi].sprite + ".png");
+            if (!m_Level->obstacles[oi].alt.empty()) {
+                objAltImg[oi] = std::make_shared<Util::Image>(
+                    root + "/sprites/tiles/" + m_Level->obstacles[oi].alt + ".png");
+                objAltDy[oi] = m_Level->obstacles[oi].altDy;
+            }
         } else if (i != 9 && i != 10) {
             objImg[oi] = std::make_shared<Util::Image>(
                 root + "/sprites/tiles/obj_" + std::to_string(i) + ".png");
@@ -355,33 +376,6 @@ void GameScene::OnEnter() {
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
         };
-        for (int x = 0; x < rg.Width(); ++x) {
-            for (int y = 0; y < rg.Height(); ++y) {
-                if (Room::IsSolidCell(rg.At(x, y))) {
-                    // MAP M1: a solid cell whose -y neighbour is walkable shows the
-                    // wall's FRONT FACE (wall prefab sprite 2), the rest its top.
-                    const bool faceSouth = y > 0 && !Room::IsSolidCell(rg.At(x, y - 1));
-                    if (faceSouth) {
-                        addTile(wallFaceImg, wallFaceSz, x, y, 1.0F);
-                    } else {
-                        addTile(wallImg, wallSz, x, y, 1.0F); // wall / obstacle
-                    }
-                } else {
-                    // MAP M1: the floor variant RoomGen rolled for this cell.
-                    const std::size_t v = static_cast<std::size_t>(rg.FloorVariantAt(x, y));
-                    addTile(floorImgs[v < floorImgs.size() ? v : 0], floorSz, x, y, 0.0F);
-                }
-            }
-        }
-
-        // Phase 4 design-obstacle VISUALS (+ unchanged Phase 3 collision). Renders
-        // each obj_index's REAL sprite (RGObjectSkin -> obstacle_list[obj_index],
-        // P4-RE) bottom-anchored at native aspect: pivot (0.5,0), pixelsToUnits 16,
-        // so a 16x8 box sits low and a 16x24 prop extends up. PURE VISUAL -- the
-        // collision is IDENTICAL to Phase 3: only box (1-4) + brazier (11) get a
-        // collider; wall (0) is already a grid solid (rendered as the ice grid wall
-        // -- minor: not the wall703 skin, see s7); trap(5)/pad(6,7)/obj(8) stay
-        // non-blocking, visual-only. No grid / connectivity / RGRoomX change.
         const auto addObjSprite = [&](const std::shared_ptr<Util::Image> &img,
                                       int cx, int cy)
             -> std::shared_ptr<Util::GameObject> {
@@ -399,6 +393,60 @@ void GameScene::OnEnter() {
             m_Renderer.AddChild(tile);
             return tile;
         };
+        for (int x = 0; x < rg.Width(); ++x) {
+            for (int y = 0; y < rg.Height(); ++y) {
+                if (Room::IsSolidCell(rg.At(x, y))) {
+                    // FAITHFUL @ wall601.prefab: the wall is a 16x24 sprite with pivot
+                    // (0.5, 0) standing on its cell (collider 1x1 at +0.5) plus the w2
+                    // face overlay at the same spot; a 16-px cell is 1 unit, so the
+                    // wall rises 1.5 units. Draw both bottom-anchored at native aspect,
+                    // sorted by y so a lower wall overdraws the one behind it.
+                    {
+                        auto ground = addObjSprite(floorImgs[0], x, y); // ground under the wall
+                        ground->SetZIndex(0.1F - ground->m_Transform.translation.y * 1e-5F);
+                    }
+                    // A design-room obj_index-0 wall wears the level's obstacle_list[0]
+                    // skin (wall603 ice crystals / wall_tree1 ...), not the perimeter wall.
+                    const bool designWall = std::find(ropt.designSolidCells.begin(),
+                                                      ropt.designSolidCells.end(),
+                                                      std::make_pair(x, y)) != ropt.designSolidCells.end();
+                    if (designWall && objImg[0] != nullptr) {
+                        auto dw = addObjSprite(objImg[0], x, y);
+                        dw->SetZIndex(1.3F - dw->m_Transform.translation.y * 1e-5F);
+                        if (objAltImg[0] != nullptr) {
+                            auto dwTop = addObjSprite(objAltImg[0], x, y);
+                            dwTop->m_Transform.translation.y += objAltDy[0] * kCellPx;
+                            dwTop->SetZIndex(1.31F - dw->m_Transform.translation.y * 1e-5F);
+                        }
+                        continue;
+                    }
+                    const auto solidTile = addObjSprite(wallImg, x, y);
+                    solidTile->SetZIndex(1.2F - solidTile->m_Transform.translation.y * 1e-5F);
+                    if (wallFaceImg != wallImg) {
+                        const auto face = addObjSprite(wallFaceImg, x, y);
+                        face->m_Transform.translation.y += wallFaceDy * kCellPx;
+                        face->SetZIndex(1.21F - face->m_Transform.translation.y * 1e-5F);
+                    }
+                } else {
+                    // MAP M1: the floor variant RoomGen rolled for this cell. Floor
+                    // sprites are 16 px wide but may be 24 px tall (castle f2xx: a raised
+                    // lip), pivot (0.5,0): draw bottom-anchored at native aspect, upper
+                    // rows first, so the lip overlaps the row above instead of squashing.
+                    const std::size_t v = static_cast<std::size_t>(rg.FloorVariantAt(x, y));
+                    auto ft = addObjSprite(floorImgs[v < floorImgs.size() ? v : 0], x, y);
+                    ft->SetZIndex(0.1F - ft->m_Transform.translation.y * 1e-5F);
+                }
+            }
+        }
+
+        // Phase 4 design-obstacle VISUALS (+ unchanged Phase 3 collision). Renders
+        // each obj_index's REAL sprite (RGObjectSkin -> obstacle_list[obj_index],
+        // P4-RE) bottom-anchored at native aspect: pivot (0.5,0), pixelsToUnits 16,
+        // so a 16x8 box sits low and a 16x24 prop extends up. PURE VISUAL -- the
+        // collision is IDENTICAL to Phase 3: only box (1-4) + brazier (11) get a
+        // collider; wall (0) is already a grid solid (rendered as the ice grid wall
+        // -- minor: not the wall703 skin, see s7); trap(5)/pad(6,7)/obj(8) stay
+        // non-blocking, visual-only. No grid / connectivity / RGRoomX change.
         if (design != nullptr) {
             for (const DesignObstacle &o : design->obstacles) {
                 if (o.x < 0 || o.x >= rg.Width() || o.y < 0 || o.y >= rg.Height()) {
@@ -410,6 +458,14 @@ void GameScene::OnEnter() {
                     continue; // 0 is the grid wall; 9/10 unused -> null
                 }
                 auto tile = addObjSprite(objImg[oi], o.x, o.y);
+                tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                if (objAltImg[oi] != nullptr) {
+                    // FAITHFUL @ box04.prefab: the w2 overlay (crate top, 16x16) sits
+                    // alt_dy units above the 16x8 base -> the crate reads as a box.
+                    auto top = addObjSprite(objAltImg[oi], o.x, o.y);
+                    top->m_Transform.translation.y += objAltDy[oi] * kCellPx;
+                    top->SetZIndex(1.31F - tile->m_Transform.translation.y * 1e-5F);
+                }
 
                 const bool box = o.objIndex >= 1 && o.objIndex <= 4;
                 const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
@@ -751,7 +807,11 @@ void GameScene::OnEnter() {
     // Zoom 2.5 -> ~80px tall + shows ~512px of world (about one 15-cell room), matching
     // the original's framing. A camera-DISTANCE change: the whole world->screen ratio
     // scales together, so player/enemy/tile relative sizes stay consistent. Feel value.
-    m_Camera.SetZoom(2.5F);
+    // FAITHFUL @ Scene_Game.unity Main Camera: orthographic size 7.5 -> the view is
+    // 15 world units tall -> 48 px per unit at 720p. Cells are kCellPx (32) px per
+    // unit, so zoom = 48 / 32 = 1.5 (was 2.5: the map showed only 16 units across
+    // instead of the original's 26.7).
+    m_Camera.SetZoom(48.0F / kCellPx);
     LOG_INFO("GameScene: multi-room floor ready");
 }
 
