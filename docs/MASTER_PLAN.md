@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.4（2026-09-12；依 Codex R1–R4 修訂，見 §9）
+> 版本：v1.5（2026-09-13；依 Codex R1–R5 修訂，見 §9）
 
 ---
 
@@ -53,7 +53,7 @@
 
 ### 1.1 無頭鉤子與可執行案例
 鉤子（env）：`SK_SEED=N`、`SK_MAX_FRAMES`、`SK_SHOT`、`SK_SKIP_MENU`、`SK_START_CHAR`、`SK_CHAR`、`SK_MENU=start`、`SK_FORCE_CLEAR=K`、`SK_FORCE_DIE=K`、`SK_FORCE_KILL=K`、`SK_FORCE_KILL_EVERY=N`、`SK_FORCE_SKILL=K`、`SK_ENDSCENE=restart|quit|menu`、`SK_GATE_TELEPORT=K`、`SK_GATE_BESIDE=K`、`SK_ROOM_TELEPORT=K,R`（R 無生成點且為出口房時傳到房中央）、`SK_SHOP_BUY=K`、`SK_SHOP_MACHINE=N`、`SK_STATUE_WORSHIP=K`、`SK_COINS=N`、`SK_EVENT_ROOM=statue|mineral`、`SK_ZOOM=<float>`（整房截圖用，覆蓋鏡頭 1.5）、`SK_AUTOWALK`（不穩）、`SK_AUTOFIRE`。
-`GameScene::m_Frame` 每層重新計數。**Shell**：命令以 Git Bash 寫（`VAR=x ./build/Debug/SoulKnight.exe`）；PowerShell 等價寫法 `$env:VAR="x"; .\build\Debug\SoulKnight.exe`。實跑腳本：`scratchpad/r2_chain.sh`（§10 附輸出）。
+`GameScene::m_Frame` 每層重新計數。**Shell**：命令以 Git Bash 寫（`VAR=x ./build/Debug/SoulKnight.exe`）；PowerShell 等價寫法 `$env:VAR="x"; .\build\Debug\SoulKnight.exe`。實跑腳本：`tools/evidence_chain.sh <版本>`（輸出入 `docs/evidence/<版本>/`，§10 引用；每案逐一檢查退出碼、逾時與 PNG 大小，任一失敗腳本以非零退出）。
 
 | 案例 | 命令（Git Bash，倉庫根目錄，Debug 建置） | 預期 log 順序 | 逾時 |
 |---|---|---|---|
@@ -116,7 +116,7 @@
 |---|---|---|---|---|---|---|
 | P2.1 關卡驅動 | LevelIdFor、章節變體 | levels.json | GameScene 讀表 | H1、LevelTableTest | T-01 | 功能完成・未驗收 |
 | P2.2 生態貼圖 | 六地板變體、牆頂牆面、障礙皮膚、寶箱等級 | levels.json、tiles | 渲染 | V-S（冰／城堡截圖） | T-02 T-16 | 功能完成・未驗收 |
-| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_typed.c StartEnemyMaker 77871–77990、EnemyDead 73138–73185、CreatePart 78030–78084 | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | H3、EnemyMakerTest、WaveSchedulerTest（9/9/6 分波、整波死亡後立即下一波、房未空不放波、boss 房空計畫即 Done） | T-03 T-04（選敵／扣 consume／生成點：CreateEnemy 截斷）T-05（加級本體截斷）T-29（ShowUpEffect 0.8 s 音效未移植） | 功能完成・未驗收 |
+| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_typed.c StartEnemyMaker 77871–77995、EnemyDead 73138–73185、CreatePart 78030–78084 | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | H3、EnemyMakerTest、WaveSchedulerTest（9/9/6 分波、整波死亡後立即下一波、房未空不放波、boss 房空計畫即 Done） | T-03 T-04（選敵／扣 consume／生成點：CreateEnemy 截斷）T-05（加級本體截斷）T-29（ShowUpEffect 0.8 s 音效未移植） | 功能完成・未驗收 |
 | P2.4 傳送門 | 走進去換層 | transfer_gate.prefab | GameScene | H2 | — | 功能完成・未驗收 |
 | P2.5 比例／牆／箱／走廊 | 48 px/單位、底部錨定 | Scene_Game camera、wall601/box04 | 渲染 | V-S | — | 功能完成・未驗收 |
 | P2.6 boss 房布局 | 14 預製件 | boss_rooms.json | 渲染＋碰撞 | H7、V-S（r1_boss4；r2_boss3 見 §10） | T-28 | 功能完成・未驗收 |
@@ -222,7 +222,7 @@
 | T-02 | 地板變體取分類擲值否則常駐擲值 | INFERRED | RoomGen.cpp CreateFloor | 地板花紋 | 需原碼 |
 | T-03 | 精英率 stage×3% | PORT CHOICE | GameScene.cpp（EnemyMaker 區） | 精英數量 | P3.8 |
 | T-04 | 生成上限 24、consume ≥1、選敵與扣點迴圈、生成點分布（CreateEnemy 在 Range(0,200) 後截斷；R4 前生成點索引恆為 0 的 bug 已修） | INFERRED / PORT CHOICE | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | 敵人數與位置 | P2.3 |
-| T-05 | 大房加級：兩維各 >15/>21 各 +1，level 0 不加；原碼旗標為 `the_room.random_room`，增量本體截斷（game_typed.c:77871–77990） | INFERRED | EnemyMaker.hpp `EnemyMakerLevel` | 敵人預算 | P2.3 |
+| T-05 | 大房加級：兩維各 >15/>21 各 +1，level 0 不加；原碼旗標為 `the_room.random_room`，增量本體截斷（game_typed.c:77871–77995） | INFERRED | EnemyMaker.hpp `EnemyMakerLevel` | 敵人預算 | P2.3 |
 | T-06 | 房間角色按距離指派 | PORT CHOICE | GameScene.cpp 房間角色區 | 特殊房位置 | P2.13 |
 | T-07 | boss 寶箱與傳送門重疊時下移兩格 | PORT CHOICE | GameScene.cpp boss 死亡區 | 視覺 | — |
 | T-08 | r_chest / r_sell 由 floorSeed 奇偶決定 | PORT CHOICE | GameScene.cpp 房殼區 | 獎勵房類型 | 需原碼 |
@@ -321,15 +321,24 @@ R3 落實度：FALLBACK 十項、雕像讀表、分波純測試、T-14/T-26、§
 - 整房截圖過程發現 v1.3 的 r2_boss3 截圖拍錯房（見 §10 更正）；`SK_ROOM_TELEPORT` 補 level-0 房的中央傳送與鏡頭對齊。
 - P3.0：32 改寫為待驗證假設並列完整影響範圍（§3 P3.0）；裁決仍待使用者。
 
+### R5 — 2026-09-12 — Codex — 對象 v1.4 @ 9536194 — **不通過**
+R4 落實度：分波立即放波（game_typed.c 73158–73184、78049–78075 核對）、生成點公式、H3 順序、H8／整房案例、SK_ZOOM、§2 P8、T-29＝已落實；EnemyMaker／WaveScheduler 引用止於 77990 但公式在 77995、GameScene:916 仍寫 `this_count`、870–872 大房加級仍在 FAITHFUL 段＝部分；evidence_chain.sh 有 pipefail/timeout 但不檢查退出碼、`head` 截流、第 26 行濾掉傳送中心 log＝部分。
+實查：資料閘 GREEN；T-01～T-29 齊；13 個 txt 讀完、3 張 PNG 非零；整房圖與 JSON 相符（四角 2×2 箱、下右門、四石／界內 rail 未畫＝P1.8、界外 rail＝T-28）。抽查三處 FAITHFUL 皆通過。
+§7：1 ✗ 2 ✓ 3 ✓ 4 ✗ 5 ✓ 6 ✓ 7 ✓ 8 ✗。
+**回覆（v1.5）**：
+- GameScene:916 改 `max_room_size = level*3 + max_room_size`（game_typed.c:77995）並註明 CreateEnemy 扣減截斷（T-04）；870–872 大房加級改標 INFERRED (T-05)；三處引用範圍改為 77871–77995。
+- `tools/evidence_chain.sh` 重寫：每案先把完整 log 寫檔再過濾（不再 `head` 截流）、檢查退出碼／逾時（124）／空摘錄／PNG 非零、H2neg 斷言＝1、最後 `STATUS: OK|FAILED(n)` 且失敗非零退出；r2boss3 兩案的過濾式包含 `SK_ROOM_TELEPORT -> room 3 centre` 與 `SK_ZOOM override`，附件可由腳本原樣產生。
+- 首次實跑時 H1–H4 逾時（各 120 s；同命令單獨重跑只需 7 s，原因未確定，疑為新建 exe 首次啟動的防毒掃描）：加入 WARM-UP 步驟（`SK_MAX_FRAMES=1`、600 s 上限）；第二次整鏈 `STATUS: OK`（§10 v1.5）。
+- §1.1 腳本路徑改為 `tools/evidence_chain.sh`。
+
 ---
 
-## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生）
+## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生，腳本結尾 `STATUS: OK` 才算有效）
 
-v1.4（`docs/evidence/v1.4/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
-- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2016`（WaveSchedulerTest 6 例、StatueTest 讀表；golden 含在內）。
+v1.5（`docs/evidence/v1.5/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
+- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2016`。
 - 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`。
-- H1–H8：`H1.txt` … `H7.txt`、`H2neg.txt`（=1）、`statue.txt`；截圖 `H5.png`。摘錄：H1 `hero c12 on floor 0` → `Level B1 (1-1) … pool 5 species` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`（分波改為立即後 log 逐字不變）；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` … `ex_miner03 dropped 6 pickups (coins 4 energy 16)`；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 -- hero c01 time 0:00:03 kills 0 coins 0 gems +0`；H6 `bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
-- V-S r2_boss3：`r2boss3_seed.txt`（`… SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2_boss3_full.png`（SK_ZOOM 0.6 整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體（底座＋頂蓋兩層）；obj22_stone ×4（(6,6)(6,14)(14,6)(14,14)）與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）；boss 站房中央、門在下與右。**更正**：v1.3 的 `r2_boss3.png` 其實拍到的是起始房——當時 `SK_ROOM_TELEPORT` 對無生成點的 level-0 房（boss／傳送門房）靜默跳過；本版改為傳到房中央並即時對齊鏡頭，log 明示 `spawn point / centre / skipped`。
+- H1–H8：`H1.txt` … `H8.txt`、`H2neg.txt`（=1）；截圖 `H5.png`。內容與 v1.4 逐字相同（分波／傳送修正不影響這些案例的 log）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
+- V-S r2_boss3：`r2boss3_seed.txt`（含 `SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2boss3_full.txt`（含 `SK_ZOOM override 0.6`）、`r2_boss3_full.png`（整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體；obj22_stone ×4 與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）＝T-28；boss 在房中央、門在下與右。**更正（v1.4 起）**：v1.3 的 `r2_boss3.png` 拍到的是起始房（當時 `SK_ROOM_TELEPORT` 對 level-0 房靜默跳過）。
 
-v1.3（458c595，`docs/evidence/v1.3/`）：ctest 2015/2015、gate GREEN、H1–H7、statue、r2_boss3.png（局部）。
-v1.2（1097c86，本機實跑未入庫）：ctest 2009/2009、gate GREEN。
+v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.5 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。

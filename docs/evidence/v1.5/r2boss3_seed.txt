@@ -1,3 +1,4 @@
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-1312,-2624)
  [info] Level D5 (2-5) biome 2-graveyard chest_level 4 map_long 4 pool 14 species
  [info] BossRoom: room 3 uses r2_boss3 (21x21, 24 objects)
  [info] GameScene: SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)

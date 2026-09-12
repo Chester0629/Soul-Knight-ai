@@ -1,30 +1,85 @@
 #!/usr/bin/env bash
-# Evidence chain for docs/MASTER_PLAN.md section 10: build, full suite, headless
-# cases H1-H7 (section 1.1) with real logs, and the boss-room visual sample.
+# Evidence chain for docs/MASTER_PLAN.md section 10: build, full suite, data gate,
+# headless cases H1-H8 (section 1.1) with real logs, and the boss-room visuals.
 # Usage (Git Bash, repo root):  tools/evidence_chain.sh <tag>   -> docs/evidence/<tag>/
-set -u -o pipefail
+# Every step is checked: a failed build/ctest/gate, a non-zero or timed-out game run,
+# an empty log or an empty PNG counts as a failure; the script exits non-zero if any
+# step failed and prints a STATUS line listing them.
+set -u
 cd "$(dirname "$0")/.." || exit 1
 TAG="${1:-latest}"
 E="docs/evidence/$TAG"; mkdir -p "$E"
 G=./build/Debug/SoulKnight.exe
-echo "=== CONFIGURE ==="; cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug 2>&1 | tail -1
-echo "=== BUILD GAME ==="; cmake --build build --config Debug 2>&1 | grep -E " error|SoulKnight.vcxproj ->" | head -10
-echo "=== BUILD TESTS ==="; cmake --build build --config Debug --target SoulKnightTests 2>&1 | grep -E " error|SoulKnightTests.vcxproj ->" | head -10
-echo "=== CTEST ==="; ctest --test-dir build -C Debug -E Tests_NOT_BUILT 2>&1 | grep -E "tests passed|tests failed" | tee "$E/ctest.txt"
-echo "=== GATE ==="; python tools/validate_data.py 2>&1 | tail -1 | tee "$E/gate.txt"
-[ -x "$G" ] || { echo "no game binary"; exit 1; }
-echo "=== H1 ==="; SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200 timeout 120 $G 2>&1 | grep -E "GameScene: hero|Level |CLEARED" | head -8 | tee "$E/H1.txt"
-echo "=== H2 ==="; SK_SKIP_MENU=1 SK_GATE_TELEPORT=200 SK_MAX_FRAMES=400 timeout 120 $G 2>&1 | grep -E "TransferGate|GameScene: hero" | head -6 | tee "$E/H2.txt"
-echo "H2-neg floors:"; SK_SKIP_MENU=1 SK_MAX_FRAMES=400 timeout 120 $G 2>&1 | grep -c "GameScene: hero" | tee "$E/H2neg.txt"
-echo "=== H3 ==="; SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700 timeout 120 $G 2>&1 | grep -E "RGRoomX: room 1|EnemyMaker: room 1" | head -12 | tee "$E/H3.txt"
-echo "=== H4 ==="; SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700 timeout 120 $G 2>&1 | grep -E "Reward:|Pickup:" | head -6 | tee "$E/H4.txt"
-echo "=== H5 ==="; SK_SKIP_MENU=1 SK_FORCE_DIE=100 SK_MAX_FRAMES=300 SK_SHOT="$E/H5.png" timeout 120 $G 2>&1 | grep -E "died|EndScene: game" | head -3 | tee "$E/H5.txt"
-echo "=== H6 ==="; SK_SKIP_MENU=1 SK_COINS=30 SK_SHOP_BUY=100 SK_MAX_FRAMES=130 timeout 120 $G 2>&1 | grep -E "Shop:" | head -5 | tee "$E/H6.txt"
-echo "=== H7 ==="; SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=447 timeout 120 $G 2>&1 | grep -E "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" | sed -n '/Level B5/,$p' | head -6 | tee "$E/H7.txt"
-echo "=== STATUE (P1.12 statues table) ==="; SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130 timeout 120 $G 2>&1 | grep -E "Statue:" | head -4 | tee "$E/statue.txt"
-echo "=== V-S r2_boss3 (seed 1: variant D, floor 9 room 3) ==="
-SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3.png" timeout 120 $G 2>&1 | grep -E "Level D5|BossRoom: room 3 uses r2_boss3" | tail -2 | tee "$E/r2boss3_seed.txt"
-echo "=== V-S r2_boss3 whole room (SK_ZOOM) ==="
-SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_ZOOM=0.6 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3_full.png" timeout 120 $G >/dev/null 2>&1; ls -la "$E/r2_boss3_full.png" | awk '{print $5}'
+CASE_TIMEOUT=120
+FAILS=()
+
+fail() { FAILS+=("$1"); echo "FAIL: $1"; }
+
+# run_case <name> <grep-regex> <max-lines> [env assignments...]
+# Runs the game with the given env under a timeout, keeps the full log in $E/<name>.log,
+# and writes the filtered excerpt to $E/<name>.txt. Fails on non-zero exit, timeout, or
+# an empty excerpt.
+run_case() {
+  local name="$1" re="$2" max="$3"; shift 3
+  echo "=== $name ==="
+  env "$@" timeout "$CASE_TIMEOUT" "$G" > "$E/$name.log" 2>&1
+  local rc=$?
+  if [ "$rc" -eq 124 ]; then fail "$name timed out after ${CASE_TIMEOUT}s"; fi
+  if [ "$rc" -ne 0 ] && [ "$rc" -ne 124 ]; then fail "$name exited $rc"; fi
+  grep -E "$re" "$E/$name.log" | sed -n "1,${max}p" > "$E/$name.txt"
+  cat "$E/$name.txt"
+  [ -s "$E/$name.txt" ] || fail "$name produced no matching log lines"
+}
+
+check_png() { # <path>
+  if [ ! -s "$1" ]; then fail "$(basename "$1") missing or empty"; else echo "$(basename "$1"): $(stat -c %s "$1") bytes"; fi
+}
+
+echo "=== CONFIGURE ==="
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug > "$E/configure.log" 2>&1 || fail "configure"
+tail -1 "$E/configure.log"
+echo "=== BUILD GAME ==="
+cmake --build build --config Debug --target SoulKnight > "$E/build_game.log" 2>&1 || fail "build SoulKnight"
+grep -E " error|SoulKnight.vcxproj ->" "$E/build_game.log"
+echo "=== BUILD TESTS ==="
+cmake --build build --config Debug --target SoulKnightTests > "$E/build_tests.log" 2>&1 || fail "build SoulKnightTests"
+grep -E " error|SoulKnightTests.vcxproj ->" "$E/build_tests.log"
+echo "=== CTEST ==="
+ctest --test-dir build -C Debug -E Tests_NOT_BUILT > "$E/ctest.log" 2>&1 || fail "ctest"
+grep -E "tests passed|tests failed" "$E/ctest.log" | tee "$E/ctest.txt"
+echo "=== GATE ==="
+python tools/validate_data.py > "$E/gate.log" 2>&1 || fail "validate_data"
+tail -1 "$E/gate.log" | tee "$E/gate.txt"
+[ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${FAILS[*]})"; exit 1; }
+echo "=== WARM-UP (first launch of a fresh build can take minutes: AV scan / shader cache) ==="
+time (env SK_SKIP_MENU=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1; echo "warm-up rc=$?")
+
+run_case H1 "GameScene: hero|Level |CLEARED" 8 SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200
+run_case H2 "TransferGate|GameScene: hero" 6 SK_SKIP_MENU=1 SK_GATE_TELEPORT=200 SK_MAX_FRAMES=400
+echo "=== H2neg (no SK_GATE_TELEPORT: floors visited must be 1) ==="
+env SK_SKIP_MENU=1 SK_MAX_FRAMES=400 timeout "$CASE_TIMEOUT" "$G" > "$E/H2neg.log" 2>&1 || fail "H2neg exited $?"
+grep -c "GameScene: hero" "$E/H2neg.log" | tee "$E/H2neg.txt"
+[ "$(cat "$E/H2neg.txt")" = "1" ] || fail "H2neg floors != 1"
+run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700
+run_case H4 "Reward:|Pickup:" 6 SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700
+run_case H5 "died|EndScene: game" 3 SK_SKIP_MENU=1 SK_FORCE_DIE=100 SK_MAX_FRAMES=300 SK_SHOT="$E/H5.png"
+check_png "$E/H5.png"
+run_case H6 "Shop:" 5 SK_SKIP_MENU=1 SK_COINS=30 SK_SHOP_BUY=100 SK_MAX_FRAMES=130
+run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 12 SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=447
+run_case H8 "Statue:" 4 SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130
+echo "=== V-S r2_boss3 (seed 1: variant D, floor 9 room 3; zoom 1.5 partial) ==="
+run_case r2boss3_seed "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre" 40 \
+  SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3.png"
+check_png "$E/r2_boss3.png"
+echo "=== V-S r2_boss3 whole room (SK_ZOOM=0.6) ==="
+run_case r2boss3_full "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre|SK_ZOOM override" 40 \
+  SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_ZOOM=0.6 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3_full.png"
+check_png "$E/r2_boss3_full.png"
 git rev-parse --short HEAD | tee "$E/head.txt"
-echo "STATUS: all steps ran (pipefail on; a failed grep shows as empty file)"
+rm -f "$E"/*.log
+if [ "${#FAILS[@]}" -eq 0 ]; then
+  echo "STATUS: OK (all steps passed)"
+else
+  echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]}"
+  exit 1
+fi

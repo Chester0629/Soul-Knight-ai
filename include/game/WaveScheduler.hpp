@@ -25,7 +25,7 @@ namespace Game {
  *     `if (part != 0) Invoke(<literal>, 0.8f)` and increment `part`. That
  *     Invoke does not gate spawning -- CreatePart has already spawned the part
  *     synchronously by the time it fires.
- *   - EnemyMaker__StartEnemyMaker @ 77871-77990: `max_room_size = level*3 +
+ *   - EnemyMaker__StartEnemyMaker @ 77871-77995: `max_room_size = level*3 +
  *     max_room_size` (the serialized field is 0 on r1_* rooms), so each part
  *     holds level*3 enemies -- the size of a part, not a count of parts.
  *

@@ -20,7 +20,7 @@ namespace Game {
  *   level 1 -> [8,15)   level 2 -> [15,24)  level 3 -> [24,36)
  *   level 4 -> [36,44)  level 5 -> [44,52)  level >= 6 -> 60 (no draw)
  *   level -1 -> 9999 (endless)  level 0 -> nothing spawns
- * `max_room_size = level*3 + max_room_size` (game_typed.c:77871-77990; the
+ * `max_room_size = level*3 + max_room_size` (game_typed.c:77871-77995; the
  * serialized field is 0 on r1_* rooms) -- each part holds level*3 enemies.
  *
  * INFERRED (T-04): EnemyMaker__CreatePart @ game_typed.c:78030-78084 spends
@@ -48,7 +48,7 @@ inline std::pair<int, int> EnemyPointRange(int level) {
     }
 }
 
-/// INFERRED (T-05): EnemyMaker__StartEnemyMaker @ game_typed.c:77871-77990
+/// INFERRED (T-05): EnemyMaker__StartEnemyMaker @ game_typed.c:77871-77995
 /// gates the big-room bump on `the_room.random_room && level > 0`, then tests
 /// room_width (+0x14) > 15 and > 21 and room_height (+0x18) > 15 and > 21 in
 /// nested blocks whose bodies were truncated; the port reads each passed test

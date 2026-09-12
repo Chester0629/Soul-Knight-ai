@@ -869,9 +869,9 @@ void GameScene::OnEnter() {
                 // MAP M1: the original EnemyMaker over the level's REAL spawn pool.
                 // FAITHFUL @ MapManager.enemy_list (weighted: duplicates are the
                 // weights) + EnemyMaker.StartEnemyMaker (level -> enemy_point budget,
-                // big-room bump) + CreatePart (spend the budget into this_count;
-                // INFERRED (T-04) how each pick charges consume -- CreateEnemy is
-                // truncated after rg_random.Range(0, 200)). Badass (type 3) rooms add
+                // game_typed.c:77871-77995). INFERRED (T-05): the big-room bump.
+                // INFERRED (T-04): how CreatePart/CreateEnemy charge each pick's
+                // consume -- CreateEnemy is truncated after rg_random.Range(0, 200). Badass (type 3) rooms add
                 // one elite from ex_enemy_list (always_badass). The maker draws from its OWN
                 // stream (m_FloorSeed + 1500 + room) so map/combat replay is untouched.
                 // Falls back to the chapter mob pool when the level table is absent.
@@ -913,8 +913,10 @@ void GameScene::OnEnter() {
                     wv.points.push_back(Room::CellToWorld(sc.first, sc.second, rg.Width(),
                                                           rg.Height(), kCellPx, origin));
                 }
-                // FAITHFUL: StartEnemyMaker -> this_count = level * 3 + this_count (prefab
-                // this_count is 0 on the r1_* rooms): the size of each part.
+                // FAITHFUL: StartEnemyMaker -> max_room_size = level * 3 + max_room_size
+                // (game_typed.c:77995; the private field is 0 on rooms): the size of
+                // each part. INFERRED (T-04): CreateEnemy's per-pick decrement of
+                // room_size/enemy_point is truncated, so a part is a fixed level*3 picks.
                 wv.wave.Plan(ids, level * 3);
                 SpawnNextWave(roomIndex);
                 LOG_INFO("EnemyMaker: room {} (type {}) level {} points {} -> {} planned, wave size {}",
