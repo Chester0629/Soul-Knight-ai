@@ -441,6 +441,21 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 m_Machines.emplace(it.key(), std::move(d));
             }
         }
+        // M3e: shop.json "statues" (statue_0N.prefab TalkStatue). FAITHFUL.
+        if (const auto sts = shop.find("statues"); sts != shop.end() && sts->is_object()) {
+            for (auto it = sts->begin(); it != sts->end(); ++it) {
+                StatueDef d;
+                d.id = it.key();
+                d.statueIndex = GetI(it.value(), "statue_index");
+                d.cost = GetI(it.value(), "cost");
+                d.baseSprite = GetS(it.value(), "base_sprite");
+                d.bodySprite = GetS(it.value(), "body_sprite");
+                d.lightSprite = GetS(it.value(), "light_sprite");
+                d.bodyDy = GetF(it.value(), "body_dy");
+                d.lightDy = GetF(it.value(), "light_dy");
+                m_Statues.push_back(std::move(d));
+            }
+        }
     }
 
     // P1.12: pickups.json
@@ -494,6 +509,15 @@ const PotDef *GameData::FindPot(const std::string &id) const {
 const MachineDef *GameData::FindMachine(const std::string &id) const {
     auto it = m_Machines.find(id);
     return it == m_Machines.end() ? nullptr : &it->second;
+}
+
+const StatueDef *GameData::FindStatue(int statueIndex) const {
+    for (const StatueDef &d : m_Statues) {
+        if (d.statueIndex == statueIndex) {
+            return &d;
+        }
+    }
+    return nullptr;
 }
 
 const BossChestDef *GameData::FindBossChest(const std::string &bossPrefab) const {

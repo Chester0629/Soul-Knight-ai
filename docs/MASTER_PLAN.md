@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.2（2026-09-12；依 Codex R1、R2 修訂，見 §9）
+> 版本：v1.3（2026-09-12；依 Codex R1–R3 修訂，見 §9）
 
 ---
 
@@ -27,13 +27,13 @@
 | characters.json | `res/player/c##.prefab` | 1.7.10 | 退回 1.07 單一模板 | 1.7.10 |
 | weapons.json（194） | `data_tables/weapons.csv` + 預製件圖示 | 1.7.10 | 退回 1.07 的 46 類別表 | 1.7.10 |
 | sprites.json / tiles | Animator→clip→sprite | 1.7.10 | 缺則佔位圖 | 1.7.10 |
-| levels / boss_rooms / boss_chests / shop / **pickups**.json | `res/map_manager`、`rgprefab/rooms`、`res/item`、`rgprefab/room/event`、`res/register` | 1.7.10 | 不產生檔案；執行期走 pre-M1 固定路徑並 log | 1.7.10 |
+| levels / boss_rooms / boss_chests / shop（pots/machines/**statues**）/ pickups.json | `res/map_manager`、`rgprefab/rooms`、`res/item`、`rgprefab/room/event`、`rgprefab/room/statue`、`res/register` | 1.7.10 | 不產生檔案；執行期：levels 缺→固定 ice 路徑；boss_rooms 缺→借 r1_* 布局；boss_chests/shop 缺→該房無內容並 log；**pickups 缺→掉落值全 0＝不掉落**（GameData log `pickups.json absent`） | 1.7.10 |
 | bullets / bosses / buffs / enemy_guns.json | `1.07/MonoBehaviour` 舊 dump | **1.07** | — | 待升版（P1.10） |
 | droptables / weapon_catalog.json | `1.07/TextAsset` | 1.07 | — | 待升版（P1.10） |
 
-**降級條件**：退化只在 `../_reverse` 缺席的乾淨 checkout 觸發，`build_gamedata.py` 對每張未產生的表印 `FALLBACK: <table> …`；標「驗收完成」的階段其表必須是 1.7.10 來源。
+**降級條件**：退化只在 `../_reverse` 缺席的乾淨 checkout 觸發，`build_gamedata.py` 對每張退化或未產生的表印 `FALLBACK: <table> …`（weapons、enemies、characters、sprites、levels、boss_rooms、boss_chests、shop、statues、pickups 十處）；標「驗收完成」的階段其表必須是 1.7.10 來源。
 
-**非目標**：多人連線、IAP／廣告、雲端存檔、Google Play 成就、季節 boss（Nian）。
+**非目標**（不列入階段表）：多人連線、IAP／廣告、雲端存檔、Google Play 成就、季節 boss（Nian）。
 **法律框架**：解包素材屬 ChillyRoom，僅供課堂演示；`Resources/sprites` 已列入 `.gitignore`。
 
 ---
@@ -43,7 +43,7 @@
 | 代號 | 方式 | 指令 / 位置 | 用途與限制 |
 |---|---|---|---|
 | V-T | GoogleTest | `cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug` → `cmake --build build --config Debug --target SoulKnightTests` → `ctest --test-dir build -C Debug -E Tests_NOT_BUILT` | 每次驗收附**測試報告行**與 commit（§10）。基準（a3bb557）：`grep -c "^TEST(" test/*.cpp` = 2009 巨集 / 141 檔；執行數以 ctest 輸出為準。 |
-| V-G | 資料閘 | `python tools/validate_data.py`（pre-commit 亦執行；非 ASCII 檢查在 pre-commit hook） | 檢查 weapons/bullets/enemies/bosses/buffs/catalog/droptables/characters + levels（31、6 地板、12 障礙、敵池引用；**未知 id 為錯誤，只豁免 T-27 列名的 ex_orc05**）、boss_rooms（14、界內、皮膚、boss 層房存在）、boss_chests、shop、pickups（四種皆有 value/speed/range/frames）。 |
+| V-G | 資料閘 | `python tools/validate_data.py`（pre-commit 亦執行；非 ASCII 檢查在 pre-commit hook） | 檢查 weapons/bullets/enemies/bosses/buffs/catalog/droptables/characters + levels（31、6 地板、12 障礙、敵池引用；**未知 id 為錯誤，只豁免 T-27 列名的 ex_orc05**）、boss_rooms（14、界內、皮膚、boss 層房存在）、boss_chests、shop（pots/machines/statues：7 座、cost>0、index 唯一、貼圖存在）、pickups（四種皆有 value/speed/range/frames）。 |
 | V-D | 資料對照 | §1.2 固定樣本 | 每個資料階段至少 5 筆「來源:欄位 → 預期 → JSON」＋全表檢查。 |
 | V-H | 無頭鉤子 | §1.1 案例（命令、seed、幀數、預期 log、逾時） | 只證明路徑可達與 log 順序；不證明正常遊玩（見 V-P）。實跑 log 存 §10。 |
 | V-P | 實玩紀錄 | 人工遊玩＋截圖／錄影＋seed | 「可玩」驗收必附。 |
@@ -72,6 +72,7 @@
 - levels：B1 (1-1, chest 1, map_long 3, f601..f606, wall602/wall601)；B5 type2=[r1_boss3,r1_boss4,r1_boss6]；C1 (2-1, chest 3, f201..)；G1 (3-6, map_long 1, type2=[r_end])。
 - boss chests：chest_boss01 level 2 weapon_077；chest_boss13 weapon_175；無 chest_boss05/06/11/12。
 - pickups：coin_0 value 5 speed 20 range 6 frames objects_common_31..34；coin_1 3；coin_2 1；energy value 8 speed 14；_rgcoin.friction 0.9。
+- statues：7 座 statue_01..07，item_value 皆 15；底座 objects3_6、光 objects3_7 @ y 0.69375；身體 1→objects3_0、2→objects3_3、3→objects3_2、4→objects3_1、5→objects3_4、6→objects3_5、7→objects3_3 @ y 1.1。
 
 ---
 
@@ -79,14 +80,14 @@
 
 | 區塊 | 功能 | 驗收 | 主要 commit | 缺口 |
 |---|---|---|---|---|
-| P1 資料層 | 進行中（P1.1–P1.7、P1.11、P1.12 功能完成） | 未驗收 | 12c3750 … 8cb1e61、本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.10 四張表仍為 1.07 |
-| P2 地圖 | 進行中（P2.1–P2.2、P2.4–P2.9 功能完成；P2.3 進行中） | 未驗收 | 3eded10 … e2c5030 | P2.3 加級條件（T-05）、P2.10–P2.13 |
-| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain 完成） | 未驗收 | phase 1–5 | P3.0–P3.9 |
+| P1 資料層 | 進行中（P1.1–P1.7、P1.11、P1.12 功能完成） | 未驗收 | 12c3750 … 1097c86、本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.10 四張表仍為 1.07 |
+| P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
+| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain 完成；P3.0 稽核完成待裁決） | 未驗收 | phase 1–5 | P3.0 裁決、P3.1–P3.9 |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
-| P5 大廳 | 未開始 | — | — | 全部 |
+| P5 大廳 | 未開始 | 未驗收 | — | 全部 |
 | P6 UI 表現 | 進行中（P6.1 功能完成） | 未驗收 | 6e46eed | P6.2–P6.8 |
-| P7 內容補完 | 未開始 | — | — | 全部 |
-| P8 擴充管線 | 未開始 | — | — | 全部 |
+| P7 內容補完 | 未開始 | 未驗收 | — | 全部 |
+| P8 擴充管線 | 未開始（P8.0 邊界已寫明） | 未驗收 | — | P8.1–P8.3 |
 
 ---
 
@@ -102,90 +103,89 @@
 | P1.5 章節 | biome/chapter、boss 池 | res/enemy/<biome> | enemies.json 欄 | ChapterProgressionTest | — | 功能完成・未驗收 |
 | P1.6 關卡表 | 31 關 | res/map_manager | levels.json | LevelTableTest、§1.2、V-G 全表引用 | T-01 T-27 | 功能完成・未驗收 |
 | P1.7 boss 房／寶箱／商店表 | 14 房、11 箱、8 藥水 3 機器 | rgprefab/rooms、res/item、room/event | boss_rooms/boss_chests/shop.json | BossRoomTest、ShopTest、V-G | T-08 T-28 | 功能完成・未驗收 |
-| P1.8 內嵌物件 | rail/stone02/carpet/obj22_house/table/stone | *_boss*.prefab 子物件 m_Sprite | boss_rooms.json prefabs | BossRoomTest | — | 未開始 |
-| P1.9 未解析掉落物 | mineral_obj、GetRoomReward、ChestXmlReader、GetPot/GetCoin | 反編譯（game_typed.c 交叉） | 對應 JSON | V-R | T-09 T-10 T-15 | 未開始 |
-| P1.10 升版 | bullets/bosses/buffs/enemy_guns/droptables/catalog 改由 AssetRipper 產生；補 ex_orc05 | res/*、rgprefab/bullet、Assets/GameObject | 同名 JSON | V-D 全表 diff | T-27 | 未開始 |
+| P1.8 內嵌物件 | rail/stone02/carpet/obj22_house/table/stone | *_boss*.prefab 子物件 m_Sprite | boss_rooms.json prefabs | BossRoomTest | — | 未開始・未驗收 |
+| P1.9 未解析掉落物 | mineral_obj、GetRoomReward、ChestXmlReader、GetPot/GetCoin | 反編譯（game_typed.c 交叉） | 對應 JSON | V-R | T-09 T-10 T-15 | 未開始・未驗收 |
+| P1.10 升版 | bullets/bosses/buffs/enemy_guns/droptables/catalog 改由 AssetRipper 產生；補 ex_orc05 | res/*、rgprefab/bullet、Assets/GameObject | 同名 JSON | V-D 全表 diff | T-27 | 未開始・未驗收 |
 | P1.11 資料閘擴充 | levels/boss_rooms/boss_chests/shop/pickups 進閘；未知引用為錯誤 | — | validate_data.py | V-G（GREEN，8 warnings） | T-27 | 功能完成・未驗收 |
-| P1.12 數值出 C++ | 掉落值、磁吸 speed/range、摩擦、幀清單 → pickups.json | res/register/coin_*、energy、coin_0.controller | pickups.json、GameData::FindPickup | EnemyRewardTest（讀表）、V-G | T-19（散射力度仍 PORT） | 功能完成・未驗收 |
+| P1.12 數值出 C++ | 掉落值、磁吸 speed/range、摩擦、幀清單 → pickups.json；雕像 cost／貼圖／偏移 → shop.json statues | res/register/coin_*、energy、coin_0.controller；rgprefab/room/statue/statue_01..07 | pickups.json、shop.json statues、GameData::FindPickup/FindStatue | EnemyRewardTest、StatueTest（讀表）、V-G | T-19（散射力度仍 PORT）；剩餘 C++ 常數＝幾何／鉤子 | 功能完成・未驗收 |
 
 ### P2 地圖與關卡
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
 | P2.1 關卡驅動 | LevelIdFor、章節變體 | levels.json | GameScene 讀表 | H1、LevelTableTest | T-01 | 功能完成・未驗收 |
 | P2.2 生態貼圖 | 六地板變體、牆頂牆面、障礙皮膚、寶箱等級 | levels.json、tiles | 渲染 | V-S（冰／城堡截圖） | T-02 T-16 | 功能完成・未驗收 |
-| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_full.c:682128 | EnemyMaker.hpp、SpawnWaves | H3、EnemyMakerTest | T-03 T-04 T-05 | 進行中・未驗收（加級條件 INFERRED；分波時序純測試待抽出） |
+| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_full.c:682128–682234（可見段） | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | H3、EnemyMakerTest、WaveSchedulerTest（9/9/6 分波、800 ms 延遲、房未空不放波） | T-03 T-04 T-05（加級本體 T-26 截斷） | 功能完成・未驗收 |
 | P2.4 傳送門 | 走進去換層 | transfer_gate.prefab | GameScene | H2 | — | 功能完成・未驗收 |
 | P2.5 比例／牆／箱／走廊 | 48 px/單位、底部錨定 | Scene_Game camera、wall601/box04 | 渲染 | V-S | — | 功能完成・未驗收 |
 | P2.6 boss 房布局 | 14 預製件 | boss_rooms.json | 渲染＋碰撞 | H7、V-S（r1_boss4；r2_boss3 見 §10） | T-28 | 功能完成・未驗收 |
 | P2.7 房間角色與寶箱 | 出口／獎勵／事件；獎勵箱；boss 箱 | boss_chests.json | GameScene | H7 | T-06 T-07 T-09 T-10 | 功能完成・未驗收 |
 | P2.8 商店房 | 三機器、E 購買 | shop.json | VendingMachine | H6、ShopTest | T-08 T-11 T-12 | 功能完成・未驗收 |
 | P2.9 門片／影子／事件房 | d1–d5、shadow2、雕像、礦物 | door_2 clips、statue_0N | GameScene | V-S（開／鎖門）、StatueTest | T-13 T-14 T-15 T-16 | 功能完成・未驗收 |
-| P2.10 傭兵房（=P7.2） | TalkMercenary 雇傭＋跟隨戰鬥 | TalkMercenary、NpcMercenaryController | 新實體 | V-T | — | 未開始 |
-| P2.11 視覺補完 | 外牆裝飾變體門檻、角色影子、P1.8 繪製 | CreateWall、shadow2 | 渲染 | V-S | — | 未開始 |
-| P2.12 一般房清場獎勵 | GetRoomReward | P1.9 | GameScene | V-T | T-10 | 未開始 |
-| P2.13 CreateMap 對照 | 房間數語意 | game_full.c CreateMap | MapManager | V-R | T-17 | 未開始 |
+| P2.10 傭兵房（=P7.2） | TalkMercenary 雇傭＋跟隨戰鬥 | TalkMercenary、NpcMercenaryController | 新實體 | V-T | — | 未開始・未驗收 |
+| P2.11 視覺補完 | 外牆裝飾變體門檻、角色影子、P1.8 繪製 | CreateWall、shadow2 | 渲染 | V-S | — | 未開始・未驗收 |
+| P2.12 一般房清場獎勵 | GetRoomReward | P1.9 | GameScene | V-T | T-10 | 未開始・未驗收 |
+| P2.13 CreateMap 對照 | 房間數語意 | game_full.c CreateMap | MapManager | V-R | T-17 | 未開始・未驗收 |
 
 ### P3 戰鬥忠實度
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
-| P3.0 單位換算稽核 | 子彈 15 px/單位 vs 地圖 32 | RGBullet 速度、預製件 PPU | 統一常數或證明 | 「子彈飛 N 格秒數」測試 | T-25 | 未開始 |
-| P3.1 Buff 本體 | Fire/Poison/Ice/Electric/Armor/ChangeSpeed | BuffXXX__*、buffs.json | combat/Buff*.cpp | 每種 buff 時序測試（固定 dt） | — | 未開始 |
-| P3.2 Buff 觸發 | 子彈預製件 *BuffTrigger → bullets.json `buff` | 預製件元件 | 資料欄＋sim 掛接 | V-D 5 顆、V-H 命中 log | — | 未開始 |
-| P3.3.c03…c13 | 每角一切片 | CharSkillC0N__* | combat/CharSkillC0N.cpp | 每技能 4 斷言（觸發／冷卻／效果量／結束） | — | 未開始 |
-| P3.4 接觸傷害 | AI04/08/13、boss 撞擊、無敵幀 | RGEController__GetHurt | sim | V-T | — | 未開始 |
-| P3.5.bossNN | 每 boss 一切片（Fan 近似→真表） | BossAI0N__ChooseAttack | sim | golden hash 前後 | — | 未開始 |
-| P3.6.gunXX | 每射擊模式一切片（25/46） | Gun*__* | WeaponBrain | WeaponBrainTest | T-22 T-23 | 未開始 |
-| P3.7 特殊 AI | AI05、AI06 召喚、AI12 複合 | 對應類別 | sim | V-T | T-24 | 未開始 |
-| P3.8 精英 | ex_* 數值、badass_rate | EnemyMaker 私有欄位 | 資料 | V-D | T-03 | 未開始 |
-| P3.9 雕像祝福 | 5 種 | BuffStatue01..04 | GameScene/sim | V-T | T-14 | 未開始 |
+| P3.0 單位換算稽核 | 子彈 15 px/單位 vs 地圖 32 | 武器圖集 `spritePixelsToUnits: 16`；Scene_Game ortho 7.5；RGBullet__SetBulletVelocity（stub，T-26） | 稽核結論（§9 R3 回覆）：15 為舊佔位，來源推得 32；改值影響所有速度與 golden（WeaponBrainTest:248、BrainFactoryTest:66 釘 15） | 「子彈飛 N 格秒數」測試 | T-25 | 進行中（稽核完成，待使用者裁決改 32）・未驗收 |
+| P3.1 Buff 本體 | Fire/Poison/Ice/Electric/Armor/ChangeSpeed | BuffXXX__*、buffs.json | combat/Buff*.cpp | 每種 buff 時序測試（固定 dt） | — | 未開始・未驗收 |
+| P3.2 Buff 觸發 | 子彈預製件 *BuffTrigger → bullets.json `buff` | 預製件元件 | 資料欄＋sim 掛接 | V-D 5 顆、V-H 命中 log | — | 未開始・未驗收 |
+| P3.3.c03…c13 | 每角一切片 | CharSkillC0N__* | combat/CharSkillC0N.cpp | 每技能 4 斷言（觸發／冷卻／效果量／結束） | — | 未開始・未驗收 |
+| P3.4 接觸傷害 | AI04/08/13、boss 撞擊、無敵幀 | RGEController__GetHurt | sim | V-T | — | 未開始・未驗收 |
+| P3.5.bossNN | 每 boss 一切片（Fan 近似→真表） | BossAI0N__ChooseAttack | sim | golden hash 前後 | — | 未開始・未驗收 |
+| P3.6.gunXX | 每射擊模式一切片（25/46） | Gun*__* | WeaponBrain | WeaponBrainTest | T-22 T-23 | 未開始・未驗收 |
+| P3.7 特殊 AI | AI05、AI06 召喚、AI12 複合 | 對應類別 | sim | V-T | T-24 | 未開始・未驗收 |
+| P3.8 精英 | ex_* 數值、badass_rate | EnemyMaker 私有欄位 | 資料 | V-D | T-03 | 未開始・未驗收 |
+| P3.9 雕像祝福 | 5 種 | BuffStatue01..04 | GameScene/sim | V-T | T-14 | 未開始・未驗收 |
 
 ### P4 進度與經濟循環
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
 | P4.1 掉落經濟 | 掉落、磁吸、HUD | pickups.json、enemies.csv | EnemyReward、CoinPickup | H4、EnemyRewardTest | T-18 T-19 | 功能完成・未驗收 |
-| P4.2 寶石 | 來源與 `PlayerSaveData.gems` | UIStatement.AddGem | RunStats/存檔 | V-T | — | 未開始（依賴 P5.3） |
-| P4.3 復活／重試 | UIWindowReborn、window_try_again | 預製件、i2 | 場景 | V-H | — | 未開始（依賴 P4.2） |
-| P4.4 buff 三選一 | 24 Buff_info、buff_* 旗標 | i2、RGGameProcess | UI＋RunState | V-T | — | 未開始（依賴 P3.1） |
-| P4.5 16 層與勝利 | G1 r_end、Victory | map_G1、r_end | 場景 | H 案例 | — | 未開始 |
+| P4.2 寶石 | 來源與 `PlayerSaveData.gems` | UIStatement.AddGem | RunStats/存檔 | V-T | — | 未開始（依賴 P5.3）・未驗收 |
+| P4.3 復活／重試 | UIWindowReborn、window_try_again | 預製件、i2 | 場景 | V-H | — | 未開始（依賴 P4.2）・未驗收 |
+| P4.4 buff 三選一 | 24 Buff_info、buff_* 旗標 | i2、RGGameProcess | UI＋RunState | V-T | — | 未開始（依賴 P3.1）・未驗收 |
+| P4.5 16 層與勝利 | G1 r_end、Victory | map_G1、r_end | 場景 | H 案例 | — | 未開始・未驗收 |
 | P4.6a 結算畫面 | Statements 場景 | Statements.unity | EndScene | H5、V-S | T-20 | 功能完成・未驗收 |
-| P4.6b 統計存檔 | StatisticData | 反編譯 | 存檔 | V-T | — | 未開始（依賴 P5.3） |
+| P4.6b 統計存檔 | StatisticData | 反編譯 | 存檔 | V-T | — | 未開始（依賴 P5.3）・未驗收 |
 
 ### P5 大廳
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
-| P5.1 可行走大廳 | HeroRoom 進地牢 | HeroRoom.unity | 場景 | V-P | — | 未開始 |
-| P5.2 角色解鎖／皮膚 | 寶石購買 | PlayerSaveData | UI | V-T | — | 未開始 |
-| P5.3 本地存檔 | PlayerSaveData/RGSaveManager | 反編譯 | 存檔模組 | V-T（往返） | — | 未開始 |
-| P5.4 花園／寵物（=P7.1）／許願池 | ItemPlant、Pet*、ItemWishingWell | 預製件 | 場景 | V-T | — | 未開始 |
-| P5.5 練習房／教學 | UITeaching | 場景 | V-P | — | 未開始 |
+| P5.1 可行走大廳 | HeroRoom 進地牢 | HeroRoom.unity | 場景 | V-P | — | 未開始・未驗收 |
+| P5.2 角色解鎖／皮膚 | 寶石購買 | PlayerSaveData | UI | V-T | — | 未開始・未驗收 |
+| P5.3 本地存檔 | PlayerSaveData/RGSaveManager | 反編譯 | 存檔模組 | V-T（往返） | — | 未開始・未驗收 |
+| P5.4 花園／寵物（=P7.1）／許願池 | ItemPlant、Pet*、ItemWishingWell | 預製件 | 場景 | V-T | — | 未開始・未驗收 |
+| P5.5 練習房／教學 | UITeaching | 場景 | V-P | — | 未開始・未驗收 |
 
 ### P6 UI 與表現
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
 | P6.1 入口流程 | 主選單、選角 | title_en0、i2 | Menu/CharSelect | H1、V-S | — | 功能完成・未驗收 |
-| P6.2 武器資訊 | weapon_icon、consume | UICanvas | HUD | V-S | — | 未開始 |
-| P6.3 小地圖 | UIMap | GetMinimapSprite | HUD | V-S | — | 未開始 |
-| P6.4 buff 列／boss 血條 | UIBuffBar、bossNN_info | 預製件 | HUD | V-S | — | 未開始 |
-| P6.5 暫停／設定 | UIWindowPause | 預製件 | 場景 | V-H | — | 未開始 |
-| P6.6 傷害數字／hit-stop | ShowTextHurt | 反編譯 | HUD | V-S | — | 未開始 |
-| P6.7 BGM／底色 | bgm_clip、camera_bg | levels.json | 音訊 | V-P | — | 未開始 |
-| P6.8 開場／劇情／載入 | Splash/Plot/Loading | 場景檔 | 場景 | V-P | — | 未開始 |
+| P6.2 武器資訊 | weapon_icon、consume | UICanvas | HUD | V-S | — | 未開始・未驗收 |
+| P6.3 小地圖 | UIMap | GetMinimapSprite | HUD | V-S | — | 未開始・未驗收 |
+| P6.4 buff 列／boss 血條 | UIBuffBar、bossNN_info | 預製件 | HUD | V-S | — | 未開始・未驗收 |
+| P6.5 暫停／設定 | UIWindowPause | 預製件 | 場景 | V-H | — | 未開始・未驗收 |
+| P6.6 傷害數字／hit-stop | ShowTextHurt | 反編譯 | HUD | V-S | — | 未開始・未驗收 |
+| P6.7 BGM／底色 | bgm_clip、camera_bg | levels.json | 音訊 | V-P | — | 未開始・未驗收 |
+| P6.8 開場／劇情／載入 | Splash/Plot/Loading | 場景檔 | 場景 | V-P | — | 未開始・未驗收 |
 
 ### P7 內容補完
-| 子階段 | 目標 | 狀態 |
-|---|---|---|
-| P7.1 寵物（=P5.4） | Pet* | 未開始 |
-| P7.2 傭兵（=P2.10） | — | 未開始 |
-| P7.3 無盡模式 | EndlessMapManager | 未開始 |
-| P7.4 季節 boss | 非目標 | 不做 |
+| 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
+|---|---|---|---|---|---|---|
+| P7.1 寵物（=P5.4） | Pet* 跟隨／攻擊 | res/pet 預製件、Pet*__* | 新實體 | V-T | — | 未開始・未驗收 |
+| P7.2 傭兵（=P2.10） | 見 P2.10 | — | — | — | T-13 | 未開始・未驗收 |
+| P7.3 無盡模式 | EndlessMapManager、level -1 預算 9999 | 反編譯、map_manager | 模式旗標 | V-H | — | 未開始・未驗收 |
 
 ### P8 擴充管線
-| 子階段 | 目標 | 驗證 | 狀態 |
-|---|---|---|---|
-| P8.0 能力邊界 | 只改 JSON 可做「既有行為的變體」（新武器＝既有射擊模式＋數值＋貼圖；新敵人＝既有 brain＋數值＋幀）；新行為需 C++ brain | 文件 | 已寫明 |
-| P8.1 素材替換 | 換高版本 ExportedProject 重跑 `tools/extract_*.py` | V-S 全案例重跑 | 未開始 |
-| P8.2 新增範例 | 各新增一把武器、一種敵人、一間房，只動 JSON/PNG（P3 完成後提前做一次） | V-T | 未開始 |
-| P8.3 文件 | CONVENTIONS.md 資料驅動新增流程 | Codex | 未開始 |
+| 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
+|---|---|---|---|---|---|---|
+| P8.0 能力邊界 | 只改 JSON 可做「既有行為的變體」（新武器＝既有射擊模式＋數值＋貼圖；新敵人＝既有 brain＋數值＋幀）；新行為需 C++ brain | — | 本節文字 | Codex 目視 | — | 功能完成（文字）・未驗收 |
+| P8.1 素材替換 | 換高版本 ExportedProject 重跑 `tools/extract_*.py` | 高版本 AssetRipper 輸出 | 腳本參數化 | V-S 全案例重跑 | — | 未開始・未驗收 |
+| P8.2 新增範例 | 各新增一把武器、一種敵人、一間房，只動 JSON/PNG（P3 完成後提前做一次） | — | 範例資料 | V-T | — | 未開始・未驗收 |
+| P8.3 文件 | CONVENTIONS.md 資料驅動新增流程 | — | 文件 | Codex | — | 未開始・未驗收 |
 
 ---
 
@@ -229,7 +229,7 @@
 | T-11 | 商店機器擺位一排 | PORT CHOICE | GameScene 商店區 | 視覺 | 需原碼 |
 | T-12 | 飲水機＝免費補滿能量一次 | PORT CHOICE | GameScene Purchase | 能量 | 需原碼 |
 | T-13 | 事件房只在雕像／礦物間選（傭兵未做） | PORT CHOICE + NOT PORTED | GameScene 事件房區 | 傭兵缺席 | P2.10 |
-| T-14 | 雕像 5 種祝福未移植；index→名字為 i2 順序推論 | NOT PORTED / INFERRED | GameScene skill_use、kStatueName | 祝福 | P3.9 |
+| T-14 | 雕像 7 座中 5 種祝福未移植；index→名字為 i2 順序推論（cost／貼圖／偏移已入 shop.json statues） | NOT PORTED / PORT CHOICE | GameScene kStatueName、skill_use | 祝福 | P3.9 |
 | T-15 | 礦物掉 10 銅幣（mineral_obj 未解析） | PORT CHOICE | GameScene 礦物房 | 經濟 | P1.9 |
 | T-16 | shadow0 不畫（需乘法材質） | PORT CHOICE | GameScene 影子區 | 視覺 | P6 |
 | T-17 | 走法房間數 map_long+4 | PORT CHOICE | GameScene.cpp mapOpt | 樓層大小 | P2.13 |
@@ -241,7 +241,7 @@
 | T-23 | Gun017Child 追蹤無人機未移植 | NOT PORTED | Gun017.hpp | 該武器 | P3.6 |
 | T-24 | RGAisle、EnemyAI15 只移植純邏輯，效果交場景層 | 部分 | RGAisle.hpp、EnemyAI15.hpp | 需登記接線位置 | P3.7 |
 | T-25 | 子彈 15 px/單位 vs 地圖 32 px/單位 | 未定 | SimConfig.hpp、GameScene kCellPx | 子彈速度 | P3.0 |
-| T-26 | Ghidra 單例呼叫後截斷（系統性） | — | game_full.c | 多處 INFERRED | game_typed.c / frida |
+| T-26 | Ghidra 單例呼叫後截斷（系統性） | — | EnemyMaker.hpp 檔頭、SimConfig.hpp（引用處） | 多處 INFERRED | game_typed.c / frida |
 | T-27 | ex_orc05 在 Assets/GameObject，enemies.csv 缺列；場景以 AI01 代表種替代；資料閘唯一豁免 | NOT PORTED（資料缺列） | validate_data.py、GameScene SpawnEnemy | A2–A5 精英池 | P1.10 |
 | T-28 | boss 房門帶外物件（r2_boss3/4 的 rail，y=21）由抽取器丟棄並記錄 `dropped_outside` | PORT CHOICE | build_gamedata.py build_boss_rooms | 兩房各少數條軌道 | P2.11 |
 
@@ -291,19 +291,30 @@ R1 要求落實度：矩陣部分（fallback 未印）；資料閘部分（未�
 - §2/§3：全部六欄、狀態詞彙修正、HEAD 改由 §10 報告承載。
 - 未做（誠實列出）：分波時序純測試（P2.3 仍進行中）；Gun008/Gun017/RGAisle/EnemyAI15 檔頭的 T-ID 待下一切片一併補。
 
+### R3 — 2026-09-12 — Codex — 對象 v1.2 @ 1097c86 — **不通過**
+R2 落實度：資料閘、pickups 讀表、鉤子、§1.1 命令＝已落實；FALLBACK（enemies/characters/sprites 缺）、EnemyMaker 檔頭（大房加級仍在 FAITHFUL 段）、§10 附件（截圖與腳本不在倉庫）、§2/§3（P7/P8 缺欄、未開始項無驗收欄）、T-ID（T-14 只在 log 字串、T-26 無引用）＝部分。
+抽查：Gun008.hpp:45 → 317449–450 通過；CombatStats.hpp:269 → 432415–438 通過；EnemyMaker.hpp:17–24 → 682128–234 不通過（加級增量不可見）。
+§7：1 ✗ 2 ✗（GameScene 雕像貼圖／價格 15 硬編）3 ✗（分波時序測試未做）4 ✓（靜態核對；重跑不適用）5 ✗（缺截圖）6 ✗ 7 ✓ 8 ✗。
+**回覆（v1.3）**：
+- FALLBACK 補齊 enemies／characters／sprites／statues 四處（`build_gamedata.py`）；§0 改寫 pickups 缺檔行為（不掉落）。
+- EnemyMaker.hpp 檔頭：FAITHFUL 段只留可見的預算表，加級本體移到「NOT visible（T-26）」段。
+- 雕像：新 `build_statue_table` → shop.json `statues`（7 座 statue_01..07，非文件先前寫的 5 座；item_value 15、body/light 貼圖與 y 偏移全由預製件讀出）；`GameData::FindStatue`；GameScene 刪除 `kStatueBodySprite`/`kStatueCost`；`kStatueName` 標 PORT CHOICE T-14；StatueTest 讀表斷言；資料閘加 statues 檢查。
+- 分波時序：抽出 `include/game/WaveScheduler.hpp`（Plan/TakeWave/NotifyRoomEmpty/Tick/Done，kPartDelayMs 800）；GameScene 改用；WaveSchedulerTest 5 例（24→9/9/6；房未空不放；790 ms 不放、800 ms 放；1 隻；parts 0→1）。log 字串逐字不變。
+- T-26 引用補進 EnemyMaker.hpp 與 SimConfig.hpp；T-14 補進 kStatueName 註解。
+- §2/§3：P7/P8 改六欄；所有未開始項加「未驗收」；非目標移出階段表。
+- §10 附件：`docs/evidence/v1.3/`（H1–H7 log、ctest、gate、H5.png、r2_boss3.png、head.txt）與 `tools/evidence_chain.sh <tag>` 入倉庫。
+- P3.0 稽核（scout 報告）：`kDataSpeedToPxPerSec = 15` 無來源依據；武器圖集 PPU 16、渲染 2×→32 px/單位＝kCellPx；15 可能誤取自 ortho 7.5×2；反編譯 RGBullet__SetBulletVelocity 為 stub（T-26）。改 32 會讓所有子彈／敵人／磁吸速度變 2.13 倍並動到兩個釘 15 的測試——**待使用者裁決**後做 P3.0 收尾。
+- 未做：分波 waveSize＝level×3 的語意（this_count 預製件）仍為 INFERRED（沿用既有 GameScene 解讀，H3 log 相符）。
+
 ---
 
-## 10. 證據附錄（每版最新一次實跑，由 `scratchpad/r2_chain.sh` 產生）
+## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生）
 
-- 對象：工作樹 = 8cb1e61 + 本版變更（提交後 HEAD 見 git log，commit 訊息 `P1.12/R2: …`）。
-- 測試報告：`100% tests passed, 0 tests failed out of 2009`（ctest -C Debug -E Tests_NOT_BUILT；golden 測試含在內，全綠＝未變）。
-- 資料閘：`GATE: GREEN -- 0 errors, 8 warning(s)`。
-- 建置：`SoulKnight.vcxproj -> build\Debug\SoulKnight.exe`、`SoulKnightTests.vcxproj -> …\SoulKnightTests.exe`，無 error。
-- H1：`GameScene: hero c12 on floor 0` → `Level B1 (1-1) biome 1-ice chest_level 1 map_long 3 pool 5 species` → `Floor 0 CLEARED -> snapshot hp=5 armor=3 energy=130 weapon='Gun001' (next floor 1)` → `GameScene: hero c12 on floor 1` → `Level B2 (1-2) … pool 10 species` → `Floor 1 CLEARED` → `hero c12 on floor 2` → `Level B3 (1-3) chest_level 2`。
-- H2：`GameScene: hero c01 on floor 0` → `TransferGate: open in room 4 at (-2624,-1312)` → `TransferGate: entered -> next floor` → `GameScene: hero c01 on floor 1` → `TransferGate: open in room 4 at (2624,1312)` → `entered -> next floor`；反例（無 SK_GATE_TELEPORT）`GameScene: hero` 出現 1 次。
-- H3：`EnemyMaker: room 1 (type 1) level 3 points 25 -> 24 planned, wave size 9`（21×21 房：stage 1 + 兩維各 +1 = level 3，T-05）→ `RGRoomX: room 1 StartRoom -> Active (door_open=0, sealed)` → `EnemyMaker: room 1 part spawned 9 (15 pending)` → `part spawned 9 (6 pending)` → `part spawned 6 (0 pending)` → `RGRoomX: room 1 cleared -> reward gate fired (room_type==1)`。
-- H4：`Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` → `Reward: ex_miner03 dropped 6 pickups (coins 4 energy 16)` → `Reward: e_yeti01 dropped 2 pickups (coins 1 energy 8)` ×2 → `Reward: e_miner01 dropped 2 pickups`（`Pickup:` 行需玩家走到磁吸範圍內，本次 head -6 內未出現；§1.1 預期改為 `Reward:` 為必要、`Pickup:` 為 SK_AUTOWALK 可選）。
-- H5：`Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 -- hero c01 time 0:00:03 kills 0 coins 0 gems +0`；截圖 evidence/H5.png。
-- H6：`Shop: vending_machine_i at room 5 sells 'health_pot_big' for 10 coins` → `Shop: water_dispenser at room 5 sells '' for 0 coins` → `Shop: vending_machine_w at room 5 sells 'weapon_010' for 12 coins` → `Shop: bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180`。
-- H7：`Level B5 (1-5) biome 1-ice chest_level 2 map_long 4 pool 15 species` → `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13 (tier 2, 1 signature weapon(s))` → `TransferGate: open in room 6 at (1312,-3936)`。
-- V-S r2_boss3：`SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_MAX_FRAMES=245 SK_SHOT=r2_boss3.png`；log `Level D5 (2-5) biome 2-graveyard chest_level 4 map_long 4` → `BossRoom: room 3 uses r2_boss3 (21x21, 24 objects)`。對照 boss_rooms.json：r2_boss3 w 21 h 21，objects = box03 ×16、rail ×4（y=0）、obj22_stone ×4，`dropped_outside` 4（rail y=21）；r2_boss4 `dropped_outside` 6。截圖 evidence/r2_boss3.png：box03 依 (3,2)(3,3)(3,18)(3,19)(4,2)… 沿牆內側成排；rail/obj22_stone 為 P1.8 內嵌預製件，尚未繪製（登記 P1.8）。
+v1.3（`docs/evidence/v1.3/`；`head.txt` = 建置時的基底 commit 1097c86，本版變更尚未提交時實跑；提交後 HEAD 見 git log）：
+- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2015`（+5 WaveSchedulerTest、+1 StatueTest；golden 含在內）。
+- 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`。
+- H1–H7：`H1.txt` … `H7.txt`、`H2neg.txt`（反例 = 1）；截圖 `H5.png`。摘錄：H1 `hero c12 on floor 0` → `Level B1 (1-1) … pool 5 species` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `level 3 points 25 -> 24 planned, wave size 9` → `part spawned 9 (15 pending)` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`（WaveScheduler 重構後逐字相同）；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` … `ex_miner03 dropped 6 pickups (coins 4 energy 16)`；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 -- hero c01 time 0:00:05 kills 0 coins 0 gems +0`；H6 `vending_machine_i … health_pot_big for 10` → `bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180`；H7 `Level B5` → `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`。
+- 雕像讀表：`statue.txt`（`SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100`）= `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
+- V-S r2_boss3：`r2boss3_seed.txt`、`r2_boss3.png`（seed 1、floor 9、room 3；對照 boss_rooms.json r2_boss3 21×21、box03 ×16、rail ×4（y=0）、obj22_stone ×4、dropped_outside 4；r2_boss4 dropped 6；rail/obj22_stone 為 P1.8 內嵌預製件尚未繪製）。
+
+v1.2 紀錄（1097c86，未入倉庫的本機實跑，摘錄保留）：ctest `100% tests passed, 0 tests failed out of 2009`；gate `GREEN -- 0 errors, 8 warning(s)`；H1–H7 log 與 v1.3 相同格式（見上一版文件歷史 `git show 1097c86:docs/MASTER_PLAN.md`）。

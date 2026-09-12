@@ -21,7 +21,8 @@ static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
               "kFixedStepMs must equal kFixedStepSeconds * 1000");
 
 /// T-25 (unit audit pending, P3.0): 15 px per data unit here vs. 32 px per map cell
-/// in GameScene::kCellPx.
+/// in GameScene::kCellPx. The decompile (T-26 truncation) does not show how RGBullet
+/// applies `speed`; the source atlas PPU is 16 (2x render = 32 px/unit).
 /// Data bulletSpeed (raw units from the JSON tables) -> pixels/second. The shell
 /// (GameScene) and the sim's WeaponController must agree on this factor, so it
 /// lives here rather than as an anonymous constant. Mirrors GameScene's historical

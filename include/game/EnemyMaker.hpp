@@ -14,16 +14,19 @@ namespace Game {
 /**
  * @brief The original EnemyMaker's spawn budget -- map work M1.
  *
- * FAITHFUL: EnemyMaker__StartEnemyMaker (game_full.c): the maker's `level`
- * selects an `enemy_point` budget `rg_random.Range(lo, hi)`:
+ * FAITHFUL: EnemyMaker__StartEnemyMaker @ game_full.c:682128-682234 (the
+ * visible part): the maker's `level` selects an `enemy_point` budget
+ * `rg_random.Range(lo, hi)`:
  *   level 1 -> [8,15)   level 2 -> [15,24)  level 3 -> [24,36)
  *   level 4 -> [36,44)  level 5 -> [44,52)  level >= 6 -> 60 (no draw)
  *   level -1 -> 9999 (endless)  level 0 -> nothing spawns
- * The same function bumps the level for big rooms (the_room.room_width > 15,
- * and again > 21) before the switch. CreatePart then instantiates enemies
- * until the budget is spent, each pick charging its RGEController.consume.
- * (The pool pick itself is `enemy_list[Range(0, count)]` on MapManager's
- * weighted list -- duplicates in enemy_list ARE the weights.)
+ * CreatePart then instantiates enemies until the budget is spent, each pick
+ * charging its RGEController.consume. (The pool pick itself is
+ * `enemy_list[Range(0, count)]` on MapManager's weighted list -- duplicates in
+ * enemy_list ARE the weights.)
+ *
+ * NOT visible (T-26 Ghidra truncation after the singleton call): the body of
+ * the big-room level bump. See EnemyMakerLevel below -- INFERRED (T-05).
  */
 inline std::pair<int, int> EnemyPointRange(int level) {
     switch (level) {

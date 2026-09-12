@@ -67,4 +67,24 @@ TEST(StatueTest, WorshipIndexPersistsAcrossFloorsAndResetsPerRun) {
     EXPECT_EQ(run.State().statueIndex, 0);
 }
 
+// P1.12 continuation: shop.json "statues" (statue_0N.prefab TalkStatue) -- the
+// 1.07 source ships 7 statue prefabs (statue_index 1..7), not the port's old
+// hardcoded 8-slot table.
+TEST(StatueTest, StatuesFromThePrefabs) {
+    Game::GameData gd;
+    gd.LoadAll(kResourceRoot);
+    EXPECT_EQ(gd.Statues().size(), 7U);
+    const Game::StatueDef *s2 = gd.FindStatue(2);
+    ASSERT_NE(s2, nullptr);
+    EXPECT_EQ(s2->id, "statue_02");
+    EXPECT_EQ(s2->cost, 15);
+    EXPECT_EQ(s2->statueIndex, 2);
+    EXPECT_EQ(s2->bodySprite, "objects3_3");
+    EXPECT_EQ(s2->baseSprite, "objects3_6");
+    EXPECT_EQ(s2->lightSprite, "objects3_7");
+    EXPECT_FLOAT_EQ(s2->bodyDy, 1.1F);
+    EXPECT_NEAR(s2->lightDy, 0.69375F, 1e-4F);
+    EXPECT_EQ(gd.FindStatue(99), nullptr);
+}
+
 } // namespace

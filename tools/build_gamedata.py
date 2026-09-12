@@ -753,6 +753,52 @@ def build_boss_chests():
 # RGBothPot health, energy, item_value) and the r_sell machines
 # (rgprefab/room/event/vending_machine_i|w: ObjectVendingMachine item_value +
 # object_list; water_dispenser: ItemWaterDispenser item_value 0).
+def _prefab_child_dy(text: str, child_name: str) -> float:
+    """Local y of a prefab child GameObject named `child_name` (e.g. the statue
+    room's 'statue' body or 'light' glow); 0.0 when the child is absent."""
+    go = None
+    for m in re.finditer(r"--- !u!1 &(\d+)\n(?:.*\n){0,12}?  m_Name: " + re.escape(child_name) + r"\n", text):
+        go = m.group(1)
+        break
+    if go is None:
+        return 0.0
+    m = re.search(r"--- !u!4 &\d+\nTransform:\n(?:.*\n){0,6}?  m_GameObject: \{fileID: " + go +
+                  r"\}\n(?:.*\n){0,3}?  m_LocalPosition: \{x: [-\d.e]+, y: ([-\d.e]+)", text)
+    return float(m.group(1)) if m else 0.0
+
+
+# STATUES (P1.12 continuation): rgprefab/room/statue/statue_0N.prefab -- TalkStatue
+# (item_value, statue_index) + 3 SpriteRenderers in document order (pedestal base /
+# worshipped-god body / glow light). The 1.07 source ships 7 prefabs
+# (statue_01..statue_07, statue_index 1..7), not the 8-slot table the port's
+# original kStatueBodySprite[8] hardcoded (slot 0 was always dead/unused).
+STATUE_DIR = EP_ASSETS / "rgprefab" / "room" / "statue"
+
+
+def build_statue_table():
+    if not STATUE_DIR.is_dir():
+        return None
+    idx = _guid_index()
+    out = {}
+    for f in sorted(STATUE_DIR.glob("statue_*.prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        val = re.search(r"\n  item_value: (\d+)", text)
+        si = re.search(r"\n  statue_index: (\d+)", text)
+        if val is None or si is None:
+            continue
+        sp = _prefab_sprites(f, idx)
+        out[f.stem] = {
+            "statue_index": int(si.group(1)),
+            "cost": int(val.group(1)),
+            "base_sprite": sp[0] if len(sp) > 0 else "",
+            "body_sprite": sp[1] if len(sp) > 1 else "",
+            "light_sprite": sp[2] if len(sp) > 2 else "",
+            "body_dy": _prefab_child_dy(text, "statue"),
+            "light_dy": _prefab_child_dy(text, "light"),
+        }
+    return out or None
+
+
 def build_shop_table():
     item_dir = EP_ASSETS / "res" / "item"
     ev_dir = EP_ASSETS / "rgprefab" / "room" / "event"
@@ -912,6 +958,7 @@ def main() -> int:
     if species:
         counts["enemies"] = write("enemies", species)
     else:
+        print("FALLBACK: enemies.csv missing -- enemies.json degrades to the 1.07 per-AI-class table (16)")
         counts["enemies"] = write("enemies", build_table(enemies, idx, prefer=("RoleAttribute",)))
     counts["bosses"] = write("bosses", build_table(bosses, idx, prefer=("Bullet",)))
     counts["buffs"] = write("buffs", build_table(buffs, idx))
@@ -920,6 +967,7 @@ def main() -> int:
     # RoleAttributePlayer components (was a single shared template + bare id list).
     characters = build_character_roster()
     if characters is None:
+        print("FALLBACK: res/player/c##.prefab missing -- characters.json degrades to the 1.07 single template")
         # fallback: prefab source absent (checkout without _reverse/) -> keep the
         # old single-shared-template behaviour so the pipeline still runs.
         player = json.loads((SRC_MB / "RoleAttributePlayer.json").read_text(encoding="utf-8"))
@@ -939,6 +987,8 @@ def main() -> int:
     manifest = build_sprite_manifest()
     if manifest is not None:
         counts["sprite_entities"] = write("sprites", manifest)
+    else:
+        print("FALLBACK: sprites not built (AssetRipper source missing) -- entities render placeholder art")
 
     levels = build_level_table()
     if levels is not None:
@@ -952,9 +1002,17 @@ def main() -> int:
         write("boss_chests", boss_chests)
         counts["boss_chests"] = len(boss_chests)
     shop = build_shop_table()
+    statues = build_statue_table()
+    if shop is not None and statues is not None:
+        shop["statues"] = statues
     if shop is not None:
         write("shop", shop)
         counts["shop_pots"] = len(shop["pots"])
+        if "statues" in shop:
+            counts["shop_statues"] = len(shop["statues"])
+    if statues is None:
+        print("FALLBACK: statues not built (AssetRipper source missing) -- shop.json has no "
+              "'statues' section, so GameScene skips statue-room content at runtime")
     pickups = build_pickup_table()
     if pickups is not None:
         write("pickups", pickups)

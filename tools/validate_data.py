@@ -209,6 +209,23 @@ def main() -> int:
         for pid, p in pots.items():
             if p.get("hp", 0) <= 0 and p.get("energy", 0) <= 0:
                 errors.append(f"pot '{pid}' restores nothing")
+        statues = shop.get("statues", {})
+        need(len(statues) >= 5, "shop: expected >= 5 statues")
+        sprites_dir = DATA.parent / "sprites"
+        seen_indices: dict = {}
+        for sid, s in statues.items():
+            if s.get("cost", 0) <= 0:
+                errors.append(f"statue '{sid}' cost must be > 0")
+            si = s.get("statue_index")
+            if si in seen_indices:
+                errors.append(f"statue '{sid}' statue_index {si} duplicates '{seen_indices[si]}'")
+            else:
+                seen_indices[si] = sid
+            if sprites_dir.is_dir():
+                for key in ("base_sprite", "body_sprite", "light_sprite"):
+                    sp = s.get(key, "")
+                    if not sp or not (sprites_dir / f"{sp}.png").is_file():
+                        errors.append(f"statue '{sid}' {key} '{sp}' missing from Resources/sprites")
 
     # --- reference-resolution report (non-fatal) ---
     if weapons:

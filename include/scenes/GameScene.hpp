@@ -26,6 +26,7 @@
 #include "data/LootTable.hpp"
 #include "data/RGRandom.hpp"
 #include "game/RunState.hpp"
+#include "game/WaveScheduler.hpp"
 #include "entities/Boss.hpp"
 #include "entities/Bullet.hpp"
 #include "entities/Chest.hpp"
@@ -103,6 +104,7 @@ private:
     /// M3e: the event room's statue (r_statue: statue_0N, TalkStatue item_value 15).
     struct StatueSpot {
         int index = 0;         ///< statue_index 1..7
+        int cost = 0;          ///< shop.json statues[N].cost (TalkStatue.item_value)
         glm::vec2 pos{0.0F, 0.0F};
         bool used = false;
         std::shared_ptr<Util::Text> tag;
@@ -127,17 +129,18 @@ private:
     /// (EnemyMaker.CreatePart / EnemyDead -> Invoke("CreatePart", 0.8f)). One queue
     /// per room: the species still to spawn and the room's spawn points.
     struct SpawnWaves {
-        std::vector<std::string> pending;
+        Game::WaveScheduler wave; ///< pending picks + the 0.8 s CreatePart timer (P2.3 extract)
         std::vector<glm::vec2> points;
-        int waveSize = 3;
-        float timerMs = -1.0F; ///< -1 = idle; counts down the 0.8 s CreatePart delay
-        int serial = 0;        ///< spawn ordinal (seed spread + point spread)
+        int serial = 0; ///< spawn ordinal (seed spread + point spread)
     };
     std::vector<SpawnWaves> m_Waves; ///< indexed by room
     /// Instantiate one enemy of species @p id at @p at in room @p roomIndex.
     void SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, int serial);
     /// Spawn the next part of a room's queue (up to waveSize).
     void SpawnNextWave(int roomIndex);
+    /// Instantiate an already-taken wave batch at @p roomIndex's spawn points
+    /// (the point-spread + logging half of the old SpawnNextWave body).
+    void SpawnWaveBatch(int roomIndex, const std::vector<std::string> &batch);
     bool PendingWaves() const;
     const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
     const LevelDef *m_Level = nullptr;    ///< MAP M1: this floor's MapManager level (may be null).

@@ -1,0 +1,2 @@
+ [info] Level D5 (2-5) biome 2-graveyard chest_level 4 map_long 4 pool 14 species
+ [info] BossRoom: room 3 uses r2_boss3 (21x21, 24 objects)

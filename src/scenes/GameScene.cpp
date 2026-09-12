@@ -62,13 +62,12 @@ constexpr float kGateTriggerPx = 30.0F;
 /// T-19 PORT CHOICE: spawn scatter impulse (units/s) handed to RGCoin.GetForce; the
 /// original's magnitude did not survive (GetReward truncated).
 constexpr float kScatterImpulseUnits = 6.0F;
-/// M3e statues: statue_0N.prefab (TalkStatue, item_value 15, statue_index N). The
-/// prefab body sprites: 1->objects3_0, 2->3, 3->2, 4->1, 5->4, 6->5, 7->3. Names
-/// follow the i2 statue_* term order (PORT mapping index->term; the prefab
-/// string_name fields are empty in the dump).
-constexpr int kStatueBodySprite[8] = {0, 0, 3, 2, 1, 4, 5, 3};
+/// PORT CHOICE T-14: statue_index -> term name. shop.json "statues" (built from
+/// statue_0N.prefab TalkStatue) carries the real statue_index/cost/sprites/
+/// offsets; this name table is the port's own guess at the i2 statue_* term
+/// order (the prefab string_name fields are empty in the dump), so it stays a
+/// hardcoded array keyed by statue_index (index 0 unused).
 const char *const kStatueName[8] = {"", "Knight", "Priest", "Assassin", "Rabbit", "Elf", "Thief", "Sorcerer"};
-constexpr int kStatueCost = 15;
 // SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
 constexpr float kAutoWalkSpeed = 300.0F;
 // Inset (px) from a room edge before the clear-room door lock may arm. The door-
@@ -913,13 +912,12 @@ void GameScene::OnEnter() {
                     wv.points.push_back(Room::CellToWorld(sc.first, sc.second, rg.Width(),
                                                           rg.Height(), kCellPx, origin));
                 }
-                wv.pending = ids;
                 // FAITHFUL: StartEnemyMaker -> this_count = level * 3 + this_count (prefab
                 // this_count is 0 on the r1_* rooms): the size of each part.
-                wv.waveSize = std::max(1, level * 3);
+                wv.wave.Plan(ids, level * 3);
                 SpawnNextWave(roomIndex);
                 LOG_INFO("EnemyMaker: room {} (type {}) level {} points {} -> {} planned, wave size {}",
-                         roomIndex, slot, level, points, ids.size(), wv.waveSize);
+                         roomIndex, slot, level, points, ids.size(), wv.wave.waveSize);
             }
         }
 
@@ -995,33 +993,38 @@ void GameScene::OnEnter() {
                                                       : ((m_FloorSeed / 5) % 2 == 0);
             const int cx = (rg.Width() - 1) / 2;
             const int cy = (rg.Height() - 1) / 2;
-            if (statueRoom) {
-                // statue_0N: base objects3_6 on the cell, body at +1.1 units, light at
-                // +0.69 (the prefab's child offsets); one statue per room, N by seed.
-                const int idx = 1 + ((m_FloorSeed / 7) % 7 + 7) % 7;
+            // statue_0N: one statue per room, N by seed. statue_index runs 1..7
+            // (shop.json "statues", FAITHFUL: statue_0N.prefab TalkStatue).
+            const int idx = 1 + ((m_FloorSeed / 7) % 7 + 7) % 7;
+            const StatueDef *sd = m_Data.FindStatue(idx);
+            if (statueRoom && sd == nullptr) {
+                LOG_INFO("Statue: index {} missing in shop.json statues", idx);
+            } else if (statueRoom) {
+                // base pedestal on the cell, body at +body_dy units, light at
+                // +light_dy (the prefab's own child offsets, FAITHFUL).
                 m_Statue.index = idx;
+                m_Statue.cost = sd->cost;
                 m_Statue.pos = Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin);
-                auto base = addObjSprite(m_SkinCache.count("objects3_6") != 0
-                                             ? m_SkinCache["objects3_6"]
-                                             : (m_SkinCache["objects3_6"] = std::make_shared<Util::Image>(
-                                                    root + "/sprites/objects3_6.png")),
+                auto base = addObjSprite(m_SkinCache.count(sd->baseSprite) != 0
+                                             ? m_SkinCache[sd->baseSprite]
+                                             : (m_SkinCache[sd->baseSprite] = std::make_shared<Util::Image>(
+                                                    root + "/sprites/" + sd->baseSprite + ".png")),
                                          cx, cy);
                 base->SetZIndex(1.3F - base->m_Transform.translation.y * 1e-5F);
-                const std::string bodyStem = "objects3_" + std::to_string(kStatueBodySprite[idx]);
-                auto bodyImg = std::make_shared<Util::Image>(root + "/sprites/" + bodyStem + ".png");
+                auto bodyImg = std::make_shared<Util::Image>(root + "/sprites/" + sd->bodySprite + ".png");
                 auto body = addObjSprite(bodyImg, cx, cy);
-                body->m_Transform.translation.y += 1.1F * kCellPx;
+                body->m_Transform.translation.y += sd->bodyDy * kCellPx;
                 body->SetZIndex(1.31F - base->m_Transform.translation.y * 1e-5F);
-                auto lightImg = std::make_shared<Util::Image>(root + "/sprites/objects3_7.png");
+                auto lightImg = std::make_shared<Util::Image>(root + "/sprites/" + sd->lightSprite + ".png");
                 auto light = addObjSprite(lightImg, cx, cy);
-                light->m_Transform.translation.y += 0.69F * kCellPx;
+                light->m_Transform.translation.y += sd->lightDy * kCellPx;
                 light->SetZIndex(1.32F - base->m_Transform.translation.y * 1e-5F);
                 m_RoomObstacles.push_back(ObstacleBox{
                     Util::Collider::MakeAABB(m_Statue.pos, glm::vec2{kCellPx, kCellPx}), RGBox{}, nullptr,
                     false, true, 0});
                 m_Statue.tag = std::make_shared<Util::Text>(root + "/fonts/pixel_bold.ttf", 14,
                                                             std::string(kStatueName[idx]) + "  " +
-                                                                std::to_string(kStatueCost) + " G",
+                                                                std::to_string(sd->cost) + " G",
                                                             Util::Color{255, 230, 120, 255});
                 auto tagObj = std::make_shared<Util::GameObject>();
                 tagObj->SetDrawable(m_Statue.tag);
@@ -1030,7 +1033,7 @@ void GameScene::OnEnter() {
                 m_RoomTiles.push_back(tagObj);
                 m_Renderer.AddChild(tagObj);
                 LOG_INFO("Event room {}: statue_{:02d} ({}) -- worship for {} coins", roomIndex, idx,
-                         kStatueName[idx], kStatueCost);
+                         kStatueName[idx], sd->cost);
             } else {
                 // r_mineral: mineral_crystal / mineral_gold (res/enemy, EnemyAI05 shells:
                 // hp 40, mineral_count 10). The mineral_obj drop prefab did not
@@ -1556,17 +1559,9 @@ void GameScene::Update(float dtMs) {
         // Invoke("CreatePart", 0.8f)).
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
             !RoomHasLiveHostile(static_cast<int>(i)) && i < m_Waves.size() &&
-            !m_Waves[i].pending.empty()) {
+            !m_Waves[i].wave.pending.empty()) {
             SpawnWaves &wv = m_Waves[i];
-            if (wv.timerMs < 0.0F) {
-                wv.timerMs = 800.0F;
-            } else {
-                wv.timerMs -= dtMs;
-                if (wv.timerMs <= 0.0F) {
-                    wv.timerMs = -1.0F;
-                    SpawnNextWave(static_cast<int>(i));
-                }
-            }
+            SpawnWaveBatch(static_cast<int>(i), wv.wave.Tick(dtMs, /*roomEmpty=*/true));
             continue;
         }
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
@@ -1776,7 +1771,7 @@ void GameScene::Update(float dtMs) {
         }
         if ((hook || Util::Input::IsKeyDown(Util::Keycode::E)) &&
             glm::distance(m_Player->Position(), m_Statue.pos) <= 2.0F * kCellPx) {
-            if (m_Run->SpendCoins(kStatueCost)) {
+            if (m_Run->SpendCoins(m_Statue.cost)) {
                 m_Statue.used = true;
                 m_Run->SetStatue(m_Statue.index);
                 if (m_Statue.tag) {
@@ -1785,7 +1780,7 @@ void GameScene::Update(float dtMs) {
                 LOG_INFO("Statue: worshipped statue_{:02d} ({}) -> statue_index {}", m_Statue.index,
                          kStatueName[m_Statue.index], m_Statue.index);
             } else {
-                LOG_INFO("Statue: not enough money ({} < {})", m_Run->State().stats.coins, kStatueCost);
+                LOG_INFO("Statue: not enough money ({} < {})", m_Run->State().stats.coins, m_Statue.cost);
             }
         }
     }
@@ -1825,7 +1820,7 @@ void GameScene::Update(float dtMs) {
     // auto-advance-on-clear is gone; SK_FORCE_CLEAR still forces the exit.
     if (!m_GateActive && m_GateRoom >= 0 && !RoomHasLiveHostile(m_GateRoom) &&
         (static_cast<std::size_t>(m_GateRoom) >= m_Waves.size() ||
-         m_Waves[static_cast<std::size_t>(m_GateRoom)].pending.empty()) &&
+         m_Waves[static_cast<std::size_t>(m_GateRoom)].wave.pending.empty()) &&
         (!IsBossFloor(m_FloorIndex) || m_HadHostiles)) {
         const std::string root(RESOURCE_DIR);
         m_GateActive = true;
@@ -1909,26 +1904,36 @@ void GameScene::SpawnNextWave(int roomIndex) {
         return;
     }
     SpawnWaves &wv = m_Waves[static_cast<std::size_t>(roomIndex)];
-    if (wv.pending.empty() || wv.points.empty()) {
-        wv.pending.clear();
+    if (wv.points.empty()) {
+        wv.wave.pending.clear();
         return;
     }
-    const int n = std::min(wv.waveSize, static_cast<int>(wv.pending.size()));
-    for (int k = 0; k < n; ++k) {
-        const std::string id = wv.pending.front();
-        wv.pending.erase(wv.pending.begin());
+    SpawnWaveBatch(roomIndex, wv.wave.TakeWave());
+}
+
+void GameScene::SpawnWaveBatch(int roomIndex, const std::vector<std::string> &batch) {
+    if (batch.empty() || roomIndex < 0 ||
+        static_cast<std::size_t>(roomIndex) >= m_Waves.size()) {
+        return;
+    }
+    SpawnWaves &wv = m_Waves[static_cast<std::size_t>(roomIndex)];
+    if (wv.points.empty()) {
+        return;
+    }
+    for (const std::string &id : batch) {
         // Spread this part over the room's spawn points (serial-indexed stride).
         const std::size_t pi = (wv.points.size() * static_cast<std::size_t>(wv.serial * 7 + 3)) %
                                wv.points.size();
         SpawnEnemy(id, wv.points[pi], roomIndex, wv.serial);
         ++wv.serial;
     }
-    LOG_INFO("EnemyMaker: room {} part spawned {} ({} pending)", roomIndex, n, wv.pending.size());
+    LOG_INFO("EnemyMaker: room {} part spawned {} ({} pending)", roomIndex, batch.size(),
+             wv.wave.pending.size());
 }
 
 bool GameScene::PendingWaves() const {
     for (const SpawnWaves &w : m_Waves) {
-        if (!w.pending.empty()) {
+        if (!w.wave.pending.empty()) {
             return true;
         }
     }

@@ -6,6 +6,7 @@
 #include "data/RGRandom.hpp"
 #include "game/EnemyMaker.hpp"
 #include "game/RunState.hpp"
+#include "game/WaveScheduler.hpp"
 
 // MAP M1: the level table recovered from res/map_manager/map_<V><N>.prefab
 // (MapManager fields), the per-run biome variant, and the EnemyMaker budget.
@@ -126,6 +127,83 @@ TEST(EnemyMakerTest, SpendsBudgetByConsume) {
     EXPECT_TRUE(Game::PlanRoomSpawns({}, cost, 10, rng).empty());
     EXPECT_TRUE(Game::PlanRoomSpawns(pool, cost, 0, rng).empty());
     EXPECT_LE(Game::PlanRoomSpawns(pool, cost, 9999, rng, 12).size(), 12u);
+}
+
+// P2.3 (Codex R2 finding: wave-timing pure test): the pure wave-timing extract from GameScene's
+// SpawnWaves. These reproduce the H3 log exactly: level 3 -> wave size
+// level*3 = 9, 24 picks split 9/9/6 with pending 15/6/0.
+namespace {
+std::vector<std::string> MakePicks(int n) {
+    std::vector<std::string> picks;
+    picks.reserve(static_cast<std::size_t>(n));
+    for (int i = 0; i < n; ++i) {
+        picks.push_back("e" + std::to_string(i));
+    }
+    return picks;
+}
+} // namespace
+
+TEST(WaveSchedulerTest, SplitsIntoLevelTimesThreeWaves) {
+    Game::WaveScheduler sched;
+    sched.Plan(MakePicks(24), /*parts=*/3 * 3); // level 3 -> level*3 = 9
+    EXPECT_EQ(sched.waveSize, 9);
+    ASSERT_EQ(sched.pending.size(), 24u);
+
+    const auto wave1 = sched.TakeWave();
+    EXPECT_EQ(wave1.size(), 9u);
+    EXPECT_EQ(sched.pending.size(), 15u);
+
+    const auto wave2 = sched.TakeWave();
+    EXPECT_EQ(wave2.size(), 9u);
+    EXPECT_EQ(sched.pending.size(), 6u);
+
+    const auto wave3 = sched.TakeWave();
+    EXPECT_EQ(wave3.size(), 6u);
+    EXPECT_EQ(sched.pending.size(), 0u);
+    EXPECT_TRUE(sched.Done());
+}
+
+TEST(WaveSchedulerTest, NoWaveReleasedWhileRoomNotEmpty) {
+    Game::WaveScheduler sched;
+    sched.Plan(MakePicks(24), 9);
+    sched.TakeWave(); // first wave (StartRoom), 15 pending left
+    for (int i = 0; i < 50; ++i) {
+        EXPECT_TRUE(sched.Tick(1000.0F, /*roomEmpty=*/false).empty());
+    }
+    EXPECT_EQ(sched.pending.size(), 15u);
+    EXPECT_LT(sched.timerMs, 0.0F); // never armed while the room isn't empty
+}
+
+TEST(WaveSchedulerTest, WaveReleasedOnlyAfterPartDelayElapses) {
+    Game::WaveScheduler sched;
+    sched.Plan(MakePicks(6), 3);
+    sched.TakeWave(); // first wave: 3 pending, 3 left
+    sched.NotifyRoomEmpty();
+    EXPECT_GT(sched.timerMs, 0.0F);
+    EXPECT_TRUE(sched.Tick(790.0F, /*roomEmpty=*/true).empty());
+    EXPECT_EQ(sched.pending.size(), 3u); // still queued, timer not expired yet
+    const auto wave2 = sched.Tick(10.0F, /*roomEmpty=*/true);
+    EXPECT_EQ(wave2.size(), 3u);
+    EXPECT_EQ(sched.pending.size(), 0u);
+    EXPECT_TRUE(sched.Done());
+}
+
+TEST(WaveSchedulerTest, SinglePickSingleWaveThenDone) {
+    Game::WaveScheduler sched;
+    sched.Plan(MakePicks(1), 3 * 3);
+    ASSERT_EQ(sched.pending.size(), 1u);
+    const auto wave = sched.TakeWave();
+    EXPECT_EQ(wave.size(), 1u);
+    EXPECT_TRUE(sched.pending.empty());
+    EXPECT_TRUE(sched.Done());
+}
+
+TEST(WaveSchedulerTest, ZeroPartsTreatedAsOne) {
+    Game::WaveScheduler sched;
+    sched.Plan(MakePicks(3), 0);
+    EXPECT_EQ(sched.waveSize, 1);
+    EXPECT_EQ(sched.TakeWave().size(), 1u);
+    EXPECT_EQ(sched.pending.size(), 2u);
 }
 
 } // namespace

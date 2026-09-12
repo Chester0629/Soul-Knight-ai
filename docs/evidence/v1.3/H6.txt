@@ -1,0 +1,4 @@
+ [info] Shop: vending_machine_i at room 5 sells 'health_pot_big' for 10 coins
+ [info] Shop: water_dispenser at room 5 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 5 sells 'weapon_010' for 12 coins
+ [info] Shop: bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180

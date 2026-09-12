@@ -281,6 +281,20 @@ struct MachineDef {
     std::string display;            ///< display frame sprite stem
 };
 
+/// M3e statue (P1.12 continuation): rgprefab/room/statue/statue_0N.prefab
+/// TalkStatue (item_value, statue_index) + its 3 SpriteRenderers (base pedestal,
+/// worshipped-god body, glow light). FAITHFUL: shop.json "statues".
+struct StatueDef {
+    std::string id;         ///< "statue_01".."statue_07"
+    int statueIndex = 0;    ///< TalkStatue.statue_index (1..7)
+    int cost = 0;           ///< TalkStatue.item_value
+    std::string baseSprite; ///< pedestal sprite stem (objects3_6 for all 7)
+    std::string bodySprite; ///< the worshipped god's sprite stem (varies per statue)
+    std::string lightSprite; ///< glow sprite stem (objects3_7 for all 7)
+    float bodyDy = 0.0F;     ///< body child local y, units (prefab: 1.1)
+    float lightDy = 0.0F;    ///< light child local y, units (prefab: 0.69375)
+};
+
 /// P1.12: a coin / energy pickup (res/register/coin_N | energy prefab: RGCoin
 /// value / speed / range; coin_0.controller spin frames).
 struct PickupDef {
@@ -404,6 +418,9 @@ public:
     /// M3c: shop tables (shop.json).
     const PotDef *FindPot(const std::string &id) const;
     const MachineDef *FindMachine(const std::string &id) const;
+    /// M3e: shop.json "statues" by TalkStatue.statue_index (1..7); nullptr when unknown.
+    const StatueDef *FindStatue(int statueIndex) const;
+    const std::vector<StatueDef> &Statues() const { return m_Statues; }
     /// M3b: the chest a boss prefab ("boss01") leaves behind; nullptr when none.
     const BossChestDef *FindBossChest(const std::string &bossPrefab) const;
     /// All loaded design-room interiors (empty if design_rooms.json is absent).
@@ -424,6 +441,7 @@ private:
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
     std::unordered_map<std::string, BossChestDef> m_BossChests;
     std::unordered_map<std::string, PotDef> m_Pots;
+    std::vector<StatueDef> m_Statues;
     std::unordered_map<std::string, PickupDef> m_Pickups;
     float m_CoinFriction = 0.9F;
     std::unordered_map<std::string, MachineDef> m_Machines;
