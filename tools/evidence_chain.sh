@@ -9,6 +9,7 @@ set -u
 cd "$(dirname "$0")/.." || exit 1
 TAG="${1:-latest}"
 E="docs/evidence/$TAG"; mkdir -p "$E"
+rm -f "$E"/*.png "$E"/*.txt "$E"/*.log   # never accept a previous run's products
 G=./build/Debug/SoulKnight.exe
 CASE_TIMEOUT=120
 FAILS=()
@@ -47,12 +48,17 @@ grep -E " error|SoulKnightTests.vcxproj ->" "$E/build_tests.log"
 echo "=== CTEST ==="
 ctest --test-dir build -C Debug -E Tests_NOT_BUILT > "$E/ctest.log" 2>&1 || fail "ctest"
 grep -E "tests passed|tests failed" "$E/ctest.log" | tee "$E/ctest.txt"
+[ -s "$E/ctest.txt" ] || fail "ctest produced no summary line"
+grep -q "0 tests failed" "$E/ctest.txt" || fail "ctest reports failures"
 echo "=== GATE ==="
 python tools/validate_data.py > "$E/gate.log" 2>&1 || fail "validate_data"
 tail -1 "$E/gate.log" | tee "$E/gate.txt"
+grep -q "GATE: GREEN" "$E/gate.txt" || fail "gate not GREEN"
 [ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${FAILS[*]})"; exit 1; }
 echo "=== WARM-UP (first launch of a fresh build can take minutes: AV scan / shader cache) ==="
-time (env SK_SKIP_MENU=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1; echo "warm-up rc=$?")
+WSTART=$(date +%s)
+env SK_SKIP_MENU=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1 || fail "warm-up exited $?"
+echo "warm-up took $(( $(date +%s) - WSTART )) s"
 
 run_case H1 "GameScene: hero|Level |CLEARED" 8 SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200
 run_case H2 "TransferGate|GameScene: hero" 6 SK_SKIP_MENU=1 SK_GATE_TELEPORT=200 SK_MAX_FRAMES=400
@@ -78,8 +84,8 @@ check_png "$E/r2_boss3_full.png"
 git rev-parse --short HEAD | tee "$E/head.txt"
 rm -f "$E"/*.log
 if [ "${#FAILS[@]}" -eq 0 ]; then
-  echo "STATUS: OK (all steps passed)"
+  echo "STATUS: OK (all steps passed) $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"
 else
-  echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]}"
+  echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]} $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"
   exit 1
 fi

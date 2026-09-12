@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.5（2026-09-13；依 Codex R1–R5 修訂，見 §9）
+> 版本：v1.6（2026-09-13；依 Codex R1–R6 修訂，見 §9）
 
 ---
 
@@ -327,18 +327,23 @@ R4 落實度：分波立即放波（game_typed.c 73158–73184、78049–78075 �
 §7：1 ✗ 2 ✓ 3 ✓ 4 ✗ 5 ✓ 6 ✓ 7 ✓ 8 ✗。
 **回覆（v1.5）**：
 - GameScene:916 改 `max_room_size = level*3 + max_room_size`（game_typed.c:77995）並註明 CreateEnemy 扣減截斷（T-04）；870–872 大房加級改標 INFERRED (T-05)；三處引用範圍改為 77871–77995。
-- `tools/evidence_chain.sh` 重寫：每案先把完整 log 寫檔再過濾（不再 `head` 截流）、檢查退出碼／逾時（124）／空摘錄／PNG 非零、H2neg 斷言＝1、最後 `STATUS: OK|FAILED(n)` 且失敗非零退出；r2boss3 兩案的過濾式包含 `SK_ROOM_TELEPORT -> room 3 centre` 與 `SK_ZOOM override`，附件可由腳本原樣產生。
+- `tools/evidence_chain.sh` 重寫：每案先把完整 log 寫檔再過濾（不再 `head` 截流）、檢查退出碼／逾時（124）／空摘錄／PNG 非零、H2neg 斷言＝1、最後 `STATUS: OK|FAILED(n)` 且失敗非零退出；r2boss3 兩案的過濾式都保留 `SK_ROOM_TELEPORT -> room 3 centre`，full 案另保留 `SK_ZOOM override`，附件可由腳本原樣產生。
 - 首次實跑時 H1–H4 逾時（各 120 s；同命令單獨重跑只需 7 s，原因未確定，疑為新建 exe 首次啟動的防毒掃描）：加入 WARM-UP 步驟（`SK_MAX_FRAMES=1`、600 s 上限）；第二次整鏈 `STATUS: OK`（§10 v1.5）。
 - §1.1 腳本路徑改為 `tools/evidence_chain.sh`。
 
+### R6 — 2026-09-13 — Codex — 對象 v1.5 @ 0f8ac9f — **不通過**
+R5 三項：註解＝已落實（GameScene:916 → typed:77995；WaveScheduler:17 → 73158–73184；:22 → 78045–78075）；腳本＝部分（WARM-UP 失敗只印 rc、ctest／gate 空摘錄未檢查、PNG 未排除舊產物）；§1.1 路徑＝已落實。§10「與 v1.4 逐字相同」不成立（H7 多四行）；附件未保存 STATUS。
+§7：1 ✓ 2 ✓ 3 ✓ 4 ✗ 5 ✓ 6 ✓ 7 ✓ 8 ✗。
+**回覆（v1.6）**：腳本開頭清除舊 png/txt/log；ctest 摘錄空或含失敗、gate 非 GREEN、WARM-UP 非零退出皆入 FAILS；結尾 `STATUS … <UTC>` 寫入 `status.txt`。§9 R5 與 §10 措辭依實際修正（兩案皆保留中心傳送、full 案含 zoom；H7 摘錄差異說明）。
+
 ---
 
-## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生，腳本結尾 `STATUS: OK` 才算有效）
+## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生；腳本把結尾 `STATUS: OK|FAILED` 與 UTC 時戳寫入 `status.txt`，只有 OK 的附件有效）
 
-v1.5（`docs/evidence/v1.5/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
+v1.6（`docs/evidence/v1.6/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
 - 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2016`。
 - 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`。
-- H1–H8：`H1.txt` … `H8.txt`、`H2neg.txt`（=1）；截圖 `H5.png`。內容與 v1.4 逐字相同（分波／傳送修正不影響這些案例的 log）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
+- H1–H8：`H1.txt` … `H8.txt`、`H2neg.txt`（=1）；截圖 `H5.png`；`status.txt`。關鍵事件與 v1.4 相同（H7 摘錄上限改為 12 行，前面多出前幾層的 `TransferGate: open` 四行）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
 - V-S r2_boss3：`r2boss3_seed.txt`（含 `SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2boss3_full.txt`（含 `SK_ZOOM override 0.6`）、`r2_boss3_full.png`（整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體；obj22_stone ×4 與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）＝T-28；boss 在房中央、門在下與右。**更正（v1.4 起）**：v1.3 的 `r2_boss3.png` 拍到的是起始房（當時 `SK_ROOM_TELEPORT` 對 level-0 房靜默跳過）。
 
-v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.5 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。
+v1.5（0f8ac9f）／v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.6 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。
