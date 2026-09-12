@@ -59,6 +59,9 @@ constexpr float kPickupRange = 28.0F;
 /// extent = 22 px + the player body; the gate fires when the player's centre is
 /// inside that box.
 constexpr float kGateTriggerPx = 30.0F;
+/// T-19 PORT CHOICE: spawn scatter impulse (units/s) handed to RGCoin.GetForce; the
+/// original's magnitude did not survive (GetReward truncated).
+constexpr float kScatterImpulseUnits = 6.0F;
 /// M3e statues: statue_0N.prefab (TalkStatue, item_value 15, statue_index N). The
 /// prefab body sprites: 1->objects3_0, 2->3, 3->2, 4->1, 5->4, 6->5, 7->3. Names
 /// follow the i2 statue_* term order (PORT mapping index->term; the prefab
@@ -162,7 +165,7 @@ void GameScene::OnEnter() {
     // MapManager.map_long counts the NORMAL rooms of the walk; the original adds
     // the start room and the special rooms (type1 chest/sell, type2 gate, type3)
     // on top. The port's walk folds specials into one count, so add those slots
-    // (PORT CHOICE: +4 = start + gate + chest/sell + badass).
+    // (PORT CHOICE T-17: +4 = start + gate + chest/sell + badass).
     mapOpt.mapLong = m_Level != nullptr ? m_Level->mapLong + 4 : 7;
     mapOpt.ranRoomProbability = 25;
     // --- Phase 2: real per-slot design-room selection ---
@@ -200,7 +203,7 @@ void GameScene::OnEnter() {
     // each MapManager pool: type0 r_start, type1 r_chest/r_sell (reward), type2
     // r_transgete / r*_boss* (exit), type3 r_mercenary/r_mineral/r_statue (event).
     // The port's walk only rolls 0..1 special slots, so roles are assigned here
-    // by distance from the start: farthest = exit (gate / boss room), next =
+    // (PORT CHOICE T-06) by distance from the start: farthest = exit (gate / boss room), next =
     // reward room, next = event room, the rest normal. Slot codes: 1 normal,
     // 2 exit, 3 event, 4 reward.
     std::vector<int> slotType(floor.Rooms().size(), 1);
@@ -290,9 +293,9 @@ void GameScene::OnEnter() {
     const glm::vec2 floorSz = floorImgs.front()->GetSize();
     const glm::vec2 wallSz = wallImg->GetSize();
     const glm::vec2 wallFaceSz = wallFaceImg->GetSize();
-    // M3d shadows: the original's wall/prop shadow0 is an OPAQUE black 16x24 block
-    // tinted by a multiply material the port has no equivalent for, so it is not
-    // drawn; shadow2 (the alpha ellipse from the character atlas, pivot (0.5,0))
+    // M3d shadows (PORT CHOICE T-16): the original's wall/prop shadow0 is an OPAQUE
+    // black 16x24 block tinted by a multiply material the port has no equivalent
+    // for, so it is not drawn; shadow2 (the alpha ellipse from the character atlas, pivot (0.5,0))
     // goes under props, boxes and door bars.
     auto shadowImg2 = std::make_shared<Util::Image>(root + "/sprites/shadow2.png");
     auto doorBaseImg = std::make_shared<Util::Image>(root + "/sprites/door02.png");
@@ -356,7 +359,7 @@ void GameScene::OnEnter() {
             ropt.roomHeight = 11;
         }
         // M3c: the reward slot draws r_chest OR r_sell (MapManager.type1_list);
-        // the pick is the floor seed's parity (PORT CHOICE -- the pool draw is
+        // the pick is the floor seed's parity (PORT CHOICE T-08 -- the pool draw is
         // not recoverable). r_sell is 19x13.
         const bool sellRoom = slot == 4 && ((m_FloorSeed / 3) % 2 == 1);
         if (sellRoom) {
@@ -883,7 +886,7 @@ void GameScene::OnEnter() {
                 RGRandom maker;
                 maker.SetRandomSeed(m_FloorSeed + 1500 + roomIndex);
                 const int stage = m_Level != nullptr ? m_Level->stage : (m_FloorIndex % kChapterFloors) + 1;
-                const int level = EnemyMakerLevel(stage, rg.Width());
+                const int level = EnemyMakerLevel(stage, rg.Width(), rg.Height());
                 const int points = RollEnemyPoints(level, maker);
                 std::vector<std::string> ids = PlanRoomSpawns(
                     pool,
@@ -894,7 +897,7 @@ void GameScene::OnEnter() {
                     points, maker);
                 // Elites: EnemyMaker.badass_rate promotes a pick to ex_enemy_list. The
                 // rate is a private field that did not survive decompilation --
-                // PORT CHOICE: stage * 3 % per pick (chapter-scaled), labelled so a
+                // PORT CHOICE T-03: stage * 3 % per pick (chapter-scaled), labelled so a
                 // recovered value can replace it in one place.
                 if (m_Level != nullptr && !m_Level->exEnemies.empty()) {
                     for (std::string &id : ids) {
@@ -929,7 +932,7 @@ void GameScene::OnEnter() {
             // object_list for item_value coins), vending_machine_w (a sample weapon
             // from the level's chest tier for item_value coins) and the free
             // water_dispenser, in a row across the upper half (the prefab has no
-            // fixed slots; MapManager places them at run time -- PORT layout).
+            // fixed slots; MapManager places them at run time -- PORT CHOICE T-11 layout).
             RGRandom shopRng;
             shopRng.SetRandomSeed(m_FloorSeed + 3000);
             const int cx = (rg.Width() - 1) / 2;
@@ -984,7 +987,7 @@ void GameScene::OnEnter() {
         }
         // M3e EVENT ROOM (slot 3, MapManager.type3_list = r_mercenary / r_mineral /
         // r_statue). r_mercenary (hire an NPC) is not ported: the slot draws the
-        // statue or the mineral room (PORT CHOICE by floor seed; SK_EVENT_ROOM=
+        // statue or the mineral room (PORT CHOICE T-13 by floor seed; SK_EVENT_ROOM=
         // statue|mineral overrides for proofs).
         if (slot == 3 && !spawnCells.empty()) {
             const char *forced = std::getenv("SK_EVENT_ROOM");
@@ -1031,7 +1034,7 @@ void GameScene::OnEnter() {
             } else {
                 // r_mineral: mineral_crystal / mineral_gold (res/enemy, EnemyAI05 shells:
                 // hp 40, mineral_count 10). The mineral_obj drop prefab did not
-                // resolve -> PORT: 10 copper coins per mineral. Six ore nodes in a
+                // resolve -> PORT CHOICE T-15: 10 copper coins per mineral. Six ore nodes in a
                 // ring (the prefab has no slots; MapManager places them at run time).
                 const int ring[6][2] = {{-3, 2}, {3, 2}, {-3, -2}, {3, -2}, {0, 3}, {0, -3}};
                 for (int k = 0; k < 6; ++k) {
@@ -1067,6 +1070,8 @@ void GameScene::OnEnter() {
                 cc.first, cc.second, rg.Width(), rg.Height(), kCellPx, origin);
             auto chest = std::make_shared<Chest>(
                 root, cpos, m_Level != nullptr ? m_Level->chestLevel : 1, Chest::Kind::RoomReward);
+            // NOT PORTED T-09: GetPot/GetCoin branches and ChestXmlReader; reward chests
+            // only yield weapons until P1.9 resolves them.
             m_Chests.push_back(chest);
             m_Renderer.AddChild(chest);
             LOG_INFO("Chest: reward room {} -> chest_room_reward (tier {})", roomIndex, chest->Tier());
@@ -1119,6 +1124,9 @@ void GameScene::OnEnter() {
     }
     if (const char *fk = std::getenv("SK_FORCE_KILL")) {
         m_ForceKillFrame = std::atol(fk);
+    }
+    if (const char *fe = std::getenv("SK_FORCE_KILL_EVERY")) {
+        m_ForceKillEvery = std::atol(fe); // repeat the kill every N frames after the first
     }
     if (const char *gt = std::getenv("SK_GATE_TELEPORT")) {
         m_GateTeleportFrame = std::atol(gt);
@@ -1299,8 +1307,13 @@ void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
                 const std::string rootDir(RESOURCE_DIR);
                 for (int c = 0; c < ob.breakCoins; ++c) {
                     const float ang = m_RewardRng.Range(0.0F, 6.2831853F);
+                    const PickupDef *pd = m_Data.FindPickup("copper");
+                    if (pd == nullptr) {
+                        break;
+                    }
                     auto coin = std::make_shared<CoinPickup>(rootDir, ob.collider.center, RewardKind::Copper,
-                                                             glm::vec2{std::cos(ang), std::sin(ang)});
+                                                             glm::vec2{std::cos(ang), std::sin(ang)}, *pd,
+                                                             m_Data.CoinFriction(), kScatterImpulseUnits);
                     m_Coins.push_back(coin);
                     m_Renderer.AddChild(coin);
                 }
@@ -1392,8 +1405,11 @@ void GameScene::Update(float dtMs) {
     if (m_ForceDieFrame >= 0 && m_Frame >= m_ForceDieFrame) {
         m_Player->Stats().hp = 0;
     }
-    if (m_ForceKillFrame >= 0 && m_Frame == m_ForceKillFrame && m_Sim) {
-        m_Sim->KillAllHostiles(); // SK_FORCE_KILL test hook: NO-OP unless set
+    if (m_ForceKillFrame >= 0 && m_Sim &&
+        (m_Frame == m_ForceKillFrame ||
+         (m_ForceKillEvery > 0 && m_Frame > m_ForceKillFrame &&
+          (m_Frame - m_ForceKillFrame) % m_ForceKillEvery == 0))) {
+        m_Sim->KillAllHostiles(); // SK_FORCE_KILL[_EVERY] test hook: NO-OP unless set
     }
     if (m_GateTeleportFrame >= 0 && m_Frame == m_GateTeleportFrame) {
         m_Player->m_Transform.translation = m_GatePos; // SK_GATE_TELEPORT test hook
@@ -1556,6 +1572,7 @@ void GameScene::Update(float dtMs) {
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
             !RoomHasLiveHostile(static_cast<int>(i))) {
             m_RoomLife[i].ClearRoom(); // process=Cleared, reward gate, OpenDoor
+            // NOT PORTED T-10: GetRoomReward (clear-room reward) is not resolved; log only.
             if (m_RoomLife[i].RewardGranted()) {
                 // reward gate FIRED (room_type==1). Gate lands here; the actual
                 // reward CONTENT (loot overlay) is the unverified special-room debt.
@@ -1620,7 +1637,7 @@ void GameScene::Update(float dtMs) {
                     m_BossDef != nullptr ? m_Data.FindBossChest(m_BossDef->id) : nullptr;
                 // The chest drops where the boss died; the gate opens at the room's
                 // b_point (centre). A boss that dies on the centre would bury its
-                // chest under the portal -- PORT CHOICE: nudge the chest two cells
+                // chest under the portal -- PORT CHOICE T-07: nudge the chest two cells
                 // below the gate when the two would overlap.
                 glm::vec2 chestPos = bv.pos;
                 if (glm::distance(chestPos, m_GatePos) < 2.0F * kCellPx) {
@@ -1952,7 +1969,7 @@ void GameScene::Purchase(VendingMachine &m) {
     }
     case VendingMachine::Kind::Water:
         // ItemWaterDispenser.ItemTrigger body did not survive (a Talk coroutine);
-        // PORT CHOICE: a free full energy refill, once.
+        // PORT CHOICE T-12: a free full energy refill, once.
         st.energy = st.maxEnergy;
         LOG_INFO("Shop: water dispenser -> energy {}", st.energy);
         break;
@@ -1974,7 +1991,7 @@ void GameScene::SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos) 
     // rg_random.Range(0,100) before the singleton call truncates it; the
     // `< reward_rate` gate and the reward_value[4] = [gold, silver, copper, energy]
     // count layout are inferred (PrefabManager.GetCoin 0..2 clamp, PrefabName.energy).
-    const std::vector<RewardDrop> drops = RollEnemyReward(*def, m_RewardRng);
+    const std::vector<RewardDrop> drops = RollEnemyReward(*def, m_RewardRng, RewardValuesFrom(m_Data));
     if (drops.empty()) {
         return;
     }
@@ -1984,8 +2001,13 @@ void GameScene::SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos) 
     for (const RewardDrop &d : drops) {
         // Scatter direction: a deterministic angle per drop (RGCoin.GetForce).
         const float ang = m_RewardRng.Range(0.0F, 6.2831853F);
+        const PickupDef *pd = m_Data.FindPickup(RewardKindName(d.kind));
+        if (pd == nullptr) {
+            continue; // pickups.json absent: no drop entity (logged at load)
+        }
         auto coin = std::make_shared<CoinPickup>(root, pos, d.kind,
-                                                 glm::vec2{std::cos(ang), std::sin(ang)});
+                                                 glm::vec2{std::cos(ang), std::sin(ang)}, *pd,
+                                                 m_Data.CoinFriction(), kScatterImpulseUnits);
         m_Coins.push_back(coin);
         m_Renderer.AddChild(coin);
         (d.kind == RewardKind::Energy ? energyTotal : coinsTotal) += d.value;
@@ -2055,7 +2077,7 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
                     }
                     LOG_INFO("Statue: Thief blessing -> +{} coins", gained);
                 } else {
-                    LOG_INFO("Statue: {} blessing not ported (statue_index {})", kStatueName[si], si);
+                    LOG_INFO("Statue: {} blessing NOT PORTED (T-14, statue_index {})", kStatueName[si], si);
                 }
             }
         } else if (e.name == "skill_dash") {

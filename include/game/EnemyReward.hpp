@@ -24,19 +24,46 @@ namespace Game {
  *   [gold, silver, copper, energy] -- the three coin slots line up with GetCoin's
  *   0..2 clamp and the 4th with the energy prefab. Evidence: slime [0,0,1,1] = one
  *   copper + one energy; bosses [3,3,0,10] = 3 gold + 3 silver + 10 energy.
- *   INFERRED layout (the instantiate loop itself did not survive decompilation).
+ *   INFERRED layout (T-18: the instantiate loop itself did not survive decompilation).
  */
 enum class RewardKind { Gold = 0, Silver = 1, Copper = 2, Energy = 3 };
 
-/// FAITHFUL: RGCoin.value per res/register/coin_N.prefab, RGEnergy.value @ energy.prefab.
-inline int RewardValue(RewardKind k) {
-    switch (k) {
-    case RewardKind::Gold: return 5;
-    case RewardKind::Silver: return 3;
-    case RewardKind::Copper: return 1;
-    case RewardKind::Energy: return 8;
+/// P1.12: the per-kind drop values (RGCoin.value / RGEnergy.value) come from
+/// pickups.json (res/register prefabs), never from constants.
+struct RewardValues {
+    int gold = 0;
+    int silver = 0;
+    int copper = 0;
+    int energy = 0;
+    int Of(RewardKind k) const {
+        switch (k) {
+        case RewardKind::Gold: return gold;
+        case RewardKind::Silver: return silver;
+        case RewardKind::Copper: return copper;
+        case RewardKind::Energy: return energy;
+        }
+        return 0;
     }
-    return 0;
+};
+
+inline const char *RewardKindName(RewardKind k) {
+    switch (k) {
+    case RewardKind::Gold: return "gold";
+    case RewardKind::Silver: return "silver";
+    case RewardKind::Copper: return "copper";
+    case RewardKind::Energy: return "energy";
+    }
+    return "";
+}
+
+/// Build the value table from GameData's pickups (0 for a missing kind).
+inline RewardValues RewardValuesFrom(const GameData &gd) {
+    RewardValues v;
+    if (const PickupDef *p = gd.FindPickup("gold")) v.gold = p->value;
+    if (const PickupDef *p = gd.FindPickup("silver")) v.silver = p->value;
+    if (const PickupDef *p = gd.FindPickup("copper")) v.copper = p->value;
+    if (const PickupDef *p = gd.FindPickup("energy")) v.energy = p->value;
+    return v;
 }
 
 struct RewardDrop {
@@ -47,7 +74,8 @@ struct RewardDrop {
 /// Roll one hostile's death reward. Draws EXACTLY one Range(0,100) from @p rng
 /// (the reward_rate gate, RGEController.GetReward); a failed gate drops nothing.
 /// Bosses carry reward_rate 100 so they always pay out.
-inline std::vector<RewardDrop> RollEnemyReward(const EnemyDef &def, RGRandom &rng) {
+inline std::vector<RewardDrop> RollEnemyReward(const EnemyDef &def, RGRandom &rng,
+                                               const RewardValues &values) {
     std::vector<RewardDrop> out;
     // INFERRED (T-18): RGEController__GetReward shows RGRandom.Range(0,100) then is
     // truncated by the singleton call; the `< reward_rate` compare is inferred.
@@ -57,7 +85,7 @@ inline std::vector<RewardDrop> RollEnemyReward(const EnemyDef &def, RGRandom &rn
     for (int slot = 0; slot < 4; ++slot) {
         const auto kind = static_cast<RewardKind>(slot);
         for (int n = 0; n < def.rewardValue[slot]; ++n) {
-            out.push_back(RewardDrop{kind, RewardValue(kind)});
+            out.push_back(RewardDrop{kind, values.Of(kind)});
         }
     }
     return out;

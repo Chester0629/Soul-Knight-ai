@@ -22,7 +22,7 @@ namespace Game {
  * Recoverable here:
  *   - the ctor's two configured weapon fields (Gun008.ctor @ 317442): an int at
  *     param+0x6c (= 3) and a float at param+0x70 (= 0.1f). Their exact runtime
- *     roles (sweep-tick count / inter-tick delay) are inferred, so the VALUES
+ *     roles (sweep-tick count / inter-tick delay) are inferred (INFERRED T-22), so the VALUES
  *     are exposed as named constants and the role is documented, not asserted.
  *   - the coroutine counter/limit/state machine (MoveNext @ 317492): state at
  *     iterator+0x2c is read then set to -1 each call; state 0 -> first yield

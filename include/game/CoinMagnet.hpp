@@ -24,8 +24,8 @@ namespace Game {
  * (Sim::kDataSpeedToPxPerSec = 15 px per unit).
  */
 struct CoinMagnet {
-    /// FAITHFUL: RGCoin.friction @ RGCoin__ctor (0.9f), per fixed step (50 Hz).
-    static constexpr float kFriction = 0.9F;
+    /// RGCoin.friction (pickups.json _rgcoin.friction; RGCoin__ctor 0.9f), per fixed step (50 Hz).
+    float friction = 0.9F;
     static constexpr float kFixedStepSec = 0.02F;
     /// Contact radius (px): coin CircleCollider2D 0.44..0.56 units ~ 8 px + body.
     static constexpr float kCollectRadiusPx = 20.0F;
@@ -74,7 +74,7 @@ struct CoinMagnet {
                 pos += (toPlayer / dist) * speedPxPerSec * kFixedStepSec;
             } else if (inertialPxPerSec > 0.5F) {
                 pos += forceDir * inertialPxPerSec * kFixedStepSec;
-                inertialPxPerSec *= kFriction;
+                inertialPxPerSec *= friction;
             }
         }
         return collected;

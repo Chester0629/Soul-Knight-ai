@@ -272,6 +272,7 @@ private:
     /// SK_FORCE_KILL=K test hook (env, -1 = off): kill every hostile on frame K to
     /// drive the death-reward / kill-count paths headlessly. NO-OP in normal play.
     long m_ForceKillFrame = -1;
+    long m_ForceKillEvery = -1; ///< SK_FORCE_KILL_EVERY=N: repeat the kill every N frames
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;

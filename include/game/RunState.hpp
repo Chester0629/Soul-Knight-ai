@@ -142,7 +142,7 @@ inline int ChapterOf(int floorIndex) {
 /// MAP M1: the biome VARIANT a run plays for a chapter. The original ships two
 /// MapManager sets per chapter (A forest / B ice, C castle / D graveyard, E alien
 /// / F volcano) and picks one per run; the selection rule did not survive the
-/// dump, so the port derives it from the run seed (PORT CHOICE): deterministic,
+/// dump, so the port derives it from the run seed (PORT CHOICE T-01): deterministic,
 /// replayable, both variants reachable.
 inline char BiomeVariantFor(int runSeed, int chapter) {
     const unsigned mix = static_cast<unsigned>(runSeed) * 2654435761u + static_cast<unsigned>(chapter) * 40503u;

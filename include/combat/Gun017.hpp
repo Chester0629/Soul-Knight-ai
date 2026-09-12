@@ -32,7 +32,7 @@ namespace Game {
  *     Instantiate / PrefabPool spawn, and Component.get_transform show/hide
  *     side-effects are all OWNER;
  *   - the Gun017Child homing drone itself (movement, targeting, its own attacks)
- *     is BLOCKED and intentionally NOT ported.
+ *     is BLOCKED and intentionally NOT ported (NOT PORTED T-23).
  *
  * What IS modelled (the honest, small brain):
  *   - Attack (964721): the scatter angle -- spread = baseAngle + baseAngle*recoil

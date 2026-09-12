@@ -794,6 +794,54 @@ def build_shop_table():
     return {"pots": pots, "machines": machines} if pots and machines else None
 
 
+
+# PICKUPS (P1.12): res/register/coin_0|1|2.prefab (RGCoin value/speed/range) and
+# energy.prefab (RGEnergy), plus the coin_0.controller spin clips, so the drop
+# values, magnet numbers and animation frames live in data, not C++.
+def build_pickup_table():
+    reg = EP_ASSETS / "res" / "register"
+    if not reg.is_dir():
+        return None
+    idx = _guid_index()
+    out = {}
+    kinds = {"coin_0": "gold", "coin_1": "silver", "coin_2": "copper", "energy": "energy"}
+    for stem, kind in kinds.items():
+        f = reg / (stem + ".prefab")
+        if not f.is_file():
+            continue
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        val = re.search(r"\n  value: (\d+)", text)
+        spd = re.search(r"\n  speed: ([\d.]+)", text)
+        rng = re.search(r"\n  range: ([\d.]+)", text)
+        sp = _prefab_sprites(f, idx)
+        out[kind] = {"prefab": stem, "value": int(val.group(1)) if val else 0,
+                     "speed": float(spd.group(1)) if spd else 0.0,
+                     "range": float(rng.group(1)) if rng else 0.0,
+                     "frames": [sp[0]] if sp else []}
+    # coin_0.controller: coin_gold / coin_silver / coin_copper / gem clips (4 frames each)
+    ctrl = next(EP_ASSETS.rglob("coin_0.controller"), None)
+    if ctrl is not None:
+        ctext = ctrl.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r"m_Name: (\w+)\n(?:.*\n){0,12}?.*m_Motion: \{fileID: \d+, guid: ([0-9a-f]+)", ctext):
+            state, ag = m.group(1), m.group(2)
+            kind = {"coin_gold": "gold", "coin_silver": "silver", "coin_copper": "copper"}.get(state)
+            anim = idx.get(ag)
+            if kind is None or anim is None or kind not in out:
+                continue
+            atext = anim.read_text(encoding="utf-8", errors="ignore")
+            frames = []
+            for g in re.findall(r"value: \{fileID: \d+, guid: ([0-9a-f]+)", atext):
+                p = idx.get(g)
+                if p is not None:
+                    frames.append(p.stem)
+            if frames:
+                out[kind]["frames"] = frames
+                out[kind]["frame_ms"] = 125  # clip sample rate 8 fps
+    if out:
+        out["_rgcoin"] = {"friction": 0.9, "_note": "RGCoin__ctor friction 0.9 (0x3f666666)"}
+    return out or None
+
+
 def parse_droptables() -> dict:
     path = SRC_TXT / "chest_data"
     root = ET.fromstring(path.read_text(encoding="utf-8"))
@@ -851,6 +899,7 @@ def main() -> int:
     # the old class table if the sources are unavailable so the pipeline runs.
     weapons = build_weapon_table()
     if weapons is None:
+        print("FALLBACK: weapons.csv/AssetRipper missing -- weapons.json degrades to the 1.07 class table")
         weapons = build_table(guns, idx, prefer=("Bullet",))
     counts["weapons"] = write("weapons", weapons)
     counts["enemy_guns"] = write("enemy_guns", build_table(eguns, idx, prefer=("Bullet",)))
@@ -906,6 +955,14 @@ def main() -> int:
     if shop is not None:
         write("shop", shop)
         counts["shop_pots"] = len(shop["pots"])
+    pickups = build_pickup_table()
+    if pickups is not None:
+        write("pickups", pickups)
+        counts["pickups"] = len([k for k in pickups if not k.startswith("_")])
+    for name, obj in (("levels", levels), ("boss_rooms", boss_rooms), ("boss_chests", boss_chests),
+                      ("shop", shop), ("pickups", pickups)):
+        if obj is None:
+            print(f"FALLBACK: {name} not built (AssetRipper source missing) -- runtime uses the pre-M1 path")
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

@@ -38,14 +38,23 @@ inline std::pair<int, int> EnemyPointRange(int level) {
     }
 }
 
-/// FAITHFUL: the big-room level bump in StartEnemyMaker (room_width > 0xf, > 0x15).
-inline int EnemyMakerLevel(int stage, int roomWidth) {
-    int level = stage;
-    if (roomWidth > 15) {
-        ++level;
+/// INFERRED (T-05): StartEnemyMaker @ game_full.c:682128-682152 gates on a
+/// room flag (RGRoomX+0x28 != 0) and level > 0, then tests room_width (+0x14)
+/// > 15 and > 21 and room_height (+0x18) > 15 and > 21 in nested blocks whose
+/// bodies were truncated; the port reads each passed test as +1 level. The flag
+/// and the exact increments are not recovered.
+inline int EnemyMakerLevel(int stage, int roomWidth, int roomHeight) {
+    if (stage <= 0) {
+        return stage;
     }
-    if (roomWidth > 21) {
-        ++level;
+    int level = stage;
+    for (int dim : {roomWidth, roomHeight}) {
+        if (dim > 15) {
+            ++level;
+        }
+        if (dim > 21) {
+            ++level;
+        }
     }
     return level;
 }
@@ -62,8 +71,8 @@ inline int RollEnemyPoints(int level, RGRandom &rng) {
 /**
  * @brief Spend @p points on picks from the weighted @p pool (MapManager.enemy_list
  *        order), charging each pick's consume (>= 1). Stops at @p cap picks so a
- *        tiny room can never be flooded (port safety cap; the original relies on
- *        its spawn-point list running out).
+ *        tiny room can never be flooded (PORT CHOICE T-04: cap 24 + consume >= 1;
+ *        the original relies on its spawn-point list running out).
  */
 inline std::vector<std::string>
 PlanRoomSpawns(const std::vector<std::string> &pool,

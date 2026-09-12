@@ -20,6 +20,8 @@ inline constexpr int kMaxStepsPerAdvance = 8;
 static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
               "kFixedStepMs must equal kFixedStepSeconds * 1000");
 
+/// T-25 (unit audit pending, P3.0): 15 px per data unit here vs. 32 px per map cell
+/// in GameScene::kCellPx.
 /// Data bulletSpeed (raw units from the JSON tables) -> pixels/second. The shell
 /// (GameScene) and the sim's WeaponController must agree on this factor, so it
 /// lives here rather than as an anonymous constant. Mirrors GameScene's historical

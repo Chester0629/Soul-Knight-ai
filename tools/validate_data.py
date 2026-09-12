@@ -142,13 +142,17 @@ def main() -> int:
                 errors.append(f"level '{lid}' map_long out of range: {lv.get('map_long')}")
             for pool in ("enemies", "ex_enemies"):
                 missing = sorted({eid for eid in lv.get(pool, []) if eid not in enemy_ids})
-                if missing:
-                    # T-27: the MapManager pool can reference a prefab that lives outside
-                    # res/enemy (ex_orc05 is under Assets/GameObject) and is therefore
-                    # absent from enemies.csv; the scene substitutes the AI01
-                    # representative. Reported, not fatal, until P1.10 re-keys it.
+                # T-27: ex_orc05 lives under Assets/GameObject, outside res/enemy, so
+                # enemies.csv has no row; the scene substitutes the AI01 representative.
+                # Only this listed gap is tolerated (warning); any other unknown id fails.
+                known_gaps = {"ex_orc05"}
+                tolerated = [m for m in missing if m in known_gaps]
+                fatal = [m for m in missing if m not in known_gaps]
+                if tolerated:
                     warnings.append(f"level '{lid}' {pool} references species missing from "
-                                    f"enemies.json (T-27): {', '.join(missing)}")
+                                    f"enemies.json (T-27 known gap): {', '.join(tolerated)}")
+                if fatal:
+                    errors.append(f"level '{lid}' {pool} references unknown enemy: {', '.join(fatal)}")
             if lv.get("stage") != 6 and lid != "G1" and not lv.get("enemies"):
                 errors.append(f"level '{lid}' has an empty enemy pool")
     if boss_rooms is not None:
@@ -179,6 +183,17 @@ def main() -> int:
             for wid in c.get("weapons", []):
                 if wid not in weapon_ids:
                     errors.append(f"boss chest '{cid}' signature weapon '{wid}' unknown")
+    pickups = load("pickups")
+    if pickups is not None:
+        for kind in ("gold", "silver", "copper", "energy"):
+            p = pickups.get(kind)
+            if not p:
+                errors.append(f"pickups: '{kind}' missing")
+                continue
+            if p.get("value", 0) <= 0 or p.get("speed", 0) <= 0 or p.get("range", 0) <= 0 or not p.get("frames"):
+                errors.append(f"pickups: '{kind}' incomplete: {p}")
+    else:
+        errors.append("pickups.json missing (P1.12)")
     if shop is not None:
         pots = shop.get("pots", {})
         machines = shop.get("machines", {})

@@ -203,7 +203,8 @@ void RoomGen::CreateAisle() {
 // FAITHFUL: RGRoomX__CreateFloor @ rva 0x4FD3E4
 //
 // Three passes over the room_width x room_height grid. The decomp draws RNG only
-// in pass 1 (noise) and pass 3 (variant pick); the placed floor variant is a
+// in pass 1 (noise) and pass 3 (variant pick; INFERRED T-02 for the category
+// vs. always-on roll); the placed floor variant is a
 // visual-only choice (it does NOT write back into map[]), so for the pure grid
 // the observable effect is solely the RNG draws that advance the stream. We
 // reproduce the EXACT draw count and order so downstream stages stay in sync.

@@ -443,12 +443,47 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         }
     }
 
+    // P1.12: pickups.json
+    const json &pickups = store.Load(dir + "pickups.json");
+    if (pickups.is_object()) {
+        for (auto it = pickups.begin(); it != pickups.end(); ++it) {
+            if (it.key() == "_rgcoin") {
+                m_CoinFriction = GetF(it.value(), "friction", 0.9F);
+                continue;
+            }
+            if (it.key().rfind("_", 0) == 0) {
+                continue;
+            }
+            PickupDef d;
+            d.kind = it.key();
+            d.value = GetI(it.value(), "value");
+            d.speed = GetF(it.value(), "speed");
+            d.range = GetF(it.value(), "range");
+            d.frameMs = GetI(it.value(), "frame_ms", 125);
+            if (const auto fr = it.value().find("frames"); fr != it.value().end() && fr->is_array()) {
+                for (const json &f : *fr) {
+                    if (f.is_string()) {
+                        d.frames.push_back(f.get<std::string>());
+                    }
+                }
+            }
+            m_Pickups.emplace(it.key(), std::move(d));
+        }
+    } else {
+        LOG_INFO("GameData: pickups.json absent (fallback: no drop values -> no drops)");
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
              m_EnemyGuns.size(), m_Buffs.size(), m_RoomLayouts.size(),
              m_DesignRooms.size());
     return ok;
+}
+
+const PickupDef *GameData::FindPickup(const std::string &kind) const {
+    auto it = m_Pickups.find(kind);
+    return it == m_Pickups.end() ? nullptr : &it->second;
 }
 
 const PotDef *GameData::FindPot(const std::string &id) const {

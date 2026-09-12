@@ -22,7 +22,8 @@
 
 namespace Game {
 namespace {
-// Screen-space GameObject: centre-origin coords, +y up (TransformUtils:
+// PORT CHOICE T-20: layout uses ported coordinates; potion/gem columns read 0
+// until P4.2. Screen-space GameObject: centre-origin coords, +y up (TransformUtils:
 // translation {0,0} is the screen centre). Util::Text("") crashes (see Hud.cpp),
 // so every label is non-empty.
 std::shared_ptr<Util::GameObject> Holder(std::shared_ptr<Core::Drawable> drawable,

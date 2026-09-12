@@ -96,9 +96,12 @@ TEST(EnemyMakerTest, BudgetTableAndBigRoomBump) {
     EXPECT_EQ(Game::EnemyPointRange(5), (std::pair<int, int>{44, 52}));
     EXPECT_EQ(Game::EnemyPointRange(6), (std::pair<int, int>{60, 60}));
     EXPECT_EQ(Game::EnemyPointRange(0), (std::pair<int, int>{0, 0}));
-    EXPECT_EQ(Game::EnemyMakerLevel(1, 15), 1);
-    EXPECT_EQ(Game::EnemyMakerLevel(1, 17), 2);
-    EXPECT_EQ(Game::EnemyMakerLevel(1, 23), 3);
+    // T-05 (INFERRED): +1 per passed size test, both dimensions; level 0 never bumps.
+    EXPECT_EQ(Game::EnemyMakerLevel(1, 15, 15), 1);
+    EXPECT_EQ(Game::EnemyMakerLevel(1, 17, 15), 2);
+    EXPECT_EQ(Game::EnemyMakerLevel(1, 23, 15), 3);
+    EXPECT_EQ(Game::EnemyMakerLevel(1, 21, 21), 3);
+    EXPECT_EQ(Game::EnemyMakerLevel(0, 21, 21), 0);
     Game::RGRandom rng;
     rng.SetRandomSeed(5);
     for (int i = 0; i < 50; ++i) {

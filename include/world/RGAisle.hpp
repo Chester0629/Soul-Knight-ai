@@ -14,7 +14,7 @@ namespace Game {
  * @brief Faithful port of the recoverable pure-logic in Soul Knight 1.7.10's
  *        @c RGAisle corridor builder (the strip that links two adjacent rooms).
  *
- * @par Scope - what is and is NOT ported
+ * @par Scope - what is and is NOT ported (T-24: effects are wired by the scene layer)
  * @c RGAisle has four native methods. Most of the class is owner-side (Unity
  * @c Transform positioning + tile @c Instantiate); only @c CreateFloor's first
  * two grid passes and @c CreateAisleWall's gated RNG cadence are recoverable

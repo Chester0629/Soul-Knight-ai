@@ -281,6 +281,17 @@ struct MachineDef {
     std::string display;            ///< display frame sprite stem
 };
 
+/// P1.12: a coin / energy pickup (res/register/coin_N | energy prefab: RGCoin
+/// value / speed / range; coin_0.controller spin frames).
+struct PickupDef {
+    std::string kind;   ///< "gold" | "silver" | "copper" | "energy"
+    int value = 0;
+    float speed = 0.0F; ///< units/s
+    float range = 0.0F; ///< magnet range, units
+    int frameMs = 125;
+    std::vector<std::string> frames; ///< sprite stems
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -387,6 +398,9 @@ public:
     /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
     const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
     const std::unordered_map<std::string, BossRoomDef> &BossRooms() const { return m_BossRooms; }
+    /// P1.12: pickups.json; nullptr when the table or kind is absent.
+    const PickupDef *FindPickup(const std::string &kind) const;
+    float CoinFriction() const { return m_CoinFriction; }
     /// M3c: shop tables (shop.json).
     const PotDef *FindPot(const std::string &id) const;
     const MachineDef *FindMachine(const std::string &id) const;
@@ -410,6 +424,8 @@ private:
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
     std::unordered_map<std::string, BossChestDef> m_BossChests;
     std::unordered_map<std::string, PotDef> m_Pots;
+    std::unordered_map<std::string, PickupDef> m_Pickups;
+    float m_CoinFriction = 0.9F;
     std::unordered_map<std::string, MachineDef> m_Machines;
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;

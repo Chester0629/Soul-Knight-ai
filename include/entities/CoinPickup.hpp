@@ -8,6 +8,7 @@
 #include "Util/GameObject.hpp"
 
 #include "game/CoinMagnet.hpp"
+#include "data/GameData.hpp"
 #include "game/EnemyReward.hpp"
 
 namespace Game {
@@ -25,8 +26,10 @@ namespace Game {
  */
 class CoinPickup : public Util::GameObject {
 public:
+    /// @p def is the kind's pickups.json entry (value / speed / range / frames);
+    /// @p friction RGCoin.friction from the same table; @p scatterImpulse T-19.
     CoinPickup(const std::string &resourceRoot, glm::vec2 pos, RewardKind kind,
-               glm::vec2 scatterDir);
+               glm::vec2 scatterDir, const PickupDef &def, float friction, float scatterImpulse);
 
     RewardKind Kind() const { return m_Kind; }
     int Value() const { return m_Value; }

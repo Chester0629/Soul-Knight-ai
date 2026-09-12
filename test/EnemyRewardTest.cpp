@@ -24,11 +24,25 @@ int Total(const std::vector<Game::RewardDrop> &d) {
     return t;
 }
 
-TEST(EnemyRewardTest, PrefabValuesAreFaithful) {
-    EXPECT_EQ(Game::RewardValue(Game::RewardKind::Gold), 5);   // coin_0.prefab
-    EXPECT_EQ(Game::RewardValue(Game::RewardKind::Silver), 3); // coin_1.prefab
-    EXPECT_EQ(Game::RewardValue(Game::RewardKind::Copper), 1); // coin_2.prefab
-    EXPECT_EQ(Game::RewardValue(Game::RewardKind::Energy), 8); // energy.prefab
+TEST(EnemyRewardTest, PickupTableCarriesThePrefabValues) {
+    // P1.12: pickups.json <- res/register/coin_0|1|2.prefab (RGCoin) + energy.prefab.
+    Game::GameData gd;
+    gd.LoadAll(kResourceRoot);
+    const Game::RewardValues v = Game::RewardValuesFrom(gd);
+    EXPECT_EQ(v.gold, 5);
+    EXPECT_EQ(v.silver, 3);
+    EXPECT_EQ(v.copper, 1);
+    EXPECT_EQ(v.energy, 8);
+    const Game::PickupDef *gold = gd.FindPickup("gold");
+    ASSERT_NE(gold, nullptr);
+    EXPECT_FLOAT_EQ(gold->speed, 20.0F);
+    EXPECT_FLOAT_EQ(gold->range, 6.0F);
+    EXPECT_EQ(gold->frames.size(), 4u); // coin_gold_0 clip
+    EXPECT_EQ(gold->frames[0], "objects_common_31");
+    const Game::PickupDef *energy = gd.FindPickup("energy");
+    ASSERT_NE(energy, nullptr);
+    EXPECT_FLOAT_EQ(energy->speed, 14.0F);
+    EXPECT_FLOAT_EQ(gd.CoinFriction(), 0.9F);
 }
 
 TEST(EnemyRewardTest, RealTableCarriesRewardValues) {
@@ -56,7 +70,8 @@ TEST(EnemyRewardTest, BossAlwaysPaysGoldSilverEnergy) {
     boss.rewardValue[3] = 10;
     Game::RGRandom rng;
     rng.SetRandomSeed(4242);
-    const auto drops = Game::RollEnemyReward(boss, rng);
+    const Game::RewardValues vals{5, 3, 1, 8};
+    const auto drops = Game::RollEnemyReward(boss, rng, vals);
     ASSERT_EQ(drops.size(), 16u);
     std::map<Game::RewardKind, int> n;
     for (const auto &d : drops) {
@@ -80,8 +95,9 @@ TEST(EnemyRewardTest, RateGatesTheDropAndDrawsOnce) {
     a.SetRandomSeed(7);
     Game::RGRandom b;
     b.SetRandomSeed(7);
-    EXPECT_TRUE(Game::RollEnemyReward(never, a).empty());
-    EXPECT_EQ(Game::RollEnemyReward(always, b).size(), 1u);
+    const Game::RewardValues vals{5, 3, 1, 8};
+    EXPECT_TRUE(Game::RollEnemyReward(never, a, vals).empty());
+    EXPECT_EQ(Game::RollEnemyReward(always, b, vals).size(), 1u);
     // Both consumed exactly one draw: the streams stay in lockstep.
     EXPECT_EQ(a.Range(0, 1000000), b.Range(0, 1000000));
 
@@ -92,7 +108,7 @@ TEST(EnemyRewardTest, RateGatesTheDropAndDrawsOnce) {
     s.SetRandomSeed(99);
     int hits = 0;
     for (int i = 0; i < 2000; ++i) {
-        hits += Game::RollEnemyReward(slime, s).empty() ? 0 : 1;
+        hits += Game::RollEnemyReward(slime, s, vals).empty() ? 0 : 1;
     }
     EXPECT_GT(hits, 200);
     EXPECT_LT(hits, 400);

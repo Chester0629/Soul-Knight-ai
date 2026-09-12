@@ -45,7 +45,10 @@ int main(int, char **) {
 
     // The RunController owns the SceneManager + RunState and puts floor 0 on the
     // stack (replacing the old single `scenes.Push(make_shared<GameScene>())`).
-    Game::RunController run;
+    // SK_SEED=N test hook: run seed (default RunState::kDefaultRunSeed) so a
+    // headless proof can pick a chapter variant / boss room deterministically.
+    const char *seedEnv = std::getenv("SK_SEED");
+    Game::RunController run(seedEnv != nullptr ? std::atoi(seedEnv) : Game::RunState::kDefaultRunSeed);
     // Entry flow (B6/B5): main menu -> hero select -> run. Headless hooks (env,
     // NO-OP unless set): SK_START_CHAR=cNN starts a run as that hero directly;
     // SK_SKIP_MENU=1 starts as the default hero -- both skip the two screens so

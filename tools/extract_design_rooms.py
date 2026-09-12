@@ -59,7 +59,7 @@ def extract_room(path):
     if rx is None:
         return None
     w, h = int(rx["room_width"]), int(rx["room_height"])
-    cx = (w - 1) / 2.0   # grid centre = (dim-1)/2; prefab centre = 20
+    cx = (w - 1) / 2.0   # grid centre = (dim-1)/2; prefab centre = 20 (INFERRED T-21)
     cy = (h - 1) / 2.0
     obstacles = []
 

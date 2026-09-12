@@ -11,7 +11,8 @@ namespace Game {
  * @class EnemyAI15
  * @brief Faithful decision/cadence brain for EnemyAI15 (an RGEController subclass).
  *
- * Per-content port: the pure, unit-testable logic layer over the deterministic
+ * Per-content port (T-24: scene-side effects are wired by GameScene/Simulation):
+ * the pure, unit-testable logic layer over the deterministic
  * RGEController/RGRandom base. EnemyAI15 is a "wander-and-reflect shooter": it
  * scouts on the scout_rate cadence (clearing its chase target + advancing the
  * stream by one idle re-roll), re-picks a random wander direction on a movement
