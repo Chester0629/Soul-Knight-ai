@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.3（2026-09-12；依 Codex R1–R3 修訂，見 §9）
+> 版本：v1.4（2026-09-12；依 Codex R1–R4 修訂，見 §9）
 
 ---
 
@@ -14,7 +14,7 @@
 **目的**：在自製的 C++ 遊戲系統（PTSD：SDL2 + OpenGL + ImGui，CMake，GoogleTest）上，以**資料驅動**的方式忠實復刻《元氣騎士》1.7.10（Unity 2017.4.1f1 IL2CPP，armeabi-v7a）的單人地牢循環，作為學術演示。之後要能**用高版本素材替換**並**新增內容**，所以數值、貼圖、布局都必須走「解包資料 → JSON/PNG → 程式讀表」。
 
 **忠實度標籤**（程式碼註解與本文件共用；取捨註解一律附 §6 的 T-ID）：
-- `FAITHFUL @ <來源>`：直接來自反編譯（`../_reverse/ghidra_export/game_full.c`，倉庫外的同層目錄）、AssetRipper 預製件（`../_reverse/asset soul/ExportedProject`）或資料表（`../_reverse/analysis/data_tables/*.csv`）。**只有原碼可見的部分**才能標 FAITHFUL；Ghidra 截斷處之後一律 INFERRED。
+- `FAITHFUL @ <來源>`：直接來自反編譯（`../_reverse/ghidra_export/game_full.c`；**`game_typed.c` 為同一二進位的帶型別版本，欄位以名字出現，較可讀，引用時寫明檔名**；皆在倉庫外的同層目錄）、AssetRipper 預製件（`../_reverse/asset soul/ExportedProject`）或資料表（`../_reverse/analysis/data_tables/*.csv`）。**只有原碼可見的部分**才能標 FAITHFUL；Ghidra 截斷處之後一律 INFERRED。
 - `INFERRED (T-xx)`：來源存在但被截斷或欄位語意需推論，依據寫在註解裡。
 - `PORT CHOICE (T-xx)`：原版邏輯不可恢復，移植版自行決定；集中在單一處。
 - `NOT PORTED (T-xx)`：明知原版有、目前沒做，程式碼只記 log。
@@ -52,18 +52,20 @@
 | V-C | Codex 審查 | §7 | 每條「通過／不通過／不適用＋證據」。 |
 
 ### 1.1 無頭鉤子與可執行案例
-鉤子（env）：`SK_SEED=N`、`SK_MAX_FRAMES`、`SK_SHOT`、`SK_SKIP_MENU`、`SK_START_CHAR`、`SK_CHAR`、`SK_MENU=start`、`SK_FORCE_CLEAR=K`、`SK_FORCE_DIE=K`、`SK_FORCE_KILL=K`、`SK_FORCE_KILL_EVERY=N`、`SK_FORCE_SKILL=K`、`SK_ENDSCENE=restart|quit|menu`、`SK_GATE_TELEPORT=K`、`SK_GATE_BESIDE=K`、`SK_ROOM_TELEPORT=K,R`、`SK_SHOP_BUY=K`、`SK_SHOP_MACHINE=N`、`SK_STATUE_WORSHIP=K`、`SK_COINS=N`、`SK_EVENT_ROOM=statue|mineral`、`SK_AUTOWALK`（不穩）、`SK_AUTOFIRE`。
+鉤子（env）：`SK_SEED=N`、`SK_MAX_FRAMES`、`SK_SHOT`、`SK_SKIP_MENU`、`SK_START_CHAR`、`SK_CHAR`、`SK_MENU=start`、`SK_FORCE_CLEAR=K`、`SK_FORCE_DIE=K`、`SK_FORCE_KILL=K`、`SK_FORCE_KILL_EVERY=N`、`SK_FORCE_SKILL=K`、`SK_ENDSCENE=restart|quit|menu`、`SK_GATE_TELEPORT=K`、`SK_GATE_BESIDE=K`、`SK_ROOM_TELEPORT=K,R`（R 無生成點且為出口房時傳到房中央）、`SK_SHOP_BUY=K`、`SK_SHOP_MACHINE=N`、`SK_STATUE_WORSHIP=K`、`SK_COINS=N`、`SK_EVENT_ROOM=statue|mineral`、`SK_ZOOM=<float>`（整房截圖用，覆蓋鏡頭 1.5）、`SK_AUTOWALK`（不穩）、`SK_AUTOFIRE`。
 `GameScene::m_Frame` 每層重新計數。**Shell**：命令以 Git Bash 寫（`VAR=x ./build/Debug/SoulKnight.exe`）；PowerShell 等價寫法 `$env:VAR="x"; .\build\Debug\SoulKnight.exe`。實跑腳本：`scratchpad/r2_chain.sh`（§10 附輸出）。
 
 | 案例 | 命令（Git Bash，倉庫根目錄，Debug 建置） | 預期 log 順序 | 逾時 |
 |---|---|---|---|
 | H1 入口流程 | `SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200 ./build/Debug/SoulKnight.exe` | `GameScene: hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `hero c12 on floor 1` → `Level B2`（`SK_START_CHAR` 由 main.cpp 直接開局，不經 CharSelectScene；選角畫面的 log 用 `SK_MENU=start SK_CHAR=c12` 驗）| 60 s |
 | H2 傳送門 | `SK_SKIP_MENU=1 SK_GATE_TELEPORT=200 SK_MAX_FRAMES=400 ./build/Debug/SoulKnight.exe`；反例同命令去掉 `SK_GATE_TELEPORT` | `TransferGate: open in room N` → `TransferGate: entered -> next floor` → `hero c01 on floor 1`；反例 `GameScene: hero` 只出現 1 次 | 60 s |
-| H3 分波與封鎖 | `SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700 ./build/Debug/SoulKnight.exe` | `RGRoomX: room 1 StartRoom` → 每次 kill 後約 0.8 s `EnemyMaker: room 1 part spawned` → pending 歸零後 `RGRoomX: room 1 cleared` | 90 s |
+| H3 分波與封鎖 | `SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700 ./build/Debug/SoulKnight.exe` | 實際順序：`EnemyMaker: room 1 part spawned 9 (15 pending)`（首波在 StartRoom 內先生成）→ `EnemyMaker: room 1 (type 1) level 3 points P -> 24 planned, wave size 9` → `RGRoomX: room 1 StartRoom -> Active` → 每次整波死亡後**立即**下一波 `part spawned 9 (6 pending)` → `part spawned 6 (0 pending)` → `RGRoomX: room 1 cleared`（FAITHFUL：EnemyDead → CreatePart 無延遲，見 T-29） | 90 s |
 | H4 掉落經濟 | `SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700 ./build/Debug/SoulKnight.exe` | `Reward: <id> dropped N pickups (coins a energy b)` 至少 3 行（必要）；`Pickup: coin +1`／`Pickup: energy +8` 需玩家進入磁吸範圍（加 `SK_AUTOWALK=1`，可選） | 90 s |
 | H5 結算 | `SK_SKIP_MENU=1 SK_FORCE_DIE=100 SK_MAX_FRAMES=300 SK_SHOT=H5.png ./build/Debug/SoulKnight.exe` | `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 …` | 60 s |
 | H6 商店 | `SK_SKIP_MENU=1 SK_COINS=30 SK_SHOP_BUY=100 SK_MAX_FRAMES=130 ./build/Debug/SoulKnight.exe`（預設 seed 第 0 層獎勵房為商店） | `Shop: vending_machine_i … sells` → `Shop: bought <pot> for 10` | 60 s |
 | H7 boss 層 | `SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=447 ./build/Debug/SoulKnight.exe` | `Level B5` → `BossRoom: room N uses r1_bossK` → `Boss defeated!` → `Chest: boss chest chest_bossNN` → `TransferGate: open` | 120 s |
+| H8 雕像讀表 | `SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130 ./build/Debug/SoulKnight.exe` | `Statue: worshipped statue_0N (<name>) -> statue_index N`（貼圖／價格來自 shop.json statues） | 60 s |
+| V-S 整房 | `SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_ZOOM=0.6 SK_MAX_FRAMES=245 SK_SHOT=r2_boss3_full.png ./build/Debug/SoulKnight.exe` | 21×21 boss 房整房入鏡；對照 boss_rooms.json 物件座標 | 120 s |
 
 ### 1.2 固定對照樣本（V-D）
 - enemies：boss01 max_hp=600；boss05=800；e_succulent=8；e_slime01 reward_rate=15；boss03 reward_value=[5,3,0,10]。
@@ -87,11 +89,11 @@
 | P5 大廳 | 未開始 | 未驗收 | — | 全部 |
 | P6 UI 表現 | 進行中（P6.1 功能完成） | 未驗收 | 6e46eed | P6.2–P6.8 |
 | P7 內容補完 | 未開始 | 未驗收 | — | 全部 |
-| P8 擴充管線 | 未開始（P8.0 邊界已寫明） | 未驗收 | — | P8.1–P8.3 |
+| P8 擴充管線 | 進行中（P8.0 文字完成；P8.1–P8.3 未開始） | 未驗收 | — | P8.1–P8.3 |
 
 ---
 
-## 3. 階段規劃（細分，六欄）
+## 3. 階段規劃（細分；七欄＝目標／來源／交付／驗證／取捨＋狀態）
 
 ### P1 資料層
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態（功能・驗收） |
@@ -114,7 +116,7 @@
 |---|---|---|---|---|---|---|
 | P2.1 關卡驅動 | LevelIdFor、章節變體 | levels.json | GameScene 讀表 | H1、LevelTableTest | T-01 | 功能完成・未驗收 |
 | P2.2 生態貼圖 | 六地板變體、牆頂牆面、障礙皮膚、寶箱等級 | levels.json、tiles | 渲染 | V-S（冰／城堡截圖） | T-02 T-16 | 功能完成・未驗收 |
-| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_full.c:682128–682234（可見段） | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | H3、EnemyMakerTest、WaveSchedulerTest（9/9/6 分波、800 ms 延遲、房未空不放波） | T-03 T-04 T-05（加級本體 T-26 截斷） | 功能完成・未驗收 |
+| P2.3 EnemyMaker | 預算表、大房加級、加權池、分波 | game_typed.c StartEnemyMaker 77871–77990、EnemyDead 73138–73185、CreatePart 78030–78084 | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | H3、EnemyMakerTest、WaveSchedulerTest（9/9/6 分波、整波死亡後立即下一波、房未空不放波、boss 房空計畫即 Done） | T-03 T-04（選敵／扣 consume／生成點：CreateEnemy 截斷）T-05（加級本體截斷）T-29（ShowUpEffect 0.8 s 音效未移植） | 功能完成・未驗收 |
 | P2.4 傳送門 | 走進去換層 | transfer_gate.prefab | GameScene | H2 | — | 功能完成・未驗收 |
 | P2.5 比例／牆／箱／走廊 | 48 px/單位、底部錨定 | Scene_Game camera、wall601/box04 | 渲染 | V-S | — | 功能完成・未驗收 |
 | P2.6 boss 房布局 | 14 預製件 | boss_rooms.json | 渲染＋碰撞 | H7、V-S（r1_boss4；r2_boss3 見 §10） | T-28 | 功能完成・未驗收 |
@@ -129,7 +131,7 @@
 ### P3 戰鬥忠實度
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
 |---|---|---|---|---|---|---|
-| P3.0 單位換算稽核 | 子彈 15 px/單位 vs 地圖 32 | 武器圖集 `spritePixelsToUnits: 16`；Scene_Game ortho 7.5；RGBullet__SetBulletVelocity（stub，T-26） | 稽核結論（§9 R3 回覆）：15 為舊佔位，來源推得 32；改值影響所有速度與 golden（WeaponBrainTest:248、BrainFactoryTest:66 釘 15） | 「子彈飛 N 格秒數」測試 | T-25 | 進行中（稽核完成，待使用者裁決改 32）・未驗收 |
+| P3.0 單位換算稽核 | 子彈 15 px/單位 vs 地圖 32 | 武器圖集 `spritePixelsToUnits: 16`；Scene_Game ortho 7.5；RGBullet__SetBulletVelocity（stub，T-26） | 稽核結論（§9 R3/R4）：15 無可追溯依據；**32 = 待驗證假設**（圖集 PPU 16 × 2 只證明空間換算，未證明 JSON speed 的單位）；改值影響：子彈／敵人／角色速度、磁吸 range、散射、兩個釘 15 的測試（WeaponBrainTest:248、BrainFactoryTest:66）與 golden | 「子彈飛 N 格秒數」測試 | T-25 | 進行中（稽核完成，待使用者裁決改 32）・未驗收 |
 | P3.1 Buff 本體 | Fire/Poison/Ice/Electric/Armor/ChangeSpeed | BuffXXX__*、buffs.json | combat/Buff*.cpp | 每種 buff 時序測試（固定 dt） | — | 未開始・未驗收 |
 | P3.2 Buff 觸發 | 子彈預製件 *BuffTrigger → bullets.json `buff` | 預製件元件 | 資料欄＋sim 掛接 | V-D 5 顆、V-H 命中 log | — | 未開始・未驗收 |
 | P3.3.c03…c13 | 每角一切片 | CharSkillC0N__* | combat/CharSkillC0N.cpp | 每技能 4 斷言（觸發／冷卻／效果量／結束） | — | 未開始・未驗收 |
@@ -219,8 +221,8 @@
 | T-01 | 章節變體 A/B 由 runSeed 決定 | PORT CHOICE | RunState.hpp `BiomeVariantFor` | 每章生態 | 需原碼 |
 | T-02 | 地板變體取分類擲值否則常駐擲值 | INFERRED | RoomGen.cpp CreateFloor | 地板花紋 | 需原碼 |
 | T-03 | 精英率 stage×3% | PORT CHOICE | GameScene.cpp（EnemyMaker 區） | 精英數量 | P3.8 |
-| T-04 | 生成上限 24、consume ≥1、生成點分布 | PORT CHOICE | EnemyMaker.hpp PlanRoomSpawns、GameScene SpawnNextWave | 敵人數與位置 | P2.3 |
-| T-05 | 大房加級：兩維各 >15/>21 各 +1，level 0 不加；原碼另有房旗標（RGRoomX+0x28）與增量本體截斷 | INFERRED | EnemyMaker.hpp `EnemyMakerLevel` | 敵人預算 | P2.3 |
+| T-04 | 生成上限 24、consume ≥1、選敵與扣點迴圈、生成點分布（CreateEnemy 在 Range(0,200) 後截斷；R4 前生成點索引恆為 0 的 bug 已修） | INFERRED / PORT CHOICE | EnemyMaker.hpp、WaveScheduler.hpp、GameScene SpawnWaveBatch | 敵人數與位置 | P2.3 |
+| T-05 | 大房加級：兩維各 >15/>21 各 +1，level 0 不加；原碼旗標為 `the_room.random_room`，增量本體截斷（game_typed.c:77871–77990） | INFERRED | EnemyMaker.hpp `EnemyMakerLevel` | 敵人預算 | P2.3 |
 | T-06 | 房間角色按距離指派 | PORT CHOICE | GameScene.cpp 房間角色區 | 特殊房位置 | P2.13 |
 | T-07 | boss 寶箱與傳送門重疊時下移兩格 | PORT CHOICE | GameScene.cpp boss 死亡區 | 視覺 | — |
 | T-08 | r_chest / r_sell 由 floorSeed 奇偶決定 | PORT CHOICE | GameScene.cpp 房殼區 | 獎勵房類型 | 需原碼 |
@@ -244,6 +246,7 @@
 | T-26 | Ghidra 單例呼叫後截斷（系統性） | — | EnemyMaker.hpp 檔頭、SimConfig.hpp（引用處） | 多處 INFERRED | game_typed.c / frida |
 | T-27 | ex_orc05 在 Assets/GameObject，enemies.csv 缺列；場景以 AI01 代表種替代；資料閘唯一豁免 | NOT PORTED（資料缺列） | validate_data.py、GameScene SpawnEnemy | A2–A5 精英池 | P1.10 |
 | T-28 | boss 房門帶外物件（r2_boss3/4 的 rail，y=21）由抽取器丟棄並記錄 `dropped_outside` | PORT CHOICE | build_gamedata.py build_boss_rooms | 兩房各少數條軌道 | P2.11 |
+| T-29 | CreatePart 在 part ≥ 1 時 `Invoke("ShowUpEffect", 0.8f)`（字串表有 ShowUpEffect、無 CreatePart；ShowUpEffect 只播音效 7）；分波本身無延遲 | NOT PORTED（音效）/ INFERRED（字串） | WaveScheduler.hpp kShowUpEffectDelayMs | 音效 | P6.7 |
 
 ---
 
@@ -288,7 +291,7 @@ R1 要求落實度：矩陣部分（fallback 未印）；資料閘部分（未�
 - T-05：`EnemyMakerLevel(stage, w, h)` 兩維、level 0 不加、標 INFERRED；測試更新。
 - T-ID 補進所有註解（GameScene ×7、RunState、EnemyReward ×2、EnemyMaker、extract_design_rooms）。
 - 鉤子：`SK_SEED`、`SK_FORCE_KILL_EVERY`；H3 改為重複擊殺；§1.1 給完整命令與 shell 說明；§10 附實跑 log 與 r2_boss3 截圖。
-- §2/§3：全部六欄、狀態詞彙修正、HEAD 改由 §10 報告承載。
+- §2/§3：全部七欄、狀態詞彙修正、HEAD 改由 §10 報告承載。
 - 未做（誠實列出）：分波時序純測試（P2.3 仍進行中）；Gun008/Gun017/RGAisle/EnemyAI15 檔頭的 T-ID 待下一切片一併補。
 
 ### R3 — 2026-09-12 — Codex — 對象 v1.2 @ 1097c86 — **不通過**
@@ -301,20 +304,32 @@ R2 落實度：資料閘、pickups 讀表、鉤子、§1.1 命令＝已落實；
 - 雕像：新 `build_statue_table` → shop.json `statues`（7 座 statue_01..07，非文件先前寫的 5 座；item_value 15、body/light 貼圖與 y 偏移全由預製件讀出）；`GameData::FindStatue`；GameScene 刪除 `kStatueBodySprite`/`kStatueCost`；`kStatueName` 標 PORT CHOICE T-14；StatueTest 讀表斷言；資料閘加 statues 檢查。
 - 分波時序：抽出 `include/game/WaveScheduler.hpp`（Plan/TakeWave/NotifyRoomEmpty/Tick/Done，kPartDelayMs 800）；GameScene 改用；WaveSchedulerTest 5 例（24→9/9/6；房未空不放；790 ms 不放、800 ms 放；1 隻；parts 0→1）。log 字串逐字不變。
 - T-26 引用補進 EnemyMaker.hpp 與 SimConfig.hpp；T-14 補進 kStatueName 註解。
-- §2/§3：P7/P8 改六欄；所有未開始項加「未驗收」；非目標移出階段表。
+- §2/§3：P7/P8 改七欄；所有未開始項加「未驗收」；非目標移出階段表。
 - §10 附件：`docs/evidence/v1.3/`（H1–H7 log、ctest、gate、H5.png、r2_boss3.png、head.txt）與 `tools/evidence_chain.sh <tag>` 入倉庫。
 - P3.0 稽核（scout 報告）：`kDataSpeedToPxPerSec = 15` 無來源依據；武器圖集 PPU 16、渲染 2×→32 px/單位＝kCellPx；15 可能誤取自 ortho 7.5×2；反編譯 RGBullet__SetBulletVelocity 為 stub（T-26）。改 32 會讓所有子彈／敵人／磁吸速度變 2.13 倍並動到兩個釘 15 的測試——**待使用者裁決**後做 P3.0 收尾。
 - 未做：分波 waveSize＝level×3 的語意（this_count 預製件）仍為 INFERRED（沿用既有 GameScene 解讀，H3 log 相符）。
+
+### R4 — 2026-09-12 — Codex — 對象 v1.3 @ 458c595 — **不通過**
+R3 落實度：FALLBACK 十項、雕像讀表、分波純測試、T-14/T-26、§10 附件入庫＝已落實；EnemyMaker 檔頭（FAITHFUL 段仍含選敵／consume）、§2 P8 狀態、腳本無 statue 步驟＝部分。
+新發現：WaveScheduler 聲稱的 `EnemyDead → Invoke("CreatePart", 0.8f)` 在匯出中找不到，可見的 0.8 s 呼叫在 CreatePart（682285–682290）；GameScene.cpp:1925 生成點公式 `(N×(serial×7+3)) % N` 恆為 0；H3 真實順序與文件不符；boss 截圖未涵蓋整房。
+§7：1 ✗ 2 ✓ 3 ✓（靜態）4 ✓（靜態）5 ✗ 6 ✗ 7 ✓ 8 ✗。P3.0 意見：不同意「已證實必須改 32」，同意 15 無依據；改值也動磁吸範圍與散射。
+**回覆（v1.4）**：
+- 改讀 `game_typed.c`（帶型別）後分波語意重寫為 FAITHFUL：`EnemyDead`（73138–73185）this_count-- → 為 0 且 enemy_point>0 時**立即** CreatePart，否則 OnGameStateChange(2)＝清房；`CreatePart`（78030–78084）每波 max_room_size = level×3 隻，part≥1 時 Invoke 0.8 s＝ShowUpEffect 音效（T-29，NOT PORTED）。WaveScheduler 去掉 800 ms 閘門，測試改為「房空的第一個 tick 放波」；boss 房 `level 0, this_count 1` 語意寫入註解。
+- 生成點索引修為 `(serial×7+3) % N`（PORT CHOICE T-04）；EnemyMaker.hpp 檔頭只留可見段，選敵／扣點移到 INFERRED (T-04)，T-05 旗標命名 `random_room`。
+- §1.1 H3 依真實順序改寫；新增 H8 雕像案例與整房截圖案例；`SK_ZOOM` 鉤子；`tools/evidence_chain.sh` 加 statue 步驟、`pipefail`、每案 `timeout 120`、整房截圖 `r2_boss3_full.png`。
+- §2 P8 改「進行中」；「六欄」改「七欄」。
+- 整房截圖過程發現 v1.3 的 r2_boss3 截圖拍錯房（見 §10 更正）；`SK_ROOM_TELEPORT` 補 level-0 房的中央傳送與鏡頭對齊。
+- P3.0：32 改寫為待驗證假設並列完整影響範圍（§3 P3.0）；裁決仍待使用者。
 
 ---
 
 ## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生）
 
-v1.3（`docs/evidence/v1.3/`；`head.txt` = 建置時的基底 commit 1097c86，本版變更尚未提交時實跑；提交後 HEAD 見 git log）：
-- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2015`（+5 WaveSchedulerTest、+1 StatueTest；golden 含在內）。
+v1.4（`docs/evidence/v1.4/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
+- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2016`（WaveSchedulerTest 6 例、StatueTest 讀表；golden 含在內）。
 - 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`。
-- H1–H7：`H1.txt` … `H7.txt`、`H2neg.txt`（反例 = 1）；截圖 `H5.png`。摘錄：H1 `hero c12 on floor 0` → `Level B1 (1-1) … pool 5 species` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `level 3 points 25 -> 24 planned, wave size 9` → `part spawned 9 (15 pending)` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`（WaveScheduler 重構後逐字相同）；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` … `ex_miner03 dropped 6 pickups (coins 4 energy 16)`；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 -- hero c01 time 0:00:05 kills 0 coins 0 gems +0`；H6 `vending_machine_i … health_pot_big for 10` → `bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180`；H7 `Level B5` → `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`。
-- 雕像讀表：`statue.txt`（`SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100`）= `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
-- V-S r2_boss3：`r2boss3_seed.txt`、`r2_boss3.png`（seed 1、floor 9、room 3；對照 boss_rooms.json r2_boss3 21×21、box03 ×16、rail ×4（y=0）、obj22_stone ×4、dropped_outside 4；r2_boss4 dropped 6；rail/obj22_stone 為 P1.8 內嵌預製件尚未繪製）。
+- H1–H8：`H1.txt` … `H7.txt`、`H2neg.txt`（=1）、`statue.txt`；截圖 `H5.png`。摘錄：H1 `hero c12 on floor 0` → `Level B1 (1-1) … pool 5 species` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`（分波改為立即後 log 逐字不變）；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` … `ex_miner03 dropped 6 pickups (coins 4 energy 16)`；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1 -- hero c01 time 0:00:03 kills 0 coins 0 gems +0`；H6 `bought health_pot_big for 10 (+4 hp, +0 energy) -> hp 6 energy 180`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
+- V-S r2_boss3：`r2boss3_seed.txt`（`… SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2_boss3_full.png`（SK_ZOOM 0.6 整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體（底座＋頂蓋兩層）；obj22_stone ×4（(6,6)(6,14)(14,6)(14,14)）與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）；boss 站房中央、門在下與右。**更正**：v1.3 的 `r2_boss3.png` 其實拍到的是起始房——當時 `SK_ROOM_TELEPORT` 對無生成點的 level-0 房（boss／傳送門房）靜默跳過；本版改為傳到房中央並即時對齊鏡頭，log 明示 `spawn point / centre / skipped`。
 
-v1.2 紀錄（1097c86，未入倉庫的本機實跑，摘錄保留）：ctest `100% tests passed, 0 tests failed out of 2009`；gate `GREEN -- 0 errors, 8 warning(s)`；H1–H7 log 與 v1.3 相同格式（見上一版文件歷史 `git show 1097c86:docs/MASTER_PLAN.md`）。
+v1.3（458c595，`docs/evidence/v1.3/`）：ctest 2015/2015、gate GREEN、H1–H7、statue、r2_boss3.png（局部）。
+v1.2（1097c86，本機實跑未入庫）：ctest 2009/2009、gate GREEN。

@@ -1,0 +1,5 @@
+ [info] Level B5 (1-5) biome 1-ice chest_level 2 map_long 4 pool 15 species
+ [info] BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)
+ [info] Boss defeated!
+ [info] Chest: boss chest chest_boss13 (tier 2, 1 signature weapon(s))
+ [info] TransferGate: open in room 6 at (1312,-3936)

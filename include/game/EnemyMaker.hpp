@@ -20,10 +20,17 @@ namespace Game {
  *   level 1 -> [8,15)   level 2 -> [15,24)  level 3 -> [24,36)
  *   level 4 -> [36,44)  level 5 -> [44,52)  level >= 6 -> 60 (no draw)
  *   level -1 -> 9999 (endless)  level 0 -> nothing spawns
- * CreatePart then instantiates enemies until the budget is spent, each pick
- * charging its RGEController.consume. (The pool pick itself is
- * `enemy_list[Range(0, count)]` on MapManager's weighted list -- duplicates in
- * enemy_list ARE the weights.)
+ * `max_room_size = level*3 + max_room_size` (game_typed.c:77871-77990; the
+ * serialized field is 0 on r1_* rooms) -- each part holds level*3 enemies.
+ *
+ * INFERRED (T-04): EnemyMaker__CreatePart @ game_typed.c:78030-78084 spends
+ * the budget into `this_count` via a do/while that creates enemies until
+ * `enemy_point`/`room_size` is exhausted, but CreateEnemy's body is truncated
+ * right after `rg_random.Range(0, 200)` -- exactly how each pick charges
+ * consume, and the `pick = enemy_list[Range(0, count)]` draw against
+ * MapManager's weighted list (duplicates in enemy_list ARE the weights), are
+ * not recovered from the decompile. PlanRoomSpawns below is this port's
+ * stand-in for that loop.
  *
  * NOT visible (T-26 Ghidra truncation after the singleton call): the body of
  * the big-room level bump. See EnemyMakerLevel below -- INFERRED (T-05).
@@ -41,11 +48,11 @@ inline std::pair<int, int> EnemyPointRange(int level) {
     }
 }
 
-/// INFERRED (T-05): StartEnemyMaker @ game_full.c:682128-682152 gates on a
-/// room flag (RGRoomX+0x28 != 0) and level > 0, then tests room_width (+0x14)
-/// > 15 and > 21 and room_height (+0x18) > 15 and > 21 in nested blocks whose
-/// bodies were truncated; the port reads each passed test as +1 level. The flag
-/// and the exact increments are not recovered.
+/// INFERRED (T-05): EnemyMaker__StartEnemyMaker @ game_typed.c:77871-77990
+/// gates the big-room bump on `the_room.random_room && level > 0`, then tests
+/// room_width (+0x14) > 15 and > 21 and room_height (+0x18) > 15 and > 21 in
+/// nested blocks whose bodies were truncated; the port reads each passed test
+/// as +1 level. The exact increments are not recovered.
 inline int EnemyMakerLevel(int stage, int roomWidth, int roomHeight) {
     if (stage <= 0) {
         return stage;

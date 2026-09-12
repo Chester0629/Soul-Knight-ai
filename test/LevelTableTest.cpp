@@ -171,20 +171,26 @@ TEST(WaveSchedulerTest, NoWaveReleasedWhileRoomNotEmpty) {
         EXPECT_TRUE(sched.Tick(1000.0F, /*roomEmpty=*/false).empty());
     }
     EXPECT_EQ(sched.pending.size(), 15u);
-    EXPECT_LT(sched.timerMs, 0.0F); // never armed while the room isn't empty
 }
 
-TEST(WaveSchedulerTest, WaveReleasedOnlyAfterPartDelayElapses) {
+TEST(WaveSchedulerTest, WaveReleasedOnFirstEmptyTickNotBefore) {
+    // FAITHFUL: EnemyMaker.EnemyDead -> CreatePart() fires immediately (no
+    // timer) once the part's last enemy dies (game_typed.c:73138-73185).
     Game::WaveScheduler sched;
     sched.Plan(MakePicks(6), 3);
     sched.TakeWave(); // first wave: 3 pending, 3 left
-    sched.NotifyRoomEmpty();
-    EXPECT_GT(sched.timerMs, 0.0F);
-    EXPECT_TRUE(sched.Tick(790.0F, /*roomEmpty=*/true).empty());
-    EXPECT_EQ(sched.pending.size(), 3u); // still queued, timer not expired yet
-    const auto wave2 = sched.Tick(10.0F, /*roomEmpty=*/true);
+    EXPECT_TRUE(sched.Tick(16.0F, /*roomEmpty=*/false).empty()); // still hostile: no release
+    EXPECT_EQ(sched.pending.size(), 3u);
+    const auto wave2 = sched.Tick(16.0F, /*roomEmpty=*/true); // first empty tick: released now
     EXPECT_EQ(wave2.size(), 3u);
     EXPECT_EQ(sched.pending.size(), 0u);
+    EXPECT_TRUE(sched.Done());
+}
+
+TEST(WaveSchedulerTest, BossStylePlanIsDoneImmediately) {
+    // Boss-room prefabs serialize level: 0, this_count: 1 -- no picks, no parts.
+    Game::WaveScheduler sched;
+    sched.Plan({}, 0);
     EXPECT_TRUE(sched.Done());
 }
 

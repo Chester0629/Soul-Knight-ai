@@ -869,9 +869,10 @@ void GameScene::OnEnter() {
                 // MAP M1: the original EnemyMaker over the level's REAL spawn pool.
                 // FAITHFUL @ MapManager.enemy_list (weighted: duplicates are the
                 // weights) + EnemyMaker.StartEnemyMaker (level -> enemy_point budget,
-                // big-room bump) + CreatePart (spend the budget, charging each
-                // pick's RGEController.consume). Badass (type 3) rooms add one elite
-                // from ex_enemy_list (always_badass). The maker draws from its OWN
+                // big-room bump) + CreatePart (spend the budget into this_count;
+                // INFERRED (T-04) how each pick charges consume -- CreateEnemy is
+                // truncated after rg_random.Range(0, 200)). Badass (type 3) rooms add
+                // one elite from ex_enemy_list (always_badass). The maker draws from its OWN
                 // stream (m_FloorSeed + 1500 + room) so map/combat replay is untouched.
                 // Falls back to the chapter mob pool when the level table is absent.
                 std::vector<std::string> pool;
@@ -1212,7 +1213,14 @@ void GameScene::OnEnter() {
     // 15 world units tall -> 48 px per unit at 720p. Cells are kCellPx (32) px per
     // unit, so zoom = 48 / 32 = 1.5 (was 2.5: the map showed only 16 units across
     // instead of the original's 26.7).
-    m_Camera.SetZoom(48.0F / kCellPx);
+    float zoom = 48.0F / kCellPx;
+    // SK_ZOOM test hook (env, NO-OP if unset): override the camera zoom for
+    // headless whole-room proof screenshots only; default behaviour is unchanged.
+    if (const char *zv = std::getenv("SK_ZOOM")) {
+        zoom = static_cast<float>(std::atof(zv));
+        LOG_INFO("GameScene: SK_ZOOM override {}", zoom);
+    }
+    m_Camera.SetZoom(zoom);
     LOG_INFO("GameScene: multi-room floor ready");
 }
 
@@ -1418,10 +1426,23 @@ void GameScene::Update(float dtMs) {
         m_Player->m_Transform.translation = m_GatePos; // SK_GATE_TELEPORT test hook
     }
     if (m_RoomTeleportFrame >= 0 && m_Frame == m_RoomTeleportFrame && m_RoomTeleportRoom >= 0 &&
-        static_cast<std::size_t>(m_RoomTeleportRoom) < m_Waves.size() &&
-        !m_Waves[static_cast<std::size_t>(m_RoomTeleportRoom)].points.empty()) {
+        static_cast<std::size_t>(m_RoomTeleportRoom) < m_Waves.size()) {
         const auto &pts = m_Waves[static_cast<std::size_t>(m_RoomTeleportRoom)].points;
-        m_Player->m_Transform.translation = pts[pts.size() / 2]; // SK_ROOM_TELEPORT
+        if (!pts.empty()) {
+            m_Player->m_Transform.translation = pts[pts.size() / 2]; // SK_ROOM_TELEPORT
+            m_Camera.SetPosition(m_Player->Position()); // snap: proof shots may land on this frame
+            LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} spawn point", m_RoomTeleportRoom);
+        } else if (m_RoomTeleportRoom == m_GateRoom) {
+            // Level-0 makers (boss / gate rooms) have no spawn points: use the
+            // room's centre cell, which the gate placement already computed.
+            m_Player->m_Transform.translation = m_GatePos;
+            m_Camera.SetPosition(m_Player->Position());
+            LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} centre (no spawn points) at ({},{})",
+                     m_RoomTeleportRoom, m_GatePos.x, m_GatePos.y);
+        } else {
+            LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} skipped (no spawn points)",
+                     m_RoomTeleportRoom);
+        }
     }
     if (m_GateBesideFrame >= 0 && m_Frame == m_GateBesideFrame) {
         m_Player->m_Transform.translation = m_GatePos + glm::vec2{0.0F, -64.0F}; // SK_GATE_BESIDE
@@ -1555,8 +1576,11 @@ void GameScene::Update(float dtMs) {
     }
     for (std::size_t i = 0; i < m_RoomLife.size(); ++i) {
         // MAP M1: a room with parts still queued is NOT clear -- the next part
-        // spawns 0.8 s after the previous one died (EnemyMaker.EnemyDead ->
-        // Invoke("CreatePart", 0.8f)).
+        // spawns on the first tick the room has no live hostile, no delay
+        // (FAITHFUL: EnemyMaker.EnemyDead -> CreatePart() immediately,
+        // game_typed.c:73138-73185; the 0.8 s Invoke in CreatePart is a
+        // show-up SOUND cue for later parts, not a spawn gate -- see
+        // WaveScheduler::kShowUpEffectDelayMs, NOT PORTED T-29).
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
             !RoomHasLiveHostile(static_cast<int>(i)) && i < m_Waves.size() &&
             !m_Waves[i].wave.pending.empty()) {
@@ -1922,8 +1946,10 @@ void GameScene::SpawnWaveBatch(int roomIndex, const std::vector<std::string> &ba
     }
     for (const std::string &id : batch) {
         // Spread this part over the room's spawn points (serial-indexed stride).
-        const std::size_t pi = (wv.points.size() * static_cast<std::size_t>(wv.serial * 7 + 3)) %
-                               wv.points.size();
+        // PORT CHOICE (T-04): point spread is the port's stride; the original's
+        // spawn placement is in the truncated CreateEnemy.
+        const std::size_t pi =
+            static_cast<std::size_t>(wv.serial * 7 + 3) % wv.points.size();
         SpawnEnemy(id, wv.points[pi], roomIndex, wv.serial);
         ++wv.serial;
     }
