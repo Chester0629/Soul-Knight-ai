@@ -49,12 +49,12 @@ echo "=== CTEST ==="
 ctest --test-dir build -C Debug -E Tests_NOT_BUILT > "$E/ctest.log" 2>&1 || fail "ctest"
 grep -E "tests passed|tests failed" "$E/ctest.log" | tee "$E/ctest.txt"
 [ -s "$E/ctest.txt" ] || fail "ctest produced no summary line"
-grep -q "0 tests failed" "$E/ctest.txt" || fail "ctest reports failures"
+grep -qE "^100% tests passed, 0 tests failed" "$E/ctest.txt" || fail "ctest reports failures"
 echo "=== GATE ==="
 python tools/validate_data.py > "$E/gate.log" 2>&1 || fail "validate_data"
 tail -1 "$E/gate.log" | tee "$E/gate.txt"
 grep -q "GATE: GREEN" "$E/gate.txt" || fail "gate not GREEN"
-[ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${FAILS[*]})"; exit 1; }
+[ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]} $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"; exit 1; }
 echo "=== WARM-UP (first launch of a fresh build can take minutes: AV scan / shader cache) ==="
 WSTART=$(date +%s)
 env SK_SKIP_MENU=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1 || fail "warm-up exited $?"
