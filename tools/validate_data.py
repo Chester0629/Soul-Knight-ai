@@ -115,6 +115,86 @@ def main() -> int:
             warnings.append(f"{len(no_catalog)} dropped weapons have no intro-text "
                             f"entry in weapon_catalog (catalog is a subset; ok)")
 
+    # --- P1.11: map / shop tables (MASTER_PLAN section 1 V-G) -------------------
+    levels = load("levels")
+    boss_rooms = load("boss_rooms")
+    boss_chests = load("boss_chests")
+    shop = load("shop")
+    enemy_ids = {e.get("id") for e in (enemies or [])}
+    weapon_ids = {w.get("id") for w in (weapons or [])}
+    if levels is not None:
+        need(len(levels) == 31, "levels: expected exactly 31 map_manager levels")
+        expect_keys(levels, ["id", "level", "chapter", "stage", "biome", "chest_level",
+                             "map_long", "floors", "walls", "obstacles", "rooms",
+                             "enemies", "ex_enemies"], "level")
+        seen = set()
+        for lv in levels:
+            lid = lv.get("id", "?")
+            if lid in seen:
+                errors.append(f"level '{lid}' duplicated")
+            seen.add(lid)
+            if len(lv.get("floors", [])) != 6:
+                errors.append(f"level '{lid}' floors must have 6 variants")
+            n_obs = len(lv.get("obstacles", []))
+            if n_obs != 12 and not (lid == "G1" and n_obs <= 12):
+                errors.append(f"level '{lid}' obstacle_list must have 12 slots (G1 may have fewer)")
+            if not (1 <= lv.get("map_long", 0) <= 8):
+                errors.append(f"level '{lid}' map_long out of range: {lv.get('map_long')}")
+            for pool in ("enemies", "ex_enemies"):
+                missing = sorted({eid for eid in lv.get(pool, []) if eid not in enemy_ids})
+                if missing:
+                    # T-27: the MapManager pool can reference a prefab that lives outside
+                    # res/enemy (ex_orc05 is under Assets/GameObject) and is therefore
+                    # absent from enemies.csv; the scene substitutes the AI01
+                    # representative. Reported, not fatal, until P1.10 re-keys it.
+                    warnings.append(f"level '{lid}' {pool} references species missing from "
+                                    f"enemies.json (T-27): {', '.join(missing)}")
+            if lv.get("stage") != 6 and lid != "G1" and not lv.get("enemies"):
+                errors.append(f"level '{lid}' has an empty enemy pool")
+    if boss_rooms is not None:
+        rooms = boss_rooms.get("rooms", {})
+        prefabs = boss_rooms.get("prefabs", {})
+        need(len(rooms) == 14, "boss_rooms: expected 14 r<C>_boss<N> layouts")
+        for rid, r in rooms.items():
+            w, h = r.get("w", 0), r.get("h", 0)
+            for o in r.get("objects", []):
+                if not (0 <= o.get("x", -1) < w and 0 <= o.get("y", -1) < h):
+                    errors.append(f"boss room '{rid}' object {o} outside {w}x{h}")
+                    break
+                if o.get("p") not in prefabs:
+                    errors.append(f"boss room '{rid}' object prefab '{o.get('p')}' has no skin entry")
+                    break
+        unresolved = [p for p, sk in prefabs.items() if not sk.get("sprite")]
+        if unresolved:
+            warnings.append(f"{len(unresolved)} boss-room prefabs without a sprite (P1.8): "
+                            f"{', '.join(sorted(unresolved))}")
+        # every level's boss-floor type2 room must exist in boss_rooms
+        for lv in levels or []:
+            if lv.get("stage") == 5:
+                for rid in lv.get("rooms", {}).get("type2", []):
+                    if rid not in rooms:
+                        errors.append(f"level '{lv.get('id')}' boss room '{rid}' missing from boss_rooms")
+    if boss_chests is not None:
+        for cid, c in boss_chests.items():
+            for wid in c.get("weapons", []):
+                if wid not in weapon_ids:
+                    errors.append(f"boss chest '{cid}' signature weapon '{wid}' unknown")
+    if shop is not None:
+        pots = shop.get("pots", {})
+        machines = shop.get("machines", {})
+        need(len(pots) >= 4, "shop: expected >= 4 pots")
+        need("vending_machine_i" in machines and "vending_machine_w" in machines,
+             "shop: both vending machines required")
+        for mid, m in machines.items():
+            for item in m.get("items", []):
+                if item not in pots:
+                    errors.append(f"machine '{mid}' sells unknown pot '{item}'")
+            if m.get("price", -1) < 0:
+                errors.append(f"machine '{mid}' price missing")
+        for pid, p in pots.items():
+            if p.get("hp", 0) <= 0 and p.get("energy", 0) <= 0:
+                errors.append(f"pot '{pid}' restores nothing")
+
     # --- reference-resolution report (non-fatal) ---
     if weapons:
         unres = count_unresolved(weapons)

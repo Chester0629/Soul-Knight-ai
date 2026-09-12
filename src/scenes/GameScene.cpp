@@ -1970,8 +1970,10 @@ void GameScene::SpawnReward(bool isBoss, std::uint32_t entityId, glm::vec2 pos) 
     if (def == nullptr) {
         return;
     }
-    // FAITHFUL: RGEController.GetReward -- rg_random.Range(0,100) < reward_rate, then
-    // reward_value[4] counts of [gold, silver, copper, energy].
+    // INFERRED (T-18): RGEController.GetReward -- the decompilation shows only
+    // rg_random.Range(0,100) before the singleton call truncates it; the
+    // `< reward_rate` gate and the reward_value[4] = [gold, silver, copper, energy]
+    // count layout are inferred (PrefabManager.GetCoin 0..2 clamp, PrefabName.energy).
     const std::vector<RewardDrop> drops = RollEnemyReward(*def, m_RewardRng);
     if (drops.empty()) {
         return;

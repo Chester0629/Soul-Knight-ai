@@ -698,6 +698,7 @@ def build_boss_rooms():
                     parent[go.group(1)] = fa.group(1) if fa else None
                     tf2go[pid] = go.group(1)
         objects = []
+        dropped = []
         for go, n in names.items():
             pgo = tf2go.get(parent.get(go) or "", "")
             if names.get(pgo, "") != "wall_group":
@@ -708,13 +709,19 @@ def build_boss_rooms():
             x, y = pos[go]
             cx = int(round(x - 20 + (w - 1) / 2.0))
             cy = int(round(y - 20 + (h - 1) / 2.0))
+            if not (0 <= cx < w and 0 <= cy < h):
+                # T-28: objects placed in the doorway band outside the w x h grid
+                # (r2_boss3/4 'rail' at y=21) belong to the aisle, which the port's
+                # RoomGen owns; recorded and skipped.
+                dropped.append({"p": base, "x": cx, "y": cy})
+                continue
             objects.append({"p": base, "x": cx, "y": cy})
             if base not in prefabs:
                 sp = _prefab_sprites(by_name.get(base), idx)
                 prefabs[base] = {"sprite": sp[0] if sp else "", "alt": sp[1] if len(sp) > 1 else "",
                                  "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base)}
         objects.sort(key=lambda o: (o["x"], o["y"], o["p"]))
-        rooms[f.stem] = {"w": w, "h": h, "objects": objects}
+        rooms[f.stem] = {"w": w, "h": h, "objects": objects, "dropped_outside": dropped}
     return {"rooms": rooms, "prefabs": prefabs} if rooms else None
 
 

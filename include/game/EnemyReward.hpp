@@ -49,7 +49,8 @@ struct RewardDrop {
 /// Bosses carry reward_rate 100 so they always pay out.
 inline std::vector<RewardDrop> RollEnemyReward(const EnemyDef &def, RGRandom &rng) {
     std::vector<RewardDrop> out;
-    // FAITHFUL: RGEController__GetReward -- RGRandom.Range(0,100) vs reward_rate.
+    // INFERRED (T-18): RGEController__GetReward shows RGRandom.Range(0,100) then is
+    // truncated by the singleton call; the `< reward_rate` compare is inferred.
     if (rng.Range(0, 100) >= def.rewardRate) {
         return out;
     }
