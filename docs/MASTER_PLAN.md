@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.7（2026-09-13；R7 通過後小版號 +1，見 §9）
+> 版本：v1.8（2026-09-13；P1.10 升版切片，待 Codex R8）
 
 ---
 
@@ -28,10 +28,10 @@
 | weapons.json（194） | `data_tables/weapons.csv` + 預製件圖示 | 1.7.10 | 退回 1.07 的 46 類別表 | 1.7.10 |
 | sprites.json / tiles | Animator→clip→sprite | 1.7.10 | 缺則佔位圖 | 1.7.10 |
 | levels / boss_rooms / boss_chests / shop（pots/machines/**statues**）/ pickups.json | `res/map_manager`、`rgprefab/rooms`、`res/item`、`rgprefab/room/event`、`rgprefab/room/statue`、`res/register` | 1.7.10 | 不產生檔案；執行期：levels 缺→固定 ice 路徑；boss_rooms 缺→借 r1_* 布局；boss_chests/shop 缺→該房無內容並 log；**pickups 缺→掉落值全 0＝不掉落**（GameData log `pickups.json absent`） | 1.7.10 |
-| bullets / bosses / buffs / enemy_guns.json | `1.07/MonoBehaviour` 舊 dump | **1.07** | — | 待升版（P1.10） |
-| droptables / weapon_catalog.json | `1.07/TextAsset` | 1.07 | — | 待升版（P1.10） |
+| bullets（203）/ bosses（16）/ buffs（12）/ enemy_guns（10）.json | 類別列：`<Class>.cs.meta` guid → 路徑序第一個帶該元件的 1.7.10 預製件（T-30）；bullets 另有每預製件列（178/256，`rgprefab/bullet`） | 1.7.10（每筆 `_source`） | 退回 `1.07/MonoBehaviour` 類別表並印 FALLBACK | 1.7.10（P1.10） |
+| droptables / weapon_catalog.json | `EP/Resources/chest_data.txt`、`weapon_introduce.txt`（與 1.07 逐位元相同） | 1.7.10 | 退回 `1.07/TextAsset` | 1.7.10（P1.10） |
 
-**降級條件**：退化只在 `../_reverse` 缺席的乾淨 checkout 觸發，`build_gamedata.py` 對每張退化或未產生的表印 `FALLBACK: <table> …`（weapons、enemies、characters、sprites、levels、boss_rooms、boss_chests、shop、statues、pickups 十處）；標「驗收完成」的階段其表必須是 1.7.10 來源。
+**降級條件**：退化只在 `../_reverse` 缺席的乾淨 checkout 觸發，`build_gamedata.py` 對每張退化或未產生的表印 `FALLBACK: <table> …`（weapons、enemies、characters、sprites、levels、boss_rooms、boss_chests、shop、statues、pickups、bullets、bosses、buffs、enemy_guns、droptables、weapon_catalog 十六處）；標「驗收完成」的階段其表必須是 1.7.10 來源。
 
 **非目標**（不列入階段表）：多人連線、IAP／廣告、雲端存檔、Google Play 成就、季節 boss（Nian）。
 **法律框架**：解包素材屬 ChillyRoom，僅供課堂演示；`Resources/sprites` 已列入 `.gitignore`。
@@ -43,7 +43,7 @@
 | 代號 | 方式 | 指令 / 位置 | 用途與限制 |
 |---|---|---|---|
 | V-T | GoogleTest | `cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug` → `cmake --build build --config Debug --target SoulKnightTests` → `ctest --test-dir build -C Debug -E Tests_NOT_BUILT` | 每次驗收附**測試報告行**與 commit（§10）。基準（a3bb557）：`grep -c "^TEST(" test/*.cpp` = 2009 巨集 / 141 檔；執行數以 ctest 輸出為準。 |
-| V-G | 資料閘 | `python tools/validate_data.py`（pre-commit 亦執行；非 ASCII 檢查在 pre-commit hook） | 檢查 weapons/bullets/enemies/bosses/buffs/catalog/droptables/characters + levels（31、6 地板、12 障礙、敵池引用；**未知 id 為錯誤，只豁免 T-27 列名的 ex_orc05**）、boss_rooms（14、界內、皮膚、boss 層房存在）、boss_chests、shop（pots/machines/statues：7 座、cost>0、index 唯一、貼圖存在）、pickups（四種皆有 value/speed/range/frames）。 |
+| V-G | 資料閘 | `python tools/validate_data.py`（pre-commit 亦執行；非 ASCII 檢查在 pre-commit hook） | 檢查 weapons/bullets/enemies/bosses/buffs/catalog/droptables/characters + levels（31、6 地板、12 障礙、敵池引用；**未知 id 為錯誤，只豁免 T-27 列名的 ex_orc05**）、boss_rooms（14、界內、皮膚、boss 層房存在）、boss_chests、shop（pots/machines/statues：7 座、cost>0、index 唯一、貼圖存在）、pickups（四種皆有 value/speed/range/frames）、六張升版表的 `_source` 標記與 weapon→bullet／boss→bullet／enemy_class→bosses 交叉引用（未解析為 warning，見 T-31）。 |
 | V-D | 資料對照 | §1.2 固定樣本 | 每個資料階段至少 5 筆「來源:欄位 → 預期 → JSON」＋全表檢查。 |
 | V-H | 無頭鉤子 | §1.1 案例（命令、seed、幀數、預期 log、逾時） | 只證明路徑可達與 log 順序；不證明正常遊玩（見 V-P）。實跑 log 存 §10。 |
 | V-P | 實玩紀錄 | 人工遊玩＋截圖／錄影＋seed | 「可玩」驗收必附。 |
@@ -74,6 +74,7 @@
 - levels：B1 (1-1, chest 1, map_long 3, f601..f606, wall602/wall601)；B5 type2=[r1_boss3,r1_boss4,r1_boss6]；C1 (2-1, chest 3, f201..)；G1 (3-6, map_long 1, type2=[r_end])。
 - boss chests：chest_boss01 level 2 weapon_077；chest_boss13 weapon_175；無 chest_boss05/06/11/12。
 - pickups：coin_0 value 5 speed 20 range 6 frames objects_common_31..34；coin_1 3；coin_2 1；energy value 8 speed 14；_rgcoin.friction 0.9。
+- P1.10（詳 `docs/evidence/p1_10_diff.md`）：`GameObject/ex_orc05.prefab` RoleAttribute.max_hp=50、EGun001.bullet_speed=16（1.07 為 10）；`rgprefab/buff/buff_statue_1.prefab` BuffStatue01.speed=12、count=4（1.07 為 24、1）；`res/enemy/1-forest/boss07.prefab` BossAI07.bullet01=bullet_e_24；`rgprefab/bullet/bullet_0.prefab` RGBullet.destroy_time=5；`res/enemy/e_battery01.prefab` EGun008.atk=5。
 - statues：7 座 statue_01..07，item_value 皆 15；底座 objects3_6、光 objects3_7 @ y 0.69375；身體 1→objects3_0、2→objects3_3、3→objects3_2、4→objects3_1、5→objects3_4、6→objects3_5、7→objects3_3 @ y 1.1。
 
 ---
@@ -82,7 +83,7 @@
 
 | 區塊 | 功能 | 驗收 | 主要 commit | 缺口 |
 |---|---|---|---|---|
-| P1 資料層 | 進行中（P1.1–P1.7、P1.11、P1.12 功能完成） | 未驗收 | 12c3750 … 1097c86、本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.10 四張表仍為 1.07 |
+| P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | 未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
 | P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
 | P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain 完成；P3.0 稽核完成待裁決） | 未驗收 | phase 1–5 | P3.0 裁決、P3.1–P3.9 |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
@@ -107,7 +108,8 @@
 | P1.7 boss 房／寶箱／商店表 | 14 房、11 箱、8 藥水 3 機器 | rgprefab/rooms、res/item、room/event | boss_rooms/boss_chests/shop.json | BossRoomTest、ShopTest、V-G | T-08 T-28 | 功能完成・未驗收 |
 | P1.8 內嵌物件 | rail/stone02/carpet/obj22_house/table/stone | *_boss*.prefab 子物件 m_Sprite | boss_rooms.json prefabs | BossRoomTest | — | 未開始・未驗收 |
 | P1.9 未解析掉落物 | mineral_obj、GetRoomReward、ChestXmlReader、GetPot/GetCoin | 反編譯（game_typed.c 交叉） | 對應 JSON | V-R | T-09 T-10 T-15 | 未開始・未驗收 |
-| P1.10 升版 | bullets/bosses/buffs/enemy_guns/droptables/catalog 改由 AssetRipper 產生；補 ex_orc05 | res/*、rgprefab/bullet、Assets/GameObject | 同名 JSON | V-D 全表 diff | T-27 | 未開始・未驗收 |
+| P1.10 升版 | 六表改由 AssetRipper 產生；補 ex_orc05（146 種）、撤資料閘豁免 | `<Class>.cs.meta` guid → 預製件 m_Script；rgprefab/bullet、res/enemy/**、rgprefab/buff、res/effect、GameObject/ex_orc05、Resources/*.txt | 同名 JSON（每筆 `_source`）、`docs/evidence/p1_10_diff.md` | V-D 五筆樣本＋全表計數 diff；GameDataTest（bullets 203、enemies 146、EGun001 speed 16）；V-G GREEN 6 warnings | T-27 已關；T-30 類別列取路徑序第一個實例；T-31 78 顆非 RGBullet 家族子彈與 59+18 個未解析引用 | 功能完成・未驗收 |
+| P1.13 每實例表 | 敵人各自的槍／子彈值（不再以類別代表）、非 RGBullet 家族子彈 | 各敵人預製件的槍子物件 | enemy_guns/bullets 每實例列＋ C++ 查表改鍵 | V-D、GameDataTest | T-30 T-31 | 未開始・未驗收 |
 | P1.11 資料閘擴充 | levels/boss_rooms/boss_chests/shop/pickups 進閘；未知引用為錯誤 | — | validate_data.py | V-G（GREEN，8 warnings） | T-27 | 功能完成・未驗收 |
 | P1.12 數值出 C++ | 掉落值、磁吸 speed/range、摩擦、幀清單 → pickups.json；雕像 cost／貼圖／偏移 → shop.json statues | res/register/coin_*、energy、coin_0.controller；rgprefab/room/statue/statue_01..07 | pickups.json、shop.json statues、GameData::FindPickup/FindStatue | EnemyRewardTest、StatueTest（讀表）、V-G | T-19（散射力度仍 PORT）；剩餘 C++ 常數＝幾何／鉤子 | 功能完成・未驗收 |
 
@@ -195,7 +197,7 @@
 
 1. **驗收補證據**（本版開始）：P1.6/P2.x/P4.1 依 §1 補測試報告、H 案例 log、樣本表，逐階段轉「驗收完成」。
 2. **P3.0 單位稽核**。
-3. **P1.10 升版** → **P3.1 → P3.2** buff。
+3. ~~P1.10 升版~~（v1.8 完成）→ **P3.1 → P3.2** buff。
 4. **P3.3.x** 技能逐角。
 5. **P5.3 最小存檔 → P4.2 → P4.3 → P4.4**。
 6. **P3.4、P3.5.x、P3.6.x**。
@@ -244,8 +246,10 @@
 | T-24 | RGAisle、EnemyAI15 只移植純邏輯，效果交場景層 | 部分 | RGAisle.hpp、EnemyAI15.hpp | 需登記接線位置 | P3.7 |
 | T-25 | 子彈 15 px/單位 vs 地圖 32 px/單位 | 未定 | SimConfig.hpp、GameScene kCellPx | 子彈速度 | P3.0 |
 | T-26 | Ghidra 單例呼叫後截斷（系統性） | — | EnemyMaker.hpp 檔頭、SimConfig.hpp（引用處） | 多處 INFERRED | game_typed.c / frida |
-| T-27 | ex_orc05 在 Assets/GameObject，enemies.csv 缺列；場景以 AI01 代表種替代；資料閘唯一豁免 | NOT PORTED（資料缺列） | validate_data.py、GameScene SpawnEnemy | A2–A5 精英池 | P1.10 |
+| T-27 | **已關（v1.8）**：ex_orc05 改由 `GameObject/ex_orc05.prefab` 直讀（max_hp 50、EnemyAI01），資料閘豁免撤除 | 已解 | build_gamedata.py build_ex_orc05_row | A2–A5 精英池 | — |
 | T-28 | boss 房門帶外物件（r2_boss3/4 的 rail，y=21）由抽取器丟棄並記錄 `dropped_outside` | PORT CHOICE | build_gamedata.py build_boss_rooms | 兩房各少數條軌道 | P2.11 |
+| T-30 | 類別鍵列（Bullet01／BossAI07／BuffArmor／EGun001…）的數值取自路徑序第一個使用該類別的 1.7.10 預製件；同類別其他實例可能不同（如 EGun001 取自 ex_orc05） | PORT CHOICE | build_gamedata.py `_first_prefab_by_guid` | 敵槍／子彈數值 | P1.13 |
+| T-31 | 78 顆非 RGBullet 家族子彈預製件（BulletFire/BulletGas…）未入表；59 個武器與 18 個 boss 的子彈引用指向表外預製件，資料閘降為 warning | NOT PORTED（資料） | validate_data.py 交叉引用檢查 | 對應武器／boss 的子彈行為 | P1.13 / P3.6 |
 | T-29 | CreatePart 在 part ≥ 1 時 `Invoke("ShowUpEffect", 0.8f)`（字串表有 ShowUpEffect、無 CreatePart；ShowUpEffect 只播音效 7）；分波本身無延遲 | NOT PORTED（音效）/ INFERRED（字串） | WaveScheduler.hpp kShowUpEffectDelayMs | 音效 | P6.7 |
 
 ---
@@ -346,10 +350,10 @@ Codex 對下一步的建議：P3.0 裁決後收尾（記錄選值依據；驗證
 
 ## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生；腳本把結尾 `STATUS: OK|FAILED` 與 UTC 時戳寫入 `status.txt`，只有 OK 的附件有效）
 
-v1.6（`docs/evidence/v1.6/`；`head.txt` = 建置時的基底 commit，提交後 HEAD 見 git log）：
+v1.8（`docs/evidence/v1.8/`；`head.txt` = 建置時的基底 commit 3fd1931，提交後 HEAD 見 git log）：
 - 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2016`。
-- 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`。
+- 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 6 warning(s)`（P1.10 後 warning 由 8 變 6：未解析 bullet/audio 引用改為交叉引用檢查）。
 - H1–H8：`H1.txt` … `H8.txt`、`H2neg.txt`（=1）；截圖 `H5.png`；`status.txt`。關鍵事件與 v1.4 相同（H7 摘錄上限改為 12 行，前面多出前幾層的 `TransferGate: open` 四行）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
 - V-S r2_boss3：`r2boss3_seed.txt`（含 `SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2boss3_full.txt`（含 `SK_ZOOM override 0.6`）、`r2_boss3_full.png`（整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體；obj22_stone ×4 與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）＝T-28；boss 在房中央、門在下與右。**更正（v1.4 起）**：v1.3 的 `r2_boss3.png` 拍到的是起始房（當時 `SK_ROOM_TELEPORT` 對 level-0 房靜默跳過）。
 
-v1.5（0f8ac9f）／v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.6 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。
+v1.6（e1507b0，R7 通過的附件，已由 v1.8 取代）／v1.5（0f8ac9f）／v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.6 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。

@@ -1,987 +1,542 @@
 [
   {
     "id": "BossAI01",
-    "clip_dead": {
-      "_unresolved_ref": -585019104860311462
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 0,
+    "_source": "1.7.10",
+    "prefab": "boss01",
     "enemy_id": "boss01",
     "ai_level": 2,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       3,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -9088751832340747206
-      },
-      {
-        "_unresolved_ref": -3123158867271594163
-      },
-      {
-        "_unresolved_ref": -2209677309484762270
-      },
-      {
-        "_unresolved_ref": -9095463867117027172
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": -4639916721810376167
-    },
-    "bullet02": {
-      "_unresolved_ref": 3439579882666292161
-    },
-    "bullet03": {
-      "_unresolved_ref": -4003164860427088165
-    },
-    "bullet04": {
-      "_unresolved_ref": -5551468238274934691
-    }
+    "bullet01": "bullet_e_1",
+    "bullet02": "bullet_e_7",
+    "bullet03": "bullet_e_28",
+    "bullet04": "bullet_e_26",
+    "bullet05": null,
+    "bullet06": null
   },
   {
     "id": "BossAI02",
-    "clip_dead": {
-      "_unresolved_ref": -6934713248656142022
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 0,
+    "_source": "1.7.10",
+    "prefab": "boss02",
     "enemy_id": "boss02",
     "ai_level": 2,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       3,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": 8270253285184107491
-      },
-      {
-        "_unresolved_ref": -4384598407450794922
-      },
-      {
-        "_unresolved_ref": 3277162434867069318
-      },
-      {
-        "_unresolved_ref": -1260882853918349079
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 132601163694926416
-    },
-    "bullet02": {
-      "_unresolved_ref": 4243032287337353236
-    },
-    "bullet03": {
-      "_unresolved_ref": -3361246727156836530
-    },
-    "bullet04": {
-      "_unresolved_ref": 5289248027382727229
-    },
-    "bullet05": {
-      "_unresolved_ref": -1962414025316494928
-    },
-    "bullet06": {
-      "_unresolved_ref": 3531261202003067347
-    }
+    "bullet01": "bullet_e_8",
+    "bullet02": "bullet_e_6",
+    "bullet03": "bullet_e_27",
+    "bullet04": "bullet_e_5",
+    "bullet05": "bullet_e_9",
+    "bullet06": "bullet_e_10"
   },
   {
     "id": "BossAI03",
-    "clip_dead": {
-      "_unresolved_ref": 553452161996654628
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 0,
+    "_source": "1.7.10",
+    "prefab": "boss03",
     "enemy_id": "boss03",
     "ai_level": 2,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       5,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -9088751832340747206
-      },
-      {
-        "_unresolved_ref": -3123158867271594163
-      },
-      {
-        "_unresolved_ref": -7532337425174709442
-      },
-      {
-        "_unresolved_ref": 4258533593997518355
-      },
-      {
-        "_unresolved_ref": -2092340568062327720
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": -4639916721810376167
-    },
-    "bullet02": {
-      "_unresolved_ref": 8639864595974338415
-    },
-    "bullet03": {
-      "_unresolved_ref": 5483590540257835671
-    },
-    "bullet04": {
-      "_unresolved_ref": -4427381684912627347
-    },
-    "bullet05": {
-      "_unresolved_ref": -5551468238274934691
-    }
+    "bullet01": "bullet_e_1",
+    "bullet02": "bullet_e_14",
+    "bullet03": "bullet_boss_03_atk3",
+    "bullet04": "e_skeleton02_temp",
+    "bullet05": "bullet_e_26",
+    "bullet06": null
   },
   {
     "id": "BossAI04",
-    "clip_dead": {
-      "_unresolved_ref": -4883873711199558326
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 0,
+    "_source": "1.7.10",
+    "prefab": "boss04",
     "enemy_id": "boss04",
     "ai_level": 2,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       5,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "angry_body": {
-      "_unresolved_ref": -5040360208012411159
-    },
-    "angry_hand": {
-      "_unresolved_ref": 1914582918067326315
-    },
-    "body_dead": {
-      "_unresolved_ref": -7918589440875004041
-    },
-    "boss_clip": [
-      {
-        "_unresolved_ref": 4451429287703896245
-      },
-      {
-        "_unresolved_ref": 5060242705679991099
-      },
-      {
-        "_unresolved_ref": -924262324297770388
-      },
-      {
-        "_unresolved_ref": 4316199098600088263
-      },
-      {
-        "_unresolved_ref": -501349891459713432
-      },
-      {
-        "_unresolved_ref": -8756931043346779590
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 3890393307674162708
-    },
-    "bullet02": {
-      "_unresolved_ref": -4639916721810376167
-    },
-    "bullet03": {
-      "_unresolved_ref": 3984425050175881195
-    },
-    "bullet04": {
-      "_unresolved_ref": 1916746441838400250
-    },
-    "bullet05": {
-      "_unresolved_ref": 132601163694926416
-    }
+    "bullet01": "bullet_e_13",
+    "bullet02": "bullet_e_1",
+    "bullet03": "bullet_e_3",
+    "bullet04": "explode_hit_player",
+    "bullet05": "bullet_e_8",
+    "bullet06": null
   },
   {
     "id": "BossAI05",
-    "clip_dead": {
-      "_unresolved_ref": -3724645176436309653
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
+    "_source": "1.7.10",
+    "prefab": "boss05",
     "enemy_id": "boss05",
     "ai_level": 1,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.3,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       5,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.3,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -376101342862570502
-      },
-      {
-        "_unresolved_ref": -1282512053643659004
-      },
-      {
-        "_unresolved_ref": -6174100370185083334
-      },
-      {
-        "_unresolved_ref": -5898441787356934763
-      },
-      {
-        "_unresolved_ref": 8184099885297121370
-      },
-      {
-        "_unresolved_ref": -5597006336623809759
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": -1732954443770473918
-    },
-    "bullet02": {
-      "_unresolved_ref": 3870113439987807993
-    },
-    "bullet03": {
-      "_unresolved_ref": -4849149366222569017
-    },
-    "bullet04": {
-      "_unresolved_ref": -4764358317164191251
-    },
-    "tentacle": {
-      "_unresolved_ref": -8396770086180913264
-    }
+    "bullet01": "bullet_e_17",
+    "bullet02": "bullet_e_18",
+    "bullet03": "Gas_boss5",
+    "bullet04": "bullet_e_20",
+    "bullet05": null,
+    "bullet06": null
   },
   {
     "id": "BossAI06",
-    "clip_dead": {
-      "_unresolved_ref": -6201922266148862781
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 0,
+    "_source": "1.7.10",
+    "prefab": "boss06",
     "enemy_id": "boss06",
     "ai_level": 1,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
-    "reward_value": [
-      5,
-      3,
-      0,
-      10
-    ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
+    "shoot_cd": 2,
+    "friction": 0,
     "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
+    "scout_rate": 1,
     "buff_immune": 0.3,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -8489294477021106069
-      },
-      {
-        "_unresolved_ref": -4333631859766836164
-      },
-      {
-        "_unresolved_ref": 4316199098600088263
-      },
-      {
-        "_unresolved_ref": 3277162434867069318
-      },
-      {
-        "_unresolved_ref": 1053594411552611365
-      }
-    ],
-    "ball_obj": "BossAI06Child",
-    "bullet01": {
-      "_unresolved_ref": 6129989709367142396
-    },
-    "bullet02": {
-      "_unresolved_ref": -8084564519669357716
-    },
-    "bullet03": {
-      "_unresolved_ref": 1553854395951415604
-    },
-    "bullet04": {
-      "_unresolved_ref": 2199362648077948541
-    },
-    "angry_body": {
-      "_unresolved_ref": 2889937868037626674
-    },
-    "angry_circle": {
-      "_unresolved_ref": -4626030772412228929
-    },
-    "angry_child1": {
-      "_unresolved_ref": 2380036223768706709
-    },
-    "angry_child2": {
-      "_unresolved_ref": 321313729201810185
-    },
-    "body_dead": {
-      "_unresolved_ref": -6369749876927212257
-    }
-  },
-  {
-    "id": "BossAI06Child",
-    "aim": {
-      "_unresolved_ref": -8537142051568961631
-    },
-    "bullet01": {
-      "_unresolved_ref": -4423587090207888863
-    },
-    "bullet02": {
-      "_unresolved_ref": -3399276615520408896
-    },
-    "bullet03": {
-      "_unresolved_ref": 6710474556842634816
-    },
-    "atk_clip1": {
-      "_unresolved_ref": -6157145428504221030
-    },
-    "atk_clip2": {
-      "_unresolved_ref": -1448364804562760397
-    }
-  },
-  {
-    "id": "BossAI07",
-    "clip_dead": {
-      "_unresolved_ref": -4234381498223628681
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
-    "enemy_id": "boss07",
-    "ai_level": 3,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
-    "reward_value": [
-      3,
-      3,
-      0,
-      10
-    ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 1,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "angry_body": {
-      "_unresolved_ref": -8612318218202686565
-    },
-    "boss_clip": [
-      {
-        "_unresolved_ref": -296760824281615770
-      },
-      {
-        "_unresolved_ref": -127557116675790205
-      },
-      {
-        "_unresolved_ref": -7138824061684614887
-      },
-      {
-        "_unresolved_ref": -8518763844105594437
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 1764472710815964071
-    },
-    "bullet02": {
-      "_unresolved_ref": -4639916721810376167
-    },
-    "bullet03": {
-      "_unresolved_ref": 2199362648077948541
-    },
-    "bullet04": "BulletEPoly",
-    "bullet05": {
-      "_unresolved_ref": 3828543239436371441
-    },
-    "bullet06": {
-      "_unresolved_ref": -1415349492265021333
-    }
-  },
-  {
-    "id": "BossAI08",
-    "clip_dead": {
-      "_unresolved_ref": -7585587146983886116
-    },
     "awake": 0,
     "temp_enemy": 0,
     "destory_on_dead": 0,
     "intensive": 0,
     "weapon_lock_target": 0,
-    "enemy_id": "boss08",
-    "ai_level": 3,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
-    "reward_value": [
-      3,
-      3,
-      0,
-      10
-    ],
     "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
     "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
+    "fixed_angle": 0,
     "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": 4501051265373644572
-      },
-      {
-        "_unresolved_ref": 8848558294856761920
-      },
-      {
-        "_unresolved_ref": -3377858863748487834
-      },
-      {
-        "_unresolved_ref": 1273969163101190416
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": -5379466852417718670
-    },
-    "bullet02": {
-      "_unresolved_ref": 319413865985152551
-    },
-    "bullet03": {
-      "_unresolved_ref": 5957428052427434969
-    },
-    "bullet04": {
-      "_unresolved_ref": -8021435792761890189
-    }
-  },
-  {
-    "id": "BossAI09",
-    "clip_dead": {
-      "_unresolved_ref": -2344690723174011822
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
-    "enemy_id": "boss09",
-    "ai_level": 3,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
-    "reward_value": [
-      3,
-      3,
-      0,
-      10
-    ],
-    "dead": 0,
-    "shoot_cd": 1.5,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": 1705599016201267756
-      },
-      {
-        "_unresolved_ref": -5093006080760716364
-      },
-      {
-        "_unresolved_ref": 8435649363812791180
-      },
-      {
-        "_unresolved_ref": -5204139684259155487
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 8878788003346813849
-    },
-    "bullet02": {
-      "_unresolved_ref": 7938604193972030306
-    },
-    "bullet03": {
-      "_unresolved_ref": -4003164860427088165
-    },
-    "bullet04": {
-      "_unresolved_ref": 2412727153614036403
-    },
-    "bullet05": {
-      "_unresolved_ref": 4762871726117688333
-    },
-    "bullet06": {
-      "_unresolved_ref": 4029235511921159075
-    }
-  },
-  {
-    "id": "BossAI10",
-    "clip_dead": {
-      "_unresolved_ref": 8262888682005009416
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
-    "enemy_id": "boss10",
-    "ai_level": 1,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
-    "reward_value": [
-      3,
-      3,
-      0,
-      10
-    ],
-    "dead": 0,
-    "shoot_cd": 1.5,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": 2155578124556537881
-      },
-      {
-        "_unresolved_ref": -391852392323724526
-      },
-      {
-        "_unresolved_ref": -6201922266148862781
-      },
-      {
-        "_unresolved_ref": -2731911340235740225
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": -3399276615520408896
-    },
-    "bullet02": {
-      "_unresolved_ref": -4851664780214873632
-    },
-    "bullet03": {
-      "_unresolved_ref": 3551968028003963022
-    },
-    "bullet04": {
-      "_unresolved_ref": 4984761072998586819
-    }
-  },
-  {
-    "id": "BossAI11",
-    "clip_dead": {
-      "_unresolved_ref": -4701504466623537313
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
-    "enemy_id": "boss11",
-    "ai_level": 1,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
     "reward_value": [
       5,
       3,
       0,
       10
     ],
-    "dead": 0,
-    "shoot_cd": 2.0,
-    "friction": 0.0,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.3,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -1765832051076196083
-      },
-      {
-        "_unresolved_ref": -2865623502321454289
-      },
-      {
-        "_unresolved_ref": 4857498937171492428
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 8639864595974338415
-    },
-    "bullet02": {
-      "_unresolved_ref": 3555696940471584491
-    },
-    "bullet03": {
-      "_unresolved_ref": -4983674012363679561
-    },
-    "bullet04": {
-      "_unresolved_ref": 6582239763687266019
-    },
-    "bullet05": {
-      "_unresolved_ref": -8985858291253897890
-    },
-    "bullet06": {
-      "_unresolved_ref": 1764472710815964071
-    }
+    "bullet01": "bullet_e_2",
+    "bullet02": "bullet_e_11",
+    "bullet03": "bullet_e_22",
+    "bullet04": "bullet_e_34",
+    "bullet05": null,
+    "bullet06": null
   },
   {
-    "id": "BossAI12",
-    "clip_dead": {
-      "_unresolved_ref": -6174100370185083334
-    },
+    "id": "BossAI06Child",
+    "_source": "1.7.10",
+    "prefab": "boss06_c",
+    "enemy_id": "",
+    "reward_value": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "bullet01": "bullet_e_15",
+    "bullet02": "bullet_e_25",
+    "bullet03": "bullet_e_21",
+    "bullet04": null,
+    "bullet05": null,
+    "bullet06": null
+  },
+  {
+    "id": "BossAI07",
+    "_source": "1.7.10",
+    "prefab": "boss07",
+    "enemy_id": "boss07",
+    "ai_level": 3,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 1,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
     "awake": 0,
     "temp_enemy": 0,
     "destory_on_dead": 0,
     "intensive": 0,
     "weapon_lock_target": 1,
-    "enemy_id": "boss12_2",
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      3,
+      3,
+      0,
+      10
+    ],
+    "bullet01": "bullet_e_24",
+    "bullet02": "bullet_e_1",
+    "bullet03": "bullet_e_34",
+    "bullet04": "explode_E_poly",
+    "bullet05": "bullet_e_37",
+    "bullet06": "Gas"
+  },
+  {
+    "id": "BossAI08",
+    "_source": "1.7.10",
+    "prefab": "boss08",
+    "enemy_id": "boss08",
+    "ai_level": 3,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 0,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      3,
+      3,
+      0,
+      10
+    ],
+    "bullet01": "e_fireball",
+    "bullet02": "bullet_e_32",
+    "bullet03": "bullet_e_16",
+    "bullet04": "bullet_e_30",
+    "bullet05": null,
+    "bullet06": null
+  },
+  {
+    "id": "BossAI09",
+    "_source": "1.7.10",
+    "prefab": "boss09",
+    "enemy_id": "boss09",
+    "ai_level": 3,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "shoot_cd": 1.5,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      3,
+      3,
+      0,
+      10
+    ],
+    "bullet01": "bullet_e_shock",
+    "bullet02": "bullet_follow_ice_e",
+    "bullet03": "bullet_e_28",
+    "bullet04": "effect_shock2",
+    "bullet05": "bullet_e_42",
+    "bullet06": "bullet_e_41"
+  },
+  {
+    "id": "BossAI10",
+    "_source": "1.7.10",
+    "prefab": "boss10",
+    "enemy_id": "boss10",
+    "ai_level": 1,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "shoot_cd": 1.5,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.5,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      3,
+      3,
+      0,
+      10
+    ],
+    "bullet01": "bullet_e_25",
+    "bullet02": "explode_ice2",
+    "bullet03": "bullet_e_19",
+    "bullet04": "bullet_e_40",
+    "bullet05": null,
+    "bullet06": null
+  },
+  {
+    "id": "BossAI11",
+    "_source": "1.7.10",
+    "prefab": "boss11",
+    "enemy_id": "boss11",
+    "ai_level": 1,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
+    "shoot_cd": 2,
+    "friction": 0,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.3,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      5,
+      3,
+      0,
+      10
+    ],
+    "bullet01": "bullet_e_14",
+    "bullet02": "bullet_e_39",
+    "bullet03": "bullet_e_43",
+    "bullet04": "effect_shock3",
+    "bullet05": "bullet_e_44",
+    "bullet06": "bullet_e_24"
+  },
+  {
+    "id": "BossAI12",
+    "_source": "1.7.10",
+    "prefab": "boss12_1",
+    "enemy_id": "boss12_1",
     "ai_level": 1,
     "consume": 10,
     "e_size": 2,
     "reward_rate": 100,
+    "shoot_cd": 1.5,
+    "friction": 0.2,
+    "kinematic": 0,
+    "scout_rate": 1,
+    "buff_immune": 0.3,
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       2,
       0,
       4,
       5
     ],
-    "dead": 0,
-    "shoot_cd": 1.5,
-    "friction": 0.2,
-    "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
-    "buff_immune": 0.3,
-    "boss_clip": [
-      {
-        "_unresolved_ref": 1646215587303905401
-      },
-      {
-        "_unresolved_ref": -4349703345033038959
-      },
-      {
-        "_unresolved_ref": -4457107479111878831
-      },
-      {
-        "_unresolved_ref": 2144691907625522199
-      },
-      {
-        "_unresolved_ref": 8997492751896420417
-      },
-      {
-        "_unresolved_ref": -6157145428504221030
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 7543192324113904418
-    },
-    "bullet02": {
-      "_unresolved_ref": 132601163694926416
-    },
-    "bullet03": {
-      "_unresolved_ref": -313710142771074167
-    },
-    "bullet04": {
-      "_unresolved_ref": -5535529524777890787
-    },
-    "bullet05": {
-      "_unresolved_ref": -4423587090207888863
-    }
+    "bullet01": "bullet_e_46",
+    "bullet02": "bullet_e_8",
+    "bullet03": "bullet_e_45",
+    "bullet04": "bullet_e_48",
+    "bullet05": "bullet_e_15",
+    "bullet06": null
   },
   {
     "id": "BossAI12Parent",
-    "boss1_obj": {
-      "_unresolved_ref": -5684197291598063277
-    },
-    "boss2_obj": "BossAI12"
+    "_source": "1.7.10",
+    "prefab": "boss12_parent",
+    "enemy_id": "",
+    "reward_value": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "bullet01": null,
+    "bullet02": null,
+    "bullet03": null,
+    "bullet04": null,
+    "bullet05": null,
+    "bullet06": null
   },
   {
     "id": "BossAI13",
-    "clip_dead": {
-      "_unresolved_ref": -7273493238577079056
-    },
-    "awake": 0,
-    "temp_enemy": 0,
-    "destory_on_dead": 0,
-    "intensive": 0,
-    "weapon_lock_target": 1,
+    "_source": "1.7.10",
+    "prefab": "boss13",
     "enemy_id": "boss13",
     "ai_level": 3,
     "consume": 50,
     "e_size": 2,
     "reward_rate": 100,
-    "reward_value": [
-      3,
-      3,
-      0,
-      10
-    ],
-    "dead": 0,
     "shoot_cd": 1.5,
-    "friction": 0.0,
+    "friction": 0,
     "kinematic": 0,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
+    "scout_rate": 1,
     "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      {
-        "_unresolved_ref": -2974192501872668147
-      },
-      {
-        "_unresolved_ref": 2155578124556537881
-      },
-      {
-        "_unresolved_ref": 5504835643648423946
-      },
-      {
-        "_unresolved_ref": -1299907336212379164
-      },
-      null,
-      {
-        "_unresolved_ref": 7345522095206016048
-      }
-    ],
-    "bullet01": {
-      "_unresolved_ref": 8541251893116382779
-    },
-    "bullet02": {
-      "_unresolved_ref": 3822982578201466509
-    },
-    "bullet03": {
-      "_unresolved_ref": -3399276615520408896
-    },
-    "bullet03_angry": {
-      "_unresolved_ref": 4984761072998586819
-    },
-    "bullet04": {
-      "_unresolved_ref": 6582239763687266019
-    },
-    "bullet04_snowman": {
-      "_unresolved_ref": 4021596633245231199
-    },
-    "bullet05": {
-      "_unresolved_ref": 4029235511921159075
-    }
-  },
-  {
-    "id": "BossAI14",
-    "clip_dead": {
-      "_unresolved_ref": -8074201411771808359
-    },
     "awake": 0,
     "temp_enemy": 0,
     "destory_on_dead": 0,
     "intensive": 0,
     "weapon_lock_target": 1,
-    "enemy_id": "boss14",
-    "ai_level": 3,
-    "consume": 50,
-    "e_size": 2,
-    "reward_rate": 100,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
     "reward_value": [
       3,
       3,
       0,
       10
     ],
-    "dead": 0,
+    "bullet01": "bullet_nofollow_ice_e",
+    "bullet02": "bullet_e_42_less",
+    "bullet03": "bullet_e_25",
+    "bullet04": "effect_shock3",
+    "bullet05": "bullet_e_41",
+    "bullet06": null
+  },
+  {
+    "id": "BossAI14",
+    "_source": "1.7.10",
+    "prefab": "boss14",
+    "enemy_id": "boss14",
+    "ai_level": 3,
+    "consume": 50,
+    "e_size": 2,
+    "reward_rate": 100,
     "shoot_cd": 1.5,
-    "friction": 0.0,
+    "friction": 0,
     "kinematic": 1,
-    "hand": null,
-    "role_attribute": null,
-    "target_obj": null,
-    "shooting": 0,
-    "fixed_angle": 0.0,
-    "scout_rate": 1.0,
-    "is_lock": 0,
+    "scout_rate": 1,
     "buff_immune": 0.5,
-    "boss_info": null,
-    "boss_clip": [
-      null,
-      {
-        "_unresolved_ref": 5345391127644447577
-      },
-      {
-        "_unresolved_ref": -2209677309484762270
-      },
-      null,
-      {
-        "_unresolved_ref": -1030642333278441972
-      },
-      {
-        "_unresolved_ref": 4316199098600088263
-      }
+    "awake": 0,
+    "temp_enemy": 0,
+    "destory_on_dead": 0,
+    "intensive": 0,
+    "weapon_lock_target": 1,
+    "dead": 0,
+    "shooting": 0,
+    "fixed_angle": 0,
+    "is_lock": 0,
+    "reward_value": [
+      3,
+      3,
+      0,
+      10
     ],
-    "bullet01": {
-      "_unresolved_ref": -4003164860427088165
-    },
-    "bullet02": {
-      "_unresolved_ref": 5379994840606427544
-    },
-    "bullet03": {
-      "_unresolved_ref": -301560881027485576
-    },
-    "bullet04": {
-      "_unresolved_ref": 8878788003346813849
-    },
-    "bullet05": {
-      "_unresolved_ref": -8962267898797499882
-    },
-    "bullet06": {
-      "_unresolved_ref": -4639916721810376167
-    }
+    "bullet01": "bullet_e_28",
+    "bullet02": "bullet_boss_14_atk2",
+    "bullet03": "bullet_e_51",
+    "bullet04": "bullet_e_shock",
+    "bullet05": "bullet_e_50",
+    "bullet06": "bullet_e_1"
   }
 ]

@@ -61,12 +61,23 @@ def count_unresolved(records) -> int:
     return n
 
 
+def has_source(records, label) -> None:
+    """P1.10 UPVERSION gate: every record of a re-keyed table must say which
+    dump it came from ('1.7.10' resolved, '1.07' fallback -- see
+    tools/build_gamedata.py's builders)."""
+    for r in records or []:
+        if r.get("_source") not in ("1.07", "1.7.10"):
+            errors.append(f"{label} '{r.get('id', '?')}' missing/invalid _source marker")
+            return
+
+
 def main() -> int:
     weapons = load("weapons")
     bullets = load("bullets")
     enemies = load("enemies")
     bosses = load("bosses")
     buffs = load("buffs")
+    enemy_guns = load("enemy_guns")
     catalog = load("weapon_catalog")
     drops = load("droptables")
     chars = load("characters")
@@ -99,6 +110,57 @@ def main() -> int:
         if len(e.get("reward_value", [])) != 4:
             errors.append(f"enemy '{e.get('id')}' reward_value must have 4 entries")
             break
+
+    # --- P1.10 UPVERSION: _source markers + bullet/boss cross-table integrity ---
+    has_source(bullets, "bullet")
+    has_source(bosses, "boss")
+    has_source(buffs, "buff")
+    has_source(enemy_guns, "enemy_gun")
+    if catalog:
+        for w in catalog:
+            if w.get("_source") not in ("1.07", "1.7.10"):
+                errors.append(f"weapon_catalog '{w.get('weapon_id', '?')}' missing _source marker")
+                break
+    if drops:
+        for lvl, items in drops.items():
+            if any(it.get("_source") not in ("1.07", "1.7.10") for it in items):
+                errors.append(f"droptable[{lvl}] item missing _source marker")
+                break
+
+    # Bullet refs that don't resolve into bullets.json are WARNed, not FAILed:
+    # bullet01-06/bullet_prefab legitimately also point at prefabs bullets.json
+    # doesn't cover -- item-family effects (rgprefab/item/Gas*), another WEAPON
+    # prefab used as a thrown projectile (res/weapon/*), or one of the ~78
+    # rgprefab/bullet variants outside the RGBullet class family (see
+    # build_bullet_table's docstring) -- all real 1.7.10 data, just not part
+    # of this pass's per-instance RGBullet extraction.
+    bullet_ids = {b.get("id") for b in (bullets or [])}
+    if weapons and bullet_ids:
+        bad = sorted({w["id"] for w in weapons
+                      if w.get("bullet_prefab") and w["bullet_prefab"] not in bullet_ids})
+        if bad:
+            warnings.append(f"{len(bad)} weapons reference a bullet_prefab outside bullets.json "
+                            f"(non-RGBullet-family or non-bullet prefab; ok): {', '.join(bad[:5])}"
+                            + (", ..." if len(bad) > 5 else ""))
+    if bosses and bullet_ids:
+        unresolved_boss_bullets = []
+        for b in bosses:
+            for k in ("bullet01", "bullet02", "bullet03", "bullet04", "bullet05", "bullet06"):
+                v = b.get(k)
+                if v and v not in bullet_ids:
+                    unresolved_boss_bullets.append(f"{b.get('id')}.{k}={v}")
+        if unresolved_boss_bullets:
+            warnings.append(f"{len(unresolved_boss_bullets)} boss bullet refs outside bullets.json "
+                            f"(non-RGBullet-family or non-bullet prefab; ok): "
+                            f"{', '.join(unresolved_boss_bullets[:5])}"
+                            + (", ..." if len(unresolved_boss_bullets) > 5 else ""))
+    boss_ids = {b.get("id") for b in (bosses or [])}
+    if enemies and boss_ids:
+        bad = sorted({e["enemy_class"] for e in enemies
+                      if str(e.get("enemy_class", "")).startswith("BossAI")
+                      and e["enemy_class"] not in boss_ids})
+        if bad:
+            errors.append(f"enemies reference enemy_class with no bosses.json entry: {', '.join(bad)}")
 
     # --- drop-table referential integrity (vs weapon_catalog ids) ---
     if catalog and drops:
@@ -141,18 +203,12 @@ def main() -> int:
             if not (1 <= lv.get("map_long", 0) <= 8):
                 errors.append(f"level '{lid}' map_long out of range: {lv.get('map_long')}")
             for pool in ("enemies", "ex_enemies"):
+                # T-27 CLOSED: ex_orc05 (GameObject/ex_orc05.prefab, outside res/enemy/**)
+                # now has a real enemies.json row (build_ex_orc05_row(), P1.10), so no
+                # gap is tolerated here any more -- any unknown id fails outright.
                 missing = sorted({eid for eid in lv.get(pool, []) if eid not in enemy_ids})
-                # T-27: ex_orc05 lives under Assets/GameObject, outside res/enemy, so
-                # enemies.csv has no row; the scene substitutes the AI01 representative.
-                # Only this listed gap is tolerated (warning); any other unknown id fails.
-                known_gaps = {"ex_orc05"}
-                tolerated = [m for m in missing if m in known_gaps]
-                fatal = [m for m in missing if m not in known_gaps]
-                if tolerated:
-                    warnings.append(f"level '{lid}' {pool} references species missing from "
-                                    f"enemies.json (T-27 known gap): {', '.join(tolerated)}")
-                if fatal:
-                    errors.append(f"level '{lid}' {pool} references unknown enemy: {', '.join(fatal)}")
+                if missing:
+                    errors.append(f"level '{lid}' {pool} references unknown enemy: {', '.join(missing)}")
             if lv.get("stage") != 6 and lid != "G1" and not lv.get("enemies"):
                 errors.append(f"level '{lid}' has an empty enemy pool")
     if boss_rooms is not None:

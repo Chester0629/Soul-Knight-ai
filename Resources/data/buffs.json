@@ -1,101 +1,85 @@
 [
   {
     "id": "BuffArmor",
+    "_source": "1.7.10",
+    "prefab": "buff_armor",
     "is_enemy": 0,
-    "buff_time": 6.0
+    "buff_time": 6
   },
   {
     "id": "BuffChangeSpeed",
+    "_source": "1.7.10",
+    "prefab": "buff_speed_down",
     "is_enemy": 1,
-    "buff_time": 6.0,
+    "buff_time": 6,
     "changeValue": -0.75
   },
   {
     "id": "BuffEffectTrigger",
-    "buff": "BuffIce",
-    "probability": 0.0
+    "_source": "1.7.10",
+    "prefab": "bullet_95",
+    "probability": 0
   },
   {
     "id": "BuffElectric",
+    "_source": "1.7.10",
+    "prefab": "buff_ele",
     "is_enemy": 1,
-    "buff_time": 2.0
+    "buff_time": 2
   },
   {
     "id": "BuffFire",
+    "_source": "1.7.10",
+    "prefab": "buff_fire",
     "is_enemy": 1,
-    "buff_time": 2.0
+    "buff_time": 2
   },
   {
     "id": "BuffIce",
+    "_source": "1.7.10",
+    "prefab": "buff_ice",
     "is_enemy": 1,
-    "buff_time": 2.75,
-    "ice_end": {
-      "_unresolved_ref": 3485854188369714355
-    },
-    "audio_clip": {
-      "_unresolved_ref": -3697264472016340514
-    }
+    "buff_time": 2.75
   },
   {
     "id": "BuffPoison",
+    "_source": "1.7.10",
+    "prefab": "buff_posion",
     "is_enemy": 1,
-    "buff_time": 5.0
+    "buff_time": 5
   },
   {
     "id": "BuffRandomEffectTrigger",
-    "buffs": [
-      "BuffPoison",
-      "BuffFire",
-      "BuffElectric"
-    ]
+    "_source": "1.7.10",
+    "prefab": "bullet_96"
   },
   {
     "id": "BuffStatue01",
-    "cd": 1.0,
-    "audio_clip": {
-      "_unresolved_ref": 1826340476550598763
-    },
-    "bullet": {
-      "_unresolved_ref": 6833897561378509306
-    },
-    "speed": 24.0,
-    "atk": 4,
-    "count": 1,
-    "angle": 12,
-    "pierced": 1
+    "_source": "1.7.10",
+    "prefab": "buff_statue_1",
+    "cd": 5,
+    "speed": 12,
+    "atk": 3,
+    "count": 4,
+    "angle": 45,
+    "pierced": 0
   },
   {
     "id": "BuffStatue02",
-    "cd": 8.0,
-    "audio_clip": {
-      "_unresolved_ref": 2138041291659840983
-    },
-    "bullet": {
-      "_unresolved_ref": 1486050045704832511
-    },
-    "smoke_effect": {
-      "_unresolved_ref": -889557083460782702
-    }
+    "_source": "1.7.10",
+    "prefab": "buff_statue_2",
+    "cd": 8
   },
   {
     "id": "BuffStatue03",
-    "cd": 12.0,
-    "audio_clip": {
-      "_unresolved_ref": -2655448754900361401
-    },
-    "bullet": {
-      "_unresolved_ref": 7314951079659796869
-    },
-    "player_parent": 0,
-    "speed_factor": 0.0
+    "_source": "1.7.10",
+    "prefab": "buff_statue_3",
+    "cd": 12
   },
   {
     "id": "BuffStatue04",
-    "cd": 9.0,
-    "audio_clip": {
-      "_unresolved_ref": 2194855489963722353
-    },
-    "armor": 2,
-    "bullet": null
+    "_source": "1.7.10",
+    "prefab": "buff_statue_7",
+    "cd": 9
   }
 ]

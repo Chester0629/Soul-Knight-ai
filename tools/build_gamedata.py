@@ -121,7 +121,12 @@ def build_table(groups, idx: Index, prefer: tuple[str, ...] = ()) -> list[dict]:
 
 
 def parse_weapon_catalog() -> list[dict]:
-    path = SRC_TXT / "weapon_introduce"
+    # P1.10 UPVERSION: prefer the 1.7.10 AssetRipper Resources/weapon_introduce.txt
+    # (byte-identical to the 1.07 TextAsset dump as of this port -- same 90
+    # <weapon id=.../> entries, same text -- but the 1.7.10 file is the real
+    # asset, not a reconstruction, so it wins when present).
+    path_1710 = EP_ASSETS / "Resources" / "weapon_introduce.txt"
+    path, source = (path_1710, "1.7.10") if path_1710.is_file() else (SRC_TXT / "weapon_introduce", "1.07")
     root = ET.fromstring(path.read_text(encoding="utf-8"))
     out = []
     for w in root.findall("weapon"):
@@ -129,6 +134,7 @@ def parse_weapon_catalog() -> list[dict]:
             "weapon_id": w.get("id"),
             "name": (w.findtext("name") or "").strip(),
             "info": (w.findtext("info") or "").strip(),
+            "_source": source,
         })
     return out
 
@@ -497,7 +503,329 @@ def build_enemy_species_table() -> list[dict]:
                 "critical": _csv_int(row.get("ra_critical")),
                 "deviation": _csv_int(row.get("ra_deviation")),
             })
+    # T-27 CLOSED: ex_orc05 lives under Assets/GameObject (outside res/enemy/**),
+    # so it has no enemies.csv row (the CSV only walked res/enemy/**). Read its
+    # real EnemyAI + RoleAttribute components directly from the AssetRipper
+    # prefab -- FAITHFUL @ GameObject/ex_orc05.prefab -- so level pools that
+    # reference it (see LEVEL_GEN_PLAN.md) resolve to a real species instead of
+    # the AI01-representative substitute validate_data.py used to tolerate.
+    if out and not any(r["id"] == "ex_orc05" for r in out):
+        extra = build_ex_orc05_row()
+        if extra is not None:
+            out.append(extra)
     return out
+
+
+
+# ---------------------------------------------------------------------------
+# P1.10 UPVERSION (bullets / bosses / buffs / enemy_guns): the 1.07 dump only
+# ever had ONE row per AI/behaviour CLASS (BulletNN, BossAINN, BuffXxx, EGunNNN
+# -- a shared script asset, never a real per-instance object), so there was no
+# per-species crosswalk to upgrade the way weapons.csv/enemies.csv did. The
+# AssetRipper project resolves this a different way: every 1.7.10 prefab that
+# uses one of these scripts carries the SAME MonoBehaviour field names keyed by
+# the SAME m_Script guid as the class's <Class>.cs.meta -- so a class id maps
+# to its real values via "first prefab, in path order, whose MonoBehaviour
+# m_Script guid matches <Class>.cs.meta's guid". That keeps the class-keyed ids
+# every existing consumer/test looks up (FindBullet("Bullet01"), etc.) while
+# sourcing the SCALARS from a real 1.7.10 instance instead of the class
+# template. Bullets additionally get one entry PER REAL PREFAB (256, id =
+# prefab stem) appended, so weapon/boss bullet references resolve to a real
+# bullet (WEAPON RE-KEY's bullet_prefab, BOSS bullet01-06 below). Every record
+# carries "_source": "1.7.10" (resolved) or "1.07" (AssetRipper source
+# missing, or -- for enemy_guns/bosses/buffs -- no prefab uses that class in
+# 1.7.10, e.g. EGun007), so the fallback is visible in the data itself.
+# ---------------------------------------------------------------------------
+_ASM_CSHARP = EP_ASSETS / "Scripts" / "Assembly-CSharp"
+
+
+def _class_guid(class_name: str) -> str | None:
+    """<Class>.cs.meta's guid, or None if the source file isn't present."""
+    p = _ASM_CSHARP / f"{class_name}.cs.meta"
+    if not p.is_file():
+        return None
+    m = re.search(r"guid: ([0-9a-f]{32})", p.read_text(encoding="utf-8", errors="ignore"))
+    return m.group(1) if m else None
+
+
+def _mono_block(text: str, guid: str) -> str | None:
+    """The MonoBehaviour document that carries m_Script guid `guid`, from the
+    guid mention to the next '--- !u!' document boundary (or EOF)."""
+    i = text.find("guid: " + guid)
+    if i < 0:
+        return None
+    end = text.find("\n--- !u!", i)
+    return text[i: end if end > 0 else len(text)]
+
+
+def _field(block: str, key: str):
+    """A scalar (int/float) field's value out of a MonoBehaviour block, or
+    None if absent -- same convention as _prefab_role_attr's regex."""
+    m = re.search(r"(?m)^\s*" + re.escape(key) + r":\s*(-?[0-9.]+)\s*$", block)
+    if not m:
+        return None
+    v = m.group(1)
+    return float(v) if "." in v else int(v)
+
+
+def _first_prefab_by_guid(guids) -> dict:
+    """guid -> first prefab (path order) whose MonoBehaviour m_Script carries
+    it. One pass over every AssetRipper prefab, shared across bosses/buffs/
+    enemy_guns/ex_orc05 so each caller doesn't re-scan the whole project.
+    PORT CHOICE (T-30): a CLASS-keyed row (Bullet01, BossAI07, EGun001 ...) takes
+    its scalars from the first prefab in path order that uses the class; other
+    instances of the same class may carry different values (per-instance
+    tables are P1.13)."""
+    remaining = {g for g in guids if g}
+    found = {}
+    if not remaining:
+        return found
+    for p in sorted(EP_ASSETS.rglob("*.prefab")):
+        if not remaining:
+            break
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        for g in list(remaining):
+            if ("guid: " + g) in text:
+                found[g] = p
+                remaining.discard(g)
+    return found
+
+
+_RGBULLET_GUID = "80abcc51ab60b8f507748fc221cf528f"
+# The RGBullet subclass family (Scripts/Assembly-CSharp/*.cs "class X : ... :
+# RGBullet" chain): every one of these serializes the same 7 base fields
+# (Unity inherits serialized fields down the hierarchy), so a prefab using
+# ANY of them still yields real speed/camp/destroy_time/... values. Widens
+# resolution from 121/256 (RGBullet-only) to 178/256; the rest use bullet-ish
+# classes that don't derive from RGBullet at all (BulletFire, BulletGas, ... --
+# same family the 1.07 dump's own "modifier/variant bullets without speed/
+# destroy_time" warning already flags) and are out of this pass's scope.
+_RGBULLET_FAMILY = ("RGBullet", "Bullet01", "Bullet02", "Bullet02AngleLimit",
+                     "Bullet03", "Bullet04", "Bullet05", "BulletBeetle",
+                     "BulletColor", "BulletFollow", "BulletImmediately",
+                     "BulletLaterFixedTarget", "BulletParabola", "BulletRoundabout",
+                     "RGBDelayDivision", "RGSBullet01", "RGSBullet02")
+_BULLET_FIELDS = ("speed", "camp", "destroy_time", "rotate_angle", "awake",
+                   "can_rebound", "manual_destroy")
+BULLET_DIR = EP_ASSETS / "rgprefab" / "bullet"
+
+
+def build_bullet_table(bullet_groups, idx: Index):
+    """bullets.json = the 1.07 class-keyed rows (kept, so FindBullet("BulletNN")
+    keeps resolving) PLUS one row per real 1.7.10 bullet prefab (256, id =
+    prefab stem) whose MonoBehaviour uses the RGBullet family -- see the
+    P1.10 UPVERSION note above. None if the AssetRipper source is absent
+    (caller falls back to the 1.07-only table)."""
+    if not BULLET_DIR.is_dir():
+        return None
+    out = build_table(bullet_groups, idx)
+    for r in out:
+        r["_source"] = "1.07"
+    family_guids = [g for g in (_class_guid(c) for c in _RGBULLET_FAMILY) if g]
+    n_real, n_skip = 0, []
+    for f in sorted(BULLET_DIR.glob("*.prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        block = next((b for g in family_guids
+                      if (b := _mono_block(text, g)) is not None), None)
+        if block is None:
+            n_skip.append(f.stem)
+            continue
+        rec = {"id": f.stem, "_source": "1.7.10"}
+        for k in _BULLET_FIELDS:
+            v = _field(block, k)
+            if v is not None:
+                rec[k] = v
+        out.append(rec)
+        n_real += 1
+    print(f"  bullets: {len(bullet_groups)} 1.07 class rows kept + {n_real} real "
+          f"1.7.10 prefabs ({len(n_skip)} non-RGBullet-family prefabs skipped)")
+    return out
+
+
+_BOSS_FIELDS = ("ai_level", "consume", "e_size", "reward_rate", "shoot_cd",
+                "friction", "kinematic", "scout_rate", "buff_immune", "awake",
+                "temp_enemy", "destory_on_dead", "intensive", "weapon_lock_target",
+                "dead", "shooting", "fixed_angle", "is_lock")
+_BOSS_BULLET_KEYS = ("bullet01", "bullet02", "bullet03", "bullet04", "bullet05", "bullet06")
+
+
+def build_boss_table(boss_groups, idx: Index):
+    """bosses.json stays class-keyed (BossAI01.."BossAI14"/06Child/12Parent, one
+    row per 1.07 dump stem -- nothing in C++ consumes this table by id today,
+    only tools/validate_data.py's count/shape gate), sourced from the FIRST
+    1.7.10 boss prefab (path order) whose MonoBehaviour uses that class's
+    script guid -- see the P1.10 UPVERSION note above. bulletNN fields resolve
+    through the guid index to real bullet prefab ids (bullets.json). Falls
+    back per-class to the 1.07 row when no 1.7.10 prefab uses that class
+    (none observed among the 16 -- BossAI14 lives at GameObject/boss14.prefab,
+    outside res/enemy/**, but its class guid still resolves there)."""
+    if not EP_ASSETS.is_dir():
+        return None
+    guids = {stem: _class_guid(stem) for stem, _ in boss_groups}
+    found = _first_prefab_by_guid(guids.values())
+    bidx = _guid_index()
+    out = []
+    n_real = 0
+    for stem, data in boss_groups:
+        g = guids.get(stem)
+        p = found.get(g) if g else None
+        if p is None:
+            rec = {"id": stem, **clean(data, idx, stem, prefer=("Bullet",))}
+            rec["_source"] = "1.07"
+            out.append(rec)
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        block = _mono_block(text, g)
+        rec = {"id": stem, "_source": "1.7.10", "prefab": p.stem}
+        m = re.search(r"(?m)^\s*enemy_id:\s*(\S*)\s*$", block)
+        rec["enemy_id"] = m.group(1) if m else ""
+        for k in _BOSS_FIELDS:
+            v = _field(block, k)
+            if v is not None:
+                rec[k] = v
+        rv = re.search(r"(?m)^\s*reward_value:\s*([0-9a-f]{32})\s*$", block)
+        rec["reward_value"] = _csv_reward_value(rv.group(1)) if rv else [0, 0, 0, 0]
+        for bk in _BOSS_BULLET_KEYS:
+            bm = re.search(re.escape(bk) + r": \{fileID: \d+, guid: ([0-9a-f]{32})", block)
+            bp = bidx.get(bm.group(1)) if bm else None
+            rec[bk] = bp.stem if bp is not None else None
+        out.append(rec)
+        n_real += 1
+    print(f"  bosses: {n_real}/{len(out)} classes resolved to a real 1.7.10 prefab")
+    return out
+
+
+_BUFF_SCALAR_FIELDS = ("is_enemy", "buff_time", "changeValue", "probability",
+                        "cd", "speed", "atk", "count", "angle", "pierced")
+
+
+def build_buff_table(buff_groups, idx: Index):
+    """buffs.json stays class-keyed (BuffArmor.."BuffStatue04", 12 rows, the
+    1.07 dump stems -- FindBuff("BuffArmor") keeps resolving), sourced from the
+    1.7.10 prefab whose MonoBehaviour uses that class's script guid -- see the
+    P1.10 UPVERSION note above. All 12 classes resolve (armor/electric/fire/
+    ice/poison/change_speed under rgprefab/buff, the two *EffectTrigger classes
+    under rgprefab/bullet, the four BuffStatueNN under res/effect) so there is
+    no per-class 1.07 fallback in practice; the whole table falls back only
+    when the AssetRipper source itself is absent."""
+    if not EP_ASSETS.is_dir():
+        return None
+    guids = {stem: _class_guid(stem) for stem, _ in buff_groups}
+    found = _first_prefab_by_guid(guids.values())
+    out = []
+    n_real = 0
+    for stem, data in buff_groups:
+        g = guids.get(stem)
+        p = found.get(g) if g else None
+        if p is None:
+            rec = {"id": stem, **clean(data, idx, stem), "_source": "1.07"}
+            out.append(rec)
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        block = _mono_block(text, g)
+        rec = {"id": stem, "_source": "1.7.10", "prefab": p.stem}
+        for k in _BUFF_SCALAR_FIELDS:
+            v = _field(block, k)
+            if v is not None:
+                rec[k] = v
+        out.append(rec)
+        n_real += 1
+    print(f"  buffs: {n_real}/{len(out)} classes resolved to a real 1.7.10 prefab")
+    return out
+
+
+_EGUN_FIELDS = ("atk", "repel", "bullet_speed", "deviation", "can_through",
+                "need_lock", "facing", "activate", "fx_play_alone")
+
+
+def build_enemy_gun_table(egun_groups, idx: Index):
+    """enemy_guns.json stays class-keyed (EGun001..EGun011 minus EGun007, the
+    10 rows the 1.07 dump had -- FindEnemyGun("EGun001") keeps resolving),
+    sourced from the FIRST 1.7.10 prefab (path order) whose MonoBehaviour uses
+    that class's script guid -- see the P1.10 UPVERSION note above."""
+    if not EP_ASSETS.is_dir():
+        return None
+    guids = {stem: _class_guid(stem) for stem, _ in egun_groups}
+    found = _first_prefab_by_guid(guids.values())
+    out = []
+    n_real = 0
+    for stem, data in egun_groups:
+        g = guids.get(stem)
+        p = found.get(g) if g else None
+        if p is None:
+            rec = {"id": stem, **clean(data, idx, stem, prefer=("Bullet",))}
+            rec["_source"] = "1.07"
+            out.append(rec)
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        block = _mono_block(text, g)
+        rec = {"id": stem, "_source": "1.7.10", "prefab": p.stem}
+        for k in _EGUN_FIELDS:
+            v = _field(block, k)
+            if v is not None:
+                rec[k] = v
+        out.append(rec)
+        n_real += 1
+    print(f"  enemy_guns: {n_real}/{len(out)} classes resolved to a real 1.7.10 prefab")
+    return out
+
+
+EX_ORC05_PREFAB = EP_ASSETS / "GameObject" / "ex_orc05.prefab"
+
+
+def build_ex_orc05_row():
+    """T-27: ex_orc05's real per-species row, read straight from its
+    AssetRipper prefab (it has no enemies.csv row -- see the comment at the
+    enemies.csv-loading call site). None if the prefab or its RoleAttribute/
+    EnemyAI components can't be resolved (checkout without the AssetRipper
+    source, or the prefab moved)."""
+    if not EX_ORC05_PREFAB.is_file():
+        return None
+    text = EX_ORC05_PREFAB.read_text(encoding="utf-8", errors="ignore")
+    ra_guid = _class_guid("RoleAttribute")
+    if ra_guid is None:
+        return None
+    ra_block = _mono_block(text, ra_guid)
+    if ra_block is None:
+        return None
+    enemy_class, ai_block = None, None
+    for f in sorted(_ASM_CSHARP.glob("EnemyAI*.cs.meta")):
+        cls = f.name[: -len(".cs.meta")]
+        g = _class_guid(cls)
+        if g and ("guid: " + g) in text:
+            enemy_class = cls
+            ai_block = _mono_block(text, g)
+            break
+    if enemy_class is None or ai_block is None:
+        return None
+    rv = re.search(r"(?m)^\s*reward_value:\s*([0-9a-f]{32})\s*$", ai_block)
+    return {
+        "id": "ex_orc05",
+        "enemy_class": enemy_class,
+        "biome": "",   # GameObject/ex_orc05.prefab -- outside res/enemy/**, chapter-agnostic
+        "chapter": 0,
+        "ai_level": _field(ai_block, "ai_level") or 0,
+        "shoot_cd": float(_field(ai_block, "shoot_cd") or 0.0),
+        "friction": float(_field(ai_block, "friction") or 0.0),
+        "scout_rate": float(_field(ai_block, "scout_rate") or 0.0),
+        "consume": _field(ai_block, "consume") or 0,
+        "e_size": _field(ai_block, "e_size") or 0,
+        "reward_rate": _field(ai_block, "reward_rate") or 0,
+        "reward_value": _csv_reward_value(rv.group(1)) if rv else [0, 0, 0, 0],
+        "buff_immune": float(_field(ai_block, "buff_immune") or 0.0),
+        "kinematic": _field(ai_block, "kinematic") or 0,
+        "max_hp": _field(ra_block, "max_hp") or 0,
+        "hp": _field(ra_block, "hp") or 0,
+        "atk": 0,  # FAITHFUL: no 'damage' field on this prefab's EnemyAI component
+        "speed": float(_field(ra_block, "speed") or 0.0),
+        "speed_rate": float(_field(ra_block, "speed_rate") or 0.0),
+        "camp": _field(ra_block, "camp") or 0,
+        "critical": _field(ra_block, "critical") or 0,
+        "deviation": _field(ra_block, "deviation") or 0,
+    }
 
 
 
@@ -889,7 +1217,14 @@ def build_pickup_table():
 
 
 def parse_droptables() -> dict:
-    path = SRC_TXT / "chest_data"
+    # P1.10 UPVERSION: prefer the 1.7.10 AssetRipper Resources/chest_data.txt
+    # (byte-identical to the 1.07 TextAsset dump as of this port -- same 7
+    # <chest_info level=.../> tiers, same text). "_source" is tagged per item
+    # (not as a sibling dict key) so droptables.json's schema -- a plain
+    # {"0".."6": [...]} object LootTable::LoadAll parses every key of as a
+    # tier -- doesn't grow an 8th, non-numeric key.
+    path_1710 = EP_ASSETS / "Resources" / "chest_data.txt"
+    path, source = (path_1710, "1.7.10") if path_1710.is_file() else (SRC_TXT / "chest_data", "1.07")
     root = ET.fromstring(path.read_text(encoding="utf-8"))
     levels = {}
     for ci in root.findall("chest_info"):
@@ -899,6 +1234,7 @@ def parse_droptables() -> dict:
             items.append({
                 "weapon_id": (it.findtext("path") or "").strip(),
                 "rate": int((it.findtext("rate") or "0").strip() or 0),
+                "_source": source,
             })
         levels[lvl] = items
     return levels
@@ -948,8 +1284,28 @@ def main() -> int:
         print("FALLBACK: weapons.csv/AssetRipper missing -- weapons.json degrades to the 1.07 class table")
         weapons = build_table(guns, idx, prefer=("Bullet",))
     counts["weapons"] = write("weapons", weapons)
-    counts["enemy_guns"] = write("enemy_guns", build_table(eguns, idx, prefer=("Bullet",)))
-    counts["bullets"] = write("bullets", build_table(bullets, idx))
+    # P1.10 UPVERSION: enemy_guns/bullets/bosses/buffs are class-keyed rows
+    # sourced from the AssetRipper 1.7.10 project (real per-instance scalars,
+    # not the 1.07 dump's shared class template) -- see the builders' own
+    # docstrings. Each falls back to the plain 1.07 build_table() when the
+    # AssetRipper source is absent so the pipeline still runs on a checkout
+    # without the sibling _reverse/ tree.
+    enemy_guns = build_enemy_gun_table(eguns, idx)
+    if enemy_guns is None:
+        print("FALLBACK: AssetRipper source missing -- enemy_guns.json stays 1.07-only")
+        enemy_guns = build_table(eguns, idx, prefer=("Bullet",))
+        for r in enemy_guns:
+            r["_source"] = "1.07"
+    counts["enemy_guns"] = write("enemy_guns", enemy_guns)
+
+    new_bullets = build_bullet_table(bullets, idx)
+    if new_bullets is None:
+        print("FALLBACK: rgprefab/bullet missing -- bullets.json stays 1.07-only")
+        new_bullets = build_table(bullets, idx)
+        for r in new_bullets:
+            r["_source"] = "1.07"
+    counts["bullets"] = write("bullets", new_bullets)
+
     # ENEMY RE-KEY: enemies.json is now ONE ENTRY PER SPECIES (from the RE'd
     # enemies.csv ground truth), not one per AI-class template. Falls back to the
     # old per-AI-class table (16 entries) if the CSV is unavailable (e.g. a
@@ -960,8 +1316,22 @@ def main() -> int:
     else:
         print("FALLBACK: enemies.csv missing -- enemies.json degrades to the 1.07 per-AI-class table (16)")
         counts["enemies"] = write("enemies", build_table(enemies, idx, prefer=("RoleAttribute",)))
-    counts["bosses"] = write("bosses", build_table(bosses, idx, prefer=("Bullet",)))
-    counts["buffs"] = write("buffs", build_table(buffs, idx))
+
+    new_bosses = build_boss_table(bosses, idx)
+    if new_bosses is None:
+        print("FALLBACK: AssetRipper source missing -- bosses.json stays 1.07-only")
+        new_bosses = build_table(bosses, idx, prefer=("Bullet",))
+        for r in new_bosses:
+            r["_source"] = "1.07"
+    counts["bosses"] = write("bosses", new_bosses)
+
+    new_buffs = build_buff_table(buffs, idx)
+    if new_buffs is None:
+        print("FALLBACK: AssetRipper source missing -- buffs.json stays 1.07-only")
+        new_buffs = build_table(buffs, idx)
+        for r in new_buffs:
+            r["_source"] = "1.07"
+    counts["buffs"] = write("buffs", new_buffs)
 
     # characters: per-character roster with REAL stats from the c##.prefab
     # RoleAttributePlayer components (was a single shared template + bare id list).

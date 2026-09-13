@@ -72,7 +72,9 @@ struct BulletDef {
 ///
 /// ENEMY RE-KEY: as of the per-species pipeline (tools/build_gamedata.py,
 /// enemies.csv ground truth), @c id is the PREFAB name (e.g. "boss01",
-/// "e_succulent") -- one real species per entry, 145 total -- and @c enemyClass
+/// "e_succulent") -- one real species per entry, 146 total (145 from
+/// enemies.csv + ex_orc05, T-27: read from its AssetRipper prefab since it
+/// lives outside res/enemy/** and has no CSV row) -- and @c enemyClass
 /// is the shared AI-class dispatch key (e.g. "BossAI01", "EnemyAI07") those 16
 /// brain templates are keyed by. GameData::FindEnemy looks up by @c id (species);
 /// GameData::FindEnemyByClass looks up a representative species by @c enemyClass

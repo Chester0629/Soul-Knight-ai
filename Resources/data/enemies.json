@@ -4203,5 +4203,34 @@
     "camp": 0,
     "critical": 0,
     "deviation": 0
+  },
+  {
+    "id": "ex_orc05",
+    "enemy_class": "EnemyAI01",
+    "biome": "",
+    "chapter": 0,
+    "ai_level": 3,
+    "shoot_cd": 3.0,
+    "friction": 0.7,
+    "scout_rate": 1.0,
+    "consume": 2,
+    "e_size": 2,
+    "reward_rate": 100,
+    "reward_value": [
+      0,
+      0,
+      4,
+      3
+    ],
+    "buff_immune": 1.0,
+    "kinematic": 0,
+    "max_hp": 50,
+    "hp": 50,
+    "atk": 0,
+    "speed": 4.0,
+    "speed_rate": 0.0,
+    "camp": 1,
+    "critical": 0,
+    "deviation": 0
   }
 ]

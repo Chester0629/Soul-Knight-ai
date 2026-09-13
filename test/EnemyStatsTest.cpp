@@ -39,7 +39,10 @@ TEST(EnemyStatsTest, LoadsAllSpeciesFromEnemiesCsv) {
     // enemies.csv has 145 data rows (prefab_name is unique per row); the old
     // per-AI-class table had 16. Any reasonably-complete re-key should be in the
     // same ballpark as the full table, well above the old class-template count.
-    EXPECT_EQ(gd.Enemies().size(), 145u);
+    // P1.10 UPVERSION (T-27): plus ex_orc05, read straight from its AssetRipper
+    // prefab (GameObject/ex_orc05.prefab is outside res/enemy/**, so it has no
+    // enemies.csv row) -- 146 total.
+    EXPECT_EQ(gd.Enemies().size(), 146u);
 }
 
 TEST(EnemyStatsTest, Boss01RealMaxHp) {

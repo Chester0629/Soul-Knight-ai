@@ -15,13 +15,23 @@ TEST(GameDataTest, LoadsAllTablesWithExpectedCounts) {
     GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
     EXPECT_EQ(gd.Weapons().size(), 194u); // WEAPON RE-KEY: one per prefab (was 46 class templates)
-    EXPECT_EQ(gd.Bullets().size(), 25u);
+    // P1.10 UPVERSION: bullets.json is now the 25 1.07 class-keyed rows (kept,
+    // so FindBullet("BulletNN") still resolves) PLUS 178 real 1.7.10 prefab
+    // rows (id = prefab stem, e.g. "bullet_0") from the RGBullet class family --
+    // see tools/build_gamedata.py build_bullet_table().
+    EXPECT_EQ(gd.Bullets().size(), 203u);
     // ENEMY RE-KEY: enemies.json used to carry 16 AI-CLASS templates (one row per
-    // EnemyAI*.json/BossAI*.json dump); it is now 145 real SPECIES rows straight
+    // EnemyAI*.json/BossAI*.json dump); it is now 146 real SPECIES rows straight
     // from enemies.csv (every enemy/boss loaded flat HP=3/500 before this -- the
-    // bug the re-key fixes). See EnemyStatsTest.cpp for the fidelity assertions.
-    EXPECT_EQ(gd.Enemies().size(), 145u);
+    // bug the re-key fixes), plus ex_orc05 (T-27: read straight from its
+    // AssetRipper prefab -- it has no enemies.csv row). See EnemyStatsTest.cpp
+    // for the fidelity assertions.
+    EXPECT_EQ(gd.Enemies().size(), 146u);
+    // P1.10 UPVERSION: still one row per class (EGun001..EGun011 minus EGun007),
+    // now sourced from a real 1.7.10 prefab per class instead of the 1.07 dump.
     EXPECT_EQ(gd.EnemyGuns().size(), 10u);
+    // P1.10 UPVERSION: still one row per class (12), now sourced from a real
+    // 1.7.10 prefab per class (all 12 resolve -- see build_buff_table()).
     EXPECT_EQ(gd.Buffs().size(), 12u);
 }
 
@@ -109,8 +119,12 @@ TEST(GameDataTest, EnemyGun001ScalarStats) {
     gd.LoadAll(kResourceRoot);
     const auto *g = gd.FindEnemyGun("EGun001");
     ASSERT_NE(g, nullptr);
+    // P1.10 UPVERSION: FAITHFUL @ GameObject/ex_orc05.prefab's EGun001 component
+    // (the first 1.7.10 prefab, in path order, that uses the class -- see
+    // build_enemy_gun_table()). bulletSpeed was 10.0 in the 1.07 class dump;
+    // the real instance is 16.0 (atk/deviation happen to match).
     EXPECT_EQ(g->atk, 3);
-    EXPECT_FLOAT_EQ(g->bulletSpeed, 10.0F);
+    EXPECT_FLOAT_EQ(g->bulletSpeed, 16.0F);
     EXPECT_EQ(g->deviation, 5);
 }
 
