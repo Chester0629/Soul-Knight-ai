@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.10（2026-09-13；依 Codex R9 修訂 P1.10 文件一致性）
+> 版本：v1.11（2026-09-13；R10 通過 P1.10 切片，小版號 +1）
 
 ---
 
@@ -83,7 +83,7 @@
 
 | 區塊 | 功能 | 驗收 | 主要 commit | 缺口 |
 |---|---|---|---|---|
-| P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | 未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
+| P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | P1.10 驗收完成（有取捨）；其餘未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
 | P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
 | P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain 完成；P3.0 稽核完成待裁決） | 未驗收 | phase 1–5 | P3.0 裁決、P3.1–P3.9 |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
@@ -108,7 +108,7 @@
 | P1.7 boss 房／寶箱／商店表 | 14 房、11 箱、8 藥水 3 機器 | rgprefab/rooms、res/item、room/event | boss_rooms/boss_chests/shop.json | BossRoomTest、ShopTest、V-G | T-08 T-28 | 功能完成・未驗收 |
 | P1.8 內嵌物件 | rail/stone02/carpet/obj22_house/table/stone | *_boss*.prefab 子物件 m_Sprite | boss_rooms.json prefabs | BossRoomTest | — | 未開始・未驗收 |
 | P1.9 未解析掉落物 | mineral_obj、GetRoomReward、ChestXmlReader、GetPot/GetCoin | 反編譯（game_typed.c 交叉） | 對應 JSON | V-R | T-09 T-10 T-15 | 未開始・未驗收 |
-| P1.10 升版 | 六表改由 AssetRipper 產生；補 ex_orc05（146 種）、撤資料閘豁免 | `<Class>.cs.meta` guid → 預製件 m_Script；rgprefab/bullet、res/enemy/**、rgprefab/buff、res/effect、GameObject/ex_orc05、Resources/*.txt | 同名 JSON（每筆 `_source`）、`docs/evidence/p1_10_diff.md` | V-D 五筆樣本＋全表計數 diff；GameDataTest（bullets 203、enemies 146、EGun001 speed 16）；V-G GREEN 6 warnings | T-27 已關；T-30 類別列取路徑序第一個實例；T-31 78 顆非 RGBullet 家族子彈；59 個武器與 18 筆 boss 子彈引用未解析（清單化） | 功能完成・未驗收（R8 不通過，v1.9 修正待 R9） |
+| P1.10 升版 | 六表改由 AssetRipper 產生；補 ex_orc05（146 種）、撤資料閘豁免 | `<Class>.cs.meta` guid → 預製件 m_Script；rgprefab/bullet、res/enemy/**、rgprefab/buff、res/effect、GameObject/ex_orc05、Resources/*.txt | 同名 JSON（每筆 `_source`）、`docs/evidence/p1_10_diff.md` | V-D 五筆樣本＋全表計數 diff；GameDataTest（bullets 203、enemies 146、EGun001 speed 16）；V-G GREEN 6 warnings | T-27 已關；T-30 類別列取路徑序第一個實例；T-31 78 顆非 RGBullet 家族子彈；59 個武器與 18 筆 boss 子彈引用未解析（清單化） | 功能完成・**驗收完成（有取捨 T-30/T-31）**（R10 @ 41c9172） |
 | P1.13 每實例表 | 敵人各自的槍／子彈值（不再以類別代表）、非 RGBullet 家族子彈 | 各敵人預製件的槍子物件 | enemy_guns/bullets 每實例列＋ C++ 查表改鍵 | V-D、GameDataTest | T-30 T-31 | 未開始・未驗收 |
 | P1.11 資料閘擴充 | levels/boss_rooms/boss_chests/shop/pickups 進閘；未知引用為錯誤 | — | validate_data.py | V-G（GREEN，8 warnings） | T-27 | 功能完成・未驗收 |
 | P1.12 數值出 C++ | 掉落值、磁吸 speed/range、摩擦、幀清單 → pickups.json；雕像 cost／貼圖／偏移 → shop.json statues | res/register/coin_*、energy、coin_0.controller；rgprefab/room/statue/statue_01..07 | pickups.json、shop.json statues、GameData::FindPickup/FindStatue | EnemyRewardTest、StatueTest（讀表）、V-G | T-19（散射力度仍 PORT）；剩餘 C++ 常數＝幾何／鉤子 | 功能完成・未驗收 |
@@ -355,6 +355,9 @@ Codex 對下一步的建議：P3.0 裁決後收尾（記錄選值依據；驗證
 ### R9 — 2026-09-13 — Codex — 對象 P1.10 切片 v1.9 @ 4d4d49b — **不通過（僅文件一致性）**
 25 筆 bullet 類別列獨立核對全部相符（18 解析、7 保留 1.07）；T-31 清單 47 個 id、清單外報錯、邊界測試 3/3 並入證據鏈；三筆抽查（Bullet04 `_bullet_71` destroy_time 0.75、Bullet05 `_bullet_8` rotate_angle 570、BulletParabola `bullet_90` camp 0）通過；T-01～T-31 齊；附件一致。§7：1–4、6、7 通過，5 不適用，**8 不通過**：T-31 位置寫成 GameData.cpp（實際在閘門）；diff 報告仍說 Bullet01 原封保留 1.07、「14 distinct entries」應為 14 個不同目標（18 筆引用、涉及 12 個 boss）；build_gamedata.py 註解「none observed」應為 7 筆；§0 退化條件未涵蓋「來源存在但類別無預製件」的例外。
 **回覆（v1.10）**：四處文字全部改正（本節上方 T-31 列、§9 R8 回覆、§0 降級條件、diff 報告兩處、build_gamedata.py 註解）。無程式行為變更，附件沿用 v1.9。
+
+### R10 — 2026-09-13 — Codex — 對象 P1.10 切片 v1.10 @ 41c9172 — **驗收完成（有取捨 T-30／T-31）**
+R9 四項全數修正；`git diff 4d4d49b..41c9172 --stat` 3 檔、僅 Markdown 與 docstring，AST 相同無行為變更。§7：1–4、6–8 通過，5 不適用。P1.10 為第一個進入「驗收完成」的切片；補完留 P1.13／P3.6。
 
 ---
 
