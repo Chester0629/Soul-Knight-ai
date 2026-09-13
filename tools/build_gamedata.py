@@ -654,9 +654,9 @@ def build_bullet_table(bullet_groups, idx: Index):
     come from the RGBullet-family fields on that prefab (_BULLET_FIELDS) and
     it carries `_source: "1.7.10"` + `_prefab: <stem>`. A class with no 1.7.10
     bullet prefab (no prefab under rgprefab/bullet uses its script) stays the
-    plain 1.07 row with `_source: "1.07"` -- reported in the diff (none
-    observed among the 25 as of this pass, but the fallback is intentional/
-    the pattern all four class-keyed tables share).
+    plain 1.07 row with `_source: "1.07"` -- reported in the diff (7 of the
+    25 as of this pass: BulletBuleLight/CoinExplode/EPoly/Fire/Gas/GreenLight/
+    Polymerization; the pattern all four class-keyed tables share).
 
     None if the AssetRipper source is absent (caller falls back to the
     1.07-only table)."""

@@ -133,8 +133,9 @@ same three pinned values; only `can_rebound` (not asserted) changed.
 
 - bullets: `rgprefab/bullet/bullet_0.prefab:RGBullet.destroy_time` -> `5`
   (same field name/shape as the 1.07 `BulletNN.json` dump; matches
-  `test/GameDataTest.cpp`'s `Bullet01ScalarStats`, since `Bullet01`'s row is
-  kept 1.07-sourced verbatim -- see "no test changes needed" above).
+  `test/GameDataTest.cpp`'s `Bullet01ScalarStats`: `Bullet01` now resolves to
+  `_bullet_4.prefab` whose speed/destroy_time/camp equal the 1.07 template, so
+  the pinned assertions hold unchanged; only can_rebound changed 0 -> 1).
 - bosses: `res/enemy/3-volcano/boss12_1.prefab` and
   `res/enemy/3-volcano/boss12_2.prefab` both use `BossAI12` (two real
   instances, one class row -- the first, `boss12_1`, wins by path order).
@@ -154,8 +155,8 @@ same three pinned values; only `can_rebound` (not asserted) changed.
   no FALLBACK lines printed (AssetRipper source present).
 - `python tools/validate_data.py` -- `GATE: GREEN -- 0 errors, 6 warning(s)`.
   New warnings (all expected/documented, not regressions): 59 weapons + 18
-  boss bullet REFERENCES (14 distinct boss.bulletNN entries across 16 bosses,
-  some bosses carrying more than one) point at prefabs outside bullets.json
+  boss bullet REFERENCES (14 distinct target prefabs, spread over 12 of the 16
+  bosses, some bosses carrying more than one) point at prefabs outside bullets.json
   (Gas/item effects, another weapon prefab used as a thrown projectile, or
   one of the 78 non-RGBullet-family bullet variants -- real 1.7.10 data, out
   of this pass's scope). T-31 (Codex review): these are no longer a blanket

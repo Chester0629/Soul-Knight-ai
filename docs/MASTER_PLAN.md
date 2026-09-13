@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.9（2026-09-13；依 Codex R8 修訂 P1.10 切片）
+> 版本：v1.10（2026-09-13；依 Codex R9 修訂 P1.10 文件一致性）
 
 ---
 
@@ -31,7 +31,7 @@
 | bullets（25 類別列＋178 預製件列）/ bosses（16）/ buffs（12）/ enemy_guns（10）.json | 類別列：`<Class>.cs.meta` guid → 路徑序第一個帶該元件的 1.7.10 預製件（T-30；bullet 類別列於 v1.9 起同樣解析：18/25 解析、7 筆（BulletBuleLight/CoinExplode/EPoly/Fire/Gas/GreenLight/Polymerization）無預製件保留 1.07 並以 `_source` 標明）；bullets 另有每預製件列（178/256，`rgprefab/bullet`） | 1.7.10／少數 1.07（每筆 `_source`） | 退回 `1.07/MonoBehaviour` 類別表並印 FALLBACK | 1.7.10（P1.10） |
 | droptables / weapon_catalog.json | `EP/Resources/chest_data.txt`、`weapon_introduce.txt`（與 1.07 逐位元相同） | 1.7.10 | 退回 `1.07/TextAsset` | 1.7.10（P1.10） |
 
-**降級條件**：退化只在 `../_reverse` 缺席的乾淨 checkout 觸發，`build_gamedata.py` 對每張退化或未產生的表印 `FALLBACK: <table> …`（weapons、enemies、characters、sprites、levels、boss_rooms、boss_chests、shop、statues、pickups、bullets、bosses、buffs、enemy_guns、droptables、weapon_catalog 十六處）；標「驗收完成」的階段其表必須是 1.7.10 來源。
+**降級條件**：整表退化只在 `../_reverse` 缺席的乾淨 checkout 觸發；另有「來源存在但該類別無任何 1.7.10 預製件」的逐筆例外（bullets 7 筆類別列：BulletBuleLight/CoinExplode/EPoly/Fire/Gas/GreenLight/Polymerization，以 `_source: "1.07"` 標明，補完屬 P1.13），`build_gamedata.py` 對每張退化或未產生的表印 `FALLBACK: <table> …`（weapons、enemies、characters、sprites、levels、boss_rooms、boss_chests、shop、statues、pickups、bullets、bosses、buffs、enemy_guns、droptables、weapon_catalog 十六處）；標「驗收完成」的階段其表必須是 1.7.10 來源。
 
 **非目標**（不列入階段表）：多人連線、IAP／廣告、雲端存檔、Google Play 成就、季節 boss（Nian）。
 **法律框架**：解包素材屬 ChillyRoom，僅供課堂演示；`Resources/sprites` 已列入 `.gitignore`。
@@ -249,7 +249,7 @@
 | T-27 | **已關（v1.8）**：ex_orc05 改由 `GameObject/ex_orc05.prefab` 直讀（max_hp 50、EnemyAI01），資料閘豁免撤除 | 已解 | build_gamedata.py build_ex_orc05_row | A2–A5 精英池 | — |
 | T-28 | boss 房門帶外物件（r2_boss3/4 的 rail，y=21）由抽取器丟棄並記錄 `dropped_outside` | PORT CHOICE | build_gamedata.py build_boss_rooms | 兩房各少數條軌道 | P2.11 |
 | T-30 | 類別鍵列（Bullet01／BossAI07／BuffArmor／EGun001…）的數值取自路徑序第一個使用該類別的 1.7.10 預製件；同類別其他實例可能不同（如 EGun001 取自 ex_orc05） | PORT CHOICE | build_gamedata.py `_first_prefab_by_guid` | 敵槍／子彈數值 | P1.13 |
-| T-31 | 78 顆非 RGBullet 家族子彈預製件（BulletFire/BulletGas…）未入表；59 個武器與 18 **筆** boss 子彈引用指向表外預製件，列入 `KNOWN_UNRESOLVED_BULLET_REFS` 後降為 warning，清單外為錯誤 | NOT PORTED（資料） | validate_data.py `KNOWN_UNRESOLVED_BULLET_REFS`、GameData.cpp 查表註解 | 對應武器／boss 的子彈行為 | P1.13 / P3.6 |
+| T-31 | 78 顆非 RGBullet 家族子彈預製件（BulletFire/BulletGas…）未入表；59 個武器與 18 **筆** boss 子彈引用指向表外預製件，列入 `KNOWN_UNRESOLVED_BULLET_REFS` 後降為 warning，清單外為錯誤 | NOT PORTED（資料） | validate_data.py `KNOWN_UNRESOLVED_BULLET_REFS`（# T-31）、tools/tests/test_validate_data.py；C++ 無對應查表（bullet_prefab 尚未載入 C++） | 對應武器／boss 的子彈行為 | P1.13 / P3.6 |
 | T-29 | CreatePart 在 part ≥ 1 時 `Invoke("ShowUpEffect", 0.8f)`（字串表有 ShowUpEffect、無 CreatePart；ShowUpEffect 只播音效 7）；分波本身無延遲 | NOT PORTED（音效）/ INFERRED（字串） | WaveScheduler.hpp kShowUpEffectDelayMs | 音效 | P6.7 |
 
 ---
@@ -350,7 +350,11 @@ Codex 對下一步的建議：P3.0 裁決後收尾（記錄選值依據；驗證
 五筆樣本數值皆核對通過（BuffStatue01 實檔在 `res/effect/buff_statue_1.prefab`，文件路徑錯）；GameDataTest 三項變更有依據（203＝25 筆 1.07 類別列＋178 筆 1.7.10；146＝145＋ex_orc05；EGun001 speed 16）。
 阻擋：bullets 的 25 筆類別列仍為 1.07，與矩陣「六表皆 1.7.10」不符；T-31 的 warning 無界限（注入不存在引用仍 GREEN）；程式缺 T-31；§1 仍寫 ex_orc05 豁免；「18 個 boss」應為 18 筆引用；§9 未補。T-30 可接受為暫時 PORT CHOICE（同為 EGun001：e_orc01 speed 7、ex_orc01 8、代表列取 16），每實例接線留 P1.13。
 §7：1 ✗ 2 ✓ 3 ✓ 4 ✓ 5 不適用 6 ✗ 7 ✓ 8 ✗。
-**回覆（v1.9）**：bullet 類別列改走同一 guid→首個預製件解析並記 `_prefab`；`KNOWN_UNRESOLVED_BULLET_REFS` 清單化、清單外為錯誤、`tools/tests/test_validate_data.py` 注入假引用驗證邊界並納入證據鏈；GameData.cpp 查表加 T-30／T-31 註解；§1 V-G 刪豁免敘述；§1.2 路徑更正；T-31 措辭改「18 筆引用」。
+**回覆（v1.9）**：bullet 類別列改走同一 guid→首個預製件解析並記 `_prefab`；`KNOWN_UNRESOLVED_BULLET_REFS` 清單化、清單外為錯誤、`tools/tests/test_validate_data.py` 注入假引用驗證邊界並納入證據鏈；GameData.cpp 查表加 T-30 註解（T-31 位置在 Python 閘門與邊界測試，C++ 尚無 bullet_prefab 讀取）；§1 V-G 刪豁免敘述；§1.2 路徑更正；T-31 措辭改「18 筆引用」。
+
+### R9 — 2026-09-13 — Codex — 對象 P1.10 切片 v1.9 @ 4d4d49b — **不通過（僅文件一致性）**
+25 筆 bullet 類別列獨立核對全部相符（18 解析、7 保留 1.07）；T-31 清單 47 個 id、清單外報錯、邊界測試 3/3 並入證據鏈；三筆抽查（Bullet04 `_bullet_71` destroy_time 0.75、Bullet05 `_bullet_8` rotate_angle 570、BulletParabola `bullet_90` camp 0）通過；T-01～T-31 齊；附件一致。§7：1–4、6、7 通過，5 不適用，**8 不通過**：T-31 位置寫成 GameData.cpp（實際在閘門）；diff 報告仍說 Bullet01 原封保留 1.07、「14 distinct entries」應為 14 個不同目標（18 筆引用、涉及 12 個 boss）；build_gamedata.py 註解「none observed」應為 7 筆；§0 退化條件未涵蓋「來源存在但類別無預製件」的例外。
+**回覆（v1.10）**：四處文字全部改正（本節上方 T-31 列、§9 R8 回覆、§0 降級條件、diff 報告兩處、build_gamedata.py 註解）。無程式行為變更，附件沿用 v1.9。
 
 ---
 
