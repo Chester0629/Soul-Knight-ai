@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "combat/Buff.hpp"
+
 namespace Game {
 
 /// Player weapon definition (from Resources/data/weapons.json).
@@ -151,11 +153,30 @@ struct SpriteSet {
 };
 
 /// Status-effect definition (from Resources/data/buffs.json).
+///
+/// isEnemy / buffTime / changeValue are FAITHFUL (real prefab fields, "_source":
+/// "1.7.10"). tickSec / tickDamage / speedMul / armorDelta come from each row's
+/// "_inferred" JSON block: numbers the decompile (game_typed.c:86460-87048) does
+/// not show a literal for -- see BuffParamsFrom and tools/build_gamedata.py's
+/// build_buff_table(). Only the six core status buffs (BuffArmor, BuffChangeSpeed,
+/// BuffElectric, BuffFire, BuffIce, BuffPoison) carry an "_inferred" block; the
+/// BuffStatue*/BuffEffectTrigger/BuffRandomEffectTrigger rows leave these at 0/1.0.
 struct BuffDef {
     std::string id;
     int isEnemy = 0;
     float buffTime = 0.0F;
+    float changeValue = 0.0F; ///< FAITHFUL: BuffChangeSpeed's changeValue field.
+    float tickSec = 0.0F;     ///< INFERRED (T-32): Fire/Poison damage-tick cadence.
+    int tickDamage = 0;       ///< INFERRED (T-32): Fire/Poison damage per tick.
+    float speedMul = 1.0F;    ///< INFERRED (T-32): movement multiplier while active.
+    int armorDelta = 0;       ///< INFERRED (T-32): BuffArmor's +armor while active.
 };
+
+/// Build engine-free Combat::BuffParams from a data-table BuffDef, dispatching on
+/// BuffDef::id ("BuffFire" -> BuffKind::Fire, etc.). Unknown ids fall back to
+/// BuffKind::Fire with durationSec = d.buffTime (never used in practice; every
+/// caller looks the def up by one of the six known ids first).
+Combat::BuffParams BuffParamsFrom(const BuffDef &d);
 
 /// One floor-1 design room's SIZE (from Resources/data/room_layouts.json).
 /// Phase 2 size source: a dungeon slot takes one of these rooms' width/height; the

@@ -176,6 +176,33 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
     has_source(bosses, "boss")
     has_source(buffs, "buff")
     has_source(enemy_guns, "enemy_gun")
+
+    # --- P3.1: the six core status buffs need a positive duration + an
+    # "_inferred" block carrying the numbers the decompile doesn't show
+    # (tick cadence/damage, freeze-via-speed_mul, armor bonus, or the
+    # additive-changeValue -> multiplicative-speed_mul conversion), each with
+    # a "_why" citation. See tools/build_gamedata.py's _buff_inferred().
+    CORE_BUFF_IDS = ("BuffArmor", "BuffChangeSpeed", "BuffElectric", "BuffFire",
+                      "BuffIce", "BuffPoison")
+    REQUIRED_INFERRED_KEYS = ("tick_sec", "tick_damage", "speed_mul", "armor_delta", "_why")
+    if buffs:
+        by_id = {b.get("id"): b for b in buffs}
+        for bid in CORE_BUFF_IDS:
+            b = by_id.get(bid)
+            if b is None:
+                errors.append(f"buff '{bid}': missing from buffs.json")
+                continue
+            if not (isinstance(b.get("buff_time"), (int, float)) and b["buff_time"] > 0):
+                errors.append(f"buff '{bid}': buff_time must be > 0")
+            inferred = b.get("_inferred")
+            if not isinstance(inferred, dict):
+                errors.append(f"buff '{bid}': missing '_inferred' block")
+                continue
+            missing = [k for k in REQUIRED_INFERRED_KEYS if k not in inferred]
+            if missing:
+                errors.append(f"buff '{bid}': _inferred missing keys {missing}")
+            elif not isinstance(inferred.get("_why"), str) or not inferred["_why"].strip():
+                errors.append(f"buff '{bid}': _inferred._why must be a non-empty string")
     if catalog:
         for w in catalog:
             if w.get("_source") not in ("1.07", "1.7.10"):

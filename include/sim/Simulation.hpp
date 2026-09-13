@@ -9,6 +9,7 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
 #include "combat/CombatStats.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
@@ -78,6 +79,19 @@ public:
     /// Seed the player's combat vitals (enemy bullets damage these; read back via PlayerStats).
     void SetPlayerStats(const Game::CombatStats &stats);
 
+    /// P3.1: apply (or refresh) a status-effect buff to one entity. @p entityId uses
+    /// the same scheme as EntityView::id / SimEvent::entityId: kPlayerViewId,
+    /// kBossViewId, or an enemy index 0..N. A no-op if entityId names a boss/enemy
+    /// that does not currently exist. Reapplying the same BuffKind refreshes its
+    /// remaining duration (does not stack). Bullet-trigger wiring (auto-applying a
+    /// buff on hit) is P3.2 -- this is the manual/test-hook entry point only.
+    void ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params);
+    /// True iff the PLAYER is currently frozen (Ice/Electric): the shell (GameScene
+    /// owns player movement, not the sim) must gate its own movement on this.
+    bool PlayerFrozen() const { return m_PlayerFrozen; }
+    /// The PLAYER's combined movement-speed multiplier this step (1.0 = no buff).
+    float PlayerSpeedMul() const { return m_PlayerSpeedMul; }
+
     // --- drive -------------------------------------------------------------
     /// Run FixedClock.Advance(dtMs) fixed Step()s with @p in held constant. Returns step count.
     int Advance(float dtMs, const WorldInputs &in);
@@ -101,6 +115,7 @@ private:
     void TickWeapon();                         // Task 3.
     void TickSkill();                          // A3: activate + cooldown + publish progress.
     void EmitAttackEvents();                   // A: per-controller fire -> AnimTrigger "attack".
+    void TickBuffs();                          // P3.1: advance every BuffList, apply DoT.
     void MoveControllers();                    // Task 5/6.
     void DrainFireIntents();                   // Task 3.
     void IntegrateBullets();                   // Task 4.
@@ -129,6 +144,12 @@ private:
     std::unique_ptr<ICharSkill> m_Skill;
 
     Game::CombatStats m_PlayerStats{};
+    // --- P3.1: player buff state (the sim does not own the player's position, so
+    // GameScene polls PlayerFrozen()/PlayerSpeedMul() to gate its own movement). ---
+    Game::Combat::BuffList m_PlayerBuffs;
+    float m_PlayerSpeedMul = 1.0F;
+    bool m_PlayerFrozen = false;
+    int m_PlayerArmorGranted = 0; ///< so the Armor buff's end can revert exactly this much.
     WorldInputs m_Input{};
     int m_PlayerShotsLastAdvance = 0;
     std::vector<SimEvent> m_Events;

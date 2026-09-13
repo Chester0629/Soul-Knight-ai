@@ -763,6 +763,81 @@ _BUFF_SCALAR_FIELDS = ("is_enemy", "buff_time", "changeValue", "probability",
                         "cd", "speed", "atk", "count", "angle", "pierced")
 
 
+def _buff_inferred(stem: str, rec: dict) -> dict | None:
+    """P3.1: numeric buff-engine params the decompile (game_typed.c:86460-87048)
+    does not show a literal for, per the six core status buffs. Every other row
+    (BuffStatue*, *EffectTrigger) gets no "_inferred" block -- they are not
+    tick/duration status effects in this engine slice.
+
+    Each buff's REAL fields (is_enemy/buff_time/changeValue, "_source": "1.7.10"
+    or "1.07") are kept as-is; only the numbers below (tick cadence, tick damage,
+    the ice/electric freeze modeling, the armor bonus magnitude, and the
+    additive-changeValue -> multiplicative-speedMul conversion) are INFERRED
+    (T-32) and cited with a "_why"."""
+    if stem == "BuffFire":
+        return {
+            "tick_sec": 1.0, "tick_damage": 1, "speed_mul": 1.0, "armor_delta": 0,
+            "_why": ("INFERRED (T-32): BuffFire__GetHurt is an obfuscation-guard "
+                     "tail call with no visible damage literal (game_typed.c "
+                     "~86822-86846). 1 damage/sec is Soul Knight's well-known "
+                     "burning-DoT rate; buff_time (2s) is the FAITHFUL duration."),
+        }
+    if stem == "BuffPoison":
+        return {
+            "tick_sec": 1.0, "tick_damage": 1, "speed_mul": 1.0, "armor_delta": 0,
+            "_why": ("INFERRED (T-32): no BuffPoison GetHurt body is visible in "
+                     "the decompiled range (obfuscation-guard tail calls only). "
+                     "1 damage/sec matches Soul Knight's known poison-DoT rate; "
+                     "buff_time (5s) is the FAITHFUL duration."),
+        }
+    if stem == "BuffIce":
+        return {
+            "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 0.0, "armor_delta": 0,
+            "_why": ("INFERRED (T-32): BuffIce__BuffEnd calls CancelInvoke "
+                     "(game_typed.c ~86936-86948), confirming a SCHEDULED/timed "
+                     "end (the only visible timed-end evidence among the six "
+                     "buffs); modeling that as a full freeze (speed_mul=0.0) for "
+                     "buff_time (2.75s, FAITHFUL) is inferred from Soul Knight's "
+                     "known ice-stun visual, not from a decompiled literal."),
+        }
+    if stem == "BuffElectric":
+        return {
+            "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 0.0, "armor_delta": 0,
+            "_why": ("INFERRED (T-32): BuffElectric__Start has no visible stun "
+                     "logic beyond the is_enemy branch (game_typed.c ~86745-"
+                     "86758); modeled as a short freeze (speed_mul=0.0) for its "
+                     "FAITHFUL buff_time (2s), matching Soul Knight's known "
+                     "electric-shock stun behaviour."),
+        }
+    if stem == "BuffArmor":
+        return {
+            "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 1.0, "armor_delta": 1,
+            "_why": ("INFERRED (T-32): BuffArmor__GetArmor exists and is gated "
+                     "on !is_enemy (game_typed.c ~86487-86498), confirming an "
+                     "armor-while-active mechanic; the +1 magnitude is not a "
+                     "decompiled literal (body is a truncated tail call) -- "
+                     "chosen as the smallest whole armor point, matching "
+                     "CombatStats' existing +1-per-tick armor-reload unit."),
+        }
+    if stem == "BuffChangeSpeed":
+        change_value = float(rec.get("changeValue", 0.0) or 0.0)
+        # FAITHFUL: RoleAttribute__ChangeSpeed(role, tag, value, time, changeValue)
+        # is a confirmed call (game_typed.c ~86553-86555) and is ADDITIVE (matches
+        # CombatStats::ChangeSpeed's existing +=). The sim's movement pipeline
+        # instead multiplies velocity by a speedMul, so this converts the additive
+        # delta into an equivalent multiplier at data-build time -- INFERRED (T-32).
+        speed_mul = max(0.0, 1.0 + change_value)
+        return {
+            "tick_sec": 0.0, "tick_damage": 0, "speed_mul": speed_mul, "armor_delta": 0,
+            "_why": (f"INFERRED (T-32): changeValue ({change_value}) is FAITHFUL "
+                     "(RoleAttribute__ChangeSpeed call, game_typed.c ~86553-86555) "
+                     "and additive in the original; converted here to a "
+                     f"multiplicative speed_mul ({speed_mul}) = max(0, 1+changeValue) "
+                     "for the sim's multiplicative movement pipeline."),
+        }
+    return None
+
+
 def build_buff_table(buff_groups, idx: Index):
     """buffs.json stays class-keyed (BuffArmor.."BuffStatue04", 12 rows, the
     1.07 dump stems -- FindBuff("BuffArmor") keeps resolving), sourced from the
@@ -783,6 +858,9 @@ def build_buff_table(buff_groups, idx: Index):
         p = found.get(g) if g else None
         if p is None:
             rec = {"id": stem, **clean(data, idx, stem), "_source": "1.07"}
+            inferred = _buff_inferred(stem, rec)
+            if inferred is not None:
+                rec["_inferred"] = inferred
             out.append(rec)
             continue
         text = p.read_text(encoding="utf-8", errors="ignore")
@@ -792,6 +870,9 @@ def build_buff_table(buff_groups, idx: Index):
             v = _field(block, k)
             if v is not None:
                 rec[k] = v
+        inferred = _buff_inferred(stem, rec)
+        if inferred is not None:
+            rec["_inferred"] = inferred
         out.append(rec)
         n_real += 1
     print(f"  buffs: {n_real}/{len(out)} classes resolved to a real 1.7.10 prefab")

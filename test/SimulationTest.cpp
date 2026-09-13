@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
 #include "data/GameData.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/Simulation.hpp"
@@ -515,6 +516,39 @@ TEST(SimulationTest, RapidBulletChurnKeepsLiveIdsUniqueAndMonotone) {
     // Far more ids were issued than were ever simultaneously live -> ids never recycle.
     EXPECT_GT(static_cast<std::size_t>(maxIdSeen), maxLiveAtOnce * 2U);
     EXPECT_GT(maxIdSeen, 100U);
+}
+
+// --- P3.1: buff engine wired into the sim (ApplyBuff + TickBuffs -> Damage.hpp) ---
+
+TEST(SimulationTest, FireBuffDamagesEnemyOverTimeThroughDamagePath) {
+    Simulation sim(20240607, &g_NullWorld);
+    Game::EnemyDef def{};
+    def.shootCd = 99.0F;  // no bullets of its own -> hp change is ONLY the buff DoT.
+    def.scoutRate = 99.0F; // hold still (movement is not under test here).
+    def.friction = 0.9F;
+    sim.AddEnemy(def, glm::vec2{0.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+
+    WorldInputs in = Idle();
+    in.playerRoomId = 0; // same room -> awake, so TickBuffs' gating is exercised faithfully.
+    ASSERT_EQ(sim.EnemyViews().size(), 1U);
+    const int startHp = sim.EnemyViews()[0].hp;
+
+    // Mirrors buffs.json's BuffFire (buff_time=2, FAITHFUL) + its "_inferred" block
+    // (tick_sec=1, tick_damage=1) -- see Game::BuffParamsFrom.
+    Game::Combat::BuffParams fire;
+    fire.kind = Game::Combat::BuffKind::Fire;
+    fire.durationSec = 2.0F;
+    fire.tickSec = 1.0F;
+    fire.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, fire);
+
+    for (int i = 0; i < 150; ++i) { // well past the 2.0s duration (100 fixed 20ms steps).
+        sim.Advance(20.0F, in);
+    }
+    ASSERT_EQ(sim.EnemyViews().size(), 1U);
+    // floor(2.0s / 1.0s) = 2 ticks * 1 damage/tick = 2 total DoT damage.
+    EXPECT_EQ(sim.EnemyViews()[0].hp, startHp - 2);
+    EXPECT_TRUE(sim.Bullets().empty()); // no weapon equipped -> the hp drop is buff-only.
 }
 
 // NOLINTEND(readability-magic-numbers)

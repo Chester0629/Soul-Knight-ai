@@ -4,7 +4,14 @@
     "_source": "1.7.10",
     "prefab": "buff_armor",
     "is_enemy": 0,
-    "buff_time": 6
+    "buff_time": 6,
+    "_inferred": {
+      "tick_sec": 0.0,
+      "tick_damage": 0,
+      "speed_mul": 1.0,
+      "armor_delta": 1,
+      "_why": "INFERRED (T-32): BuffArmor__GetArmor exists and is gated on !is_enemy (game_typed.c ~86487-86498), confirming an armor-while-active mechanic; the +1 magnitude is not a decompiled literal (body is a truncated tail call) -- chosen as the smallest whole armor point, matching CombatStats' existing +1-per-tick armor-reload unit."
+    }
   },
   {
     "id": "BuffChangeSpeed",
@@ -12,7 +19,14 @@
     "prefab": "buff_speed_down",
     "is_enemy": 1,
     "buff_time": 6,
-    "changeValue": -0.75
+    "changeValue": -0.75,
+    "_inferred": {
+      "tick_sec": 0.0,
+      "tick_damage": 0,
+      "speed_mul": 0.25,
+      "armor_delta": 0,
+      "_why": "INFERRED (T-32): changeValue (-0.75) is FAITHFUL (RoleAttribute__ChangeSpeed call, game_typed.c ~86553-86555) and additive in the original; converted here to a multiplicative speed_mul (0.25) = max(0, 1+changeValue) for the sim's multiplicative movement pipeline."
+    }
   },
   {
     "id": "BuffEffectTrigger",
@@ -25,28 +39,56 @@
     "_source": "1.7.10",
     "prefab": "buff_ele",
     "is_enemy": 1,
-    "buff_time": 2
+    "buff_time": 2,
+    "_inferred": {
+      "tick_sec": 0.0,
+      "tick_damage": 0,
+      "speed_mul": 0.0,
+      "armor_delta": 0,
+      "_why": "INFERRED (T-32): BuffElectric__Start has no visible stun logic beyond the is_enemy branch (game_typed.c ~86745-86758); modeled as a short freeze (speed_mul=0.0) for its FAITHFUL buff_time (2s), matching Soul Knight's known electric-shock stun behaviour."
+    }
   },
   {
     "id": "BuffFire",
     "_source": "1.7.10",
     "prefab": "buff_fire",
     "is_enemy": 1,
-    "buff_time": 2
+    "buff_time": 2,
+    "_inferred": {
+      "tick_sec": 1.0,
+      "tick_damage": 1,
+      "speed_mul": 1.0,
+      "armor_delta": 0,
+      "_why": "INFERRED (T-32): BuffFire__GetHurt is an obfuscation-guard tail call with no visible damage literal (game_typed.c ~86822-86846). 1 damage/sec is Soul Knight's well-known burning-DoT rate; buff_time (2s) is the FAITHFUL duration."
+    }
   },
   {
     "id": "BuffIce",
     "_source": "1.7.10",
     "prefab": "buff_ice",
     "is_enemy": 1,
-    "buff_time": 2.75
+    "buff_time": 2.75,
+    "_inferred": {
+      "tick_sec": 0.0,
+      "tick_damage": 0,
+      "speed_mul": 0.0,
+      "armor_delta": 0,
+      "_why": "INFERRED (T-32): BuffIce__BuffEnd calls CancelInvoke (game_typed.c ~86936-86948), confirming a SCHEDULED/timed end (the only visible timed-end evidence among the six buffs); modeling that as a full freeze (speed_mul=0.0) for buff_time (2.75s, FAITHFUL) is inferred from Soul Knight's known ice-stun visual, not from a decompiled literal."
+    }
   },
   {
     "id": "BuffPoison",
     "_source": "1.7.10",
     "prefab": "buff_posion",
     "is_enemy": 1,
-    "buff_time": 5
+    "buff_time": 5,
+    "_inferred": {
+      "tick_sec": 1.0,
+      "tick_damage": 1,
+      "speed_mul": 1.0,
+      "armor_delta": 0,
+      "_why": "INFERRED (T-32): no BuffPoison GetHurt body is visible in the decompiled range (obfuscation-guard tail calls only). 1 damage/sec matches Soul Knight's known poison-DoT rate; buff_time (5s) is the FAITHFUL duration."
+    }
   },
   {
     "id": "BuffRandomEffectTrigger",

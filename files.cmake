@@ -11,6 +11,7 @@ set(SRC_FILES
     world/RoomGen.cpp
     world/MapManager.cpp
     combat/Damage.cpp
+    combat/Buff.cpp
     combat/BossAI01.cpp
     combat/BossAI04.cpp
     combat/BossAINian.cpp
@@ -353,6 +354,7 @@ set(TEST_FILES
     DoorTransitionTest.cpp
     RealBodyDriverTest.cpp
     DamageTest.cpp
+    BuffTest.cpp
     LootTableTest.cpp
     LootIntegrationTest.cpp
     BossAI01Test.cpp

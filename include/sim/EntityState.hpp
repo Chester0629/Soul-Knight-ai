@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
 #include "combat/CombatStats.hpp"
 
 namespace Game::Sim {
@@ -17,6 +18,17 @@ struct EntityState {
     bool dead = false;
     bool kinematic = false;
     int roomId = -1;
+
+    // --- P3.1: buff engine (Game::Combat::BuffList; see Simulation::TickBuffs) ---
+    Combat::BuffList buffs{};
+    /// This step's combined movement-speed multiplier from active buffs (1.0 = none);
+    /// MoveControllers() multiplies the controller's velocity by this every step.
+    float buffSpeedMul = 1.0F;
+    /// True iff buffSpeedMul is exactly 0 this step (Ice/Electric freeze).
+    bool buffFrozen = false;
+    /// The armor amount granted by the currently-active Armor buff (0 if none), so
+    /// Simulation::TickBuffs can revert exactly this much when the buff ends.
+    int buffArmorGranted = 0;
 };
 
 } // namespace Game::Sim

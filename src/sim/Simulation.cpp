@@ -1,9 +1,11 @@
 #include "sim/Simulation.hpp"
 
 #include <algorithm>
+#include <string>
 #include <utility>
 #include <vector>
 
+#include "combat/Buff.hpp"
 #include "combat/CharSkillC01.hpp"
 #include "combat/Damage.hpp"
 #include "sim/BrainFactory.hpp"
@@ -170,12 +172,124 @@ void Simulation::EmitAttackEvents() {
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "attack"});
     }
 }
+// P3.1: apply (or refresh) a status-effect buff on one entity. Grants the Armor
+// buff's flat armor bonus exactly once (on first apply, not on a same-kind
+// refresh); TickBuffs() reverts exactly this much when the buff ends.
+void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params) {
+    Game::Combat::BuffList *list = nullptr;
+    Game::CombatStats *stats = nullptr;
+    int *armorGranted = nullptr;
+    if (entityId == kPlayerViewId) {
+        list = &m_PlayerBuffs;
+        stats = &m_PlayerStats;
+        armorGranted = &m_PlayerArmorGranted;
+    } else if (entityId == kBossViewId) {
+        if (m_Boss == nullptr) {
+            return;
+        }
+        list = &m_Boss->MutableState().buffs;
+        stats = &m_Boss->MutableState().stats;
+        armorGranted = &m_Boss->MutableState().buffArmorGranted;
+    } else if (entityId < m_Enemies.size()) {
+        list = &m_Enemies[entityId]->MutableState().buffs;
+        stats = &m_Enemies[entityId]->MutableState().stats;
+        armorGranted = &m_Enemies[entityId]->MutableState().buffArmorGranted;
+    } else {
+        return; // unknown / nonexistent entity: no-op.
+    }
+
+    const bool hadArmor = list->Has(Game::Combat::BuffKind::Armor);
+    list->Apply(params);
+    if (params.kind == Game::Combat::BuffKind::Armor && !hadArmor) {
+        stats->RestoreArmor(params.armorDelta);
+        *armorGranted = params.armorDelta;
+    }
+    m_Events.push_back(SimEvent{
+        SimEventType::AnimTrigger, entityId,
+        "buff_applied:" + std::string(Game::Combat::BuffKindName(params.kind)) + ":" +
+            std::to_string(params.durationSec)});
+}
+
+// P3.1: advance every entity's BuffList by one fixed step: apply Fire/Poison DoT
+// through the existing Damage.hpp path (armor-then-hp for the player, straight hp
+// for enemies/boss -- same split ResolveHits() uses, just skipping the crit roll/
+// repel since a DoT tick is not a bullet hit), cache the combined speed multiplier
+// for MoveControllers(), revert the Armor buff's flat bonus on end, and emit the
+// "Buff: <kind> ended" cue.
+void Simulation::TickBuffs() {
+    auto endedEvent = [this](std::uint32_t id, Game::Combat::BuffKind k) {
+        m_Events.push_back(SimEvent{SimEventType::AnimTrigger, id,
+                                    "buff_ended:" + std::string(Game::Combat::BuffKindName(k))});
+    };
+
+    // --- player ---
+    {
+        const Game::Combat::BuffList::TickResult r = m_PlayerBuffs.Tick(kFixedStepSeconds);
+        m_PlayerSpeedMul = r.speedMul;
+        m_PlayerFrozen = r.frozen;
+        if (r.damage > 0 && m_Input.playerAlive) {
+            Game::Combat::HitResult hr;
+            hr.finalDamage = r.damage;
+            Game::Combat::ApplyToPlayer(m_PlayerStats, hr, /*canHurt=*/true);
+        }
+        for (const Game::Combat::BuffKind k : r.ended) {
+            if (k == Game::Combat::BuffKind::Armor) {
+                m_PlayerStats.RestoreArmor(-m_PlayerArmorGranted);
+                m_PlayerArmorGranted = 0;
+            }
+            endedEvent(kPlayerViewId, k);
+        }
+    }
+
+    // --- enemies ---
+    for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
+        EntityState &st = m_Enemies[ei]->MutableState();
+        const Game::Combat::BuffList::TickResult r = st.buffs.Tick(kFixedStepSeconds);
+        st.buffSpeedMul = r.speedMul;
+        st.buffFrozen = r.frozen;
+        if (r.damage > 0 && !st.dead) {
+            Game::Combat::HitResult hr;
+            hr.finalDamage = r.damage;
+            Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+        }
+        for (const Game::Combat::BuffKind k : r.ended) {
+            if (k == Game::Combat::BuffKind::Armor) {
+                st.stats.armor = std::max(0, st.stats.armor - st.buffArmorGranted);
+                st.buffArmorGranted = 0;
+            }
+            endedEvent(static_cast<std::uint32_t>(ei), k);
+        }
+    }
+
+    // --- boss ---
+    if (m_Boss != nullptr) {
+        EntityState &st = m_Boss->MutableState();
+        const Game::Combat::BuffList::TickResult r = st.buffs.Tick(kFixedStepSeconds);
+        st.buffSpeedMul = r.speedMul;
+        st.buffFrozen = r.frozen;
+        if (r.damage > 0 && !st.dead) {
+            Game::Combat::HitResult hr;
+            hr.finalDamage = r.damage;
+            Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+        }
+        for (const Game::Combat::BuffKind k : r.ended) {
+            if (k == Game::Combat::BuffKind::Armor) {
+                st.stats.armor = std::max(0, st.stats.armor - st.buffArmorGranted);
+                st.buffArmorGranted = 0;
+            }
+            endedEvent(kBossViewId, k);
+        }
+    }
+}
+
 void Simulation::MoveControllers() {
     for (auto &e : m_Enemies) {
         if (e->State().dead) {
             continue;
         }
-        const glm::vec2 vel = e->ComputeVelocity(); // ONCE per step (decays knockback).
+        // P3.1: buffSpeedMul folds in Ice/Electric freeze (0.0) and ChangeSpeed's
+        // slow (< 1.0); 1.0 (no buff) leaves movement byte-identical to before.
+        const glm::vec2 vel = e->ComputeVelocity() * e->State().buffSpeedMul;
         glm::vec2 pos = e->State().pos;
         // Axis-separated wall slide (same shape as the GameScene player pattern).
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
@@ -198,7 +312,9 @@ void Simulation::MoveControllers() {
         if (moveDir.x == 0.0F && moveDir.y == 0.0F) {
             moveDir = chase; // before the first think tick: fall back to chase (no idle freeze).
         }
-        const glm::vec2 vel = moveDir * BossController::kSpeed;
+        // P3.1: buffSpeedMul folds in Ice/Electric freeze (0.0); 1.0 (no buff)
+        // leaves boss movement byte-identical to before.
+        const glm::vec2 vel = moveDir * BossController::kSpeed * m_Boss->State().buffSpeedMul;
         glm::vec2 pos = m_Boss->State().pos;
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
         if (!m_World->Blocks(tryX, kBossBodyRadius)) {
@@ -338,6 +454,7 @@ void Simulation::Step() {
     TickSkill();  // A3: activate + advance cooldown BEFORE the weapon (so the mirror sees in_skill).
     TickWeapon();
     EmitAttackEvents(); // A: enemy/boss "attack" cues (the OnShootTicks ran in Scheduler.Tick).
+    TickBuffs();        // P3.1: advance buffs (DoT + speed/freeze cache) BEFORE movement uses them.
     MoveControllers();
     DrainFireIntents();
     IntegrateBullets();

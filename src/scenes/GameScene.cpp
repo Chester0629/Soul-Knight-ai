@@ -1160,6 +1160,15 @@ void GameScene::OnEnter() {
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
+    // SK_FORCE_BUFF=K,<kind> test hook (env, NO-OP if unset): apply <kind> to the
+    // player on frame K via Simulation::ApplyBuff, so the "Buff: ... applied/ended"
+    // log path (P3.1) can be proven headlessly without bullet-trigger wiring (P3.2).
+    if (const char *fb = std::getenv("SK_FORCE_BUFF")) {
+        m_ForceBuffFrame = std::atol(fb);
+        if (const char *comma = std::strchr(fb, ',')) {
+            m_ForceBuffKind = comma + 1;
+        }
+    }
     // SK_AUTOFIRE test hook (env, NO-OP if unset): when also auto-walking, fire along
     // the travel direction (see Update). Kept separate so SK_AUTOWALK stays pure
     // navigation -- no firing, no energy spend.
@@ -1449,6 +1458,23 @@ void GameScene::Update(float dtMs) {
     if (m_GateBesideFrame >= 0 && m_Frame == m_GateBesideFrame) {
         m_Player->m_Transform.translation = m_GatePos + glm::vec2{0.0F, -64.0F}; // SK_GATE_BESIDE
     }
+    // SK_FORCE_BUFF=K,<kind> test hook (env, NO-OP if unset): apply <kind> to the
+    // player on frame K via Simulation::ApplyBuff (P3.1). Not bullet-triggered
+    // (P3.2) -- a direct API poke so the buff-applied/ended log path is provable
+    // headlessly. Unknown kind names are silently ignored (NO-OP).
+    if (m_ForceBuffFrame >= 0 && m_Frame == m_ForceBuffFrame && m_Sim) {
+        static const std::unordered_map<std::string, std::string> kKindToBuffId = {
+            {"fire", "BuffFire"},         {"poison", "BuffPoison"},
+            {"ice", "BuffIce"},           {"electric", "BuffElectric"},
+            {"armor", "BuffArmor"},       {"changespeed", "BuffChangeSpeed"},
+        };
+        const auto it = kKindToBuffId.find(m_ForceBuffKind);
+        if (it != kKindToBuffId.end()) {
+            if (const BuffDef *bdef = m_Data.FindBuff(it->second)) {
+                m_Sim->ApplyBuff(Sim::Simulation::kPlayerViewId, Game::BuffParamsFrom(*bdef));
+            }
+        }
+    }
 
     // --- Player movement with axis-separated wall sliding (stays scene-side) ---
     const glm::vec2 before = m_Player->Position();
@@ -1459,6 +1485,17 @@ void GameScene::Update(float dtMs) {
         const float len = std::sqrt(d.x * d.x + d.y * d.y);
         if (len > 1.0F) {
             after = before + (d / len) * (kAutoWalkSpeed * dtMs / 1000.0F);
+        }
+    }
+    // P3.1: the sim owns the player's buff state (TickBuffs, ticked in the PREVIOUS
+    // Advance()) but not the player's position -- gate this frame's movement on it.
+    // Ice/Electric freeze -> speedMul reaches 0 -> movement is fully blocked;
+    // ChangeSpeed's slow scales the travel delta.
+    if (m_Sim) {
+        if (m_Sim->PlayerFrozen()) {
+            after = before; // frozen: block movement entirely.
+        } else if (m_Sim->PlayerSpeedMul() != 1.0F) {
+            after = before + (after - before) * m_Sim->PlayerSpeedMul();
         }
     }
     glm::vec2 resolved = before;
@@ -2068,6 +2105,23 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
             if (e.entityId < evs.size()) {
                 pos = evs[e.entityId].pos;
             }
+        }
+
+        // P3.1: buff lifecycle cues carry their payload in the name string (no
+        // extra SimEvent fields needed): "buff_applied:<Kind>:<durationSec>" /
+        // "buff_ended:<Kind>". Presentation-free for now (P3.2 adds VFX); just log.
+        if (e.name.rfind("buff_applied:", 0) == 0) {
+            const std::string rest = e.name.substr(std::strlen("buff_applied:"));
+            const std::size_t sep = rest.find(':');
+            const std::string kind = (sep == std::string::npos) ? rest : rest.substr(0, sep);
+            const std::string sec = (sep == std::string::npos) ? "?" : rest.substr(sep + 1);
+            LOG_INFO("Buff: {} applied to {} for {}s", kind, e.entityId, sec);
+            continue;
+        }
+        if (e.name.rfind("buff_ended:", 0) == 0) {
+            const std::string kind = e.name.substr(std::strlen("buff_ended:"));
+            LOG_INFO("Buff: {} ended on {}", kind, e.entityId);
+            continue;
         }
 
         if (e.name == "fire" || e.name == "attack") {

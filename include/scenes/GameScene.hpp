@@ -279,6 +279,12 @@ private:
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;
+    /// SK_FORCE_BUFF=K,<kind> test hook (env, -1 = off): apply <kind> ("fire",
+    /// "poison", "ice", "electric", "armor", "changespeed") to the PLAYER on frame K
+    /// (Simulation::ApplyBuff), so the buff-applied/ended log path (P3.1) can be
+    /// proven headlessly. NOT bullet-triggered (that is P3.2); a direct API poke.
+    long m_ForceBuffFrame = -1;
+    std::string m_ForceBuffKind; ///< lower-cased kind name parsed from SK_FORCE_BUFF.
     /// SK_AUTOWALK test hook (env): when set, steer the player straight at
     /// m_AutoWalkTarget each frame to drive room->corridor->room traversal headlessly
     /// and log the room transitions. NO-OP in normal play (m_AutoWalk stays false).

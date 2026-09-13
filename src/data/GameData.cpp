@@ -157,6 +157,14 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.id = GetS(e, "id");
             d.isEnemy = GetI(e, "is_enemy");
             d.buffTime = GetF(e, "buff_time");
+            d.changeValue = GetF(e, "changeValue");
+            auto inf = e.find("_inferred");
+            if (inf != e.end() && inf->is_object()) {
+                d.tickSec = GetF(*inf, "tick_sec");
+                d.tickDamage = GetI(*inf, "tick_damage");
+                d.speedMul = GetF(*inf, "speed_mul", 1.0F);
+                d.armorDelta = GetI(*inf, "armor_delta");
+            }
             m_BuffIndex[d.id] = m_Buffs.size();
             m_Buffs.push_back(std::move(d));
         }
@@ -735,6 +743,33 @@ const EnemyGunDef *GameData::FindEnemyGun(const std::string &id) const {
 const BuffDef *GameData::FindBuff(const std::string &id) const {
     auto it = m_BuffIndex.find(id);
     return it == m_BuffIndex.end() ? nullptr : &m_Buffs[it->second];
+}
+
+// (d) dispatch on BuffDef::id -> Combat::BuffKind. See BuffDef's doc comment for
+// which fields are FAITHFUL vs INFERRED per kind.
+Combat::BuffParams BuffParamsFrom(const BuffDef &d) {
+    Combat::BuffParams p;
+    p.durationSec = d.buffTime;
+    p.tickSec = d.tickSec;
+    p.tickDamage = d.tickDamage;
+    p.speedMul = d.speedMul;
+    p.armorDelta = d.armorDelta;
+    if (d.id == "BuffFire") {
+        p.kind = Combat::BuffKind::Fire;
+    } else if (d.id == "BuffPoison") {
+        p.kind = Combat::BuffKind::Poison;
+    } else if (d.id == "BuffIce") {
+        p.kind = Combat::BuffKind::Ice;
+    } else if (d.id == "BuffElectric") {
+        p.kind = Combat::BuffKind::Electric;
+    } else if (d.id == "BuffArmor") {
+        p.kind = Combat::BuffKind::Armor;
+    } else if (d.id == "BuffChangeSpeed") {
+        p.kind = Combat::BuffKind::ChangeSpeed;
+    } else {
+        p.kind = Combat::BuffKind::Fire; // unreached by the six known-id callers.
+    }
+    return p;
 }
 
 } // namespace Game
