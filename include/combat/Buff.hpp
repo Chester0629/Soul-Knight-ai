@@ -15,7 +15,8 @@ namespace Combat {
  * truncated, in game_full.c around 961063-961320). Every ctor is confirmed to set
  * `is_enemy` + `buff_time`; BuffChangeSpeed__Start is confirmed to call
  * RoleAttribute__ChangeSpeed(role, tag, value, time, changeValue) (game_typed.c
- * 86553-86555), i.e. an ADDITIVE speed delta is decompile-confirmed.
+ * 86553-86555); only the CALL is confirmed -- that the delta is ADDITIVE is
+ * INFERRED (T-32) from the parameter's name/signature, see below.
  * BuffIce__BuffEnd is confirmed to call CancelInvoke (game_typed.c 86943-86945 /
  * game_full.c:961235); that only proves SOME previously scheduled callback is
  * cancelled at end -- it does NOT prove the buff's END itself is scheduled (vs.

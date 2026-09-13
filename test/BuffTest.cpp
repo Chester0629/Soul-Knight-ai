@@ -189,6 +189,47 @@ TEST(BuffTest, NonMultipleDurationTicksFloorDurationOverTickSecNeverOneMore) {
     ExpectFullyRestored(list); // no phantom tick after the buff is gone.
 }
 
+// Duration shorter than one tick interval: 0.99 s / 1.0 s -> zero ticks. The
+// pre-fix implementation (crediting the full dt past expiry) would have emitted
+// one tick here; the 2.75 s case alone could not distinguish the two.
+TEST(BuffTest, DurationShorterThanTickSecNeverTicks) {
+    BuffList list;
+    BuffParams p = FireNonMultipleDuration();
+    p.durationSec = 0.99F;
+    list.Apply(p);
+    const ExpiryProbe probe = RunUntilExpired(list, BuffKind::Fire);
+    EXPECT_EQ(probe.totalDamage, 0);
+    EXPECT_TRUE(probe.endedVectorHadKind);
+    ExpectFullyRestored(list);
+}
+
+// Counting `ended` events distinguishes refresh from stacking for kinds without a
+// numeric effect to sum: a stacked second Ice instance would end twice.
+TEST(BuffTest, ReapplyingIceOrElectricEndsExactlyOnce) {
+    for (const BuffParams &base : {Ice(), Electric()}) {
+        BuffList list;
+        list.Apply(base);
+        for (int i = 0; i < 30; ++i) {
+            list.Tick(kDt);
+        }
+        list.Apply(base);
+        int endedCount = 0;
+        for (int i = 0; i < 1000 && (list.Has(base.kind) || i == 0); ++i) {
+            const BuffList::TickResult r = list.Tick(kDt);
+            for (const BuffKind k : r.ended) {
+                if (k == base.kind) {
+                    ++endedCount;
+                }
+            }
+        }
+        for (int i = 0; i < 50; ++i) { // well past any hypothetical second instance
+            const BuffList::TickResult r = list.Tick(kDt);
+            endedCount += static_cast<int>(r.ended.size());
+        }
+        EXPECT_EQ(endedCount, 1) << BuffKindName(base.kind);
+    }
+}
+
 TEST(BuffTest, FireFullyRestoredAfterExpiry) {
     BuffList list;
     list.Apply(Fire());
