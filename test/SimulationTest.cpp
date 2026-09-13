@@ -551,4 +551,78 @@ TEST(SimulationTest, FireBuffDamagesEnemyOverTimeThroughDamagePath) {
     EXPECT_TRUE(sim.Bullets().empty()); // no weapon equipped -> the hp drop is buff-only.
 }
 
+namespace {
+
+// Player stats shaped for the Armor-buff tests: nothing in Simulation reloads armor,
+// so the only armor movement is the buff apply/expiry path under test.
+Game::CombatStats ArmorTestStats(int armor, int maxArmor) {
+    Game::CombatStats s;
+    s.maxHp = 10;
+    s.hp = 10;
+    s.maxArmor = maxArmor;
+    s.armor = armor;
+    return s;
+}
+
+Game::Combat::BuffParams ArmorBuff2s() {
+    Game::Combat::BuffParams p;
+    p.kind = Game::Combat::BuffKind::Armor;
+    p.durationSec = 2.0F; // 100 fixed 20ms steps
+    p.armorDelta = 1;
+    return p;
+}
+
+} // namespace
+
+// INFERRED (T-32) armor rule, case 1: at FULL armor the +1 is swallowed by
+// RestoreArmor's maxArmor cap, so grantedArmor = armorAfter - armorBefore = 0 and
+// expiry removes min(0, current) = 0. The old code recorded the REQUESTED +1 and
+// dropped the entity to maxArmor-1 on expiry.
+TEST(SimulationTest, ArmorBuffAtFullArmorGrantsNothingAndRemovesNothingOnExpiry) {
+    Simulation sim(20240607, &g_NullWorld);
+    sim.SetPlayerStats(ArmorTestStats(/*armor=*/5, /*maxArmor=*/5));
+
+    sim.ApplyBuff(Simulation::kPlayerViewId, ArmorBuff2s());
+    EXPECT_EQ(sim.PlayerStats().armor, 5); // capped: nothing was actually granted.
+
+    WorldInputs in = Idle();
+    for (int i = 0; i < 50; ++i) { // mid-buff
+        sim.Advance(20.0F, in);
+    }
+    EXPECT_EQ(sim.PlayerStats().armor, 5);
+
+    for (int i = 0; i < 100; ++i) { // well past the 100-step duration
+        sim.Advance(20.0F, in);
+    }
+    // granted=0, current=5 at expiry, remove min(0,5)=0 -> armor stays 5 (NOT 4).
+    EXPECT_EQ(sim.PlayerStats().armor, 5);
+}
+
+// INFERRED (T-32) armor rule, case 2: the entity took damage while the buff was
+// active, so expiry removes only what is still there -- never more, never negative.
+TEST(SimulationTest, ArmorBuffExpiryRemovesOnlyWhatIsStillPresent) {
+    Simulation sim(20240607, &g_NullWorld);
+    sim.SetPlayerStats(ArmorTestStats(/*armor=*/3, /*maxArmor=*/5));
+
+    sim.ApplyBuff(Simulation::kPlayerViewId, ArmorBuff2s());
+    EXPECT_EQ(sim.PlayerStats().armor, 4); // 3 + 1, below the cap -> granted = 1.
+
+    WorldInputs in = Idle();
+    for (int i = 0; i < 25; ++i) {
+        sim.Advance(20.0F, in);
+    }
+    // Take 2 armor damage mid-buff (armor absorbs first, so hp is untouched).
+    Game::CombatStats hurt = sim.PlayerStats();
+    hurt.TakeDamage(2);
+    sim.SetPlayerStats(hurt);
+    EXPECT_EQ(sim.PlayerStats().armor, 2); // 4 - 2
+
+    for (int i = 0; i < 150; ++i) { // past the 100-step duration
+        sim.Advance(20.0F, in);
+    }
+    // granted=1, current=2 before expiry, remove min(1,2)=1 -> armor ends at 1.
+    EXPECT_EQ(sim.PlayerStats().armor, 1);
+    EXPECT_EQ(sim.PlayerStats().hp, 10); // armor absorbed it all; hp never moved.
+}
+
 // NOLINTEND(readability-magic-numbers)

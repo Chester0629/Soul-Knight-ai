@@ -201,8 +201,13 @@ void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParam
     const bool hadArmor = list->Has(Game::Combat::BuffKind::Armor);
     list->Apply(params);
     if (params.kind == Game::Combat::BuffKind::Armor && !hadArmor) {
+        // INFERRED (T-32): record what was ACTUALLY added, not what was requested.
+        // CombatStats::RestoreArmor caps a positive delta at maxArmor, so an entity at
+        // full armor gains 0 from a +1 Armor buff; recording the requested +1 would let
+        // the expiry path subtract armor that was never granted.
+        const int armorBefore = stats->armor;
         stats->RestoreArmor(params.armorDelta);
-        *armorGranted = params.armorDelta;
+        *armorGranted = stats->armor - armorBefore;
     }
     m_Events.push_back(SimEvent{
         SimEventType::AnimTrigger, entityId,
@@ -234,7 +239,14 @@ void Simulation::TickBuffs() {
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
-                m_PlayerStats.RestoreArmor(-m_PlayerArmorGranted);
+                // INFERRED (T-32): the decompile does not specify what happens to a
+                // temporary armor buff's bonus when the entity's armor state changed
+                // (took damage) while the buff was active. Rule chosen here: remove
+                // min(granted, current) -- never more than the entity still has. It is
+                // the least-surprising option: it cannot push armor negative and cannot
+                // double-penalize a hit that already consumed the granted armor.
+                const int toRemove = std::min(m_PlayerArmorGranted, m_PlayerStats.armor);
+                m_PlayerStats.RestoreArmor(-toRemove);
                 m_PlayerArmorGranted = 0;
             }
             endedEvent(kPlayerViewId, k);
@@ -254,7 +266,10 @@ void Simulation::TickBuffs() {
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
-                st.stats.armor = std::max(0, st.stats.armor - st.buffArmorGranted);
+                // INFERRED (T-32): same rule as the player path above -- remove
+                // min(granted, current), never more armor than the entity still has.
+                const int toRemove = std::min(st.buffArmorGranted, st.stats.armor);
+                st.stats.armor -= toRemove; // >= 0 by construction, no extra floor needed.
                 st.buffArmorGranted = 0;
             }
             endedEvent(static_cast<std::uint32_t>(ei), k);
@@ -274,7 +289,10 @@ void Simulation::TickBuffs() {
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
-                st.stats.armor = std::max(0, st.stats.armor - st.buffArmorGranted);
+                // INFERRED (T-32): same rule as the player path above -- remove
+                // min(granted, current), never more armor than the entity still has.
+                const int toRemove = std::min(st.buffArmorGranted, st.stats.armor);
+                st.stats.armor -= toRemove; // >= 0 by construction, no extra floor needed.
                 st.buffArmorGranted = 0;
             }
             endedEvent(kBossViewId, k);

@@ -771,15 +771,16 @@ def _buff_inferred(stem: str, rec: dict) -> dict | None:
 
     Each buff's REAL fields (is_enemy/buff_time/changeValue, "_source": "1.7.10"
     or "1.07") are kept as-is; only the numbers below (tick cadence, tick damage,
-    the ice/electric freeze modeling, the armor bonus magnitude, and the
-    additive-changeValue -> multiplicative-speedMul conversion) are INFERRED
-    (T-32) and cited with a "_why"."""
+    the ice/electric freeze modeling, the armor-while-active semantic and bonus
+    magnitude, and the additive-changeValue -> multiplicative-speedMul conversion,
+    clamped to a minimum of 0 with no upper clamp) are INFERRED (T-32) and cited
+    with a "_why"."""
     if stem == "BuffFire":
         return {
             "tick_sec": 1.0, "tick_damage": 1, "speed_mul": 1.0, "armor_delta": 0,
             "_why": ("INFERRED (T-32): BuffFire__GetHurt is an obfuscation-guard "
                      "tail call with no visible damage literal (game_typed.c "
-                     "~86822-86846). 1 damage/sec is Soul Knight's well-known "
+                     "86867-86886). 1 damage/sec is Soul Knight's well-known "
                      "burning-DoT rate; buff_time (2s) is the FAITHFUL duration."),
         }
     if stem == "BuffPoison":
@@ -794,18 +795,21 @@ def _buff_inferred(stem: str, rec: dict) -> dict | None:
         return {
             "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 0.0, "armor_delta": 0,
             "_why": ("INFERRED (T-32): BuffIce__BuffEnd calls CancelInvoke "
-                     "(game_typed.c ~86936-86948), confirming a SCHEDULED/timed "
-                     "end (the only visible timed-end evidence among the six "
-                     "buffs); modeling that as a full freeze (speed_mul=0.0) for "
+                     "(game_typed.c 86943-86945). That only proves SOME "
+                     "previously scheduled callback is cancelled at end -- it "
+                     "does NOT prove the buff end itself is scheduled rather "
+                     "than immediate, so no scheduled-end mechanism is claimed "
+                     "from it. Modeling Ice as a full freeze (speed_mul=0.0) for "
                      "buff_time (2.75s, FAITHFUL) is inferred from Soul Knight's "
                      "known ice-stun visual, not from a decompiled literal."),
         }
     if stem == "BuffElectric":
         return {
             "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 0.0, "armor_delta": 0,
-            "_why": ("INFERRED (T-32): BuffElectric__Start has no visible stun "
-                     "logic beyond the is_enemy branch (game_typed.c ~86745-"
-                     "86758); modeled as a short freeze (speed_mul=0.0) for its "
+            "_why": ("INFERRED (T-32): BuffElectric__Start (starts at "
+                     "game_typed.c 86760) has no visible stun logic beyond the "
+                     "is_enemy branch; modeled as a short freeze "
+                     "(speed_mul=0.0) for its "
                      "FAITHFUL buff_time (2s), matching Soul Knight's known "
                      "electric-shock stun behaviour."),
         }
@@ -813,27 +817,33 @@ def _buff_inferred(stem: str, rec: dict) -> dict | None:
         return {
             "tick_sec": 0.0, "tick_damage": 0, "speed_mul": 1.0, "armor_delta": 1,
             "_why": ("INFERRED (T-32): BuffArmor__GetArmor exists and is gated "
-                     "on !is_enemy (game_typed.c ~86487-86498), confirming an "
-                     "armor-while-active mechanic; the +1 magnitude is not a "
-                     "decompiled literal (body is a truncated tail call) -- "
-                     "chosen as the smallest whole armor point, matching "
-                     "CombatStats' existing +1-per-tick armor-reload unit."),
+                     "on !is_enemy (game_typed.c 86492-86503). Its existence "
+                     "alone does NOT prove the temporary-armor-while-active, "
+                     "reverted-on-end semantic -- that semantic is inferred, as "
+                     "is the +1 magnitude (the body is a truncated tail call "
+                     "with no visible literal); +1 was chosen as the smallest "
+                     "whole armor point, matching CombatStats' existing "
+                     "+1-per-tick armor-reload unit."),
         }
     if stem == "BuffChangeSpeed":
         change_value = float(rec.get("changeValue", 0.0) or 0.0)
-        # FAITHFUL: RoleAttribute__ChangeSpeed(role, tag, value, time, changeValue)
-        # is a confirmed call (game_typed.c ~86553-86555) and is ADDITIVE (matches
-        # CombatStats::ChangeSpeed's existing +=). The sim's movement pipeline
-        # instead multiplies velocity by a speedMul, so this converts the additive
-        # delta into an equivalent multiplier at data-build time -- INFERRED (T-32).
+        # FAITHFUL: the call RoleAttribute__ChangeSpeed(role, tag, value, time,
+        # changeValue) is decompile-confirmed (game_typed.c 86553-86555). That it is
+        # ADDITIVE is INFERRED from the changeValue parameter name/signature, not
+        # from a recovered body; the choice to model it as a multiplier at all, and
+        # the conversion formula below, are likewise INFERRED (T-32). The clamp is a
+        # lower bound only (minimum 0); there is no upper clamp at 1.
         speed_mul = max(0.0, 1.0 + change_value)
         return {
             "tick_sec": 0.0, "tick_damage": 0, "speed_mul": speed_mul, "armor_delta": 0,
             "_why": (f"INFERRED (T-32): changeValue ({change_value}) is FAITHFUL "
-                     "(RoleAttribute__ChangeSpeed call, game_typed.c ~86553-86555) "
-                     "and additive in the original; converted here to a "
-                     f"multiplicative speed_mul ({speed_mul}) = max(0, 1+changeValue) "
-                     "for the sim's multiplicative movement pipeline."),
+                     "(the RoleAttribute__ChangeSpeed call is decompile-confirmed, "
+                     "game_typed.c 86553-86555); that it is additive is INFERRED "
+                     "from the changeValue signature, not from a recovered body. "
+                     "Converting it to a multiplicative speed_mul "
+                     f"({speed_mul}) = max(0, 1+changeValue) for the sim's "
+                     "multiplicative movement pipeline is INFERRED too; the clamp "
+                     "is a minimum of 0 only, with no upper clamp at 1."),
         }
     return None
 

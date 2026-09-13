@@ -15,13 +15,15 @@ namespace Combat {
  * truncated, in game_full.c around 961063-961320). Every ctor is confirmed to set
  * `is_enemy` + `buff_time`; BuffChangeSpeed__Start is confirmed to call
  * RoleAttribute__ChangeSpeed(role, tag, value, time, changeValue) (game_typed.c
- * ~86553-86555); BuffIce__BuffEnd is confirmed to call CancelInvoke (game_typed.c
- * ~86936-86948 / game_full.c:961235), i.e. Ice ends via a scheduled callback, not an
- * immediate transition -- the only visible evidence for a TIMED end among the six.
- * BuffFire__GetHurt / BuffPoison equivalents are present but their bodies are
- * obfuscation-guard tail calls with NO visible numeric literal (tick interval, tick
- * damage, stun length): those numbers are INFERRED (T-32), see buffs.json's
- * "_inferred" block and tools/build_gamedata.py's build_buff_table().
+ * 86553-86555), i.e. an ADDITIVE speed delta is decompile-confirmed.
+ * BuffIce__BuffEnd is confirmed to call CancelInvoke (game_typed.c 86943-86945 /
+ * game_full.c:961235); that only proves SOME previously scheduled callback is
+ * cancelled at end -- it does NOT prove the buff's END itself is scheduled (vs.
+ * immediate), so do not over-claim a scheduled-end mechanism from this alone.
+ * BuffFire__GetHurt (game_typed.c 86867-86886) / BuffPoison equivalents are present
+ * but their bodies are obfuscation-guard tail calls with NO visible numeric literal
+ * (tick interval, tick damage, stun length): those numbers are INFERRED (T-32), see
+ * buffs.json's "_inferred" block and tools/build_gamedata.py's build_buff_table().
  */
 enum class BuffKind {
     Fire,
@@ -48,15 +50,25 @@ struct BuffParams {
     int tickDamage = 0;            ///< INFERRED (T-32): Fire/Poison damage per tick.
     /// Multiplicative movement-speed factor applied while the buff is active
     /// (1.0 = no change). Ice/Electric use 0.0 (a full freeze) -- INFERRED (T-32)
-    /// stun-via-zero-speed modeling of the decompile-confirmed timed BuffIce end.
-    /// ChangeSpeed's real mechanic is RoleAttribute__ChangeSpeed, an ADDITIVE speed
-    /// delta (decompile-confirmed call, game_typed.c ~86553-86555) using the data
-    /// `changeValue` (e.g. -0.75); the sim's movement pipeline has no baseline
-    /// "1.0 unit" speed to add onto uniformly, so build_buff_table() converts that
-    /// additive delta into an equivalent multiplier (clamped to [0,1]) at data-build
-    /// time -- INFERRED (T-32) conversion, documented per-row in "_inferred._why".
+    /// stun-via-zero-speed modeling; BuffIce__BuffEnd's CancelInvoke (game_typed.c
+    /// 86943-86945) only shows a scheduled callback being cancelled, it does not
+    /// prove a freeze nor a scheduled end.
+    /// ChangeSpeed: the call RoleAttribute__ChangeSpeed(role, tag, value, time,
+    /// changeValue) is decompile-confirmed (game_typed.c 86553-86555); that it is
+    /// ADDITIVE is INFERRED from the changeValue parameter's name/signature, not
+    /// from a recovered body. Implementing it as a multiplier at all is likewise
+    /// INFERRED (T-32): the sim's movement pipeline has no baseline "1.0 unit"
+    /// speed to add onto uniformly, so build_buff_table() converts the additive
+    /// delta with speed_mul = max(0, 1 + changeValue) -- clamped to a minimum of 0
+    /// (no upper clamp) -- at data-build time, documented per-row in
+    /// "_inferred._why".
     float speedMul = 1.0F;
-    int armorDelta = 0;            ///< FAITHFUL: BuffArmor__GetArmor exists (armor while active).
+    /// INFERRED (T-32): BuffArmor__GetArmor is confirmed to exist (game_typed.c
+    /// 86492-86503, gated on !is_enemy), but its body is a truncated tail call --
+    /// the "temporary armor granted while active, reverted when the buff ends"
+    /// semantic and the +1 magnitude are both inferred, NOT proven by the mere
+    /// existence of that function.
+    int armorDelta = 0;
     bool refreshOnReapply = true;  ///< INFERRED (T-32): reapplying refreshes, does not stack.
 };
 
@@ -96,9 +108,11 @@ public:
     void Apply(const BuffParams &params);
 
     /// Advance every active buff by dtSec (the sim's fixed step). Fire/Poison
-    /// accumulate tickAccum and emit tickDamage once per full tickSec elapsed
-    /// (an exhausted buff still fires its last tick if the boundary lands exactly
-    /// on expiry -- matches "duration counts down, ends exactly at buff_time").
+    /// accumulate tickAccum and emit tickDamage once per full tickSec elapsed.
+    /// Only the slice of dtSec that falls inside the buff's remaining lifetime is
+    /// credited, so the total tick count is exactly floor(durationSec / tickSec)
+    /// even when durationSec is not a multiple of the fixed step (a boundary tick
+    /// that lands exactly on expiry still fires; one past expiry never does).
     TickResult Tick(float dtSec);
 
     /// True iff a buff of this kind is currently active.

@@ -37,13 +37,23 @@ BuffList::TickResult BuffList::Tick(float dtSec) {
     TickResult r;
     for (auto it = m_Active.begin(); it != m_Active.end();) {
         ActiveBuff &b = *it;
+        // Only the slice of dtSec that still falls INSIDE the buff's lifetime may be
+        // credited to tickAccum. Without this clamp a buff whose durationSec is not an
+        // exact multiple of the fixed step (e.g. 0.99s at 0.02s steps) would still
+        // accumulate a full 1.00s of tick time on the step that ends it, emitting a
+        // tick that logically happens after the buff was already over. With the clamp
+        // the invariant holds exactly: ticks == floor(durationSec / tickSec).
+        const float remainingBefore = b.remainingSec;
+        const float effectiveDt = (remainingBefore > 0.0F)
+                                      ? ((dtSec < remainingBefore) ? dtSec : remainingBefore)
+                                      : 0.0F;
         b.remainingSec -= dtSec;
 
         // Fire/Poison: accumulate and emit tickDamage once per full tickSec elapsed.
         // A small epsilon absorbs float accumulation error from repeated dtSec adds
         // (kFixedStepSeconds = 0.02F) so a boundary tick is not dropped by a hair.
         if (b.p.tickSec > 0.0F) {
-            b.tickAccum += dtSec;
+            b.tickAccum += effectiveDt;
             constexpr float kTickEpsilon = 1e-4F;
             while (b.tickAccum + kTickEpsilon >= b.p.tickSec) {
                 r.damage += b.p.tickDamage;
