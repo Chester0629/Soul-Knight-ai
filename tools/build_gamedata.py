@@ -533,8 +533,9 @@ def build_enemy_species_table() -> list[dict]:
 # prefab stem) appended, so weapon/boss bullet references resolve to a real
 # bullet (WEAPON RE-KEY's bullet_prefab, BOSS bullet01-06 below). Every record
 # carries "_source": "1.7.10" (resolved) or "1.07" (AssetRipper source
-# missing, or -- for enemy_guns/bosses/buffs -- no prefab uses that class in
-# 1.7.10, e.g. EGun007), so the fallback is visible in the data itself.
+# missing, or -- for bullets/enemy_guns/bosses/buffs -- no prefab uses that
+# class in 1.7.10, e.g. EGun007, or 7 of the 25 bullet classes -- T-30), so
+# the fallback is visible in the data itself.
 # ---------------------------------------------------------------------------
 _ASM_CSHARP = EP_ASSETS / "Scripts" / "Assembly-CSharp"
 
@@ -613,17 +614,75 @@ _BULLET_FIELDS = ("speed", "camp", "destroy_time", "rotate_angle", "awake",
 BULLET_DIR = EP_ASSETS / "rgprefab" / "bullet"
 
 
+def _first_bullet_prefab_by_guid(guids) -> dict:
+    """Like _first_prefab_by_guid, but scoped to rgprefab/bullet/*.prefab (path
+    order) instead of every AssetRipper prefab -- T-30 applied to the bullet
+    CLASS rows themselves (Bullet01, Bullet02, ...): a class-keyed bullet row's
+    real instance should be a real bullet prefab, not some unrelated prefab
+    that happens to reuse the same script (e.g. a boss/weapon prefab)."""
+    remaining = {g for g in guids if g}
+    found = {}
+    if not remaining:
+        return found
+    for p in sorted(BULLET_DIR.glob("*.prefab")):
+        if not remaining:
+            break
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        for g in list(remaining):
+            if ("guid: " + g) in text:
+                found[g] = p
+                remaining.discard(g)
+    return found
+
+
 def build_bullet_table(bullet_groups, idx: Index):
-    """bullets.json = the 1.07 class-keyed rows (kept, so FindBullet("BulletNN")
-    keeps resolving) PLUS one row per real 1.7.10 bullet prefab (256, id =
-    prefab stem) whose MonoBehaviour uses the RGBullet family -- see the
-    P1.10 UPVERSION note above. None if the AssetRipper source is absent
-    (caller falls back to the 1.07-only table)."""
+    """bullets.json = the 1.07 class-keyed rows PLUS one row per real 1.7.10
+    bullet prefab (256, id = prefab stem) whose MonoBehaviour uses the
+    RGBullet family -- see the P1.10 UPVERSION note above.
+
+    T-30 applied to the class rows (Codex review of P1.10): a class-keyed row
+    (Bullet01, Bullet02, ...) is no longer a verbatim 1.07 copy -- it resolves
+    via <Class>.cs.meta's guid to the FIRST rgprefab/bullet/*.prefab (path
+    order) whose MonoBehaviour m_Script carries that guid (same "first prefab
+    of the class" strategy build_boss_table/build_buff_table/
+    build_enemy_gun_table already use for their class rows, just scoped to
+    BULLET_DIR instead of the whole AssetRipper project -- a bullet class's
+    real instance should be a real bullet prefab). The resolved row's scalars
+    come from the RGBullet-family fields on that prefab (_BULLET_FIELDS) and
+    it carries `_source: "1.7.10"` + `_prefab: <stem>`. A class with no 1.7.10
+    bullet prefab (no prefab under rgprefab/bullet uses its script) stays the
+    plain 1.07 row with `_source: "1.07"` -- reported in the diff (none
+    observed among the 25 as of this pass, but the fallback is intentional/
+    the pattern all four class-keyed tables share).
+
+    None if the AssetRipper source is absent (caller falls back to the
+    1.07-only table)."""
     if not BULLET_DIR.is_dir():
         return None
-    out = build_table(bullet_groups, idx)
-    for r in out:
-        r["_source"] = "1.07"
+    class_guids = {stem: _class_guid(stem) for stem, _ in bullet_groups}
+    class_found = _first_bullet_prefab_by_guid(class_guids.values())
+    out = []
+    n_class_real, class_fallback = 0, []
+    for stem, data in bullet_groups:
+        g = class_guids.get(stem)
+        p = class_found.get(g) if g else None
+        if p is None:
+            rec = {"id": stem, **clean(data, idx, stem), "_source": "1.07"}
+            out.append(rec)
+            class_fallback.append(stem)
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        block = _mono_block(text, g)
+        rec = {"id": stem, "_source": "1.7.10", "_prefab": p.stem}
+        for k in _BULLET_FIELDS:
+            v = _field(block, k)
+            if v is not None:
+                rec[k] = v
+        out.append(rec)
+        n_class_real += 1
     family_guids = [g for g in (_class_guid(c) for c in _RGBULLET_FAMILY) if g]
     n_real, n_skip = 0, []
     for f in sorted(BULLET_DIR.glob("*.prefab")):
@@ -640,8 +699,10 @@ def build_bullet_table(bullet_groups, idx: Index):
                 rec[k] = v
         out.append(rec)
         n_real += 1
-    print(f"  bullets: {len(bullet_groups)} 1.07 class rows kept + {n_real} real "
-          f"1.7.10 prefabs ({len(n_skip)} non-RGBullet-family prefabs skipped)")
+    print(f"  bullets: {n_class_real}/{len(bullet_groups)} 1.07 class rows resolved to a "
+          f"real 1.7.10 bullet prefab ({len(class_fallback)} stayed 1.07: "
+          f"{class_fallback if class_fallback else 'none'}) + {n_real} real 1.7.10 "
+          f"prefab rows ({len(n_skip)} non-RGBullet-family prefabs skipped)")
     return out
 
 

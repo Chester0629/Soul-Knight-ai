@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""test_validate_data.py — T-31 boundary test for validate_data.py's bounded
+weapon/boss -> bullet cross-reference check.
+
+Codex review of the P1.10 upversion flagged that the cross-reference check
+downgraded EVERY unresolved bullet reference to a warning, so a newly-broken
+reference (typo, regression in build_gamedata.py) would pass the gate
+silently. The fix bounds it with KNOWN_UNRESOLVED_BULLET_REFS: anything
+outside that allow-list is now an ERROR. This test asserts the boundary:
+
+  1. The real, unmodified Resources/data/*.json tables yield 0 errors (the
+     allow-list actually covers every currently-known gap).
+  2. Injecting one bogus reference (not in the allow-list) turns it into an
+     error, i.e. the check is NOT silently downgrading everything to a
+     warning any more.
+
+unittest only, no external deps. Run:
+    python -m unittest discover -s tools/tests -v
+"""
+from __future__ import annotations
+
+import copy
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "tools"))
+
+import validate_data  # noqa: E402
+
+
+class TestBulletRefBoundary(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data = validate_data.load_all_tables()
+        load_errors = cls.data.get("_load_errors")
+        if load_errors:
+            raise RuntimeError(f"tables failed to load: {load_errors} "
+                                f"-- run tools/build_gamedata.py first")
+
+    def test_real_data_yields_zero_errors(self) -> None:
+        """The unmodified, checked-in data must pass the gate clean: every
+        currently-known unresolved bullet reference is in
+        KNOWN_UNRESOLVED_BULLET_REFS (see validate_data.py's allow-list)."""
+        errors, _warnings = validate_data.run_checks(self.data)
+        self.assertEqual(errors, [], f"unexpected errors on real data: {errors}")
+
+    def test_unknown_weapon_bullet_ref_is_an_error(self) -> None:
+        """Injecting a bogus weapon.bullet_prefab (not in bullets.json, not in
+        the allow-list) must be reported as an ERROR, not silently swallowed
+        into the warning bucket -- this is the regression Codex's review was
+        blocking on."""
+        data = copy.deepcopy(self.data)
+        weapons = data["weapons"]
+        self.assertTrue(weapons, "weapons.json is empty; cannot inject a reference")
+        weapons[0] = dict(weapons[0])
+        weapons[0]["bullet_prefab"] = "R8_nonexistent_prefab"
+        errors, _warnings = validate_data.run_checks(data)
+        joined = " ".join(errors)
+        self.assertIn("R8_nonexistent_prefab", joined,
+                      f"bogus bullet_prefab was not reported as an error; errors={errors}")
+
+    def test_unknown_boss_bullet_ref_is_an_error(self) -> None:
+        """Same boundary check on the boss.bulletNN side of the cross-reference."""
+        data = copy.deepcopy(self.data)
+        bosses = data["bosses"]
+        self.assertTrue(bosses, "bosses.json is empty; cannot inject a reference")
+        bosses[0] = dict(bosses[0])
+        bosses[0]["bullet01"] = "R8_nonexistent_prefab"
+        errors, _warnings = validate_data.run_checks(data)
+        joined = " ".join(errors)
+        self.assertIn("R8_nonexistent_prefab", joined,
+                      f"bogus boss bullet ref was not reported as an error; errors={errors}")
+
+
+if __name__ == "__main__":
+    unittest.main()

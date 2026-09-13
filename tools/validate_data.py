@@ -19,11 +19,43 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "Resources" / "data"
 
-errors: list[str] = []
-warnings: list[str] = []
+# T-31: the weapon->bullet / boss->bullet cross-reference check used to
+# downgrade EVERY unresolved reference to a warning, so a newly-broken
+# reference (e.g. a typo'd bullet_prefab, or a build_gamedata.py regression
+# that stops resolving a class) would pass silently. This is the bounded
+# allow-list of reference ids that are known, expected, and documented to
+# stay unresolved as of the P1.10 upversion (real 1.7.10 ids that point at
+# something outside bullets.json's RGBullet-family scope: item-family effects
+# (Gas*), melee weapon prefabs used as thrown "bullets" (sword_*/spear_*/...),
+# or one of the ~78 rgprefab/bullet variants outside the RGBullet inheritance
+# family -- see build_bullet_table()'s docstring). Any reference id NOT in
+# this set is now a hard ERROR instead of a warning. Grown only when a new,
+# understood-and-documented gap is confirmed -- never to silence a real
+# regression.
+KNOWN_UNRESOLVED_BULLET_REFS = {
+    # rgprefab/item/Gas* (poison-gas item effect, not a bullet prefab)
+    "Gas", "Gas_boss5",
+    # melee weapons whose bullet_prefab points at the weapon's own swing/attack
+    # prefab (used as a thrown "bullet" visual, not an RGBullet-family prefab)
+    "buff_armor", "shield", "shield_prism",
+    "sword_0", "sword_1_75", "sword_1_75_gourd", "sword_2_5",
+    "sword_2_5_explode", "sword_2_blue", "sword_2_dizzy", "sword_2_fire",
+    "sword_2_green", "sword_2_ice", "sword_2_red",
+    "spear_0_8", "spear_1_5", "spear_2", "spear_3",
+    # non-RGBullet-family rgprefab/bullet variants (BulletFire/BulletGas/... --
+    # see build_bullet_table()'s docstring, 78 of 256 out of this pass's scope)
+    "bullet_10", "bullet_40", "bullet_41", "bullet_42", "bullet_43",
+    "bullet_48", "bullet_87", "bullet_9", "bullet_chain", "bullet_drill",
+    "bullet_tnt", "fireball", "effect_health_skill",
+    "bullet_e_15", "bullet_e_20", "bullet_e_21", "bullet_e_48", "bullet_e_8",
+    "e_fireball", "e_skeleton02_temp", "effect_shock2", "effect_shock3",
+    "explode_E_poly", "explode_hit_player", "explode_ice2",
+    # npc prefabs used as a boss/weapon "bullet" reference (summon, not a shot)
+    "npc_char_phantom", "npc_skeleton_01",
+}
 
 
-def load(name: str):
+def load(name: str, errors: list[str]):
     p = DATA / f"{name}.json"
     if not p.exists():
         errors.append(f"missing table: {name}.json (run build_gamedata.py)")
@@ -31,56 +63,84 @@ def load(name: str):
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def need(cond: bool, msg: str) -> None:
-    if not cond:
-        errors.append(msg)
+def load_all_tables() -> dict:
+    """Load every table run_checks() looks at, keyed by name. Missing-file
+    errors are collected into data['_load_errors'] rather than raised, so
+    run_checks() still reports every other problem in one pass."""
+    load_errors: list[str] = []
+    data = {
+        "weapons": load("weapons", load_errors),
+        "bullets": load("bullets", load_errors),
+        "enemies": load("enemies", load_errors),
+        "bosses": load("bosses", load_errors),
+        "buffs": load("buffs", load_errors),
+        "enemy_guns": load("enemy_guns", load_errors),
+        "catalog": load("weapon_catalog", load_errors),
+        "drops": load("droptables", load_errors),
+        "chars": load("characters", load_errors),
+        "levels": load("levels", load_errors),
+        "boss_rooms": load("boss_rooms", load_errors),
+        "boss_chests": load("boss_chests", load_errors),
+        "shop": load("shop", load_errors),
+        "pickups": load("pickups", load_errors),
+    }
+    data["_load_errors"] = load_errors
+    return data
 
 
-def expect_keys(records, keys, label) -> None:
-    for r in records or []:
-        missing = [k for k in keys if k not in r]
-        if missing:
-            errors.append(f"{label} '{r.get('id', '?')}' missing keys: {missing}")
-            return  # one example is enough per table
+def run_checks(data: dict) -> tuple[list[str], list[str]]:
+    """Run every gate against an already-loaded table dict (see
+    load_all_tables()'s keys) and return (errors, warnings). Pure function of
+    its input -- no file I/O -- so tests can load the real data once, mutate
+    an in-memory copy (e.g. inject a bogus reference), and assert on the
+    result without touching disk."""
+    errors: list[str] = list(data.get("_load_errors", []))
+    warnings: list[str] = []
 
+    def need(cond: bool, msg: str) -> None:
+        if not cond:
+            errors.append(msg)
 
-def numeric(records, keys, label) -> None:
-    for r in records or []:
-        for k in keys:
-            if k in r and not isinstance(r[k], (int, float)):
-                errors.append(f"{label} '{r.get('id', '?')}' key '{k}' not numeric: {r[k]!r}")
+    def expect_keys(records, keys, label) -> None:
+        for r in records or []:
+            missing = [k for k in keys if k not in r]
+            if missing:
+                errors.append(f"{label} '{r.get('id', '?')}' missing keys: {missing}")
+                return  # one example is enough per table
+
+    def numeric(records, keys, label) -> None:
+        for r in records or []:
+            for k in keys:
+                if k in r and not isinstance(r[k], (int, float)):
+                    errors.append(f"{label} '{r.get('id', '?')}' key '{k}' not numeric: {r[k]!r}")
+                    return
+
+    def count_unresolved(records) -> int:
+        n = 0
+        for r in records or []:
+            for v in r.values():
+                if isinstance(v, dict) and "_unresolved_ref" in v:
+                    n += 1
+        return n
+
+    def has_source(records, label) -> None:
+        """P1.10 UPVERSION gate: every record of a re-keyed table must say which
+        dump it came from ('1.7.10' resolved, '1.07' fallback -- see
+        tools/build_gamedata.py's builders)."""
+        for r in records or []:
+            if r.get("_source") not in ("1.07", "1.7.10"):
+                errors.append(f"{label} '{r.get('id', '?')}' missing/invalid _source marker")
                 return
 
-
-def count_unresolved(records) -> int:
-    n = 0
-    for r in records or []:
-        for v in r.values():
-            if isinstance(v, dict) and "_unresolved_ref" in v:
-                n += 1
-    return n
-
-
-def has_source(records, label) -> None:
-    """P1.10 UPVERSION gate: every record of a re-keyed table must say which
-    dump it came from ('1.7.10' resolved, '1.07' fallback -- see
-    tools/build_gamedata.py's builders)."""
-    for r in records or []:
-        if r.get("_source") not in ("1.07", "1.7.10"):
-            errors.append(f"{label} '{r.get('id', '?')}' missing/invalid _source marker")
-            return
-
-
-def main() -> int:
-    weapons = load("weapons")
-    bullets = load("bullets")
-    enemies = load("enemies")
-    bosses = load("bosses")
-    buffs = load("buffs")
-    enemy_guns = load("enemy_guns")
-    catalog = load("weapon_catalog")
-    drops = load("droptables")
-    chars = load("characters")
+    weapons = data.get("weapons")
+    bullets = data.get("bullets")
+    enemies = data.get("enemies")
+    bosses = data.get("bosses")
+    buffs = data.get("buffs")
+    enemy_guns = data.get("enemy_guns")
+    catalog = data.get("catalog")
+    drops = data.get("drops")
+    chars = data.get("chars")
 
     # --- count sanity (lower bounds: tolerant of future content growth) ---
     need(weapons is not None and len(weapons) >= 40, "weapons: expected >= 40")
@@ -127,33 +187,49 @@ def main() -> int:
                 errors.append(f"droptable[{lvl}] item missing _source marker")
                 break
 
-    # Bullet refs that don't resolve into bullets.json are WARNed, not FAILed:
-    # bullet01-06/bullet_prefab legitimately also point at prefabs bullets.json
-    # doesn't cover -- item-family effects (rgprefab/item/Gas*), another WEAPON
-    # prefab used as a thrown projectile (res/weapon/*), or one of the ~78
-    # rgprefab/bullet variants outside the RGBullet class family (see
-    # build_bullet_table's docstring) -- all real 1.7.10 data, just not part
-    # of this pass's per-instance RGBullet extraction.
+    # T-31: bullet refs that don't resolve into bullets.json are only OK when
+    # the target id is in KNOWN_UNRESOLVED_BULLET_REFS (documented, expected
+    # gaps -- item-family effects, melee-weapon "bullet" prefabs, or one of the
+    # ~78 rgprefab/bullet variants outside the RGBullet class family; see
+    # build_bullet_table()'s docstring). Anything else is a newly-broken
+    # reference and fails the gate outright.
     bullet_ids = {b.get("id") for b in (bullets or [])}
     if weapons and bullet_ids:
-        bad = sorted({w["id"] for w in weapons
-                      if w.get("bullet_prefab") and w["bullet_prefab"] not in bullet_ids})
-        if bad:
-            warnings.append(f"{len(bad)} weapons reference a bullet_prefab outside bullets.json "
-                            f"(non-RGBullet-family or non-bullet prefab; ok): {', '.join(bad[:5])}"
-                            + (", ..." if len(bad) > 5 else ""))
+        refs = sorted({w["bullet_prefab"] for w in weapons
+                       if w.get("bullet_prefab") and w["bullet_prefab"] not in bullet_ids})
+        known = [r for r in refs if r in KNOWN_UNRESOLVED_BULLET_REFS]
+        unknown = [r for r in refs if r not in KNOWN_UNRESOLVED_BULLET_REFS]
+        if known:
+            warnings.append(f"{sum(1 for w in weapons if w.get('bullet_prefab') in known)} "
+                            f"weapons reference a known/allow-listed bullet_prefab outside "
+                            f"bullets.json (non-RGBullet-family or non-bullet prefab; ok): "
+                            f"{', '.join(known[:5])}" + (", ..." if len(known) > 5 else ""))
+        if unknown:
+            errors.append(f"weapons reference an UNKNOWN bullet_prefab outside bullets.json "
+                          f"(not in KNOWN_UNRESOLVED_BULLET_REFS -- add it there if this is a "
+                          f"real, documented gap, or fix the reference): {', '.join(unknown)}")
     if bosses and bullet_ids:
-        unresolved_boss_bullets = []
+        known_boss_bullets = []
+        unknown_boss_bullets = []
         for b in bosses:
             for k in ("bullet01", "bullet02", "bullet03", "bullet04", "bullet05", "bullet06"):
                 v = b.get(k)
                 if v and v not in bullet_ids:
-                    unresolved_boss_bullets.append(f"{b.get('id')}.{k}={v}")
-        if unresolved_boss_bullets:
-            warnings.append(f"{len(unresolved_boss_bullets)} boss bullet refs outside bullets.json "
+                    entry = f"{b.get('id')}.{k}={v}"
+                    if v in KNOWN_UNRESOLVED_BULLET_REFS:
+                        known_boss_bullets.append(entry)
+                    else:
+                        unknown_boss_bullets.append(entry)
+        if known_boss_bullets:
+            warnings.append(f"{len(known_boss_bullets)} boss bullet refs outside bullets.json "
                             f"(non-RGBullet-family or non-bullet prefab; ok): "
-                            f"{', '.join(unresolved_boss_bullets[:5])}"
-                            + (", ..." if len(unresolved_boss_bullets) > 5 else ""))
+                            f"{', '.join(known_boss_bullets[:5])}"
+                            + (", ..." if len(known_boss_bullets) > 5 else ""))
+        if unknown_boss_bullets:
+            errors.append(f"boss bullet refs point at an UNKNOWN bullet outside bullets.json "
+                          f"(not in KNOWN_UNRESOLVED_BULLET_REFS -- add it there if this is a "
+                          f"real, documented gap, or fix the reference): "
+                          f"{', '.join(unknown_boss_bullets)}")
     boss_ids = {b.get("id") for b in (bosses or [])}
     if enemies and boss_ids:
         bad = sorted({e["enemy_class"] for e in enemies
@@ -178,10 +254,10 @@ def main() -> int:
                             f"entry in weapon_catalog (catalog is a subset; ok)")
 
     # --- P1.11: map / shop tables (MASTER_PLAN section 1 V-G) -------------------
-    levels = load("levels")
-    boss_rooms = load("boss_rooms")
-    boss_chests = load("boss_chests")
-    shop = load("shop")
+    levels = data.get("levels")
+    boss_rooms = data.get("boss_rooms")
+    boss_chests = data.get("boss_chests")
+    shop = data.get("shop")
     enemy_ids = {e.get("id") for e in (enemies or [])}
     weapon_ids = {w.get("id") for w in (weapons or [])}
     if levels is not None:
@@ -239,7 +315,7 @@ def main() -> int:
             for wid in c.get("weapons", []):
                 if wid not in weapon_ids:
                     errors.append(f"boss chest '{cid}' signature weapon '{wid}' unknown")
-    pickups = load("pickups")
+    pickups = data.get("pickups")
     if pickups is not None:
         for kind in ("gold", "silver", "copper", "energy"):
             p = pickups.get(kind)
@@ -288,6 +364,13 @@ def main() -> int:
         unres = count_unresolved(weapons)
         warnings.append(f"unresolved bullet/audio refs across weapons: {unres} "
                         f"(mapping/RE track TODO)")
+
+    return errors, warnings
+
+
+def main() -> int:
+    data = load_all_tables()
+    errors, warnings = run_checks(data)
 
     print("=" * 56)
     print("DATA VALIDATION")

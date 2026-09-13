@@ -18,38 +18,8 @@
     "droptable_levels": 7
   },
   "pathid_index_size": 127,
-  "unresolved_ref_count": 11,
+  "unresolved_ref_count": 3,
   "unresolved_refs_sample": [
-    {
-      "owner": "BulletBat",
-      "field": "audio_clip",
-      "pathid": 7494592237317156370
-    },
-    {
-      "owner": "BulletBat",
-      "field": "hit_object",
-      "pathid": 823895981258909257
-    },
-    {
-      "owner": "BulletBoom",
-      "field": "explode",
-      "pathid": 1916746441838400250
-    },
-    {
-      "owner": "BulletBottle",
-      "field": "hit_object",
-      "pathid": 4415217883253891945
-    },
-    {
-      "owner": "BulletBottle",
-      "field": "bullet",
-      "pathid": -1415349492265021333
-    },
-    {
-      "owner": "BulletBottle",
-      "field": "audio_clip",
-      "pathid": -1487583298571570170
-    },
     {
       "owner": "BulletEPoly",
       "field": "audio_clip",
@@ -64,16 +34,6 @@
       "owner": "BulletPolymerization",
       "field": "audio_clip",
       "pathid": 7714463989765790460
-    },
-    {
-      "owner": "BulletThunder",
-      "field": "audio_clip",
-      "pathid": 1420409875615434846
-    },
-    {
-      "owner": "BulletThunder",
-      "field": "thunder",
-      "pathid": -2864713471259152331
     }
   ]
 }

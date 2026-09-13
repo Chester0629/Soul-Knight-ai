@@ -591,6 +591,7 @@ const WeaponDef *GameData::ResolveDropWeapon(const std::string &dropId) const {
     const std::size_t idx = static_cast<std::size_t>(n) % m_Weapons.size();
     return &m_Weapons[idx];
 }
+// PORT CHOICE (T-30): class-keyed row = first 1.7.10 prefab of that class (P1.13 per-instance)
 const BulletDef *GameData::FindBullet(const std::string &id) const {
     auto it = m_BulletIndex.find(id);
     return it == m_BulletIndex.end() ? nullptr : &m_Bullets[it->second];
@@ -725,10 +726,12 @@ const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const 
     }
     return nullptr;
 }
+// PORT CHOICE (T-30): class-keyed row = first 1.7.10 prefab of that class (P1.13 per-instance)
 const EnemyGunDef *GameData::FindEnemyGun(const std::string &id) const {
     auto it = m_EnemyGunIndex.find(id);
     return it == m_EnemyGunIndex.end() ? nullptr : &m_EnemyGuns[it->second];
 }
+// PORT CHOICE (T-30): class-keyed row = first 1.7.10 prefab of that class (P1.13 per-instance)
 const BuffDef *GameData::FindBuff(const std::string &id) const {
     auto it = m_BuffIndex.find(id);
     return it == m_BuffIndex.end() ? nullptr : &m_Buffs[it->second];

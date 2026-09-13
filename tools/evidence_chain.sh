@@ -54,6 +54,9 @@ echo "=== GATE ==="
 python tools/validate_data.py > "$E/gate.log" 2>&1 || fail "validate_data"
 tail -1 "$E/gate.log" | tee "$E/gate.txt"
 grep -q "GATE: GREEN" "$E/gate.txt" || fail "gate not GREEN"
+echo "=== GATE BOUNDARY TEST (T-31) ==="
+python -m unittest discover -s tools/tests > "$E/gate_tests.log" 2>&1 || fail "gate boundary unittest"
+tail -3 "$E/gate_tests.log" | tee "$E/gate_tests.txt"
 [ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]} $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"; exit 1; }
 echo "=== WARM-UP (first launch of a fresh build can take minutes: AV scan / shader cache) ==="
 WSTART=$(date +%s)
