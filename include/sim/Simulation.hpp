@@ -11,6 +11,7 @@
 
 #include "combat/Buff.hpp"
 #include "combat/CombatStats.hpp"
+#include "combat/Damage.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
 #include "sim/BossController.hpp"
@@ -77,9 +78,13 @@ public:
     /// Build (or rebuild) the player's skill brain via (d) dispatch (B1-P4a). @p charId
     /// ("c01".."c13") selects the per-hero adapter (MakeCharSkill); unknown -> c01.
     /// @p skillCd / @p inSkillTime come from the CharacterDef stat sheet (one shared
-    /// player_template today -- per-char overrides pending). The skill is a SINGLE
-    /// owned member parallel to the weapon.
-    void SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime);
+    /// player_template today -- per-char overrides pending). @p atk (P3.3.b) is the
+    /// hero's base role_attribute.atk (CharacterDef::atk), fed to skills whose effect
+    /// needs it (C04's sword cut: atk + 3/7); default 0 leaves every caller that does
+    /// not pass it byte-identical for heroes with no atk-driven effect. The skill is
+    /// a SINGLE owned member parallel to the weapon.
+    void SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime,
+                        int atk = 0);
     /// Seed the player's combat vitals (enemy bullets damage these; read back via PlayerStats).
     void SetPlayerStats(const Game::CombatStats &stats);
 
@@ -157,6 +162,16 @@ private:
     /// the camp comes from b.camp) and, on success, ApplyBuff(targetId,
     /// b.buffParams). No-op when !b.hasBuff -- and no RNG is drawn in that case.
     void RollBulletBuff(const BulletState &b, std::uint32_t targetId, bool isCritic);
+    /// P3.3.b: route an incoming player hit through ICharSkill::OnPlayerHurt first
+    /// (C08's shield absorb); apply the (possibly replaced) damage via
+    /// Combat::ApplyToPlayer otherwise. @p hr.finalDamage is read/overwritten.
+    void ApplyDamageToPlayer(Game::Combat::HitResult hr);
+    /// P3.3.b: C04's melee sword cut -- deals @p damage to every live enemy/boss
+    /// within kMeleeCutReachPx of the player and inside the kMeleeCutHalfAngleDeg
+    /// forward arc of the current aim direction (see SimConfig.hpp T-36). Marks
+    /// lastHitByPlayer on every entity hit (Cull's kill-attribution) and emits a
+    /// "hurt" AnimTrigger per landed cut, same shape as a bullet hit.
+    void ApplyMeleeCut(int damage);
     static EntityView ViewOf(const EntityState &s, std::uint32_t id);
 
     int m_RunSeed;
@@ -178,6 +193,10 @@ private:
     /// The player's skill brain via (d) dispatch (B1-P4a). A SINGLE owned member,
     /// parallel to m_Weapon -- charId selects the per-hero adapter (MakeCharSkill).
     std::unique_ptr<ICharSkill> m_Skill;
+    /// P3.3.b: the hero's base role_attribute.atk (CharacterDef::atk), fed to
+    /// ICharSkill::RoleAtkMelee (C04's cut damage = atk + 3/7). Set by
+    /// SetPlayerSkill; 0 for callers that omit it (no atk-driven skill effect).
+    int m_PlayerAtk = 0;
 
     Game::CombatStats m_PlayerStats{};
     // --- P3.1: player buff state (the sim does not own the player's position, so

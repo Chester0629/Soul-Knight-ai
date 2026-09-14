@@ -47,6 +47,20 @@ inline constexpr float kRepelScale = 30.0F;
 /// is distinct from every brain stream (which are seeded from runSeed + offsets).
 inline constexpr int kHitRngSalt = 0x5170;
 
+/// PORT CHOICE (T-36): C04's melee sword-cut (AtkCut, RGSword spawn) has no
+/// recovered reach/hitbox value -- the RGSword prefab's collider dimensions are a
+/// truncated get_transform/Instantiate tail-call, out of scope for this port. The
+/// sim needs SOME forward hit-test to land the cut, so it uses a small radius+cone
+/// query rather than reusing the bullet-circle path (a melee cut is not a bullet).
+/// Chosen: reach = 48px (~3x kEnemyBodyRadius, a generous one-body-length "sword
+/// swing" past the player's own 16px body) and a 120-degree forward arc (60 degrees
+/// either side of the aim direction) -- wide enough that a roughly-aimed cut lands,
+/// narrow enough it is not an omnidirectional nuke. Not FAITHFUL; flagged here so a
+/// future RGSword-collider recovery can replace it without hunting through
+/// Simulation.cpp.
+inline constexpr float kMeleeCutReachPx = 48.0F;
+inline constexpr float kMeleeCutHalfAngleDeg = 60.0F;
+
 } // namespace Game::Sim
 
 #endif /* GAME_SIM_SIMCONFIG_HPP */

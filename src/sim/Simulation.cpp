@@ -68,7 +68,23 @@ void Simulation::WakeByRoom() {
 
 // Per-step helpers filled across Tasks 3-7.
 void Simulation::TickWeapon() {
-    if (!m_Weapon.has_value()) {
+    // --- P3.3.b: C04's melee sword cut. RoleAtkMelee is a no-op default (all-false)
+    // for every hero except C04, so this block is behaviourally invisible for the
+    // rest of the roster -- suppressFire stays false and the normal weapon path
+    // below runs exactly as before. For C04, in_skill_effect redirects the SAME
+    // press that would have fired the gun into one big cut instead (FAITHFUL:
+    // C04Controller__RoleAtk never reaches hand.SetAttack on that branch).
+    bool suppressFire = false;
+    if (m_Skill != nullptr) {
+        const ICharSkill::MeleeAtkEffect m = m_Skill->RoleAtkMelee(
+            /*pressDown=*/m_Input.firing, /*standingOnItem=*/false, m_PlayerAtk,
+            /*skillStrengthen=*/false); // skill_strengthen has no data source yet (T-36 debt).
+        if (m.doCut) {
+            ApplyMeleeCut(m.cutDamage);
+        }
+        suppressFire = m.suppressWeaponFire;
+    }
+    if (!m_Weapon.has_value() || suppressFire) {
         return;
     }
     const std::size_t before = m_FireIntents.size();
@@ -287,6 +303,67 @@ void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId, bo
     ApplyBuff(targetId, b.buffParams);
 }
 
+// P3.3.b: route an incoming player hit through the skill's OnPlayerHurt hook first
+// (C08's shield absorb; every other hero's default is an exact pass-through --
+// absorbed=false, damageToApply==the raw finalDamage -- so this is behaviourally
+// invisible for them). @p hr is taken BY VALUE so the caller's copy is untouched.
+void Simulation::ApplyDamageToPlayer(Game::Combat::HitResult hr) {
+    if (m_Skill != nullptr) {
+        const ICharSkill::HurtOutcome ho = m_Skill->OnPlayerHurt(hr.finalDamage, /*awake=*/true);
+        if (ho.absorbed) {
+            return; // C08's shield ate it (or the silent !awake no-op) -- no HP/armor change.
+        }
+        hr.finalDamage = ho.damageToApply;
+    }
+    Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
+}
+
+// P3.3.b: C04's melee sword cut (see SimConfig.hpp T-36 for the reach/arc port
+// choice). Straight damage, no crit/repel (the decomp shows no crit roll on this
+// path); marks lastHitByPlayer so Cull can attribute a resulting death to
+// ICharSkill::OnEnemyKilled (C04's kill-combo), and emits the same "hurt"
+// AnimTrigger a bullet hit would (presentation parity).
+void Simulation::ApplyMeleeCut(int damage) {
+    if (damage <= 0) {
+        return;
+    }
+    const glm::vec2 origin = m_Input.playerPos;
+    const glm::vec2 aim = Normalize(m_Input.aimDir);
+    const float cosHalfAngle = std::cos(kMeleeCutHalfAngleDeg * kDegToRad);
+    auto inReach = [&](glm::vec2 targetPos) {
+        const glm::vec2 d = targetPos - origin;
+        const float distSq = d.x * d.x + d.y * d.y;
+        if (distSq > kMeleeCutReachPx * kMeleeCutReachPx) {
+            return false;
+        }
+        if (distSq <= 1e-6F) {
+            return true; // on top of the player: always in the arc.
+        }
+        const float dist = std::sqrt(distSq);
+        const glm::vec2 dn = d / dist;
+        return (dn.x * aim.x + dn.y * aim.y) >= cosHalfAngle;
+    };
+
+    Game::Combat::HitResult hr;
+    hr.finalDamage = damage;
+    for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
+        auto &e = m_Enemies[ei];
+        if (e->State().dead || !inReach(e->State().pos)) {
+            continue;
+        }
+        Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
+        e->MutableState().lastHitByPlayer = true;
+        m_Events.push_back(
+            SimEvent{SimEventType::AnimTrigger, static_cast<std::uint32_t>(ei), "hurt"});
+    }
+    if (m_Boss != nullptr && !m_Boss->State().dead && inReach(m_Boss->State().pos)) {
+        Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
+        m_Boss->MutableState().lastHitByPlayer = true;
+        m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
+        m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"});
+    }
+}
+
 // P3.1: advance every entity's BuffList by one fixed step: apply Fire/Poison DoT
 // through the existing Damage.hpp path (armor-then-hp for the player, straight hp
 // for enemies/boss -- same split ResolveHits() uses, just skipping the crit roll/
@@ -307,7 +384,7 @@ void Simulation::TickBuffs() {
         if (r.damage > 0 && m_Input.playerAlive) {
             Game::Combat::HitResult hr;
             hr.finalDamage = r.damage;
-            Game::Combat::ApplyToPlayer(m_PlayerStats, hr, /*canHurt=*/true);
+            ApplyDamageToPlayer(hr); // P3.3.b: C08's shield can absorb a DoT tick too.
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
@@ -469,12 +546,21 @@ void Simulation::ResolveHits() {
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
                 Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
+                e->MutableState().lastHitByPlayer = true; // P3.3.b: Cull kill-attribution.
                 if (!e->State().kinematic) {
                     e->ApplyForce(Normalize(b.vel), hr.repelMagnitude);
                 }
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                             static_cast<std::uint32_t>(ei), "hurt"}); // A
                 RollBulletBuff(b, static_cast<std::uint32_t>(ei), hr.isCrit); // P3.2
+                // P3.3.b: C10/C13's every-3rd-qualifying-hit armor-regen passive; a
+                // no-op (returns 0) for every other hero.
+                if (m_Skill != nullptr) {
+                    const int armorGain = m_Skill->OnPlayerBulletHit();
+                    if (armorGain > 0) {
+                        m_PlayerStats.RestoreArmor(armorGain);
+                    }
+                }
                 consumed = true;
                 break;
             }
@@ -487,9 +573,16 @@ void Simulation::ResolveHits() {
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
                 Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
+                m_Boss->MutableState().lastHitByPlayer = true; // P3.3.b
                 m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"}); // A
                 RollBulletBuff(b, kBossViewId, hr.isCrit); // P3.2
+                if (m_Skill != nullptr) {
+                    const int armorGain = m_Skill->OnPlayerBulletHit(); // P3.3.b
+                    if (armorGain > 0) {
+                        m_PlayerStats.RestoreArmor(armorGain);
+                    }
+                }
                 consumed = true;
             }
             if (consumed && b.pierce <= 0) {
@@ -507,7 +600,7 @@ void Simulation::ResolveHits() {
                 in.repelInputMagnitude = b.repel * kRepelScale;
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::PLAYER);
-                Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
+                ApplyDamageToPlayer(hr); // P3.3.b: C08's shield can absorb this hit.
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"}); // A
                 // P3.2: enemy bullets never carry a buff today (EnemyGunDef has no
                 // bullet-prefab link into bullets.json's buff-carrying rows -- NOT
@@ -525,14 +618,22 @@ void Simulation::Cull() {
     for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
         auto &e = m_Enemies[ei];
         if (!e->State().dead && e->State().stats.IsDead()) {
+            const bool byPlayer = e->State().lastHitByPlayer; // P3.3.b: read before Kill().
             e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
             m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                         static_cast<std::uint32_t>(ei), "death"}); // A
+            if (byPlayer && m_Skill != nullptr) {
+                m_Skill->OnEnemyKilled(); // P3.3.b: C04's kill-combo; no-op for the rest.
+            }
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().stats.IsDead()) {
+        const bool byPlayer = m_Boss->State().lastHitByPlayer; // P3.3.b
         m_Boss->Kill();
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "death"}); // A
+        if (byPlayer && m_Skill != nullptr) {
+            m_Skill->OnEnemyKilled();
+        }
     }
     m_Bullets.erase(std::remove_if(m_Bullets.begin(), m_Bullets.end(),
                                    [](const BulletState &b) {
@@ -598,11 +699,14 @@ void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weap
                              int seed, const Game::GameData *data) {
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed, data)); // cold rebuild
 }
-void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime) {
-    // B1-P4a (d) dispatch: charId -> per-hero ICharSkill adapter. C01 (mirror) + C02
-    // (dash) are faithful; c03..c13 are gate+cooldown-only stubs. The skill starts
-    // READY (each brain ctor). Single owned member, parallel to m_Weapon.
+void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime,
+                                int atk) {
+    // B1-P4a/P3.3.b (d) dispatch: charId -> per-hero ICharSkill adapter. C01/C02/
+    // C04/C08/C10/C13 are faithful; the rest are gate+cooldown-only stubs. The
+    // skill starts READY (each brain ctor). Single owned member, parallel to
+    // m_Weapon. m_PlayerAtk feeds RoleAtkMelee (C04's cut damage = atk + 3/7).
     m_Skill = MakeCharSkill(charId, skillCd, inSkillTime);
+    m_PlayerAtk = atk;
 }
 
 void Simulation::KillAllHostiles() {

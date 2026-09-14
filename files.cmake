@@ -548,6 +548,10 @@ set(TEST_FILES
     # Milestone 1 A3: CharSkill -> sim pipeline (skill cast + cooldown -> HUD)
     SkillPipelineTest.cpp
 
+    # P3.3.b: real C04/C08/C10/C13 skill adapters (melee cut / shield absorb /
+    # armor-regen passives), replacing StubSkillAdapter for those four heroes.
+    CharSkillSimTest.cpp
+
     # Milestone 1 A4: Vertical/Bottom Filled (UV-crop) cooldown-mask geometry
     FilledImageTest.cpp
 

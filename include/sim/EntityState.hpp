@@ -29,6 +29,12 @@ struct EntityState {
     /// The armor amount granted by the currently-active Armor buff (0 if none), so
     /// Simulation::TickBuffs can revert exactly this much when the buff ends.
     int buffArmorGranted = 0;
+
+    /// P3.3.b: true once a player bullet or melee cut has applied damage to this
+    /// entity (ResolveHits / Simulation::ApplyMeleeCut set it). Cull() reads it to
+    /// attribute a death to the player -> ICharSkill::OnEnemyKilled (C04's combo).
+    /// Never cleared (an entity dies at most once); irrelevant once dead.
+    bool lastHitByPlayer = false;
 };
 
 } // namespace Game::Sim

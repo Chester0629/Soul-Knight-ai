@@ -59,6 +59,33 @@ public:
         bool triggerItem = false;      ///< standing-on-item press triggers the pickup.
     };
 
+    /// P3.3.b: the result of @ref OnPlayerHurt -- what the caller should do with an
+    /// incoming hit BEFORE the normal armor/hp pipeline runs. Default (no override)
+    /// is an exact pass-through (absorbed=false, damageToApply==the raw damage), so
+    /// every hero without a hurt hook stays byte-identical to today.
+    struct HurtOutcome {
+        bool absorbed = false;  ///< true -> the skill fully handled the hit itself
+                                 ///< (e.g. C08's shield); skip the normal HP/armor
+                                 ///< pipeline entirely (no damage reaches the player).
+        int damageToApply = 0;  ///< the damage the normal pipeline should apply when
+                                 ///< !absorbed. Defaults to the incoming damage.
+    };
+
+    /// P3.3.b: C04's melee sword-cut decision. RoleAtk (above) carries no atk /
+    /// skill_strengthen, which the cut damage formula needs, so this parallel hook
+    /// exists for the one hero that needs them; every other hero's default leaves
+    /// suppressWeaponFire=false / doCut=false (the normal weapon-fire path runs
+    /// completely unaffected).
+    struct MeleeAtkEffect {
+        bool doCut = false;            ///< true -> the owner must deal cutDamage as a
+                                        ///< melee hit this step (C04's AtkCut).
+        int cutDamage = 0;             ///< valid only when doCut.
+        bool suppressWeaponFire = false; ///< true -> the normal ranged weapon must NOT
+                                          ///< fire this step (the cut REPLACES the shot,
+                                          ///< faithful to C04Controller__RoleAtk not
+                                          ///< reaching hand.SetAttack on that branch).
+    };
+
     virtual ~ICharSkill() = default;
 
     /// Seed the hero's deterministic stream (never advanced; parity only).
@@ -72,6 +99,37 @@ public:
     /// The in_skill attack-modifier hook (C01 mirror). Returns all-false when the
     /// hero has no RoleAtk or the skill is inactive.
     virtual AtkEffect RoleAtk(bool pressDown, bool standingOnItem) = 0;
+
+    /// P3.3.b hook: called once per player-bullet fire step in place of / alongside
+    /// RoleAtk for heroes whose ultimate replaces the normal shot with a melee cut
+    /// (C04). Default no-op (all-false) -- every other hero's normal weapon fire is
+    /// completely unaffected.
+    virtual MeleeAtkEffect RoleAtkMelee(bool pressDown, bool standingOnItem, int atk,
+                                        bool skillStrengthen) {
+        (void)pressDown;
+        (void)standingOnItem;
+        (void)atk;
+        (void)skillStrengthen;
+        return {};
+    }
+
+    /// P3.3.b hook: called BEFORE the normal player damage pipeline for every
+    /// incoming hit (bullet or DoT). Default is an exact pass-through (C08 is the
+    /// only hero that intercepts here, absorbing the hit into its shield).
+    virtual HurtOutcome OnPlayerHurt(int damage, bool awake) {
+        (void)awake;
+        return HurtOutcome{false, damage};
+    }
+
+    /// P3.3.b hook: called once when an enemy/boss the PLAYER killed dies (Cull
+    /// attributes the kill via EntityState::lastHitByPlayer). Default no-op; C04
+    /// uses this to drive its in-window kill combo.
+    virtual void OnEnemyKilled() {}
+
+    /// P3.3.b hook: called once per player-bullet-lands-on-a-target hit (enemy or
+    /// boss). @return armor to restore this hit (0 = none). Default no-op; C10/C13
+    /// use this for their every-3rd-qualifying-hit armor-regen passive.
+    virtual int OnPlayerBulletHit() { return 0; }
 
     virtual bool InSkill() const = 0;
     virtual bool SkillReady() const = 0;

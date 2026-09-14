@@ -1132,7 +1132,8 @@ void GameScene::OnEnter() {
     m_Sim->SetPlayerSkill(charId,
                           cdef != nullptr ? cdef->skillCd : m_Data.PlayerTemplate().skillCd,
                           cdef != nullptr ? cdef->inSkillTime
-                                          : m_Data.PlayerTemplate().inSkillTime);
+                                          : m_Data.PlayerTemplate().inSkillTime,
+                          cdef != nullptr ? cdef->atk : m_Data.PlayerTemplate().atk);
 
     // --- Forward run loop (step 2a) setup ---
     // Arm the clear check only after >= 1 hostile has existed, read from the sim's

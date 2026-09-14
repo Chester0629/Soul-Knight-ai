@@ -1,1 +1,2 @@
  [info] Skill: c10 activated
+ [info] Skill: c10 ended

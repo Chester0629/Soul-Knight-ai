@@ -21,11 +21,13 @@
 
 namespace Game::Sim {
 
-// === (d) per-hero skill adapters (B1-P4a). The skill-brain SOURCE is NEVER modified;
-// each adapter only CALLS public brain methods. C01 (dual-hand mirror) + C02 (forward
-// dash) are FAITHFUL via the existing sim; C03..C13 are GATE+COOLDOWN-ONLY stubs
-// (trigger/cooldown/window run, the combat effect is a deliberate no-op until each
-// effect subsystem stage lands -- recorded debt). ========================
+// === (d) per-hero skill adapters (B1-P4a/P3.3.b). The skill-brain SOURCE is NEVER
+// modified; each adapter only CALLS public brain methods. C01 (dual-hand mirror),
+// C02 (forward dash), C04 (sword cut + kill combo), C08 (shield absorb), C10 and
+// C13 (armor-regen passive) are FAITHFUL via the existing sim; C03/C05/C06/C07/
+// C09/C11/C12 remain GATE+COOLDOWN-ONLY stubs (trigger/cooldown/window run, the
+// combat effect is a deliberate no-op until each effect subsystem stage lands --
+// recorded debt). ========================
 
 /// C01 -- dual-hand hero (FAITHFUL). The active window persists (Tick auto-ends it);
 /// while in_skill the second hand mirrors the attack (the sim duplicates the shot).
@@ -77,11 +79,10 @@ public:
 };
 
 /// Gate+cooldown-only stub for the common `bool TryActivateSkill()` + `void EndSkill()`
-/// heroes (C03/C04/C05/C06/C07/C08/C10/C11/C12/C13). TryTrigger activates then
-/// immediately spends the cooldown (EndSkill), so the trigger/cooldown cycle runs;
-/// the ultimate EFFECT is a no-op until that hero's subsystem stage. (C13's
-/// TryActivateSkill(changing=false) uses its default arg; C06's TryCancelSkill and
-/// C04/C10/C13's RoleAtk effects are part of the deferred work.)
+/// heroes (C03/C05/C06/C07/C09/C11/C12 today -- C04/C08/C10/C13 graduated to real
+/// adapters below, P3.3.b). TryTrigger activates then immediately spends the
+/// cooldown (EndSkill), so the trigger/cooldown cycle runs; the ultimate EFFECT is a
+/// no-op until that hero's subsystem stage.
 template <class TBrain>
 class StubSkillAdapter : public CharSkillBase<TBrain> {
 public:
@@ -96,6 +97,150 @@ public:
     AtkEffect RoleAtk(bool /*pressDown*/, bool /*standingOnItem*/) override { return {}; }
 };
 
+// === P3.3.b: real per-hero adapters for C04/C08/C10/C13, replacing the stub above.
+// Each keeps the ultimate ACTIVE across frames (no immediate EndSkill on trigger);
+// the window closes only via the brain's own logic (a windowed Tick auto-end, an
+// explicit end, or -- C04 -- the kill-chain closing the cut window) exactly like the
+// faithful C01/C02 adapters above. ========================================
+
+/// C04 -- charge-and-cut melee hero (FAITHFUL gate/cut/combo; T-36 reach is a
+/// documented port choice, see SimConfig.hpp). The ultimate opens a sword-cut
+/// window (in_skill_effect); the NEXT press deals one cut (atk+3/+7) INSTEAD of a
+/// normal shot (RoleAtkMelee.suppressWeaponFire), and in-window kills
+/// (OnEnemyKilled -> KillSomeOne, called EXACTLY as decompiled, no adapter-side
+/// gating) drive the 5-kill combo -- every kill but the 5th instantly refreshes the
+/// cooldown (ReflashSkillCd, this_skill_time = skill_cd) and closes the cut window;
+/// the 5th wraps the combo to 0 with NO refresh and also closes the window.
+///
+/// PORT CHOICE (C04-END): the recovered decomp never shows WHEN the underlying
+/// RoleSkillEnd (in_skill=false) fires after the cut window closes -- only
+/// EndSkillEffect's in_skill_effect=false is recovered, and CharSkillC04 exposes no
+/// primitive that clears in_skill WITHOUT also spending the cooldown (EndSkill()
+/// always zeros this_skill_time, which would silently erase KillSomeOne's just-
+/// applied ReflashSkillCd refresh -- calling it from OnEnemyKilled was tried and
+/// rejected for exactly that reason). So in_skill is left alone by a kill; instead,
+/// same as C08 below, a SECOND skill-button press while already in_skill is the
+/// self-driven close (TryTrigger toggles EndSkill() then), which correctly spends
+/// whatever cooldown state KillSomeOne last left behind (instant-ready after a
+/// refresh, or a full wait after the 5th-kill wrap).
+class CharSkillC04Adapter : public CharSkillBase<Game::CharSkillC04> {
+public:
+    using CharSkillBase::CharSkillBase;
+    TriggerResult TryTrigger() override {
+        if (m_Brain.InSkill()) {
+            m_Brain.EndSkill(); // PORT CHOICE (C04-END, see class comment above).
+            return {TriggerOutcome::Released, false};
+        }
+        return m_Brain.TryActivateSkill() ? TriggerResult{TriggerOutcome::Activated, false}
+                                          : TriggerResult{};
+    }
+    // C04's normal RoleAtk hook (mirror-shaped AtkEffect) carries no cut info --
+    // the sim drives C04 entirely through RoleAtkMelee (below), which needs
+    // atk/skillStrengthen the shared AtkEffect signature does not carry.
+    AtkEffect RoleAtk(bool /*pressDown*/, bool /*standingOnItem*/) override { return {}; }
+    MeleeAtkEffect RoleAtkMelee(bool pressDown, bool standingOnItem, int atk,
+                                bool skillStrengthen) override {
+        const Game::CharSkillC04::AtkDecision d =
+            m_Brain.RoleAtk(pressDown, standingOnItem, atk, skillStrengthen);
+        MeleeAtkEffect e;
+        e.doCut = d.doCut;
+        e.cutDamage = d.cutDamage;
+        // FAITHFUL: every branch except the normal-fire / already-cut path skips
+        // hand.SetAttack entirely (the item-trigger return, and an uncut press/
+        // release both never reach it) -- suppress the ranged shot exactly then.
+        e.suppressWeaponFire = !d.setHandAttack;
+        return e;
+    }
+    void OnEnemyKilled() override {
+        m_Brain.KillSomeOne(); // FAITHFUL: combo/refresh/wrap exactly as decompiled.
+    }
+};
+
+/// C08 -- shield hero (FAITHFUL gate/absorb). While the ultimate is up, every
+/// incoming hit (OnPlayerHurt) is absorbed straight out of shield_value instead of
+/// hitting HP/armor. PORT CHOICE (C08-END): C08's Update has NO in_skill_time
+/// countdown and no recovered Cancel/TryCancelSkill -- the only exposed way to
+/// leave in_skill is EndSkill(). A second skill-button press while already in_skill
+/// is modeled as the toggle-off (press-to-raise / press-to-lower is the common
+/// shield-ultimate shape, and the only self-driven close this API surface allows).
+class CharSkillC08Adapter : public CharSkillBase<Game::CharSkillC08> {
+public:
+    using CharSkillBase::CharSkillBase;
+    TriggerResult TryTrigger() override {
+        if (m_Brain.InSkill()) {
+            m_Brain.EndSkill(); // PORT CHOICE (C08-END, see class comment above).
+            return {TriggerOutcome::Released, false};
+        }
+        return m_Brain.TryActivateSkill() ? TriggerResult{TriggerOutcome::Activated, false}
+                                          : TriggerResult{};
+    }
+    AtkEffect RoleAtk(bool /*pressDown*/, bool /*standingOnItem*/) override { return {}; }
+    HurtOutcome OnPlayerHurt(int damage, bool awake) override {
+        const Game::CharSkillC08::HurtDecision d = m_Brain.GetHurt(damage, awake);
+        if (d.deferToBase) {
+            return HurtOutcome{false, damage}; // !in_skill -> normal pipeline, unchanged.
+        }
+        // in_skill: either the shield absorbed it (awake), or the decomp's silent
+        // !awake early-return (no effect at all) -- both skip the normal HP/armor
+        // pipeline entirely, so both report absorbed with zero damage applied.
+        return HurtOutcome{true, 0};
+    }
+};
+
+/// C10 -- transforming "beast/paw" hero (FAITHFUL gate/window/armor-regen). The
+/// window auto-ends via Tick (in_skill_time countdown -> the brain's own EndSkill,
+/// same shape as C01). While active, firing arms skill_atk (RoleAtk's in_skill
+/// animator-mirror branch, `setSkillAnim`, IS the in_skill gate); the next landed
+/// player-bullet hit (OnPlayerBulletHit -> HurtSomeOne) consumes it, and every 3rd
+/// such hit restores 1 armor. PORT CHOICE: the decomp's skill_atk-arming write
+/// (FUN_0026a58c) could not be attributed to a named method (see the header's own
+/// TODO); arming it on a fire press while in_skill is the natural per-hero-fire
+/// hook this adapter already has (RoleAtk, called once per player-shot step).
+class CharSkillC10Adapter : public CharSkillBase<Game::CharSkillC10> {
+public:
+    using CharSkillBase::CharSkillBase;
+    TriggerResult TryTrigger() override {
+        return m_Brain.TryActivateSkill() ? TriggerResult{TriggerOutcome::Activated, false}
+                                          : TriggerResult{};
+    }
+    AtkEffect RoleAtk(bool pressDown, bool standingOnItem) override {
+        const Game::CharSkillC10::AtkDecision d = m_Brain.RoleAtk(pressDown, standingOnItem);
+        if (d.setSkillAnim && pressDown) {
+            m_Brain.ArmSkillAtk(); // PORT CHOICE, see class comment above.
+        }
+        AtkEffect e;
+        e.triggerItem = d.triggerItem;
+        return e;
+    }
+    int OnPlayerBulletHit() override {
+        return m_Brain.HurtSomeOne() ? Game::CharSkillC10::kArmorRestoreAmount : 0;
+    }
+};
+
+/// C13 -- transfiguration / armor-regen hero (FAITHFUL gate/window/armor-regen),
+/// structurally the C10 twin: the window auto-ends via Tick, firing while in_skill
+/// arms the per-hit passive (animatorMirror IS the in_skill gate, same PORT CHOICE
+/// as C10 above), and OnPlayerBulletHit's ArmTickFromHit already returns the exact
+/// armor delta (0 or kArmorRestoredPerCycle) -- no bool->int translation needed.
+class CharSkillC13Adapter : public CharSkillBase<Game::CharSkillC13> {
+public:
+    using CharSkillBase::CharSkillBase;
+    TriggerResult TryTrigger() override {
+        return m_Brain.TryActivateSkill() ? TriggerResult{TriggerOutcome::Activated, false}
+                                          : TriggerResult{};
+    }
+    AtkEffect RoleAtk(bool pressDown, bool standingOnItem) override {
+        const Game::CharSkillC13::AtkDecision d = m_Brain.RoleAtk(pressDown, standingOnItem);
+        if (d.animatorMirror && pressDown) {
+            m_Brain.SetSkillAtkFlag(true); // PORT CHOICE, see CharSkillC10Adapter comment.
+        }
+        AtkEffect e;
+        e.triggerItem = d.triggerItem;
+        return e;
+    }
+    int OnPlayerBulletHit() override { return m_Brain.ArmTickFromHit(); }
+};
+
 /// Dispatch a character id -> its (d) skill adapter. All 13 heroes register. C01/C10/
 /// C13 take (skillCd, inSkillTime); the rest take (skillCd). per-char skill_cd/
 /// in_skill_time overrides are PENDING (one shared player_template), so today every
@@ -104,19 +249,19 @@ inline std::unique_ptr<ICharSkill> MakeCharSkill(const std::string &charId, floa
                                                  float inSkillTime) {
     if (charId == "c02") { return std::make_unique<CharSkillC02Adapter>(skillCd); }
     if (charId == "c03") { return std::make_unique<StubSkillAdapter<Game::CharSkillC03>>(skillCd); }
-    if (charId == "c04") { return std::make_unique<StubSkillAdapter<Game::CharSkillC04>>(skillCd); }
+    if (charId == "c04") { return std::make_unique<CharSkillC04Adapter>(skillCd); }
     if (charId == "c05") { return std::make_unique<StubSkillAdapter<Game::CharSkillC05>>(skillCd); }
     if (charId == "c06") { return std::make_unique<StubSkillAdapter<Game::CharSkillC06>>(skillCd); }
     if (charId == "c07") { return std::make_unique<StubSkillAdapter<Game::CharSkillC07>>(skillCd); }
-    if (charId == "c08") { return std::make_unique<StubSkillAdapter<Game::CharSkillC08>>(skillCd); }
+    if (charId == "c08") { return std::make_unique<CharSkillC08Adapter>(skillCd); }
     if (charId == "c09") { return std::make_unique<CharSkillC09Adapter>(skillCd); }
     if (charId == "c10") {
-        return std::make_unique<StubSkillAdapter<Game::CharSkillC10>>(skillCd, inSkillTime);
+        return std::make_unique<CharSkillC10Adapter>(skillCd, inSkillTime);
     }
     if (charId == "c11") { return std::make_unique<StubSkillAdapter<Game::CharSkillC11>>(skillCd); }
     if (charId == "c12") { return std::make_unique<StubSkillAdapter<Game::CharSkillC12>>(skillCd); }
     if (charId == "c13") {
-        return std::make_unique<StubSkillAdapter<Game::CharSkillC13>>(skillCd, inSkillTime);
+        return std::make_unique<CharSkillC13Adapter>(skillCd, inSkillTime);
     }
     return std::make_unique<CharSkillC01Adapter>(skillCd, inSkillTime); // c01 + default fallback
 }
