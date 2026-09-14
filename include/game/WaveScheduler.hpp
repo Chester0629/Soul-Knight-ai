@@ -38,19 +38,33 @@ namespace Game {
  * enemy_point per enemy is not recovered; PlanRoomSpawns' consume-charging
  * loop (see EnemyMaker.hpp) is this port's stand-in.
  *
- * NOT PORTED (T-29): kShowUpEffectDelayMs documents CreatePart's
- * `Invoke("ShowUpEffect", 0.8f)` call for parts >= 1 (`part != 0`). Ghidra
- * does not resolve the literal string, but `"ShowUpEffect"` is in the string
- * table (`"CreatePart"` is not) and EnemyMaker__ShowUpEffect @
- * game_full.c:682319 just plays sound effect 7 -- this is a show-up SOUND
- * cue, not a spawn delay, so it is not implemented here.
+ * PORTED (T-29, was NOT PORTED): kShowUpEffectDelayMs is CreatePart's
+ * `Invoke("ShowUpEffect", 0.8f)` delay for parts >= 1 (`part != 0`) --
+ * EnemyMaker$$CreatePart @ game_typed.c:78030-78082 ends with
+ * `if (part != 0) Invoke(<str>, 0.8f); part = part + 1;` (the 0.8 f is the
+ * 0x3f4ccccd literal in that Invoke call). Ghidra does not resolve the method
+ * name string, but `"ShowUpEffect"` is in the string table (`"CreatePart"` is
+ * not) and EnemyMaker$$ShowUpEffect @ game_typed.c:78114-78126 is exactly
+ * `RGMusicManager.PlayEffect(7)` -- so this is a show-up SOUND cue, not a
+ * spawn delay, and it is NOT a gate on this struct's Tick().
+ *
+ * It is consumed by the SCENE, not by WaveScheduler: GameScene::SpawnWaveBatch
+ * (src/scenes/GameScene.cpp) pushes kShowUpEffectDelayMs onto m_ShowUpCuesMs
+ * whenever it spawns a part with SpawnWaves::partsSpawned != 0, and
+ * GameScene::TickShowUpCues counts those down and fires
+ * AudioPlayer::PlaySfx(GameData::FindEffectClip(7)) == fx_show_up.wav. The
+ * earlier port choice -- playing effect 7 immediately on boss-room lock -- is
+ * gone.
  *
  * This struct owns only that bookkeeping (no engine/scene types) so it can be
  * unit-tested directly; GameScene drives it and still owns spawn points,
  * point-spread indexing and the actual enemy instantiation.
  */
 struct WaveScheduler {
-    // NOT PORTED (T-29): Invoke("ShowUpEffect", 0.8f) on parts >= 1 -- sound only.
+    /// T-29: the delay of CreatePart's `Invoke("ShowUpEffect", 0.8f)` on parts
+    /// >= 1 (sound only -- it never gates a spawn). Consumed by
+    /// GameScene::SpawnWaveBatch -> GameScene::TickShowUpCues; see this header's
+    /// doc comment for the decompile citation.
     static constexpr float kShowUpEffectDelayMs = 800.0F;
 
     std::vector<std::string> pending;

@@ -113,6 +113,33 @@ public:
     /// Move out the queued anim/sfx events (empty this cycle; emission is deferred).
     std::vector<SimEvent> DrainEvents();
 
+    /// P3.2 DECISION RULE, FAITHFUL @ BuffEffectTrigger$$TriggerWith
+    /// (game_typed.c:86608-86645, disasm @ 00ae97dc). Exposed as a public static
+    /// so every branch can be unit-tested directly (RollBulletBuff is private and
+    /// only reachable through a landed hit).
+    ///
+    /// The decompile's `probability` is a 0..100 PERCENT; pass it on that scale.
+    /// The float-status-word bit test at the top of TriggerWith selects the FIRST
+    /// branch when `probability < 0 || probability == 0 || isnan(probability)` --
+    /// i.e. exactly `!(probability > 0)`:
+    ///
+    ///   probability <= 0 (or NaN):  if (!isCritic) { if (bullet.camp == 0) return; }
+    ///                               -> apply iff (isCritic || camp != 0);
+    ///                                  skip ONLY when it is not a crit AND camp == 0.
+    ///   probability >  0:           roll = UnityEngine.Random.Range(0, 100);
+    ///                               if (probability <= roll) return;
+    ///                               -> apply iff (probability > roll). Range(0,100)
+    ///                                  is max-EXCLUSIVE (RGRandom::Range(int,int)),
+    ///                                  so roll is 0..99 and probability >= 100
+    ///                                  always applies.
+    ///
+    /// @param probability 0..100 percent (NOT a 0..1 fraction).
+    /// @param isCritic    this hit's resolved crit flag (Combat::HitResult::isCrit).
+    /// @param camp        the BULLET's camp (BulletState::camp; 0 = player bullet).
+    /// @param rng         drawn from ONLY on the probability > 0 branch, faithfully.
+    static bool ShouldApplyBulletBuff(float probability, bool isCritic, int camp,
+                                      Game::RGRandom &rng);
+
 private:
     void Step();                              // one fixed tick (built across Tasks 3-7).
     void WakeByRoom();                         // awake = (roomId == m_Input.playerRoomId).
@@ -125,11 +152,11 @@ private:
     void IntegrateBullets();                   // Task 4.
     void ResolveHits();                        // Task 7.
     void Cull();                               // Task 5/7.
-    /// P3.2: if @p b carries a buff (hasBuff), roll it against buffProbability on
-    /// the deterministic hit RNG (same 0..100 Range(int,int) convention the
-    /// decompiled BuffEffectTrigger$$TriggerWith uses) and, on success,
-    /// ApplyBuff(targetId, b.buffParams). No-op when !b.hasBuff.
-    void RollBulletBuff(const BulletState &b, std::uint32_t targetId);
+    /// P3.2: if @p b carries a buff (hasBuff), decide it via ShouldApplyBulletBuff()
+    /// (@p isCritic is THIS hit's resolved crit flag, Combat::HitResult::isCrit;
+    /// the camp comes from b.camp) and, on success, ApplyBuff(targetId,
+    /// b.buffParams). No-op when !b.hasBuff -- and no RNG is drawn in that case.
+    void RollBulletBuff(const BulletState &b, std::uint32_t targetId, bool isCritic);
     static EntityView ViewOf(const EntityState &s, std::uint32_t id);
 
     int m_RunSeed;

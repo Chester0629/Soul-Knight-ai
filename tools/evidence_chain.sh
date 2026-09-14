@@ -78,7 +78,12 @@ run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 12
 run_case H8 "Statue:" 4 SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130
 run_case H9 "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,fire SK_MAX_FRAMES=200
 run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=600
-run_case H10 "Buff:" 6 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
+# H10 keeps 40 lines (was 6): a bullet-triggered Fire buff logs one "applied"
+# line per landed hit, so a 6-line excerpt was all "applied" and truncated the
+# "ended" lines that prove the P3.1 expiry path actually runs.
+run_case H10 "Buff:" 40 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
+grep -q "Buff: Fire ended" "$E/H10.txt" \
+  || fail "H10: no 'Buff: Fire ended' line -- the bullet-triggered Fire buff never expired"
 run_case H11 "Audio:" 40 SK_SKIP_MENU=1 SK_MUTE=1 SK_AUTOWALK=1 SK_AUTOFIRE=1 SK_FORCE_HIT=30 SK_FORCE_KILL=120 SK_MAX_FRAMES=300
 echo "=== V-S r2_boss3 (seed 1: variant D, floor 9 room 3; zoom 1.5 partial) ==="
 run_case r2boss3_seed "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre" 40 \

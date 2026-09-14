@@ -82,11 +82,14 @@ struct BulletDef {
     /// BuffEffectTrigger/RGLaserBuff on the bullet's rgprefab/bullet prefab).
     std::string buffId;
     /// P3.2: 0..1 chance to apply @c buffId on a landed hit (only meaningful
-    /// when @c buffId is non-empty). 1.0 for the three always-apply triggers
-    /// (no serialized gate exists to read); a real percent-based roll for
-    /// BuffEffectTrigger (FAITHFUL, decompile-confirmed) and RGLaserBuff
-    /// (INFERRED, T-33) -- see bullets.json "buff.probability" /
-    /// "buff._why" for the per-row citation.
+    /// when @c buffId is non-empty). 1.0 for RGBulletBuffTrigger /
+    /// RGSwordBuffTrigger / RGArrowBuffTrigger -- INFERRED (T-33): no serialized
+    /// probability field, and their OnTriggerEnter2D bodies truncate/delegate in
+    /// the decompile, so hidden checks after the truncation cannot be excluded.
+    /// A real percent-based roll for BuffEffectTrigger (FAITHFUL,
+    /// decompile-confirmed) and RGLaserBuff (INFERRED, T-33) -- see bullets.json
+    /// "buff.probability" / "buff._why" for the per-row citation. The decision
+    /// itself (including the crit/camp branch) is Simulation::ShouldApplyBulletBuff.
     float buffProbability = 0.0F;
 };
 
@@ -364,9 +367,15 @@ struct AudioTable {
         std::string low;
         std::string high; ///< "" when the source ships no High variant for this biome
     };
-    std::unordered_map<std::string, Bgm> bgmByBiome;     ///< ChapterBiome(chapter) key
+    std::unordered_map<std::string, Bgm> bgmByBiome;     ///< LevelDef::biome key ("1-forest", ...)
     std::unordered_map<std::string, std::string> weaponShoot;    ///< weapon id -> clip
     std::unordered_map<std::string, std::string> enemyGunShoot;  ///< enemy_guns.json id -> clip
+    /// AUDIO / T-35: audio.json "ui_effects" -- the scene-played clips that are
+    /// NOT in RGMusicManager's 11-entry effect_list (chest open, hurt/death
+    /// fallbacks). Key -> clip file name; every row's provenance (FAITHFUL asset
+    /// link vs PORT CHOICE) lives in audio.json's per-row "_why"/"_evidence"/
+    /// "_port_choice" fields, written by build_gamedata.py's _build_ui_effects().
+    std::unordered_map<std::string, std::string> uiEffects;
 };
 
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
@@ -501,14 +510,29 @@ public:
     const std::string &WeaponShootClip(const std::string &weaponId) const;
     /// AUDIO: this enemy gun's fire clip (enemy_guns.json id); "" when unknown.
     const std::string &EnemyGunShootClip(const std::string &enemyGunId) const;
-    /// AUDIO: the chapter's BGM loop via ChapterBiome(chapter); @p high asks for
-    /// the combat variant, falling back to "low" when the biome ships none.
-    /// "" when audio.json is absent.
-    const std::string &BgmFor(int chapter, bool high) const;
+    /// AUDIO: the BGM loop for a LEVEL BIOME ("1-forest", "1-ice", "2-castle",
+    /// "2-graveyard", "3-alien", "3-volcano" -- LevelDef::biome, the same key
+    /// audio.json's bgm.by_biome is written with from each map_<V><N> prefab's
+    /// MapManager.bgm_clip). @p high asks for the combat variant, falling back to
+    /// "low" when the biome ships none. "" when audio.json is absent or the biome
+    /// is unknown.
+    ///
+    /// Keyed on the biome, NOT the chapter: a chapter has TWO biome variants
+    /// (A/B, C/D, E/F) with different bgm_clips, so deriving the biome from the
+    /// chapter number could only ever name one of each pair.
+    const std::string &BgmFor(const std::string &biome, bool high) const;
+    /// AUDIO / T-35: audio.json "ui_effects" clip for @p key ("chest_open",
+    /// "player_hurt", "enemy_hurt", "player_death", "enemy_death", "boss_death");
+    /// "" when audio.json is absent or the key is unknown. See AudioTable::uiEffects.
+    const std::string &UiEffectClip(const std::string &key) const;
     const std::string &BgmMenu() const { return m_Audio.bgmMenu; }
     const std::string &BgmMenuButtonClip() const { return m_Audio.bgmMenuButton; }
     const std::string &BgmRoomClip() const { return m_Audio.bgmRoom; }
     bool HasAudio() const { return !m_Audio.effects.empty() || !m_Audio.weaponShoot.empty(); }
+    /// AUDIO: the whole parsed table, for callers that must walk EVERY clip
+    /// reference (audio.json's clip-existence contract is asserted exhaustively
+    /// by AudioTableTest.EveryReferencedClipFileExists over exactly this object).
+    const AudioTable &Audio() const { return m_Audio; }
 
 private:
     std::vector<WeaponDef> m_Weapons;

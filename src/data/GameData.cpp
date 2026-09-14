@@ -555,6 +555,19 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 }
             }
         }
+        // AUDIO / T-35: "ui_effects" rows are OBJECTS ({clip, _why, ...}) so each
+        // clip carries its provenance in the data; only "clip" is read here.
+        if (const auto ui = audio.find("ui_effects"); ui != audio.end() && ui->is_object()) {
+            for (auto it = ui->begin(); it != ui->end(); ++it) {
+                if (!it.value().is_object()) {
+                    continue;
+                }
+                std::string clip = GetS(it.value(), "clip");
+                if (!clip.empty()) {
+                    m_Audio.uiEffects.emplace(it.key(), std::move(clip));
+                }
+            }
+        }
     } else {
         LOG_INFO("GameData: audio.json absent (fallback: game runs muted)");
     }
@@ -752,8 +765,14 @@ const std::string &GameData::EnemyGunShootClip(const std::string &enemyGunId) co
     return it == m_Audio.enemyGunShoot.end() ? kEmptyClip : it->second;
 }
 
-const std::string &GameData::BgmFor(int chapter, bool high) const {
-    auto it = m_Audio.bgmByBiome.find(ChapterBiome(chapter));
+const std::string &GameData::BgmFor(const std::string &biome, bool high) const {
+    // P6.7 fix: keyed on the LEVEL's biome (LevelDef::biome), not the chapter.
+    // audio.json's bgm.by_biome is generated one row per map_<V><N> prefab's
+    // MapManager.bgm_clip, and the six biomes carry five distinct low clips
+    // (1-forest bgm_1Low, 2-graveyard bgm_2Low, 3-alien bgm_3Low, 2-castle
+    // bgm_4Low, 1-ice bgm_5Low, 3-volcano bgm_6Low) -- a chapter number cannot
+    // select between the two variants of its own chapter.
+    auto it = m_Audio.bgmByBiome.find(biome);
     if (it == m_Audio.bgmByBiome.end()) {
         return kEmptyClip;
     }
@@ -761,6 +780,11 @@ const std::string &GameData::BgmFor(int chapter, bool high) const {
         return it->second.high;
     }
     return it->second.low;
+}
+
+const std::string &GameData::UiEffectClip(const std::string &key) const {
+    auto it = m_Audio.uiEffects.find(key);
+    return it == m_Audio.uiEffects.end() ? kEmptyClip : it->second;
 }
 
 const char *ChapterBiome(int chapter) {

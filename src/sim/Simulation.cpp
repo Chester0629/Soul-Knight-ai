@@ -215,32 +215,74 @@ void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParam
             std::to_string(params.durationSec)});
 }
 
-// P3.2: bullet-trigger wiring -- if the bullet that just landed carries a buff
-// (b.hasBuff, resolved once at EquipWeapon time from BulletDef::buffId), roll it
-// against buffProbability and, on success, apply it to the target that was just
-// hit. Called once per landed hit, AFTER the damage/repel for that hit -- so a
-// bullet that kills its target on this same hit still applies its buff (matches
-// ResolveHits' existing "all in-flight bullets land" determinism: the buff roll
-// draws from the same m_HitRng stream, in the same fixed per-bullet order, as the
-// crit roll that precedes it).
-void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId) {
-    if (!b.hasBuff) {
-        return;
+// FAITHFUL: BuffEffectTrigger$$TriggerWith @ game_typed.c:86608-86645 (disasm
+// 00ae97dc). The decompiled body, in full:
+//
+//   fVar6 = this->probability;                       // 0..100 PERCENT
+//   // the fpscr bit test below is the compiler's encoding of the comparison
+//   // `probability <= 0.0f` WITH the NaN case folded into the same branch:
+//   // bit 0x1f = (probability < 0), bit 0x1e = (probability == 0),
+//   // bit 0x1c = isnan(probability).
+//   if (probability < 0 || probability == 0 || isnan(probability)) {
+//       if (!isCritic) {
+//           bullet = RGBulletEffectTrigger__get_bullet(this);  // throws if null
+//           if (bullet->camp == 0) {
+//               return;                              // <-- the ONLY skip here
+//           }
+//       }
+//       // isCritic, or camp != 0 -> fall through and APPLY
+//   } else {
+//       roll = UnityEngine.Random.Range(0, 100);      // max EXCLUSIVE -> 0..99
+//       if (probability <= (float)roll) {
+//           return;                                   // skip
+//       }
+//   }
+//   ... AddBuff ...
+//
+// So the zero/negative/NaN-probability case is NOT "never applies": it applies
+// on a CRITICAL hit, and it applies for any bullet whose camp != 0, and it is
+// skipped only when the hit is not a crit AND the bullet's camp == 0 (the
+// player's own camp). Range(0,100) is max-exclusive (see RGRandom::Range(int,int)
+// doc), so the roll is 0..99 and any probability >= 100 always applies.
+bool Simulation::ShouldApplyBulletBuff(float probability, bool isCritic, int camp,
+                                       Game::RGRandom &rng) {
+    if (!(probability > 0.0F)) {
+        // Covers probability < 0, probability == 0 AND NaN in one test -- exactly
+        // the branch the fpscr bit test selects. No RNG draw on this path
+        // (faithful: TriggerWith does not call Random.Range here).
+        return isCritic || camp != 0;
     }
-    if (b.buffProbability < 1.0F) {
-        // FAITHFUL: BuffEffectTrigger$$TriggerWith (game_typed.c:86608-86645) draws
-        // UnityEngine.Random.Range(0,100) and skips applying the buff when
-        // `probability <= roll` -- i.e. probability is a 0..100 percent chance.
-        // RGLaserBuff's buff_probability is rolled the same way (T-33: no visible
-        // compare to mirror in its own decompile, see bullets.json's "buff._why").
-        // RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger never reach this
-        // branch (their rows carry probability 1.0 exactly) -- faithfully, those
-        // triggers never roll at all in the decompile.
-        const int roll = m_HitRng.Range(0, 100);
-        const float percent = b.buffProbability * 100.0F;
-        if (!(percent > static_cast<float>(roll))) {
-            return; // probability <= roll: skip, matching the decompile's early-return.
-        }
+    const int roll = rng.Range(0, 100);
+    return probability > static_cast<float>(roll);
+}
+
+// P3.2: bullet-trigger wiring -- if the bullet that just landed carries a buff
+// (b.hasBuff, resolved once at EquipWeapon time from BulletDef::buffId), run the
+// decompiled BuffEffectTrigger decision (ShouldApplyBulletBuff above) and, on
+// success, apply it to the target that was just hit. Called once per landed hit,
+// AFTER the damage/repel for that hit -- so a bullet that kills its target on
+// this same hit still applies its buff (matches ResolveHits' existing "all
+// in-flight bullets land" determinism: the buff roll draws from the same m_HitRng
+// stream, in the same fixed per-bullet order, as the crit roll that precedes it).
+//
+// @p isCritic is THIS hit's resolved crit flag (Combat::HitResult::isCrit, the
+// same roll that scaled the damage just applied) -- the decompile reads its own
+// `isCritic` parameter, which RGBulletTrigger passes down from the same crit
+// decision. The camp is the BULLET's camp (BulletState::camp), matching
+// TriggerWith's `get_bullet()->camp`.
+//
+// bullets.json stores probability as a 0..1 FRACTION (build_gamedata.py divides
+// the serialized percent by 100), so it is scaled back to the decompile's 0..100
+// percent here. Rows whose probability is the INFERRED (T-33) 1.0 -- the
+// RGBulletBuffTrigger / RGSwordBuffTrigger / RGArrowBuffTrigger families, which
+// serialize no probability at all -- therefore take the roll branch at 100
+// percent and always apply (roll is 0..99).
+void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId, bool isCritic) {
+    if (!b.hasBuff) {
+        return; // no buff carried: no decision, no RNG draw.
+    }
+    if (!ShouldApplyBulletBuff(b.buffProbability * 100.0F, isCritic, b.camp, m_HitRng)) {
+        return;
     }
     ApplyBuff(targetId, b.buffParams);
 }
@@ -432,7 +474,7 @@ void Simulation::ResolveHits() {
                 }
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                             static_cast<std::uint32_t>(ei), "hurt"}); // A
-                RollBulletBuff(b, static_cast<std::uint32_t>(ei)); // P3.2
+                RollBulletBuff(b, static_cast<std::uint32_t>(ei), hr.isCrit); // P3.2
                 consumed = true;
                 break;
             }
@@ -447,7 +489,7 @@ void Simulation::ResolveHits() {
                 Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
                 m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"}); // A
-                RollBulletBuff(b, kBossViewId); // P3.2
+                RollBulletBuff(b, kBossViewId, hr.isCrit); // P3.2
                 consumed = true;
             }
             if (consumed && b.pierce <= 0) {
@@ -470,8 +512,10 @@ void Simulation::ResolveHits() {
                 // P3.2: enemy bullets never carry a buff today (EnemyGunDef has no
                 // bullet-prefab link into bullets.json's buff-carrying rows -- NOT
                 // PORTED, see the P3.2 report); this call is a no-op (b.hasBuff is
-                // always false here) kept for symmetry / future wiring.
-                RollBulletBuff(b, kPlayerViewId);
+                // always false here) kept for symmetry / future wiring. Were one
+                // ever wired, camp != 0 here, so the decompile's zero-probability
+                // branch would APPLY it (see ShouldApplyBulletBuff).
+                RollBulletBuff(b, kPlayerViewId, hr.isCrit);
                 b.active = false;
             }
         }

@@ -5,10 +5,14 @@
 // BulletState -> Simulation::RollBulletBuff/ApplyBuff).
 #include <gtest/gtest.h>
 
+#include <cstddef>
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include "combat/Buff.hpp"
 #include "data/GameData.hpp"
+#include "data/RGRandom.hpp"
 #include "sim/SimEvent.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldCollision.hpp"
@@ -177,27 +181,145 @@ TEST(BuffTriggerTest, FireBulletWeaponAppliesFireOnHit) {
     EXPECT_TRUE(sawDot) << "Fire's tick damage never reduced the enemy's hp after the initial hit";
 }
 
-TEST(BuffTriggerTest, ProbabilityZeroBulletNeverAppliesBuff) {
+// --- the zero/negative-probability branch of BuffEffectTrigger$$TriggerWith
+// (game_typed.c:86608-86645). NOT "never applies": the decompile skips ONLY when
+// the hit is not a crit AND the bullet's camp == 0. Crit is forced deterministically
+// by overriding the WeaponDef's `critical` (0..100, the crit-roll threshold in
+// Combat::ResolveHit: crit iff Range(0,100) < critical -- so 0 never crits and
+// 100 always crits, with no reliance on a particular RNG seed). ---
+
+TEST(BuffTriggerTest, ProbabilityZeroNonCritPlayerBulletNeverAppliesBuff) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
     const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
     const Game::WeaponDef *wdef = gd.FindWeapon("weapon_175"); // Gun001, bullet_95 (ice, p=0.0)
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
+    Game::WeaponDef noCrit = *wdef;
+    noCrit.critical = 0; // Range(0,100) < 0 is never true -> every hit is non-crit.
 
     Simulation sim(1, &g_NullWorld);
     sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
-    sim.EquipWeapon(*wdef, "weapon_175", 5, &gd);
+    sim.EquipWeapon(noCrit, "weapon_175", 5, &gd);
 
     const WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
     for (int i = 0; i < 150; ++i) {
         sim.Advance(20.0F, in);
         EXPECT_FALSE(HasBuffApplied(sim.DrainEvents(), "Ice"))
-            << "bullet_95 has buff.probability 0 -- it must never apply Ice";
+            << "bullet_95 has buff.probability 0 and this is a NON-crit player "
+               "(camp 0) bullet -- TriggerWith returns before AddBuff";
         if (!sim.EnemyViews()[0].alive) {
             break;
         }
     }
+}
+
+TEST(BuffTriggerTest, ProbabilityZeroCritBulletDoesApplyBuff) {
+    Game::GameData gd;
+    ASSERT_TRUE(gd.LoadAll(kResourceRoot));
+    const Game::EnemyDef *edef = gd.FindEnemyByClass("EnemyAI01");
+    const Game::WeaponDef *wdef = gd.FindWeapon("weapon_175"); // bullet_95, probability 0.0
+    ASSERT_NE(edef, nullptr);
+    ASSERT_NE(wdef, nullptr);
+    Game::WeaponDef allCrit = *wdef;
+    allCrit.critical = 100; // Range(0,100) is 0..99 -> always < 100 -> every hit crits.
+
+    Simulation sim(1, &g_NullWorld);
+    sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
+    sim.EquipWeapon(allCrit, "weapon_175", 5, &gd);
+
+    const WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
+    bool sawIce = false;
+    for (int i = 0; i < 150 && !sawIce; ++i) {
+        sim.Advance(20.0F, in);
+        sawIce = HasBuffApplied(sim.DrainEvents(), "Ice");
+        if (!sim.EnemyViews()[0].alive) {
+            break;
+        }
+    }
+    EXPECT_TRUE(sawIce) << "probability 0 + isCritic must APPLY -- TriggerWith only "
+                           "returns early when !isCritic AND camp == 0";
+}
+
+// --- the decision rule itself, all four branches, no sim needed --------------
+// Simulation::ShouldApplyBulletBuff(probability[0..100], isCritic, camp, rng).
+
+TEST(BuffTriggerTest, ShouldApplyBulletBuffZeroProbabilityCritCampMatrix) {
+    Game::RGRandom rng;
+    rng.FallbackSeed = 1234;
+    // probability <= 0 draws NO rng at all (faithful: TriggerWith calls
+    // Random.Range only on the else branch), so the stream stays untouched --
+    // asserted below by the stream still being unseeded after 12 decisions.
+    for (float p : {0.0F, -1.0F, -100.0F}) {
+        EXPECT_FALSE(Simulation::ShouldApplyBulletBuff(p, /*isCritic=*/false, /*camp=*/0, rng))
+            << "p=" << p << ": not a crit AND camp 0 is the ONLY skip";
+        EXPECT_TRUE(Simulation::ShouldApplyBulletBuff(p, /*isCritic=*/true, /*camp=*/0, rng))
+            << "p=" << p << ": crit applies regardless of camp";
+        EXPECT_TRUE(Simulation::ShouldApplyBulletBuff(p, /*isCritic=*/false, /*camp=*/1, rng))
+            << "p=" << p << ": camp != 0 applies even without a crit";
+        EXPECT_TRUE(Simulation::ShouldApplyBulletBuff(p, /*isCritic=*/true, /*camp=*/1, rng));
+    }
+    // RGRandom lazy-seeds on its FIRST draw, so an unseeded stream after all 12
+    // decisions above is positive proof the probability <= 0 branch never rolled.
+    EXPECT_FALSE(rng.Seeded());
+}
+
+// Boundary of the roll branch: apply iff `probability > roll`, with
+// roll = Range(0, 100) (max EXCLUSIVE -> 0..99). Replaying the SAME seeded
+// stream gives the same roll sequence, so each roll can be probed from both
+// sides of the comparison.
+TEST(BuffTriggerTest, ShouldApplyBulletBuffRollBoundaryIsStrictGreaterThan) {
+    auto rolls = [] {
+        Game::RGRandom r;
+        r.FallbackSeed = 4242;
+        std::vector<int> out;
+        out.reserve(16);
+        for (int i = 0; i < 16; ++i) {
+            out.push_back(r.Range(0, 100));
+        }
+        return out;
+    }();
+    ASSERT_EQ(rolls.size(), 16U);
+    for (int r : rolls) {
+        ASSERT_GE(r, 0);
+        ASSERT_LE(r, 99); // Range(int,int) is max-exclusive.
+    }
+
+    auto decide = [](float percent, std::size_t draws) {
+        Game::RGRandom r;
+        r.FallbackSeed = 4242;
+        bool last = false;
+        for (std::size_t i = 0; i < draws; ++i) {
+            last = Simulation::ShouldApplyBulletBuff(percent, /*isCritic=*/false,
+                                                     /*camp=*/0, r);
+        }
+        return last;
+    };
+    for (std::size_t i = 0; i < rolls.size(); ++i) {
+        const float roll = static_cast<float>(rolls[i]);
+        // probability == roll -> `probability <= roll` -> SKIP (the decompile's
+        // early return); probability == roll + 1 -> apply.
+        EXPECT_FALSE(decide(roll, i + 1)) << "roll " << rolls[i] << ": equal must skip";
+        EXPECT_TRUE(decide(roll + 1.0F, i + 1)) << "roll " << rolls[i] << ": greater must apply";
+    }
+}
+
+TEST(BuffTriggerTest, ShouldApplyBulletBuffHundredPercentAlwaysApplies) {
+    Game::RGRandom rng;
+    rng.FallbackSeed = 99;
+    // Range(0,100) can never return 100, so 100 > roll always holds. This is the
+    // branch every INFERRED (T-33) probability-1.0 row takes.
+    for (int i = 0; i < 200; ++i) {
+        EXPECT_TRUE(Simulation::ShouldApplyBulletBuff(100.0F, false, 0, rng));
+    }
+    // ... and a 1-percent chance must NOT always apply over 200 draws.
+    Game::RGRandom rng2;
+    rng2.FallbackSeed = 99;
+    int applied = 0;
+    for (int i = 0; i < 200; ++i) {
+        applied += Simulation::ShouldApplyBulletBuff(1.0F, false, 0, rng2) ? 1 : 0;
+    }
+    EXPECT_LT(applied, 200);
 }
 
 TEST(BuffTriggerTest, ProbabilityRollIsDeterministicUnderFixedSeed) {

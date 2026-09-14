@@ -133,6 +133,10 @@ private:
         Game::WaveScheduler wave; ///< pending picks + the 0.8 s CreatePart timer (P2.3 extract)
         std::vector<glm::vec2> points;
         int serial = 0; ///< spawn ordinal (seed spread + point spread)
+        /// T-29: EnemyMaker.part -- how many PARTS of this room's wave have been
+        /// spawned. The original's CreatePart plays the show-up cue only when
+        /// `part != 0`, i.e. from the 2nd part on (game_typed.c:78030-78082).
+        int partsSpawned = 0;
     };
     std::vector<SpawnWaves> m_Waves; ///< indexed by room
     /// Instantiate one enemy of species @p id at @p at in room @p roomIndex.
@@ -142,6 +146,16 @@ private:
     /// Instantiate an already-taken wave batch at @p roomIndex's spawn points
     /// (the point-spread + logging half of the old SpawnNextWave body).
     void SpawnWaveBatch(int roomIndex, const std::vector<std::string> &batch);
+    /// T-29: count down (and fire) the pending Invoke("ShowUpEffect", 0.8f) cues.
+    void TickShowUpCues(float dtMs);
+    /// T-29: remaining ms on each scheduled show-up cue (one per part >= 1 spawned).
+    /// Scene-local and audio-only: it never touches the sim's clock or RNG.
+    std::vector<float> m_ShowUpCuesMs;
+    /// AUDIO (P6.7): this floor's LevelDef::biome, the audio.json bgm.by_biome key.
+    const std::string &LevelBiome() const;
+    /// AUDIO (T-35): audio.json ui_effects[@p key] -> clip name, with the single
+    /// documented hardcoded fallback when the table itself has no entry.
+    const std::string &UiClip(const char *key) const;
     bool PendingWaves() const;
     const EnemyDef *m_BossDef = nullptr; ///< B3: the floor's boss species (reward roll).
     const LevelDef *m_Level = nullptr;    ///< MAP M1: this floor's MapManager level (may be null).

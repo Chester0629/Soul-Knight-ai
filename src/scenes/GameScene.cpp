@@ -156,10 +156,12 @@ void GameScene::OnEnter() {
         } else {
             LOG_INFO("Level {} not in levels.json -> pre-M1 fixed tileset/roster", levelId);
         }
-        // AUDIO: chapter BGM loop (ChapterBiome(chapter) -> audio.json bgm.by_biome;
-        // see GameData::BgmFor). Chapter 1 when the level table is absent.
-        const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
-        m_Audio->PlayBgm(m_Data.BgmFor(chapter, m_BgmHigh));
+        // AUDIO (P6.7): this FLOOR's BGM loop, keyed on the level's own biome
+        // (LevelDef::biome -> audio.json bgm.by_biome, generated from each
+        // map_<V><N> prefab's MapManager.bgm_clip). NOT the chapter: each chapter
+        // has two biome variants with different clips (A/B, C/D, E/F), so a
+        // chapter number can only ever name one of each pair.
+        m_Audio->PlayBgm(m_Data.BgmFor(LevelBiome(), m_BgmHigh));
     }
     MapManager::Options mapOpt;
     // MapManager.map_long counts the NORMAL rooms of the walk; the original adds
@@ -1178,12 +1180,16 @@ void GameScene::OnEnter() {
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
-    // SK_FORCE_BUFF=K,<kind> test hook (env, NO-OP if unset): apply <kind> to the
-    // player on frame K via Simulation::ApplyBuff, so the "Buff: ... applied/ended"
-    // log path (P3.1) can be proven headlessly without bullet-trigger wiring (P3.2).
+    // SK_FORCE_HIT=K test hook (env, NO-OP if unset): K is the FIRST frame the
+    // hook acts on, not a one-shot -- from frame K onward it re-aims at the
+    // nearest enemy/boss and holds fire EVERY frame (see the aim block in
+    // ResolveInput and m_ForceHitFrame's doc comment).
     if (const char *fh = std::getenv("SK_FORCE_HIT")) {
         m_ForceHitFrame = std::atol(fh);
     }
+    // SK_FORCE_BUFF=K,<kind> test hook (env, NO-OP if unset): apply <kind> to the
+    // player on frame K via Simulation::ApplyBuff, so the "Buff: ... applied/ended"
+    // log path (P3.1) can be proven headlessly without bullet-trigger wiring (P3.2).
     if (const char *fb = std::getenv("SK_FORCE_BUFF")) {
         m_ForceBuffFrame = std::atol(fb);
         if (const char *comma = std::strchr(fb, ',')) {
@@ -1580,10 +1586,12 @@ void GameScene::Update(float dtMs) {
             in.firing = true;
         }
     }
-    // SK_FORCE_HIT test hook (env, NO-OP unless set): aim straight at the nearest
-    // alive enemy/boss (from the SIM's own last-frame views) and hold fire. Wins
-    // over SK_AUTOFIRE's travel-direction aim when both are set -- this hook exists
-    // specifically to GUARANTEE a landed hit (not just a fired shot) for headless
+    // SK_FORCE_HIT=K test hook (env, NO-OP unless set): CONTINUOUS, not one shot --
+    // from frame K onward this runs EVERY frame, re-picking the nearest alive
+    // enemy/boss from the SIM's own last-frame views, re-aiming at it and holding
+    // fire (subject only to the energy gate in the condition below). Wins over
+    // SK_AUTOFIRE's travel-direction aim when both are set -- this hook exists
+    // specifically to GUARANTEE landed hits (not just fired shots) for headless
     // proof of hit-triggered behaviour (P3.2 bullet buffs).
     if (m_ForceHitFrame >= 0 && m_Frame >= m_ForceHitFrame &&
         m_Player->Stats().energy >= m_WeaponEnergyCost) {
@@ -1678,30 +1686,32 @@ void GameScene::Update(float dtMs) {
                  playerRoomId);
         // FAITHFUL: RGMusicManager effect_list[4] == fx_door.wav (door seal).
         m_Audio->PlaySfx(m_Data.FindEffectClip(4));
-        // Boss show-up cue (FAITHFUL: EnemyMaker.ShowUpEffect -> effect_list[7] ==
-        // fx_show_up.wav, game_typed.c RGMusicManager__PlayEffect(this, 7)). PORT
-        // CHOICE: fired immediately on room-lock instead of the original's 0.8s
-        // delayed Invoke per spawned PART (WaveScheduler::kShowUpEffectDelayMs,
-        // NOT PORTED T-29) -- the timer itself is out of this audio task's scope.
-        if (playerRoomId == m_GateRoom && IsBossFloor(m_FloorIndex) && m_Sim->HasBoss()) {
-            m_Audio->PlaySfx(m_Data.FindEffectClip(7));
-        }
+        // T-29: the show-up cue is NOT played here any more. FAITHFUL @
+        // EnemyMaker$$CreatePart (game_typed.c:78030-78082): the cue is
+        // `if (part != 0) Invoke("ShowUpEffect", 0.8f)` -- i.e. it fires 0.8 s
+        // after the 2nd and later spawn PARTS of a wave, not on room-lock, and
+        // EnemyMaker__ShowUpEffect (game_typed.c:78114-78126) is exactly
+        // RGMusicManager__PlayEffect(this, 7). It is wired at the real trigger in
+        // SpawnWaveBatch() via WaveScheduler::kShowUpEffectDelayMs (0.8 s ==
+        // 0x3f4ccccd, the Invoke's float literal) and fired by
+        // TickShowUpCues(dtMs) below.
         // INFERRED (T-34): switch to the biome's "high"/combat BGM variant, when the
         // source ships one, on room-lock; back to "low" on clear (below). No
         // decompiled trigger was found for this -- see AudioTable's doc comment.
         if (!m_BgmHigh) {
             m_BgmHigh = true;
-            const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
-            m_Audio->PlayBgm(m_Data.BgmFor(chapter, true));
+            m_Audio->PlayBgm(m_Data.BgmFor(LevelBiome(), true));
         }
     }
+    TickShowUpCues(dtMs); // T-29: EnemyMaker's 0.8 s Invoke("ShowUpEffect") timers.
     for (std::size_t i = 0; i < m_RoomLife.size(); ++i) {
         // MAP M1: a room with parts still queued is NOT clear -- the next part
         // spawns on the first tick the room has no live hostile, no delay
         // (FAITHFUL: EnemyMaker.EnemyDead -> CreatePart() immediately,
         // game_typed.c:73138-73185; the 0.8 s Invoke in CreatePart is a
-        // show-up SOUND cue for later parts, not a spawn gate -- see
-        // WaveScheduler::kShowUpEffectDelayMs, NOT PORTED T-29).
+        // show-up SOUND cue for later parts, not a spawn gate -- it is now wired
+        // at the spawn site, see WaveScheduler::kShowUpEffectDelayMs and
+        // SpawnWaveBatch/TickShowUpCues, T-29).
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
             !RoomHasLiveHostile(static_cast<int>(i)) && i < m_Waves.size() &&
             !m_Waves[i].wave.pending.empty()) {
@@ -1719,8 +1729,7 @@ void GameScene::Update(float dtMs) {
             // switch above.
             if (m_BgmHigh && static_cast<int>(i) == playerRoomId) {
                 m_BgmHigh = false;
-                const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
-                m_Audio->PlayBgm(m_Data.BgmFor(chapter, false));
+                m_Audio->PlayBgm(m_Data.BgmFor(LevelBiome(), false));
             }
             // NOT PORTED T-10: GetRoomReward (clear-room reward) is not resolved; log only.
             if (m_RoomLife[i].RewardGranted()) {
@@ -1837,7 +1846,10 @@ void GameScene::Update(float dtMs) {
             continue;
         }
         chest->Open();
-        m_Audio->PlaySfx("fx_chest_open.wav"); // real rgsound/effect clip (not in RGMusicManager's 11-entry table)
+        // FAITHFUL (T-35): audio.json ui_effects.chest_open, generated from
+        // res/item/chest01.prefab RGChest.audio_clip -- a real rgsound/effect
+        // clip that is NOT in RGMusicManager's 11-entry effect_list.
+        m_Audio->PlaySfx(UiClip("chest_open"));
         // RGChestBoss: CreateBossWeapon (object_list, guaranteed) + CreateSampleWeapon
         // (a roll); RGChest / RGChestRoomReward: the tier roll (GetWeapon).
         std::vector<const WeaponDef *> drops;
@@ -2072,6 +2084,23 @@ void GameScene::SpawnNextWave(int roomIndex) {
     SpawnWaveBatch(roomIndex, wv.wave.TakeWave());
 }
 
+// AUDIO (T-35): audio.json "ui_effects" lookup for the clips the SCENE plays
+// directly (chest open, hurt/death), each with its provenance recorded in the
+// data rather than as a bare literal here.
+//
+// DOCUMENTED EXCEPTION -- kAudioTableMissingFallback below is the ONLY clip
+// filename literal left in C++. It is used solely when the audio TABLE lookup
+// itself fails: audio.json absent (a checkout without the sibling _reverse dump)
+// or a ui_effects key the generator could not resolve. In that situation
+// Resources/audio/ is normally absent too, so AudioPlayer no-ops on it anyway;
+// it exists so a missing table degrades to one known-shipped generic hit cue
+// (RGMusicManager effect_list[5]) instead of to an unnamed clip.
+const std::string &GameScene::UiClip(const char *key) const {
+    static const std::string kAudioTableMissingFallback = "fx_hit.wav";
+    const std::string &clip = m_Data.UiEffectClip(key);
+    return clip.empty() ? kAudioTableMissingFallback : clip;
+}
+
 void GameScene::SpawnWaveBatch(int roomIndex, const std::vector<std::string> &batch) {
     if (batch.empty() || roomIndex < 0 ||
         static_cast<std::size_t>(roomIndex) >= m_Waves.size()) {
@@ -2090,8 +2119,48 @@ void GameScene::SpawnWaveBatch(int roomIndex, const std::vector<std::string> &ba
         SpawnEnemy(id, wv.points[pi], roomIndex, wv.serial);
         ++wv.serial;
     }
+    // T-29: FAITHFUL @ EnemyMaker$$CreatePart (game_typed.c:78030-78082). After
+    // spawning a part, the original does `if (part != 0) Invoke("ShowUpEffect",
+    // 0.8f); part = part + 1;` -- so the cue fires for every part EXCEPT the
+    // first, 0.8 s after that part spawns. CreatePart is EnemyMaker-wide in the
+    // decompile (not boss-only), so every multi-part wave gets it, boss room
+    // included. ShowUpEffect == RGMusicManager.PlayEffect(7) == effect_list[7]
+    // (game_typed.c:78114-78126).
+    if (wv.partsSpawned != 0) {
+        m_ShowUpCuesMs.push_back(Game::WaveScheduler::kShowUpEffectDelayMs);
+    }
+    ++wv.partsSpawned;
     LOG_INFO("EnemyMaker: room {} part spawned {} ({} pending)", roomIndex, batch.size(),
              wv.wave.pending.size());
+}
+
+// T-29: drain the pending Invoke("ShowUpEffect", 0.8f) timers scheduled by
+// SpawnWaveBatch(). A plain countdown list rather than a general scheduler: this
+// is the only delayed-callback the scene needs, and keeping it local keeps the
+// sim's own FixedClock/Scheduler (which owns combat determinism) untouched.
+void GameScene::TickShowUpCues(float dtMs) {
+    if (m_ShowUpCuesMs.empty()) {
+        return;
+    }
+    std::size_t w = 0;
+    for (std::size_t r = 0; r < m_ShowUpCuesMs.size(); ++r) {
+        const float left = m_ShowUpCuesMs[r] - dtMs;
+        if (left <= 0.0F) {
+            m_Audio->PlaySfx(m_Data.FindEffectClip(7)); // effect_list[7] == fx_show_up.wav
+        } else {
+            m_ShowUpCuesMs[w++] = left;
+        }
+    }
+    m_ShowUpCuesMs.resize(w);
+}
+
+// AUDIO (P6.7): this floor's biome key for audio.json bgm.by_biome. "1-forest"
+// when the level table is absent -- that is map_A1's biome, the same floor the
+// pre-M1 fallback tileset draws, and its bgm_clip is bgm_1Low.ogg (also the
+// Title screen's clip), so a table-less checkout still gets the chapter-1 loop.
+const std::string &GameScene::LevelBiome() const {
+    static const std::string kFallbackBiome = "1-forest";
+    return (m_Level != nullptr && !m_Level->biome.empty()) ? m_Level->biome : kFallbackBiome;
 }
 
 bool GameScene::PendingWaves() const {
@@ -2239,20 +2308,28 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
         } else if (e.name == "hurt") {
             SpawnEffect(EffectFrames(root, "effect03", 3), pos, 180.0F); // hit spark
             // AUDIO: prefer the data clip (RGMusicManager effect_list[5] == fx_hit.wav,
-            // the generic PlayEffect(5) hit cue) when audio.json is loaded; else keep
-            // the pre-existing hardcoded fallback (both already ship in Resources/audio).
+            // the FAITHFUL generic PlayEffect(5) hit cue) when audio.json is loaded;
+            // else the ui_effects fallback rows. PORT CHOICE (T-35) for BOTH
+            // fallbacks -- see audio.json ui_effects.player_hurt._why (fx_hurt.wav
+            // is referenced by nothing in the asset dump) and ui_effects
+            // .enemy_hurt._why (fx_hit_p1.wav is the PLAYER's c01.prefab clip_hit,
+            // reused enemy-side because no enemy hurt-clip field exists).
             {
                 const std::string &dataClip = m_Data.FindEffectClip(5);
-                m_Audio->PlaySfx(!dataClip.empty() ? dataClip
-                                                    : (isPlayer ? "fx_hurt.wav" : "fx_hit_p1.wav"));
+                m_Audio->PlaySfx(!dataClip.empty()
+                                     ? dataClip
+                                     : UiClip(isPlayer ? "player_hurt" : "enemy_hurt"));
             }
         } else if (e.name == "death") {
             SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
-            // PORT CHOICE: the pre-audio-wiring fallback played "enermy_die3.wav" for
-            // BOTH the player and enemies. isPlayer now gets its own clip (fx_dead.wav
-            // -- a rgsound/effect clip, not guid-linked to any one character; boss/
-            // enemy picks are the pre-existing fallbacks).
-            m_Audio->PlaySfx(isPlayer ? "fx_dead.wav" : (isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav"));
+            // PORT CHOICE (T-35) for all three rows -- see audio.json
+            // ui_effects.player_death._why (c01.prefab declares clip_skill and
+            // clip_hit but no death clip, so the port borrows an enemy clip_dead),
+            // ui_effects.boss_death._why and ui_effects.enemy_death._why (both are
+            // ONE prefab's clip_dead applied to every boss / every mob, because
+            // per-species death clips are not ported).
+            m_Audio->PlaySfx(
+                UiClip(isPlayer ? "player_death" : (isBoss ? "boss_death" : "enemy_death")));
             if (m_Run != nullptr && !isPlayer) {
                 m_Run->RecordKill(); // B4: RGGameProcess.kill_count analog
             }

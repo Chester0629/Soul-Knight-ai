@@ -1,1 +1,0 @@
-GATE: GREEN -- 0 errors, 7 warning(s)

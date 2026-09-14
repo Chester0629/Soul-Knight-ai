@@ -728,10 +728,19 @@ _BUFF_ID_TO_PREFAB = {
 }
 # Trigger component script guids (Scripts/Assembly-CSharp/*.cs.meta) that apply a
 # buff on hit.
-# - RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger: their .cs stubs
-#   declare only a `buff` GameObject field, no probability -> FAITHFUL always-apply
-#   (there is no serialized gate to read, so probability 1.0 is not a guess about a
-#   hidden roll, it is the absence of one).
+# - RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger: INFERRED (T-33).
+#   Their .cs stubs declare only a `buff` GameObject field and no probability, so
+#   there is no serialized gate to read -- but that is NOT proof of an
+#   unconditional apply. All three OnTriggerEnter2D bodies TRUNCATE or DELEGATE in
+#   the decompile before any gate would be visible:
+#     RGArrowBuffTrigger$$OnTriggerEnter2D  @ game_typed.c:18775-18793 (004a3c34)
+#     RGSwordBuffTrigger$$OnTriggerEnter2D  @ game_typed.c:31949-31967 (0051dc58)
+#   both end at `UnityEngine_Component__get_gameObject(other)` marked
+#   "WARNING: Subroutine does not return" -- Ghidra lost the tail; and
+#     RGBulletBuffTrigger$$OnTriggerEnter2D @ game_typed.c:47173-47183 (005b96c0)
+#   is a bare tail-call into RGBulletTrigger__OnTriggerEnter2D, whose own body is
+#   likewise truncated. So probability 1.0 is this port's MODEL of "no serialized
+#   probability field"; hidden checks after the truncation cannot be excluded.
 # - BuffEffectTrigger: FAITHFUL 0..100 percent. BuffEffectTrigger$$TriggerWith
 #   (game_typed.c:86608-86645, disasm @ 00ae97dc) is decompile-confirmed to compare
 #   `UnityEngine.Random.Range(0,100)` against `probability` and skip applying the
@@ -817,9 +826,11 @@ def attach_bullet_buffs(bullet_rows: list) -> list:
         if trigger_name in _TRIGGER_NO_PROB:
             rec["probability"] = 1.0
             rec["_probability_inferred"] = True
-            rec["_why"] = (f"INFERRED (T-33): {trigger_name}.cs declares no probability "
-                            "field (only `buff`) -- modeled as an unconditional apply "
-                            "(probability 1.0) since there is no serialized gate to read.")
+            rec["_why"] = (f"INFERRED (T-33): {trigger_name} declares no serialized "
+                            "probability field (only `buff`), and its OnTriggerEnter2D "
+                            "truncates/delegates in the decompile before any gate would "
+                            "be visible; hidden checks after the truncation cannot be "
+                            "excluded. Modeled here as probability 1.0 (always applies).")
         elif trigger_name == "BuffEffectTrigger":
             raw = _field(buff_block, "probability")
             raw = 0.0 if raw is None else float(raw)
@@ -1555,6 +1566,83 @@ def _clip_name(idx: dict, guid: str) -> str:
     return p.name if p is not None else ""
 
 
+# AUDIO / T-35: the non-RGMusicManager clips the SCENE layer plays directly
+# (chest open, hurt, death). Before this table they were bare .wav string
+# literals in src/scenes/GameScene.cpp; they now come from audio.json like every
+# other clip, each with its provenance recorded IN THE DATA.
+#
+# Each entry is (key, prefab path relative to EP_ASSETS, serialized field, kind,
+# why). `kind` is "faithful" when the port uses the clip for exactly the thing
+# the prefab field names, and "port_choice" when the clip is real and
+# asset-linked but the port applies it more broadly (or to a different actor)
+# than the single prefab it was read from. A None prefab means no asset link was
+# found at all -- the clip stays a documented PORT CHOICE literal.
+_UI_EFFECT_SOURCES = (
+    ("chest_open", "res/item/chest01.prefab", "audio_clip", "faithful",
+     "FAITHFUL: res/item/chest01.prefab (and chest00/e_chest1/e_chest2) RGChest."
+     "audio_clip -> this clip. Played when a chest opens, exactly as the prefab "
+     "wires it. Not in RGMusicManager's 11-entry effect_list."),
+    ("enemy_hurt", "res/player/c01.prefab", "clip_hit", "port_choice",
+     "PORT CHOICE (T-35): this is the PLAYER's clip_hit (res/player/c01.prefab); "
+     "no enemy-side hurt clip field was found on any enemy prefab. Reused here as "
+     "the enemy-hurt FALLBACK, which only fires when audio.json's effect_list[5] "
+     "(fx_hit.wav, the faithful PlayEffect(5) hit cue) is unavailable."),
+    ("enemy_death", "res/enemy/2-castle/e_wizard01.prefab", "clip_dead", "port_choice",
+     "PORT CHOICE (T-35): res/enemy/2-castle/e_wizard01.prefab (and ex_wizard) "
+     "RGEController.clip_dead -> this clip. Per-species clip_dead is NOT ported "
+     "(EnemyDef carries no death-clip field), so this ONE species' clip is used "
+     "for every non-boss enemy death."),
+    ("boss_death", "res/enemy/2-graveyard/boss03.prefab", "clip_dead", "port_choice",
+     "PORT CHOICE (T-35): res/enemy/2-graveyard/boss03.prefab clip_dead -> this "
+     "clip. It is the only boss prefab that references it; the port uses it for "
+     "EVERY boss death because per-boss death clips are not ported."),
+    ("player_death", "res/enemy/3-alien/ex_alien01.prefab", "clip_dead", "port_choice",
+     "PORT CHOICE (T-35): this is an ENEMY clip_dead (13 enemy prefabs reference "
+     "it, e.g. res/enemy/3-alien/ex_alien01.prefab). res/player/c01.prefab "
+     "declares clip_skill and clip_hit but NO death clip, so no player-death clip "
+     "exists to be faithful to; this is the port's pick."),
+    ("player_hurt", None, None, "port_choice",
+     "PORT CHOICE (T-35): fx_hurt.wav ships in rgsound/effect but NOTHING in the "
+     "ExportedProject dump references its guid (1a3c62ede8639f24ba781cf9820699c9 "
+     "appears only in its own .meta, 1 hit repo-wide). The one asset-linked "
+     "player hit clip IS res/player/c01.prefab clip_hit == fx_hit_p1.wav, but the "
+     "port's pre-existing pick is kept so this change is pure provenance, not a "
+     "behaviour change. Only fires as the FALLBACK when effect_list[5] "
+     "(fx_hit.wav, the faithful PlayEffect(5) hit cue) is unavailable."),
+)
+_UI_EFFECT_LITERALS = {"player_hurt": "fx_hurt.wav"}
+
+
+def _prefab_clip(idx: dict, rel: str, field: str) -> str:
+    """Clip file name behind `<field>: {fileID: N, guid: G}` on the prefab at
+    EP_ASSETS/<rel>; '' when the prefab, the field or the guid does not resolve."""
+    f = EP_ASSETS / rel
+    if not f.is_file():
+        return ""
+    m = re.search(r"(?m)^\s*" + re.escape(field) + r": \{fileID: \d+, guid: ([0-9a-f]{32})",
+                  f.read_text(encoding="utf-8", errors="ignore"))
+    return _clip_name(idx, m.group(1)) if m else ""
+
+
+def _build_ui_effects(idx: dict, audio_dir) -> dict:
+    """AUDIO / T-35: audio.json "ui_effects" -- {key: {clip, _why, ...}} for the
+    scene-played clips that are NOT in RGMusicManager's effect_list. Entries whose
+    clip cannot be resolved (or whose file is not in Resources/audio) are dropped,
+    so the table never advertises a clip the game cannot play."""
+    out = {}
+    for key, rel, field, kind, why in _UI_EFFECT_SOURCES:
+        clip = _UI_EFFECT_LITERALS.get(key, "") if rel is None else _prefab_clip(idx, rel, field)
+        if not clip or not (audio_dir / clip).is_file():
+            continue
+        rec = {"clip": clip, "_why": why}
+        if rel is not None:
+            rec["_evidence"] = f"{rel} -> {field}"
+        if kind == "port_choice":
+            rec["_port_choice"] = True
+        out[key] = rec
+    return out
+
+
 def build_audio_table():
     """Returns the audio.json payload, or None when the sibling _reverse
     checkout / Resources/audio/ is absent (pipeline still runs; game plays
@@ -1653,6 +1741,8 @@ def build_audio_table():
         "bgm": {"menu": menu_bgm, "menu_button": menu_btn, "room": room_clip, "by_biome": by_biome},
         "weapon_shoot": weapon_shoot,
         "enemy_gun_shoot": enemy_gun_shoot,
+        # AUDIO / T-35: scene-played clips outside RGMusicManager's effect_list.
+        "ui_effects": _build_ui_effects(idx, audio_dir),
     }
 
 

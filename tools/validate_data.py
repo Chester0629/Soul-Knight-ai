@@ -24,28 +24,47 @@ DATA = ROOT / "Resources" / "data"
 # reference (e.g. a typo'd bullet_prefab, or a build_gamedata.py regression
 # that stops resolving a class) would pass silently. This is the bounded
 # allow-list of reference ids that are known, expected, and documented to
-# stay unresolved as of the P1.10 upversion (real 1.7.10 ids that point at
-# something outside bullets.json's RGBullet-family scope: item-family effects
-# (Gas*), melee weapon prefabs used as thrown "bullets" (sword_*/spear_*/...),
-# or one of the ~78 rgprefab/bullet variants outside the RGBullet inheritance
-# family -- see build_bullet_table()'s docstring). Any reference id NOT in
-# this set is now a hard ERROR instead of a warning. Grown only when a new,
-# understood-and-documented gap is confirmed -- never to silence a real
-# regression.
+# stay unresolved (real 1.7.10 ids that point at something outside
+# bullets.json's RGBullet-family scope: item-family effects (Gas*), melee
+# weapon prefabs used as thrown "bullets" (sword_*/spear_*/...), or one of the
+# rgprefab/bullet variants outside the RGBullet inheritance family -- see
+# build_bullet_table()'s docstring). Any reference id NOT in this set is a hard
+# ERROR instead of a warning. Grown only when a new, understood-and-documented
+# gap is confirmed -- never to silence a real regression.
+#
+# CURRENT COUNTS (measured from this repo's generated tables, not estimated --
+# `python tools/build_gamedata.py && python tools/validate_data.py`):
+#   bullets.json                                  211 rows
+#     = 25 class-keyed rows (18 resolved to a real 1.7.10 prefab, 7 stayed 1.07)
+#     + 178 real 1.7.10 rgprefab/bullet rows (78 non-RGBullet-family prefabs
+#       skipped, i.e. 178 + 78 = 256 prefabs scanned)
+#     + 8 buff-only rows appended by attach_bullet_buffs() (bullet_9,
+#       spear_2_fire, sword_1_75_gourd, sword_2_dizzy, sword_2_fire,
+#       sword_2_ice, sword_bit_fire, sword_bit_ice)
+#   allow-list entries                            42 (every one still referenced
+#                                                 AND still unresolved)
+#   weapons whose bullet_prefab is allow-listed   51
+#   boss bulletNN refs that are allow-listed      18
+#
+# The 8 buff-only rows above mean five ids that USED to need allow-listing
+# (bullet_9, sword_1_75_gourd, sword_2_dizzy, sword_2_fire, sword_2_ice) now
+# resolve into bullets.json; they were removed from this set rather than left
+# behind as dead entries that could mask a future regression.
 KNOWN_UNRESOLVED_BULLET_REFS = {
     # rgprefab/item/Gas* (poison-gas item effect, not a bullet prefab)
     "Gas", "Gas_boss5",
     # melee weapons whose bullet_prefab points at the weapon's own swing/attack
     # prefab (used as a thrown "bullet" visual, not an RGBullet-family prefab)
     "buff_armor", "shield", "shield_prism",
-    "sword_0", "sword_1_75", "sword_1_75_gourd", "sword_2_5",
-    "sword_2_5_explode", "sword_2_blue", "sword_2_dizzy", "sword_2_fire",
-    "sword_2_green", "sword_2_ice", "sword_2_red",
+    "sword_0", "sword_1_75", "sword_2_5",
+    "sword_2_5_explode", "sword_2_blue",
+    "sword_2_green", "sword_2_red",
     "spear_0_8", "spear_1_5", "spear_2", "spear_3",
     # non-RGBullet-family rgprefab/bullet variants (BulletFire/BulletGas/... --
-    # see build_bullet_table()'s docstring, 78 of 256 out of this pass's scope)
+    # see build_bullet_table()'s docstring; 78 of the 256 scanned prefabs are
+    # outside this pass's RGBullet-family scope)
     "bullet_10", "bullet_40", "bullet_41", "bullet_42", "bullet_43",
-    "bullet_48", "bullet_87", "bullet_9", "bullet_chain", "bullet_drill",
+    "bullet_48", "bullet_87", "bullet_chain", "bullet_drill",
     "bullet_tnt", "fireball", "effect_health_skill",
     "bullet_e_15", "bullet_e_20", "bullet_e_21", "bullet_e_48", "bullet_e_8",
     "e_fireball", "e_skeleton02_temp", "effect_shock2", "effect_shock3",
@@ -451,6 +470,31 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
             for eid, clip in audio.get("enemy_gun_shoot", {}).items():
                 if not clip_exists(clip):
                     errors.append(f"audio.json enemy_gun_shoot['{eid}'] -> '{clip}' missing from Resources/audio")
+            # T-35: ui_effects rows are objects ({clip, _why, ...}) so each clip
+            # carries its FAITHFUL/PORT-CHOICE provenance in the data itself.
+            ui = audio.get("ui_effects", {})
+            for key, rec in ui.items():
+                if not isinstance(rec, dict):
+                    errors.append(f"audio.json ui_effects['{key}'] must be an object "
+                                  f"({{clip, _why, ...}})")
+                    continue
+                if not clip_exists(rec.get("clip", "")):
+                    errors.append(f"audio.json ui_effects['{key}'] -> "
+                                  f"'{rec.get('clip', '')}' missing from Resources/audio")
+                if not rec.get("_why"):
+                    errors.append(f"audio.json ui_effects['{key}'] has no '_why' provenance "
+                                  f"string (FAITHFUL asset link, or PORT CHOICE T-35)")
+            if ui:
+                n_pc = sum(1 for r in ui.values() if isinstance(r, dict) and r.get("_port_choice"))
+                warnings.append(f"{len(ui)} ui_effects clips (T-35): {n_pc} PORT CHOICE, "
+                                f"{len(ui) - n_pc} asset-linked FAITHFUL")
+            # The keys src/scenes/GameScene.cpp looks up must all be present --
+            # a missing one silently falls back to the single hardcoded literal.
+            for key in ("chest_open", "player_hurt", "enemy_hurt",
+                        "player_death", "enemy_death", "boss_death"):
+                if key not in ui:
+                    errors.append(f"audio.json ui_effects is missing '{key}' (GameScene.cpp "
+                                  f"plays it -- see _build_ui_effects in build_gamedata.py)")
         else:
             warnings.append("Resources/audio/ absent -- skipping audio.json clip-existence checks "
                             "(run tools/extract_audio.py)")

@@ -248,5 +248,41 @@
     "EGun009": "fx_atk_hummer.wav",
     "EGun010": "fx_sword1.wav",
     "EGun011": "fx_healthpot.wav"
+  },
+  "ui_effects": {
+    "chest_open": {
+      "clip": "fx_chest_open.wav",
+      "_why": "FAITHFUL: res/item/chest01.prefab (and chest00/e_chest1/e_chest2) RGChest.audio_clip -> this clip. Played when a chest opens, exactly as the prefab wires it. Not in RGMusicManager's 11-entry effect_list.",
+      "_evidence": "res/item/chest01.prefab -> audio_clip"
+    },
+    "enemy_hurt": {
+      "clip": "fx_hit_p1.wav",
+      "_why": "PORT CHOICE (T-35): this is the PLAYER's clip_hit (res/player/c01.prefab); no enemy-side hurt clip field was found on any enemy prefab. Reused here as the enemy-hurt FALLBACK, which only fires when audio.json's effect_list[5] (fx_hit.wav, the faithful PlayEffect(5) hit cue) is unavailable.",
+      "_evidence": "res/player/c01.prefab -> clip_hit",
+      "_port_choice": true
+    },
+    "enemy_death": {
+      "clip": "enermy_die3.wav",
+      "_why": "PORT CHOICE (T-35): res/enemy/2-castle/e_wizard01.prefab (and ex_wizard) RGEController.clip_dead -> this clip. Per-species clip_dead is NOT ported (EnemyDef carries no death-clip field), so this ONE species' clip is used for every non-boss enemy death.",
+      "_evidence": "res/enemy/2-castle/e_wizard01.prefab -> clip_dead",
+      "_port_choice": true
+    },
+    "boss_death": {
+      "clip": "fx_boss1_dead.wav",
+      "_why": "PORT CHOICE (T-35): res/enemy/2-graveyard/boss03.prefab clip_dead -> this clip. It is the only boss prefab that references it; the port uses it for EVERY boss death because per-boss death clips are not ported.",
+      "_evidence": "res/enemy/2-graveyard/boss03.prefab -> clip_dead",
+      "_port_choice": true
+    },
+    "player_death": {
+      "clip": "fx_dead.wav",
+      "_why": "PORT CHOICE (T-35): this is an ENEMY clip_dead (13 enemy prefabs reference it, e.g. res/enemy/3-alien/ex_alien01.prefab). res/player/c01.prefab declares clip_skill and clip_hit but NO death clip, so no player-death clip exists to be faithful to; this is the port's pick.",
+      "_evidence": "res/enemy/3-alien/ex_alien01.prefab -> clip_dead",
+      "_port_choice": true
+    },
+    "player_hurt": {
+      "clip": "fx_hurt.wav",
+      "_why": "PORT CHOICE (T-35): fx_hurt.wav ships in rgsound/effect but NOTHING in the ExportedProject dump references its guid (1a3c62ede8639f24ba781cf9820699c9 appears only in its own .meta, 1 hit repo-wide). The one asset-linked player hit clip IS res/player/c01.prefab clip_hit == fx_hit_p1.wav, but the port's pre-existing pick is kept so this change is pure provenance, not a behaviour change. Only fires as the FALLBACK when effect_list[5] (fx_hit.wav, the faithful PlayEffect(5) hit cue) is unavailable.",
+      "_port_choice": true
+    }
   }
 }
