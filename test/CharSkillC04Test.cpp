@@ -71,6 +71,20 @@ TEST(CharSkillC04Test, EndSkillIsNoOpWhenNotInSkill) {
     EXPECT_FALSE(c.InSkill());
 }
 
+TEST(CharSkillC04Test, EndSkillClearsHasCut) {
+    // FAITHFUL (audit fix vs game_typed.c:1214-1263, fully recovered):
+    // C04Controller__RoleSkillEnd writes in_skill=false AND has_cut=false before
+    // ReSetSkillReload -- so a latched cut is cleared by RoleSkillEnd, not only by
+    // the next TryActivateSkill.
+    CharSkillC04 c(5.0F);
+    c.TryActivateSkill();
+    c.RoleAtk(true, false, 10, false);   // cut -> has_cut latched
+    EXPECT_TRUE(c.HasCut());
+    c.EndSkill();
+    EXPECT_FALSE(c.HasCut());            // RoleSkillEnd clears has_cut
+    EXPECT_FALSE(c.InSkill());
+}
+
 TEST(CharSkillC04Test, EndSkillDoesNotCloseEffectWindow) {
     // RoleSkillEnd does not touch in_skill_effect (that closes via a kill); only
     // in_skill + cooldown change.
@@ -260,10 +274,11 @@ TEST(CharSkillC04Test, FifthKillWrapsComboAndDoesNotRefresh) {
 }
 
 TEST(CharSkillC04Test, KillDoesNotClearHasCutButReactivationDoes) {
-    // FAITHFUL: EndSkillEffect @156401 clears ONLY in_skill_effect (0x94); has_cut
-    // (0x95) is never written =0 by any recovered C04 body. So a kill closes the
-    // window but LEAVES has_cut latched -- it is re-cleared on the next activation
-    // (fabrication_flags item (c)), not by the kill.
+    // FAITHFUL: EndSkillEffect clears ONLY in_skill_effect (0x94); has_cut (0x95)
+    // is NOT written =0 by EndSkillEffect / KillSomeOne. So a kill closes the
+    // window but LEAVES has_cut latched -- it is cleared by the next RoleSkillEnd
+    // (EndSkillClearsHasCut) or by the next TryActivateSkill's window re-open
+    // (fabrication_flags item (c)), not by the kill itself.
     CharSkillC04 c(5.0F);
     c.TryActivateSkill();
     c.RoleAtk(true, false, 10, false);     // cut -> has_cut latched

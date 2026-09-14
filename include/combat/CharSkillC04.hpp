@@ -41,10 +41,14 @@ namespace Game {
  *      spawn), so only the GATE is recoverable. NO RGRandom draw on this path.
  *      The cooldown engine (this_skill_time count-up to skill_cd) is the
  *      established PlayerDash / CharSkillC01 pattern; reused so TryActivateSkill
- *      can be unit-tested end to end (see fabrication_flags). ReSetSkillReload
- *      (the spend) is NOT in any recovered C04 body -- it lives in the base
- *      RGController.RoleSkillEnd -> ReSetSkillReload chain -- so EndSkill() models
- *      it and the assumption is flagged.
+ *      can be unit-tested end to end (see fabrication_flags).
+ *
+ *      AUDIT FIX (game_typed.c:1214-1263, fully recovered -- NOT a truncated
+ *      tail-call as the prior game_full.c-line-number comment here claimed):
+ *      C04Controller__RoleSkillEnd is fully visible and writes, in order,
+ *      in_skill = false; has_cut = false; role_attribute.ReSetSkillReload();
+ *      (then a pure owner/visual tail: get_skill_ready + shadow_lock sprite
+ *      recolor). EndSkill() now clears has_cut too, matching the decomp.
  *
  *  - RoleAtk (C04Controller__RoleAtk @ game_full.c:156423, value = press down):
  *      if (awake) {                                  // this+0xC
@@ -76,18 +80,22 @@ namespace Game {
  *      }
  *      base RGController.KillSomeOne();
  *      NO RGRandom draw. ReflashSkillCd sets this_skill_time = skill_cd (ready
- *      now); the EndSkillEffect (energy decrement + renderer disable + clear
- *      in_skill_effect) is owner-side except for clearing the ONE flag it writes
- *      (in_skill_effect, this+0x94), which the brain models so the next window's
- *      gate starts clean. has_cut (this+0x95) is NOT cleared here (see below).
+ *      now); the EndSkillEffect (speed-rate bonus removed + trail renderer
+ *      disable + clear in_skill_effect) is owner-side except for clearing the
+ *      ONE flag it writes (in_skill_effect, this+0x94), which the brain models
+ *      so the next window's gate starts clean. has_cut (this+0x95) is NOT
+ *      cleared by KillSomeOne / EndSkillEffect -- it is cleared by
+ *      RoleSkillEnd instead (see EndSkill() / AUDIT FIX above).
  *
- *  - EndSkillEffect (C04Controller__EndSkillEffect @ game_full.c:156401): OWNER
- *      body -- energy attr+0x14 -= 1, Renderer.set_enabled(false) at this+0x90.
- *      Its SOLE brain write is the single byte clear
+ *  - EndSkillEffect (C04Controller__EndSkillEffect @ game_typed.c:1276-1303,
+ *      fully recovered): OWNER body -- role_attribute.speed_rate +=
+ *      DAT_0026577c (removes a speed-rate bonus applied elsewhere; AUDIT FIX:
+ *      the prior game_full.c-based comment here wrongly claimed "energy
+ *      attr+0x14 -= 1"; no such write is present), trail.set_enabled(false)
+ *      at this+0x90. Its SOLE brain write is the single byte clear
  *      *(undefined1 *)(this + 0x94) = 0;  // in_skill_effect = 0 (ONLY 0x94)
- *      It does NOT write has_cut (0x95). No recovered C04 body clears has_cut on a
- *      kill / window-end; has_cut is re-cleared on the next activation instead
- *      (see fabrication_flags item (c)).
+ *      It does NOT write has_cut (0x95); has_cut is cleared by RoleSkillEnd,
+ *      not by EndSkillEffect / KillSomeOne (see fabrication_flags item (c)).
  *
  *  - AutoLock / AtkCut / Awake / _ctor: OWNER bodies (transform/get_position spawn
  *      tails, RGMusicManager + Instantiate<RGWeapon>/RGSword, AwakeController, base
@@ -105,18 +113,20 @@ namespace Game {
  *       model: this_skill_time counts UP by dt, clamped to skill_cd; ready when
  *       skill_cd <= this_skill_time. Unlike C01 there is NO in_skill_time countdown,
  *       so Tick() does NOT auto-end the skill (no Update/auto-end exists in C04).
- *   (b) EndSkill() = base RGController.RoleSkillEnd -> RoleAttributePlayer.
- *       ReSetSkillReload (this_skill_time = 0). No recovered C04 body spends the
- *       charge; the spend lives in the inherited base chain, exposed here so the
- *       skill is testable end to end.
+ *   (b) EndSkill() = C04Controller__RoleSkillEnd (game_typed.c:1214-1263,
+ *       FAITHFUL, fully recovered -- see AUDIT FIX above): in_skill = false;
+ *       has_cut = false; role_attribute.ReSetSkillReload() (this_skill_time =
+ *       0). Modeled directly; not a reconstruction (kept in fabrication_flags
+ *       only because the owner-side shadow_lock recolor tail is not modeled).
  *   (c) Activation window-open. The recovered RoleSkill head (156371) writes NO
  *       flags -- it is a get_transform tail-call past the gate. TryActivateSkill's
  *       in_skill = true and the window-open (in_skill_effect = true, has_cut =
  *       false) live in the owner-side transform tail / Invoke, modeled here so the
  *       activate->cut->kill loop is one testable decision. RELATED: EndSkillEffect
- *       (156401) clears ONLY in_skill_effect (0x94); has_cut (0x95) is never written
- *       =0 by any recovered C04 body, so the brain leaves has_cut alone on a kill
- *       and relies on this activation re-clear to start each window clean.
+ *       (game_typed.c:1276-1303) clears ONLY in_skill_effect (0x94); has_cut
+ *       (0x95) is cleared by RoleSkillEnd (see (b)), not by EndSkillEffect /
+ *       KillSomeOne, so a window that ends via a kill leaves has_cut set until
+ *       the hero's NEXT RoleSkillEnd or TryActivateSkill re-clears it.
  *
  * @see CharSkillC01.hpp (the canonical hero brain shape + cooldown-reuse +
  *      fabrication-flag conventions), recreation Player/RGController.cs,
@@ -173,11 +183,11 @@ public:
     /**
      * @brief End the active skill and spend the charge.
      *
-     * Models the base RGController.RoleSkillEnd -> RoleAttributePlayer.
-     * ReSetSkillReload chain (NOT in any recovered C04 body; see
-     * fabrication_flags): leaves the skill state (in_skill = false) and restarts
-     * the cooldown (this_skill_time = 0). Does NOT touch the sword-effect window
-     * (that ends via a kill / EndSkillEffect). No-op if not currently in skill.
+     * FAITHFUL: C04Controller__RoleSkillEnd @ game_typed.c:1214-1263 (fully
+     * recovered). Clears in_skill AND has_cut, then spends the cooldown via
+     * RoleAttributePlayer.ReSetSkillReload (this_skill_time = 0). Does NOT
+     * touch the sword-effect window (in_skill_effect ends via a kill /
+     * EndSkillEffect, not RoleSkillEnd). No-op if not currently in skill.
      */
     void EndSkill();
 

@@ -41,15 +41,22 @@ bool CharSkillC04::TryActivateSkill() {
     return true;
 }
 
-// Models RGController.RoleSkillEnd -> RoleAttributePlayer.ReSetSkillReload (NOT in
-// any recovered C04 body; see fabrication_flags): leave the skill state and
-// restart the cooldown (this_skill_time = 0). The sword-effect window is left
-// alone here -- it closes via KillSomeOne / EndSkillEffect, not RoleSkillEnd.
+// FAITHFUL (fixed by audit against game_typed.c, fully recovered, non-tail-call
+// body): C04Controller__RoleSkillEnd @ game_typed.c:1214-1263. The earlier
+// game_full.c-based comment here claimed this body was NOT recovered and that
+// has_cut was left untouched by RoleSkillEnd; game_typed.c shows the head is
+// fully visible and writes BOTH flags before the ReSetSkillReload call:
+//   in_skill = false; has_cut = false; role_attribute.ReSetSkillReload();
+// (the remaining tail -- get_skill_ready + shadow_lock sprite recolor -- is a
+// pure owner/visual concern, not modeled). this_skill_time = 0 models
+// ReSetSkillReload(). The sword-effect window itself (in_skill_effect) is left
+// alone -- it closes via KillSomeOne / EndSkillEffect, not RoleSkillEnd.
 void CharSkillC04::EndSkill() {
     if (!m_InSkill) {
         return;
     }
     m_InSkill = false;
+    m_HasCut = false;        // FAITHFUL: RoleSkillEnd clears has_cut (this+0x95).
     m_ThisSkillTime = 0.0F; // ReSetSkillReload(): restart the cooldown
 }
 
@@ -126,10 +133,13 @@ bool CharSkillC04::KillSomeOne() {
         m_ThisSkillTime = m_SkillCd;
     }
 
-    // 156522-156523: CancelInvoke("...") + EndSkillEffect(). EndSkillEffect @156401
-    // is owner-side (energy-1 at attr+0x14, Renderer.set_enabled(false) at this+0x90)
-    // EXCEPT its sole brain write -- the single flag clear we model so the next
-    // window's gate starts clean:
+    // 156522-156523: CancelInvoke("...") + EndSkillEffect(). EndSkillEffect is
+    // owner-side (FIXED by audit against game_typed.c:1276-1303, fully recovered:
+    // role_attribute.speed_rate += DAT_0026577c i.e. removes a speed-rate bonus
+    // applied elsewhere, NOT an energy decrement as the prior game_full.c-based
+    // comment claimed; trail.set_enabled(false) at this+0x90 -- "trail" not
+    // "Renderer" generically) EXCEPT its sole brain write -- the single flag clear
+    // we model so the next window's gate starts clean:
     //   *(undefined1 *)(param_1 + 0x94) = 0;   // in_skill_effect = 0 (ONLY byte 0x94)
     // FAITHFUL: EndSkillEffect writes ONLY 0x94. It does NOT clear has_cut (0x95);
     // no recovered C04 body writes has_cut = 0 here. (has_cut is re-cleared on the

@@ -1656,6 +1656,16 @@ void GameScene::Update(float dtMs) {
                  m_Player->Stats().skillCdProgress, inSkill, ready,
                  m_Sim->PlayerShotsLastAdvance());
     }
+    // P3.3.a headless hook: "Skill: <char> ended" trace, edge-detected on InSkill()
+    // true->false (mirrors "skill_use" activation trace above + the "Buff: ... ended"
+    // convention, P3.1). NO-OP on behaviour -- logging/bookkeeping only.
+    if (m_Sim->PlayerSkill() != nullptr) {
+        const bool inSkillNow = m_Sim->PlayerSkill()->InSkill();
+        if (m_SkillWasActive && !inSkillNow) {
+            LOG_INFO("Skill: {} ended", m_CharId);
+        }
+        m_SkillWasActive = inSkillNow;
+    }
 
     // --- A: present the sim's anim/sfx cues (muzzle/hit/death). Drained before the view
     // sync below so a dying entity's view is still alive to anchor its death effect. ---
@@ -2337,6 +2347,12 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
                 SpawnReward(isBoss, e.entityId, pos); // B3: RGEController.GetReward
             }
         } else if (e.name == "skill_use") {
+            // P3.3.a headless hook: "Skill: <char> activated" trace, mirrors the
+            // "Buff: ... applied" convention (P3.1). NO-OP on behaviour -- logging
+            // only; fires once per TryTrigger Activated edge (skill_use is only
+            // pushed on that edge, see Simulation::TickSkill). ICharSkill has no
+            // public SkillCd() accessor, so the trace reports charId only.
+            LOG_INFO("Skill: {} activated", m_CharId);
             // M3e BuffStatue.UseSkill: the worshipped statue's blessing on each skill
             // press, gated by its cd. Priest (statue_index 2, BuffStatue02 cd 8):
             // regain energy; Thief (6): coins from the enemies in the room. The

@@ -300,6 +300,10 @@ private:
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;
+    /// Edge-detect InSkill() so the "Skill: <char> ended" trace (P3.3.a headless
+    /// hook) logs exactly once per active-window close. NO-OP on behaviour --
+    /// logging/bookkeeping only, mirrors the "Buff: ... ended" convention (P3.1).
+    bool m_SkillWasActive = false;
     /// SK_FORCE_BUFF=K,<kind> test hook (env, -1 = off): apply <kind> ("fire",
     /// "poison", "ice", "electric", "armor", "changespeed") to the PLAYER on frame K
     /// (Simulation::ApplyBuff), so the buff-applied/ended log path (P3.1) can be

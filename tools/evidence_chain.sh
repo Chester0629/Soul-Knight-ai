@@ -81,6 +81,7 @@ run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=6
 # H10 keeps 40 lines (was 6): a bullet-triggered Fire buff logs one "applied"
 # line per landed hit, so a 6-line excerpt was all "applied" and truncated the
 # "ended" lines that prove the P3.1 expiry path actually runs.
+for c in c04 c08 c10 c13; do run_case "H12_$c" "Skill:" 4 SK_SKIP_MENU=1 SK_MUTE=1 SK_START_CHAR=$c SK_FORCE_SKILL=60 SK_MAX_FRAMES=200; done
 run_case H10 "Buff:" 40 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
 grep -q "Buff: Fire ended" "$E/H10.txt" \
   || fail "H10: no 'Buff: Fire ended' line -- the bullet-triggered Fire buff never expired"

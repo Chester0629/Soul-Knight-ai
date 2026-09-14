@@ -20,8 +20,8 @@
  [info] Audio: sfx fx_gun_1.wav
  [info] Audio: sfx fx_gun_1.wav
  [info] Audio: sfx fx_gun_1.wav
- [info] Audio: sfx fx_door.wav
- [info] Audio: sfx fx_gun_1.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
  [info] Audio: sfx enermy_die3.wav
  [info] Audio: sfx enermy_die3.wav
  [info] Audio: sfx enermy_die3.wav
