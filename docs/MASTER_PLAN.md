@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.19（2026-09-14；R16 通過 P3.2；P6.7 依 R16 修正 T-35 措辭，待 R17）
+> 版本：v1.20（2026-09-14；R17 通過 P6.7，小版號 +1）
 
 ---
 
@@ -88,10 +88,10 @@
 |---|---|---|---|---|
 | P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | P1.10 驗收完成（有取捨）；其餘未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
 | P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
-| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain、P3.1 buff 本體、P3.2 buff 觸發功能完成；P3.0 稽核完成待裁決） | 未驗收 | phase 1–5、本版 | P3.0 裁決、P3.3–P3.9 |
+| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain、P3.1 buff 本體、P3.2 buff 觸發功能完成；P3.0 稽核完成待裁決） | P3.2 驗收完成（有取捨）；其餘未驗收 | phase 1–5、本版 | P3.0 裁決、P3.3–P3.9 |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
 | P5 大廳 | 未開始 | 未驗收 | — | 全部 |
-| P6 UI 表現 | 進行中（P6.1、P6.7 音效／BGM 功能完成） | 未驗收 | 6e46eed、本版 | P6.2–P6.6、P6.8 |
+| P6 UI 表現 | 進行中（P6.1、P6.7 功能完成） | P6.7 驗收完成（有取捨）；P6.1 未驗收 | 6e46eed、本版 | P6.2–P6.6、P6.8 |
 | P7 內容補完 | 未開始 | 未驗收 | — | 全部 |
 | P8 擴充管線 | 進行中（P8.0 文字完成；P8.1–P8.3 未開始） | 未驗收 | — | P8.1–P8.3 |
 
@@ -176,7 +176,7 @@
 | P6.4 buff 列／boss 血條 | UIBuffBar、bossNN_info | 預製件 | HUD | V-S | — | 未開始・未驗收 |
 | P6.5 暫停／設定 | UIWindowPause | 預製件 | 場景 | V-H | — | 未開始・未驗收 |
 | P6.6 傷害數字／hit-stop | ShowTextHurt | 反編譯 | HUD | V-S | — | 未開始・未驗收 |
-| P6.7 音效／BGM | 183 顆原版 clip、效果表、開火／命中／死亡／拾取／寶箱／傳送門／門／boss 出場音、選單與依關卡 biome 的 BGM 高低版 | rgsound/{effect,bgm,test}（`tools/extract_audio.py`，gitignored，183/183 逐位元相同）；RGMusicManager.prefab `effect_list[0..10]`（typed 19258–19282；7＝fx_show_up）；UITitle.bgm_clip／btn_clip；MapManager.bgm_clip 六生態（typed 25098–25119）；RGWeapon.audio_clip 193/194；EGun 9/10；ui_effects 六項中五項有 `_evidence` 預製件連結（player_hurt 只有音檔來源說明），只有 chest_open 的使用語意標 FAITHFUL，其餘五項的播放時機為 PORT CHOICE（T-35） | audio.json（`build_audio_table`：effects／bgm／weapon_shoot／enemy_gun_shoot／ui_effects）、`GameData::BgmFor(biome, high)`、`Game::AudioPlayer`（SK_MUTE、Mix 失敗自動靜音、每次播放印 `Audio:`）、SDL2_mixer 開 stb_vorbis 供 ogg；C++ 無 clip 字面（除缺表退回 fx_hit.wav） | AudioTableTest（effect 7、武器 clip、選單 bgm、六生態 low/high 與退回、逐一檢查 audio.json 每個引用的檔案存在且 >200 筆）；H11；實跑 `SK_SEED=1 SK_FORCE_CLEAR=25` 見 bgm 隨 A1→D1→E1 換為 bgm_1/2/3Low；V-G | T-34、T-35、T-29（出場音 0.8 s 延遲已接）；NOT PORTED：敵人／boss 攻擊音、buff 音 | 功能完成・未驗收（R14 不通過，v1.17 修正待 R15） |
+| P6.7 音效／BGM | 183 顆原版 clip、效果表、開火／命中／死亡／拾取／寶箱／傳送門／門／boss 出場音、選單與依關卡 biome 的 BGM 高低版 | rgsound/{effect,bgm,test}（`tools/extract_audio.py`，gitignored，183/183 逐位元相同）；RGMusicManager.prefab `effect_list[0..10]`（typed 19258–19282；7＝fx_show_up）；UITitle.bgm_clip／btn_clip；MapManager.bgm_clip 六生態（typed 25098–25119）；RGWeapon.audio_clip 193/194；EGun 9/10；ui_effects 六項中五項有 `_evidence` 預製件連結（player_hurt 只有音檔來源說明），只有 chest_open 的使用語意標 FAITHFUL，其餘五項的播放時機為 PORT CHOICE（T-35） | audio.json（`build_audio_table`：effects／bgm／weapon_shoot／enemy_gun_shoot／ui_effects）、`GameData::BgmFor(biome, high)`、`Game::AudioPlayer`（SK_MUTE、Mix 失敗自動靜音、每次播放印 `Audio:`）、SDL2_mixer 開 stb_vorbis 供 ogg；C++ 無 clip 字面（除缺表退回 fx_hit.wav） | AudioTableTest（effect 7、武器 clip、選單 bgm、六生態 low/high 與退回、逐一檢查 audio.json 每個引用的檔案存在且 >200 筆）；H11；實跑 `SK_SEED=1 SK_FORCE_CLEAR=25` 見 bgm 隨 A1→D1→E1 換為 bgm_1/2/3Low；V-G | T-34、T-35、T-29（出場音 0.8 s 延遲已接）；NOT PORTED：敵人／boss 攻擊音、buff 音 | 功能完成・**驗收完成（有取捨 T-34／T-35）**（R17 @ 2d2ca97） |
 | P6.8 開場／劇情／載入 | Splash/Plot/Loading | 場景檔 | 場景 | V-P | — | 未開始・未驗收 |
 
 ### P7 內容補完
@@ -390,6 +390,9 @@ R14 程式阻擋全部修正：機率判定與 86608–86645 一致、穿線正�
 ### R16 — 2026-09-14 — Codex — 對象 P3.2＋P6.7 v1.18 @ 8a16e95 — **P3.2 驗收完成（有取捨 T-33）；P6.7 不通過（一處事實）**
 R15 六項中五項通過；diff 3 檔 +15/−10 無行為變更。P6.7 唯一剩餘：`ui_effects` 實際只有五項帶 `_evidence`（player_hurt 無預製件連結，產表程式刻意不產生），R15 的「六項皆有」要求本身有誤，本輪更正。§7：P3.2 全過；P6.7 只有 8 不通過。
 **回覆（v1.19）**：§3 P6.7、§6 T-35、§9 R14／R15 措辭改為「五項有預製件連結，player_hurt 僅音檔來源說明，只有 chest_open 語意可證」。P3.2 狀態改為驗收完成（有取捨）。純文件變更。
+
+### R17 — 2026-09-14 — Codex — 對象 P6.7 v1.19 @ 2d2ca97 — **驗收完成（有取捨 T-34／T-35）**
+diff 1 檔 +10/−6 純文件；T-35 措辭與 audio.json `_evidence` 相符。§7 全過（5 不適用）。至此已驗收切片：P1.10、P3.2、P6.7；架構書本身 R7 通過。
 
 ---
 
