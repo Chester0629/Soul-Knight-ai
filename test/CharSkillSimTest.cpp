@@ -864,7 +864,7 @@ TEST(CharSkillSimTest, KillAttributionPlayerCutLocksOutALaterSameStepNonPlayerDo
 // overwrite deathSource back to a player source before Cull reads it.
 // ===================================================================
 
-TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAPendingPlayerHitAndDot) {
+TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAnInFlightPlayerBullet) {
     Simulation sim(86, &g_NullWorld);
     // Stationary, far enough (x=205) that the bullet needs several steps to
     // arrive, well outside C04's ~48px cut reach so the "latch has_cut" press
@@ -926,7 +926,7 @@ TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAPendingPlayerHitAndDot
 }
 
 // Directly exercises the IMMUTABILITY of DeathSource::Forced (not just the
-// damage-already-applied guard the DoT test above also happens to trip): a player
+// damage-already-applied guard the in-flight-bullet test above also trips): a player
 // melee cut lands on the entity in the SAME step as Cull(), AFTER KillAllHostiles
 // already forced its hp to 0 -- ApplyMeleeCut only gates on the `dead` FLAG (set
 // by Cull, not yet true), not on stats.IsDead(), so pre-fix this cut would call
