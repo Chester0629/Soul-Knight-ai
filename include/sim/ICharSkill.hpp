@@ -122,7 +122,7 @@ public:
     }
 
     /// P3.3.b hook: called once when an enemy/boss the PLAYER killed dies (Cull
-    /// attributes the kill via EntityState::lastHitByPlayer). Default no-op; C04
+    /// attributes the kill via EntityState::deathSource). Default no-op; C04
     /// uses this to drive its in-window kill combo.
     virtual void OnEnemyKilled() {}
 

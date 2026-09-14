@@ -155,19 +155,23 @@ void Simulation::TickSkill() {
     if (m_Skill == nullptr) {
         return;
     }
-    // Activation (edge trigger): the skill button this step tries to enter the
-    // ultimate via the (d) adapter, but ONLY on the false->true EDGE of
-    // m_Input.skill (item 1 fix, R18/Codex block): m_Input.skill is a raw held-key
-    // level (GameScene forwards IsKeyDown unedited), and one Advance(dtMs) can run
-    // several fixed Step()s with the SAME m_Input -- so without this latch a single
-    // 40ms press (2 sub-steps @ 20ms) would call TryTrigger() twice in one frame,
-    // and for the toggle heroes (C04/C08: a 2nd TryTrigger() while already InSkill()
-    // closes the toggle) that immediately un-does the activation it just performed.
-    // m_SkillHeldPrev is latched until the button is actually released, so a held
-    // press activates exactly once and a genuine 2nd press (release in between) is
-    // the only thing that can end a toggle-type skill.
-    const bool skillEdge = m_Input.skill && !m_SkillHeldPrev;
-    m_SkillHeldPrev = m_Input.skill;
+    // Activation (edge trigger): the skill button tries to enter the ultimate via
+    // the (d) adapter, but ONLY when a press-edge is PENDING (item 1 fix, R18/Codex
+    // block; R19 fix for the zero-substep drop -- see m_SkillPressPending and
+    // Advance()). The false->true edge on the raw held-key level (GameScene forwards
+    // IsKeyDown unedited) is now detected in Advance(), at CALL granularity, not
+    // here -- a short dt can make Advance() run ZERO fixed Step()s, so detecting the
+    // edge only here (against m_Input.skill, fixed-step granularity) could silently
+    // drop a press the next Advance() call overwrites before any Step() saw it.
+    // Here we only CONSUME the latch, exactly once: clearing it (rather than
+    // re-deriving skillEdge from m_Input.skill) is what keeps a single press
+    // activating exactly once whether it spans multiple fixed sub-steps of ONE
+    // Advance() call (40ms press == 2 sub-steps @ 20ms -- the flag is already false
+    // by the 2nd sub-step) or is held across MANY separate Advance() calls (the flag
+    // is only re-armed by a fresh false->true transition of the raw input in
+    // Advance(), never by "still true").
+    const bool skillEdge = m_SkillPressPending;
+    m_SkillPressPending = false;
     if (skillEdge) {
         const ICharSkill::TriggerResult r = m_Skill->TryTrigger();
         if (r.outcome == ICharSkill::TriggerOutcome::Activated) {
@@ -319,11 +323,11 @@ void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId, bo
     if (!ShouldApplyBulletBuff(b.buffProbability * 100.0F, isCritic, b.camp, m_HitRng)) {
         return;
     }
-    // item 5: b.camp == 0 is the PLAYER's own camp (see ResolveHits' "Player bullet
-    // -> enemies, then boss" branch above) -- a buff carried by a player bullet is a
-    // player-sourced application, so its later DoT ticks must attribute
-    // EntityState::lastHitByPlayer to the player, same as the bullet's own direct
-    // hit already does.
+    // item 5/2 (R19): b.camp == 0 is the PLAYER's own camp (see ResolveHits' "Player
+    // bullet -> enemies, then boss" branch above) -- a buff carried by a player
+    // bullet is a player-sourced application, so its later DoT ticks must
+    // attribute EntityState::deathSource to DeathSource::PlayerDot, same as the
+    // bullet's own direct hit already does (DeathSource::PlayerBullet).
     ApplyBuff(targetId, b.buffParams, /*fromPlayer=*/b.camp == 0);
 }
 
@@ -344,9 +348,10 @@ void Simulation::ApplyDamageToPlayer(Game::Combat::HitResult hr) {
 
 // P3.3.b: C04's melee sword cut (see SimConfig.hpp T-36 for the reach/arc port
 // choice). Straight damage, no crit/repel (the decomp shows no crit roll on this
-// path); marks lastHitByPlayer so Cull can attribute a resulting death to
-// ICharSkill::OnEnemyKilled (C04's kill-combo), and emits the same "hurt"
-// AnimTrigger a bullet hit would (presentation parity).
+// path); marks EntityState::deathSource (DeathSource::PlayerCut, item 2/R19) so
+// Cull can attribute a resulting death to ICharSkill::OnEnemyKilled (C04's
+// kill-combo), and emits the same "hurt" AnimTrigger a bullet hit would
+// (presentation parity).
 void Simulation::ApplyMeleeCut(int damage) {
     if (damage <= 0) {
         return;
@@ -376,13 +381,13 @@ void Simulation::ApplyMeleeCut(int damage) {
             continue;
         }
         Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
-        e->MutableState().lastHitByPlayer = true;
+        e->MutableState().SetDeathSource(DeathSource::PlayerCut); // item 2 (R19)
         m_Events.push_back(
             SimEvent{SimEventType::AnimTrigger, static_cast<std::uint32_t>(ei), "hurt"});
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && inReach(m_Boss->State().pos)) {
         Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
-        m_Boss->MutableState().lastHitByPlayer = true;
+        m_Boss->MutableState().SetDeathSource(DeathSource::PlayerCut); // item 2 (R19)
         m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"});
     }
@@ -432,15 +437,27 @@ void Simulation::TickBuffs() {
         const Game::Combat::BuffList::TickResult r = st.buffs.Tick(kFixedStepSeconds);
         st.buffSpeedMul = r.speedMul;
         st.buffFrozen = r.frozen;
-        if (r.damage > 0 && !st.dead) {
-            Game::Combat::HitResult hr;
-            hr.finalDamage = r.damage;
-            Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
-            // item 5: a DoT tick is a damage source like any other -- attribute (or
-            // explicitly un-attribute) this kill-attribution flag to whether THIS
-            // tick's buff was player-sourced, same "last damage source" semantics
-            // as every other write to lastHitByPlayer in this file.
-            st.lastHitByPlayer = r.damageFromPlayer;
+        // item 2 (R19 fix): apply the two DoT sources as SEPARATE damage events,
+        // non-player FIRST then player -- documented rule, see
+        // Combat::BuffList::TickResult and EntityState::DeathSource. Skip the 2nd
+        // (player) portion once the entity is already dead from the 1st: it cannot
+        // be the tick that killed it, so it must not overwrite the attribution the
+        // 1st portion already earned (SetDeathSource would ignore it anyway once
+        // Forced, but here we want the FIRST lethal tick's source to stick, not
+        // just "not Forced").
+        if ((r.damageFromOther > 0 || r.damageFromPlayer > 0) && !st.dead) {
+            if (r.damageFromOther > 0) {
+                Game::Combat::HitResult hr;
+                hr.finalDamage = r.damageFromOther;
+                Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+                st.SetDeathSource(DeathSource::Other);
+            }
+            if (r.damageFromPlayer > 0 && !st.stats.IsDead()) {
+                Game::Combat::HitResult hr;
+                hr.finalDamage = r.damageFromPlayer;
+                Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+                st.SetDeathSource(DeathSource::PlayerDot);
+            }
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
@@ -460,11 +477,20 @@ void Simulation::TickBuffs() {
         const Game::Combat::BuffList::TickResult r = st.buffs.Tick(kFixedStepSeconds);
         st.buffSpeedMul = r.speedMul;
         st.buffFrozen = r.frozen;
-        if (r.damage > 0 && !st.dead) {
-            Game::Combat::HitResult hr;
-            hr.finalDamage = r.damage;
-            Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
-            st.lastHitByPlayer = r.damageFromPlayer; // item 5: see the enemy loop above.
+        if ((r.damageFromOther > 0 || r.damageFromPlayer > 0) && !st.dead) {
+            // item 2 (R19): see the enemy loop above -- same non-player-first rule.
+            if (r.damageFromOther > 0) {
+                Game::Combat::HitResult hr;
+                hr.finalDamage = r.damageFromOther;
+                Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+                st.SetDeathSource(DeathSource::Other);
+            }
+            if (r.damageFromPlayer > 0 && !st.stats.IsDead()) {
+                Game::Combat::HitResult hr;
+                hr.finalDamage = r.damageFromPlayer;
+                Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+                st.SetDeathSource(DeathSource::PlayerDot);
+            }
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
@@ -576,7 +602,8 @@ void Simulation::ResolveHits() {
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
                 Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
-                e->MutableState().lastHitByPlayer = true; // P3.3.b: Cull kill-attribution.
+                // item 2 (R19): DeathSource, not a plain bool -- see EntityState.hpp.
+                e->MutableState().SetDeathSource(DeathSource::PlayerBullet);
                 if (!e->State().kinematic) {
                     e->ApplyForce(Normalize(b.vel), hr.repelMagnitude);
                 }
@@ -603,7 +630,7 @@ void Simulation::ResolveHits() {
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::ENEMY);
                 Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
-                m_Boss->MutableState().lastHitByPlayer = true; // P3.3.b
+                m_Boss->MutableState().SetDeathSource(DeathSource::PlayerBullet); // item 2 (R19)
                 m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"}); // A
                 RollBulletBuff(b, kBossViewId, hr.isCrit); // P3.2
@@ -644,11 +671,21 @@ void Simulation::ResolveHits() {
         }
     }
 }
+namespace {
+// item 2 (R19): the ONLY DeathSource values that attribute a death to the player
+// -> ICharSkill::OnEnemyKilled (C04's kill-combo). None (never hit), Other
+// (non-player DoT), and Forced (KillAllHostiles/SK_FORCE_KILL, immutable) never do.
+bool IsPlayerDeathSource(DeathSource src) {
+    return src == DeathSource::PlayerBullet || src == DeathSource::PlayerCut ||
+           src == DeathSource::PlayerDot;
+}
+} // namespace
+
 void Simulation::Cull() {
     for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
         auto &e = m_Enemies[ei];
         if (!e->State().dead && e->State().stats.IsDead()) {
-            const bool byPlayer = e->State().lastHitByPlayer; // P3.3.b: read before Kill().
+            const bool byPlayer = IsPlayerDeathSource(e->State().deathSource); // read before Kill().
             e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
             m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                         static_cast<std::uint32_t>(ei), "death"}); // A
@@ -658,7 +695,7 @@ void Simulation::Cull() {
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().stats.IsDead()) {
-        const bool byPlayer = m_Boss->State().lastHitByPlayer; // P3.3.b
+        const bool byPlayer = IsPlayerDeathSource(m_Boss->State().deathSource);
         m_Boss->Kill();
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "death"}); // A
         if (byPlayer && m_Skill != nullptr) {
@@ -693,6 +730,21 @@ void Simulation::Step() {
 }
 
 int Simulation::Advance(float dtMs, const WorldInputs &in) {
+    // R19/item-1 fix: detect the skill press-edge HERE, at Advance()-call
+    // granularity, BEFORE m_Input is overwritten below and BEFORE we know whether
+    // this call will run any fixed Step()s at all. m_Clock.Advance(dtMs) can return
+    // 0 for a short dt (its accumulator has not yet crossed kFixedStepMs), in which
+    // case Step()/TickSkill() never run this call -- if edge detection lived only in
+    // TickSkill() (as it did pre-R19), a press arriving on such a zero-step call
+    // would be silently lost the moment the NEXT Advance() overwrites m_Input with a
+    // different level, since no Step() ever got to see skill=true. Latching the edge
+    // into m_SkillPressPending instead means it survives until a fixed Step() (any
+    // later Advance() call, however many it takes to cross the next kFixedStepMs
+    // boundary) actually consumes it in TickSkill().
+    if (in.skill && !m_SkillHeldPrev) {
+        m_SkillPressPending = true;
+    }
+    m_SkillHeldPrev = in.skill;
     m_Input = in;
     m_PlayerShotsLastAdvance = 0;
     WakeByRoom();
@@ -743,17 +795,23 @@ void Simulation::KillAllHostiles() {
     for (auto &e : m_Enemies) {
         if (!e->State().dead) {
             e->MutableState().stats.hp = 0;
-            // item 5: a forced clear is NOT a player kill -- clear any stale
-            // lastHitByPlayer left over from an earlier (non-lethal) player hit, so
-            // Cull() does not misattribute this death to the player and fire
-            // ICharSkill::OnEnemyKilled (C04's kill-combo) for a kill the player
-            // never made.
-            e->MutableState().lastHitByPlayer = false;
+            // item 2 (R19 fix, was item 5's plain lastHitByPlayer=false clear): a
+            // forced clear is NOT a player kill -- and unlike the old bool, this
+            // assignment LOCKS the attribution. KillAllHostiles zeroes hp but does
+            // not mark the entity `dead` (only Cull() does, the next time it runs),
+            // so between now and that Cull() a player bullet/cut/DoT tick could
+            // still land on this (not-yet-culled) entity; direct-assigning Forced
+            // here (bypassing SetDeathSource's own Forced-is-immutable guard, which
+            // only protects FUTURE writes) means every one of those later writes
+            // goes through SetDeathSource and is silently ignored, so Cull() still
+            // sees Forced and never fires ICharSkill::OnEnemyKilled for a kill the
+            // player never made.
+            e->MutableState().deathSource = DeathSource::Forced;
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead) {
         m_Boss->MutableState().stats.hp = 0;
-        m_Boss->MutableState().lastHitByPlayer = false; // item 5, see above.
+        m_Boss->MutableState().deathSource = DeathSource::Forced; // item 2 (R19), see above.
     }
 }
 

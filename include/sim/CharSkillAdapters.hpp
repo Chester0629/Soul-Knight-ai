@@ -171,7 +171,7 @@ public:
     using CharSkillBase::CharSkillBase;
     TriggerResult TryTrigger() override {
         if (m_Brain.InSkill()) {
-            m_Brain.EndSkill(); // PORT CHOICE (C08-END, see class comment above).
+            m_Brain.EndSkill(); // PORT CHOICE (C08-END, T-37; see class comment above).
             return {TriggerOutcome::Released, false};
         }
         return m_Brain.TryActivateSkill() ? TriggerResult{TriggerOutcome::Activated, false}

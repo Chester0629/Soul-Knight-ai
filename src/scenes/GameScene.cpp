@@ -1123,11 +1123,14 @@ void GameScene::OnEnter() {
         m_CurrentWeaponId = wdef->id;
     } // else: unknown id -> leave the default (never deref a null FindWeapon).
 
-    // --- B1-P4a: dispatch the player skill brain by character id (charId seam).
-    // skillCd / inSkillTime come from PlayerTemplate (CharacterDef; one shared template
-    // -- per-char overrides pending). charId is carried across floors (defaults "c01"
-    // until the HeroRoom picker, B5). C01/C02 effects are faithful; c03..c13 are
-    // gate+cooldown-only stubs. Rebuilt per floor (starts ready).
+    // --- B1-P4a/P3.3.b: dispatch the player skill brain by character id (charId
+    // seam, MakeCharSkill in CharSkillAdapters.hpp). skillCd / inSkillTime / atk come
+    // from the resolved CharacterDef (cdef, per-char stats -- see characters.json),
+    // falling back to the shared PlayerTemplate only when cdef is null. charId is
+    // carried across floors (defaults "c01" until the HeroRoom picker, B5). C01,
+    // C02, C04, C08, C09, C10, and C13 have faithful per-hero effects; C03, C05,
+    // C06, C07, C11, and C12 remain gate+cooldown-only stubs (StubSkillAdapter).
+    // Rebuilt per floor (starts ready).
     // charId + cdef were resolved at player-creation time (top of OnEnter).
     m_Sim->SetPlayerSkill(charId,
                           cdef != nullptr ? cdef->skillCd : m_Data.PlayerTemplate().skillCd,

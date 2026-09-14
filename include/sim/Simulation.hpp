@@ -96,7 +96,7 @@ public:
     /// buff on hit) is P3.2 -- this is the manual/test-hook entry point only.
     /// @p fromPlayer (item 5, kill attribution) records whether this application is
     /// player-sourced, so a later DoT tick from it can correctly mark
-    /// EntityState::lastHitByPlayer; defaults to false (the manual/test-hook use of
+    /// EntityState::deathSource (DeathSource::PlayerDot); defaults to false (the manual/test-hook use of
     /// this entry point is not, by itself, a player action).
     void ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params,
                    bool fromPlayer = false);
@@ -174,7 +174,7 @@ private:
     /// P3.3.b: C04's melee sword cut -- deals @p damage to every live enemy/boss
     /// within kMeleeCutReachPx of the player and inside the kMeleeCutHalfAngleDeg
     /// forward arc of the current aim direction (see SimConfig.hpp T-36). Marks
-    /// lastHitByPlayer on every entity hit (Cull's kill-attribution) and emits a
+    /// EntityState::deathSource (DeathSource::PlayerCut) on every entity hit (Cull's kill-attribution) and emits a
     /// "hurt" AnimTrigger per landed cut, same shape as a bullet hit.
     void ApplyMeleeCut(int damage);
     static EntityView ViewOf(const EntityState &s, std::uint32_t id);
@@ -202,18 +202,31 @@ private:
     /// ICharSkill::RoleAtkMelee (C04's cut damage = atk + 3/7). Set by
     /// SetPlayerSkill; 0 for callers that omit it (no atk-driven skill effect).
     int m_PlayerAtk = 0;
-    /// R18/item-1: the skill button's PER-FIXED-STEP edge latch. WorldInputs::skill
+    /// R18/item-1 (+ R19 zero-substep fix, see Advance()): the raw WorldInputs::skill
+    /// level observed by the PREVIOUS Advance() call, updated on EVERY Advance()
+    /// regardless of how many fixed Step()s that call actually ran. WorldInputs::skill
     /// is a raw held-key level from the shell (GameScene passes IsKeyDown straight
-    /// through -- NOT edge-detected there), and one Advance(dtMs) call can run
-    /// MULTIPLE fixed Step()s with m_Input held constant (dtMs > kFixedStepMs, e.g.
-    /// a 40ms frame == 2 steps at 20ms). Without this latch TickSkill() would call
-    /// TryTrigger() on EVERY such sub-step while the button stays down, and for the
-    /// toggle heroes (C04/C08 -- TryTrigger() treats a 2nd call while already
-    /// InSkill() as the close-toggle) the very first held press would activate on
-    /// sub-step 1 then immediately toggle itself off on sub-step 2 of the SAME
-    /// frame. Tracked here (not in WorldInputs) because it must survive across
-    /// Advance() calls too, at fixed-step granularity, not per-call granularity.
+    /// through -- NOT edge-detected there); this is compared against the new level at
+    /// the TOP of Advance() to detect a false->true press-edge at CALL granularity
+    /// (not fixed-step granularity -- see m_SkillPressPending), so a press is never
+    /// missed even when its Advance() call happens to run zero fixed Step()s.
     bool m_SkillHeldPrev = false;
+    /// R19/item-1 fix: the skill button's press-edge latch. Set in Advance() (see
+    /// above) the instant a false->true edge on the raw input is observed, and held
+    /// SET until a fixed Step()'s TickSkill() actually consumes it (calls
+    /// TryTrigger() exactly once and clears it). This decouples "a press happened"
+    /// from "a fixed Step() ran to notice it": IsKeyDown (PTSD/src/Util/Input.cpp) is
+    /// a single-frame pulse, and Simulation::Advance(dtMs) can run ZERO fixed
+    /// sub-steps for a short dt (m_Clock accumulates dtMs and only emits a Step()
+    /// once the accumulator crosses kFixedStepMs) -- with edge detection living
+    /// in TickSkill() alone, a press occurring during such a zero-step Advance()
+    /// would be silently overwritten by the NEXT Advance() call before any Step()
+    /// ever observed skill=true, dropping the press entirely. Latching the edge here
+    /// (at Advance()-call granularity) instead of inside TickSkill() (fixed-step
+    /// granularity) fixes that while preserving the existing "held across many
+    /// sub-steps/Advance() calls counts once" behaviour, since the latch is only
+    /// ever (re)armed on a genuine false->true transition of the raw input.
+    bool m_SkillPressPending = false;
 
     Game::CombatStats m_PlayerStats{};
     // --- P3.1: player buff state (the sim does not own the player's position, so

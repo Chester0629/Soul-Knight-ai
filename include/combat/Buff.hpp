@@ -81,7 +81,7 @@ struct ActiveBuff {
     /// item 5 (R18/Codex block, kill-attribution): true iff this buff instance was
     /// applied as the result of a PLAYER-sourced hit (a player bullet's on-hit buff
     /// trigger). Sim-side bookkeeping, NOT decompile state -- carried so a later
-    /// DoT tick from this buff can correctly mark/unmark EntityState::lastHitByPlayer
+    /// DoT tick from this buff can correctly attribute EntityState::deathSource
     /// ("last damage source was the player", not "was ever hit by the player").
     bool fromPlayer = false;
 };
@@ -103,17 +103,29 @@ public:
     /// still-active Armor buffs, and which kinds expired THIS step (for the
     /// "Buff: <kind> ended" log line).
     struct TickResult {
+        /// Total DoT damage this tick, from EVERY source combined (== damageFromPlayer
+        /// + damageFromOther). Kept for callers that don't care about attribution
+        /// (e.g. BuffTest.cpp, the player-DoT path in Simulation::TickBuffs).
         int damage = 0;
         float speedMul = 1.0F;
         bool frozen = false;
         int armorDelta = 0;
         std::vector<BuffKind> ended;
-        /// item 5: true iff at least one buff that contributed to `damage` this tick
-        /// was applied by a player-sourced hit (ActiveBuff::fromPlayer). false when
-        /// damage == 0 (nothing to attribute) or every contributing buff was
-        /// non-player-sourced. Simulation::TickBuffs uses this to set/clear
-        /// EntityState::lastHitByPlayer on a DoT tick, same as a direct hit would.
-        bool damageFromPlayer = false;
+        /// item 2 (R19 kill-attribution fix): `damage` broken out PER SOURCE, so a
+        /// caller that needs to know exactly which tick killed an entity
+        /// (Simulation::TickBuffs) can apply the two portions as SEPARATE damage
+        /// events instead of one merged one. Pre-fix, a single player fire DoT and a
+        /// single non-player poison DoT ticking the SAME step merged into one
+        /// HitResult with a bool "was any contributing source the player" flag --
+        /// so an enemy killed by the non-player tick could still fire
+        /// ICharSkill::OnEnemyKilled() just because a player DoT happened to also be
+        /// active that step. Documented attribution rule (Simulation::TickBuffs):
+        /// apply damageFromOther FIRST, then damageFromPlayer, skipping the 2nd
+        /// portion once the entity is already dead from the 1st -- so
+        /// EntityState::deathSource reflects whichever portion actually crossed
+        /// hp<=0, not merely "was a player-sourced buff active this tick".
+        int damageFromPlayer = 0;
+        int damageFromOther = 0;
     };
 
     /// Apply (or refresh) a buff. Reapplying the same kind resets remainingSec to

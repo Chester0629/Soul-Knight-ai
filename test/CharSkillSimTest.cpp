@@ -46,6 +46,14 @@ Game::EnemyDef WeakEnemy() {
     return def;
 }
 
+// item 2 (R19 kill-attribution fix): WeakEnemy() with an overridden maxHp, for
+// tests that need to control EXACTLY which DoT tick crosses hp<=0.
+Game::EnemyDef EnemyWithHp(int hp) {
+    Game::EnemyDef def = WeakEnemy();
+    def.maxHp = hp;
+    return def;
+}
+
 bool HasEvent(Simulation &sim, SimEventType type, std::uint32_t entityId,
              const std::string &name) {
     for (const SimEvent &e : sim.DrainEvents()) {
@@ -369,6 +377,80 @@ TEST(CharSkillSimTest, SkillSecondDistinctPressEndsToggleTypeSkillAfterARelease)
 }
 
 // ===================================================================
+// R19 fix: a press-edge occurring during an Advance() call that runs ZERO fixed
+// Step()s (dtMs < kFixedStepMs, e.g. a 10ms frame with kFixedStepMs=20) must NOT be
+// lost. Pre-fix, edge detection lived inside TickSkill() (i.e. only ran when Step()
+// ran); m_Clock.Advance(10) returns 0 steps, so TickSkill() never saw skill=true --
+// and the VERY NEXT Advance() call overwrote m_Input with a different level before
+// any Step() ever got a chance to look at it, silently dropping the press. The fix
+// (Simulation::Advance) latches the edge at CALL granularity into
+// m_SkillPressPending, independent of whether that call runs any Step()s, so a
+// later Advance() call's fixed Step() still consumes it.
+// ===================================================================
+
+TEST(CharSkillSimTest, SkillPressSurvivesAnAdvanceCallWithZeroFixedSubSteps) {
+    Simulation sim(77, &g_NullWorld);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs press = Idle();
+    press.skill = true;
+    // 10ms < kFixedStepMs(20ms): m_Clock's accumulator does not cross a fixed-step
+    // boundary yet, so this call runs ZERO Step()s -- TickSkill() never executes.
+    const int steps1 = sim.Advance(10.0F, press);
+    ASSERT_EQ(steps1, 0) << "test assumes a 10ms dt yields zero fixed sub-steps";
+    ASSERT_FALSE(sim.PlayerSkill()->InSkill())
+        << "no Step() ran yet, so the skill cannot have activated yet";
+
+    // Release the button; accumulator now crosses 20ms -> exactly 1 fixed Step()
+    // runs THIS call, and that Step() must still see (and consume) the press-edge
+    // latched by the PREVIOUS Advance() call, even though m_Input.skill is false by
+    // the time this Step() actually executes.
+    WorldInputs release = Idle();
+    release.skill = false;
+    const int steps2 = sim.Advance(10.0F, release);
+    ASSERT_EQ(steps2, 1) << "test assumes the 2nd 10ms dt crosses the 20ms boundary";
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill())
+        << "the press from the zero-step Advance() call must not be dropped -- it "
+           "must activate on the first fixed Step() that gets a chance to run, one "
+           "activation exactly";
+}
+
+TEST(CharSkillSimTest, SkillHeldFor100msActivatesExactlyOnce) {
+    Simulation sim(78, &g_NullWorld);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs held = Idle();
+    held.skill = true;
+    // 100ms / 20ms == 5 fixed sub-steps, all with the SAME held input, in ONE
+    // Advance() call.
+    const int steps = sim.Advance(100.0F, held);
+    ASSERT_EQ(steps, 5);
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill())
+        << "holding the button for 100ms (5 sub-steps) must activate exactly once, "
+           "not toggle itself back off on a later sub-step";
+}
+
+TEST(CharSkillSimTest, SkillTwoPulsesSeparatedByAReleaseEndsToggleTypeSkill) {
+    Simulation sim(79, &g_NullWorld);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs press = Idle();
+    press.skill = true;
+    WorldInputs release = Idle();
+    release.skill = false;
+
+    sim.Advance(kFixedStepMs, press); // pulse 1: activates the toggle.
+    sim.Advance(kFixedStepMs, release); // release between pulses.
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill())
+        << "release alone (no 2nd press yet) must not end the toggle";
+
+    sim.Advance(kFixedStepMs, press); // pulse 2: a genuine distinct press.
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill())
+        << "two pulses separated by a release must end a toggle-type skill on the "
+           "2nd pulse";
+}
+
+// ===================================================================
 // item 2 (R18/Codex block, T-37): C04's toggle-close (EndSkill via a 2nd press)
 // must not silently wipe a cooldown KillSomeOne already refreshed, and no cut may
 // survive past the end regardless of whether a kill ever closed the window.
@@ -558,6 +640,173 @@ TEST(CharSkillSimTest, KillAttributionPlayerSourcedBuffDotCallsOnEnemyKilled) {
     EXPECT_FALSE(sim.EnemyViews()[0].alive);
     EXPECT_EQ(adapter->Brain().Combo(), 1) << "a player-sourced buff DoT kill DOES call OnEnemyKilled";
     EXPECT_FALSE(adapter->Brain().InSkillEffect()) << "KillSomeOne closes the cut window on a real kill";
+}
+
+// ===================================================================
+// item 2 (R19 kill-attribution fix): TWO DoT sources ticking the SAME step must be
+// attributed to whichever one ACTUALLY crosses hp<=0, not "was any contributing
+// source the player" (the R18 merged-TickResult bug -- see Combat::BuffList::
+// TickResult and Simulation::TickBuffs). Documented rule: the non-player portion
+// is applied FIRST, then the player portion (skipped if the entity is already
+// dead from the 1st).
+// ===================================================================
+
+// Enemy hp=1: the non-player poison portion (applied first) alone kills it, so the
+// player fire portion is never applied -- OnEnemyKilled must NOT fire.
+TEST(CharSkillSimTest, KillAttributionMixedDotsDyingOnNonPlayerTickDoesNotCallOnEnemyKilled) {
+    Simulation sim(84, &g_NullWorld);
+    sim.AddEnemy(EnemyWithHp(1), glm::vec2{500.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    Game::Combat::BuffParams fire; // player-sourced.
+    fire.kind = Game::Combat::BuffKind::Fire;
+    fire.durationSec = 1.0F;
+    fire.tickSec = 0.02F; // one fixed step.
+    fire.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, fire, /*fromPlayer=*/true);
+
+    Game::Combat::BuffParams poison; // NOT player-sourced.
+    poison.kind = Game::Combat::BuffKind::Poison;
+    poison.durationSec = 1.0F;
+    poison.tickSec = 0.02F;
+    poison.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, poison, /*fromPlayer=*/false);
+
+    sim.Advance(kFixedStepMs, Idle()); // both ticks fire this step; hp=1 dies on poison.
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "the enemy died from the non-player poison tick (applied first, hp=1) -- "
+           "the player fire tick was never applied, so this must NOT be attributed "
+           "to the player";
+    EXPECT_TRUE(adapter->Brain().InSkillEffect())
+        << "the cut window is untouched by a kill never attributed to the player";
+}
+
+// Enemy hp=2: the non-player poison portion (applied first) only brings it to 1,
+// so the player fire portion (applied second) is the one that actually kills it --
+// OnEnemyKilled MUST fire.
+TEST(CharSkillSimTest, KillAttributionMixedDotsDyingOnPlayerTickCallsOnEnemyKilled) {
+    Simulation sim(85, &g_NullWorld);
+    sim.AddEnemy(EnemyWithHp(2), glm::vec2{500.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    Game::Combat::BuffParams fire; // player-sourced.
+    fire.kind = Game::Combat::BuffKind::Fire;
+    fire.durationSec = 1.0F;
+    fire.tickSec = 0.02F;
+    fire.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, fire, /*fromPlayer=*/true);
+
+    Game::Combat::BuffParams poison; // NOT player-sourced.
+    poison.kind = Game::Combat::BuffKind::Poison;
+    poison.durationSec = 1.0F;
+    poison.tickSec = 0.02F;
+    poison.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, poison, /*fromPlayer=*/false);
+
+    sim.Advance(kFixedStepMs, Idle()); // both ticks fire this step; hp=2 dies on fire.
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 1)
+        << "the poison tick (applied first) only brought hp to 1 -- the fire tick "
+           "(applied second) is the one that actually crossed hp<=0, so this MUST "
+           "be attributed to the player";
+    EXPECT_FALSE(adapter->Brain().InSkillEffect())
+        << "KillSomeOne closes the cut window on a real kill";
+}
+
+// ===================================================================
+// item 2 (R19 kill-attribution fix): a forced death (KillAllHostiles) must set an
+// IMMUTABLE EntityState::DeathSource::Forced so a player hit/DoT tick that lands
+// BEFORE the next Cull() (KillAllHostiles zeroes hp but does not set `dead` --
+// only Cull() does) cannot re-attribute the death to the player. Regression
+// covers: a player bullet already hit the enemy (would-be PlayerBullet source)
+// AND a player DoT is still pending when the forced kill happens; the pending
+// tick fires on the very next Advance(), in the SAME step Cull() runs -- pre-fix,
+// that tick would overwrite deathSource back to a player source before Cull read it.
+// ===================================================================
+
+TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAPendingPlayerHitAndDot) {
+    Simulation sim(86, &g_NullWorld);
+    sim.AddEnemy(EnemyWithHp(1000), glm::vec2{20.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    Game::WeaponDef wdef{};
+    wdef.bulletSpeed = 1000.0F; // fast enough to land the same step it is fired.
+    wdef.atk = 1;               // 1 dmg: nowhere near lethal on a 1000-hp enemy.
+    sim.EquipWeapon(wdef, "Gun001", 7);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+
+    // A non-lethal player bullet hit -- would (pre-fix) leave a "last hit by
+    // player" trace the forced kill below must not inherit.
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    sim.Advance(kFixedStepMs, fire);
+    ASSERT_TRUE(sim.EnemyViews()[0].alive) << "1 dmg on a 1000-hp enemy must not kill it";
+
+    // A player-sourced DoT still pending -- its tick has not fired yet.
+    Game::Combat::BuffParams fireDot;
+    fireDot.kind = Game::Combat::BuffKind::Fire;
+    fireDot.durationSec = 1.0F;
+    fireDot.tickSec = 0.02F; // fires on the VERY NEXT fixed step.
+    fireDot.tickDamage = 1;
+    sim.ApplyBuff(/*entityId=*/0, fireDot, /*fromPlayer=*/true);
+
+    sim.KillAllHostiles(); // forces hp=0 NOW; entity is not yet `dead` (Cull hasn't run).
+    // The pending fire DoT tick fires THIS step (TickBuffs runs before Cull in
+    // Step()), then Cull() processes the forced death in the SAME Advance() call.
+    sim.Advance(kFixedStepMs, Idle());
+
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "KillAllHostiles must lock out BOTH the earlier player bullet hit and "
+           "the pending player DoT tick -- OnEnemyKilled must not fire for a "
+           "forced kill";
+}
+
+// Directly exercises the IMMUTABILITY of DeathSource::Forced (not just the
+// damage-already-applied guard the DoT test above also happens to trip): a player
+// melee cut lands on the entity in the SAME step as Cull(), AFTER KillAllHostiles
+// already forced its hp to 0 -- ApplyMeleeCut only gates on the `dead` FLAG (set
+// by Cull, not yet true), not on stats.IsDead(), so pre-fix this cut would call
+// EntityState::SetDeathSource(PlayerCut) and misattribute the kill.
+TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutASameStepPlayerCut) {
+    Simulation sim(87, &g_NullWorld);
+    sim.AddEnemy(EnemyWithHp(1000), glm::vec2{20.0F, 0.0F}, /*roomId=*/0, /*seed=*/1); // in cut reach.
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast); // open the cut window.
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    sim.KillAllHostiles(); // forces hp=0 NOW; entity is not yet `dead` (Cull hasn't run).
+
+    // Same step: TickWeapon (-> ApplyMeleeCut, gates ONLY on the `dead` flag, still
+    // false) runs BEFORE Cull() -- the cut lands on the already-forced-dead entity.
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    sim.Advance(kFixedStepMs, fire);
+
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "a player cut landing AFTER KillAllHostiles but BEFORE the next Cull() "
+           "must not re-attribute a forced death to the player";
 }
 
 // NOLINTEND(readability-magic-numbers)

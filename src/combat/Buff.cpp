@@ -60,8 +60,15 @@ BuffList::TickResult BuffList::Tick(float dtSec) {
             while (b.tickAccum + kTickEpsilon >= b.p.tickSec) {
                 r.damage += b.p.tickDamage;
                 b.tickAccum -= b.p.tickSec;
-                if (b.p.tickDamage > 0 && b.fromPlayer) {
-                    r.damageFromPlayer = true; // item 5: this tick's damage is player-caused.
+                // item 2 (R19): split into the per-source totals too, so a caller
+                // that needs kill-attribution can apply the two portions as SEPARATE
+                // damage events (see TickResult::damageFromPlayer/damageFromOther).
+                if (b.p.tickDamage > 0) {
+                    if (b.fromPlayer) {
+                        r.damageFromPlayer += b.p.tickDamage;
+                    } else {
+                        r.damageFromOther += b.p.tickDamage;
+                    }
                 }
             }
         }

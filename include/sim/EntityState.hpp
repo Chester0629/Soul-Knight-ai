@@ -8,6 +8,31 @@
 
 namespace Game::Sim {
 
+/// item 2 (R19 kill-attribution fix): WHY this entity is currently dying, tracked
+/// as the source of the LAST damage-application event applied to it (None while
+/// alive/untouched) -- replaces the old plain-bool EntityState::lastHitByPlayer
+/// (R18/item 5), which could only say "was the player" and had no way to lock
+/// itself once a FORCED death (KillAllHostiles/SK_FORCE_KILL) happened. That gap
+/// mattered because KillAllHostiles zeroes hp immediately but does not mark the
+/// entity `dead` (only Simulation::Cull() does, the next time it runs) -- so a
+/// player-sourced DoT tick already in flight, or a stray player hit, landing in
+/// the window between the forced kill and the next Cull() would silently flip
+/// attribution back to the player. EntityState::SetDeathSource() is the ONLY
+/// writer every normal (non-forced) damage-application site should use: once
+/// `deathSource` is Forced it is IMMUTABLE (SetDeathSource becomes a no-op) for
+/// the rest of this entity's life; KillAllHostiles instead assigns `deathSource`
+/// directly (a forced kill always wins immediately, overwriting whatever came
+/// before). Cull() fires ICharSkill::OnEnemyKilled iff deathSource is
+/// PlayerBullet/PlayerCut/PlayerDot -- None, Other, and Forced never do.
+enum class DeathSource {
+    None,         ///< no damage applied yet, or nothing dying.
+    PlayerBullet, ///< a player bullet hit (Simulation::ResolveHits).
+    PlayerCut,    ///< C04's melee sword cut (Simulation::ApplyMeleeCut).
+    PlayerDot,    ///< a player-sourced buff's DoT tick (Simulation::TickBuffs).
+    Other,        ///< a non-player-sourced buff's DoT tick (Simulation::TickBuffs).
+    Forced,       ///< KillAllHostiles/SK_FORCE_KILL -- immutable once set.
+};
+
 /// Gameplay state a controller owns; the PTSD entity is a view onto it.
 struct EntityState {
     glm::vec2 pos{0.0F, 0.0F};
@@ -30,18 +55,19 @@ struct EntityState {
     /// Simulation::TickBuffs can revert exactly this much when the buff ends.
     int buffArmorGranted = 0;
 
-    /// item 5 (R18/Codex block): whether the LAST damage source applied to this
-    /// entity was the player -- NOT "was ever hit by the player" (the P3.3.b
-    /// original semantics). Set true by a player bullet hit (ResolveHits), a C04
-    /// melee cut (Simulation::ApplyMeleeCut), or a player-sourced buff's DoT tick
-    /// (TickBuffs, ActiveBuff::fromPlayer); set false by a non-player-sourced DoT
-    /// tick (TickBuffs) and unconditionally by a forced kill (KillAllHostiles /
-    /// SK_FORCE_KILL) so that a stale true from an earlier player hit cannot
-    /// misattribute a forced death. Cull() reads it (immediately before Kill(), so
-    /// a forced-kill's explicit clear above always wins) to decide whether to
-    /// attribute this death to the player -> ICharSkill::OnEnemyKilled (C04's
-    /// combo). Irrelevant once dead (never read again).
-    bool lastHitByPlayer = false;
+    /// item 2 (R19 kill-attribution fix, was item 5's `lastHitByPlayer` bool). See
+    /// the DeathSource enum doc above. Irrelevant once dead (never read again).
+    DeathSource deathSource = DeathSource::None;
+
+    /// The only normal (non-forced) writer of `deathSource`: a no-op once it is
+    /// already Forced (immutable), otherwise records @p src as the latest
+    /// damage-application source. KillAllHostiles bypasses this helper and assigns
+    /// `deathSource = DeathSource::Forced` directly.
+    void SetDeathSource(DeathSource src) {
+        if (deathSource != DeathSource::Forced) {
+            deathSource = src;
+        }
+    }
 };
 
 } // namespace Game::Sim
