@@ -3,12 +3,14 @@
 #include <glm/glm.hpp>
 
 #include "combat/CharSkillC04.hpp"
+#include "sim/CharSkillAdapters.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimEvent.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldCollision.hpp"
 #include "sim/WorldInputs.hpp"
 
+using Game::Sim::CharSkillC04Adapter;
 using Game::Sim::kFixedStepMs;
 using Game::Sim::Simulation;
 using Game::Sim::SimEvent;
@@ -196,6 +198,13 @@ TEST(CharSkillSimTest, C08ShieldAbsorbsHitsAndDoesNotTouchHpOrArmor) {
 // ===================================================================
 
 namespace {
+// item 4 (R18/Codex block): the enemy must survive PAST hit 6 so hits 4/5 (no
+// extra armor -- the counter just reset) and hit 6 (a 2nd full 3-hit cycle -> a
+// 2nd armor point) are all actually OBSERVED landed hits, not skipped because the
+// target died early. WeakEnemy's hp=3 died on/around hit 3, which is exactly why
+// the old version of this test never really exercised hits 4-6 -- it just counted
+// Advance() calls and hoped. This version counts real "hurt" AnimTrigger events
+// for entityId 0 and asserts armor immediately after EACH landed hit.
 void RunArmorRegenCase(const std::string &charId) {
     Simulation sim(charId == "c10" ? 1010 : 1013, &g_NullWorld);
     Game::CombatStats player;
@@ -204,10 +213,12 @@ void RunArmorRegenCase(const std::string &charId) {
     player.armor = 0; // start at 0 so a +1 restore is directly observable
     player.maxArmor = 5;
     sim.SetPlayerStats(player);
-    sim.AddEnemy(WeakEnemy(), glm::vec2{200.0F, 0.0F}, /*roomId=*/0, /*seed=*/3); // far: survives 3 hits
+    Game::EnemyDef durable = WeakEnemy();
+    durable.maxHp = 50; // item 4: survive well past the 6th landed hit (was 3 -> died at hit 3).
+    sim.AddEnemy(durable, glm::vec2{200.0F, 0.0F}, /*roomId=*/0, /*seed=*/3); // far: many hits needed to travel there.
     Game::WeaponDef wdef{};
     wdef.bulletSpeed = 40.0F; // fast: lands within a handful of steps
-    wdef.atk = 1;             // low: several hits needed before the enemy (hp 3) dies
+    wdef.atk = 1;             // low: 1 dmg/hit, needs 50 hits to kill -- plenty of headroom.
     sim.EquipWeapon(wdef, "Gun001", 77);
     sim.SetPlayerSkill(charId, /*skillCd=*/12.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
 
@@ -221,17 +232,29 @@ void RunArmorRegenCase(const std::string &charId) {
     WorldInputs fire = Idle();
     fire.firing = true;
     fire.aimDir = glm::vec2{1.0F, 0.0F};
-    for (int i = 0; i < 3000 && sim.PlayerStats().armor == 0; ++i) {
-        sim.Advance(kFixedStepMs, fire);
-    }
-    EXPECT_EQ(sim.PlayerStats().armor, 1) << charId << ": the 3rd landed hit restores exactly 1 armor";
 
-    // Keep firing: a 4th qualifying hit must NOT restore a 2nd point (the counter
-    // just reset to 0, so hits 4-5 are silent and only the 6th would fire again).
-    for (int i = 0; i < 5; ++i) {
+    int hits = 0;
+    int expectedArmor = 0;
+    for (int i = 0; i < 6000 && hits < 6; ++i) {
         sim.Advance(kFixedStepMs, fire);
+        for (const SimEvent &e : sim.DrainEvents()) {
+            if (e.type != SimEventType::AnimTrigger || e.entityId != 0U || e.name != "hurt") {
+                continue;
+            }
+            ++hits;
+            if (hits % 3 == 0) {
+                ++expectedArmor; // every 3rd qualifying hit -> +1 armor (kArmorRestoreEveryNthHit=3).
+            }
+            EXPECT_EQ(sim.PlayerStats().armor, expectedArmor)
+                << charId << ": armor immediately after landed hit #" << hits;
+        }
     }
-    EXPECT_EQ(sim.PlayerStats().armor, 1) << charId << ": no armor restore until the NEXT 3-hit cycle";
+    ASSERT_EQ(hits, 6) << charId << ": expected to observe 6 landed hits within the step budget";
+    // item 4: hits 4 and 5 were directly asserted above (expectedArmor stayed 1,
+    // the counter having just reset after hit 3); hit 6 closes a 2nd full 3-hit
+    // cycle and grants a 2nd armor point.
+    EXPECT_EQ(sim.PlayerStats().armor, 2)
+        << charId << ": two full 3-hit cycles (hits 3 and 6) -> 2 armor total";
 }
 } // namespace
 
@@ -286,6 +309,255 @@ TEST(CharSkillSimTest, C01StillMirrorsUnaffectedByOtherAdapterChanges) {
     EXPECT_TRUE(sim.PlayerSkill()->InSkill());
     EXPECT_EQ(sim.Bullets().size(), 1U);
     EXPECT_EQ(sim.PlayerShotsLastAdvance(), 1);
+}
+
+// ===================================================================
+// item 1 (R18/Codex block): the skill button must be edge-detected ONCE per
+// press, latched until release -- not re-triggered on every fixed sub-step of an
+// Advance() call that holds the same WorldInputs::skill across MULTIPLE steps
+// (dtMs > kFixedStepMs), and not re-triggered by a shell that simply forwards a
+// raw held-key level across consecutive Advance() calls (GameScene does exactly
+// that -- WorldInputs::skill is IsKeyDown, not edge-detected shell-side).
+// ===================================================================
+
+TEST(CharSkillSimTest, SkillEdgeDetectedWithinOneAdvanceMultipleFixedSubSteps) {
+    Simulation sim(71, &g_NullWorld);
+    sim.SetPlayerSkill("c08", /*skillCd=*/12.0F, /*inSkillTime=*/5.0F, /*atk=*/4);
+
+    WorldInputs held = Idle();
+    held.skill = true;
+    // 2 fixed sub-steps (40ms / 20ms), the SAME m_Input held across both.
+    sim.Advance(2.0F * kFixedStepMs, held);
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill())
+        << "a single held press spanning 2 fixed sub-steps of ONE Advance() must "
+           "activate exactly once, not toggle itself back off on the 2nd sub-step";
+}
+
+TEST(CharSkillSimTest, SkillEdgeDetectedAcrossConsecutiveAdvanceCallsWhileHeld) {
+    Simulation sim(72, &g_NullWorld);
+    sim.SetPlayerSkill("c08", /*skillCd=*/12.0F, /*inSkillTime=*/5.0F, /*atk=*/4);
+
+    WorldInputs held = Idle();
+    held.skill = true;
+    sim.Advance(kFixedStepMs, held); // press: activates.
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill());
+
+    for (int i = 0; i < 5; ++i) {
+        sim.Advance(kFixedStepMs, held); // held down across several MORE frames.
+    }
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill())
+        << "holding skill=true across several separate Advance() calls (the shell's "
+           "raw held-key level, never edge-detected there) must not retrigger the "
+           "toggle -- only the initial press-edge may activate";
+}
+
+TEST(CharSkillSimTest, SkillSecondDistinctPressEndsToggleTypeSkillAfterARelease) {
+    Simulation sim(73, &g_NullWorld);
+    sim.SetPlayerSkill("c08", /*skillCd=*/12.0F, /*inSkillTime=*/5.0F, /*atk=*/4);
+
+    WorldInputs held = Idle();
+    held.skill = true;
+    sim.Advance(kFixedStepMs, held); // press 1: activate.
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill());
+
+    sim.Advance(kFixedStepMs, Idle()); // release (skill=false).
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill()) << "a release alone must not end the skill";
+
+    sim.Advance(kFixedStepMs, held); // press 2: a genuine, distinct press (edge again).
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill())
+        << "a second DISTINCT press (release in between) ends a toggle-type skill";
+}
+
+// ===================================================================
+// item 2 (R18/Codex block, T-37): C04's toggle-close (EndSkill via a 2nd press)
+// must not silently wipe a cooldown KillSomeOne already refreshed, and no cut may
+// survive past the end regardless of whether a kill ever closed the window.
+// ===================================================================
+
+// Brain-level: hits/kills 1..6, asserting cooldown-progress after EACH kill AND
+// after the immediately-following toggle-close (EndSkill). skill_cd = 11.0
+// (characters.json c04). Every kill (win or wrap) leaves this_skill_time at
+// skill_cd going in (TryActivateSkill's own skill_ready gate guarantees it) --
+// the genuinely distinguishing signal per item 2 is that EndSkill() no longer
+// resets it to 0 after a NON-WRAP refresh (kills 1,2,3,4,6 here), so
+// re-activation needs no extra wait for those. The 5th kill is the one genuine
+// exception -- FAITHFUL: the wrap does NOT call ReflashSkillCd, so its
+// toggle-close DOES spend the cooldown normally and the loop fast-forwards a full
+// Tick(11000ms) there before continuing, same as the older
+// C04FifthKillWrapsComboBackToZero test above (which fast-forwards every
+// iteration, since it predates T-37 and never relies on the no-wait behaviour).
+TEST(CharSkillSimTest, C04SixKillSequenceCooldownProgressAndReactivationAfterRefresh) {
+    constexpr float kSkillCd = 11.0F; // characters.json c04 skill_cd
+    Game::CharSkillC04 c(kSkillCd);
+    for (int i = 1; i <= 6; ++i) {
+        ASSERT_TRUE(c.SkillReady()) << "kill " << i;
+        ASSERT_TRUE(c.TryActivateSkill()) << "kill " << i;
+        ASSERT_TRUE(c.InSkillEffect()) << "kill " << i;
+
+        EXPECT_TRUE(c.KillSomeOne()) << "kill " << i;
+        EXPECT_FALSE(c.InSkillEffect()) << "kill " << i << ": KillSomeOne always closes the window";
+        const int expectedCombo =
+            (i % Game::CharSkillC04::kComboWrap == 0) ? 0 : (i % Game::CharSkillC04::kComboWrap);
+        EXPECT_EQ(c.Combo(), expectedCombo) << "kill " << i;
+        // The 5th kill (of each 5-kill cycle) WRAPS the combo and does NOT refresh
+        // (kComboWrap == 5 -> combo 0 here, i.e. i == 5, 10, ...); every other kill
+        // refreshes. SkillReady() itself is trivially true right after EITHER
+        // (TryActivateSkill's own gate already required it going in, and a same-
+        // value ReflashSkillCd is a no-op write) -- RefreshedThisWindow() is the
+        // genuinely distinguishing T-37 signal, and it drives what EndSkill does
+        // next: preserve readiness after a refresh, spend it normally after a wrap.
+        const bool wrapped = (expectedCombo == 0);
+        EXPECT_EQ(c.RefreshedThisWindow(), !wrapped) << "kill " << i;
+        EXPECT_TRUE(c.SkillReady()) << "kill " << i;
+        EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F) << "kill " << i;
+
+        // The toggle-close (2nd skill-button press, modeled by EndSkill()) must NOT
+        // spend a just-refreshed cooldown a second time (T-37), and must leave no
+        // cut able to fire (in_skill_effect/has_cut both cleared unconditionally)
+        // -- but a WRAP kill (no refresh this window) still spends normally, same
+        // as C04EndSkillWithoutAKillSpendsCooldownNormally below.
+        c.EndSkill();
+        EXPECT_EQ(c.SkillReady(), !wrapped)
+            << "kill " << i << ": refresh preserved readiness (T-37), wrap spent it normally";
+        EXPECT_FLOAT_EQ(c.CooldownRemaining(), wrapped ? kSkillCd : 0.0F) << "kill " << i;
+        EXPECT_FALSE(c.InSkillEffect()) << "kill " << i << ": no cut can survive the end";
+        EXPECT_FALSE(c.HasCut()) << "kill " << i;
+        EXPECT_FALSE(c.InSkill()) << "kill " << i;
+
+        if (wrapped) {
+            c.Tick(kSkillCd * 1000.0F); // a genuine wrap DOES require a full wait -- see FifthKill...
+            ASSERT_TRUE(c.SkillReady()) << "kill " << i;
+        }
+    }
+}
+
+// Contrast case: a toggle-close with NO kill in the window spends the cooldown
+// normally (this_skill_time -> 0), exactly like the decompiled ReSetSkillReload --
+// T-37's "skip the reset" carve-out applies ONLY when a kill actually refreshed.
+TEST(CharSkillSimTest, C04EndSkillWithoutAKillSpendsCooldownNormally) {
+    constexpr float kSkillCd = 11.0F;
+    Game::CharSkillC04 c(kSkillCd);
+    ASSERT_TRUE(c.TryActivateSkill());
+    c.EndSkill(); // toggle-close, no kill happened.
+    EXPECT_FALSE(c.SkillReady());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), kSkillCd);
+    EXPECT_FALSE(c.InSkillEffect());
+    EXPECT_FALSE(c.HasCut());
+}
+
+// Sim-level: activate, release, press again (toggle-close) with NO kill in between
+// -- the normal ranged shot must resume afterward (no lingering cut window).
+TEST(CharSkillSimTest, C04NoCutAfterToggleEndEvenWithoutAKill) {
+    Simulation sim(74, &g_NullWorld);
+    Game::WeaponDef wdef{};
+    wdef.bulletSpeed = 10.0F;
+    wdef.atk = 1;
+    sim.EquipWeapon(wdef, "Gun001", 7);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast); // activate only (no fire this step).
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill());
+
+    sim.Advance(kFixedStepMs, Idle()); // release the skill button.
+    WorldInputs endCast = Idle();
+    endCast.skill = true;
+    sim.Advance(kFixedStepMs, endCast); // 2nd press: toggle-close, no kill happened.
+    ASSERT_FALSE(sim.PlayerSkill()->InSkill());
+
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    sim.Advance(kFixedStepMs, fire); // fire AFTER the end -- must be a normal shot.
+    EXPECT_EQ(sim.Bullets().size(), 1U)
+        << "no cut can survive the end -- normal ranged fire resumed";
+}
+
+// ===================================================================
+// item 5 (R18/Codex block): EntityState::lastHitByPlayer is the LAST damage
+// source, not "ever hit by the player" -- and a forced clear (KillAllHostiles /
+// SK_FORCE_KILL) must never be attributed to the player. Observed indirectly via
+// C04's Combo()/InSkillEffect() (CharSkillBase::Brain(), a test-only backdoor --
+// see ICharSkill.hpp), since ICharSkill has no OnEnemyKilled call-count of its
+// own: KillSomeOne only advances combo / closes the window when Simulation::Cull
+// actually calls ICharSkill::OnEnemyKilled, which happens iff the dying entity's
+// lastHitByPlayer was true. The POSITIVE case (a genuine player cut-kill DOES call
+// OnEnemyKilled -> refreshes the cooldown) is already covered by
+// C04CutKillsEnemyInReachAndRefreshesCooldownOnNonWrapKill above; these add the
+// NEGATIVE cases.
+// ===================================================================
+
+TEST(CharSkillSimTest, KillAttributionForcedKillDoesNotCallOnEnemyKilled) {
+    Simulation sim(81, &g_NullWorld);
+    sim.AddEnemy(WeakEnemy(), glm::vec2{500.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast); // open the cut window.
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    sim.KillAllHostiles(); // SK_FORCE_KILL test hook -- NOT a player action.
+    sim.Advance(kFixedStepMs, Idle()); // Cull() processes the forced death this step.
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "KillAllHostiles/SK_FORCE_KILL must not call ICharSkill::OnEnemyKilled";
+    EXPECT_TRUE(adapter->Brain().InSkillEffect())
+        << "a forced kill must not close the cut window either (KillSomeOne never fires)";
+}
+
+TEST(CharSkillSimTest, KillAttributionNonPlayerBuffDotDoesNotCallOnEnemyKilled) {
+    Simulation sim(82, &g_NullWorld);
+    sim.AddEnemy(WeakEnemy(), glm::vec2{500.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    Game::Combat::BuffParams fire;
+    fire.kind = Game::Combat::BuffKind::Fire;
+    fire.durationSec = 1.0F;
+    fire.tickSec = 0.02F; // one fixed step.
+    fire.tickDamage = 50; // overkill on the first tick (WeakEnemy hp=3).
+    sim.ApplyBuff(/*entityId=*/0, fire, /*fromPlayer=*/false); // NOT player-sourced.
+
+    sim.Advance(kFixedStepMs, Idle()); // the DoT tick kills the enemy this step.
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "a non-player-sourced buff DoT kill must NOT call OnEnemyKilled";
+    EXPECT_TRUE(adapter->Brain().InSkillEffect())
+        << "the cut window is untouched by a kill never attributed to the player";
+}
+
+TEST(CharSkillSimTest, KillAttributionPlayerSourcedBuffDotCallsOnEnemyKilled) {
+    Simulation sim(83, &g_NullWorld);
+    sim.AddEnemy(WeakEnemy(), glm::vec2{500.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
+
+    Game::Combat::BuffParams fire;
+    fire.kind = Game::Combat::BuffKind::Fire;
+    fire.durationSec = 1.0F;
+    fire.tickSec = 0.02F;
+    fire.tickDamage = 50;
+    sim.ApplyBuff(/*entityId=*/0, fire, /*fromPlayer=*/true); // player-sourced (e.g. a bullet's buff).
+
+    sim.Advance(kFixedStepMs, Idle());
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 1) << "a player-sourced buff DoT kill DOES call OnEnemyKilled";
+    EXPECT_FALSE(adapter->Brain().InSkillEffect()) << "KillSomeOne closes the cut window on a real kill";
 }
 
 // NOLINTEND(readability-magic-numbers)

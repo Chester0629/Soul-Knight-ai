@@ -67,10 +67,16 @@ CharSkillC08::HurtDecision CharSkillC08::GetHurt(int damage, bool awake) {
         return d; // all-false: no absorption, no base call, no process effect
     }
 
-    // 156984: shield_value(this+0x90) -= damage. The raised shield eats the hit; the
-    // normal HP/armor pipeline is bypassed entirely. No clamp-to-zero is modeled
-    // because the decomp does a bare subtraction (see fabrication_flags
-    // CharSkillC08-CD04).
+    // 156984 (re-confirmed game_typed.c:2231-2261, C08Controller$$GetHurt @
+    // 002674c0): shield_value(this+0x90) -= damage, an UNCONDITIONAL subtraction --
+    // no floor/clamp-to-zero check and no branch that spills leftover damage to
+    // HP/armor once shield_value would go negative. T-37b (item 3, R18/Codex
+    // block): this is the VISIBLE decompiled behaviour, not an inference -- the
+    // shield keeps absorbing (and can go negative) for as long as in_skill stays
+    // true; the normal HP/armor pipeline is bypassed entirely on every hit taken
+    // while the ultimate is up, regardless of how depleted the shield already is.
+    // absorbedByShield is therefore unconditionally true on this path (full absorb,
+    // never a partial spill), matching the bare subtraction exactly.
     m_ShieldValue -= damage;
     d.absorbedByShield = true;
 

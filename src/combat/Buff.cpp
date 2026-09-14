@@ -15,7 +15,7 @@ const char *BuffKindName(BuffKind kind) {
     return "Unknown";
 }
 
-void BuffList::Apply(const BuffParams &params) {
+void BuffList::Apply(const BuffParams &params, bool fromPlayer) {
     // INFERRED (T-32): reapplying the same kind refreshes remainingSec (does not
     // stack a second concurrent instance).
     for (ActiveBuff &b : m_Active) {
@@ -23,6 +23,7 @@ void BuffList::Apply(const BuffParams &params) {
             b.p = params;
             b.remainingSec = params.durationSec;
             b.tickAccum = 0.0F;
+            b.fromPlayer = fromPlayer; // item 5: a reapply's source replaces the old one.
             return;
         }
     }
@@ -30,6 +31,7 @@ void BuffList::Apply(const BuffParams &params) {
     fresh.p = params;
     fresh.remainingSec = params.durationSec;
     fresh.tickAccum = 0.0F;
+    fresh.fromPlayer = fromPlayer;
     m_Active.push_back(fresh);
 }
 
@@ -58,6 +60,9 @@ BuffList::TickResult BuffList::Tick(float dtSec) {
             while (b.tickAccum + kTickEpsilon >= b.p.tickSec) {
                 r.damage += b.p.tickDamage;
                 b.tickAccum -= b.p.tickSec;
+                if (b.p.tickDamage > 0 && b.fromPlayer) {
+                    r.damageFromPlayer = true; // item 5: this tick's damage is player-caused.
+                }
             }
         }
 

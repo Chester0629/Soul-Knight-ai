@@ -221,7 +221,14 @@ public:
     float SkillCd() const { return m_SkillCd; }
 
     /// @return current shield_value (this+0x90); decremented by GetHurt while in_skill.
-    /// FABRICATED-PATTERN NOTE: no regen/clamp is modeled (see CharSkillC08-CD04).
+    /// T-37b (item 3, R18/Codex block): CAN go negative -- game_typed.c:2231-2261
+    /// (C08Controller$$GetHurt @ 002674c0) shows shield_value -= damage as an
+    /// UNCONDITIONAL subtraction with no floor/clamp and no spill-to-HP branch once
+    /// depleted, so this is the VISIBLE decompiled behaviour (not inferred): the
+    /// shield keeps fully absorbing every hit for as long as in_skill stays true, no
+    /// matter how negative shield_value already is. No regen is modeled either (see
+    /// CharSkillC08-CD04) -- shield_value is only ever set (ctor) and decremented
+    /// (GetHurt) in the recovered bodies.
     int ShieldValue() const { return m_ShieldValue; }
 
     RGRandom &Rng() { return m_Rng; }

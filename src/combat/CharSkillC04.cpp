@@ -38,26 +38,44 @@ bool CharSkillC04::TryActivateSkill() {
     m_InSkill = true;       // RECONSTRUCTED: not written by the RoleSkill head.
     m_InSkillEffect = true; // RECONSTRUCTED: window open lives in the owner tail.
     m_HasCut = false;       // RECONSTRUCTED: clean latch for the new window.
+    m_RefreshedThisWindow = false; // T-37: fresh window, no kill-refresh yet.
     return true;
 }
 
-// FAITHFUL (fixed by audit against game_typed.c, fully recovered, non-tail-call
-// body): C04Controller__RoleSkillEnd @ game_typed.c:1214-1263. The earlier
-// game_full.c-based comment here claimed this body was NOT recovered and that
-// has_cut was left untouched by RoleSkillEnd; game_typed.c shows the head is
+// FAITHFUL (base, fixed by audit against game_typed.c, fully recovered,
+// non-tail-call body): C04Controller__RoleSkillEnd @ game_typed.c:1214-1263. The
+// earlier game_full.c-based comment here claimed this body was NOT recovered and
+// that has_cut was left untouched by RoleSkillEnd; game_typed.c shows the head is
 // fully visible and writes BOTH flags before the ReSetSkillReload call:
 //   in_skill = false; has_cut = false; role_attribute.ReSetSkillReload();
 // (the remaining tail -- get_skill_ready + shadow_lock sprite recolor -- is a
-// pure owner/visual concern, not modeled). this_skill_time = 0 models
-// ReSetSkillReload(). The sword-effect window itself (in_skill_effect) is left
-// alone -- it closes via KillSomeOne / EndSkillEffect, not RoleSkillEnd.
+// pure owner/visual concern, not modeled).
+//
+// PORT CHOICE (T-37, see the header doc on EndSkill() for the full reasoning): the
+// decomp shows NO call site for RoleSkillEnd on C04 (no Invoke/timer references it,
+// unlike C01/C10/C13's in_skill_time auto-end), so the real end trigger is not
+// recoverable. The adapter uses a 2nd skill-button press as the end trigger; to
+// keep that from silently erasing a cooldown KillSomeOne just refreshed
+// (ReflashSkillCd), this_skill_time is reset to 0 ONLY when no kill has refreshed
+// the window since it opened (!m_RefreshedThisWindow). Also clears in_skill_effect
+// here (NOT faithful to the decomp's own RoleSkillEnd, which never touches it) so
+// "no cut happens after the end" holds even when EndSkill fires before any kill
+// closes the window -- see the header doc for why this is a safe superset of the
+// decomp's own EndSkillEffect clear, not a contradiction of it.
 void CharSkillC04::EndSkill() {
     if (!m_InSkill) {
         return;
     }
     m_InSkill = false;
-    m_HasCut = false;        // FAITHFUL: RoleSkillEnd clears has_cut (this+0x95).
-    m_ThisSkillTime = 0.0F; // ReSetSkillReload(): restart the cooldown
+    m_HasCut = false;         // FAITHFUL: RoleSkillEnd clears has_cut (this+0x95).
+    m_InSkillEffect = false;  // PORT CHOICE (T-37): no cut can survive the end.
+    if (!m_RefreshedThisWindow) {
+        m_ThisSkillTime = 0.0F; // ReSetSkillReload(): restart the cooldown
+    }
+    // else: a kill already refreshed (or wrap-preserved) the cooldown this window
+    // -- PORT CHOICE (T-37): leave this_skill_time exactly where the refresh left
+    // it instead of spending it a second time.
+    m_RefreshedThisWindow = false;
 }
 
 // FAITHFUL: C04Controller__RoleAtk @ game_full.c:156423. Branch order preserved:
@@ -131,6 +149,7 @@ bool CharSkillC04::KillSomeOne() {
         // ReflashSkillCd(): this_skill_time = skill_cd -> ready immediately again.
         // (UpdateShadowLock @ 156520 is owner-side; the UI reflash is too.)
         m_ThisSkillTime = m_SkillCd;
+        m_RefreshedThisWindow = true; // T-37: EndSkill must not wipe this refresh.
     }
 
     // 156522-156523: CancelInvoke("...") + EndSkillEffect(). EndSkillEffect is

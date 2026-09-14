@@ -85,14 +85,20 @@ TEST(CharSkillC04Test, EndSkillClearsHasCut) {
     EXPECT_FALSE(c.InSkill());
 }
 
-TEST(CharSkillC04Test, EndSkillDoesNotCloseEffectWindow) {
-    // RoleSkillEnd does not touch in_skill_effect (that closes via a kill); only
-    // in_skill + cooldown change.
+TEST(CharSkillC04Test, EndSkillClosesEffectWindow) {
+    // PORT CHOICE (T-37, item 2/R18-Codex block; see EndSkill()'s doc comment):
+    // the decompiled RoleSkillEnd itself does NOT touch in_skill_effect (that is
+    // normally closed only via a kill / EndSkillEffect) -- but this port's chosen
+    // end trigger (a 2nd skill-button press) can fire BEFORE any kill ever closes
+    // the window, so EndSkill() now ALSO clears in_skill_effect (and has_cut)
+    // unconditionally, so no cut can survive past the end.
     CharSkillC04 c(5.0F);
     c.TryActivateSkill();
     EXPECT_TRUE(c.InSkillEffect());
     c.EndSkill();
-    EXPECT_TRUE(c.InSkillEffect());      // window still open after RoleSkillEnd
+    EXPECT_FALSE(c.InSkillEffect())      // window closed by EndSkill (T-37 port choice)
+        << "no cut may survive the end, even when no kill ever closed the window";
+    EXPECT_FALSE(c.HasCut());
 }
 
 // ---- Cooldown (reused PlayerDash/C01 count-up; flagged) ------------------------
@@ -239,38 +245,58 @@ TEST(CharSkillC04Test, KillOutsideEffectWindowIsNoOp) {
 TEST(CharSkillC04Test, KillInWindowRefreshesCooldownAndClosesWindow) {
     CharSkillC04 c(5.0F);
     c.TryActivateSkill();
-    c.EndSkill();                         // spend -> on cooldown, this_skill_time=0
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_TRUE(c.InSkillEffect());       // window still open after EndSkill
-    EXPECT_TRUE(c.KillSomeOne());         // in-window kill (combo 1, not 5th)
+    EXPECT_TRUE(c.InSkillEffect());
+    EXPECT_FALSE(c.RefreshedThisWindow()); // T-37: fresh window, no kill-refresh yet.
+    EXPECT_TRUE(c.KillSomeOne());          // in-window kill (combo 1, not 5th)
     EXPECT_EQ(c.Combo(), 1);
-    EXPECT_TRUE(c.SkillReady());          // ReflashSkillCd -> instantly ready again
-    EXPECT_FALSE(c.InSkillEffect());      // window closed (EndSkillEffect clears 0x94)
-    EXPECT_FALSE(c.HasCut());             // never cut this window -> still false
-                                          // (the kill does NOT touch has_cut)
+    EXPECT_TRUE(c.RefreshedThisWindow())   // T-37: ReflashSkillCd fired (non-wrap kill).
+        << "EndSkill must consult this so a later toggle-close does not re-spend it";
+    EXPECT_TRUE(c.SkillReady());           // ReflashSkillCd -> instantly ready again
+    EXPECT_FALSE(c.InSkillEffect());       // window closed (EndSkillEffect clears 0x94)
+    EXPECT_FALSE(c.HasCut());              // never cut this window -> still false
+                                           // (the kill does NOT touch has_cut)
+
+    // T-37: closing the toggle (EndSkill) AFTER a refresh must NOT spend the
+    // cooldown a 2nd time -- SkillReady stays true instead of resetting to 0.
+    c.EndSkill();
+    EXPECT_TRUE(c.SkillReady());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
 }
 
 TEST(CharSkillC04Test, FifthKillWrapsComboAndDoesNotRefresh) {
-    // FAITHFUL: combo == 5 wraps to 0 with NO ReflashSkillCd. We re-open the window
-    // before each kill (a kill closes it) to drive the counter to the 5th.
+    // FAITHFUL: combo == 5 wraps to 0 with NO ReflashSkillCd. Each kill closes the
+    // window; TryActivateSkill re-opens it. T-37: because kills 1-4 each refresh
+    // the cooldown (RefreshedThisWindow), the toggle-close (EndSkill) between them
+    // no longer needs to wait out a full cooldown to re-activate -- contrast the
+    // OLD version of this test, which had to EndSkill+rely on a full recharge
+    // before every re-activation because EndSkill used to spend the cooldown
+    // unconditionally.
     CharSkillC04 c(5.0F);
     for (int i = 1; i <= 4; ++i) {
-        // After a kill the window is closed and the hero is idle; activate re-opens
-        // it, then EndSkill puts us on cooldown so the refresh is observable.
-        EXPECT_TRUE(c.TryActivateSkill()); // re-open the window
-        c.EndSkill();                      // put on cooldown so the refresh is visible
-        EXPECT_FALSE(c.SkillReady());
-        EXPECT_TRUE(c.KillSomeOne());      // kills 1..4: refresh -> ready
+        ASSERT_TRUE(c.SkillReady()) << i;
+        ASSERT_TRUE(c.TryActivateSkill()) << i; // re-open the window.
+        EXPECT_TRUE(c.KillSomeOne()) << i;      // kills 1..4: refresh -> ready.
         EXPECT_EQ(c.Combo(), i);
-        EXPECT_TRUE(c.SkillReady());       // ReflashSkillCd fired
+        EXPECT_TRUE(c.RefreshedThisWindow()) << i;
+        c.EndSkill(); // toggle-close; T-37: must not wipe the just-granted refresh.
+        EXPECT_TRUE(c.SkillReady()) << i << ": no wait needed after a refreshed close";
     }
     // 5th kill: combo wraps to 0, NO refresh.
-    c.TryActivateSkill();                  // ready (refreshed) -> re-open window
-    c.EndSkill();                          // on cooldown again
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_TRUE(c.KillSomeOne());          // 5th in-window kill
-    EXPECT_EQ(c.Combo(), 0);               // wrapped
-    EXPECT_FALSE(c.SkillReady());          // NO ReflashSkillCd on the 5th
+    ASSERT_TRUE(c.TryActivateSkill());
+    EXPECT_TRUE(c.KillSomeOne());          // 5th in-window kill.
+    EXPECT_EQ(c.Combo(), 0);               // wrapped.
+    EXPECT_FALSE(c.RefreshedThisWindow())  // the wrap kill itself does NOT refresh...
+        << "the 5th kill does not call ReflashSkillCd";
+    EXPECT_TRUE(c.SkillReady())            // ...but kill 4's refresh already left
+        << "this_skill_time == skill_cd going in, and nothing spent it since";
+    // T-37: closing after a wrap-only window (RefreshedThisWindow == false) spends
+    // the cooldown NORMALLY -- this is the one case in this loop where EndSkill
+    // actually resets this_skill_time to 0, distinguishing "wrap, no refresh" from
+    // every non-wrap kill above.
+    c.EndSkill();
+    EXPECT_FALSE(c.SkillReady())
+        << "no refresh happened this window -- EndSkill spends the cooldown normally";
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 5.0F);
 }
 
 TEST(CharSkillC04Test, KillDoesNotClearHasCutButReactivationDoes) {
@@ -293,11 +319,17 @@ TEST(CharSkillC04Test, KillDoesNotClearHasCutButReactivationDoes) {
     // refreshed the cooldown (the latch and the refresh are separate lifecycle events).
     EXPECT_TRUE(c.InSkill());
     EXPECT_FALSE(c.TryActivateSkill());    // blocked: in_skill still latched
-    c.EndSkill();                          // RoleSkillEnd: in_skill=0 + ReSetSkillReload
+    c.EndSkill();                          // RoleSkillEnd: in_skill=0 (+ cooldown, see below)
     EXPECT_FALSE(c.InSkill());
-    EXPECT_FALSE(c.SkillReady());          // ReSetSkillReload restarted the cooldown
-    c.Tick(5.0F * 1000.0F);                // recharge to ready
-    // The reconstructed activation window-open re-clears has_cut for the new window.
+    // T-37 (item 2/R18-Codex block): the KillSomeOne above (combo 1, non-wrap)
+    // already refreshed the cooldown (RefreshedThisWindow was true going into this
+    // EndSkill), so EndSkill must NOT spend it a 2nd time -- SkillReady stays true
+    // instead of the old "ReSetSkillReload always resets it" assumption. This is
+    // the exact bug item 2 fixes: the toggle-close must not silently erase a kill's
+    // refresh.
+    EXPECT_TRUE(c.SkillReady()) << "EndSkill must not wipe the kill-refreshed cooldown (T-37)";
+    // The reconstructed activation window-open re-clears has_cut for the new window
+    // (no extra recharge wait needed -- the cooldown was already ready).
     EXPECT_TRUE(c.TryActivateSkill());     // fresh activation re-opens the window
     EXPECT_FALSE(c.HasCut());              // RECONSTRUCTED: activation clears has_cut
 }

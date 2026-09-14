@@ -30,10 +30,17 @@ struct EntityState {
     /// Simulation::TickBuffs can revert exactly this much when the buff ends.
     int buffArmorGranted = 0;
 
-    /// P3.3.b: true once a player bullet or melee cut has applied damage to this
-    /// entity (ResolveHits / Simulation::ApplyMeleeCut set it). Cull() reads it to
-    /// attribute a death to the player -> ICharSkill::OnEnemyKilled (C04's combo).
-    /// Never cleared (an entity dies at most once); irrelevant once dead.
+    /// item 5 (R18/Codex block): whether the LAST damage source applied to this
+    /// entity was the player -- NOT "was ever hit by the player" (the P3.3.b
+    /// original semantics). Set true by a player bullet hit (ResolveHits), a C04
+    /// melee cut (Simulation::ApplyMeleeCut), or a player-sourced buff's DoT tick
+    /// (TickBuffs, ActiveBuff::fromPlayer); set false by a non-player-sourced DoT
+    /// tick (TickBuffs) and unconditionally by a forced kill (KillAllHostiles /
+    /// SK_FORCE_KILL) so that a stale true from an earlier player hit cannot
+    /// misattribute a forced death. Cull() reads it (immediately before Kill(), so
+    /// a forced-kill's explicit clear above always wins) to decide whether to
+    /// attribute this death to the player -> ICharSkill::OnEnemyKilled (C04's
+    /// combo). Irrelevant once dead (never read again).
     bool lastHitByPlayer = false;
 };
 

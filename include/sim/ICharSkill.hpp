@@ -169,6 +169,16 @@ public:
     }
     int RngRange(int lo, int hi) override { return m_Brain.Rng().Range(lo, hi); }
 
+    /// Test/debug introspection ONLY: direct read access to the wrapped hero brain,
+    /// bypassing the uniform ICharSkill abstraction. Some per-hero state (C04's
+    /// Combo()/InSkillEffect(), for instance) has no ICharSkill-level equivalent --
+    /// by design, so the uniform interface stays uniform -- but sim-level tests
+    /// still need to observe it (e.g. proving Simulation::Cull's kill-attribution
+    /// gate did or did not call OnEnemyKilled). Production code (Simulation) only
+    /// ever holds an ICharSkill&/ICharSkill*, never this. Callers reach it via
+    /// dynamic_cast<const ConcreteAdapter*>(sim.PlayerSkill())->Brain().
+    const TBrain &Brain() const { return m_Brain; }
+
 protected:
     TBrain m_Brain; ///< the wrapped hero skill brain (source unchanged).
 };

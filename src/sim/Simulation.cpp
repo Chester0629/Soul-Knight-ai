@@ -78,7 +78,15 @@ void Simulation::TickWeapon() {
     if (m_Skill != nullptr) {
         const ICharSkill::MeleeAtkEffect m = m_Skill->RoleAtkMelee(
             /*pressDown=*/m_Input.firing, /*standingOnItem=*/false, m_PlayerAtk,
-            /*skillStrengthen=*/false); // skill_strengthen has no data source yet (T-36 debt).
+            /*skillStrengthen=*/false); // PORT CHOICE (T-38): skill_strengthen has no
+                                        // data source yet (RoleAttributePlayer.skill_
+                                        // strengthen is not wired into CharacterDef /
+                                        // characters.json), so it is hardcoded false
+                                        // here -- every C04 cut in the sim uses the
+                                        // un-strengthened bonus (+3, kCutBonusNormal)
+                                        // until that stat is threaded through. This is
+                                        // a SEPARATE debt from T-36 (C04's melee reach/
+                                        // arc hitbox, SimConfig.hpp) -- do not conflate.
         if (m.doCut) {
             ApplyMeleeCut(m.cutDamage);
         }
@@ -148,9 +156,19 @@ void Simulation::TickSkill() {
         return;
     }
     // Activation (edge trigger): the skill button this step tries to enter the
-    // ultimate via the (d) adapter. Idempotent -- the brain gates on cooldown/
-    // in_skill, so a held / multi-step-constant input cannot re-cast.
-    if (m_Input.skill) {
+    // ultimate via the (d) adapter, but ONLY on the false->true EDGE of
+    // m_Input.skill (item 1 fix, R18/Codex block): m_Input.skill is a raw held-key
+    // level (GameScene forwards IsKeyDown unedited), and one Advance(dtMs) can run
+    // several fixed Step()s with the SAME m_Input -- so without this latch a single
+    // 40ms press (2 sub-steps @ 20ms) would call TryTrigger() twice in one frame,
+    // and for the toggle heroes (C04/C08: a 2nd TryTrigger() while already InSkill()
+    // closes the toggle) that immediately un-does the activation it just performed.
+    // m_SkillHeldPrev is latched until the button is actually released, so a held
+    // press activates exactly once and a genuine 2nd press (release in between) is
+    // the only thing that can end a toggle-type skill.
+    const bool skillEdge = m_Input.skill && !m_SkillHeldPrev;
+    m_SkillHeldPrev = m_Input.skill;
+    if (skillEdge) {
         const ICharSkill::TriggerResult r = m_Skill->TryTrigger();
         if (r.outcome == ICharSkill::TriggerOutcome::Activated) {
             // M3e: statue blessings (BuffStatue.UseSkill) hang off the skill press.
@@ -191,7 +209,8 @@ void Simulation::EmitAttackEvents() {
 // P3.1: apply (or refresh) a status-effect buff on one entity. Grants the Armor
 // buff's flat armor bonus exactly once (on first apply, not on a same-kind
 // refresh); TickBuffs() reverts exactly this much when the buff ends.
-void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params) {
+void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params,
+                           bool fromPlayer) {
     Game::Combat::BuffList *list = nullptr;
     Game::CombatStats *stats = nullptr;
     int *armorGranted = nullptr;
@@ -215,7 +234,7 @@ void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParam
     }
 
     const bool hadArmor = list->Has(Game::Combat::BuffKind::Armor);
-    list->Apply(params);
+    list->Apply(params, fromPlayer);
     if (params.kind == Game::Combat::BuffKind::Armor && !hadArmor) {
         // INFERRED (T-32): record what was ACTUALLY added, not what was requested.
         // CombatStats::RestoreArmor caps a positive delta at maxArmor, so an entity at
@@ -300,7 +319,12 @@ void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId, bo
     if (!ShouldApplyBulletBuff(b.buffProbability * 100.0F, isCritic, b.camp, m_HitRng)) {
         return;
     }
-    ApplyBuff(targetId, b.buffParams);
+    // item 5: b.camp == 0 is the PLAYER's own camp (see ResolveHits' "Player bullet
+    // -> enemies, then boss" branch above) -- a buff carried by a player bullet is a
+    // player-sourced application, so its later DoT ticks must attribute
+    // EntityState::lastHitByPlayer to the player, same as the bullet's own direct
+    // hit already does.
+    ApplyBuff(targetId, b.buffParams, /*fromPlayer=*/b.camp == 0);
 }
 
 // P3.3.b: route an incoming player hit through the skill's OnPlayerHurt hook first
@@ -412,6 +436,11 @@ void Simulation::TickBuffs() {
             Game::Combat::HitResult hr;
             hr.finalDamage = r.damage;
             Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+            // item 5: a DoT tick is a damage source like any other -- attribute (or
+            // explicitly un-attribute) this kill-attribution flag to whether THIS
+            // tick's buff was player-sourced, same "last damage source" semantics
+            // as every other write to lastHitByPlayer in this file.
+            st.lastHitByPlayer = r.damageFromPlayer;
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
@@ -435,6 +464,7 @@ void Simulation::TickBuffs() {
             Game::Combat::HitResult hr;
             hr.finalDamage = r.damage;
             Game::Combat::ApplyToEnemy(st.stats, hr, /*canHurt=*/true);
+            st.lastHitByPlayer = r.damageFromPlayer; // item 5: see the enemy loop above.
         }
         for (const Game::Combat::BuffKind k : r.ended) {
             if (k == Game::Combat::BuffKind::Armor) {
@@ -713,10 +743,17 @@ void Simulation::KillAllHostiles() {
     for (auto &e : m_Enemies) {
         if (!e->State().dead) {
             e->MutableState().stats.hp = 0;
+            // item 5: a forced clear is NOT a player kill -- clear any stale
+            // lastHitByPlayer left over from an earlier (non-lethal) player hit, so
+            // Cull() does not misattribute this death to the player and fire
+            // ICharSkill::OnEnemyKilled (C04's kill-combo) for a kill the player
+            // never made.
+            e->MutableState().lastHitByPlayer = false;
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead) {
         m_Boss->MutableState().stats.hp = 0;
+        m_Boss->MutableState().lastHitByPlayer = false; // item 5, see above.
     }
 }
 

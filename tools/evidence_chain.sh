@@ -81,7 +81,19 @@ run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=6
 # H10 keeps 40 lines (was 6): a bullet-triggered Fire buff logs one "applied"
 # line per landed hit, so a 6-line excerpt was all "applied" and truncated the
 # "ended" lines that prove the P3.1 expiry path actually runs.
-for c in c04 c08 c10 c13; do run_case "H12_$c" "Skill:" 6 SK_SKIP_MENU=1 SK_MUTE=1 SK_START_CHAR=$c SK_FORCE_SKILL=60 SK_MAX_FRAMES=600; grep -q "Skill: $c ended" "$E/H12_$c.txt" || fail "H12_$c has no ended line"; done
+# item 6 (R18/Codex block): SK_FORCE_SKILL (a HELD press) can never show "ended"
+# for a toggle-type skill (C04/C08), because the toggle's only end trigger is a
+# SECOND, DISTINCT press -- and a held button is never released to make one.
+# SK_FORCE_SKILL_PULSE=60,300 presses for exactly one frame at 60 and again at
+# 300 (release in between), so c04/c08 show "activated" (frame 60) then "ended"
+# (frame 300, the pulse's 2nd press toggles the shield/cut window off); c10/c13
+# show "activated" then their OWN "ended" via in_skill_time auto-end well before
+# frame 300 (5.0s in_skill_time / 0.02s fixed step = 250 fixed steps; the sim runs
+# at kFixedStepMs=20ms == the same 60fps-ish cadence GameScene drives it at here,
+# so 250 fixed steps land well inside the 240-frame gap between the two pulses) --
+# the 2nd pulse at 300 is then a harmless no-op for them (TryActivateSkill's
+# !in_skill gate has nothing to re-enter or close).
+for c in c04 c08 c10 c13; do run_case "H12_$c" "Skill:" 6 SK_SKIP_MENU=1 SK_MUTE=1 SK_START_CHAR=$c SK_FORCE_SKILL_PULSE=60,300 SK_MAX_FRAMES=600; grep -q "Skill: $c activated" "$E/H12_$c.txt" || fail "H12_$c has no activated line"; grep -q "Skill: $c ended" "$E/H12_$c.txt" || fail "H12_$c has no ended line"; done
 run_case H10 "Buff:" 40 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
 grep -q "Buff: Fire ended" "$E/H10.txt" \
   || fail "H10: no 'Buff: Fire ended' line -- the bullet-triggered Fire buff never expired"

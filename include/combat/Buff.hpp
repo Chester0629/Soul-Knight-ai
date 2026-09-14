@@ -78,6 +78,12 @@ struct ActiveBuff {
     BuffParams p{};
     float remainingSec = 0.0F;
     float tickAccum = 0.0F;
+    /// item 5 (R18/Codex block, kill-attribution): true iff this buff instance was
+    /// applied as the result of a PLAYER-sourced hit (a player bullet's on-hit buff
+    /// trigger). Sim-side bookkeeping, NOT decompile state -- carried so a later
+    /// DoT tick from this buff can correctly mark/unmark EntityState::lastHitByPlayer
+    /// ("last damage source was the player", not "was ever hit by the player").
+    bool fromPlayer = false;
 };
 
 /**
@@ -102,11 +108,20 @@ public:
         bool frozen = false;
         int armorDelta = 0;
         std::vector<BuffKind> ended;
+        /// item 5: true iff at least one buff that contributed to `damage` this tick
+        /// was applied by a player-sourced hit (ActiveBuff::fromPlayer). false when
+        /// damage == 0 (nothing to attribute) or every contributing buff was
+        /// non-player-sourced. Simulation::TickBuffs uses this to set/clear
+        /// EntityState::lastHitByPlayer on a DoT tick, same as a direct hit would.
+        bool damageFromPlayer = false;
     };
 
     /// Apply (or refresh) a buff. Reapplying the same kind resets remainingSec to
-    /// durationSec rather than stacking a second instance.
-    void Apply(const BuffParams &params);
+    /// durationSec rather than stacking a second instance. @p fromPlayer (item 5)
+    /// records whether this application was player-sourced (default false, so every
+    /// existing call site -- including the manual/test ApplyBuff hook -- keeps its
+    /// prior behaviour unless it opts in).
+    void Apply(const BuffParams &params, bool fromPlayer = false);
 
     /// Advance every active buff by dtSec (the sim's fixed step). Fire/Poison
     /// accumulate tickAccum and emit tickDamage once per full tickSec elapsed.

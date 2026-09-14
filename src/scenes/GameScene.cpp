@@ -1181,6 +1181,15 @@ void GameScene::OnEnter() {
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
+    // item 6 (H12): SK_FORCE_SKILL_PULSE=K1,K2 -- see the member doc comment
+    // (GameScene.hpp) for why this is a SEPARATE hook from SK_FORCE_SKILL (a held
+    // press vs. two one-frame pulses).
+    if (const char *fsp = std::getenv("SK_FORCE_SKILL_PULSE")) {
+        m_ForceSkillPulseFrame1 = std::atol(fsp);
+        if (const char *comma = std::strchr(fsp, ',')) {
+            m_ForceSkillPulseFrame2 = std::atol(comma + 1);
+        }
+    }
     // SK_FORCE_HIT=K test hook (env, NO-OP if unset): K is the FIRST frame the
     // hook acts on, not a one-shot -- from frame K onward it re-aims at the
     // nearest enemy/boss and holds fire EVERY frame (see the aim block in
@@ -1562,14 +1571,20 @@ void GameScene::Update(float dtMs) {
     // MOUSE_RB is a reasonable default pairing with MOUSE_LB fire; revisit if a faithful
     // binding ever surfaces.
     const bool forceSkill = (m_ForceSkillFrame >= 0 && m_Frame >= m_ForceSkillFrame);
+    // item 6 (H12): SK_FORCE_SKILL_PULSE -- true on EXACTLY frame K1 or frame K2,
+    // never held (see the member doc comment, GameScene.hpp) -- so it produces a
+    // real press-release-press-release edge sequence a toggle-type skill (C04/C08)
+    // needs to prove both "activated" and "ended" headlessly.
+    const bool forceSkillPulse = (m_ForceSkillPulseFrame1 >= 0 && m_Frame == m_ForceSkillPulseFrame1) ||
+                                 (m_ForceSkillPulseFrame2 >= 0 && m_Frame == m_ForceSkillPulseFrame2);
     Sim::WorldInputs in;
     in.playerPos = resolved;
     in.aimDir = AimDirection();
     in.firing = Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB) &&
                 m_Player->Stats().energy >= m_WeaponEnergyCost;
-    in.skill = Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB) || forceSkill;
-    if (forceSkill) {
-        in.firing = true; // SK_FORCE_SKILL hook: hold fire so the active-skill mirror is observable.
+    in.skill = Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB) || forceSkill || forceSkillPulse;
+    if (forceSkill || forceSkillPulse) {
+        in.firing = true; // SK_FORCE_SKILL[_PULSE] hook: hold fire so the active-skill mirror is observable.
     }
     // SK_AUTOFIRE test hook (env, NO-OP if unset): aim + fire along the autowalk
     // travel direction so a headless run can shoot through a design-box column and

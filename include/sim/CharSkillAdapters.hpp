@@ -112,17 +112,20 @@ public:
 /// cooldown (ReflashSkillCd, this_skill_time = skill_cd) and closes the cut window;
 /// the 5th wraps the combo to 0 with NO refresh and also closes the window.
 ///
-/// PORT CHOICE (C04-END): the recovered decomp never shows WHEN the underlying
-/// RoleSkillEnd (in_skill=false) fires after the cut window closes -- only
-/// EndSkillEffect's in_skill_effect=false is recovered, and CharSkillC04 exposes no
-/// primitive that clears in_skill WITHOUT also spending the cooldown (EndSkill()
-/// always zeros this_skill_time, which would silently erase KillSomeOne's just-
-/// applied ReflashSkillCd refresh -- calling it from OnEnemyKilled was tried and
-/// rejected for exactly that reason). So in_skill is left alone by a kill; instead,
-/// same as C08 below, a SECOND skill-button press while already in_skill is the
-/// self-driven close (TryTrigger toggles EndSkill() then), which correctly spends
+/// PORT CHOICE (C04-END / T-37, full reasoning on CharSkillC04::EndSkill()): the
+/// recovered decomp never shows WHEN the underlying RoleSkillEnd (in_skill=false)
+/// fires after the cut window closes -- only EndSkillEffect's in_skill_effect=false
+/// is recovered, and calling EndSkill() from OnEnemyKilled was tried and rejected
+/// (a kill must never itself close in_skill -- only the player's own 2nd press
+/// does). So in_skill is left alone by a kill; instead, same as C08 below, a SECOND
+/// skill-button press while already in_skill is the self-driven close (TryTrigger
+/// toggles EndSkill() then). EndSkill() itself now tracks whether a kill refreshed
+/// the cooldown THIS window (CharSkillC04::RefreshedThisWindow) and skips the
+/// this_skill_time=0 spend when it did, so the toggle-close correctly preserves
 /// whatever cooldown state KillSomeOne last left behind (instant-ready after a
-/// refresh, or a full wait after the 5th-kill wrap).
+/// refresh, or a full wait after a window that saw no kill) instead of silently
+/// erasing it; it also now clears in_skill_effect/has_cut unconditionally so no cut
+/// can survive past the end even when no kill ever closed the window.
 class CharSkillC04Adapter : public CharSkillBase<Game::CharSkillC04> {
 public:
     using CharSkillBase::CharSkillBase;
@@ -192,10 +195,15 @@ public:
 /// same shape as C01). While active, firing arms skill_atk (RoleAtk's in_skill
 /// animator-mirror branch, `setSkillAnim`, IS the in_skill gate); the next landed
 /// player-bullet hit (OnPlayerBulletHit -> HurtSomeOne) consumes it, and every 3rd
-/// such hit restores 1 armor. PORT CHOICE: the decomp's skill_atk-arming write
-/// (FUN_0026a58c) could not be attributed to a named method (see the header's own
-/// TODO); arming it on a fire press while in_skill is the natural per-hero-fire
-/// hook this adapter already has (RoleAtk, called once per player-shot step).
+/// such hit restores 1 armor. PORT CHOICE (T-38): the decomp's skill_atk-arming
+/// write (FUN_0026a58c) could not be attributed to a named method (see the
+/// header's own TODO), so which in-game trigger arms it is NOT recoverable from
+/// the decomp as-is; arming it on an ORDINARY fire press while in_skill is this
+/// port's chosen stand-in -- the natural per-hero-fire hook this adapter already
+/// has (RoleAtk, called once per player-shot step) -- not a decompile-confirmed
+/// trigger. A different real trigger (e.g. only a fully-charged shot, or a
+/// specific weapon-fire animation event) would change WHEN skill_atk arms without
+/// changing the every-3rd-hit cadence this brain models faithfully once armed.
 class CharSkillC10Adapter : public CharSkillBase<Game::CharSkillC10> {
 public:
     using CharSkillBase::CharSkillBase;
@@ -206,7 +214,8 @@ public:
     AtkEffect RoleAtk(bool pressDown, bool standingOnItem) override {
         const Game::CharSkillC10::AtkDecision d = m_Brain.RoleAtk(pressDown, standingOnItem);
         if (d.setSkillAnim && pressDown) {
-            m_Brain.ArmSkillAtk(); // PORT CHOICE, see class comment above.
+            m_Brain.ArmSkillAtk(); // PORT CHOICE (T-38, "arm on ordinary fire"), see
+                                   // class comment above -- not decompile-confirmed.
         }
         AtkEffect e;
         e.triggerItem = d.triggerItem;
@@ -220,8 +229,11 @@ public:
 /// C13 -- transfiguration / armor-regen hero (FAITHFUL gate/window/armor-regen),
 /// structurally the C10 twin: the window auto-ends via Tick, firing while in_skill
 /// arms the per-hit passive (animatorMirror IS the in_skill gate, same PORT CHOICE
-/// as C10 above), and OnPlayerBulletHit's ArmTickFromHit already returns the exact
-/// armor delta (0 or kArmorRestoredPerCycle) -- no bool->int translation needed.
+/// (T-38) "arm on ordinary fire" as C10 above -- game_typed.c:4016-4020 confirms
+/// C13Controller__RoleAtk's HEAD only; C13Controller__SkillAtk @ 0026c2fc does NOT
+/// set skill_atk either, same unresolved-trigger situation as C10's FUN_0026a58c),
+/// and OnPlayerBulletHit's ArmTickFromHit already returns the exact armor delta (0
+/// or kArmorRestoredPerCycle) -- no bool->int translation needed.
 class CharSkillC13Adapter : public CharSkillBase<Game::CharSkillC13> {
 public:
     using CharSkillBase::CharSkillBase;
@@ -232,7 +244,8 @@ public:
     AtkEffect RoleAtk(bool pressDown, bool standingOnItem) override {
         const Game::CharSkillC13::AtkDecision d = m_Brain.RoleAtk(pressDown, standingOnItem);
         if (d.animatorMirror && pressDown) {
-            m_Brain.SetSkillAtkFlag(true); // PORT CHOICE, see CharSkillC10Adapter comment.
+            m_Brain.SetSkillAtkFlag(true); // PORT CHOICE (T-38), see
+                                           // CharSkillC10Adapter comment.
         }
         AtkEffect e;
         e.triggerItem = d.triggerItem;
@@ -242,9 +255,17 @@ public:
 };
 
 /// Dispatch a character id -> its (d) skill adapter. All 13 heroes register. C01/C10/
-/// C13 take (skillCd, inSkillTime); the rest take (skillCd). per-char skill_cd/
-/// in_skill_time overrides are PENDING (one shared player_template), so today every
-/// hero runs on the same timings (recorded debt). Unknown id -> c01 (safe default).
+/// C13 take (skillCd, inSkillTime); the rest take (skillCd). item 6 (R18/Codex
+/// block): skillCd/inSkillTime/atk ARE per-character today -- GameScene::OnEnter
+/// resolves them from the roster's own CharacterDef (characters.json's skill_cd/
+/// in_skill_time/atk columns), falling back to the shared PlayerTemplate only when
+/// no CharacterDef is found for charId (an unrecognised id). This dispatcher itself
+/// stays timing-agnostic (it only routes charId -> adapter type; the caller already
+/// resolved the per-hero numbers before calling MakeCharSkill/SetPlayerSkill), so
+/// callers that DO pass a shared/placeholder pair (most unit tests, which often
+/// reuse one skillCd/inSkillTime across cases for simplicity) will still see that
+/// shared value here -- that is the CALLER's choice, not a limitation of this
+/// dispatch layer. Unknown id -> c01 (safe default).
 inline std::unique_ptr<ICharSkill> MakeCharSkill(const std::string &charId, float skillCd,
                                                  float inSkillTime) {
     if (charId == "c02") { return std::make_unique<CharSkillC02Adapter>(skillCd); }

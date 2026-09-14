@@ -94,7 +94,12 @@ public:
     /// that does not currently exist. Reapplying the same BuffKind refreshes its
     /// remaining duration (does not stack). Bullet-trigger wiring (auto-applying a
     /// buff on hit) is P3.2 -- this is the manual/test-hook entry point only.
-    void ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params);
+    /// @p fromPlayer (item 5, kill attribution) records whether this application is
+    /// player-sourced, so a later DoT tick from it can correctly mark
+    /// EntityState::lastHitByPlayer; defaults to false (the manual/test-hook use of
+    /// this entry point is not, by itself, a player action).
+    void ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParams &params,
+                   bool fromPlayer = false);
     /// True iff the PLAYER is currently frozen (Ice/Electric): the shell (GameScene
     /// owns player movement, not the sim) must gate its own movement on this.
     bool PlayerFrozen() const { return m_PlayerFrozen; }
@@ -197,6 +202,18 @@ private:
     /// ICharSkill::RoleAtkMelee (C04's cut damage = atk + 3/7). Set by
     /// SetPlayerSkill; 0 for callers that omit it (no atk-driven skill effect).
     int m_PlayerAtk = 0;
+    /// R18/item-1: the skill button's PER-FIXED-STEP edge latch. WorldInputs::skill
+    /// is a raw held-key level from the shell (GameScene passes IsKeyDown straight
+    /// through -- NOT edge-detected there), and one Advance(dtMs) call can run
+    /// MULTIPLE fixed Step()s with m_Input held constant (dtMs > kFixedStepMs, e.g.
+    /// a 40ms frame == 2 steps at 20ms). Without this latch TickSkill() would call
+    /// TryTrigger() on EVERY such sub-step while the button stays down, and for the
+    /// toggle heroes (C04/C08 -- TryTrigger() treats a 2nd call while already
+    /// InSkill() as the close-toggle) the very first held press would activate on
+    /// sub-step 1 then immediately toggle itself off on sub-step 2 of the SAME
+    /// frame. Tracked here (not in WorldInputs) because it must survive across
+    /// Advance() calls too, at fixed-step granularity, not per-call granularity.
+    bool m_SkillHeldPrev = false;
 
     Game::CombatStats m_PlayerStats{};
     // --- P3.1: player buff state (the sim does not own the player's position, so

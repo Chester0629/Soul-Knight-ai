@@ -183,11 +183,41 @@ public:
     /**
      * @brief End the active skill and spend the charge.
      *
-     * FAITHFUL: C04Controller__RoleSkillEnd @ game_typed.c:1214-1263 (fully
+     * FAITHFUL (base): C04Controller__RoleSkillEnd @ game_typed.c:1214-1263 (fully
      * recovered). Clears in_skill AND has_cut, then spends the cooldown via
-     * RoleAttributePlayer.ReSetSkillReload (this_skill_time = 0). Does NOT
-     * touch the sword-effect window (in_skill_effect ends via a kill /
-     * EndSkillEffect, not RoleSkillEnd). No-op if not currently in skill.
+     * RoleAttributePlayer.ReSetSkillReload (this_skill_time = 0).
+     *
+     * PORT CHOICE (T-37): the decomp never shows WHAT calls RoleSkillEnd for C04 --
+     * no Invoke/CancelInvoke site or auto-end timer references it anywhere in the
+     * recovered bodies (unlike C01/C10/C13's in_skill_time countdown), so the real
+     * end trigger is genuinely not visible. The port's adapter (CharSkillC04Adapter)
+     * uses a second skill-button press as the end trigger (the toggle shape shared
+     * with C08). That collides with KillSomeOne's ReflashSkillCd refresh: if this
+     * body did an unconditional this_skill_time=0 here, a toggle-close pressed
+     * shortly after an in-window kill would silently ERASE the refresh the kill just
+     * granted (the player would see the skill go on cooldown despite the game
+     * telling them, via the kill, that it was instantly ready again). So EndSkill()
+     * skips the this_skill_time reset when RefreshedThisWindow() is true (a kill
+     * refreshed the cooldown since the window opened) -- the cooldown stays exactly
+     * where the refresh left it (ready, or ready-then-untouched-by-the-5th-kill's
+     * wrap). When no kill has refreshed this window, EndSkill spends the cooldown
+     * normally (this_skill_time=0), matching ReSetSkillReload exactly.
+     *
+     * Also clears the sword-effect window (in_skill_effect) here, NOT just has_cut:
+     * the decomp's RoleSkillEnd does not touch in_skill_effect (it is normally
+     * closed only by KillSomeOne/EndSkillEffect) -- but since this port's chosen end
+     * trigger can fire BEFORE any kill closes the window (the player cancels the
+     * ultimate with no kill), leaving in_skill_effect set would let a 3rd press
+     * (after a fresh TryActivateSkill gate re-opens... no, TryActivateSkill always
+     * re-opens it explicitly) or, more importantly, any RoleAtk call between this
+     * EndSkill and the next TryActivateSkill still see in_skill_effect==true and
+     * throw a cut with no active ultimate. Clearing it here is the one extra write
+     * needed so "no cut happens after the end" holds unconditionally, exactly as
+     * requested; it is a superset of the decomp's own EndSkillEffect clear, not a
+     * contradiction of it (EndSkillEffect still separately clears it on the kill
+     * path, so both routes agree on the end state).
+     *
+     * No-op if not currently in skill.
      */
     void EndSkill();
 
@@ -264,6 +294,14 @@ public:
     /// @return the current combo count (combo, this+0x98).
     int Combo() const { return m_Combo; }
 
+    /// PORT CHOICE (T-37, see EndSkill() doc): true once a KillSomeOne() in the
+    /// CURRENT in_skill window has already refreshed the cooldown (ReflashSkillCd).
+    /// Not part of the recovered C04 state (no this+offset backs it) -- it is
+    /// sim-side bookkeeping the port's toggle-close end trigger needs so it does not
+    /// clobber a refresh a kill just granted. Reset on TryActivateSkill (fresh
+    /// window) and consumed/reset by EndSkill().
+    bool RefreshedThisWindow() const { return m_RefreshedThisWindow; }
+
     /**
      * @return true when off cooldown and ready to fire.
      * FAITHFUL: RoleAttributePlayer.get_skill_ready -- skill_cd <= this_skill_time.
@@ -300,6 +338,7 @@ private:
     bool m_InSkillEffect = false; ///< in_skill_effect (this+0x94); cut window up.
     bool m_HasCut = false;        ///< has_cut (this+0x95); cut latched this window.
     int m_Combo = 0;              ///< combo (this+0x98); kill-chain counter.
+    bool m_RefreshedThisWindow = false; ///< T-37 sim-side bookkeeping, see EndSkill().
 };
 
 } // namespace Game

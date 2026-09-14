@@ -300,6 +300,19 @@ private:
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;
+    /// item 6 (R18/Codex block, H12): SK_FORCE_SKILL_PULSE=K1,K2 test hook (env,
+    /// -1 = off): press the skill button for EXACTLY ONE frame at K1, and again for
+    /// exactly one frame at K2 -- unlike SK_FORCE_SKILL (which HOLDS the button
+    /// down from K onward forever), a one-frame pulse is released again the very
+    /// next frame, so it produces a clean press-release-press-release sequence.
+    /// That is what a TOGGLE-type skill (C04/C08) needs to prove BOTH "activated"
+    /// (K1, a fresh edge) AND "ended" (K2, a second DISTINCT edge after the K1
+    /// release) headlessly -- SK_FORCE_SKILL alone can only ever show "activated"
+    /// for a toggle hero, because it never releases the button so a second press
+    /// (the toggle's only end trigger) can never happen. NO-OP (both frames -1)
+    /// unless set.
+    long m_ForceSkillPulseFrame1 = -1;
+    long m_ForceSkillPulseFrame2 = -1;
     /// Edge-detect InSkill() so the "Skill: <char> ended" trace (P3.3.a headless
     /// hook) logs exactly once per active-window close. NO-OP on behaviour --
     /// logging/bookkeeping only, mirrors the "Buff: ... ended" convention (P3.1).
