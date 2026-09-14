@@ -69,7 +69,11 @@ public:
     void SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed,
                  const std::string &bossId = "BossAI01");
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
-    void EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId, int seed);
+    /// @p data (P3.2), when non-null, resolves the weapon's bullet's buff-application
+    /// trigger (BrainFactory::MakeWeapon) so ResolveHits() auto-applies it on a landed
+    /// hit; null (the default) keeps every existing call site byte-identical.
+    void EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId, int seed,
+                     const Game::GameData *data = nullptr);
     /// Build (or rebuild) the player's skill brain via (d) dispatch (B1-P4a). @p charId
     /// ("c01".."c13") selects the per-hero adapter (MakeCharSkill); unknown -> c01.
     /// @p skillCd / @p inSkillTime come from the CharacterDef stat sheet (one shared
@@ -121,6 +125,11 @@ private:
     void IntegrateBullets();                   // Task 4.
     void ResolveHits();                        // Task 7.
     void Cull();                               // Task 5/7.
+    /// P3.2: if @p b carries a buff (hasBuff), roll it against buffProbability on
+    /// the deterministic hit RNG (same 0..100 Range(int,int) convention the
+    /// decompiled BuffEffectTrigger$$TriggerWith uses) and, on success,
+    /// ApplyBuff(targetId, b.buffParams). No-op when !b.hasBuff.
+    void RollBulletBuff(const BulletState &b, std::uint32_t targetId);
     static EntityView ViewOf(const EntityState &s, std::uint32_t id);
 
     int m_RunSeed;

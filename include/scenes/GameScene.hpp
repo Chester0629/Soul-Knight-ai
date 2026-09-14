@@ -25,6 +25,7 @@
 #include "data/GameData.hpp"
 #include "data/LootTable.hpp"
 #include "data/RGRandom.hpp"
+#include "game/AudioPlayer.hpp"
 #include "game/RunState.hpp"
 #include "game/WaveScheduler.hpp"
 #include "entities/Boss.hpp"
@@ -240,6 +241,12 @@ private:
     /// The deterministic sim this scene drives (Plan 4a). Constructed in OnEnter with
     /// (m_FloorSeed, this-as-WorldCollision). Move-deleted -> emplaced in place.
     std::optional<Sim::Simulation> m_Sim;
+    /// Data-driven SFX/BGM (audio.json via GameData). Constructed in OnEnter
+    /// with RESOURCE_DIR; std::optional because AudioPlayer isn't default-constructible.
+    std::optional<Game::AudioPlayer> m_Audio;
+    /// True once this floor's room-clear BGM (the "high"/combat variant, when
+    /// the biome ships one) is the one currently looping; false = "low"/ambient.
+    bool m_BgmHigh = false;
     /// Pooled Bullet VIEWS keyed by the sim BulletState id (render mirror only).
     std::unordered_map<std::uint32_t, std::shared_ptr<Bullet>> m_BulletViews;
     /// Energy spent per player shot (the equipped WeaponDef.consume).
@@ -284,6 +291,15 @@ private:
     /// (Simulation::ApplyBuff), so the buff-applied/ended log path (P3.1) can be
     /// proven headlessly. NOT bullet-triggered (that is P3.2); a direct API poke.
     long m_ForceBuffFrame = -1;
+    /// SK_FORCE_HIT=K test hook (env, -1 = off): from frame K onward, override the
+    /// aim direction to point straight at the nearest alive enemy/boss (recomputed
+    /// every frame from the sim's own EnemyViews()/BossView()) and hold fire --
+    /// deterministic headless proof that a bullet actually LANDS on a target
+    /// (P3.2's auto-buff-on-hit path needs a real hit, not just a fired shot).
+    /// Independent of SK_AUTOWALK/SK_AUTOFIRE (which aim along the travel
+    /// direction, not at a target) -- combine with SK_AUTOWALK to first get the
+    /// player within the target room. NO-OP (false) unless set.
+    long m_ForceHitFrame = -1;
     std::string m_ForceBuffKind; ///< lower-cased kind name parsed from SK_FORCE_BUFF.
     /// SK_AUTOWALK test hook (env): when set, steer the player straight at
     /// m_AutoWalkTarget each frame to drive room->corridor->room traversal headlessly

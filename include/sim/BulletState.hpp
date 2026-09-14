@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
+
 namespace Game::Sim {
 
 /// A logical bullet owned by the Simulation. GameScene mirrors each to a pooled
@@ -21,6 +23,12 @@ struct BulletState {
     bool canThrough = false;
     int pierce = 0;
     bool active = false;
+    // P3.2: carried from the FireIntent that spawned this bullet (see
+    // FireIntent's own doc comment) -- resolved once at EquipWeapon time so it
+    // survives a mid-flight weapon swap.
+    bool hasBuff = false;
+    Game::Combat::BuffParams buffParams{};
+    float buffProbability = 0.0F;
 };
 
 } // namespace Game::Sim

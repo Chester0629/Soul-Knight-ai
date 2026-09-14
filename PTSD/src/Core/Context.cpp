@@ -33,7 +33,9 @@ Context::Context() {
         LOG_ERROR(SDL_GetError());
     }
 
-    if (Mix_Init(MIX_INIT_MP3) < 0) {
+    // MIX_INIT_OGG: SK's BGM clips ship as .ogg (SDL2MIXER_VORBIS=STB decoder,
+    // see PTSD/cmake/Dependencies.cmake).
+    if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) < 0) {
         LOG_ERROR("Failed to initialize SDL_mixer");
         LOG_ERROR(SDL_GetError());
     }

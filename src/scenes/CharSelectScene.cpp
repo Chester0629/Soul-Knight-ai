@@ -46,6 +46,7 @@ float RowStartX(std::size_t count) {
 
 void CharSelectScene::OnEnter() {
     m_Data.LoadAll(RESOURCE_DIR);
+    m_Audio.emplace(RESOURCE_DIR);
     std::vector<std::string> ids;
     for (const CharacterDef &c : m_Data.Characters()) {
         ids.push_back(c.id);
@@ -161,6 +162,9 @@ void CharSelectScene::Update(float /*dtMs*/) {
                        Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB) || autoStart;
     if (start && m_Run != nullptr) {
         LOG_INFO("CharSelectScene: start run as {}", m_Model.Current());
+        if (m_Audio) {
+            m_Audio->PlaySfx(m_Data.BgmMenuButtonClip()); // FAITHFUL @ UITitle.btn_clip
+        }
         m_Run->StartRun(m_Model.Current()); // deferred Replace into floor 0
         return;
     }

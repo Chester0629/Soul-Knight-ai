@@ -20,6 +20,12 @@ struct WeaponDef {
     int atk = 0;
     float repel = 0.0F;      ///< knockback
     float bulletSpeed = 0.0F;
+    /// P3.2: weapons.json "bullet_prefab" -- the bullet prefab id (bullets.json
+    /// row id) this weapon fires, when it resolves into bullets.json (a real
+    /// RGBullet-family bullet or a buff-only row, see GameData::BulletForWeapon).
+    /// "" when absent (e.g. a melee/no-projectile weapon, or a prefab
+    /// build_bullet_table() doesn't cover) -- FAITHFUL @ weapons.csv.
+    std::string bulletPrefab;
     int critical = 0;
     int deviation = 0;       ///< spread, in (engine) angle units
     int consume = 0;         ///< energy cost per shot
@@ -68,6 +74,20 @@ struct BulletDef {
     int rotateAngle = 0;
     int canRebound = 0;
     int manualDestroy = 0;
+    /// P3.2: buffs.json BuffDef::id ("BuffFire", ...) this bullet applies to
+    /// its target on hit, or "" when the bullet carries no buff-application
+    /// trigger. FAITHFUL @ bullets.json "buff.kind" (see
+    /// tools/build_gamedata.py's attach_bullet_buffs() for provenance --
+    /// RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger/
+    /// BuffEffectTrigger/RGLaserBuff on the bullet's rgprefab/bullet prefab).
+    std::string buffId;
+    /// P3.2: 0..1 chance to apply @c buffId on a landed hit (only meaningful
+    /// when @c buffId is non-empty). 1.0 for the three always-apply triggers
+    /// (no serialized gate exists to read); a real percent-based roll for
+    /// BuffEffectTrigger (FAITHFUL, decompile-confirmed) and RGLaserBuff
+    /// (INFERRED, T-33) -- see bullets.json "buff.probability" /
+    /// "buff._why" for the per-row citation.
+    float buffProbability = 0.0F;
 };
 
 /// Enemy AI/behaviour definition (from Resources/data/enemies.json).
@@ -329,6 +349,26 @@ struct PickupDef {
     std::vector<std::string> frames; ///< sprite stems
 };
 
+/// AUDIO (Resources/data/audio.json): RGMusicManager's fixed effect_list (index
+/// -> clip), the menu/per-biome BGM clips, and per-weapon/enemy-gun shoot
+/// clips. FAITHFUL @ RGMusicManager.prefab / MapManager.bgm_clip / RGWeapon.
+/// audio_clip (see tools/build_gamedata.py build_audio_table()). "high" bgm
+/// variants are INFERRED-absent-a-trigger (T-34): the decompile shows no
+/// High/Low switch condition, so by_biome just records which clips exist.
+struct AudioTable {
+    std::unordered_map<int, std::string> effects;       ///< PlayEffect(index) -> clip
+    std::string bgmMenu;                                ///< UITitle.bgm_clip
+    std::string bgmMenuButton;                           ///< UITitle.btn_clip
+    std::string bgmRoom;                                 ///< map_A0 (shop/lobby) MapManager.bgm_clip
+    struct Bgm {
+        std::string low;
+        std::string high; ///< "" when the source ships no High variant for this biome
+    };
+    std::unordered_map<std::string, Bgm> bgmByBiome;     ///< ChapterBiome(chapter) key
+    std::unordered_map<std::string, std::string> weaponShoot;    ///< weapon id -> clip
+    std::unordered_map<std::string, std::string> enemyGunShoot;  ///< enemy_guns.json id -> clip
+};
+
 /// CHAPTER PROGRESSION: the biome folder a chapter draws its mobs/bosses from.
 /// The original picks one of two biome variants per chapter (selection rule not
 /// recovered); the port fixes the variant whose tileset it has wired (1-ice) and
@@ -376,6 +416,9 @@ public:
     const WeaponDef *ResolveDropWeapon(const std::string &dropId) const;
 
     const BulletDef *FindBullet(const std::string &id) const;
+    /// P3.2: resolve @p def's own bullet (WeaponDef::bulletPrefab -> FindBullet),
+    /// or nullptr when the weapon carries no bulletPrefab or it doesn't resolve.
+    const BulletDef *BulletForWeapon(const WeaponDef &def) const;
     /// Look up a species by its prefab id (e.g. "e_succulent", "boss01").
     const EnemyDef *FindEnemy(const std::string &id) const;
 
@@ -451,6 +494,22 @@ public:
         return m_DesignRooms;
     }
 
+    /// AUDIO: RGMusicManager.effect_list[index]; "" when audio.json is absent or
+    /// index is out of range (silent no-op -- see Game::AudioPlayer).
+    const std::string &FindEffectClip(int index) const;
+    /// AUDIO: this weapon's fire clip (weapons.json id); "" when unknown.
+    const std::string &WeaponShootClip(const std::string &weaponId) const;
+    /// AUDIO: this enemy gun's fire clip (enemy_guns.json id); "" when unknown.
+    const std::string &EnemyGunShootClip(const std::string &enemyGunId) const;
+    /// AUDIO: the chapter's BGM loop via ChapterBiome(chapter); @p high asks for
+    /// the combat variant, falling back to "low" when the biome ships none.
+    /// "" when audio.json is absent.
+    const std::string &BgmFor(int chapter, bool high) const;
+    const std::string &BgmMenu() const { return m_Audio.bgmMenu; }
+    const std::string &BgmMenuButtonClip() const { return m_Audio.bgmMenuButton; }
+    const std::string &BgmRoomClip() const { return m_Audio.bgmRoom; }
+    bool HasAudio() const { return !m_Audio.effects.empty() || !m_Audio.weaponShoot.empty(); }
+
 private:
     std::vector<WeaponDef> m_Weapons;
     std::vector<BulletDef> m_Bullets;
@@ -471,6 +530,7 @@ private:
     CharacterDef m_PlayerTemplate;
     std::vector<CharacterDef> m_Characters;
     std::vector<SpriteSet> m_Sprites;
+    AudioTable m_Audio;
 
     std::unordered_map<std::string, std::size_t> m_WeaponIndex;
     std::unordered_map<std::string, std::size_t> m_BulletIndex;

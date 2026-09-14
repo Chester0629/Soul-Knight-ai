@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
+
 namespace Game::Sim {
 
 /// Bullet-spawn shapes. Single + Fan are implemented in Plan 1; Burst/Charge/
@@ -35,6 +37,14 @@ struct FireIntent {
     bool canThrough = false;
     int pierce = 0;
     int camp = 0;
+    // P3.2: the firing weapon's bullet buff (resolved once at EquipWeapon time
+    // from BulletDef::buffId + buffs.json -> Combat::BuffParams, so it travels
+    // with the bullet unchanged even if the player swaps weapons before this
+    // bullet lands). hasBuff false / buffProbability 0 => no buff, byte-identical
+    // to a bullet with no BuffTrigger.
+    bool hasBuff = false;
+    Game::Combat::BuffParams buffParams{};
+    float buffProbability = 0.0F; ///< 0..1 chance to apply buffParams on a landed hit.
 };
 
 } // namespace Game::Sim

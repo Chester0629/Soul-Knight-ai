@@ -160,6 +160,9 @@ set(SRC_FILES
 
     # Engine port -- run loop (Line 2, Phase 1): run-level state + controller
     game/RunController.cpp
+
+    # Audio: data-driven SFX/BGM wrapper (audio.json -> GameData -> AudioPlayer)
+    game/AudioPlayer.cpp
 )
 
 set(INCLUDE_FILES
@@ -337,6 +340,9 @@ set(INCLUDE_FILES
     game/RunState.hpp
     game/RunController.hpp
     game/FloorClear.hpp
+
+    # Audio: data-driven SFX/BGM wrapper (audio.json -> GameData -> AudioPlayer)
+    game/AudioPlayer.hpp
 )
 
 set(TEST_FILES
@@ -355,6 +361,7 @@ set(TEST_FILES
     RealBodyDriverTest.cpp
     DamageTest.cpp
     BuffTest.cpp
+    BuffTriggerTest.cpp
     LootTableTest.cpp
     LootIntegrationTest.cpp
     BossAI01Test.cpp
@@ -543,4 +550,7 @@ set(TEST_FILES
 
     # Milestone 1 A4: Vertical/Bottom Filled (UV-crop) cooldown-mask geometry
     FilledImageTest.cpp
+
+    # Audio: audio.json -> GameData wiring
+    AudioTableTest.cpp
 )

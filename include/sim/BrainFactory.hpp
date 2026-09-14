@@ -43,8 +43,17 @@ public:
 
     /// Build a WeaponController from a WeaponDef. @p weaponId selects the gun brain
     /// ("Gun016" -> HeatMinigun, else Single). Returned by value (prvalue).
+    ///
+    /// P3.2: @p data, when non-null, resolves @p def's own bullet
+    /// (GameData::BulletForWeapon) and, if that bullet carries a buff-application
+    /// trigger (BulletDef::buffId non-empty), looks up the buffs.json BuffDef and
+    /// builds its Combat::BuffParams ONCE here -- stamped onto every FireIntent the
+    /// controller emits (WeaponController::Params::hasBuff/buffParams/
+    /// buffProbability). Null (the default) keeps every existing call site
+    /// byte-identical (no buff on any fired bullet).
     static WeaponController MakeWeapon(const Game::WeaponDef &def,
-                                       const std::string &weaponId, int seed);
+                                       const std::string &weaponId, int seed,
+                                       const Game::GameData *data = nullptr);
 };
 
 } // namespace Game::Sim

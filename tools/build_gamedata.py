@@ -706,6 +706,161 @@ def build_bullet_table(bullet_groups, idx: Index):
     return out
 
 
+# P3.2: buff-application triggers on bullet/sword/spear/laser prefabs
+# (rgprefab/bullet/*.prefab). Each buff prefab's own guid (its .prefab.meta
+# identity, e.g. rgprefab/buff/buff_fire.prefab.meta) is what a trigger's
+# `buff:` field references -- verified 1:1 against the six buff .meta files.
+_BUFF_PREFAB_GUID_TO_ID = {
+    "ea35ff57269eca249967e29b996bf199": "BuffFire",
+    "e51a385cdbb3efd40910dc69329a05f2": "BuffElectric",
+    "b6df437fee4494d4a83218f49d8cbedf": "BuffPoison",
+    "14a778ce9c75ac045adb73729c9cf1a9": "BuffArmor",
+    "141f99e39f21b4e4181fbc1b72a90c67": "BuffIce",
+    "135033648100bfc46b3f2212749e7995": "BuffChangeSpeed",
+}
+_BUFF_ID_TO_KIND = {
+    "BuffFire": "fire", "BuffPoison": "poison", "BuffIce": "ice",
+    "BuffElectric": "electric", "BuffArmor": "armor", "BuffChangeSpeed": "changespeed",
+}
+_BUFF_ID_TO_PREFAB = {
+    "BuffFire": "buff_fire", "BuffPoison": "buff_posion", "BuffIce": "buff_ice",
+    "BuffElectric": "buff_ele", "BuffArmor": "buff_armor", "BuffChangeSpeed": "buff_speed_down",
+}
+# Trigger component script guids (Scripts/Assembly-CSharp/*.cs.meta) that apply a
+# buff on hit.
+# - RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger: their .cs stubs
+#   declare only a `buff` GameObject field, no probability -> FAITHFUL always-apply
+#   (there is no serialized gate to read, so probability 1.0 is not a guess about a
+#   hidden roll, it is the absence of one).
+# - BuffEffectTrigger: FAITHFUL 0..100 percent. BuffEffectTrigger$$TriggerWith
+#   (game_typed.c:86608-86645, disasm @ 00ae97dc) is decompile-confirmed to compare
+#   `UnityEngine.Random.Range(0,100)` against `probability` and skip applying the
+#   buff when `probability <= roll` -- i.e. probability is a 0..100 percent chance.
+# - RGLaserBuff: RGLaserBuff.cs declares `buff` + `buff_probability` (int), but no
+#   comparison against buff_probability is visible anywhere in the decompile --
+#   RGLaserBuff only overrides ShowCollider (itself an empty stub); the actual
+#   trigger/compare must live in the obfuscated RGLaser base class body, not
+#   recovered here. Treated per this task's stated fallback (T-33): a value > 1 is
+#   a 0..100 percent (matching BuffEffectTrigger's confirmed convention), else an
+#   already-0..1 fraction.
+# NOT PORTED (documented, deliberately excluded):
+# - ReboundBuffEffector (5189d243ffd8978c8f0a5f96f0cf7359, seen on 42 bullet
+#   prefabs) carries NO serialized fields at all in this decompile -- its .cs stub
+#   has only a get-only `prefab` property that returns null, and grep of
+#   game_typed.c finds no ReboundBuffEffector__* body beyond an empty .ctor/Start/
+#   OnTaken. Despite its name, it is not observed here to reference a buff prefab
+#   or a probability, so (T-33) it is NOT treated as a buff-application trigger.
+# - BuffRandomEffectTrigger (eae75e70e400dd912de155db1fa013e3, bullet_96 only):
+#   BuffRandomEffectTrigger.cs declares `buffs` (a GameObject[] of 3: poison/fire/
+#   electric on bullet_96) with no probability field -- picks ONE at random. Its
+#   shape (a LIST of candidate buffs) does not fit this port's one-buff-per-bullet
+#   BulletDef.buffKind field; left NOT PORTED (no "buff" block emitted for
+#   bullet_96), documented here rather than silently dropped.
+_TRIGGER_NO_PROB = ("RGBulletBuffTrigger", "RGSwordBuffTrigger", "RGArrowBuffTrigger")
+_TRIGGER_GUIDS = {
+    "RGBulletBuffTrigger": "c9203266c5360bd46020e5f3a078eecd",
+    "RGSwordBuffTrigger": "7499194a673482b8e85eb6e5d2ebf684",
+    "RGArrowBuffTrigger": "09df7edb5e8ed94b26aa85876523cc1b",
+    "RGLaserBuff": "c9bee7ac3146027fe156dfed95a401de",
+    "BuffEffectTrigger": "20ff156bf6421fde0df856989bd4d4ef",
+}
+
+
+def _bullet_buff_trigger_block(text: str, guid: str):
+    """First MonoBehaviour document in `text` whose m_Script line carries `guid`
+    -- anchored on the m_Script line itself (unlike _mono_block's bare substring
+    search) so a trigger's own script guid can never accidentally match some
+    OTHER field on the prefab that happens to reference the same guid."""
+    m = re.search(r"(?m)^\s*m_Script: \{fileID: \d+, guid: " + re.escape(guid), text)
+    if not m:
+        return None
+    end = text.find("\n--- !u!", m.start())
+    return text[m.start(): end if end > 0 else len(text)]
+
+
+def attach_bullet_buffs(bullet_rows: list) -> list:
+    """P3.2: scan every rgprefab/bullet/*.prefab for a buff-application trigger
+    component and attach a "buff" block ({kind, buff_prefab, trigger,
+    probability, ...}) to the matching bullets.json row (by prefab stem == row
+    id). Sword/spear/laser prefabs that carry a trigger but have no existing
+    RGBullet-family row (build_bullet_table() only emits rows for the
+    RGBullet-derived family, and sword/spear/laser bullets do not derive from
+    it) get a new buff-only row appended, id = prefab stem, `_source:
+    "1.7.10 (buff-only)"`. Mutates+extends `bullet_rows` in place and returns
+    it; a no-op if BULLET_DIR is absent (mirrors build_bullet_table's guard)."""
+    if not BULLET_DIR.is_dir():
+        return bullet_rows
+    by_id = {r["id"]: r for r in bullet_rows}
+    n_hit = 0
+    extra_rows = []
+    for f in sorted(BULLET_DIR.glob("*.prefab")):
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        buff_block, trigger_name = None, None
+        for name, g in _TRIGGER_GUIDS.items():
+            b = _bullet_buff_trigger_block(text, g)
+            if b is not None:
+                buff_block, trigger_name = b, name
+                break
+        if buff_block is None:
+            continue
+        m = re.search(r"(?m)^\s*buff:\s*\{fileID: \d+, guid: ([0-9a-f]{32})", buff_block)
+        if not m:
+            continue  # trigger present but its buff slot is unset (e.g. an editor default)
+        buff_id = _BUFF_PREFAB_GUID_TO_ID.get(m.group(1))
+        if buff_id is None:
+            continue  # references a buff prefab outside the six core status buffs
+        rec = {
+            "kind": _BUFF_ID_TO_KIND[buff_id],
+            "buff_prefab": _BUFF_ID_TO_PREFAB[buff_id],
+            "trigger": trigger_name,
+        }
+        if trigger_name in _TRIGGER_NO_PROB:
+            rec["probability"] = 1.0
+            rec["_probability_inferred"] = True
+            rec["_why"] = (f"INFERRED (T-33): {trigger_name}.cs declares no probability "
+                            "field (only `buff`) -- modeled as an unconditional apply "
+                            "(probability 1.0) since there is no serialized gate to read.")
+        elif trigger_name == "BuffEffectTrigger":
+            raw = _field(buff_block, "probability")
+            raw = 0.0 if raw is None else float(raw)
+            rec["probability"] = raw / 100.0
+            rec["_probability_raw"] = raw
+            rec["_why"] = ("FAITHFUL: BuffEffectTrigger$$TriggerWith (game_typed.c:86608-"
+                           "86645) compares UnityEngine.Random.Range(0,100) against "
+                           "`probability` and skips applying the buff when "
+                           "`probability <= roll` -- i.e. probability is a 0..100 percent "
+                           "chance. Stored here as a 0..1 fraction (raw/100).")
+        else:  # RGLaserBuff
+            raw = _field(buff_block, "buff_probability")
+            raw = 0.0 if raw is None else float(raw)
+            rec["probability"] = raw / 100.0 if raw > 1.0 else raw
+            rec["_probability_raw"] = raw
+            rec["_probability_inferred"] = True
+            rec["_why"] = ("INFERRED (T-33): RGLaserBuff.cs declares `buff_probability` "
+                           "(int) but no comparison against it is visible in the decompile "
+                           "(RGLaserBuff only overrides ShowCollider, itself an empty stub; "
+                           "the real trigger/compare lives in the obfuscated RGLaser base). "
+                           "Value > 1 treated as a 0..100 percent (matching "
+                           "BuffEffectTrigger's confirmed convention), else as an already-"
+                           "0..1 fraction.")
+        row = by_id.get(f.stem)
+        if row is not None:
+            row["buff"] = rec
+        else:
+            new_row = {"id": f.stem, "_source": "1.7.10", "_buff_only": True, "buff": rec}
+            for k in _BULLET_FIELDS:
+                v = _field(text, k)
+                if v is not None:
+                    new_row[k] = v
+            extra_rows.append(new_row)
+            by_id[f.stem] = new_row
+        n_hit += 1
+    bullet_rows.extend(extra_rows)
+    print(f"buff triggers: {n_hit} bullets carry a buff ({len(extra_rows)} new buff-only "
+          f"rows: {sorted(r['id'] for r in extra_rows)})")
+    return bullet_rows
+
+
 _BOSS_FIELDS = ("ai_level", "consume", "e_size", "reward_rate", "shoot_cd",
                 "friction", "kinematic", "scout_rate", "buff_immune", "awake",
                 "temp_enemy", "destory_on_dead", "intensive", "weapon_lock_target",
@@ -1368,6 +1523,139 @@ def build_pickup_table():
     return out or None
 
 
+# ---------------------------------------------------------------------------
+# AUDIO TABLE: Resources/data/audio.json. Sources (all FAITHFUL, guid-resolved
+# via _guid_index()):
+#   effects        RGMusicManager.prefab effect_list[i] -- the SAME 11-clip
+#                  array RGMusicManager__PlayEffect(int) bounds-checks against
+#                  (game_typed.c @ 0x004f5570), so index i IS clip i faithfully.
+#   bgm.by_biome   res/map_manager/map_<variant><N>.prefab MapManager.bgm_clip,
+#                  one per biome (_VARIANT_BIOME, same key build_level_table()
+#                  already emits as levels.json "biome"). "high" is the
+#                  matching bgm_<N>High clip when the source ships one, else ""
+#                  -- INFERRED (T-34): no decompiled High/Low *switch* trigger
+#                  was found (RGMusicManager__PlayBGM takes a ready AudioClip,
+#                  not an index/bool), so this table only records which clips
+#                  exist; the port picks when to use "high" itself.
+#   bgm.menu/menu_button/room  Assets/_RGScene/Title.unity UITitle.bgm_clip /
+#                  .btn_clip, and map_A0.prefab (the empty/lobby template).
+#   weapon_shoot   res/weapon/<id>.prefab RGWeapon(-derived).audio_clip, keyed
+#                  by the SAME id as weapons.json (id == prefab stem).
+#   enemy_gun_shoot  same audio_clip field on the enemy_guns.json row's prefab.
+# ---------------------------------------------------------------------------
+RGMUSICMANAGER_PREFAB = EP_ASSETS / "GameObject" / "RGMusicManager.prefab"
+TITLE_SCENE = EP_ASSETS / "_RGScene" / "Title.unity"
+WEAPON_DIR = EP_ASSETS / "res" / "weapon"
+_AUDIO_CLIP_RE = re.compile(r"audio_clip: \{fileID: (\d+), guid: ([0-9a-f]+)")
+_BGM_CLIP_RE = re.compile(r"bgm_clip: \{fileID: \d+, guid: ([0-9a-f]+)")
+
+
+def _clip_name(idx: dict, guid: str) -> str:
+    p = idx.get(guid)
+    return p.name if p is not None else ""
+
+
+def build_audio_table():
+    """Returns the audio.json payload, or None when the sibling _reverse
+    checkout / Resources/audio/ is absent (pipeline still runs; game plays
+    muted)."""
+    audio_dir = ROOT / "Resources" / "audio"
+    if not RGMUSICMANAGER_PREFAB.is_file() or not audio_dir.is_dir():
+        return None
+    idx = _guid_index()
+
+    effects = {}
+    text = RGMUSICMANAGER_PREFAB.read_text(encoding="utf-8", errors="ignore")
+    m = re.search(r"effect_list:\n((?:  - .*\n)+)", text)
+    if m:
+        for i, g in enumerate(re.findall(r"guid: ([0-9a-f]+)", m.group(1))):
+            name = _clip_name(idx, g)
+            if name:
+                effects[str(i)] = name
+
+    by_biome = {}
+    if MAP_MANAGER_DIR.is_dir():
+        for f in sorted(MAP_MANAGER_DIR.glob("map_[A-G][1-9].prefab")):
+            biome = _VARIANT_BIOME.get(f.stem[4])
+            if not biome or biome in by_biome:
+                continue
+            gm = _BGM_CLIP_RE.search(f.read_text(encoding="utf-8", errors="ignore"))
+            if not gm:
+                continue
+            low = _clip_name(idx, gm.group(1))
+            if not low:
+                continue
+            stem = low.rsplit("Low", 1)[0]  # 'bgm_3Low.ogg' -> 'bgm_3'
+            high_guess = stem + "High" + low[len(stem) + 3:]
+            high = high_guess if (audio_dir / high_guess).is_file() else ""
+            by_biome[biome] = {"low": low, "high": high}
+
+    room_clip = ""
+    room_prefab = MAP_MANAGER_DIR / "map_A0.prefab"
+    if room_prefab.is_file():
+        gm = _BGM_CLIP_RE.search(room_prefab.read_text(encoding="utf-8", errors="ignore"))
+        if gm:
+            room_clip = _clip_name(idx, gm.group(1))
+
+    menu_bgm, menu_btn = "", ""
+    if TITLE_SCENE.is_file():
+        t = TITLE_SCENE.read_text(encoding="utf-8", errors="ignore")
+        gm = _BGM_CLIP_RE.search(t)
+        gb = re.search(r"btn_clip: \{fileID: \d+, guid: ([0-9a-f]+)", t)
+        if gm:
+            menu_bgm = _clip_name(idx, gm.group(1))
+        if gb:
+            menu_btn = _clip_name(idx, gb.group(1))
+
+    weapon_shoot = {}
+    weapons_json = OUT / "weapons.json"
+    weapon_ids = []
+    if weapons_json.is_file():
+        try:
+            weapon_ids = [r["id"] for r in json.loads(weapons_json.read_text(encoding="utf-8"))]
+        except (OSError, json.JSONDecodeError, KeyError):
+            weapon_ids = []
+    for wid in weapon_ids:
+        f = WEAPON_DIR / f"{wid}.prefab"
+        if not f.is_file():
+            continue
+        gm = _AUDIO_CLIP_RE.search(f.read_text(encoding="utf-8", errors="ignore"))
+        if gm and gm.group(1) != "0":
+            name = _clip_name(idx, gm.group(2))
+            if name:
+                weapon_shoot[wid] = name
+
+    enemy_gun_shoot = {}
+    egun_json = OUT / "enemy_guns.json"
+    if egun_json.is_file():
+        try:
+            eguns = json.loads(egun_json.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            eguns = []
+        for row in eguns:
+            prefab, eid = row.get("prefab"), row.get("id")
+            if not prefab or not eid:
+                continue
+            f = next(EP_ASSETS.rglob(f"{prefab}.prefab"), None)
+            if f is None:
+                continue
+            gm = _AUDIO_CLIP_RE.search(f.read_text(encoding="utf-8", errors="ignore"))
+            if gm and gm.group(1) != "0":
+                name = _clip_name(idx, gm.group(2))
+                if name:
+                    enemy_gun_shoot[eid] = name
+
+    if not effects and not weapon_shoot:
+        return None
+
+    return {
+        "effects": effects,
+        "bgm": {"menu": menu_bgm, "menu_button": menu_btn, "room": room_clip, "by_biome": by_biome},
+        "weapon_shoot": weapon_shoot,
+        "enemy_gun_shoot": enemy_gun_shoot,
+    }
+
+
 def parse_droptables() -> dict:
     # P1.10 UPVERSION: prefer the 1.7.10 AssetRipper Resources/chest_data.txt
     # (byte-identical to the 1.07 TextAsset dump as of this port -- same 7
@@ -1456,6 +1744,7 @@ def main() -> int:
         new_bullets = build_table(bullets, idx)
         for r in new_bullets:
             r["_source"] = "1.07"
+    new_bullets = attach_bullet_buffs(new_bullets)
     counts["bullets"] = write("bullets", new_bullets)
 
     # ENEMY RE-KEY: enemies.json is now ONE ENTRY PER SPECIES (from the RE'd
@@ -1543,6 +1832,15 @@ def main() -> int:
                       ("shop", shop), ("pickups", pickups)):
         if obj is None:
             print(f"FALLBACK: {name} not built (AssetRipper source missing) -- runtime uses the pre-M1 path")
+
+    audio = build_audio_table()
+    if audio is not None:
+        write("audio", audio)
+        counts["audio_effects"] = len(audio["effects"])
+        counts["audio_weapon_shoot"] = len(audio["weapon_shoot"])
+        counts["audio_enemy_gun_shoot"] = len(audio["enemy_gun_shoot"])
+    else:
+        print("FALLBACK: audio not built (AssetRipper source / Resources/audio missing) -- game runs muted")
 
     counts["weapon_catalog"] = write("weapon_catalog", parse_weapon_catalog())
     drop = parse_droptables()

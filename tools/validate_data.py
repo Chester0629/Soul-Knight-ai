@@ -84,6 +84,12 @@ def load_all_tables() -> dict:
         "shop": load("shop", load_errors),
         "pickups": load("pickups", load_errors),
     }
+    # audio.json is optional (build_gamedata.py's build_audio_table() returns
+    # None, and skips the write, on a checkout without the sibling _reverse
+    # dump / Resources/audio/) -- soft-load so its absence doesn't turn every
+    # such checkout's gate RED.
+    audio_path = DATA / "audio.json"
+    data["audio"] = json.loads(audio_path.read_text(encoding="utf-8")) if audio_path.exists() else None
     data["_load_errors"] = load_errors
     return data
 
@@ -213,6 +219,31 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
             if any(it.get("_source") not in ("1.07", "1.7.10") for it in items):
                 errors.append(f"droptable[{lvl}] item missing _source marker")
                 break
+
+    # --- P3.2: every bullets.json row's "buff" block (if present) names one of
+    # the six core status kinds and a buff_prefab that resolves to a real
+    # buffs.json row. See tools/build_gamedata.py's attach_bullet_buffs().
+    CORE_BUFF_KINDS = ("fire", "poison", "ice", "electric", "armor", "changespeed")
+    if bullets:
+        buff_prefabs = {b.get("prefab") for b in (buffs or []) if b.get("prefab")}
+        n_buff_bullets = 0
+        for b in bullets:
+            buff = b.get("buff")
+            if buff is None:
+                continue
+            n_buff_bullets += 1
+            kind = buff.get("kind")
+            if kind not in CORE_BUFF_KINDS:
+                errors.append(f"bullet '{b.get('id')}': buff.kind '{kind}' is not one of "
+                              f"{CORE_BUFF_KINDS}")
+            prefab = buff.get("buff_prefab")
+            if prefab not in buff_prefabs:
+                errors.append(f"bullet '{b.get('id')}': buff.buff_prefab '{prefab}' does not "
+                              f"resolve to a buffs.json row")
+            if not isinstance(buff.get("probability"), (int, float)):
+                errors.append(f"bullet '{b.get('id')}': buff.probability must be numeric")
+        if n_buff_bullets:
+            warnings.append(f"{n_buff_bullets} bullets carry a buff (P3.2)")
 
     # T-31: bullet refs that don't resolve into bullets.json are only OK when
     # the target id is in KNOWN_UNRESOLVED_BULLET_REFS (documented, expected
@@ -385,6 +416,46 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                     sp = s.get(key, "")
                     if not sp or not (sprites_dir / f"{sp}.png").is_file():
                         errors.append(f"statue '{sid}' {key} '{sp}' missing from Resources/sprites")
+
+    # --- audio.json (optional table; skipped entirely when neither the table
+    # nor Resources/audio/ exists -- a checkout without the sibling _reverse
+    # dump never built it) ---
+    audio = data.get("audio")
+    audio_dir = DATA.parent / "audio"
+    if audio is not None:
+        effects = audio.get("effects", {})
+        if effects:
+            idxs = sorted(int(i) for i in effects.keys())
+            need(idxs == list(range(len(idxs))),
+                 f"audio.json effects: indexes not contiguous from 0: {idxs}")
+        if audio_dir.is_dir():
+            def clip_exists(name: str) -> bool:
+                return bool(name) and (audio_dir / name).is_file()
+
+            for i, clip in effects.items():
+                if not clip_exists(clip):
+                    errors.append(f"audio.json effects[{i}] -> '{clip}' missing from Resources/audio")
+            bgm = audio.get("bgm", {})
+            for key in ("menu", "menu_button", "room"):
+                clip = bgm.get(key, "")
+                if clip and not clip_exists(clip):
+                    errors.append(f"audio.json bgm.{key} -> '{clip}' missing from Resources/audio")
+            for biome, variants in bgm.get("by_biome", {}).items():
+                for variant, clip in variants.items():
+                    if clip and not clip_exists(clip):
+                        errors.append(f"audio.json bgm.by_biome.{biome}.{variant} -> "
+                                      f"'{clip}' missing from Resources/audio")
+            for wid, clip in audio.get("weapon_shoot", {}).items():
+                if not clip_exists(clip):
+                    errors.append(f"audio.json weapon_shoot['{wid}'] -> '{clip}' missing from Resources/audio")
+            for eid, clip in audio.get("enemy_gun_shoot", {}).items():
+                if not clip_exists(clip):
+                    errors.append(f"audio.json enemy_gun_shoot['{eid}'] -> '{clip}' missing from Resources/audio")
+        else:
+            warnings.append("Resources/audio/ absent -- skipping audio.json clip-existence checks "
+                            "(run tools/extract_audio.py)")
+    elif audio_dir.is_dir():
+        errors.append("Resources/audio/ exists but audio.json is missing (run build_gamedata.py)")
 
     # --- reference-resolution report (non-fatal) ---
     if weapons:

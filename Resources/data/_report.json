@@ -2,7 +2,7 @@
   "counts": {
     "weapons": 194,
     "enemy_guns": 10,
-    "bullets": 203,
+    "bullets": 211,
     "enemies": 146,
     "bosses": 16,
     "buffs": 12,
@@ -14,6 +14,9 @@
     "shop_pots": 8,
     "shop_statues": 7,
     "pickups": 4,
+    "audio_effects": 11,
+    "audio_weapon_shoot": 193,
+    "audio_enemy_gun_shoot": 9,
     "weapon_catalog": 90,
     "droptable_levels": 7
   },

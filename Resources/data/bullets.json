@@ -512,7 +512,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_20",
@@ -688,7 +696,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_3",
@@ -699,7 +715,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_30",
@@ -732,7 +756,15 @@
     "rotate_angle": 15,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "electric",
+      "buff_prefab": "buff_ele",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_33",
@@ -787,7 +819,15 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGArrowBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGArrowBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_37",
@@ -798,7 +838,15 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGArrowBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGArrowBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_38",
@@ -809,7 +857,15 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGArrowBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGArrowBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_39",
@@ -831,7 +887,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_4",
@@ -842,7 +906,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_44",
@@ -941,7 +1013,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_52",
@@ -952,7 +1032,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_53",
@@ -1051,7 +1139,15 @@
     "rotate_angle": 15,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_60",
@@ -1315,7 +1411,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_82",
@@ -1337,7 +1441,15 @@
     "rotate_angle": 25,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "electric",
+      "buff_prefab": "buff_ele",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_84",
@@ -1469,7 +1581,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "BuffEffectTrigger",
+      "probability": 0.0,
+      "_probability_raw": 0.0,
+      "_why": "FAITHFUL: BuffEffectTrigger$$TriggerWith (game_typed.c:86608-86645) compares UnityEngine.Random.Range(0,100) against `probability` and skips applying the buff when `probability <= roll` -- i.e. probability is a 0..100 percent chance. Stored here as a 0..1 fraction (raw/100)."
+    }
   },
   {
     "id": "bullet_96",
@@ -1876,7 +1996,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "poison",
+      "buff_prefab": "buff_posion",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_e_38",
@@ -1931,7 +2059,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_e_42",
@@ -2173,7 +2309,15 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGBulletBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGBulletBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    }
   },
   {
     "id": "bullet_z_02",
@@ -2185,5 +2329,118 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0
+  },
+  {
+    "id": "bullet_9",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGLaserBuff",
+      "probability": 0.04,
+      "_probability_raw": 4.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGLaserBuff.cs declares `buff_probability` (int) but no comparison against it is visible in the decompile (RGLaserBuff only overrides ShowCollider, itself an empty stub; the real trigger/compare lives in the obfuscated RGLaser base). Value > 1 treated as a 0..100 percent (matching BuffEffectTrigger's confirmed convention), else as an already-0..1 fraction."
+    },
+    "camp": 0
+  },
+  {
+    "id": "spear_2_fire",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_1_75_gourd",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "changespeed",
+      "buff_prefab": "buff_speed_down",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_2_dizzy",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "electric",
+      "buff_prefab": "buff_ele",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_2_fire",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_2_ice",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_bit_fire",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "fire",
+      "buff_prefab": "buff_fire",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
+  },
+  {
+    "id": "sword_bit_ice",
+    "_source": "1.7.10",
+    "_buff_only": true,
+    "buff": {
+      "kind": "ice",
+      "buff_prefab": "buff_ice",
+      "trigger": "RGSwordBuffTrigger",
+      "probability": 1.0,
+      "_probability_inferred": true,
+      "_why": "INFERRED (T-33): RGSwordBuffTrigger.cs declares no probability field (only `buff`) -- modeled as an unconditional apply (probability 1.0) since there is no serialized gate to read."
+    },
+    "camp": 0
   }
 ]

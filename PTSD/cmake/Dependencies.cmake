@@ -107,7 +107,13 @@ set(SDL2MIXER_MIDI OFF)
 set(SDL2MIXER_MOD OFF)
 set(SDL2MIXER_OPUS OFF)
 set(SDL2MIXER_OGG OFF)
-set(SDL2MIXER_VORBIS OFF)
+# SK audio: BGM ships as .ogg (Soul Knight's own rgsound/bgm clips). "STB" uses
+# SDL_mixer's vendored, header-only stb_vorbis decoder (PTSD/lib/sdl2_mixer/
+# src/codecs/stb_vorbis/stb_vorbis.h) -- no libogg / no external tool needed,
+# and it does NOT flip SDL2MIXER_OGG on (that's only for the
+# TREMOR/VORBISFILE/FLAC/OPUS paths that vendor libogg itself; see
+# PTSD/lib/sdl2_mixer/CMakeLists.txt).
+set(SDL2MIXER_VORBIS "STB")
 set(SDL2MIXER_VOC OFF)
 
 set(JSON_ImplicitConversions OFF)

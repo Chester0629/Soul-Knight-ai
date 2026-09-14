@@ -54,7 +54,8 @@ std::unique_ptr<BossController> BrainFactory::MakeBossPtr(const std::string &bos
 }
 
 WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
-                                          const std::string &weaponId, int seed) {
+                                          const std::string &weaponId, int seed,
+                                          const Game::GameData *data) {
     WeaponController::Params p; // p.fireIntervalSeconds defaults to the slice base (0.15s).
     // weaponSpeed is a fire-rate MULTIPLIER (RGWeapon); the true base cadence is
     // OWNER/animation-driven (Plan 4). Until wired, scale the slice base by it so a
@@ -74,6 +75,19 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     p.count = def.count;
     p.fanStepDeg = def.angle;
     p.fanSpreadDeg = def.angle * static_cast<float>((def.count > 1 ? def.count : 1) - 1);
+    // P3.2: resolve this weapon's own bullet's buff-application trigger (if any)
+    // ONCE here, from GameData -- see MakeWeapon's doc comment.
+    if (data != nullptr) {
+        if (const Game::BulletDef *bulletDef = data->BulletForWeapon(def)) {
+            if (!bulletDef->buffId.empty()) {
+                if (const Game::BuffDef *buffDef = data->FindBuff(bulletDef->buffId)) {
+                    p.hasBuff = true;
+                    p.buffParams = Game::BuffParamsFrom(*buffDef);
+                    p.buffProbability = bulletDef->buffProbability;
+                }
+            }
+        }
+    }
     // (d) dispatch: pick the per-gun brain adapter by id (Gun001 fallback). The
     // brain returns the gun's REAL FirePattern; the cooldown/canFire gate stays in
     // WeaponController. Only Gun001+Gun016 were wired before; now all 21 dispatch.

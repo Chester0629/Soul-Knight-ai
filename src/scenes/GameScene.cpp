@@ -101,11 +101,6 @@ std::vector<std::string> EffectFrames(const std::string &root, const std::string
     return frames;
 }
 
-void PlaySfx(const std::string &root, const std::string &file) {
-    // Mix_Chunk is cached in Util::SFX's AssetStore, so re-loading by path is cheap.
-    Util::SFX sfx(root + "/audio/" + file);
-    sfx.Play();
-}
 } // namespace
 
 GameScene::GameScene(int floorSeed, int floorIndex,
@@ -121,6 +116,8 @@ void GameScene::OnEnter() {
     const std::string root = RESOURCE_DIR;
     m_Data.LoadAll(root);
     m_Loot.LoadAll(root); // chest droptables
+    m_Audio.emplace(root);
+    m_BgmHigh = false;
 
     // Root every deterministic stream this floor owns in the per-floor seed.
     m_Rng.SetRandomSeed(m_FloorSeed);
@@ -159,6 +156,10 @@ void GameScene::OnEnter() {
         } else {
             LOG_INFO("Level {} not in levels.json -> pre-M1 fixed tileset/roster", levelId);
         }
+        // AUDIO: chapter BGM loop (ChapterBiome(chapter) -> audio.json bgm.by_biome;
+        // see GameData::BgmFor). Chapter 1 when the level table is absent.
+        const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
+        m_Audio->PlayBgm(m_Data.BgmFor(chapter, m_BgmHigh));
     }
     MapManager::Options mapOpt;
     // MapManager.map_long counts the NORMAL rooms of the walk; the original adds
@@ -1095,12 +1096,29 @@ void GameScene::OnEnter() {
     if (m_Carried) {
         m_Player->Stats() = m_Carried->stats; // continue hp/armor/energy (Player.hpp:33 mutable ref)
     }
-    const std::string equipWeaponId =
+    std::string equipWeaponId =
         m_Carried ? m_Carried->weaponId : std::string("Gun001");
+    // SK_FORCE_WEAPON test hook (env, NO-OP if unset): equip this weapon id/class
+    // instead of the carried/default one at floor start -- headless proof-of-life
+    // for weapon-specific behaviour (e.g. P3.2 bullet buffs) without a full pickup
+    // walk. FindWeapon resolves either an exact prefab id (weapon_013) or a class
+    // id (Gun001..); an unresolvable value is silently ignored (keeps the normal
+    // equip).
+    if (const char *fw = std::getenv("SK_FORCE_WEAPON")) {
+        if (m_Data.FindWeapon(fw) != nullptr) {
+            equipWeaponId = fw;
+            LOG_INFO("SK_FORCE_WEAPON -> equipping '{}'", equipWeaponId);
+        }
+    }
     if (const WeaponDef *wdef = m_Data.FindWeapon(equipWeaponId)) {
-        m_Sim->EquipWeapon(*wdef, equipWeaponId, m_FloorSeed + 5);
+        m_Sim->EquipWeapon(*wdef, equipWeaponId, m_FloorSeed + 5, &m_Data); // P3.2: bullet-buff wiring
         m_WeaponEnergyCost = WeaponEnergyCost(*wdef);
-        m_CurrentWeaponId = equipWeaponId;
+        // AUDIO: wdef->id is the RESOLVED prefab id (e.g. "weapon_000"), unlike
+        // equipWeaponId which may still be a class id ("Gun001") -- audio.json
+        // weapon_shoot is keyed by prefab id, same as the live pickup-equip path
+        // below (WeaponPickup::Def()->id), so this keeps the carry vehicle
+        // consistent and WeaponShootClip() resolvable from floor 0.
+        m_CurrentWeaponId = wdef->id;
     } // else: unknown id -> leave the default (never deref a null FindWeapon).
 
     // --- B1-P4a: dispatch the player skill brain by character id (charId seam).
@@ -1163,6 +1181,9 @@ void GameScene::OnEnter() {
     // SK_FORCE_BUFF=K,<kind> test hook (env, NO-OP if unset): apply <kind> to the
     // player on frame K via Simulation::ApplyBuff, so the "Buff: ... applied/ended"
     // log path (P3.1) can be proven headlessly without bullet-trigger wiring (P3.2).
+    if (const char *fh = std::getenv("SK_FORCE_HIT")) {
+        m_ForceHitFrame = std::atol(fh);
+    }
     if (const char *fb = std::getenv("SK_FORCE_BUFF")) {
         m_ForceBuffFrame = std::atol(fb);
         if (const char *comma = std::strchr(fb, ',')) {
@@ -1559,6 +1580,49 @@ void GameScene::Update(float dtMs) {
             in.firing = true;
         }
     }
+    // SK_FORCE_HIT test hook (env, NO-OP unless set): aim straight at the nearest
+    // alive enemy/boss (from the SIM's own last-frame views) and hold fire. Wins
+    // over SK_AUTOFIRE's travel-direction aim when both are set -- this hook exists
+    // specifically to GUARANTEE a landed hit (not just a fired shot) for headless
+    // proof of hit-triggered behaviour (P3.2 bullet buffs).
+    if (m_ForceHitFrame >= 0 && m_Frame >= m_ForceHitFrame &&
+        m_Player->Stats().energy >= m_WeaponEnergyCost) {
+        glm::vec2 best{0.0F, 0.0F};
+        float bestDistSq = -1.0F;
+        bool found = false;
+        for (const Sim::Simulation::EntityView &ev : m_Sim->EnemyViews()) {
+            if (!ev.alive) {
+                continue;
+            }
+            const glm::vec2 d = ev.pos - resolved;
+            const float distSq = d.x * d.x + d.y * d.y;
+            if (!found || distSq < bestDistSq) {
+                best = ev.pos;
+                bestDistSq = distSq;
+                found = true;
+            }
+        }
+        if (m_Sim->HasBoss()) {
+            const Sim::Simulation::EntityView bv = m_Sim->BossView();
+            if (bv.alive) {
+                const glm::vec2 d = bv.pos - resolved;
+                const float distSq = d.x * d.x + d.y * d.y;
+                if (!found || distSq < bestDistSq) {
+                    best = bv.pos;
+                    bestDistSq = distSq;
+                    found = true;
+                }
+            }
+        }
+        if (found) {
+            const glm::vec2 d = best - resolved;
+            const float len = std::sqrt(d.x * d.x + d.y * d.y);
+            if (len > 1.0F) {
+                in.aimDir = d / len;
+            }
+            in.firing = true;
+        }
+    }
     in.playerAlive = !m_Player->Stats().IsDead();
     in.playerRoomId = playerRoomId;
 
@@ -1612,6 +1676,24 @@ void GameScene::Update(float dtMs) {
         m_RoomLife[static_cast<std::size_t>(playerRoomId)].StartRoom();
         LOG_INFO("RGRoomX: room {} StartRoom -> Active (door_open=0, sealed)",
                  playerRoomId);
+        // FAITHFUL: RGMusicManager effect_list[4] == fx_door.wav (door seal).
+        m_Audio->PlaySfx(m_Data.FindEffectClip(4));
+        // Boss show-up cue (FAITHFUL: EnemyMaker.ShowUpEffect -> effect_list[7] ==
+        // fx_show_up.wav, game_typed.c RGMusicManager__PlayEffect(this, 7)). PORT
+        // CHOICE: fired immediately on room-lock instead of the original's 0.8s
+        // delayed Invoke per spawned PART (WaveScheduler::kShowUpEffectDelayMs,
+        // NOT PORTED T-29) -- the timer itself is out of this audio task's scope.
+        if (playerRoomId == m_GateRoom && IsBossFloor(m_FloorIndex) && m_Sim->HasBoss()) {
+            m_Audio->PlaySfx(m_Data.FindEffectClip(7));
+        }
+        // INFERRED (T-34): switch to the biome's "high"/combat BGM variant, when the
+        // source ships one, on room-lock; back to "low" on clear (below). No
+        // decompiled trigger was found for this -- see AudioTable's doc comment.
+        if (!m_BgmHigh) {
+            m_BgmHigh = true;
+            const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
+            m_Audio->PlayBgm(m_Data.BgmFor(chapter, true));
+        }
     }
     for (std::size_t i = 0; i < m_RoomLife.size(); ++i) {
         // MAP M1: a room with parts still queued is NOT clear -- the next part
@@ -1630,6 +1712,16 @@ void GameScene::Update(float dtMs) {
         if (m_RoomLife[i].State() == RGRoomX::Process::Active &&
             !RoomHasLiveHostile(static_cast<int>(i))) {
             m_RoomLife[i].ClearRoom(); // process=Cleared, reward gate, OpenDoor
+            // FAITHFUL: RGMusicManager effect_list[4] == fx_door.wav (door reopens).
+            m_Audio->PlaySfx(m_Data.FindEffectClip(4));
+            // INFERRED (T-34): back to the "low"/ambient BGM loop once the room the
+            // player is standing in is the one that just cleared -- see the StartRoom
+            // switch above.
+            if (m_BgmHigh && static_cast<int>(i) == playerRoomId) {
+                m_BgmHigh = false;
+                const int chapter = m_Level != nullptr ? m_Level->chapter : 1;
+                m_Audio->PlayBgm(m_Data.BgmFor(chapter, false));
+            }
             // NOT PORTED T-10: GetRoomReward (clear-room reward) is not resolved; log only.
             if (m_RoomLife[i].RewardGranted()) {
                 // reward gate FIRED (room_type==1). Gate lands here; the actual
@@ -1745,6 +1837,7 @@ void GameScene::Update(float dtMs) {
             continue;
         }
         chest->Open();
+        m_Audio->PlaySfx("fx_chest_open.wav"); // real rgsound/effect clip (not in RGMusicManager's 11-entry table)
         // RGChestBoss: CreateBossWeapon (object_list, guaranteed) + CreateSampleWeapon
         // (a roll); RGChest / RGChestRoomReward: the tier roll (GetWeapon).
         std::vector<const WeaponDef *> drops;
@@ -1772,7 +1865,7 @@ void GameScene::Update(float dtMs) {
         if (glm::distance(playerPos, (*it)->Position()) <= kPickupRange) {
             const WeaponDef *def = (*it)->Def();
             ++m_WeaponSwaps;
-            m_Sim->EquipWeapon(*def, def->id, m_FloorSeed + 5 + m_WeaponSwaps);
+            m_Sim->EquipWeapon(*def, def->id, m_FloorSeed + 5 + m_WeaponSwaps, &m_Data); // P3.2
             m_WeaponEnergyCost = WeaponEnergyCost(*def);
             m_CurrentWeaponId = def->id; // keep the weapon-id carry vehicle in sync on every equip
             m_Renderer.RemoveChild(*it);
@@ -1795,6 +1888,8 @@ void GameScene::Update(float dtMs) {
             LOG_INFO("Pickup: {} +{} (coins now {})",
                      (*it)->Kind() == RewardKind::Energy ? "energy" : "coin", (*it)->Value(),
                      m_Run != nullptr ? m_Run->State().stats.coins : 0);
+            // FAITHFUL: RGMusicManager effect_list[1]/[2] == fx_coin.wav / fx_energy.wav.
+            m_Audio->PlaySfx(m_Data.FindEffectClip((*it)->Kind() == RewardKind::Energy ? 2 : 1));
             m_Renderer.RemoveChild(*it);
             it = m_Coins.erase(it);
         } else {
@@ -1920,6 +2015,9 @@ void GameScene::Update(float dtMs) {
         m_GateActive && glm::distance(playerPos, m_GatePos) <= kGateTriggerPx;
     if (gateEntered && !m_Transitioning) {
         LOG_INFO("TransferGate: entered -> next floor");
+        // PORT CHOICE: RGMusicManager effect_list[6] == fx_switch.wav; the closest
+        // "activation" cue in the 11-clip table to a gate/lever trigger.
+        m_Audio->PlaySfx(m_Data.FindEffectClip(6));
     }
     if (!m_Transitioning && m_Run != nullptr && (gateEntered || forceClear)) {
         m_Transitioning = true; // signal exactly once
@@ -2126,12 +2224,35 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
 
         if (e.name == "fire" || e.name == "attack") {
             SpawnEffect({root + "/sprites/effect01.png"}, pos, 80.0F); // muzzle flash
+            // AUDIO: "fire" is player-only (kPlayerViewId, see Simulation.cpp) so this
+            // is always the player's own shot -- the equipped weapon's REAL audio_clip
+            // (audio.json weapon_shoot, guid-resolved from RGWeapon.audio_clip).
+            // "attack" (enemy/boss) is NOT wired: enemies.json carries no gun/audio_clip
+            // link (EnemyDef has no gun-id field; the 10-row enemy_gun_shoot table only
+            // covers ex_orc05/EGun001), and the boss atk .wav filenames (fx_boss<N>_atk*)
+            // don't consistently match the boss prefab numbering (e.g. boss09 keeps a
+            // leading zero, boss01 doesn't) -- guessing one would ship an unverified
+            // clip labelled as faithful, so it's left silent.
+            if (isPlayer) {
+                m_Audio->PlaySfx(m_Data.WeaponShootClip(m_CurrentWeaponId));
+            }
         } else if (e.name == "hurt") {
             SpawnEffect(EffectFrames(root, "effect03", 3), pos, 180.0F); // hit spark
-            PlaySfx(root, isPlayer ? "fx_hurt.wav" : "fx_hit_p1.wav");
+            // AUDIO: prefer the data clip (RGMusicManager effect_list[5] == fx_hit.wav,
+            // the generic PlayEffect(5) hit cue) when audio.json is loaded; else keep
+            // the pre-existing hardcoded fallback (both already ship in Resources/audio).
+            {
+                const std::string &dataClip = m_Data.FindEffectClip(5);
+                m_Audio->PlaySfx(!dataClip.empty() ? dataClip
+                                                    : (isPlayer ? "fx_hurt.wav" : "fx_hit_p1.wav"));
+            }
         } else if (e.name == "death") {
             SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
-            PlaySfx(root, isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav");
+            // PORT CHOICE: the pre-audio-wiring fallback played "enermy_die3.wav" for
+            // BOTH the player and enemies. isPlayer now gets its own clip (fx_dead.wav
+            // -- a rgsound/effect clip, not guid-linked to any one character; boss/
+            // enemy picks are the pre-existing fallbacks).
+            m_Audio->PlaySfx(isPlayer ? "fx_dead.wav" : (isBoss ? "fx_boss1_dead.wav" : "enermy_die3.wav"));
             if (m_Run != nullptr && !isPlayer) {
                 m_Run->RecordKill(); // B4: RGGameProcess.kill_count analog
             }

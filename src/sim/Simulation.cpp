@@ -215,6 +215,36 @@ void Simulation::ApplyBuff(std::uint32_t entityId, const Game::Combat::BuffParam
             std::to_string(params.durationSec)});
 }
 
+// P3.2: bullet-trigger wiring -- if the bullet that just landed carries a buff
+// (b.hasBuff, resolved once at EquipWeapon time from BulletDef::buffId), roll it
+// against buffProbability and, on success, apply it to the target that was just
+// hit. Called once per landed hit, AFTER the damage/repel for that hit -- so a
+// bullet that kills its target on this same hit still applies its buff (matches
+// ResolveHits' existing "all in-flight bullets land" determinism: the buff roll
+// draws from the same m_HitRng stream, in the same fixed per-bullet order, as the
+// crit roll that precedes it).
+void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId) {
+    if (!b.hasBuff) {
+        return;
+    }
+    if (b.buffProbability < 1.0F) {
+        // FAITHFUL: BuffEffectTrigger$$TriggerWith (game_typed.c:86608-86645) draws
+        // UnityEngine.Random.Range(0,100) and skips applying the buff when
+        // `probability <= roll` -- i.e. probability is a 0..100 percent chance.
+        // RGLaserBuff's buff_probability is rolled the same way (T-33: no visible
+        // compare to mirror in its own decompile, see bullets.json's "buff._why").
+        // RGBulletBuffTrigger/RGSwordBuffTrigger/RGArrowBuffTrigger never reach this
+        // branch (their rows carry probability 1.0 exactly) -- faithfully, those
+        // triggers never roll at all in the decompile.
+        const int roll = m_HitRng.Range(0, 100);
+        const float percent = b.buffProbability * 100.0F;
+        if (!(percent > static_cast<float>(roll))) {
+            return; // probability <= roll: skip, matching the decompile's early-return.
+        }
+    }
+    ApplyBuff(targetId, b.buffParams);
+}
+
 // P3.1: advance every entity's BuffList by one fixed step: apply Fire/Poison DoT
 // through the existing Damage.hpp path (armor-then-hp for the player, straight hp
 // for enemies/boss -- same split ResolveHits() uses, just skipping the crit roll/
@@ -402,6 +432,7 @@ void Simulation::ResolveHits() {
                 }
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                             static_cast<std::uint32_t>(ei), "hurt"}); // A
+                RollBulletBuff(b, static_cast<std::uint32_t>(ei)); // P3.2
                 consumed = true;
                 break;
             }
@@ -416,6 +447,7 @@ void Simulation::ResolveHits() {
                 Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
                 m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"}); // A
+                RollBulletBuff(b, kBossViewId); // P3.2
                 consumed = true;
             }
             if (consumed && b.pierce <= 0) {
@@ -435,6 +467,11 @@ void Simulation::ResolveHits() {
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::PLAYER);
                 Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"}); // A
+                // P3.2: enemy bullets never carry a buff today (EnemyGunDef has no
+                // bullet-prefab link into bullets.json's buff-carrying rows -- NOT
+                // PORTED, see the P3.2 report); this call is a no-op (b.hasBuff is
+                // always false here) kept for symmetry / future wiring.
+                RollBulletBuff(b, kPlayerViewId);
                 b.active = false;
             }
         }
@@ -514,8 +551,8 @@ void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int room
     m_Boss->Activate(m_Scheduler, m_FireIntents); // asleep until WakeByRoom().
 }
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
-                             int seed) {
-    m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed)); // cold rebuild
+                             int seed, const Game::GameData *data) {
+    m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed, data)); // cold rebuild
 }
 void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime) {
     // B1-P4a (d) dispatch: charId -> per-hero ICharSkill adapter. C01 (mirror) + C02

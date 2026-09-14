@@ -62,6 +62,11 @@ void MenuScene::OnEnter() {
     if (const char *a = std::getenv("SK_MENU"); a != nullptr && std::string(a) == "start") {
         m_AutoStartFrame = 30;
     }
+    // AUDIO: FAITHFUL @ Assets/_RGScene/Title.unity UITitle.bgm_clip (== the SAME
+    // clip as chapter 1's map_A1 MapManager.bgm_clip -- bgm_1Low.ogg).
+    m_Data.LoadAll(RESOURCE_DIR);
+    m_Audio.emplace(RESOURCE_DIR);
+    m_Audio->PlayBgm(m_Data.BgmMenu());
 }
 
 void MenuScene::OnExit() {
@@ -78,6 +83,11 @@ void MenuScene::Update(float /*dtMs*/) {
 
     if (start && m_Run != nullptr) {
         LOG_INFO("MenuScene: start -> hero select");
+        // AUDIO: FAITHFUL @ UITitle.btn_clip (== RGMusicManager effect_list[8] ==
+        // fx_btn1.wav, played directly rather than via PlayEffect(int)).
+        if (m_Audio) {
+            m_Audio->PlaySfx(m_Data.BgmMenuButtonClip());
+        }
         m_Run->ShowCharSelect(); // deferred Replace (we are inside the manager's Update)
         return;
     }

@@ -2,6 +2,7 @@
 #define GAME_CHAR_SELECT_SCENE_HPP
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,7 @@
 #include "Util/Text.hpp"
 
 #include "data/GameData.hpp"
+#include "game/AudioPlayer.hpp"
 #include "game/CharSelectModel.hpp"
 
 namespace Game {
@@ -45,6 +47,8 @@ private:
 
     RunController *m_Run;
     GameData m_Data;
+    /// AUDIO: start-button click (audio.json bgm.menu_button); constructed in OnEnter.
+    std::optional<AudioPlayer> m_Audio;
     CharSelectModel m_Model{std::vector<std::string>{}};
     Util::Renderer m_Renderer;
     std::vector<std::shared_ptr<Util::GameObject>> m_Thumbs;

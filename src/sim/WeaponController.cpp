@@ -55,7 +55,15 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
         ctx.camp = 0;
         ctx.count = m_Params.count;
         ctx.stepAngle = m_Params.fanStepDeg;
+        const std::size_t before = out.size(); // P3.2: stamp buff onto intents THIS call adds.
         const int pulls = m_Brain->Tick(ctx, out);
+        if (m_Params.hasBuff) {
+            for (std::size_t i = before; i < out.size(); ++i) {
+                out[i].hasBuff = true;
+                out[i].buffParams = m_Params.buffParams;
+                out[i].buffProbability = m_Params.buffProbability;
+            }
+        }
         if (pulls > 0) {
             m_CooldownTicks = (std::max)(1, Scheduler::SecondsToTicks(m_Params.fireIntervalSeconds));
         }
@@ -90,6 +98,9 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
     intent.repel = m_Params.repel;
     intent.canThrough = m_Params.canThrough;
     intent.pierce = m_Params.pierce;
+    intent.hasBuff = m_Params.hasBuff; // P3.2
+    intent.buffParams = m_Params.buffParams;
+    intent.buffProbability = m_Params.buffProbability;
     if (m_Params.kind == Kind::HeatMinigun) {
         // Heat-ramped single stream (Gun016): always one scattered shot, ignores count.
         const float ratio = Gun016::HeatRatio(m_HeatTime, m_Params.heatMaxTime);

@@ -18,8 +18,12 @@ TEST(GameDataTest, LoadsAllTablesWithExpectedCounts) {
     // P1.10 UPVERSION: bullets.json is now the 25 1.07 class-keyed rows (kept,
     // so FindBullet("BulletNN") still resolves) PLUS 178 real 1.7.10 prefab
     // rows (id = prefab stem, e.g. "bullet_0") from the RGBullet class family --
-    // see tools/build_gamedata.py build_bullet_table().
-    EXPECT_EQ(gd.Bullets().size(), 203u);
+    // see tools/build_gamedata.py build_bullet_table(). P3.2 adds 8 more
+    // buff-only rows (sword_2_fire, sword_2_ice, sword_2_dizzy, sword_bit_fire,
+    // sword_bit_ice, sword_1_75_gourd, spear_2_fire, bullet_9) for prefabs that
+    // carry a buff-application trigger but don't derive from the RGBullet family
+    // -- see attach_bullet_buffs().
+    EXPECT_EQ(gd.Bullets().size(), 211u);
     // ENEMY RE-KEY: enemies.json used to carry 16 AI-CLASS templates (one row per
     // EnemyAI*.json/BossAI*.json dump); it is now 146 real SPECIES rows straight
     // from enemies.csv (every enemy/boss loaded flat HP=3/500 before this -- the

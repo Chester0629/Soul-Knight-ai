@@ -60,7 +60,7 @@ tail -3 "$E/gate_tests.log" | tee "$E/gate_tests.txt"
 [ -x "$G" ] || { fail "no game binary"; echo "STATUS: FAILED (${#FAILS[@]}): ${FAILS[*]} $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"; exit 1; }
 echo "=== WARM-UP (first launch of a fresh build can take minutes: AV scan / shader cache) ==="
 WSTART=$(date +%s)
-env SK_SKIP_MENU=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1 || fail "warm-up exited $?"
+env SK_SKIP_MENU=1 SK_MUTE=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1 || fail "warm-up exited $?"
 echo "warm-up took $(( $(date +%s) - WSTART )) s"
 
 run_case H1 "GameScene: hero|Level |CLEARED" 8 SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200
@@ -78,6 +78,8 @@ run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 12
 run_case H8 "Statue:" 4 SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130
 run_case H9 "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,fire SK_MAX_FRAMES=200
 run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=600
+run_case H10 "Buff:" 6 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
+run_case H11 "Audio:" 40 SK_SKIP_MENU=1 SK_MUTE=1 SK_AUTOWALK=1 SK_AUTOFIRE=1 SK_FORCE_HIT=30 SK_FORCE_KILL=120 SK_MAX_FRAMES=300
 echo "=== V-S r2_boss3 (seed 1: variant D, floor 9 room 3; zoom 1.5 partial) ==="
 run_case r2boss3_seed "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre" 40 \
   SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3.png"

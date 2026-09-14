@@ -1,0 +1,6 @@
+ [info] Buff: Fire applied to 4 for 2.000000s
+ [info] Buff: Fire applied to 4 for 2.000000s
+ [info] Buff: Fire applied to 6 for 2.000000s
+ [info] Buff: Fire applied to 6 for 2.000000s
+ [info] Buff: Fire applied to 6 for 2.000000s
+ [info] Buff: Fire applied to 8 for 2.000000s

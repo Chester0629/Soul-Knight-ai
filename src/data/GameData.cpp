@@ -29,6 +29,19 @@ std::string GetS(const json &j, const char *key,
                                               : fallback;
 }
 
+// P3.2: bullets.json "buff.kind" ("fire"/"poison"/...) -> the buffs.json row id
+// ("BuffFire"/"BuffPoison"/...) GameData::FindBuff resolves. See
+// tools/build_gamedata.py's attach_bullet_buffs()/_BUFF_ID_TO_KIND (inverse map).
+std::string BuffIdFromKind(const std::string &kind) {
+    if (kind == "fire") return "BuffFire";
+    if (kind == "poison") return "BuffPoison";
+    if (kind == "ice") return "BuffIce";
+    if (kind == "electric") return "BuffElectric";
+    if (kind == "armor") return "BuffArmor";
+    if (kind == "changespeed") return "BuffChangeSpeed";
+    return "";
+}
+
 } // namespace
 
 bool GameData::LoadAll(const std::string &resourceRoot) {
@@ -48,6 +61,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.atk = GetI(e, "atk");
             d.repel = GetF(e, "repel");
             d.bulletSpeed = GetF(e, "bullet_speed");
+            d.bulletPrefab = GetS(e, "bullet_prefab"); // P3.2
             d.critical = GetI(e, "critical");
             d.deviation = GetI(e, "deviation");
             d.consume = GetI(e, "consume");
@@ -82,6 +96,11 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.rotateAngle = GetI(e, "rotate_angle");
             d.canRebound = GetI(e, "can_rebound");
             d.manualDestroy = GetI(e, "manual_destroy");
+            auto buffIt = e.find("buff"); // P3.2
+            if (buffIt != e.end() && buffIt->is_object()) {
+                d.buffId = BuffIdFromKind(GetS(*buffIt, "kind"));
+                d.buffProbability = GetF(*buffIt, "probability");
+            }
             m_BulletIndex[d.id] = m_Bullets.size();
             m_Bullets.push_back(std::move(d));
         }
@@ -496,6 +515,50 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         LOG_INFO("GameData: pickups.json absent (fallback: no drop values -> no drops)");
     }
 
+    // AUDIO: audio.json (absent on a checkout without the sibling _reverse dump
+    // / Resources/audio/ -- see tools/build_gamedata.py build_audio_table()).
+    // Absence is not a load failure: the game just runs muted (AudioPlayer
+    // no-ops on an empty clip name).
+    const json &audio = store.Load(dir + "audio.json");
+    if (audio.is_object()) {
+        if (const auto fx = audio.find("effects"); fx != audio.end() && fx->is_object()) {
+            for (auto it = fx->begin(); it != fx->end(); ++it) {
+                if (it.value().is_string()) {
+                    m_Audio.effects[std::atoi(it.key().c_str())] = it.value().get<std::string>();
+                }
+            }
+        }
+        if (const auto bgm = audio.find("bgm"); bgm != audio.end() && bgm->is_object()) {
+            m_Audio.bgmMenu = GetS(*bgm, "menu");
+            m_Audio.bgmMenuButton = GetS(*bgm, "menu_button");
+            m_Audio.bgmRoom = GetS(*bgm, "room");
+            if (const auto bb = bgm->find("by_biome"); bb != bgm->end() && bb->is_object()) {
+                for (auto it = bb->begin(); it != bb->end(); ++it) {
+                    AudioTable::Bgm b;
+                    b.low = GetS(it.value(), "low");
+                    b.high = GetS(it.value(), "high");
+                    m_Audio.bgmByBiome.emplace(it.key(), std::move(b));
+                }
+            }
+        }
+        if (const auto ws = audio.find("weapon_shoot"); ws != audio.end() && ws->is_object()) {
+            for (auto it = ws->begin(); it != ws->end(); ++it) {
+                if (it.value().is_string()) {
+                    m_Audio.weaponShoot.emplace(it.key(), it.value().get<std::string>());
+                }
+            }
+        }
+        if (const auto egs = audio.find("enemy_gun_shoot"); egs != audio.end() && egs->is_object()) {
+            for (auto it = egs->begin(); it != egs->end(); ++it) {
+                if (it.value().is_string()) {
+                    m_Audio.enemyGunShoot.emplace(it.key(), it.value().get<std::string>());
+                }
+            }
+        }
+    } else {
+        LOG_INFO("GameData: audio.json absent (fallback: game runs muted)");
+    }
+
     LOG_INFO("GameData loaded: {} weapons, {} bullets, {} enemies, {} "
              "enemy_guns, {} buffs, {} room layouts, {} design rooms",
              m_Weapons.size(), m_Bullets.size(), m_Enemies.size(),
@@ -604,6 +667,13 @@ const BulletDef *GameData::FindBullet(const std::string &id) const {
     auto it = m_BulletIndex.find(id);
     return it == m_BulletIndex.end() ? nullptr : &m_Bullets[it->second];
 }
+
+const BulletDef *GameData::BulletForWeapon(const WeaponDef &def) const {
+    if (def.bulletPrefab.empty()) {
+        return nullptr;
+    }
+    return FindBullet(def.bulletPrefab);
+}
 const EnemyDef *GameData::FindEnemy(const std::string &id) const {
     auto it = m_EnemyIndex.find(id);
     return it == m_EnemyIndex.end() ? nullptr : &m_Enemies[it->second];
@@ -662,6 +732,37 @@ int GameData::SpriteIntervalMs(const std::string &id, int fallbackMs) const {
     const SpriteSet *s = FindSprites(id);
     return (s != nullptr && s->sampleRate > 0) ? 1000 / s->sampleRate : fallbackMs;
 }
+
+namespace {
+const std::string kEmptyClip;
+} // namespace
+
+const std::string &GameData::FindEffectClip(int index) const {
+    auto it = m_Audio.effects.find(index);
+    return it == m_Audio.effects.end() ? kEmptyClip : it->second;
+}
+
+const std::string &GameData::WeaponShootClip(const std::string &weaponId) const {
+    auto it = m_Audio.weaponShoot.find(weaponId);
+    return it == m_Audio.weaponShoot.end() ? kEmptyClip : it->second;
+}
+
+const std::string &GameData::EnemyGunShootClip(const std::string &enemyGunId) const {
+    auto it = m_Audio.enemyGunShoot.find(enemyGunId);
+    return it == m_Audio.enemyGunShoot.end() ? kEmptyClip : it->second;
+}
+
+const std::string &GameData::BgmFor(int chapter, bool high) const {
+    auto it = m_Audio.bgmByBiome.find(ChapterBiome(chapter));
+    if (it == m_Audio.bgmByBiome.end()) {
+        return kEmptyClip;
+    }
+    if (high && !it->second.high.empty()) {
+        return it->second.high;
+    }
+    return it->second.low;
+}
+
 const char *ChapterBiome(int chapter) {
     switch (((chapter - 1) % 3 + 3) % 3) {
     case 0:

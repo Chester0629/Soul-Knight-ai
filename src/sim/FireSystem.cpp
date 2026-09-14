@@ -20,6 +20,9 @@ BulletState MakeBullet(const FireIntent &in, glm::vec2 dir, std::uint32_t &nextI
     b.canThrough = in.canThrough;
     b.pierce = in.pierce;
     b.active = true;
+    b.hasBuff = in.hasBuff; // P3.2
+    b.buffParams = in.buffParams;
+    b.buffProbability = in.buffProbability;
     return b;
 }
 

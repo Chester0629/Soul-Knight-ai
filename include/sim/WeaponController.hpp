@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include "combat/Buff.hpp"
 #include "combat/Gun001.hpp"
 #include "combat/Gun016.hpp"
 #include "sim/FireIntent.hpp"
@@ -45,6 +46,13 @@ public:
         float heatMaxTime = 2.0F;
         float heatBaseAngle = 20.0F;
         float heatRecoil = 0.0F;
+        // P3.2: this weapon's bullet buff, resolved once (BrainFactory::MakeWeapon,
+        // from BulletDef::buffId + buffs.json) and stamped onto every FireIntent
+        // this controller emits. hasBuff false => every intent stays buff-free,
+        // byte-identical to a weapon with no BuffTrigger bullet.
+        bool hasBuff = false;
+        Game::Combat::BuffParams buffParams{};
+        float buffProbability = 0.0F;
     };
 
     WeaponController(const Params &params, int seed);
