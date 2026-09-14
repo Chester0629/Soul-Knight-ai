@@ -81,7 +81,7 @@ TEST(BuffTriggerTest, DataSwordFireBuffOnlyRow) {
     EXPECT_FLOAT_EQ(b->buffProbability, 1.0F);
 }
 
-TEST(BuffTriggerTest, DataBulletProbabilityZeroNeverApplies) {
+TEST(BuffTriggerTest, DataBulletProbabilityZeroIsCritOnly) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));
     const Game::BulletDef *b = gd.FindBullet("bullet_95"); // BuffEffectTrigger, probability: 0

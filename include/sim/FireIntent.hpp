@@ -40,7 +40,8 @@ struct FireIntent {
     // P3.2: the firing weapon's bullet buff (resolved once at EquipWeapon time
     // from BulletDef::buffId + buffs.json -> Combat::BuffParams, so it travels
     // with the bullet unchanged even if the player swaps weapons before this
-    // bullet lands). hasBuff false / buffProbability 0 => no buff, byte-identical
+    // bullet lands). hasBuff false => no buff (buffProbability 0 still applies on a crit or
+    // for camp != 0, game_typed.c 86608-86645), byte-identical
     // to a bullet with no BuffTrigger.
     bool hasBuff = false;
     Game::Combat::BuffParams buffParams{};
