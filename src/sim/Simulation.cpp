@@ -807,11 +807,16 @@ void Simulation::KillAllHostiles() {
             // sees Forced and never fires ICharSkill::OnEnemyKilled for a kill the
             // player never made.
             e->MutableState().deathSource = DeathSource::Forced;
+            e->MutableState().deathLocked = true; // item 2 (R20): belt-and-suspenders --
+            // the `deathSource == Forced` guard in SetDeathSource already rejects every
+            // later write unconditionally, but locking here too keeps the invariant
+            // "Forced is immutable" true of BOTH fields, not just one of them.
         }
     }
     if (m_Boss != nullptr && !m_Boss->State().dead) {
         m_Boss->MutableState().stats.hp = 0;
         m_Boss->MutableState().deathSource = DeathSource::Forced; // item 2 (R19), see above.
+        m_Boss->MutableState().deathLocked = true;                // item 2 (R20), see above.
     }
 }
 

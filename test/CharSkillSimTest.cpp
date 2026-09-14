@@ -54,6 +54,17 @@ Game::EnemyDef EnemyWithHp(int hp) {
     return def;
 }
 
+// item 2 (R20 lock-attribution fix): EnemyWithHp(), also pinned immobile
+// (kinematic, EnemyController::ComputeVelocity's turret branch -- see
+// EnemyController.cpp) so a multi-step scenario (a bullet travelling a fixed,
+// precomputed distance over several Advance() calls) is not thrown off by the
+// enemy's own AI steering toward the player in the meantime.
+Game::EnemyDef StationaryEnemyWithHp(int hp) {
+    Game::EnemyDef def = EnemyWithHp(hp);
+    def.kinematic = 1;
+    return def;
+}
+
 bool HasEvent(Simulation &sim, SimEventType type, std::uint32_t entityId,
              const std::string &name) {
     for (const SimEvent &e : sim.DrainEvents()) {
@@ -729,51 +740,188 @@ TEST(CharSkillSimTest, KillAttributionMixedDotsDyingOnPlayerTickCallsOnEnemyKill
 }
 
 // ===================================================================
-// item 2 (R19 kill-attribution fix): a forced death (KillAllHostiles) must set an
-// IMMUTABLE EntityState::DeathSource::Forced so a player hit/DoT tick that lands
-// BEFORE the next Cull() (KillAllHostiles zeroes hp but does not set `dead` --
-// only Cull() does) cannot re-attribute the death to the player. Regression
-// covers: a player bullet already hit the enemy (would-be PlayerBullet source)
-// AND a player DoT is still pending when the forced kill happens; the pending
-// tick fires on the very next Advance(), in the SAME step Cull() runs -- pre-fix,
-// that tick would overwrite deathSource back to a player source before Cull read it.
+// item 2 (R20 lock-attribution fix): death attribution must be locked by the FIRST
+// application that leaves hp<=0, whatever its source -- Simulation::Step's fixed
+// order (TickWeapon's melee cut -> TickBuffs' DoT -> ResolveHits' bullets -> Cull)
+// must not let a LATER hit in the same step steal or erase the attribution a
+// STILL-EARLIER hit already earned. See EntityState::deathLocked /
+// EntityState::SetDeathSource (include/sim/EntityState.hpp).
+// ===================================================================
+
+// A non-player DoT tick (TickBuffs, early in Step()) kills the enemy; a player
+// bullet -- already in flight from an earlier Advance() call -- lands LATER in
+// the very same step (ResolveHits, after TickBuffs). Pre-fix, ResolveHits gates
+// only on the `dead` FLAG (not yet set -- Cull hasn't run this step), so the
+// bullet's SetDeathSource(PlayerBullet) would silently steal the attribution back
+// from Other. Post-fix it must stay locked at Other -> OnEnemyKilled must NOT fire.
+TEST(CharSkillSimTest, KillAttributionNonPlayerDotLocksOutALaterSameStepPlayerBullet) {
+    Simulation sim(90, &g_NullWorld);
+    // Stationary, hp=1 so a single tickDamage=1 poison tick is exactly lethal.
+    // BulletDef::bulletSpeed is in DATA units, scaled to px/fixed-step by
+    // Sim::kDataSpeedToPxPerSec(15) * kFixedStepSeconds(0.02) -- see
+    // BrainFactory::MakeWeapon -- so bulletSpeed=100 moves 100*15*0.02=30px per
+    // fixed step. Placed at x=115 so the bullet lands EXACTLY on it on the 4th
+    // IntegrateBullets call (30, 60, 90, 120), never sooner (the radius-sum
+    // overlap gate is kBulletRadius(4)+kEnemyBodyRadius(16)=20px, and
+    // 115-90=25 > 20, so step 3 is still a clean miss; 120-115=5 <= 20 lands).
+    sim.AddEnemy(StationaryEnemyWithHp(1), glm::vec2{115.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    Game::WeaponDef wdef{};
+    wdef.bulletSpeed = 100.0F;
+    wdef.atk = 1; // irrelevant -- the DoT is what kills it.
+    sim.EquipWeapon(wdef, "Gun001", 7);
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+
+    // Step 1: fire the bullet BEFORE the skill window opens (in_skill_effect==false
+    // here, so this press is a plain shot -- C04 only hijacks "firing" into a cut
+    // once the window is up). Bullet now at x=30, still far from the enemy.
+    WorldInputs fire = Idle();
+    fire.firing = true;
+    sim.Advance(kFixedStepMs, fire);
+    ASSERT_EQ(sim.Bullets().size(), 1U) << "the shot fired (no skill window yet to suppress it)";
+    ASSERT_TRUE(sim.EnemyViews()[0].alive);
+
+    // Step 2: open the cut window (idle otherwise -- the bullet keeps flying via
+    // IntegrateBullets regardless of `firing`). Bullet now at x=60.
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    ASSERT_TRUE(adapter->Brain().InSkillEffect()) << "the cut window is open";
+
+    // Step 3: idle. Bullet now at x=90 (still a clean miss, see the setup comment).
+    sim.Advance(kFixedStepMs, Idle());
+    ASSERT_TRUE(sim.EnemyViews()[0].alive) << "the bullet has not reached the enemy yet";
+
+    // Arm the lethal non-player DoT right before the landing step: it ticks in
+    // TickBuffs, BEFORE this same step's ResolveHits moves the bullet to x=120 and
+    // resolves the (now-redundant, but still gate-passing) hit.
+    Game::Combat::BuffParams poison; // NOT player-sourced.
+    poison.kind = Game::Combat::BuffKind::Poison;
+    poison.durationSec = 1.0F;
+    poison.tickSec = 0.02F; // ticks on the very next Advance() (one fixed step).
+    poison.tickDamage = 1;  // exactly lethal (hp=1).
+    sim.ApplyBuff(/*entityId=*/0, poison, /*fromPlayer=*/false);
+
+    sim.Advance(kFixedStepMs, Idle()); // Step 4: DoT tick (lethal, locks Other) -> bullet lands -> Cull.
+
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(adapter->Brain().Combo(), 0)
+        << "the non-player poison tick (TickBuffs) killed the enemy BEFORE the "
+           "player bullet landed (ResolveHits, later the same step) -- the "
+           "Other attribution must stay locked, so OnEnemyKilled must NOT fire";
+    EXPECT_TRUE(adapter->Brain().InSkillEffect())
+        << "the cut window is untouched by a kill never attributed to the player";
+}
+
+// A player melee cut (TickWeapon, early in Step()) kills the enemy; a non-player
+// DoT tick lands LATER in the very same step (TickBuffs, after TickWeapon).
+// Pre-fix, TickBuffs gates only on `!st.dead` (not yet set -- Cull hasn't run this
+// step), so the DoT's SetDeathSource(Other) would silently steal the attribution
+// away from PlayerCut. Post-fix it must stay locked at PlayerCut -> OnEnemyKilled
+// DOES fire (exactly once, for the real kill).
+TEST(CharSkillSimTest, KillAttributionPlayerCutLocksOutALaterSameStepNonPlayerDot) {
+    Simulation sim(91, &g_NullWorld);
+    sim.AddEnemy(WeakEnemy(), glm::vec2{30.0F, 0.0F}, /*roomId=*/0, /*seed=*/1); // in cut reach+arc.
+    sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
+    const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
+    ASSERT_NE(adapter, nullptr);
+
+    // A non-player DoT tick queued to fire THIS step, in TickBuffs -- AFTER
+    // TickWeapon's cut (Step() order: TickWeapon -> ... -> TickBuffs).
+    Game::Combat::BuffParams poison; // NOT player-sourced.
+    poison.kind = Game::Combat::BuffKind::Poison;
+    poison.durationSec = 1.0F;
+    poison.tickSec = 0.02F; // ticks on the very next Advance() (one fixed step).
+    poison.tickDamage = 50; // magnitude is irrelevant -- the cut already killed it.
+    sim.ApplyBuff(/*entityId=*/0, poison, /*fromPlayer=*/false);
+
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    cast.firing = true; // same-step activate + cut (TickSkill runs before TickWeapon).
+    sim.Advance(kFixedStepMs, cast);
+
+    EXPECT_FALSE(sim.EnemyViews()[0].alive); // 8 dmg cut > 3 hp -- overkill.
+    EXPECT_EQ(adapter->Brain().Combo(), 1)
+        << "the player cut (TickWeapon) killed the enemy BEFORE the non-player "
+           "poison tick (TickBuffs, later the same step) -- the PlayerCut "
+           "attribution must stay locked, so OnEnemyKilled DOES fire";
+    EXPECT_FALSE(adapter->Brain().InSkillEffect())
+        << "KillSomeOne closes the cut window on the real (locked) kill";
+}
+
+// ===================================================================
+// item 2 (R19/R20 kill-attribution fix): a forced death (KillAllHostiles) must set
+// an IMMUTABLE EntityState::DeathSource::Forced so a player hit that lands BEFORE
+// the next Cull() (KillAllHostiles zeroes hp but does not set `dead` -- only
+// Cull() does) cannot re-attribute the death to the player. Regression covers:
+// C04's cut window is open (InSkill/InSkillEffect true) and a player bullet is
+// STILL IN FLIGHT (fired several steps earlier, has not yet reached the enemy)
+// when the forced kill happens; the bullet then lands on its own schedule,
+// arriving in the SAME step Cull() processes the forced death -- pre-fix,
+// ResolveHits gates only on the `dead` FLAG (still false at that point in the
+// step), so that landing hit would call SetDeathSource(PlayerBullet) and
+// overwrite deathSource back to a player source before Cull reads it.
 // ===================================================================
 
 TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAPendingPlayerHitAndDot) {
     Simulation sim(86, &g_NullWorld);
-    sim.AddEnemy(EnemyWithHp(1000), glm::vec2{20.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    // Stationary, far enough (x=205) that the bullet needs several steps to
+    // arrive, well outside C04's ~48px cut reach so the "latch has_cut" press
+    // below cannot itself touch it. BulletDef::bulletSpeed is in DATA units,
+    // scaled to px/fixed-step by Sim::kDataSpeedToPxPerSec(15) *
+    // kFixedStepSeconds(0.02) -- see BrainFactory::MakeWeapon -- so
+    // bulletSpeed=100 moves 100*15*0.02=30px per fixed step: the real shot
+    // (below) reaches x=180 after 5 idle steps (30*6=180, distance 25 > the
+    // kBulletRadius(4)+kEnemyBodyRadius(16)=20px overlap gate -- a clean miss),
+    // then x=210 one step later (distance 5 <= 20 -- lands).
+    sim.AddEnemy(StationaryEnemyWithHp(1000), glm::vec2{205.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
     Game::WeaponDef wdef{};
-    wdef.bulletSpeed = 1000.0F; // fast enough to land the same step it is fired.
+    wdef.bulletSpeed = 100.0F;
     wdef.atk = 1;               // 1 dmg: nowhere near lethal on a 1000-hp enemy.
     sim.EquipWeapon(wdef, "Gun001", 7);
     sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
     const auto *adapter = dynamic_cast<const CharSkillC04Adapter *>(sim.PlayerSkill());
     ASSERT_NE(adapter, nullptr);
 
-    // A non-lethal player bullet hit -- would (pre-fix) leave a "last hit by
-    // player" trace the forced kill below must not inherit.
-    WorldInputs fire = Idle();
-    fire.firing = true;
-    sim.Advance(kFixedStepMs, fire);
-    ASSERT_TRUE(sim.EnemyViews()[0].alive) << "1 dmg on a 1000-hp enemy must not kill it";
+    // Activate C04 FIRST and confirm the cut window is actually open.
+    WorldInputs cast = Idle();
+    cast.skill = true;
+    sim.Advance(kFixedStepMs, cast);
+    ASSERT_TRUE(adapter->Brain().InSkill());
+    ASSERT_TRUE(adapter->Brain().InSkillEffect());
 
-    // A player-sourced DoT still pending -- its tick has not fired yet.
-    Game::Combat::BuffParams fireDot;
-    fireDot.kind = Game::Combat::BuffKind::Fire;
-    fireDot.durationSec = 1.0F;
-    fireDot.tickSec = 0.02F; // fires on the VERY NEXT fixed step.
-    fireDot.tickDamage = 1;
-    sim.ApplyBuff(/*entityId=*/0, fireDot, /*fromPlayer=*/true);
+    // While in_skill_effect is up, the FIRST press is a cut attempt (has_cut was
+    // false), not a shot -- it whiffs (the enemy is out of cut reach) but latches
+    // has_cut=true, so the NEXT press falls through to a normal weapon shot
+    // (RoleAtk: `if (has_cut != 0) hand.SetAttack(value)`). This is the only way to
+    // get a real in-flight player bullet while the window stays open.
+    WorldInputs press = Idle();
+    press.firing = true;
+    sim.Advance(kFixedStepMs, press); // whiff cut, latches has_cut.
+    ASSERT_EQ(sim.Bullets().size(), 0U) << "the first press in-window is a cut attempt, not a shot";
+
+    sim.Advance(kFixedStepMs, press); // has_cut is set -- this press fires the gun.
+    ASSERT_EQ(sim.Bullets().size(), 1U) << "the second press falls through to a normal shot";
+
+    // Let the bullet fly (still in flight, nowhere near the enemy) while
+    // in_skill_effect stays open the whole time.
+    for (int i = 0; i < 5; ++i) {
+        sim.Advance(kFixedStepMs, Idle());
+    }
+    ASSERT_TRUE(sim.EnemyViews()[0].alive) << "the bullet has not reached the enemy yet";
+    ASSERT_TRUE(adapter->Brain().InSkillEffect()) << "the cut window is still open";
 
     sim.KillAllHostiles(); // forces hp=0 NOW; entity is not yet `dead` (Cull hasn't run).
-    // The pending fire DoT tick fires THIS step (TickBuffs runs before Cull in
-    // Step()), then Cull() processes the forced death in the SAME Advance() call.
+    // The in-flight bullet lands THIS step (IntegrateBullets/ResolveHits run before
+    // Cull in Step()), then Cull() processes the forced death in the SAME
+    // Advance() call -- the exact race the pre-fix code lost.
     sim.Advance(kFixedStepMs, Idle());
 
     EXPECT_FALSE(sim.EnemyViews()[0].alive);
     EXPECT_EQ(adapter->Brain().Combo(), 0)
-        << "KillAllHostiles must lock out BOTH the earlier player bullet hit and "
-           "the pending player DoT tick -- OnEnemyKilled must not fire for a "
+        << "KillAllHostiles must lock out the in-flight player bullet landing in "
+           "the SAME step as Cull -- OnEnemyKilled must not fire for a "
            "forced kill";
 }
 

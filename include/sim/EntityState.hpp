@@ -59,13 +59,38 @@ struct EntityState {
     /// the DeathSource enum doc above. Irrelevant once dead (never read again).
     DeathSource deathSource = DeathSource::None;
 
-    /// The only normal (non-forced) writer of `deathSource`: a no-op once it is
-    /// already Forced (immutable), otherwise records @p src as the latest
-    /// damage-application source. KillAllHostiles bypasses this helper and assigns
+    /// item 2 (R20 fix): true once `deathSource` has been LOCKED by the first
+    /// damage-application call that left `stats.hp <= 0` this life. Death
+    /// attribution must belong to whichever hit was actually lethal, not to
+    /// whichever hit happened to land last in Simulation::Step's fixed order
+    /// (melee cut -> DoT -> bullets -> Cull). Without this flag a non-player DoT
+    /// tick that already killed the enemy could be re-attributed to a player
+    /// bullet landing later the SAME step (false OnEnemyKilled), and symmetrically
+    /// a lethal player cut could be overwritten to Other by a later non-player DoT
+    /// tick (missed OnEnemyKilled). Forced (KillAllHostiles/SK_FORCE_KILL) is
+    /// exempt from this lock the same way it is exempt from SetDeathSource below:
+    /// it is assigned directly to `deathSource` (never through SetDeathSource), so
+    /// it always overwrites regardless of `deathLocked`, and the `deathSource ==
+    /// Forced` check below then rejects every subsequent SetDeathSource call
+    /// unconditionally -- Forced always keeps priority.
+    bool deathLocked = false;
+
+    /// The only normal (non-forced) writer of `deathSource`: a no-op once
+    /// `deathLocked` is set or `deathSource` is already Forced (both immutable),
+    /// otherwise records @p src as the latest damage-application source and, if
+    /// this application just brought `stats.hp` to <= 0, LOCKS it as the death's
+    /// attribution (first lethal hit wins, not the last hit of the step). Callers
+    /// must invoke this immediately after applying the damage that may have been
+    /// lethal (stats.hp already updated) so the hp<=0 check below observes it.
+    /// KillAllHostiles bypasses this helper and assigns
     /// `deathSource = DeathSource::Forced` directly.
     void SetDeathSource(DeathSource src) {
-        if (deathSource != DeathSource::Forced) {
-            deathSource = src;
+        if (deathLocked || deathSource == DeathSource::Forced) {
+            return;
+        }
+        deathSource = src;
+        if (stats.IsDead()) {
+            deathLocked = true;
         }
     }
 };
