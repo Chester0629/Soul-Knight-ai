@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.29（2026-10-04；P3.3.c 依 Codex R23 修訂，待 R24；證據腳本逐項斷言）
+> 版本：v1.30（2026-10-04；依 Codex R24 補證據斷言順序與數量，待 R25）
 
 ---
 
@@ -54,7 +54,7 @@
 
 ### 1.1 無頭鉤子與可執行案例
 鉤子（env）：`SK_SEED=N`、`SK_MAX_FRAMES`、`SK_SHOT`、`SK_SKIP_MENU`、`SK_START_CHAR`、`SK_CHAR`、`SK_MENU=start`、`SK_FORCE_CLEAR=K`、`SK_FORCE_DIE=K`、`SK_FORCE_KILL=K`、`SK_FORCE_KILL_EVERY=N`、`SK_FORCE_SKILL=K`、`SK_ENDSCENE=restart|quit|menu`、`SK_GATE_TELEPORT=K`、`SK_GATE_BESIDE=K`、`SK_ROOM_TELEPORT=K,R`（R 無生成點且為出口房時傳到房中央）、`SK_SHOP_BUY=K`、`SK_SHOP_MACHINE=N`、`SK_STATUE_WORSHIP=K`、`SK_COINS=N`、`SK_EVENT_ROOM=statue|mineral`、`SK_ZOOM=<float>`（整房截圖用，覆蓋鏡頭 1.5）、`SK_FORCE_BUFF=K,<kind>`（第 K 幀對玩家上 buff）、`SK_FORCE_WEAPON=<weapon id>`（開局裝備）、`SK_FORCE_HIT=K`（自第 K 幀起持續朝最近敵人開火）、`SK_FORCE_SKILL_PULSE=K1,K2`（第 K1、K2 幀各按一次技能鍵）、`SK_MUTE=1`（靜音但仍印 `Audio:` log）、`SK_AUTOWALK`（不穩）、`SK_AUTOFIRE`。
-`GameScene::m_Frame` 每層重新計數。**Shell**：命令以 Git Bash 寫（`VAR=x ./build/Debug/SoulKnight.exe`）；PowerShell 等價寫法 `$env:VAR="x"; .\build\Debug\SoulKnight.exe`。實跑腳本：`tools/evidence_chain.sh <版本>`（輸出入 `docs/evidence/<版本>/`，§10 引用；每案逐一檢查退出碼、逾時與 PNG 大小，並以 `require` 逐項斷言上表「預期 log」中的必要事件，缺一即失敗；任一失敗腳本以非零退出）。
+`GameScene::m_Frame` 每層重新計數。**Shell**：命令以 Git Bash 寫（`VAR=x ./build/Debug/SoulKnight.exe`）；PowerShell 等價寫法 `$env:VAR="x"; .\build\Debug\SoulKnight.exe`。實跑腳本：`tools/evidence_chain.sh <版本>`（輸出入 `docs/evidence/<版本>/`，§10 引用；每案逐一檢查退出碼、逾時與 PNG 大小，並以 `require_order`（事件依序出現）、`require_count`（最少筆數）與 `require`（存在）斷言上表「預期 log」的必要事件，缺一或順序錯即失敗；任一失敗腳本以非零退出）。
 
 | 案例 | 命令（Git Bash，倉庫根目錄，Debug 建置） | 預期 log 順序 | 逾時 |
 |---|---|---|---|
@@ -90,7 +90,7 @@
 |---|---|---|---|---|
 | P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | P1.10 驗收完成（有取捨）；其餘未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
 | P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
-| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain、P3.1、P3.2、P3.3.a/b/c 功能完成；P3.0 稽核完成待裁決） | P3.2、P3.3.a、P3.3.b 驗收完成；P3.3.c 審查中；其餘未驗收 | phase 1–5、本版 | P3.0 裁決、P3.4–P3.9、P3.3.c 效果未移植部分（T-43–T-48） |
+| P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain、P3.1、P3.2、P3.3.a/b/c 功能完成；P3.0 稽核完成待裁決） | P3.2、P3.3.a、P3.3.b 驗收完成；其餘未驗收（P3.3.c 送審中） | phase 1–5、本版 | P3.0 裁決、P3.4–P3.9、P3.3.c 效果未移植部分（T-43–T-48） |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
 | P5 大廳 | 未開始 | 未驗收 | — | 全部 |
 | P6 UI 表現 | 進行中（P6.1、P6.7 功能完成） | P6.7 驗收完成（有取捨）；P6.1 未驗收 | 6e46eed、本版 | P6.2–P6.6、P6.8 |
@@ -438,14 +438,18 @@ diff 只有測試名／註解／文件；§7 全過（5 不適用）。已驗收
 （第一次執行因暫存 CODEX_HOME 的 auth.json 遺失回 401，重建後重跑。）FAITHFUL 抽查六組相符；DISASM 實跑 `tools/arm_disasm.py` 確認 C03 雷擊 8、C05 尾端呼叫、C07 命中／未命中分支與 6／10、C11 治療 1／2、C12 in_skill 分支，DISASM 作為證據類別可接受；`build_character_roster()` 重算與 characters.json 完全相符；T-01～T-51 齊；指定 exe 100/100。阻擋：T-49「永不清」超出可見證據；C05 包裝函式寫死陣列長度 4；C03／C12 擊殺歸因測試只驗死亡、改錯來源仍會過；**H7 附件只剩三行開門（447 幀只走到第 3 層），腳本卻回 STATUS: OK**；brain 測試實為 61 例、§10 Python 5／3 例並存、§2 未同步。
 **回覆（v1.29）**：T-49 拆為 FAITHFUL（End 不清、FUN_0026b1dc 召喚時設 1）與 INFERRED（四份匯出檔全掃無其他清除點；未掃原始 .so）；C05 `TryActivateSkill(variantCount)` 由 CharacterDef 傳入；C05 引用改 0x2661e8–0x2661ec；Simulation 加 `PlayerKillCount`／`LastDeathSourceForTest`，C03／C12 歸因測試改斷言來源與擊殺數並各配強殺反例（以錯誤來源回歸驗證會失敗）；C12 測試措辭與命名改正。證據腳本：新增 `require` 逐項斷言 13 案的必要事件（以 v1.28 舊 H7 驗證會報 4 個缺失），H7 改 700 幀、摘錄 20 行。§2／§3／§10 數字同步。ctest 2114。
 
+### R24 — 2026-10-04 — Codex — 對象 P3.3.c v1.29 @ aaab948 — **不通過（證據腳本與文件）**
+T-49 拆分、C05 資料化與 0x2661e8–0x2661ec、C03／C12 歸因正反例皆通過（指定 exe 282/282、gate GREEN、unittest 5/5、T-01～T-51 齊；來源核對 game_full.c 158451–158472／158489–158490／158514–158524）。阻擋：`require` 只驗存在、不驗順序與數量——刪掉 H1 的 B2、H3 前兩波、H7 boss 後開門、H11 死亡音或把 H4 縮成一筆仍會通過；§10 H7 行數（實 12、上限 20）與 H11 計數（槍 24、死亡 13、門 1、命中 1、BGM 1）不符；§2 驗收欄用了未定義的「審查中」。
+**回覆（v1.30）**：腳本新增 `require_order`（依序；awk 以 ENVIRON 傳 pattern 避免反斜線被吃）與 `require_count`；H1 加 B2、H3 改為 9(15)→計畫→Active→9(6)→6(0)→cleared、H4 ≥3 筆、H6 先售價 10 再成交 10、H7 加 boss 後開門、H9／H9armor 加持續秒數、H10 改 applied→ended、H11 加死亡音。以 v1.29 附件驗證：原檔 0 失敗；照 R24 列的六種刪改各自報錯。§10 行數與計數、§2 狀態值改正。
+
 ---
 
 ## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生；腳本把結尾 `STATUS: OK|FAILED` 與 UTC 時戳寫入 `status.txt`，只有 OK 的附件有效）
 
-v1.29（`docs/evidence/v1.29/`；`head.txt` = 建置時的基底 commit 9b10e32，提交後 HEAD 見 git log；13 案皆經 `require` 逐項斷言）：
-- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2114`（P3.3.c：五角 brain 測試 61 例、CharSkillSimTest +15；golden 含在內）；`gate_tests.txt` 5 例。`H7.txt` 20 行，含 `Level B5 (1-5)` → `BossRoom: room 6 uses r1_boss4` → `Boss defeated!` → `Chest: boss chest chest_boss13`（700 幀）。
+v1.30（`docs/evidence/v1.30/`；`head.txt` = 建置時的基底 commit aaab948，提交後 HEAD 見 git log；各案經 `require_order`／`require_count`／`require` 斷言）：
+- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2114`（P3.3.c：五角 brain 測試 61 例、CharSkillSimTest +15；golden 含在內）；`gate_tests.txt` 5 例。`H7.txt` 實際 12 行（摘錄上限 20 行；前四行為 B1–B4 的開門），依序含 `Level B5 (1-5)` → `BossRoom: room 6 uses r1_boss4` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`（700 幀）。
 - 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`；`gate_tests.txt` = 邊界 unittest（5 例：注入假引用必須報錯、P3.3.c 角色 skill_refs 必填）。
-- H1–H9：`H1.txt` … `H9.txt`、`H2neg.txt`（=1）；截圖 `H5.png`；`status.txt`。H9 = `Buff: Fire applied to 61453 for 2.000000s` → `Buff: Fire ended on 61453`；`H9armor.txt` = `Buff: Armor applied to 61453 for 6.000000s` → `Buff: Armor ended on 61453`；`H10.txt`（40 行）= `Buff: Fire applied to <id>` … `Buff: Fire ended on <id>`（腳本斷言 ended）；`H12_<c>.txt` 九角：c03／c04／c07／c08／c10／c13 為 `activated` → `ended`（c07 另有 `effect bat_swarm n=6`）；c05 `effect bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)`；c11 `effect holy_light`（14 s 冷卻內第二次按鍵無效）；c12 `effect wolf_summon n=2 NOT_PORTED(T-48)` 後第二次為 `effect atk_cut dmg=5`；`H11.txt`（40 行）= `sfx fx_gun_1.wav` x22、`sfx enermy_die3.wav` x16、`bgm bgm_5Low.ogg` x1、`sfx fx_door.wav` x1。關鍵事件與 v1.4 相同（H7 摘錄上限改為 12 行，前面多出前幾層的 `TransferGate: open` 四行）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
+- H1–H9：`H1.txt` … `H9.txt`、`H2neg.txt`（=1）；截圖 `H5.png`；`status.txt`。H9 = `Buff: Fire applied to 61453 for 2.000000s` → `Buff: Fire ended on 61453`；`H9armor.txt` = `Buff: Armor applied to 61453 for 6.000000s` → `Buff: Armor ended on 61453`；`H10.txt`（40 行）= `Buff: Fire applied to <id>` … `Buff: Fire ended on <id>`（腳本斷言 ended）；`H12_<c>.txt` 九角：c03／c04／c07／c08／c10／c13 為 `activated` → `ended`（c07 另有 `effect bat_swarm n=6`）；c05 `effect bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)`；c11 `effect holy_light`（14 s 冷卻內第二次按鍵無效）；c12 `effect wolf_summon n=2 NOT_PORTED(T-48)` 後第二次為 `effect atk_cut dmg=5`；`H11.txt`（40 行）本次 = `sfx fx_gun_1.wav` x24、`sfx enermy_die3.wav` x12、`sfx fx_hit.wav` x2、`bgm bgm_5Low.ogg` x1、`sfx fx_door.wav` x1。各音效次數隨實跑時序浮動（v1.29 為死亡 13、命中 1），腳本只斷言 BGM 先於開火、死亡音至少 1 次。關鍵事件與 v1.4 相同（H7 摘錄上限改為 12 行，前面多出前幾層的 `TransferGate: open` 四行）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
 - V-S r2_boss3：`r2boss3_seed.txt`（含 `SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2boss3_full.txt`（含 `SK_ZOOM override 0.6`）、`r2_boss3_full.png`（整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體；obj22_stone ×4 與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）＝T-28；boss 在房中央、門在下與右。**更正（v1.4 起）**：v1.3 的 `r2_boss3.png` 拍到的是起始房（當時 `SK_ROOM_TELEPORT` 對 level-0 房靜默跳過）。
 
 v1.6（e1507b0，R7 通過的附件，已由 v1.8 取代）／v1.5（0f8ac9f）／v1.4（9536194）：ctest 2016/2016、gate GREEN、H1–H8、整房截圖（附件已由 v1.6 取代）。v1.3（458c595）：ctest 2015/2015。v1.2（1097c86）：ctest 2009/2009。
