@@ -36,6 +36,11 @@ inline constexpr float kDataSpeedToPxPerSec = 15.0F;
 /// bullet with no resolvable bullet prefab). The live values come from data:
 /// Sim::BodyGeom (hero/enemy/boss body circle + hurtbox) and BulletState::radiusPx
 /// (the bullet prefab collider) -- see sim/BodyGeom.hpp and tools/build_gamedata.py.
+///
+/// PORT CHOICE (T-52): ENEMY bullets never carry a prefab radius (the enemy fire path sets
+/// FireIntent::radiusPx = 0), so they always use this 4 px fallback instead of their
+/// bullet prefab's own collider; only player-weapon bullets (BrainFactory ->
+/// EquivalentRadiusPx) use the data radius.
 inline constexpr float kBulletRadius = 4.0F;
 inline constexpr float kPlayerBodyRadius = 16.0F;
 inline constexpr float kEnemyBodyRadius = 16.0F;

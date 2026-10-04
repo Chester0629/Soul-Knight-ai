@@ -69,8 +69,10 @@ inline int WeaponEnergyCost(const WeaponDef &def) {
 
 /// A prefab collider (tools/build_gamedata.py prefab_geometry/bullet_collider), in
 /// Unity UNITS (1 unit = 1 map cell = Scale::kCellPx px), already multiplied by its
-/// GameObject's lossy scale. `offset` is relative to the prefab root origin (the
-/// feet for a character). FAITHFUL @ CircleCollider2D.m_Radius/m_Offset,
+/// GameObject's lossy scale. `offset` is the collider CENTRE in the prefab ROOT's space
+/// (root origin = the feet for a character): the whole Transform chain composed
+/// (localPosition + localScale * q per ancestor) plus m_Offset, e.g. mineral_gold's
+/// collider child at localPosition y 0.8 + m_Offset y 0.5 = 1.3. FAITHFUL @ CircleCollider2D.m_Radius/m_Offset,
 /// BoxCollider2D.m_Size/m_Offset, m_IsTrigger.
 struct ColliderDef {
     enum class Shape { None, Circle, Box };
@@ -162,6 +164,12 @@ struct EnemyDef {
     /// FAITHFUL: lossy localScale of root/img/body (1 unless the prefab says otherwise:
     /// e_shark 1.5, ex_* elites 1.5/2.0); multiplies Scale::kSpriteScale.
     float bodyScale = 1.0F;
+    /// FAITHFUL: root-space position (units) of the sprite-bearing GameObject root/img/body
+    /// (build_gamedata.py `sprite_offset`): where the sprite pivot lands relative to the
+    /// root origin. Non-zero for boss05 (0.2, 0.3), boss11 (-0.074, -1.1), boss12_1/2,
+    /// the flyers e_creeper_fly/e_mosquito/e_ufo and their ex_* elites.
+    float spriteOffsetX = 0.0F;
+    float spriteOffsetY = 0.0F;
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -198,6 +206,8 @@ struct CharacterDef {
     ColliderDef body;
     ColliderDef hurtbox;
     float bodyScale = 1.0F;
+    float spriteOffsetX = 0.0F; ///< see EnemyDef::spriteOffsetX (0 for every hero prefab).
+    float spriteOffsetY = 0.0F;
     /// P3.3.c: the hero-specific serialized refs of the c##.prefab controller
     /// MonoBehaviour (everything after the shared `skinIndex:` -- c03 `thunder`,
     /// c05 `bottle_objs`, c07 `bullet_bat`, c11 `skill_obj`, c12 `skill_obj1/2`,

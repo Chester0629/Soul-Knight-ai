@@ -13,7 +13,10 @@
 namespace Game::Sim {
 
 /// Collision geometry of one body (hero / enemy / boss), in screen-world px, derived
-/// from the prefab colliders in data (GameData ColliderDef, Unity units * kCellPx).
+/// from the prefab colliders in data (GameData ColliderDef, Unity units * kCellPx). Every
+/// collider offset is ROOT-SPACE (tools/build_gamedata.py composes the child GameObjects'
+/// localPosition/localScale chain), so `feetOffsetPx` is the true body-centre-above-root
+/// distance even when the collider sits on a displaced child (mineral_gold: 1.3 units).
 ///
 /// POSITION CONVENTION: an entity's Position() is the centre of its PHYSICAL body
 /// circle (the prefab's "collider" child). The Unity root origin (the sprite pivot,
@@ -60,6 +63,13 @@ struct BodyGeom {
 
 /// Equivalent circle radius (px) of a collider: a circle's radius, a box's inscribed
 /// circle (its smaller half extent); 0 when the collider is absent.
+///
+/// PORT CHOICE (T-52): a BOX bullet collider is flattened to its inscribed circle and the
+/// collider's OFFSET IS IGNORED (the bullet's hit circle stays centred on the bullet
+/// position). The original tests the real oriented BoxCollider2D at its offset against
+/// the target; the sim keeps one circle per bullet (cheap, deterministic, rotation-free).
+/// Consequence: an elongated box bullet hits slightly SHORT along its long axis. Circle
+/// bullets (the large majority) are exact apart from the ignored offset.
 inline float EquivalentRadiusPx(const ColliderDef &c) {
     switch (c.shape) {
     case ColliderDef::Shape::Circle:
@@ -72,9 +82,16 @@ inline float EquivalentRadiusPx(const ColliderDef &c) {
     return 0.0F;
 }
 
-/// Build a body's geometry from its prefab colliders (data units -> px). A missing
-/// physical body falls back to the hurtbox's offset/equivalent radius, and with no
-/// data at all to @p fallbackRadiusPx (BodyGeom::Fallback; fromData == false).
+/// Build a body's geometry from its prefab colliders (data units -> px).
+///
+/// PORT CHOICE (T-52), the missing-body-collider rule: a prefab with NO physical
+/// "collider" child (data: e_snowman_temp only; tools/validate_data.py NO_BODY_COLLIDER)
+/// uses its HURTBOX for the body too -- feet offset = the hurtbox's root-space offset and
+/// body radius = EquivalentRadiusPx(hurtbox), i.e. the hurtbox's INSCRIBED circle (its
+/// smaller half extent for a box), NOT the fixed kEnemyBodyRadius 16 px. Only with no
+/// collider data at all (a default def) does it fall back to @p fallbackRadiusPx
+/// (BodyGeom::Fallback; fromData == false). The original has no such prefab case to
+/// copy (it would simply have no wall collider), so this keeps the enemy blockable.
 inline BodyGeom MakeBodyGeom(const ColliderDef &body, const ColliderDef &hurt,
                              float fallbackRadiusPx) {
     if (!body.Present() && !hurt.Present()) {

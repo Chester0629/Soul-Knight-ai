@@ -29,15 +29,21 @@ namespace Game {
  * character/enemy/boss frames carry a bottom-centre pivot (c01_4: 0.486, -0.002), and
  * the prefab root origin the pivot lands on is the FEET. The port's entity position
  * is the centre of the physical body circle (Sim::BodyGeom), which the prefab places
- * `feetOffsetPx` above the feet (c01: collider.offset.y 0.5 unit = 16 px). So each
- * frame is drawn with its pivot point at  Position() - feetOffsetPx ; the per-frame
- * pivot fractions come from sprites.json (`pivots`, from the sprite assets). Frames
- * without data are anchored bottom-centre {0.5, 0}.
+ * `feetOffsetPx` above the feet (c01: collider.offset.y 0.5 unit = 16 px). The
+ * collider offsets are ROOT-SPACE (the whole child Transform chain composed by
+ * tools/build_gamedata.py), so feet = Position() - feetOffsetPx is the true root origin.
+ * The sprite-bearing GameObject (root/img/body) may itself sit off the root origin
+ * (data `sprite_offset`, root-space units: boss11 (-0.074, -1.1), boss05 (0.2, 0.3), the
+ * flyers ...); the pivot lands there. So each frame is drawn with its pivot point at
+ *   Position() - feetOffsetPx + spriteOffsetPx ;
+ * the per-frame pivot fractions come from sprites.json (`pivots`, from the sprite
+ * assets). Frames without data are anchored bottom-centre {0.5, 0}.
  */
 struct SpriteAnchor {
     /// Pivot fractions (x, y from the frame rect's bottom-left) per animation frame.
     std::vector<std::array<float, 2>> framePivots;
-    glm::vec2 feetOffsetPx{0.0F, 0.0F}; ///< Position() - feet, px.
+    glm::vec2 feetOffsetPx{0.0F, 0.0F}; ///< Position() - feet (root origin), px.
+    glm::vec2 spriteOffsetPx{0.0F, 0.0F}; ///< sprite GameObject origin - feet, px (y up).
     float bodyScale = 1.0F;             ///< data `body_scale` (multiplies kSpriteScale).
     float bodyRadiusPx = 16.0F;         ///< physical body circle (entity GetCollider()).
 
@@ -46,15 +52,15 @@ struct SpriteAnchor {
     /// GameObject pivot (source px, as Util::GameObject::SetPivot wants it) for frame
     /// @p frameIndex of source size @p frameSize. Draw() puts the quad centre at
     /// translation - pivot * scale, so the sprite's pivot point lands on
-    /// translation - feetOffset when
-    ///   pivot = feetOffset / scale + ((fx - 0.5) * w, (fy - 0.5) * h).
+    /// translation - feetOffset + spriteOffset when
+    ///   pivot = (feetOffset - spriteOffset) / scale + ((fx - 0.5) * w, (fy - 0.5) * h).
     /// Pure math (no GL), so it is unit-tested.
     glm::vec2 PivotPx(glm::vec2 frameSize, std::size_t frameIndex) const {
         std::array<float, 2> pv{0.5F, 0.0F}; // no data: bottom-centre
         if (frameIndex < framePivots.size()) {
             pv = framePivots[frameIndex];
         }
-        return feetOffsetPx / DrawScale() +
+        return (feetOffsetPx - spriteOffsetPx) / DrawScale() +
                glm::vec2{(pv[0] - 0.5F) * frameSize.x, (pv[1] - 0.5F) * frameSize.y};
     }
 
@@ -70,12 +76,16 @@ struct SpriteAnchor {
 
 /// Build an entity's anchor from data: the species' sprite pivots (index-aligned with
 /// GameData::SpriteFrames(spriteId)), the feet offset (physical body collider offset,
-/// else the hurtbox's) and the body scale. @p fallbackRadiusPx is the placeholder body
-/// radius used when neither collider is in data.
+/// else the hurtbox's), the sprite GameObject's root-space offset @p spriteOffsetUnits
+/// (data `sprite_offset`, units) and the body scale. @p fallbackRadiusPx is the
+/// placeholder body radius used when neither collider is in data.
 inline SpriteAnchor MakeSpriteAnchor(const GameData &data, const std::string &spriteId,
                                      const ColliderDef &body, const ColliderDef &hurtbox,
-                                     float bodyScale, float fallbackRadiusPx) {
+                                     float bodyScale, glm::vec2 spriteOffsetUnits,
+                                     float fallbackRadiusPx) {
     SpriteAnchor a;
+    a.spriteOffsetPx = {Scale::UnitsToPx(spriteOffsetUnits.x),
+                        Scale::UnitsToPx(spriteOffsetUnits.y)};
     a.framePivots = data.SpriteFramePivots(spriteId);
     a.bodyScale = bodyScale > 0.0F ? bodyScale : 1.0F;
     a.bodyRadiusPx = fallbackRadiusPx;

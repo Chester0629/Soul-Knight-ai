@@ -557,8 +557,11 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                 need(c["hurtbox"].get("trigger") is True, f"{c.get('id')}: hurtbox must be IsTrigger")
             if isinstance(c.get("collider"), dict):
                 need(c["collider"].get("trigger") is False, f"{c.get('id')}: body collider must not be IsTrigger")
-    # Prefabs whose root has no physical "collider" child (hurtbox only): the sim then
-    # derives the body circle from the hurtbox. e_snowman_temp is the only one today.
+    # Prefabs whose root has no physical "collider" child (hurtbox only). PORT CHOICE
+    # (T-52): Sim::MakeBodyGeom then uses the hurtbox's root-space offset and its
+    # INSCRIBED circle (smaller half extent for a box) as the body circle -- not the fixed
+    # 16 px fallback, which applies only with no collider data at all. e_snowman_temp is
+    # the only such prefab today.
     NO_BODY_COLLIDER = {"e_snowman_temp"}
     if enemies and any("hurtbox" in e for e in enemies):
         for e in enemies:
@@ -572,6 +575,16 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                         f"(no-body-collider allow-list: {sorted(NO_BODY_COLLIDER)})")
     elif enemies:
         errors.append("enemies.json rows carry no 'hurtbox' collider data (run build_gamedata.py)")
+    # sprite_offset: root-space [x, y] units of the sprite-bearing GameObject (R27 hierarchy
+    # pass); present on every hero/enemy/boss row.
+    for src, rows in (("characters.json", hero_rows), ("enemies.json", enemies or [])):
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            so = r.get("sprite_offset")
+            need(isinstance(so, list) and len(so) == 2
+                 and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in so),
+                 f"{src} {r.get('id')}: sprite_offset must be [x, y] numbers (run build_gamedata.py)")
     if bullets:
         n_bc = sum(1 for b in bullets if isinstance(b.get("collider"), dict))
         for b in bullets:

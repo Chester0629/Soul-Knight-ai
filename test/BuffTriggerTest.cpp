@@ -367,6 +367,7 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         sim.EquipWeapon(*wdef, "Gun001", 5, passData ? &gd : nullptr);
         const WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
         std::vector<float> trace;
+        trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp)); // [0] = hp before any tick
         for (int i = 0; i < 150; ++i) {
             sim.Advance(20.0F, in);
             trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp));
@@ -384,7 +385,22 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         v.erase(std::unique(v.begin(), v.end()), v.end());
         return v;
     };
-    EXPECT_EQ(distinct(run(/*passData=*/true)), distinct(run(/*passData=*/false)));
+    const std::vector<float> withData = run(/*passData=*/true);
+    const std::vector<float> fallback = run(/*passData=*/false);
+    EXPECT_EQ(distinct(withData), distinct(fallback));
+    // ...and that tick shift is exactly what the radius change predicts: the first hit
+    // lands precisely ONE tick earlier with the data radius (6.4 px) than with the 4 px
+    // fallback (the 2.4 px of extra reach is less than one tick of bullet travel).
+    auto firstHit = [](const std::vector<float> &t) {
+        for (std::size_t i = 1; i < t.size(); ++i) {
+            if (t[i] < t[0]) {
+                return static_cast<int>(i);
+            }
+        }
+        return -1;
+    };
+    ASSERT_GT(firstHit(fallback), 1);
+    EXPECT_EQ(firstHit(withData), firstHit(fallback) - 1);
 }
 
 // NOLINTEND(readability-magic-numbers)

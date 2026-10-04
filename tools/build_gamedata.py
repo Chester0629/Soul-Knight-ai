@@ -483,10 +483,23 @@ def build_sprite_manifest():
 #   * body_scale -- lossy localScale of the sprite-bearing GameObject root/img/body
 #     (only emitted when != 1: e_shark 1.5, the ex_* elites 1.5/2.0). Every other
 #     hero/enemy/boss body is 1 (boss01's 1.5 is only on shadow/shadow_lock/point_1).
+#   * sprite_offset -- ROOT-SPACE position (units) of the sprite-bearing GameObject's
+#     origin (= where its sprite pivot lands). boss11's body GameObject sits at
+#     img(0,0) + (-0.074,-1.1); boss05's at (0.2,0.3); also non-zero: boss12_1/2,
+#     e_creeper_fly, e_mosquito, e_ufo and the ex_* of those. Emitted on every row.
 # All lengths are in Unity UNITS (1 unit = 1 map cell = kCellPx screen-world px);
-# a collider's size/radius/offset are already multiplied by its GameObject's lossy
-# scale, exactly as Unity's physics does. `offset` is relative to the root origin
-# (the feet), so Position() = body-collider centre = feet + collider.offset.
+# a collider's size/radius are multiplied by its GameObject's lossy scale, exactly as
+# Unity's physics does.
+# TRANSFORM COMPOSITION (root space): a point q in a GameObject's local space maps to
+# the prefab root's space by  q' = localPosition + localScale * q  at EVERY ancestor
+# step up to the root (the root's own localPosition is the origin, so it contributes
+# 0; its localScale does apply). A collider's `offset` is the composed root-space
+# CENTRE of the collider = compose(go, m_Offset) -- e.g. the mineral_gold "collider"
+# child at localPosition y=0.8 with m_Offset y=0.5 -> 1.3, not 0.5 -- so
+# Position() = body-collider centre = feet + collider.offset. Rotations in the chains
+# are ignored: survey -> only boss13 (img 2.5 deg, its body offset is 0), boss11 (the
+# body GameObject's OWN 90 deg turns its sprite, not its position) and e_chest1/2 (root
+# y-flip: mirrors x, all their offsets have x = 0) carry any, none shifts an offset.
 # ---------------------------------------------------------------------------
 _TYPED_DOC_RE2 = re.compile(r"(?m)^--- !u!(\d+) &(\d+)\s*\n")
 _VEC2_RE = r"\{x: ([-0-9.eE+]+), y: ([-0-9.eE+]+)"
@@ -499,7 +512,8 @@ def _vec2(body: str, key: str):
 
 def _parse_prefab(text: str):
     """-> (docs{fid:(classId, body)}, names{go:str}, scale{go:(x,y)}, father{go:go|None},
-    root_go). Old-format (Unity 2017) prefab: one root Transform with m_Father 0."""
+    root_go, pos{go:(x,y)}). Old-format (Unity 2017) prefab: one root Transform with
+    m_Father 0. `pos` is the Transform's m_LocalPosition (x, y)."""
     heads = list(_TYPED_DOC_RE2.finditer(text))
     docs = {}
     for i, h in enumerate(heads):
@@ -514,16 +528,30 @@ def _parse_prefab(text: str):
             m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
             if m:
                 tr_go[fid] = m.group(1)
-    scale, father = {}, {}
+    scale, father, pos = {}, {}, {}
     for fid, (cid, b) in docs.items():
         if cid != 4 or fid not in tr_go:
             continue
         g = tr_go[fid]
         scale[g] = _vec2(b, "m_LocalScale") or (1.0, 1.0)
+        pos[g] = _vec2(b, "m_LocalPosition") or (0.0, 0.0)
         m = re.search(r"m_Father: \{fileID: (\d+)\}", b)
         father[g] = tr_go.get(m.group(1)) if m else None
     roots = [g for g, f in father.items() if f is None]
-    return docs, names, scale, father, (roots[0] if roots else None)
+    return docs, names, scale, father, (roots[0] if roots else None), pos
+
+
+def _to_root(go, q, scale, father, pos, root):
+    """Point q (x, y) in GameObject @p go's local space -> the prefab root's space:
+    at each ancestor step  q = localPosition + localScale * q  (the root contributes
+    only its scale: its position is the origin of root space)."""
+    x, y = q
+    while go is not None:
+        sx, sy = scale.get(go, (1.0, 1.0))
+        px, py = (0.0, 0.0) if go == root else pos.get(go, (0.0, 0.0))
+        x, y = px + sx * x, py + sy * y
+        go = father.get(go)
+    return x, y
 
 
 def _lossy(go, scale, father):
@@ -536,9 +564,11 @@ def _lossy(go, scale, father):
     return sx, sy
 
 
-def _collider_json(cid: int, body: str, lossy):
+def _collider_json(cid: int, body: str, lossy, centre=None):
     """Circle(58)/Box(61) collider -> {shape, radius|size, offset, trigger} in units
-    (lossy-scaled), or None for any other collider class (capsule/polygon/edge)."""
+    (lossy-scaled), or None for any other collider class (capsule/polygon/edge).
+    @p centre = the collider centre already composed into root space (see TRANSFORM
+    COMPOSITION above); None -> the GameObject-local m_Offset * lossy scale."""
     sx, sy = lossy
     off = _vec2(body, "m_Offset") or (0.0, 0.0)
     trig = re.search(r"m_IsTrigger: (\d)", body)
@@ -557,7 +587,9 @@ def _collider_json(cid: int, body: str, lossy):
         out["size"] = [round(size[0] * abs(sx), 4), round(size[1] * abs(sy), 4)]
     else:
         return None
-    out["offset"] = [round(off[0] * sx, 4), round(off[1] * sy, 4)]
+    if centre is None:
+        centre = (off[0] * sx, off[1] * sy)
+    out["offset"] = [round(centre[0], 4) + 0.0, round(centre[1], 4) + 0.0]
     out["trigger"] = bool(trig and trig.group(1) == "1")
     return out
 
@@ -568,9 +600,10 @@ def _enabled(body: str) -> bool:
 
 
 def prefab_geometry(path: Path) -> dict:
-    """{collider?, hurtbox?, body_scale?} of a hero/enemy/boss prefab (see above)."""
+    """{collider?, hurtbox?, body_scale?, sprite_offset} of a hero/enemy/boss prefab
+    (see above); every offset is in root space."""
     text = path.read_text(encoding="utf-8", errors="ignore")
-    docs, names, scale, father, root = _parse_prefab(text)
+    docs, names, scale, father, root, pos = _parse_prefab(text)
     if root is None:
         return {}
     out = {}
@@ -588,7 +621,8 @@ def prefab_geometry(path: Path) -> dict:
             key = "collider"
         if key is None or key in out:
             continue
-        cj = _collider_json(cid, b, _lossy(go, scale, father))
+        centre = _to_root(go, _vec2(b, "m_Offset") or (0.0, 0.0), scale, father, pos, root)
+        cj = _collider_json(cid, b, _lossy(go, scale, father), centre)
         if cj is not None:
             out[key] = cj
     # sprite-bearing GameObject: root/img/body (else root/img); lossy |scale|.
@@ -608,6 +642,10 @@ def prefab_geometry(path: Path) -> dict:
         s = round(abs(sx), 4)
         if abs(abs(sx) - abs(sy)) < 1e-3 and abs(s - 1.0) > 1e-3:
             out["body_scale"] = s
+        ox, oy = _to_root(body_go, (0.0, 0.0), scale, father, pos, root)
+        out["sprite_offset"] = [round(ox, 4) + 0.0, round(oy, 4) + 0.0]
+    else:
+        out["sprite_offset"] = [0.0, 0.0]
     return out
 
 
@@ -615,14 +653,15 @@ def bullet_collider(path: Path):
     """First enabled Circle/Box collider (file order) on a bullet prefab, in units
     (lossy-scaled), or None (no collider / capsule / polygon only)."""
     text = path.read_text(encoding="utf-8", errors="ignore")
-    docs, names, scale, father, root = _parse_prefab(text)
+    docs, names, scale, father, root, pos = _parse_prefab(text)
     for fid, (cid, b) in docs.items():
         if cid not in (58, 61) or not _enabled(b):
             continue
         m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
         if m is None:
             continue
-        cj = _collider_json(cid, b, _lossy(m.group(1), scale, father))
+        centre = _to_root(m.group(1), _vec2(b, "m_Offset") or (0.0, 0.0), scale, father, pos, root)
+        cj = _collider_json(cid, b, _lossy(m.group(1), scale, father), centre)
         if cj is not None:
             return cj
     return None

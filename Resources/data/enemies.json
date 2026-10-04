@@ -47,7 +47,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss02",
@@ -97,7 +101,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss03",
@@ -147,7 +155,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss04",
@@ -197,7 +209,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss05",
@@ -247,7 +263,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.2,
+      0.3
+    ]
   },
   {
     "id": "boss06",
@@ -297,7 +317,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss07",
@@ -347,7 +371,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss08",
@@ -397,7 +425,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss09",
@@ -447,7 +479,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss10",
@@ -497,7 +533,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "boss11",
@@ -547,7 +587,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      -0.074,
+      -1.1
+    ]
   },
   {
     "id": "boss12_1",
@@ -597,7 +641,11 @@
         0.7
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      -0.2
+    ]
   },
   {
     "id": "boss12_2",
@@ -647,7 +695,11 @@
         0.7
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      -0.2
+    ]
   },
   {
     "id": "boss13",
@@ -697,7 +749,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_alien01",
@@ -747,7 +803,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_alien02",
@@ -797,7 +857,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_alien03",
@@ -847,7 +911,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_battery01",
@@ -897,7 +965,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_boar01",
@@ -947,7 +1019,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_boar02",
@@ -997,7 +1073,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_chest1",
@@ -1047,7 +1127,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_chest2",
@@ -1097,7 +1181,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_creeper",
@@ -1147,7 +1235,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_creeper_fly",
@@ -1197,7 +1289,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      -0.7
+    ]
   },
   {
     "id": "e_crystal",
@@ -1247,7 +1343,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_fireknight01",
@@ -1297,7 +1397,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_fireknight02",
@@ -1347,7 +1451,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_fireknight03",
@@ -1397,7 +1505,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_giant",
@@ -1447,7 +1559,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_golem01",
@@ -1497,7 +1613,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_golem02",
@@ -1547,7 +1667,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_hammer",
@@ -1597,7 +1721,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight01",
@@ -1647,7 +1775,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight02",
@@ -1697,7 +1829,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight03",
@@ -1747,7 +1883,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight04",
@@ -1797,7 +1937,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight05",
@@ -1847,7 +1991,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_knight06",
@@ -1897,7 +2045,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner01",
@@ -1947,7 +2099,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner02",
@@ -1997,7 +2153,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner03",
@@ -2047,7 +2207,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner04",
@@ -2097,7 +2261,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner05",
@@ -2147,7 +2315,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_miner06",
@@ -2197,7 +2369,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_mosquito",
@@ -2247,7 +2423,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      -0.2
+    ]
   },
   {
     "id": "e_mummy01",
@@ -2297,7 +2477,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_mummy02",
@@ -2347,7 +2531,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_mummy03",
@@ -2397,7 +2585,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_mummy04",
@@ -2447,7 +2639,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_mummy05",
@@ -2497,7 +2693,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc01",
@@ -2547,7 +2747,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc02",
@@ -2597,7 +2801,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc03",
@@ -2647,7 +2855,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc04",
@@ -2697,7 +2909,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc05",
@@ -2747,7 +2963,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc06",
@@ -2797,7 +3017,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc07",
@@ -2847,7 +3071,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_orc08",
@@ -2897,7 +3125,11 @@
         1.0
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_shaman",
@@ -2947,7 +3179,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_shark",
@@ -2998,7 +3234,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton01",
@@ -3048,7 +3288,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton02",
@@ -3098,7 +3342,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton02_temp",
@@ -3148,7 +3396,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton03",
@@ -3198,7 +3450,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton04",
@@ -3248,7 +3504,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton05",
@@ -3298,7 +3558,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_skeleton06",
@@ -3348,7 +3612,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_slime01",
@@ -3398,7 +3666,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_snowman_temp",
@@ -3439,7 +3711,11 @@
         0.5
       ],
       "trigger": true
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_spider01",
@@ -3489,7 +3765,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_spider02",
@@ -3539,7 +3819,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_spider03",
@@ -3589,7 +3873,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_spider04",
@@ -3639,7 +3927,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_spider05",
@@ -3689,7 +3981,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_succulent",
@@ -3739,7 +4035,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_tentacle",
@@ -3789,7 +4089,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_tentacle_temp",
@@ -3839,7 +4143,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_tortoise",
@@ -3889,7 +4197,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_ufo",
@@ -3939,7 +4251,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      -0.7
+    ]
   },
   {
     "id": "e_wizard01",
@@ -3989,7 +4305,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_worm01",
@@ -4039,7 +4359,11 @@
         0.6
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_yeti01",
@@ -4089,7 +4413,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "e_yeti02",
@@ -4139,7 +4467,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_alien01",
@@ -4190,7 +4522,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_alien02",
@@ -4241,7 +4577,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_alien03",
@@ -4292,7 +4632,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_battery01",
@@ -4343,7 +4687,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_boar02",
@@ -4394,7 +4742,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_boar03",
@@ -4445,7 +4797,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_creeper",
@@ -4496,7 +4852,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_creeper_fly",
@@ -4547,7 +4907,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      -1.1
+    ]
   },
   {
     "id": "ex_crystal",
@@ -4598,7 +4962,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_fireknight",
@@ -4649,7 +5017,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_fireknight2",
@@ -4700,7 +5072,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_giant",
@@ -4751,7 +5127,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_golem01",
@@ -4802,7 +5182,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_golem02",
@@ -4853,7 +5237,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_hammer",
@@ -4904,7 +5292,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight01",
@@ -4955,7 +5347,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight02",
@@ -5006,7 +5402,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight03",
@@ -5057,7 +5457,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight04",
@@ -5108,7 +5512,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight05",
@@ -5159,7 +5567,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_knight06",
@@ -5210,7 +5622,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner01",
@@ -5261,7 +5677,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner02",
@@ -5312,7 +5732,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner03",
@@ -5363,7 +5787,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner04",
@@ -5414,7 +5842,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner05",
@@ -5465,7 +5897,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_miner06",
@@ -5516,7 +5952,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_mosquito",
@@ -5567,7 +6007,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      -0.35
+    ]
   },
   {
     "id": "ex_mummy01",
@@ -5617,7 +6061,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_mummy02",
@@ -5667,7 +6115,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_mummy03",
@@ -5717,7 +6169,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_mummy04",
@@ -5768,7 +6224,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_mummy05",
@@ -5818,7 +6278,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc01",
@@ -5869,7 +6333,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc02",
@@ -5920,7 +6388,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc03",
@@ -5971,7 +6443,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc04",
@@ -6022,7 +6498,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc06",
@@ -6073,7 +6553,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc07",
@@ -6124,7 +6608,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc08",
@@ -6175,7 +6663,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_shaman",
@@ -6226,7 +6718,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton01",
@@ -6277,7 +6773,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton02",
@@ -6328,7 +6828,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton03",
@@ -6379,7 +6883,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton04",
@@ -6430,7 +6938,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton05",
@@ -6481,7 +6993,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_skeleton06",
@@ -6532,7 +7048,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_slime01",
@@ -6583,7 +7103,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_spider01",
@@ -6634,7 +7158,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_spider02",
@@ -6685,7 +7213,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_spider03",
@@ -6736,7 +7268,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_spider04",
@@ -6787,7 +7323,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_spider05",
@@ -6838,7 +7378,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_succulent",
@@ -6889,7 +7433,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_tortoise",
@@ -6940,7 +7488,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_ufo",
@@ -6991,7 +7543,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      -1.1
+    ]
   },
   {
     "id": "ex_wizard",
@@ -7042,7 +7598,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_worm",
@@ -7093,7 +7653,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 2.0
+    "body_scale": 2.0,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_yeti01",
@@ -7144,7 +7708,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_yeti02",
@@ -7195,7 +7763,11 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "mineral_crystal",
@@ -7242,10 +7814,14 @@
       "radius": 0.8,
       "offset": [
         0.0,
-        0.5
+        1.3
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "mineral_gold",
@@ -7292,10 +7868,14 @@
       "radius": 0.8,
       "offset": [
         0.0,
-        0.5
+        1.3
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   {
     "id": "ex_orc05",
@@ -7346,6 +7926,10 @@
       ],
       "trigger": false
     },
-    "body_scale": 1.5
+    "body_scale": 1.5,
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   }
 ]

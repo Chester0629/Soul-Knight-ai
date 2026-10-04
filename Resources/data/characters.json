@@ -36,7 +36,11 @@
         0.5
       ],
       "trigger": false
-    }
+    },
+    "sprite_offset": [
+      0.0,
+      0.0
+    ]
   },
   "roster": [
     {
@@ -77,7 +81,11 @@
           0.5
         ],
         "trigger": false
-      }
+      },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ]
     },
     {
       "id": "c02",
@@ -117,7 +125,11 @@
           0.5
         ],
         "trigger": false
-      }
+      },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ]
     },
     {
       "id": "c03",
@@ -158,6 +170,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "thunder": [
           "thunder"
@@ -206,6 +222,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "sword_obj": [
           "sword_2_5_assassin"
@@ -251,6 +271,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "bottle_objs": [
           "bullet_bottle_0",
@@ -299,6 +323,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "battery": [
           "battery"
@@ -344,6 +372,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "bullet_bat": [
           "bullet_bat"
@@ -392,7 +424,11 @@
           0.5
         ],
         "trigger": false
-      }
+      },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ]
     },
     {
       "id": "c09",
@@ -433,6 +469,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "skill_arrow": [
           "bullet_c09"
@@ -481,6 +521,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"
@@ -529,6 +573,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "skill_obj": [
           "Holy_light_c11"
@@ -577,6 +625,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "skill_obj1": [
           "wolf1"
@@ -632,6 +684,10 @@
         ],
         "trigger": false
       },
+      "sprite_offset": [
+        0.0,
+        0.0
+      ],
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"

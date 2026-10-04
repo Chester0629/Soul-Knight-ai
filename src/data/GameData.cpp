@@ -29,6 +29,17 @@ std::string GetS(const json &j, const char *key,
                                               : fallback;
 }
 
+/// `sprite_offset: [x, y]` (units, prefab-root space) -> (x, y); (0, 0) when absent.
+void ReadSpriteOffset(const json &j, float &x, float &y) {
+    x = 0.0F;
+    y = 0.0F;
+    auto it = j.find("sprite_offset");
+    if (it != j.end() && it->is_array() && it->size() >= 2) {
+        x = (*it)[0].is_number() ? (*it)[0].get<float>() : 0.0F;
+        y = (*it)[1].is_number() ? (*it)[1].get<float>() : 0.0F;
+    }
+}
+
 // A prefab collider object ({shape, radius|size, offset, trigger}, units) under @p key, or a
 // Shape::None def when absent/unknown (callers then keep their documented fallback).
 ColliderDef GetCollider(const json &j, const char *key) {
@@ -177,6 +188,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.body = GetCollider(e, "collider");   // physical body circle (units)
             d.hurtbox = GetCollider(e, "hurtbox"); // bullet-hit trigger (units)
             d.bodyScale = GetF(e, "body_scale", 1.0F);
+            ReadSpriteOffset(e, d.spriteOffsetX, d.spriteOffsetY);
             m_EnemyIndex[d.id] = m_Enemies.size();
             m_Enemies.push_back(std::move(d));
         }
@@ -284,6 +296,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.body = GetCollider(c, "collider");
             d.hurtbox = GetCollider(c, "hurtbox");
             d.bodyScale = GetF(c, "body_scale", 1.0F);
+            ReadSpriteOffset(c, d.spriteOffsetX, d.spriteOffsetY);
             // P3.3.c: hero-specific serialized skill refs + effect-prefab numbers.
             if (auto sr = c.find("skill_refs"); sr != c.end() && sr->is_object()) {
                 for (auto it = sr->begin(); it != sr->end(); ++it) {

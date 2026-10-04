@@ -147,7 +147,9 @@ void GameScene::OnEnter() {
         m_PlayerRadiusPx = pg.bodyRadiusPx;
         m_Sim->SetPlayerGeom(pg);
         m_Player->SetAnchor(MakeSpriteAnchor(m_Data, charId, hero.body, hero.hurtbox,
-                                             hero.bodyScale, pg.bodyRadiusPx));
+                                             hero.bodyScale,
+                                             {hero.spriteOffsetX, hero.spriteOffsetY},
+                                             pg.bodyRadiusPx));
     }
 
     // --- Procedural floor: a MapManager random-walk lays out the rooms; each is
@@ -866,10 +868,11 @@ void GameScene::OnEnter() {
                     m_Data.SpriteFrames(bossPrefab, root),
                     m_Data.SpriteIntervalMs(bossPrefab, 150));
                 if (bossDef != nullptr) {
-                    // SCALE/PIVOT/COLLIDER FROM DATA (boss body scale is 1 in every boss prefab).
-                    boss->SetAnchor(MakeSpriteAnchor(m_Data, bossPrefab, bossDef->body,
-                                                     bossDef->hurtbox, bossDef->bodyScale,
-                                                     Sim::kBossBodyRadius));
+                    // SCALE/PIVOT/COLLIDER FROM DATA (boss body scale is 1 in every boss
+                    // prefab; the sprite GameObject offset is not: boss05, boss11, boss12).
+                    boss->SetAnchor(MakeSpriteAnchor(
+                        m_Data, bossPrefab, bossDef->body, bossDef->hurtbox, bossDef->bodyScale,
+                        {bossDef->spriteOffsetX, bossDef->spriteOffsetY}, Sim::kBossBodyRadius));
                 }
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
@@ -2116,6 +2119,7 @@ void GameScene::SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, i
                                          m_Data.SpriteFrames(rdef->id, root),
                                          m_Data.SpriteIntervalMs(rdef->id, 120));
     enemy->SetAnchor(MakeSpriteAnchor(m_Data, rdef->id, rdef->body, rdef->hurtbox, rdef->bodyScale,
+                                      {rdef->spriteOffsetX, rdef->spriteOffsetY},
                                       Sim::kEnemyBodyRadius));
     enemy->AI().SetSeed(seed);
     enemy->AI().SetKinematic(rdef->kinematic != 0);

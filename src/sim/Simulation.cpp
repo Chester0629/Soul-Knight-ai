@@ -681,6 +681,8 @@ void Simulation::ResolveHits() {
         if (!b.active) {
             continue;
         }
+        // PORT CHOICE (T-52): enemy bullets (radiusPx 0) use the 4 px kBulletRadius fallback,
+        // not their prefab collider (see SimConfig.hpp); player bullets use the data radius.
         const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
         if (b.camp == 0) {
             // Player bullet -> enemies, then boss. One target per bullet per step.

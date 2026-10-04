@@ -5,6 +5,9 @@
 // exactly at the data radius boundary.
 #include <gtest/gtest.h>
 
+#include <array>
+#include <cmath>
+#include <string>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -165,6 +168,134 @@ TEST_F(ColliderDataTest, EveryHeroAndEnemyCarriesColliders) {
     }
 }
 
+// HIERARCHY (R27): collider centres and the sprite GameObject are placed in the prefab
+// ROOT's space -- every ancestor's localPosition + localScale * q is composed, not just
+// the collider's own m_Offset / the body's own scale.
+TEST_F(ColliderDataTest, MineralColliderChildPositionIsComposedIntoRootSpace) {
+    // res/enemy/mineral_gold.prefab: child "collider" at localPosition (0, 0.8) carrying a
+    // CircleCollider2D r 0.8 with m_Offset (0, 0.5) -> root-space centre y = 0.8 + 0.5 = 1.3
+    // (the data used to say 0.5). The root's own hurtbox BoxCollider2D is at offset (0, 0.8).
+    for (const char *id : {"mineral_gold", "mineral_crystal"}) {
+        const Game::EnemyDef *m = s_Data.FindEnemy(id);
+        ASSERT_NE(m, nullptr) << id;
+        ASSERT_EQ(m->body.shape, ColliderDef::Shape::Circle) << id;
+        EXPECT_FLOAT_EQ(m->body.radius, 0.8F) << id;
+        EXPECT_FLOAT_EQ(m->body.offsetX, 0.0F) << id;
+        EXPECT_NEAR(m->body.offsetY, 1.3F, 1e-5F) << id;
+        ASSERT_EQ(m->hurtbox.shape, ColliderDef::Shape::Box) << id;
+        EXPECT_NEAR(m->hurtbox.offsetY, 0.8F, 1e-5F) << id;
+    }
+    // BodyGeom: feet 1.3 * 32 = 41.6 px below the body centre; the hurtbox centre sits
+    // 0.5 unit (16 px) BELOW the body centre.
+    const Game::EnemyDef *m = s_Data.FindEnemy("mineral_gold");
+    const BodyGeom g = MakeBodyGeom(m->body, m->hurtbox, 16.0F);
+    EXPECT_NEAR(g.feetOffsetPx.y, 41.6F, 1e-3F);
+    EXPECT_NEAR(g.hurtOffsetPx.y, -16.0F, 1e-3F);
+}
+
+namespace {
+// World position (relative to Position()) of frame @p frame's pivot point once drawn the
+// way Util::GameObject::Draw does: quad centre = translation - pivot * scale.
+glm::vec2 DrawnPivotPoint(const Game::SpriteAnchor &a, glm::vec2 size, std::size_t frame) {
+    const glm::vec2 pivot = a.PivotPx(size, frame);
+    const float s = a.DrawScale();
+    const glm::vec2 centre = -pivot * s;
+    std::array<float, 2> pv{0.5F, 0.0F};
+    if (frame < a.framePivots.size()) {
+        pv = a.framePivots[frame];
+    }
+    return centre + glm::vec2{(pv[0] - 0.5F) * size.x, (pv[1] - 0.5F) * size.y} * s;
+}
+
+Game::SpriteAnchor AnchorOf(const Game::GameData &gd, const char *id, bool withSpriteOffset) {
+    const Game::EnemyDef *e = gd.FindEnemy(id);
+    const glm::vec2 off = withSpriteOffset ? glm::vec2{e->spriteOffsetX, e->spriteOffsetY}
+                                           : glm::vec2{0.0F, 0.0F};
+    return Game::MakeSpriteAnchor(gd, id, e->body, e->hurtbox, e->bodyScale, off, 24.0F);
+}
+} // namespace
+
+TEST_F(ColliderDataTest, Boss11SpriteOffsetAndDrawPosition) {
+    // res/enemy/3-volcano/boss11.prefab: img (0,0) -> body at localPosition (-0.074, -1.1):
+    // the sprite pivot is 1.1 units (35.2 px) BELOW the root origin, 0.074 units left.
+    const Game::EnemyDef *b = s_Data.FindEnemy("boss11");
+    ASSERT_NE(b, nullptr);
+    EXPECT_NEAR(b->spriteOffsetX, -0.074F, 1e-5F);
+    EXPECT_NEAR(b->spriteOffsetY, -1.1F, 1e-5F);
+    EXPECT_FLOAT_EQ(b->body.offsetY, 1.0F); // body circle centre 1 unit above the root
+    const glm::vec2 size{40.0F, 50.0F};
+    const Game::SpriteAnchor with = AnchorOf(s_Data, "boss11", true);
+    const Game::SpriteAnchor without = AnchorOf(s_Data, "boss11", false);
+    ASSERT_FALSE(with.framePivots.empty());
+    EXPECT_NEAR(with.spriteOffsetPx.x, -0.074F * 32.0F, 1e-3F);
+    EXPECT_NEAR(with.spriteOffsetPx.y, -35.2F, 1e-3F);
+    // Pivot lands at root origin + sprite_offset: Position() - 32 - 35.2 px, x -2.368 px.
+    const glm::vec2 p = DrawnPivotPoint(with, size, 0);
+    EXPECT_NEAR(p.x, -2.368F, 1e-3F);
+    EXPECT_NEAR(p.y, -67.2F, 1e-3F);
+    // Ignoring the hierarchy (the R27 bug) drew the sprite 35.2 px too high.
+    const glm::vec2 q = DrawnPivotPoint(without, size, 0);
+    EXPECT_NEAR(q.y, -32.0F, 1e-3F);
+    EXPECT_NEAR(p.y - q.y, -35.2F, 1e-3F);
+}
+
+TEST_F(ColliderDataTest, Boss05SpriteOffset) {
+    // res/enemy/3-alien/boss05.prefab: img (0,0) -> body at localPosition (0.2, 0.3);
+    // hurtbox Box @ (0, 1), body Circle r 0.6 @ (0, 1) (root children at the origin).
+    const Game::EnemyDef *b = s_Data.FindEnemy("boss05");
+    ASSERT_NE(b, nullptr);
+    EXPECT_NEAR(b->spriteOffsetX, 0.2F, 1e-5F);
+    EXPECT_NEAR(b->spriteOffsetY, 0.3F, 1e-5F);
+    EXPECT_FLOAT_EQ(b->body.offsetY, 1.0F);
+    const glm::vec2 size{60.0F, 60.0F};
+    const Game::SpriteAnchor a = AnchorOf(s_Data, "boss05", true);
+    const Game::SpriteAnchor flat = AnchorOf(s_Data, "boss05", false);
+    const glm::vec2 p = DrawnPivotPoint(a, size, 0);
+    EXPECT_NEAR(p.x, 6.4F, 1e-3F);          // 0.2 unit right of the root origin
+    EXPECT_NEAR(p.y, -32.0F + 9.6F, 1e-3F); // feet 32 px below the body, +0.3 unit up
+    const glm::vec2 q = DrawnPivotPoint(flat, size, 0);
+    EXPECT_NEAR(p.x - q.x, 6.4F, 1e-3F);
+    EXPECT_NEAR(p.y - q.y, 9.6F, 1e-3F);
+}
+
+TEST_F(ColliderDataTest, SpriteOffsetIsZeroExceptForTheSurveyedPrefabs) {
+    // Survey of every hero/enemy/boss prefab (tools/build_gamedata.py): only these have a
+    // sprite GameObject displaced from the root (units, root space).
+    for (const Game::CharacterDef &c : s_Data.Characters()) {
+        EXPECT_FLOAT_EQ(c.spriteOffsetX, 0.0F) << c.id;
+        EXPECT_FLOAT_EQ(c.spriteOffsetY, 0.0F) << c.id;
+    }
+    struct Row {
+        const char *id;
+        float x;
+        float y;
+    };
+    const std::vector<Row> expected = {
+        {"boss05", 0.2F, 0.3F},          {"boss11", -0.074F, -1.1F},
+        {"boss12_1", 0.0F, -0.2F},       {"boss12_2", 0.0F, -0.2F},
+        {"e_creeper_fly", 0.0F, -0.7F},  {"e_mosquito", 0.0F, -0.2F},
+        {"e_ufo", 0.0F, -0.7F},          {"ex_creeper_fly", 0.0F, -1.1F},
+        {"ex_mosquito", 0.0F, -0.35F},   {"ex_ufo", 0.0F, -1.1F},
+    };
+    int nonZero = 0;
+    for (const Game::EnemyDef &e : s_Data.Enemies()) {
+        if (e.spriteOffsetX != 0.0F || e.spriteOffsetY != 0.0F) {
+            ++nonZero;
+        }
+        float ex = 0.0F;
+        float ey = 0.0F;
+        for (const Row &r : expected) {
+            if (e.id == r.id) {
+                ex = r.x;
+                ey = r.y;
+            }
+        }
+        EXPECT_NEAR(e.spriteOffsetX, ex, 1e-5F) << e.id;
+        EXPECT_NEAR(e.spriteOffsetY, ey, 1e-5F) << e.id;
+    }
+    EXPECT_EQ(nonZero, static_cast<int>(expected.size()));
+}
+
 // ---- BodyGeom: units -> px, feet offset, hit boundary --------------------------------
 TEST(BodyGeomTest, KnightGeometryInPixels) {
     const BodyGeom g = MakeBodyGeom(Circle(0.4F, 0.0F, 0.5F), Box(0.5F, 0.5F, 0.0F, 0.7F), 16.0F);
@@ -209,7 +340,8 @@ TEST(SpriteAnchorTest, KnightFeetAlignWithPrefabOrigin) {
     const Game::CharacterDef *c = data.FindCharacter("c01");
     ASSERT_NE(c, nullptr);
     const Game::SpriteAnchor a =
-        Game::MakeSpriteAnchor(data, "c01", c->body, c->hurtbox, c->bodyScale, 16.0F);
+        Game::MakeSpriteAnchor(data, "c01", c->body, c->hurtbox, c->bodyScale,
+                               {c->spriteOffsetX, c->spriteOffsetY}, 16.0F);
     ASSERT_FALSE(a.framePivots.empty());
     EXPECT_FLOAT_EQ(a.DrawScale(), 2.0F);
     EXPECT_FLOAT_EQ(a.feetOffsetPx.y, 16.0F);
@@ -225,6 +357,18 @@ TEST(SpriteAnchorTest, KnightFeetAlignWithPrefabOrigin) {
     EXPECT_NEAR(pivotWorld.y, -16.0F, 1e-3F); // the feet, 16 px below the body centre
     // And the sprite sits on them: its bottom edge is within a pixel of the feet.
     EXPECT_NEAR(centre.y - size.y * s * 0.5F, -16.0F, 0.2F * s);
+}
+
+TEST(SpriteAnchorTest, SpriteOffsetMovesThePivotPointInRootSpace) {
+    Game::SpriteAnchor a;
+    a.feetOffsetPx = {0.0F, 32.0F};
+    a.spriteOffsetPx = {-2.368F, -35.2F};
+    a.framePivots = {{0.5F, 0.0F}};
+    const glm::vec2 size{20.0F, 30.0F};
+    const glm::vec2 centre = -a.PivotPx(size, 0) * a.DrawScale();
+    const glm::vec2 pivotWorld = centre + glm::vec2{0.0F, -15.0F} * a.DrawScale();
+    EXPECT_NEAR(pivotWorld.x, -2.368F, 1e-3F);
+    EXPECT_NEAR(pivotWorld.y, -32.0F - 35.2F, 1e-3F);
 }
 
 TEST(SpriteAnchorTest, NoDataAnchorsBottomCentre) {
@@ -248,8 +392,14 @@ Game::Sim::WorldInputs FireAlongX() {
 
 // Fire straight along +x past a slime whose hurtbox centre is @p enemyY above the line of
 // fire; true if its hp dropped.
-bool SlimeHit(const Game::GameData &gd, const Game::WeaponDef &w, float enemyY) {
-    const Game::EnemyDef *slime = gd.FindEnemy("e_slime01");
+bool SlimeHit(const Game::GameData &gd, Game::WeaponDef w, float enemyY, bool stripData = false) {
+    Game::EnemyDef slimeCopy = *gd.FindEnemy("e_slime01");
+    if (stripData) { // the old placeholder geometry: 16 px circle + 4 px bullet
+        slimeCopy.body = ColliderDef{};
+        slimeCopy.hurtbox = ColliderDef{};
+        w.bulletPrefab.clear();
+    }
+    const Game::EnemyDef *slime = &slimeCopy;
     Game::Sim::Simulation sim(20240607, &g_NullWorld);
     // Position() is the BODY centre; the slime's hurtbox centre coincides with it
     // (both offsets 0.5 unit), so enemyY is also the hurtbox centre.
@@ -278,9 +428,12 @@ TEST(SimColliderTest, BulletHitsEnemyAtTheDataRadiusBoundary) {
     // bullet (radius 6.4) touches it at enemyY = 16 + 6.4.
     EXPECT_TRUE(SlimeHit(gd, w, half + bulletR - 0.5F));  // 0.5 px inside the boundary: hit
     EXPECT_FALSE(SlimeHit(gd, w, half + bulletR + 0.5F)); // 0.5 px outside: clean miss
-    // The OLD placeholder geometry (bullet 4 + circle 16 = 20 px) would have hit at 21.9 and
-    // 22.9 alike: the data radius is what separates these two.
-    EXPECT_GT(half + bulletR + 0.5F, 20.0F);
+    // The OLD placeholder geometry (bullet 4 + circle 16 = 20 px) MISSES at both 21.9 and 22.9
+    // (both are beyond 20): only the data radius makes 21.9 a hit. Proved below by running
+    // the same shot with the colliders and the bullet prefab stripped.
+    EXPECT_GT(half + bulletR - 0.5F, Game::Sim::kBulletRadius + Game::Sim::kEnemyBodyRadius);
+    EXPECT_FALSE(SlimeHit(gd, w, half + bulletR - 0.5F, /*stripData=*/true));
+    EXPECT_FALSE(SlimeHit(gd, w, half + bulletR + 0.5F, /*stripData=*/true));
 }
 
 TEST(SimColliderTest, DefWithoutColliderDataKeepsPlaceholderRadii) {
