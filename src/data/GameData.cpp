@@ -329,14 +329,15 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         m_PlayerTemplate = *knight; // faithful default (was a hand-patched mix)
     }
     // COLLIDER DATA: log once per entity whose prefab carried no physical-body / hurtbox
-    // collider. PORT CHOICE (T-52): a missing body uses the hurtbox's inscribed circle and
-    // root-space offset (MakeBodyGeom); only a missing hurtbox, or both, falls back to the
-    // documented placeholder radii.
+    // collider. PORT CHOICE (T-52), mirroring MakeBodyGeom (include/sim/BodyGeom.hpp): a
+    // missing body uses the hurtbox's inscribed circle and root-space offset; a missing
+    // hurtbox makes bullets hit the body circle; only when both are missing does it fall
+    // back to the documented placeholder radius.
     const auto fallbackText = [](bool hasBody, bool hasHurtbox) {
         if (!hasBody && hasHurtbox) {
             return "body -> hurtbox inscribed circle (T-52)";
         }
-        return hasBody ? "hurtbox -> placeholder radius" : "body/hurtbox -> placeholder radius";
+        return hasBody ? "hurtbox -> body circle (T-52)" : "body/hurtbox -> placeholder radius";
     };
     for (const CharacterDef &c : m_Characters) {
         if (!c.body.Present() || !c.hurtbox.Present()) {

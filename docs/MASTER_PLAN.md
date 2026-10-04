@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.35（2026-10-05；P2.14 R28 中斷後補一處 log 文字，重跑 R28）
+> 版本：v1.36（2026-10-05；P2.14 依 Codex R28 同步退回規則文字，待 R29）
 
 ---
 
@@ -135,7 +135,7 @@
 | P2.11 視覺補完 | 外牆裝飾變體門檻、角色影子、P1.8 繪製 | CreateWall、shadow2 | 渲染 | V-S | — | 未開始・未驗收 |
 | P2.12 一般房清場獎勵 | GetRoomReward | P1.9 | GameScene | V-T | T-10 | 未開始・未驗收 |
 | P2.13 CreateMap 對照 | 房間數語意 | game_full.c CreateMap | MapManager | V-R | T-17 | 未開始・未驗收 |
-| P2.14 人物比例與碰撞框 | 使用者回報人物比原版小：地圖與物件畫 2 倍，玩家／敵人／子彈／地上武器卻是 1 倍、boss 1.5 倍。改為一律與地圖同比例，碰撞改讀預製件 | FAITHFUL：人物與敵人圖集 `spritePixelsToUnits: 16`（SpriteAtlasTexture-character01）；c01／e_slime01／e_yeti01／boss01 身體 localScale 1（boss01 的 1.5 只在 shadow／shadow_lock／point_1）；58 種 ex_* 精英與 e_shark 身體 1.5／2.0 由資料 `body_scale` 帶入；每幀 sprite pivot（c01_4 為 0.48643634,−0.0017742697，`Assets/rgtexture/character/c01_4.asset`，底部置中）寫入 sprites.json；子物件 Transform 位移逐層合成到根空間（`q' = localPosition + localScale·q`，根物件只貢獻縮放）：`sprite_offset`（boss05 (0.2,0.3)、boss11 (−0.074,−1.1)、boss12_1/2 (0,−0.2)、e_creeper_fly／e_ufo (0,−0.7)、ex_ 版 (0,−1.1)、e_mosquito (0,−0.2)、ex_mosquito (0,−0.35)，其餘為 0）與碰撞 offset（mineral_gold／mineral_crystal 身體圓 y 0.5→1.3）；碰撞：子物件 `collider` 圓（Body 層，擋牆不擋子彈）＋根物件 IsTrigger 受擊框（子彈打這個），依 Physics2DSettings 碰撞矩陣確認 | `include/game/WorldScale.hpp`（kSpriteScale＝kCellPx/16＝2，全物件共用）、`include/entities/SpriteAnchor.hpp`（腳底對齊 pivot）、`include/sim/BodyGeom.hpp`（單位→px、子彈圓對受擊圓／框）；characters／enemies／bullets.json 的 `collider`／`hurtbox`／`body_scale`；c01 身體圓 r 0.4@(0,0.5)、受擊框 0.5×0.5@(0,0.7)；boss01 r 0.6@(0,1.0)、框 1.2×1.8@(0,1.3)；bullet_0 框 0.5×0.4→內切圓 6.4 px；玩家碰撞半徑 16→12.8 px，門鎖內縮 49→45.8 px | test/ScaleColliderTest.cpp 20 例（ScaleTest 2、ColliderDataTest 10、BodyGeomTest 3、SimColliderTest 2、SpriteAnchorTest 3：縮放常數、四種實體與 bullet_0 碰撞值、e_shark／ex_slime01 body_scale、全英雄全敵人有碰撞、邊界內 0.5 px 命中／外 0.5 px 不中且舊 20 px 邊界兩者皆不中、pivot 腳底在身體中心下 16 px、礦物身體圓 y 1.3、boss11 繪製 pivot 下移 35.2 px、boss05 偏移、非零 sprite_offset 清單鎖定）；BuffTriggerTest 斷言有資料時首擊恰早 4 px 退回值一個 tick；tools/tests 8 例；V-S `docs/evidence/scale/`：scale_before／scale_after（騎士 0.8×0.9 格→1.54×1.69 格，原版約 1.6×1.8）、enemies_after、boss_after（雪人 boss）、boss05_after（sprite_offset (0.2,0.3)；boss11 在現行 boss 池抽不到，只由單元測試覆蓋，見 P2.15） | T-52（子彈框取內切圓且忽略偏移；敵彈無預製件沿用 4 px；e_snowman_temp 無身體碰撞沿用 16 px）| 功能完成・未驗收 |
+| P2.14 人物比例與碰撞框 | 使用者回報人物比原版小：地圖與物件畫 2 倍，玩家／敵人／子彈／地上武器卻是 1 倍、boss 1.5 倍。改為一律與地圖同比例，碰撞改讀預製件 | FAITHFUL：人物與敵人圖集 `spritePixelsToUnits: 16`（SpriteAtlasTexture-character01）；c01／e_slime01／e_yeti01／boss01 身體 localScale 1（boss01 的 1.5 只在 shadow／shadow_lock／point_1）；58 種 ex_* 精英與 e_shark 身體 1.5／2.0 由資料 `body_scale` 帶入；每幀 sprite pivot（c01_4 為 0.48643634,−0.0017742697，`Assets/rgtexture/character/c01_4.asset`，底部置中）寫入 sprites.json；子物件 Transform 位移逐層合成到根空間（`q' = localPosition + localScale·q`，根物件只貢獻縮放）：`sprite_offset`（boss05 (0.2,0.3)、boss11 (−0.074,−1.1)、boss12_1/2 (0,−0.2)、e_creeper_fly／e_ufo (0,−0.7)、ex_ 版 (0,−1.1)、e_mosquito (0,−0.2)、ex_mosquito (0,−0.35)，其餘為 0）與碰撞 offset（mineral_gold／mineral_crystal 身體圓 y 0.5→1.3）；碰撞：子物件 `collider` 圓（Body 層，擋牆不擋子彈）＋根物件 IsTrigger 受擊框（子彈打這個），依 Physics2DSettings 碰撞矩陣確認 | `include/game/WorldScale.hpp`（kSpriteScale＝kCellPx/16＝2，全物件共用）、`include/entities/SpriteAnchor.hpp`（腳底對齊 pivot）、`include/sim/BodyGeom.hpp`（單位→px、子彈圓對受擊圓／框）；characters／enemies／bullets.json 的 `collider`／`hurtbox`／`body_scale`；c01 身體圓 r 0.4@(0,0.5)、受擊框 0.5×0.5@(0,0.7)；boss01 r 0.6@(0,1.0)、框 1.2×1.8@(0,1.3)；bullet_0 框 0.5×0.4→內切圓 6.4 px；玩家碰撞半徑 16→12.8 px，門鎖內縮 49→45.8 px | test/ScaleColliderTest.cpp 20 例（ScaleTest 2、ColliderDataTest 10、BodyGeomTest 3、SimColliderTest 2、SpriteAnchorTest 3：縮放常數、四種實體與 bullet_0 碰撞值、e_shark／ex_slime01 body_scale、全英雄全敵人有碰撞、邊界內 0.5 px 命中／外 0.5 px 不中且舊 20 px 邊界兩者皆不中、pivot 腳底在身體中心下 16 px、礦物身體圓 y 1.3、boss11 繪製 pivot 下移 35.2 px、boss05 偏移、非零 sprite_offset 清單鎖定）；BuffTriggerTest 斷言有資料時首擊恰早 4 px 退回值一個 tick；tools/tests 8 例；V-S `docs/evidence/scale/`：scale_before／scale_after（騎士 0.8×0.9 格→1.54×1.69 格，原版約 1.6×1.8）、enemies_after、boss_after（雪人 boss）、boss05_after（sprite_offset (0.2,0.3)；boss11 在現行 boss 池抽不到，只由單元測試覆蓋，見 P2.15） | T-52（子彈框取內切圓且忽略偏移；敵彈無預製件沿用 4 px；e_snowman_temp 無身體碰撞，取受擊框內切圓與其根空間 offset，目前算得 16 px）| 功能完成・未驗收 |
 | P2.15 boss 池依當層生態 | `GameData::ChapterBossPool` 以章節固定生態（冰原／城堡／外星）選 boss，忽略當層實際變體（A/B、C/D、E/F），故森林／墓地／火山的 boss（如 boss11「3-volcano」）永遠不會出現；與 P6.7 BGM 原本的錯誤同型 | levels.json 每層 biome 與 type2 boss 房池；res/enemy/<biome>/boss*.prefab | boss 選取改依 `LevelDef.biome` | 每生態至少一隻 boss 可抽到的測試；V-S boss11 截圖 | — | 未開始・未驗收 |
 
 ### P3 戰鬥忠實度
@@ -280,7 +280,7 @@
 | T-49 | FAITHFUL：C12 RoleSkillEnd（3736–3749）不寫 in_skill；game_full.c FUN_0026b1dc（158490）在召喚時寫 in_skill=1。INFERRED：在 game_typed.c／game_full.c／game.c／game_named.c 只找到 C01/C02/C04/C05/C06/C07/C11 的 RoleSkillEnd 與 C03 DeadChild 會寫 in_skill=false，RGController 各方法皆不寫；故視首次召喚後 in_skill 常駐、之後每次施放為斬擊。未掃描原始 .so 的 `strb [rX,#0x55]`，不能證明原版完全沒有清除 | FAITHFUL＋INFERRED | CharSkillC12、CharSkillAdapters.hpp | 技能只召喚一次 | 實機驗證 |
 | T-50 | C03 DeadChild（943–956）只在 brain 層實作與測試；sim 無英雄死亡／復活鉤子 | NOT WIRED | CharSkillC03 | 召喚物死亡處理 | P4.3 |
 | T-51 | 表現層未移植：UpdateShadowLock 色調（含 C05 色值）、粒子、Animator 觸發、PlayEffect 音效、光環預製件 | NOT PORTED | 各 brain | 視覺／音效 | P6 |
-| T-52 | 碰撞簡化：子彈 BoxCollider2D 取內切圓、忽略 offset（`EquivalentRadiusPx`）；敵人／boss 子彈沒有可解析的子彈預製件，沿用 4 px 半徑；缺身體碰撞子物件時（目前只有 e_snowman_temp），`MakeBodyGeom` 改用受擊框的根空間 offset 與內切圓（較短半邊）當身體 | PORT CHOICE | BodyGeom.hpp、SimConfig.hpp、Simulation::ResolveHits、validate_data.py 白名單 | 子彈命中邊界、該雪人推擠 | P1.13（敵彈預製件）／需完整物理 |
+| T-52 | 碰撞簡化：子彈 BoxCollider2D 取內切圓、忽略 offset（`EquivalentRadiusPx`）；敵人／boss 子彈沒有可解析的子彈預製件，沿用 4 px 半徑；缺身體碰撞子物件時（目前只有 e_snowman_temp），`MakeBodyGeom` 改用受擊框的根空間 offset 與內切圓（較短半邊）當身體；缺受擊框時子彈打身體圓；兩者皆缺才用佔位半徑 | PORT CHOICE | BodyGeom.hpp、SimConfig.hpp、Simulation::ResolveHits、validate_data.py 白名單 | 子彈命中邊界、該雪人推擠 | P1.13（敵彈預製件）／需完整物理 |
 | T-29 | CreatePart 在 part ≥ 1 時 `Invoke("ShowUpEffect", 0.8f)`（字串表有 ShowUpEffect、無 CreatePart；ShowUpEffect 只播音效 7）；分波本身無延遲。**v1.17 起音效已接線**：第 2 波以後生成後 0.8 s 播 effect 7（GameScene 計時器，用 kShowUpEffectDelayMs） | INFERRED（字串） | WaveScheduler.hpp kShowUpEffectDelayMs、GameScene 分波處 | 音效 | 已接線；字串仍為推論 |
 
 ---
@@ -462,7 +462,11 @@ H7 取 boss 房號 6 後斷言同房開門：原附件 0 失敗、只刪 boss �
 
 ### R28（中斷）— 2026-10-04 — Codex — 對象 P2.14 @ ec016e0 — **未完成：OpenAI 用量上限**
 中斷前已回報：指定 C++ 測試 37/37、gate GREEN（10 warnings）、Python 8/8；指出雪人載入警告仍寫「placeholder radius」，與 T-52 新規則不符。
-**回覆（v1.35）**：GameData 載入警告依實際退回規則分三種文字（缺身體→`body -> hurtbox inscribed circle (T-52)`；缺受擊框或兩者皆缺→placeholder），實跑僅 e_snowman_temp 一行；ctest 仍 2134 全過。附件沿用 v1.34（只改 log 文字）。
+**回覆（v1.35）**：GameData 載入警告依實際退回規則分三種文字（缺身體→`body -> hurtbox inscribed circle (T-52)`；缺受擊框或兩者皆缺→placeholder，此句 R28 指出有誤，v1.36 更正），實跑僅 e_snowman_temp 一行；ctest 仍 2134 全過。附件沿用 v1.34（只改 log 文字）。
+
+### R28 — 2026-10-05 — Codex — 對象 P2.14 v1.35 @ 7918b0a — **不通過（兩處退回規則文字）**
+功能全過：預製件直接核對 mineral_gold 圓心 y 0.8＋0.5＝1.3、boss05 (0.2,0.3)、boss11 (−0.074,−1.1)；146 筆敵人幾何重算與 JSON 全符；SpriteAnchor／BodyGeom 接線、新增 5 例、20 px 斷言、首擊早一 tick、T-52 標記與雪人規則皆成立；P2.15 屬實；37/37、gate GREEN、Python 8/8。阻擋：§3 P2.14 仍寫雪人「沿用 16 px」；GameData 把「有身體、缺受擊框」寫成 placeholder，實作（BodyGeom.hpp:105）是子彈打身體圓。另註：功能程式在 ec016e0，7918b0a 只改 log 與文件。
+**回覆（v1.36）**：GameData 警告與註解改為「缺受擊框→子彈打身體圓（T-52）」；§3 改為「取受擊框內切圓，目前算得 16 px」；§6 T-52 補三種情況；§9 R28（中斷）回覆標註更正。
 
 ---
 
