@@ -245,6 +245,28 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.skillCd = GetF(c, "skill_cd");
             d.inSkillTime = GetF(c, "in_skill_time");
             d.fireRate = GetF(c, "fire_rate");
+            // P3.3.c: hero-specific serialized skill refs + effect-prefab numbers.
+            if (auto sr = c.find("skill_refs"); sr != c.end() && sr->is_object()) {
+                for (auto it = sr->begin(); it != sr->end(); ++it) {
+                    if (!it.value().is_array()) {
+                        continue;
+                    }
+                    std::vector<std::string> stems;
+                    for (const json &v : it.value()) {
+                        if (v.is_string()) {
+                            stems.push_back(v.get<std::string>());
+                        }
+                    }
+                    d.skillRefs[it.key()] = std::move(stems);
+                }
+            }
+            if (auto sp = c.find("skill_params"); sp != c.end() && sp->is_object()) {
+                for (auto it = sp->begin(); it != sp->end(); ++it) {
+                    if (it.value().is_number()) {
+                        d.skillParams[it.key()] = it.value().get<float>();
+                    }
+                }
+            }
             if (!d.id.empty()) {
                 m_CharacterIndex[d.id] = m_Characters.size();
                 m_Characters.push_back(d);

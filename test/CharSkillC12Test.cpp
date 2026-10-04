@@ -1,183 +1,127 @@
 #include <gtest/gtest.h>
 
-#include <cstddef>
-#include <vector>
-
 #include "combat/CharSkillC12.hpp"
-#include "data/RGRandom.hpp"
+#include "data/GameData.hpp"
+#include "sim/SimConfig.hpp"
 
 using Game::CharSkillC12;
-using Game::RGRandom;
+using Game::Sim::kFixedStepMs;
+using Game::Sim::kFixedStepSeconds;
+
+// P3.3.c C12 (Druid) brain. Expected numbers: characters.json (skill_cd 2.5, atk 5,
+// critical 5, through GameData) and the decompile constants cited in CharSkillC12.hpp
+// (typed 3674-3749; DISASM 0x26b26c-0x26b7d4 for the two phases).
 
 // NOLINTBEGIN(readability-magic-numbers)
 
-TEST(CharSkillC12Test, StartsReadyAndNotInSkill) {
-    CharSkillC12 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());        // freshly set-up hero: first ultimate ready
+namespace {
+const Game::CharacterDef &Hero() {
+    static Game::GameData gd;
+    static const bool ok = gd.LoadAll(RESOURCE_DIR);
+    EXPECT_TRUE(ok);
+    const Game::CharacterDef *c = gd.FindCharacter("c12");
+    EXPECT_NE(c, nullptr);
+    static const Game::CharacterDef fallback{};
+    return c != nullptr ? *c : fallback;
+}
+
+void TickSteps(CharSkillC12 &c, int n) {
+    for (int i = 0; i < n; ++i) {
+        c.Tick(kFixedStepMs);
+    }
+}
+} // namespace
+
+TEST(CharSkillC12Test, DataRowIsTheDruid) {
+    EXPECT_FLOAT_EQ(Hero().skillCd, 2.5F); // characters.json c12 skill_cd
+    EXPECT_EQ(Hero().atk, 5);
+    EXPECT_EQ(Hero().critical, 5);
+    EXPECT_EQ(Hero().skillRefs.at("skill_obj1").front(), "wolf1"); // c12.prefab
+    EXPECT_EQ(Hero().skillRefs.at("skill_obj2").front(), "wolf2");
+}
+
+// --- activation gate (TYPED 3706-3729: skill_ready ONLY, no in_skill test) ----------------
+
+TEST(CharSkillC12Test, TheFirstCastSummonsTwoWolvesAndLeavesInSkillSet) {
+    CharSkillC12 c(Hero().skillCd);
+    EXPECT_TRUE(c.SkillReady());
     EXPECT_FALSE(c.InSkill());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-    EXPECT_FLOAT_EQ(c.SkillCd(), 5.0F);
+    const CharSkillC12::RoleSkillResult r = c.RoleSkill(Hero().atk, Hero().critical, false);
+    EXPECT_EQ(r.phase, CharSkillC12::Phase::Summon);
+    EXPECT_EQ(r.wolves, 2); // skill_obj1 + skill_obj2 (DISASM 0x26b45c / 0x26b5dc)
+    EXPECT_FALSE(r.strengthened);
+    EXPECT_TRUE(c.InSkill()); // in_skill = 1 @0x26b308 ...
+    EXPECT_FALSE(c.SkillReady()); // ... and RoleSkillEnd restarted the cooldown
 }
 
-TEST(CharSkillC12Test, NegativeStatClampsToZero) {
-    CharSkillC12 c(-3.0F);              // guard against bad stat sheet values
-    EXPECT_FLOAT_EQ(c.SkillCd(), 0.0F);
-    EXPECT_TRUE(c.SkillReady());        // skill_cd 0 -> always ready
+TEST(CharSkillC12Test, TheGateIgnoresInSkillAndOnlyWaitsForTheCooldown) {
+    CharSkillC12 c(Hero().skillCd);
+    ASSERT_EQ(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::Summon);
+    // in_skill is set, yet while the cooldown runs the gate still refuses (skill_ready).
+    EXPECT_EQ(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::None);
+    TickSteps(c, 100); // 2.0 s: not yet
+    EXPECT_EQ(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::None);
+    TickSteps(c, 30); // 3.0 s: ready (the float count-up is exact only to ~1e-5)
+    EXPECT_TRUE(c.SkillReady());
+    EXPECT_NE(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::None);
 }
 
-TEST(CharSkillC12Test, ActivateSucceedsWhenReady) {
-    CharSkillC12 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());  // skill_ready -> enter (set in_skill = true)
+// --- effect magnitude: the second phase is RGHand.AtkCut(atk, critical) ---------------------
+
+TEST(CharSkillC12Test, EveryLaterCastIsAnAtkCutWithTheHeroAtkAndCritical) {
+    CharSkillC12 c(Hero().skillCd);
+    ASSERT_EQ(c.RoleSkill(Hero().atk, Hero().critical, false).phase, CharSkillC12::Phase::Summon);
+    TickSteps(c, 130);
+    const CharSkillC12::RoleSkillResult cut = c.RoleSkill(Hero().atk, Hero().critical, false);
+    EXPECT_EQ(cut.phase, CharSkillC12::Phase::Cut);
+    EXPECT_EQ(cut.cutDamage, 5); // role_attribute.atk (+0x40), DISASM 0x26b2b4-0x26b2e0
+    EXPECT_EQ(cut.cutCritical, 5); // role_attribute.critical (+0x24)
+    EXPECT_EQ(cut.wolves, 0);
+    // in_skill is NEVER cleared (RoleSkillEnd 3736-3749 has no in_skill store): the next
+    // cast after the cooldown is again a cut, not another summon.
     EXPECT_TRUE(c.InSkill());
+    TickSteps(c, 130);
+    EXPECT_EQ(c.RoleSkill(Hero().atk, Hero().critical, false).phase, CharSkillC12::Phase::Cut);
 }
 
-TEST(CharSkillC12Test, ActivateFailsWhileOnCooldown) {
-    // get_skill_ready == 0 path: TryActivateSkill is a no-op.
-    CharSkillC12 c(5.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                       // RoleSkillEnd -> ReSetSkillReload (= 0)
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FALSE(c.TryActivateSkill()); // still cooling down -> no-op
-    EXPECT_FALSE(c.InSkill());
+TEST(CharSkillC12Test, TheStrengthenedFlagRidesTheSummonOnly) {
+    CharSkillC12 c(Hero().skillCd);
+    const CharSkillC12::RoleSkillResult r = c.RoleSkill(5, 5, /*skillStrengthen=*/true);
+    EXPECT_TRUE(r.strengthened); // WolfController.strengthen (+0x80) = true
 }
 
-TEST(CharSkillC12Test, RoleSkillHasNoInSkillGuard) {
-    // FAITHFUL: C12Controller__RoleSkill @ 158451 has NO "!in_skill" (0x55) guard
-    // (unlike C01Controller__RoleSkill). While in skill and STILL ready (activation
-    // does not spend the charge in C12 -- the spend is RoleSkillEnd), the gate is
-    // satisfied again, so re-activation is NOT blocked by an in_skill check.
-    CharSkillC12 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_TRUE(c.InSkill());
-    EXPECT_TRUE(c.SkillReady());         // not spent on activate -> still ready
-    EXPECT_TRUE(c.TryActivateSkill());   // C12 has no !in_skill gate -> still allowed
-    EXPECT_TRUE(c.InSkill());
+// --- end / reset + cooldown at the fixed step (TYPED 3674-3683, 3736-3749) --------------------
+
+TEST(CharSkillC12Test, RoleSkillEndRestartsTheCooldownAndItCountsUpEveryFixedStep) {
+    CharSkillC12 c(Hero().skillCd);
+    ASSERT_NE(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::None);
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 2.5F);
+    TickSteps(c, 62); // 1.24 s
+    EXPECT_NEAR(c.CooldownRemaining(), 2.5F - 62 * kFixedStepSeconds, 1e-3F); // 1.26
 }
 
-TEST(CharSkillC12Test, EndSkillSpendsTheChargeAndLeavesState) {
-    // FAITHFUL: C12Controller__RoleSkillEnd @ 158514 -> ReSetSkillReload (0x5c = 0).
-    CharSkillC12 c(5.0F);
-    c.TryActivateSkill();
-    EXPECT_TRUE(c.InSkill());
+TEST(CharSkillC12Test, EndSkillOnlyResetsTheCooldownAndNeverClearsInSkill) {
+    CharSkillC12 c(Hero().skillCd);
+    ASSERT_EQ(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::Summon);
+    TickSteps(c, 130);
+    ASSERT_TRUE(c.SkillReady());
     c.EndSkill();
-    EXPECT_FALSE(c.InSkill());           // owner slot-0x17c finish path (flagged)
-    EXPECT_FALSE(c.SkillReady());        // cooldown restarted (this_skill_time = 0)
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 5.0F);
-}
-
-TEST(CharSkillC12Test, EndSkillIsNoOpWhenNotInSkill) {
-    CharSkillC12 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());
-    c.EndSkill();                        // no skill active -> no spend
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FALSE(c.InSkill());
-}
-
-TEST(CharSkillC12Test, CooldownRechargesAndClamps) {
-    // FAITHFUL: C12Controller__Update -> AttributeUpdate -> SkillReload count-up,
-    // clamped to skill_cd (0x44).
-    CharSkillC12 c(2.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                        // this_skill_time = 0
     EXPECT_FALSE(c.SkillReady());
-    c.Tick(1000.0F);                     // +1.0s
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 1.0F);
-    c.Tick(5000.0F);                     // overshoot -> clamps to skill_cd
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-}
-
-TEST(CharSkillC12Test, TickDoesNotAutoEndSkill) {
-    // FAITHFUL (the key C12 difference): C12Controller__Update has NO in_skill
-    // branch -- NO in_skill_time countdown and NO slot-0x17c auto-end (that is the
-    // C13/C01 feature C12 lacks). So an active skill NEVER auto-ends on Tick; it
-    // stays active until the owner routes RoleSkillEnd. Ticking for a long time
-    // while in skill must keep in_skill true.
-    CharSkillC12 c(4.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_TRUE(c.InSkill());
-    for (int i = 0; i < 50; ++i) {
-        c.Tick(1000.0F);                 // 50 seconds of ticks: no window timer
-        EXPECT_TRUE(c.InSkill());        // never auto-ends (no countdown in C12)
-    }
     EXPECT_TRUE(c.InSkill());
 }
 
-TEST(CharSkillC12Test, TickRunsCooldownWhileInSkill) {
-    // C12's Update runs AttributeUpdate -> SkillReload UNCONDITIONALLY (no in_skill
-    // gate), so the cooldown advances even during the skill. To observe it, start
-    // mid-cooldown by spending first, then re-enter in skill and tick.
-    CharSkillC12 c(4.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                        // this_skill_time = 0 (on cooldown)
-    EXPECT_FALSE(c.SkillReady());
-    c.TryActivateSkill();                // ready==false -> no-op, not in skill
-    EXPECT_FALSE(c.InSkill());
-    // Force the in-skill state without spending by toggling via a ready instance:
-    CharSkillC12 d(4.0F);
-    d.TryActivateSkill();                // in skill, this_skill_time == skill_cd
-    EXPECT_TRUE(d.InSkill());
-    d.Tick(1000.0F);                     // SkillReload runs (clamped no-op at full),
-    EXPECT_TRUE(d.InSkill());            // and crucially does NOT freeze or auto-end
-    EXPECT_TRUE(d.SkillReady());
-}
-
-TEST(CharSkillC12Test, NonPositiveDtIsIgnored) {
-    CharSkillC12 c(3.0F);
-    c.TryActivateSkill();
-    c.EndSkill();
-    const float before = c.CooldownRemaining();
-    c.Tick(0.0F);
-    c.Tick(-100.0F);
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), before); // no advance
-}
-
-TEST(CharSkillC12Test, NoRngDrawOnAnyPath) {
-    // None of the recovered C12 bodies draw from rg_random; exercising the whole
-    // brain must leave the stream un-advanced, so two seeded instances stay in
-    // lockstep. We compare a reference stream that the brain never touches.
-    CharSkillC12 a(3.0F);
-    RGRandom reference;
-    a.SetSeed(12345);
-    reference.SetRandomSeed(12345);
-    EXPECT_TRUE(a.Seeded());
-    for (int i = 0; i < 16; ++i) {
-        a.TryActivateSkill();
-        a.Tick(250.0F);
-        a.EndSkill();
-        a.Tick(250.0F);
+TEST(CharSkillC12Test, NegativeCooldownClampsAndNoRngIsDrawn) {
+    CharSkillC12 neg(-1.0F);
+    EXPECT_FLOAT_EQ(neg.SkillCd(), 0.0F);
+    CharSkillC12 a(Hero().skillCd);
+    CharSkillC12 b(Hero().skillCd);
+    a.SetSeed(12);
+    b.SetSeed(12);
+    for (int i = 0; i < 4; ++i) {
+        a.RoleSkill(5, 5, false);
+        TickSteps(a, 130);
     }
-    // 'a' ran the full brain; 'reference' was untouched. If any draw had leaked,
-    // a's stream would have advanced and diverged. Same first value -> a's stream
-    // is exactly where the reference is, i.e. zero draws were taken.
-    EXPECT_EQ(a.Rng().Range(0, 1000000), reference.Range(0, 1000000));
-}
-
-TEST(CharSkillC12Test, FullCycleIsDeterministic) {
-    // Drive identical activate/end/cooldown cycles on two instances and compare the
-    // observable state at every step -> behaviour is fully deterministic.
-    auto run = [](CharSkillC12 &c) -> std::vector<int> {
-        std::vector<int> trace;
-        for (int i = 0; i < 12; ++i) {
-            trace.push_back(c.TryActivateSkill() ? 1 : 0);
-            trace.push_back(c.InSkill() ? 1 : 0);
-            c.Tick(400.0F);
-            c.EndSkill();
-            trace.push_back(c.SkillReady() ? 1 : 0);
-            c.Tick(1500.0F);
-            trace.push_back(c.SkillReady() ? 1 : 0);
-        }
-        return trace;
-    };
-    CharSkillC12 a(2.0F);
-    CharSkillC12 b(2.0F);
-    const std::vector<int> ta = run(a);
-    const std::vector<int> tb = run(b);
-    ASSERT_EQ(ta.size(), tb.size());
-    for (std::size_t i = 0; i < ta.size(); ++i) {
-        EXPECT_EQ(ta[i], tb[i]);
-    }
+    EXPECT_EQ(a.Rng().Range(0, 1000000), b.Rng().Range(0, 1000000));
 }
 
 // NOLINTEND(readability-magic-numbers)

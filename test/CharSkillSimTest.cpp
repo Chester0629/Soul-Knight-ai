@@ -1,8 +1,12 @@
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include "combat/CharSkillC04.hpp"
+#include "data/GameData.hpp"
 #include "sim/CharSkillAdapters.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimEvent.hpp"
@@ -955,6 +959,353 @@ TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutASameStepPlayerCut) {
     EXPECT_EQ(adapter->Brain().Combo(), 0)
         << "a player cut landing AFTER KillAllHostiles but BEFORE the next Cull() "
            "must not re-attribute a forced death to the player";
+}
+
+
+// ===================================================================
+// P3.3.c -- C03 / C05 / C07 / C11 / C12 in the SIMULATION. Every expected number is
+// derived from characters.json (skill_cd / atk / critical / BulletBat.damage via
+// GameData) or from a decompile constant cited in the hero's header (CharSkillC03/05/07/
+// 11/12.hpp). Positions: 1 Unity unit == kWorldUnitPx (32) sim pixels (T-40).
+// ===================================================================
+
+namespace {
+const Game::CharacterDef &HeroDef(const std::string &id) {
+    static Game::GameData gd;
+    static const bool ok = gd.LoadAll(RESOURCE_DIR);
+    EXPECT_TRUE(ok);
+    const Game::CharacterDef *c = gd.FindCharacter(id);
+    EXPECT_NE(c, nullptr) << id;
+    static const Game::CharacterDef fallback{};
+    return c != nullptr ? *c : fallback;
+}
+
+void SetHero(Simulation &sim, const std::string &id) {
+    const Game::CharacterDef &d = HeroDef(id);
+    sim.SetPlayerSkill(id, d.skillCd, d.inSkillTime, d.atk, &d);
+}
+
+WorldInputs Press() {
+    WorldInputs in = Idle();
+    in.skill = true;
+    return in;
+}
+
+// Advance @p n fixed steps with the (held-false) idle input; collect every event.
+void RunSteps(Simulation &sim, int n, std::vector<SimEvent> *events = nullptr,
+         const WorldInputs &in = Idle()) {
+    for (int i = 0; i < n; ++i) {
+        sim.Advance(kFixedStepMs, in);
+        if (events != nullptr) {
+            for (SimEvent &e : sim.DrainEvents()) {
+                events->push_back(std::move(e));
+            }
+        }
+    }
+}
+
+int CountEvent(const std::vector<SimEvent> &evs, const std::string &name) {
+    int n = 0;
+    for (const SimEvent &e : evs) {
+        if (e.name == name) {
+            ++n;
+        }
+    }
+    return n;
+}
+
+int EnemyHp(const Simulation &sim, std::size_t i) { return sim.EnemyViews()[i].hp; }
+
+// A wall slab: blocks every circle query whose centre lies in x in [lo, hi].
+class SlabWorld : public Game::Sim::WorldCollision {
+public:
+    SlabWorld(float lo, float hi) : m_Lo(lo), m_Hi(hi) {}
+    bool Blocks(glm::vec2 pos, float /*radius*/) const override {
+        return pos.x >= m_Lo && pos.x <= m_Hi;
+    }
+
+private:
+    float m_Lo;
+    float m_Hi;
+};
+} // namespace
+
+// --- C03 Wizard: skill_cd 6, atk 3. Press -> 0.4 s -> thunder on the nearest enemy for 8, chain ---
+
+TEST(CharSkillSimTest, C03ThunderStrikesTheNearestEnemyForEightAfterFourTenthsOfASecondAndChains) {
+    Simulation sim(31, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{160.0F, 0.0F}, 0, 1);  // 5.0 units: first strike
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{300.0F, 0.0F}, 0, 2);  // 4.4 units from it
+    SetHero(sim, "c03");
+    std::vector<SimEvent> evs;
+
+    sim.Advance(kFixedStepMs, Press()); // fixed step 1: the press edge
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill()); // in_skill = 1; the Invoke is armed
+    RunSteps(sim, 18, &evs, Idle()); // steps 2..19: 380 ms elapsed
+    EXPECT_EQ(EnemyHp(sim, 0), 50); // nothing yet
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill());
+
+    RunSteps(sim, 1, &evs); // step 20 = 400 ms: CreateTunder
+    EXPECT_EQ(EnemyHp(sim, 0), 42); // 50 - 8 (StartThunder value3)
+    EXPECT_EQ(EnemyHp(sim, 1), 50); // not struck first: it is the farther one
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill()); // RoleSkillEnd ran in the same call
+    EXPECT_EQ(CountEvent(evs, "skill_effect:thunder_strike"), 1);
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.0F, 1e-6F); // cooldown restarted: 0 / 6
+
+    RunSteps(sim, 6, &evs); // steps 21..26
+    EXPECT_EQ(EnemyHp(sim, 1), 50);
+    RunSteps(sim, 1, &evs); // step 27: the 0.15 s hop (the strike step already counts one)
+    EXPECT_EQ(EnemyHp(sim, 1), 42); // chain hop: atk 8 on the nearest unhit within 10 units
+    EXPECT_EQ(EnemyHp(sim, 0), 42); // not hit twice
+    EXPECT_EQ(CountEvent(evs, "skill_effect:thunder_hop"), 1);
+
+    RunSteps(sim, 40, &evs); // far longer than any further hop (a hopped chain does not re-strike)
+    EXPECT_EQ(EnemyHp(sim, 0), 42);
+    EXPECT_EQ(EnemyHp(sim, 1), 42);
+    // Cooldown ticks from step 20: after 47 steps (steps 21..67) -> 47 * 0.02 / 6.
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 47 * 0.02F / 6.0F, 2e-3F);
+}
+
+TEST(CharSkillSimTest, C03ALoneEnemyIsStruckThenReStruckForDouble) {
+    Simulation sim(32, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{160.0F, 0.0F}, 0, 1);
+    SetHero(sim, "c03");
+    sim.Advance(kFixedStepMs, Press());
+    RunSteps(sim, 19);
+    EXPECT_EQ(EnemyHp(sim, 0), 42); // step 20: 8
+    RunSteps(sim, 6);
+    EXPECT_EQ(EnemyHp(sim, 0), 42); // step 26: the re-strike has not fired yet
+    RunSteps(sim, 1);
+    EXPECT_EQ(EnemyHp(sim, 0), 26); // step 27: no other target, count == 0 -> atk * 2 = 16
+}
+
+TEST(CharSkillSimTest, C03NoEnemyInRangeStillSpendsTheCooldownAndStrikesNothing) {
+    Simulation sim(33, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{480.0F, 0.0F}, 0, 1); // 15 units > 14
+    SetHero(sim, "c03");
+    std::vector<SimEvent> evs;
+    sim.Advance(kFixedStepMs, Press());
+    RunSteps(sim, 19, &evs);
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill()); // ended at step 20 regardless
+    EXPECT_EQ(EnemyHp(sim, 0), 50);
+    EXPECT_EQ(CountEvent(evs, "skill_effect:thunder_strike"), 0);
+    EXPECT_FALSE(sim.PlayerSkill()->SkillReady()); // the charge was spent
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.0F, 1e-6F);
+}
+
+TEST(CharSkillSimTest, C03AWallBetweenThePlayerAndTheEnemyBlocksTheStrike) {
+    SlabWorld wall(70.0F, 90.0F); // a slab between x = 0 (player) and x = 160 (enemy)
+    Simulation sim(34, &wall);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{160.0F, 0.0F}, 0, 1);
+    SetHero(sim, "c03");
+    sim.Advance(kFixedStepMs, Press());
+    RunSteps(sim, 30);
+    EXPECT_EQ(EnemyHp(sim, 0), 50); // Linecast on "Wall" blocked: nothing was struck
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill());
+    EXPECT_FALSE(sim.PlayerSkill()->SkillReady()); // ...but the cooldown was still spent
+}
+
+TEST(CharSkillSimTest, C03AThunderKillIsCreditedToThePlayerAndTheEnemyDies) {
+    Simulation sim(35, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(8), glm::vec2{160.0F, 0.0F}, 0, 1); // exactly one strike
+    SetHero(sim, "c03");
+    std::vector<SimEvent> evs;
+    sim.Advance(kFixedStepMs, Press());
+    RunSteps(sim, 19, &evs);
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(CountEvent(evs, "death"), 1);
+}
+
+// --- C05 Alchemist: skill_cd 6. The ultimate is instant; the bottle volley is NOT PORTED (T-44) ---
+
+TEST(CharSkillSimTest, C05CastEmitsTheBottleCueSpendsTheCooldownAtOnceAndNeverShowsInSkill) {
+    Simulation sim(36, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{60.0F, 0.0F}, 0, 1);
+    SetHero(sim, "c05");
+    std::vector<SimEvent> evs;
+    sim.Advance(kFixedStepMs, Press());
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_EQ(CountEvent(evs, "skill_use"), 1);
+    EXPECT_EQ(CountEvent(evs, "skill_effect:bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)"), 1);
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill()); // RoleSkillEnd inside the same RoleSkill
+    EXPECT_FALSE(sim.PlayerSkill()->SkillReady());
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.02F / 6.0F, 1e-4F); // 1 step of 6 s
+    RunSteps(sim, 150);
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 151 * 0.02F / 6.0F, 1e-3F); // 0.503
+    EXPECT_EQ(EnemyHp(sim, 0), 50); // the bottle's damage is NOT PORTED: no fake numbers
+    RunSteps(sim, 160); // past 6 s
+    EXPECT_TRUE(sim.PlayerSkill()->SkillReady());
+    EXPECT_FLOAT_EQ(sim.PlayerStats().skillCdProgress, 1.0F);
+}
+
+// --- C07 Vampire: skill_cd 8, BulletBat.damage 5 (prefab). 6 bats; hit -> heal/energy, miss -> refund ---
+
+TEST(CharSkillSimTest, C07BatsHitTheEnemyForFiveEachHealThePlayerEveryThirdHitAndEndTheSkill) {
+    Simulation sim(37, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(100), glm::vec2{160.0F, 0.0F}, 0, 1); // 5 units out
+    Game::CombatStats player;
+    player.hp = 3;
+    player.maxHp = 10;
+    player.armor = 5;
+    player.maxArmor = 5;
+    sim.SetPlayerStats(player);
+    SetHero(sim, "c07");
+    std::vector<SimEvent> evs;
+
+    sim.Advance(kFixedStepMs, Press());
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    ASSERT_TRUE(sim.PlayerSkill()->InSkill()); // stays in_skill until the last bat is back
+    EXPECT_EQ(CountEvent(evs, "skill_effect:bat_swarm n=6"), 1);
+
+    int endedAt = -1;
+    for (int step = 2; step <= 1500 && endedAt < 0; ++step) {
+        sim.Advance(kFixedStepMs, Idle());
+        sim.SetPlayerStats(sim.PlayerStats()); // the shell round-trips vitals every frame
+        if (!sim.PlayerSkill()->InSkill()) {
+            endedAt = step;
+        }
+    }
+    ASSERT_GT(endedAt, 0) << "the bats never all returned";
+    EXPECT_EQ(EnemyHp(sim, 0), 100 - 6 * 5); // six bats, BulletBat.damage 5 each, one hit per bat
+    EXPECT_EQ(sim.PlayerStats().hp, 5);      // 6 hits -> RestoreHealth(1) on the 3rd and 6th
+    // All six bats hit, none missed: no cooldown refund -> the cooldown restarted at 0.
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.0F, 1e-6F);
+    EXPECT_FALSE(sim.PlayerSkill()->SkillReady());
+    RunSteps(sim, 50);
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 50 * 0.02F / 8.0F, 1e-3F); // 0.125
+}
+
+TEST(CharSkillSimTest, C07WithNoEnemyEveryBatMissesAndTheCooldownIsFullyRefunded) {
+    Simulation sim(38, &g_NullWorld);
+    SetHero(sim, "c07");
+    sim.Advance(kFixedStepMs, Press()); // step 1 (the launch call also runs bat step 1)
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill());
+    RunSteps(sim, 29); // steps 2..30: the bats are still out (they arrive on bat step 31)
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill());
+    RunSteps(sim, 1); // step 31: the 6th BatBack -> RoleSkillEnd
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill());
+    // 6 misses * (8 / 6) = 8 = skill_cd: ReSetSkillReload then SkillReload(8) -> ready at once.
+    EXPECT_TRUE(sim.PlayerSkill()->SkillReady());
+    EXPECT_FLOAT_EQ(sim.PlayerStats().skillCdProgress, 1.0F);
+    // ...and the next press re-casts immediately.
+    sim.Advance(kFixedStepMs, Idle()); // release
+    sim.Advance(kFixedStepMs, Press());
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill());
+}
+
+TEST(CharSkillSimTest, C07AtFullHealthEveryThirdBatHitGrantsFiveEnergy) {
+    Simulation sim(39, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(100), glm::vec2{160.0F, 0.0F}, 0, 1);
+    Game::CombatStats player;
+    player.hp = 10;
+    player.maxHp = 10;
+    sim.SetPlayerStats(player);
+    SetHero(sim, "c07");
+    int energy = 0;
+    sim.Advance(kFixedStepMs, Press());
+    energy += sim.PlayerEnergyGrantedLastAdvance();
+    for (int step = 2; step <= 1500 && sim.PlayerSkill()->InSkill(); ++step) {
+        sim.Advance(kFixedStepMs, Idle());
+        energy += sim.PlayerEnergyGrantedLastAdvance();
+    }
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill());
+    EXPECT_EQ(energy, 10); // 6 hits -> two RestoreEnergy(5)
+    EXPECT_EQ(sim.PlayerStats().hp, 10);
+    EXPECT_EQ(EnemyHp(sim, 0), 70);
+}
+
+// --- C11 Priest: skill_cd 14. Instant cast; the holy light pulses 3 x RestoreHealth(1) ---
+
+TEST(CharSkillSimTest, C11HolyLightHealsThePlayerOnePointPerPulseForThreePulses) {
+    Simulation sim(40, &g_NullWorld);
+    Game::CombatStats player;
+    player.hp = 3;
+    player.maxHp = 10;
+    sim.SetPlayerStats(player);
+    SetHero(sim, "c11");
+    std::vector<SimEvent> evs;
+    sim.Advance(kFixedStepMs, Press()); // step 1: cast + the first pulse (can_hit starts true)
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_EQ(CountEvent(evs, "skill_effect:holy_light"), 1);
+    EXPECT_FALSE(sim.PlayerSkill()->InSkill()); // RoleSkillEnd inside the same RoleSkill
+    EXPECT_EQ(sim.PlayerStats().hp, 4);
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.02F / 14.0F, 1e-4F);
+    RunSteps(sim, 38); // steps 2..39
+    EXPECT_EQ(sim.PlayerStats().hp, 4);
+    RunSteps(sim, 1); // step 40: the 0.8 s re-arm
+    EXPECT_EQ(sim.PlayerStats().hp, 5);
+    RunSteps(sim, 39); // steps 41..79
+    EXPECT_EQ(sim.PlayerStats().hp, 5);
+    RunSteps(sim, 1); // step 80: 1.6 s
+    EXPECT_EQ(sim.PlayerStats().hp, 6);
+    RunSteps(sim, 140); // GasEnd (1.8 s) stopped further pulses
+    EXPECT_EQ(sim.PlayerStats().hp, 6);
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 220 * 0.02F / 14.0F, 2e-3F); // 0.314
+}
+
+TEST(CharSkillSimTest, C11APlayerWhoWalksOutOfTheLightIsNotHealedAgain) {
+    Simulation sim(41, &g_NullWorld);
+    Game::CombatStats player;
+    player.hp = 3;
+    player.maxHp = 10;
+    sim.SetPlayerStats(player);
+    SetHero(sim, "c11");
+    sim.Advance(kFixedStepMs, Press()); // pulse 1 at the cast position
+    ASSERT_EQ(sim.PlayerStats().hp, 4);
+    WorldInputs away = Idle();
+    away.playerPos = glm::vec2{200.0F, 0.0F}; // 6.25 units > the 4-unit radius
+    RunSteps(sim, 150, nullptr, away);
+    EXPECT_EQ(sim.PlayerStats().hp, 4); // pulses 2 and 3 found nobody
+}
+
+// --- C12 Druid: skill_cd 2.5, atk 5. First cast summons (NOT PORTED), later casts are AtkCut(5) ---
+
+TEST(CharSkillSimTest, C12FirstCastSummonsTwoWolvesThenEveryLaterCastCutsForAtk) {
+    Simulation sim(42, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(50), glm::vec2{30.0F, 0.0F}, 0, 1); // inside the cut reach
+    SetHero(sim, "c12");
+    std::vector<SimEvent> evs;
+
+    sim.Advance(kFixedStepMs, Press()); // cast 1: summon phase
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_EQ(CountEvent(evs, "skill_use"), 1);
+    EXPECT_EQ(CountEvent(evs, "skill_effect:wolf_summon n=2 NOT_PORTED(T-48)"), 1);
+    EXPECT_EQ(EnemyHp(sim, 0), 50); // a summon deals no damage
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill()); // in_skill = 1 and never cleared (T-49)
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.02F / 2.5F, 1e-4F);
+
+    RunSteps(sim, 5); // release; a press inside the cooldown does nothing
+    sim.Advance(kFixedStepMs, Press());
+    EXPECT_EQ(EnemyHp(sim, 0), 50);
+    RunSteps(sim, 1);
+    RunSteps(sim, 130, &evs); // well past 2.5 s from cast 1
+    EXPECT_TRUE(sim.PlayerSkill()->SkillReady());
+
+    sim.Advance(kFixedStepMs, Press()); // cast 2: the AtkCut phase (in_skill is still set)
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_EQ(EnemyHp(sim, 0), 45); // role_attribute.atk 5
+    EXPECT_EQ(CountEvent(evs, "skill_effect:atk_cut dmg=5"), 1);
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill());
+    EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.02F / 2.5F, 1e-4F); // RoleSkillEnd again
+
+    RunSteps(sim, 126); // 2.52 s
+    sim.Advance(kFixedStepMs, Press()); // cast 3: another cut, not another summon
+    EXPECT_EQ(EnemyHp(sim, 0), 40);
+}
+
+TEST(CharSkillSimTest, C12ACutKillIsAttributedToThePlayerCut) {
+    Simulation sim(43, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(5), glm::vec2{30.0F, 0.0F}, 0, 1); // one cut of 5 kills it
+    SetHero(sim, "c12");
+    std::vector<SimEvent> evs;
+    sim.Advance(kFixedStepMs, Press()); // summon
+    RunSteps(sim, 130);
+    ASSERT_TRUE(sim.PlayerSkill()->SkillReady());
+    sim.Advance(kFixedStepMs, Press()); // cut
+    for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(CountEvent(evs, "death"), 1);
 }
 
 // NOLINTEND(readability-magic-numbers)

@@ -107,11 +107,12 @@ TEST(CharSkillDispatchTest, C02DashesAndDoesNotMirror) {
     EXPECT_FALSE(sim.PlayerSkill()->SkillReady()); // cooldown spent on the dash
 }
 
-// --- stub (c03..c13): trigger + cooldown run, but NO combat effect (by design) ----
+// --- stub (c06): trigger + cooldown run, but NO combat effect (by design). P3.3.c graduated
+// c03/c05/c07/c11/c12 to real bodies (CharSkillSimTest), so c06 is the remaining stub. -----
 TEST(CharSkillDispatchTest, StubHeroTriggersAndCoolsWithNoEffect) {
     Simulation sim(7, &g_NullWorld);
     sim.EquipWeapon(SingleGun(), "Gun001", 808);
-    sim.SetPlayerSkill("c03", 2.0F, 0.0F); // a gate+cooldown-only stub
+    sim.SetPlayerSkill("c06", 2.0F, 0.0F); // a gate+cooldown-only stub
     ASSERT_TRUE(sim.PlayerSkill()->SkillReady());
 
     WorldInputs in = Idle();

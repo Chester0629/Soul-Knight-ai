@@ -73,6 +73,25 @@ class TestBulletRefBoundary(unittest.TestCase):
         self.assertIn("R8_nonexistent_prefab", joined,
                       f"bogus boss bullet ref was not reported as an error; errors={errors}")
 
+    def test_c07_bat_damage_must_flow_from_the_prefab(self) -> None:
+        """P3.3.c: C07's BulletBat.damage (5, bullet_bat.prefab) must come through
+        characters.json skill_params; dropping it must fail the gate, so the C++ side
+        can never silently fall back to a literal."""
+        data = copy.deepcopy(self.data)
+        c07 = next(c for c in data["chars"]["roster"] if c["id"] == "c07")
+        self.assertEqual(c07["skill_params"]["BulletBat.damage"], 5)
+        del c07["skill_params"]["BulletBat.damage"]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("BulletBat.damage" in e for e in errors), errors)
+
+    def test_c05_bottle_variants_must_flow_from_the_prefab(self) -> None:
+        data = copy.deepcopy(self.data)
+        c05 = next(c for c in data["chars"]["roster"] if c["id"] == "c05")
+        self.assertEqual(len(c05["skill_refs"]["bottle_objs"]), 4)
+        c05["skill_refs"]["bottle_objs"] = c05["skill_refs"]["bottle_objs"][:2]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("bottle_objs" in e for e in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

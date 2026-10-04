@@ -2,6 +2,7 @@
 #define GAME_DATA_HPP
 
 #include <cstddef>
+#include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -163,6 +164,26 @@ struct CharacterDef {
     float skillCd = 0.0F;
     float inSkillTime = 0.0F;
     float fireRate = 0.0F;
+    /// P3.3.c: the hero-specific serialized refs of the c##.prefab controller
+    /// MonoBehaviour (everything after the shared `skinIndex:` -- c03 `thunder`,
+    /// c05 `bottle_objs`, c07 `bullet_bat`, c11 `skill_obj`, c12 `skill_obj1/2`,
+    /// `skill_clips` ...): field name -> asset stems. FAITHFUL @ c##.prefab; empty
+    /// for a hero that serializes none or for the shared template.
+    std::map<std::string, std::vector<std::string>> skillRefs;
+    /// P3.3.c: numeric fields of the EFFECT prefabs those refs point at, keyed
+    /// "<Class>.<field>" (e.g. "BulletBat.damage" = 5, the prefab override of the
+    /// ctor default 2). FAITHFUL @ the effect prefab; absent -> ctor default stays.
+    std::map<std::string, float> skillParams;
+    /// skillParams lookup with a fallback (the decompile ctor default).
+    float SkillParam(const std::string &key, float fallback) const {
+        const auto it = skillParams.find(key);
+        return it != skillParams.end() ? it->second : fallback;
+    }
+    /// skillRefs lookup: number of stems under @p field (0 when absent).
+    std::size_t SkillRefCount(const std::string &field) const {
+        const auto it = skillRefs.find(field);
+        return it != skillRefs.end() ? it->second.size() : 0;
+    }
 };
 
 /// Per-entity sprite animation set (from Resources/data/sprites.json): the

@@ -1,184 +1,129 @@
 #include <gtest/gtest.h>
 
-#include <cstddef>
 #include <vector>
 
 #include "combat/CharSkillC05.hpp"
+#include "data/GameData.hpp"
+#include "sim/SimConfig.hpp"
 
 using Game::CharSkillC05;
+using Game::Sim::kFixedStepMs;
+using Game::Sim::kFixedStepSeconds;
+
+// P3.3.c C05 (Alchemist) brain. Expected numbers: characters.json (skill_cd 6, bottle_objs
+// has 4 serialized refs, through GameData) and the decompile constants cited at their
+// declarations in CharSkillC05.hpp (DISASM 0x265df4-0x2661e8, typed 1549-1638).
 
 // NOLINTBEGIN(readability-magic-numbers)
 
-TEST(CharSkillC05Test, StartsReadyAndNotInSkill) {
-    CharSkillC05 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());        // freshly set-up hero: first ultimate ready
-    EXPECT_FALSE(c.InSkill());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-    EXPECT_FLOAT_EQ(c.SkillCd(), 5.0F);
+namespace {
+const Game::CharacterDef &Hero() {
+    static Game::GameData gd;
+    static const bool ok = gd.LoadAll(RESOURCE_DIR);
+    EXPECT_TRUE(ok);
+    const Game::CharacterDef *c = gd.FindCharacter("c05");
+    EXPECT_NE(c, nullptr);
+    static const Game::CharacterDef fallback{};
+    return c != nullptr ? *c : fallback;
 }
 
-TEST(CharSkillC05Test, NegativeStatClampsToZero) {
-    CharSkillC05 c(-3.0F);              // guard against bad stat sheet values
-    EXPECT_FLOAT_EQ(c.SkillCd(), 0.0F);
-    EXPECT_TRUE(c.SkillReady());        // skill_cd 0 -> always ready
-}
-
-TEST(CharSkillC05Test, ActivateSucceedsWhenReadyAndIdle) {
-    // FAITHFUL: C05Controller__RoleSkill @ 156562 gate -- skill_ready && !in_skill.
-    CharSkillC05 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_TRUE(c.InSkill());
-}
-
-TEST(CharSkillC05Test, ActivateFailsWhileAlreadyInSkill) {
-    // 156582: the !in_skill (this+0x55) leg of the gate blocks re-entry.
-    CharSkillC05 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_FALSE(c.TryActivateSkill());
-    EXPECT_TRUE(c.InSkill());
-}
-
-TEST(CharSkillC05Test, ActivateFailsWhileOnCooldown) {
-    // 156577: the skill_ready (this+0x44 -> get_skill_ready) leg blocks activation.
-    CharSkillC05 c(5.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                       // spend -> this_skill_time = 0
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FALSE(c.TryActivateSkill()); // still cooling down
-}
-
-TEST(CharSkillC05Test, EndSkillSpendsTheChargeAndLeavesState) {
-    // Models base RoleSkillEnd -> ReSetSkillReload @ 432381 (this_skill_time = 0).
-    CharSkillC05 c(5.0F);
-    c.TryActivateSkill();
-    EXPECT_TRUE(c.InSkill());
-    c.EndSkill();
-    EXPECT_FALSE(c.InSkill());
-    EXPECT_FALSE(c.SkillReady());        // cooldown restarted (this_skill_time = 0)
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 5.0F);
-}
-
-TEST(CharSkillC05Test, EndSkillIsNoOpWhenNotInSkill) {
-    CharSkillC05 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());
-    c.EndSkill();                        // no skill active -> no spend
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FALSE(c.InSkill());
-}
-
-TEST(CharSkillC05Test, CooldownRechargesAndClamps) {
-    // FAITHFUL: SkillReload @ 432455 -- this_skill_time counts UP by dt, clamped
-    // to skill_cd. get_skill_ready @ 432483 -- ready iff skill_cd <= this_skill_time.
-    CharSkillC05 c(2.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                        // this_skill_time = 0
-    EXPECT_FALSE(c.SkillReady());
-    c.Tick(1000.0F);                     // +1.0s
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 1.0F);
-    c.Tick(5000.0F);                     // overshoot -> clamps to skill_cd
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-}
-
-TEST(CharSkillC05Test, TickAdvancesCooldownWhileInSkillNoAutoEnd) {
-    // KEY DIFFERENCE FROM C01: C05Controller__Update @ 156549 has NO in_skill
-    // block -- no in_skill_time (param_1[0x25]) countdown and no RoleSkillEnd
-    // auto-end. So while in_skill, Tick must advance ONLY the cooldown and must
-    // NOT end the skill. (Compare C01, whose Update auto-ends.) Proof: enter the
-    // skill, spend so the cooldown restarts, then tick repeatedly -- the cooldown
-    // recharges but the skill never auto-ends.
-    CharSkillC05 c(2.0F);
-    c.TryActivateSkill();
-    EXPECT_TRUE(c.InSkill());
-    for (int i = 0; i < 100; ++i) {
-        c.Tick(1000.0F);                 // 100 seconds of ticks INSIDE the skill
-        EXPECT_TRUE(c.InSkill());        // C05 NEVER auto-ends (no in_skill block)
+void TickSteps(CharSkillC05 &c, int n) {
+    for (int i = 0; i < n; ++i) {
+        c.Tick(kFixedStepMs);
     }
-    EXPECT_TRUE(c.InSkill());
-    // The cooldown's SkillReload ran every tick (clamped at skill_cd from
-    // activation, so the hero stays ready) -- but the skill itself did not end.
+}
+} // namespace
+
+TEST(CharSkillC05Test, DataRowIsTheAlchemist) {
+    EXPECT_FLOAT_EQ(Hero().skillCd, 6.0F); // characters.json c05 skill_cd
+    EXPECT_EQ(Hero().atk, 4);
+    EXPECT_EQ(Hero().SkillRefCount("bottle_objs"), 4U); // c05.prefab bottle_objs[0..3]
+}
+
+// --- activation gate (TYPED 1549-1577) -----------------------------------------------
+
+TEST(CharSkillC05Test, GateIsSkillReadyAndNotInSkill) {
+    CharSkillC05 c(Hero().skillCd);
     EXPECT_TRUE(c.SkillReady());
+    const CharSkillC05::RoleSkillResult r = c.RoleSkill(0, 4, false);
+    EXPECT_TRUE(r.activated);
+    // Still on cooldown (RoleSkillEnd restarted it): a second press does nothing.
+    const CharSkillC05::RoleSkillResult again = c.RoleSkill(0, 4, false);
+    EXPECT_FALSE(again.activated);
+    EXPECT_EQ(again.bottleCount, 0);
 }
 
-TEST(CharSkillC05Test, SkillStaysActiveUntilExplicitEnd) {
-    // The active window is owner/EndSkill-driven (base RoleSkillEnd), NOT a C05
-    // timer. The skill stays up across arbitrary ticks until EndSkill is called.
-    CharSkillC05 c(4.0F);
-    c.TryActivateSkill();
-    c.Tick(10000.0F);                    // huge tick: still active (no auto-end)
-    EXPECT_TRUE(c.InSkill());
-    c.EndSkill();                        // explicit end (base RoleSkillEnd chain)
-    EXPECT_FALSE(c.InSkill());
-    EXPECT_FALSE(c.SkillReady());        // ReSetSkillReload restarted the cooldown
-}
-
-TEST(CharSkillC05Test, NonPositiveDtIsIgnored) {
-    CharSkillC05 c(3.0F);
-    c.TryActivateSkill();
-    c.EndSkill();
-    const float before = c.CooldownRemaining();
-    c.Tick(0.0F);
-    c.Tick(-100.0F);
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), before); // no advance
-}
-
-TEST(CharSkillC05Test, ReactivateAfterFullRecharge) {
-    // End-to-end: activate, end (spend), recharge fully, activate again.
-    CharSkillC05 c(2.0F);
+TEST(CharSkillC05Test, TheUltimateIsInstantInSkillNeverObservableAfterTheCall) {
+    // DISASM 0x2661e8: RoleSkillEnd is vcall'd at the tail of the SAME RoleSkill body.
+    CharSkillC05 c(Hero().skillCd);
     EXPECT_TRUE(c.TryActivateSkill());
-    c.EndSkill();
+    EXPECT_FALSE(c.InSkill());
     EXPECT_FALSE(c.SkillReady());
-    c.Tick(2000.0F);                     // full recharge
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_TRUE(c.TryActivateSkill());   // ready again -> activates
-    EXPECT_TRUE(c.InSkill());
 }
 
-TEST(CharSkillC05Test, NoRngDrawOnAnyPath) {
-    // None of the three recovered C05 bodies draws from rg_random (C05 is a
-    // player-driven hero -> ZERO draws). Exercising the whole brain must leave
-    // the stream un-advanced, so two seeded instances stay in lockstep.
-    CharSkillC05 a(3.0F);
-    CharSkillC05 b(3.0F);
-    a.SetSeed(12345);
-    b.SetSeed(12345);
-    EXPECT_TRUE(a.Seeded());
-    for (int i = 0; i < 16; ++i) {
+// --- effect magnitude: bottles per cast, fan and variant -------------------------------
+
+TEST(CharSkillC05Test, OneBottleNormallyThreeInAFanWhenStrengthened) {
+    CharSkillC05 a(Hero().skillCd);
+    const CharSkillC05::RoleSkillResult n = a.RoleSkill(0, 4, /*skillStrengthen=*/false);
+    EXPECT_EQ(n.bottleCount, 1); // DISASM 0x265df4-0x265e00
+    EXPECT_EQ(n.fanOffsetsDeg, (std::vector<float>{0.0F}));
+    CharSkillC05 b(Hero().skillCd);
+    const CharSkillC05::RoleSkillResult s = b.RoleSkill(0, 4, /*skillStrengthen=*/true);
+    EXPECT_EQ(s.bottleCount, 3);
+    EXPECT_EQ(s.fanOffsetsDeg, (std::vector<float>{-20.0F, 0.0F, 20.0F})); // -20 then += 0x14
+    EXPECT_EQ(CharSkillC05::kBottlesNormal, 1);
+    EXPECT_EQ(CharSkillC05::kBottlesStrengthened, 3);
+}
+
+TEST(CharSkillC05Test, TheBottleVariantFollowsTheCurrentSkinElseElementZero) {
+    const int variants = static_cast<int>(Hero().SkillRefCount("bottle_objs")); // 4
+    CharSkillC05 a(Hero().skillCd);
+    EXPECT_EQ(a.RoleSkill(2, variants, false).variantIndex, 2); // bottle_objs[skin 2]
+    CharSkillC05 b(Hero().skillCd);
+    EXPECT_EQ(b.RoleSkill(7, variants, false).variantIndex, 0); // skin beyond the array
+    CharSkillC05 c(Hero().skillCd);
+    const CharSkillC05::RoleSkillResult r = c.RoleSkill(0, variants, false);
+    EXPECT_EQ(r.variantIndex, 0);
+    EXPECT_EQ(r.variantCount, 4);
+}
+
+// --- end / reset + cooldown at the fixed step (TYPED 1517-1526 Update, 1584-1638) ------
+
+TEST(CharSkillC05Test, CooldownRestartsAtTheCastAndCountsUpEveryFixedStep) {
+    CharSkillC05 c(Hero().skillCd);
+    ASSERT_TRUE(c.TryActivateSkill());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 6.0F); // ReSetSkillReload: this_skill_time = 0
+    TickSteps(c, 150); // 150 * 0.02 s = 3.0 s
+    EXPECT_NEAR(c.CooldownRemaining(), 6.0F - 150 * kFixedStepSeconds, 1e-3F); // 3.0
+    EXPECT_FALSE(c.SkillReady());
+    TickSteps(c, 160); // past 6 s
+    EXPECT_TRUE(c.SkillReady());
+    EXPECT_TRUE(c.TryActivateSkill());
+}
+
+TEST(CharSkillC05Test, EndSkillIsUnconditionalAndRestartsTheCooldown) {
+    // TYPED 1584-1638 has no guard: in_skill = false; ReSetSkillReload.
+    CharSkillC05 c(Hero().skillCd);
+    EXPECT_TRUE(c.SkillReady());
+    c.EndSkill();
+    EXPECT_FALSE(c.InSkill());
+    EXPECT_FALSE(c.SkillReady());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 6.0F);
+}
+
+TEST(CharSkillC05Test, NegativeCooldownClampsAndNoRngIsDrawn) {
+    CharSkillC05 neg(-1.0F);
+    EXPECT_FLOAT_EQ(neg.SkillCd(), 0.0F);
+    CharSkillC05 a(Hero().skillCd);
+    CharSkillC05 b(Hero().skillCd);
+    a.SetSeed(5);
+    b.SetSeed(5);
+    for (int i = 0; i < 4; ++i) {
         a.TryActivateSkill();
-        a.Tick(250.0F);
-        a.EndSkill();
-        a.Tick(250.0F);
+        TickSteps(a, 301);
     }
-    // 'a' ran the full brain; 'b' was untouched. If any draw had leaked, the next
-    // draw on 'a' would diverge from 'b'. Same value -> stream truly untouched.
     EXPECT_EQ(a.Rng().Range(0, 1000000), b.Rng().Range(0, 1000000));
-}
-
-TEST(CharSkillC05Test, FullCycleIsDeterministic) {
-    // Drive identical activate/cooldown cycles on two instances and compare the
-    // observable state at every step -> behaviour is fully deterministic.
-    auto run = [](CharSkillC05 &c) -> std::vector<int> {
-        std::vector<int> trace;
-        for (int i = 0; i < 12; ++i) {
-            trace.push_back(c.TryActivateSkill() ? 1 : 0);
-            trace.push_back(c.InSkill() ? 1 : 0);
-            c.Tick(400.0F);
-            c.EndSkill();
-            trace.push_back(c.SkillReady() ? 1 : 0);
-            c.Tick(1500.0F);
-            trace.push_back(c.SkillReady() ? 1 : 0);
-        }
-        return trace;
-    };
-    CharSkillC05 a(2.0F);
-    CharSkillC05 b(2.0F);
-    const auto ta = run(a);
-    const auto tb = run(b);
-    ASSERT_EQ(ta.size(), tb.size());
-    for (std::size_t i = 0; i < ta.size(); ++i) {
-        EXPECT_EQ(ta[i], tb[i]);
-    }
 }
 
 // NOLINTEND(readability-magic-numbers)

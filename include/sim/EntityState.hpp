@@ -23,13 +23,15 @@ namespace Game::Sim {
 /// the rest of this entity's life; KillAllHostiles instead assigns `deathSource`
 /// directly (a forced kill always wins immediately, overwriting whatever came
 /// before). Cull() fires ICharSkill::OnEnemyKilled iff deathSource is
-/// PlayerBullet/PlayerCut/PlayerDot -- None, Other, and Forced never do.
+/// PlayerBullet/PlayerCut/PlayerDot/PlayerSkill -- None, Other, and Forced never do.
 enum class DeathSource {
     None,         ///< no damage applied yet, or nothing dying.
     PlayerBullet, ///< a player bullet hit (Simulation::ResolveHits).
     PlayerCut,    ///< C04's melee sword cut (Simulation::ApplyMeleeCut).
     PlayerDot,    ///< a player-sourced buff's DoT tick (Simulation::TickBuffs).
-    Other,        ///< a non-player-sourced buff's DoT tick (Simulation::TickBuffs).
+    PlayerSkill,  ///< P3.3.c: a hero ultimate's world effect (Simulation::ApplySkillEffects:
+                  ///< C03 thunder, C07 bats) -- attributed to the player like a bullet.
+    Other,       ///< a non-player-sourced buff's DoT tick (Simulation::TickBuffs).
     Forced,       ///< KillAllHostiles/SK_FORCE_KILL -- immutable once set.
 };
 

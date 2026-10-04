@@ -1,180 +1,171 @@
 #include <gtest/gtest.h>
 
-#include <cstddef>
 #include <vector>
 
 #include "combat/CharSkillC11.hpp"
-#include "data/RGRandom.hpp"
+#include "data/GameData.hpp"
+#include "sim/SimConfig.hpp"
 
 using Game::CharSkillC11;
-using Game::RGRandom;
+using Game::HolyLightZone;
+using Game::Sim::kFixedStepMs;
+using Game::Sim::kFixedStepSeconds;
+
+// P3.3.c C11 (Priest) brain. Expected numbers: characters.json (skill_cd 14, atk 3) and the
+// decompile constants cited in CharSkillC11.hpp (typed 3521-3601; DISASM for the spawn
+// tail and the BulletGreenLight pulse timings).
 
 // NOLINTBEGIN(readability-magic-numbers)
 
-TEST(CharSkillC11Test, StartsReadyAndNotInSkill) {
-    CharSkillC11 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());        // freshly set-up hero: first ultimate ready
-    EXPECT_FALSE(c.InSkill());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-    EXPECT_FLOAT_EQ(c.SkillCd(), 5.0F);
+namespace {
+const Game::CharacterDef &Hero() {
+    static Game::GameData gd;
+    static const bool ok = gd.LoadAll(RESOURCE_DIR);
+    EXPECT_TRUE(ok);
+    const Game::CharacterDef *c = gd.FindCharacter("c11");
+    EXPECT_NE(c, nullptr);
+    static const Game::CharacterDef fallback{};
+    return c != nullptr ? *c : fallback;
 }
 
-TEST(CharSkillC11Test, NegativeStatClampsToZero) {
-    CharSkillC11 c(-3.0F);              // guard against bad stat sheet values
-    EXPECT_FLOAT_EQ(c.SkillCd(), 0.0F);
-    EXPECT_TRUE(c.SkillReady());        // skill_cd 0 -> always ready
-}
-
-TEST(CharSkillC11Test, ActivateSucceedsWhenReadyAndIdle) {
-    CharSkillC11 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());  // skill_ready && !in_skill -> enter
-    EXPECT_TRUE(c.InSkill());
-}
-
-TEST(CharSkillC11Test, ActivateFailsWhileAlreadyInSkill) {
-    CharSkillC11 c(5.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_FALSE(c.TryActivateSkill()); // in_skill gate (this+0x55) blocks re-entry
-    EXPECT_TRUE(c.InSkill());
-}
-
-TEST(CharSkillC11Test, ActivateFailsWhileOnCooldown) {
-    CharSkillC11 c(5.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                       // RoleSkillEnd -> ReSetSkillReload (=0)
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FALSE(c.TryActivateSkill()); // still cooling down -> gate blocks
-}
-
-TEST(CharSkillC11Test, RoleSkillEndSpendsTheChargeAndLeavesState) {
-    // FAITHFUL: C11Controller__RoleSkillEnd @ 158395 -- in_skill = 0 then
-    // ReSetSkillReload (this_skill_time = 0). This body IS recovered for C11 (unlike
-    // C01, where it lived in the base class), so EndSkill is faithful, not assumed.
-    CharSkillC11 c(5.0F);
-    c.TryActivateSkill();
-    EXPECT_TRUE(c.InSkill());
-    c.EndSkill();
-    EXPECT_FALSE(c.InSkill());           // 158397: *(this+0x55) = 0
-    EXPECT_FALSE(c.SkillReady());        // 158403: cooldown restarted (=0)
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 5.0F);
-}
-
-TEST(CharSkillC11Test, EndSkillIsNoOpWhenNotInSkill) {
-    CharSkillC11 c(5.0F);
-    EXPECT_TRUE(c.SkillReady());
-    c.EndSkill();                        // not in skill -> no spend
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FALSE(c.InSkill());
-}
-
-TEST(CharSkillC11Test, CooldownRechargesAndClamps) {
-    CharSkillC11 c(2.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                        // this_skill_time = 0
-    EXPECT_FALSE(c.SkillReady());
-    c.Tick(1000.0F);                     // +1.0s (SkillReload count-up)
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 1.0F);
-    c.Tick(5000.0F);                     // overshoot -> clamps to skill_cd
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 0.0F);
-}
-
-TEST(CharSkillC11Test, TickAdvancesCooldownWhileInSkillAndDoesNotAutoEnd) {
-    // FAITHFUL: C11Controller__Update @ 158264 -- AttributeUpdate -> SkillReload runs
-    // UNCONDITIONALLY (not gated on in_skill), and there is NO in_skill_time
-    // countdown / auto-end (unlike C01). Proof: ticking while in_skill recharges the
-    // cooldown but NEVER ends the skill on its own.
-    CharSkillC11 c(4.0F);
-    c.TryActivateSkill();
-    c.EndSkill();                        // spend -> this_skill_time = 0, leave skill
-    EXPECT_FALSE(c.SkillReady());
-    c.TryActivateSkill();                // still on cooldown -> cannot re-enter
-    EXPECT_FALSE(c.InSkill());
-
-    c.Tick(4000.0F);                     // recharge fully
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_TRUE(c.TryActivateSkill());   // now ready -> enter
-    EXPECT_TRUE(c.InSkill());
-
-    c.Tick(10000.0F);                    // long tick INSIDE the skill...
-    EXPECT_TRUE(c.InSkill());            // ...no auto-end: C11's Update has none
-    EXPECT_TRUE(c.SkillReady());         // cooldown advanced unconditionally (clamped)
-}
-
-TEST(CharSkillC11Test, NonPositiveDtIsIgnored) {
-    CharSkillC11 c(3.0F);
-    c.TryActivateSkill();
-    c.EndSkill();
-    const float before = c.CooldownRemaining();
-    c.Tick(0.0F);
-    c.Tick(-100.0F);
-    EXPECT_FLOAT_EQ(c.CooldownRemaining(), before); // no advance
-}
-
-TEST(CharSkillC11Test, ReActivateAfterEndAndFullRecharge) {
-    // Full activate -> end -> recharge -> re-activate loop stays consistent.
-    CharSkillC11 c(2.0F);
-    EXPECT_TRUE(c.TryActivateSkill());
-    c.EndSkill();
-    EXPECT_FALSE(c.SkillReady());
-    c.Tick(1999.0F);                     // just shy of ready
-    EXPECT_FALSE(c.SkillReady());
-    EXPECT_FALSE(c.TryActivateSkill());
-    c.Tick(2.0F);                        // cross the threshold
-    EXPECT_TRUE(c.SkillReady());
-    EXPECT_TRUE(c.TryActivateSkill());
-    EXPECT_TRUE(c.InSkill());
-}
-
-TEST(CharSkillC11Test, NoRngDrawOnAnyPath) {
-    // NONE of the four recovered C11Controller bodies draws from rg_random (the hero
-    // is player-driven), so exercising the whole brain must leave the stream
-    // un-advanced. We compare against a parallel same-seeded reference RGRandom that
-    // is NEVER touched by the brain: if any draw had leaked, the next draw on the
-    // brain's stream would diverge from the reference.
-    CharSkillC11 c(3.0F);
-    c.SetSeed(987654);
-    EXPECT_TRUE(c.Seeded());
-
-    RGRandom reference;
-    reference.SetRandomSeed(987654);     // identical seed, advanced in lockstep below
-
-    for (int i = 0; i < 16; ++i) {
-        c.TryActivateSkill();
-        c.Tick(250.0F);
-        c.EndSkill();
-        c.Tick(250.0F);
+void TickSteps(CharSkillC11 &c, int n) {
+    for (int i = 0; i < n; ++i) {
+        c.Tick(kFixedStepMs);
     }
-    // The brain ran a full cycle; the reference was untouched. Drawing the SAME first
-    // value from both proves the brain's stream never advanced (zero draws).
-    EXPECT_EQ(c.Rng().Range(0, 1000000), reference.Range(0, 1000000));
+}
+} // namespace
+
+TEST(CharSkillC11Test, DataRowIsThePriest) {
+    EXPECT_FLOAT_EQ(Hero().skillCd, 14.0F); // characters.json c11 skill_cd
+    EXPECT_EQ(Hero().SkillRefCount("skill_obj"), 1U); // c11.prefab skill_obj -> Holy_light_c11
+    EXPECT_EQ(Hero().skillRefs.at("skill_obj").front(), "Holy_light_c11");
 }
 
-TEST(CharSkillC11Test, FullCycleIsDeterministic) {
-    // Drive identical activate/end/cooldown cycles on two instances and compare the
-    // observable state at every step -> behaviour is fully deterministic.
-    auto run = [](CharSkillC11 &c) -> std::vector<int> {
-        std::vector<int> trace;
-        for (int i = 0; i < 12; ++i) {
-            trace.push_back(c.TryActivateSkill() ? 1 : 0);
-            trace.push_back(c.InSkill() ? 1 : 0);
-            c.Tick(400.0F);
-            c.EndSkill();
-            trace.push_back(c.SkillReady() ? 1 : 0);
-            c.Tick(1500.0F);
-            trace.push_back(c.SkillReady() ? 1 : 0);
+// --- activation gate (TYPED 3552-3580) -----------------------------------------------
+
+TEST(CharSkillC11Test, GateIsSkillReadyAndTheLightSpawnsOnce) {
+    CharSkillC11 c(Hero().skillCd);
+    EXPECT_TRUE(c.SkillReady());
+    EXPECT_TRUE(c.TryActivateSkill());
+    EXPECT_TRUE(c.ConsumeSpawn()); // the holy light object spawns
+    EXPECT_FALSE(c.ConsumeSpawn()); // one-shot
+    EXPECT_FALSE(c.TryActivateSkill()); // on cooldown now
+    EXPECT_FALSE(c.ConsumeSpawn());
+}
+
+TEST(CharSkillC11Test, TheUltimateIsInstantInSkillNeverObservableAfterTheCall) {
+    // DISASM 0x26af90: vcall slot 25 (RoleSkillEnd) at the tail of the same RoleSkill call.
+    CharSkillC11 c(Hero().skillCd);
+    ASSERT_TRUE(c.TryActivateSkill());
+    EXPECT_FALSE(c.InSkill());
+}
+
+// --- end / reset + cooldown at the fixed step (TYPED 3521-3530, 3587-3601) ---------------
+
+TEST(CharSkillC11Test, CooldownRestartsAtTheCastAndCountsUpEveryFixedStep) {
+    CharSkillC11 c(Hero().skillCd);
+    ASSERT_TRUE(c.TryActivateSkill());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 14.0F);
+    TickSteps(c, 350); // 7.0 s
+    EXPECT_NEAR(c.CooldownRemaining(), 14.0F - 350 * kFixedStepSeconds, 1e-2F); // 7.0
+    EXPECT_FALSE(c.SkillReady());
+    TickSteps(c, 360); // past 14 s
+    EXPECT_TRUE(c.SkillReady());
+}
+
+TEST(CharSkillC11Test, EndSkillIsUnconditional) {
+    CharSkillC11 c(Hero().skillCd);
+    c.EndSkill(); // TYPED 3587-3601: no guard
+    EXPECT_FALSE(c.SkillReady());
+    EXPECT_FLOAT_EQ(c.CooldownRemaining(), 14.0F);
+}
+
+TEST(CharSkillC11Test, NegativeCooldownClampsAndNoRngIsDrawn) {
+    CharSkillC11 neg(-1.0F);
+    EXPECT_FLOAT_EQ(neg.SkillCd(), 0.0F);
+    CharSkillC11 a(Hero().skillCd);
+    CharSkillC11 b(Hero().skillCd);
+    a.SetSeed(8);
+    b.SetSeed(8);
+    for (int i = 0; i < 3; ++i) {
+        a.TryActivateSkill();
+        TickSteps(a, 720);
+    }
+    EXPECT_EQ(a.Rng().Range(0, 1000000), b.Rng().Range(0, 1000000));
+}
+
+// --- the BulletGreenLight pulses (DISASM 0xafa2e4-0xafaacc) --------------------------------
+
+namespace {
+// Run a zone for @p calls fixed steps with the player at @p player; returns the heal per call.
+std::vector<int> RunZone(HolyLightZone &z, glm::vec2 player, int calls) {
+    std::vector<int> heals;
+    for (int i = 0; i < calls; ++i) {
+        heals.push_back(z.Step(kFixedStepSeconds, player));
+    }
+    return heals;
+}
+} // namespace
+
+TEST(CharSkillC11Test, ThreePulsesLandAtSpawnPlusZeroPointEightAndOnePointSixSeconds) {
+    HolyLightZone z;
+    z.Start({0.0F, 0.0F}, /*buffDigestive=*/false);
+    const std::vector<int> heals = RunZone(z, {0.0F, 0.0F}, 200);
+    int total = 0;
+    std::vector<int> at;
+    for (std::size_t i = 0; i < heals.size(); ++i) {
+        total += heals[i];
+        if (heals[i] > 0) {
+            at.push_back(static_cast<int>(i) + 1); // 1-based call number
+            EXPECT_EQ(heals[i], 1); // RestoreHealth(1) (buff_digestive off)
         }
-        return trace;
-    };
-    CharSkillC11 a(2.0F);
-    CharSkillC11 b(2.0F);
-    const std::vector<int> ta = run(a);
-    const std::vector<int> tb = run(b);
-    ASSERT_EQ(ta.size(), tb.size());
-    for (std::size_t i = 0; i < ta.size(); ++i) {
-        EXPECT_EQ(ta[i], tb[i]);
     }
+    // Pulse 1 on the first FixedUpdate (can_hit starts true), pulse 2 when the 0.8 s
+    // Invoke re-arms can_hit (40 calls of 20 ms), pulse 3 another 40 calls later; GasEnd
+    // fires at 1.8 s = call 90 and stops the 4th (would-be call 120).
+    EXPECT_EQ(at, (std::vector<int>{1, 40, 80}));
+    EXPECT_EQ(total, 3);
+    EXPECT_EQ(z.Pulses(), 3);
+}
+
+TEST(CharSkillC11Test, TheLightIsDestroyedAfterFourAndAHalfSeconds) {
+    HolyLightZone z;
+    z.Start({0.0F, 0.0F}, false);
+    RunZone(z, {0.0F, 0.0F}, 224); // 4.48 s
+    EXPECT_TRUE(z.Alive());
+    z.Step(kFixedStepSeconds, {0.0F, 0.0F}); // call 225 = 4.5 s
+    EXPECT_FALSE(z.Alive());
+}
+
+TEST(CharSkillC11Test, OnlyAPlayerWithinFourUnitsIsHealed) {
+    HolyLightZone inside;
+    inside.Start({0.0F, 0.0F}, false);
+    EXPECT_EQ(inside.Step(kFixedStepSeconds, {4.0F, 0.0F}), 1); // exactly on the radius
+    HolyLightZone outside;
+    outside.Start({0.0F, 0.0F}, false);
+    EXPECT_EQ(outside.Step(kFixedStepSeconds, {4.01F, 0.0F}), 0);
+    EXPECT_EQ(outside.Pulses(), 1); // the pulse still happened, nobody was in range
+    // The player walks out after the first pulse: pulses 2 and 3 heal nothing.
+    HolyLightZone walker;
+    walker.Start({0.0F, 0.0F}, false);
+    int total = walker.Step(kFixedStepSeconds, {0.0F, 0.0F});
+    const std::vector<int> rest = RunZone(walker, {9.0F, 0.0F}, 150);
+    for (int h : rest) {
+        total += h;
+    }
+    EXPECT_EQ(total, 1);
+    EXPECT_EQ(walker.Pulses(), 3);
+}
+
+TEST(CharSkillC11Test, TheDigestiveRunBuffDoublesEachPulse) {
+    HolyLightZone z;
+    z.Start({0.0F, 0.0F}, /*buffDigestive=*/true); // RGGameProcess.buff_digestive (+0x47)
+    const std::vector<int> heals = RunZone(z, {0.0F, 0.0F}, 100);
+    int total = 0;
+    for (int h : heals) {
+        total += h;
+    }
+    EXPECT_EQ(total, 6); // 3 pulses x 2
 }
 
 // NOLINTEND(readability-magic-numbers)

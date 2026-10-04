@@ -178,6 +178,27 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
     need(chars is not None and len(chars.get("roster", [])) == 13,
          "characters: expected 13-character roster")
 
+    # --- P3.3.c: the serialized skill refs / effect-prefab numbers the ported C03/C05/C07/
+    # C11/C12 skill bodies read must flow through characters.json (never a C++ literal) ---
+    roster = {c.get("id"): c for c in (chars or {}).get("roster", []) if isinstance(c, dict)}
+    skill_refs_required = {
+        "c03": {"thunder": 1},
+        "c05": {"bottle_objs": 4},
+        "c07": {"bullet_bat": 1},
+        "c11": {"skill_obj": 1},
+        "c12": {"skill_obj1": 1, "skill_obj2": 1, "skill_clips": 1},
+    }
+    for cid, fields in skill_refs_required.items():
+        refs = (roster.get(cid) or {}).get("skill_refs", {})
+        for fld, n_min in fields.items():
+            got = refs.get(fld, [])
+            need(isinstance(got, list) and len(got) >= n_min and all(isinstance(s, str) and s for s in got),
+                 f"characters: {cid} skill_refs.{fld} must list >= {n_min} asset stem(s) (c##.prefab)")
+    dmg = ((roster.get("c07") or {}).get("skill_params") or {}).get("BulletBat.damage")
+    need(isinstance(dmg, (int, float)) and not isinstance(dmg, bool) and dmg > 0,
+         "characters: c07 skill_params['BulletBat.damage'] must be a positive number "
+         "(bullet_bat.prefab overrides the ctor default 2)")
+
     # --- required scalar keys the gameplay systems read ---
     expect_keys(weapons, ["atk", "bullet_speed", "deviation", "repel", "consume",
                           "weapon_speed", "item_level"], "weapon")

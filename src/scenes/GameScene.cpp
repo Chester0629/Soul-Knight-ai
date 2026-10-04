@@ -1128,15 +1128,17 @@ void GameScene::OnEnter() {
     // from the resolved CharacterDef (cdef, per-char stats -- see characters.json),
     // falling back to the shared PlayerTemplate only when cdef is null. charId is
     // carried across floors (defaults "c01" until the HeroRoom picker, B5). C01,
-    // C02, C04, C08, C09, C10, and C13 have faithful per-hero effects; C03, C05,
-    // C06, C07, C11, and C12 remain gate+cooldown-only stubs (StubSkillAdapter).
-    // Rebuilt per floor (starts ready).
+    // C02, C03, C04, C05, C07, C08, C09, C10, C11, C12 and C13 have real per-hero
+    // bodies (P3.3.c added C03/C05/C07/C11/C12); only C06 remains a gate+cooldown-only
+    // stub (StubSkillAdapter). The CharacterDef itself is passed through so heroes that
+    // read effect-prefab data (C05 bottle variants, C07 BulletBat.damage, C12 crit) take
+    // it from characters.json's skill_refs/skill_params. Rebuilt per floor (starts ready).
     // charId + cdef were resolved at player-creation time (top of OnEnter).
     m_Sim->SetPlayerSkill(charId,
                           cdef != nullptr ? cdef->skillCd : m_Data.PlayerTemplate().skillCd,
                           cdef != nullptr ? cdef->inSkillTime
                                           : m_Data.PlayerTemplate().inSkillTime,
-                          cdef != nullptr ? cdef->atk : m_Data.PlayerTemplate().atk);
+                          cdef != nullptr ? cdef->atk : m_Data.PlayerTemplate().atk, cdef);
 
     // --- Forward run loop (step 2a) setup ---
     // Arm the clear check only after >= 1 hostile has existed, read from the sim's
@@ -1661,6 +1663,9 @@ void GameScene::Update(float dtMs) {
     // would clobber this frame's regen/spend with the value we pushed in. Intentional asymmetry.
     m_Player->Stats().hp = simPlayer.hp;
     m_Player->Stats().armor = simPlayer.armor;
+    // P3.3.c: energy a skill restored this Advance (C07 BatBack RestoreEnergy). Energy is
+    // scene-owned, so the grant is applied here like the shot spend below (T-46).
+    m_Player->Stats().AddEnergy(m_Sim->PlayerEnergyGrantedLastAdvance());
     // A3 cooldown bridge: the sim wrote the skill's 0..1 charge into its player-stats
     // copy (TickSkill); pull it back so the HUD (which reads m_Player->Stats()) reaches
     // it. A4 renders the mask; A3 only makes it reachable.
@@ -2365,6 +2370,12 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
             if (!isPlayer) {
                 SpawnReward(isBoss, e.entityId, pos); // B3: RGEController.GetReward
             }
+        } else if (e.name.rfind("skill_effect:", 0) == 0) {
+            // P3.3.c headless hook: "Skill: <char> effect <cue>" trace for a hero
+            // ultimate's world effect (thunder strike, bat swarm, holy light, ...). A cue
+            // carrying NOT_PORTED(T-xx) marks an effect the sim cannot express yet.
+            // Logging only -- no behaviour.
+            LOG_INFO("Skill: {} effect {}", m_CharId, e.name.substr(13));
         } else if (e.name == "skill_use") {
             // P3.3.a headless hook: "Skill: <char> activated" trace, mirrors the
             // "Buff: ... applied" convention (P3.1). NO-OP on behaviour -- logging

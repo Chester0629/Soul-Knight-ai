@@ -61,6 +61,15 @@ inline constexpr int kHitRngSalt = 0x5170;
 inline constexpr float kMeleeCutReachPx = 48.0F;
 inline constexpr float kMeleeCutHalfAngleDeg = 60.0F;
 
+/// PORT CHOICE (T-40): pixels per Unity world unit. The P3.3.c skill bodies are
+/// recovered from ARM disassembly in WORLD UNITS (Physics2D radii, Rigidbody2D.velocity
+/// units/s: thunder search 14u, chain 10u, bat speed 6u/s, holy light radius 4u).
+/// One unit == one map cell == GameScene::kCellPx (32 px) -- the same scale the room
+/// geometry already uses; T-25 (the RGBullet `speed` data-unit audit) is a separate,
+/// still-pending question and is NOT reused here because Rigidbody2D.velocity is a
+/// direct units/s value, not a bullet-data speed.
+inline constexpr float kWorldUnitPx = 32.0F;
+
 } // namespace Game::Sim
 
 #endif /* GAME_SIM_SIMCONFIG_HPP */

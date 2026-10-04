@@ -1,0 +1,3 @@
+ [info] TransferGate: open in room 4 at (-2624,-1312)
+ [info] TransferGate: open in room 4 at (2624,1312)
+ [info] TransferGate: open in room 5 at (0,3936)

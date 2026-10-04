@@ -235,6 +235,7 @@ set(INCLUDE_FILES
     combat/CharSkillC11.hpp
     combat/CharSkillC12.hpp
     combat/CharSkillC13.hpp
+    combat/SkillWorld.hpp
 
     # Phase 4 Wave D (weapons): faithful recoverable weapon mechanics, adversarially verified
     combat/GunThrow.hpp

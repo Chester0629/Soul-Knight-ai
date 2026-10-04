@@ -1,6 +1,7 @@
 #include "sim/Simulation.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <string>
 #include <utility>
 #include <vector>
@@ -190,9 +191,103 @@ void Simulation::TickSkill() {
     // Per-frame Update: cooldown counts UP (NOT frozen while in_skill) + (for windowed
     // heroes) the active window counts down and auto-ends (ICharSkill::Tick).
     m_Skill->Tick(kFixedStepMs);
+    // P3.3.c: heroes whose ultimate spawns a world effect (C03 thunder chain, C07 bat
+    // swarm, C11 holy light, C12 melee cut / wolf summon, C05 bottle volley) advance it
+    // here against a read-only world snapshot; every other hero skips this entirely
+    // (NeedsWorld() defaults false), so their behaviour -- and the replay traces -- are
+    // untouched.
+    if (m_Skill->NeedsWorld()) {
+        const ICharSkill::SkillWorldView view = BuildSkillWorld();
+        ICharSkill::SkillEffectOut out;
+        m_Skill->TickEffects(view, out);
+        ApplySkillEffects(out);
+    }
     // A3 cooldown bridge: publish the 0..1 charge into the player stats the shell
     // pulls back each frame (-> CombatStats::skillCdProgress -> HUD; A4 renders it).
     m_PlayerStats.skillCdProgress = m_Skill->CooldownProgress();
+}
+
+// P3.3.c: the read-only snapshot a world-effect skill sees. Hostiles are the LIVE,
+// AWAKE enemies (view id == enemy index) then the boss (kBossViewId) -- the entities in
+// the player's room; a Physics2D.CircleCastAll on the enemy layer could also see a
+// sleeping enemy of another room inside the radius, the sim only exposes awake ones
+// (part of T-41). Wall line-of-sight (Physics2D.Linecast, layer "Wall") is
+// approximated by sampling WorldCollision::Blocks along the segment (PORT CHOICE
+// (T-41): the sim's world is a point/circle query, not a raycast).
+ICharSkill::SkillWorldView Simulation::BuildSkillWorld() const {
+    ICharSkill::SkillWorldView v;
+    v.dtSec = kFixedStepSeconds;
+    v.playerPos = m_Input.playerPos;
+    v.aimDir = m_Input.aimDir;
+    v.playerHp = m_PlayerStats.hp;
+    v.playerMaxHp = m_PlayerStats.maxHp;
+    for (std::size_t i = 0; i < m_Enemies.size(); ++i) {
+        const EntityState &s = m_Enemies[i]->State();
+        if (!s.dead && s.awake && !s.stats.IsDead()) {
+            v.hostiles.push_back({static_cast<std::uint32_t>(i), s.pos});
+        }
+    }
+    if (m_Boss != nullptr) {
+        const EntityState &s = m_Boss->State();
+        if (!s.dead && s.awake && !s.stats.IsDead()) {
+            v.hostiles.push_back({kBossViewId, s.pos});
+        }
+    }
+    const WorldCollision *world = m_World;
+    v.lineBlocked = [world](glm::vec2 a, glm::vec2 b) {
+        constexpr float kSampleStepPx = 8.0F; // PORT CHOICE (T-41).
+        constexpr float kSampleRadiusPx = 1.0F;
+        const glm::vec2 d = b - a;
+        const float len = std::sqrt(d.x * d.x + d.y * d.y);
+        const int n = std::max(1, static_cast<int>(std::ceil(len / kSampleStepPx)));
+        for (int i = 0; i <= n; ++i) {
+            const float t = static_cast<float>(i) / static_cast<float>(n);
+            if (world->Blocks(a + d * t, kSampleRadiusPx)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    return v;
+}
+
+// P3.3.c: apply what a skill's world effect asked for. Skill damage is a straight
+// RGEController.GetHurt(damage, source) (game_typed.c has no crit roll on these paths),
+// attributed DeathSource::PlayerSkill so Cull credits the kill to the player.
+void Simulation::ApplySkillEffects(const ICharSkill::SkillEffectOut &out) {
+    for (const ICharSkill::SkillEffectOut::Hit &h : out.hits) {
+        if (h.damage <= 0) {
+            continue;
+        }
+        Game::Combat::HitResult hr;
+        hr.finalDamage = h.damage;
+        if (h.targetId == kBossViewId) {
+            if (m_Boss != nullptr && !m_Boss->State().dead) {
+                Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
+                m_Boss->MutableState().SetDeathSource(DeathSource::PlayerSkill);
+                m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
+                m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"});
+            }
+        } else if (h.targetId < m_Enemies.size() && !m_Enemies[h.targetId]->State().dead) {
+            auto &e = m_Enemies[h.targetId];
+            Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
+            e->MutableState().SetDeathSource(DeathSource::PlayerSkill);
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, h.targetId, "hurt"});
+        }
+    }
+    if (out.meleeCutDamage > 0) {
+        ApplyMeleeCut(out.meleeCutDamage); // RGHand.AtkCut -- DeathSource::PlayerCut.
+    }
+    if (out.healHp > 0) {
+        m_PlayerStats.Heal(out.healHp);
+    }
+    if (out.restoreEnergy > 0) {
+        m_PlayerEnergyGrantedLastAdvance += out.restoreEnergy;
+    }
+    for (const std::string &cue : out.cues) {
+        m_Events.push_back(
+            SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "skill_effect:" + cue});
+    }
 }
 
 // A: turn each controller's latched shot into an "attack" AnimTrigger keyed by its view id
@@ -677,7 +772,7 @@ namespace {
 // (non-player DoT), and Forced (KillAllHostiles/SK_FORCE_KILL, immutable) never do.
 bool IsPlayerDeathSource(DeathSource src) {
     return src == DeathSource::PlayerBullet || src == DeathSource::PlayerCut ||
-           src == DeathSource::PlayerDot;
+           src == DeathSource::PlayerDot || src == DeathSource::PlayerSkill;
 }
 } // namespace
 
@@ -747,6 +842,7 @@ int Simulation::Advance(float dtMs, const WorldInputs &in) {
     m_SkillHeldPrev = in.skill;
     m_Input = in;
     m_PlayerShotsLastAdvance = 0;
+    m_PlayerEnergyGrantedLastAdvance = 0;
     WakeByRoom();
     const int steps = m_Clock.Advance(dtMs);
     for (int i = 0; i < steps; ++i) {
@@ -782,12 +878,13 @@ void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weap
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed, data)); // cold rebuild
 }
 void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime,
-                                int atk) {
-    // B1-P4a/P3.3.b (d) dispatch: charId -> per-hero ICharSkill adapter. C01/C02/
-    // C04/C08/C10/C13 are faithful; the rest are gate+cooldown-only stubs. The
-    // skill starts READY (each brain ctor). Single owned member, parallel to
-    // m_Weapon. m_PlayerAtk feeds RoleAtkMelee (C04's cut damage = atk + 3/7).
-    m_Skill = MakeCharSkill(charId, skillCd, inSkillTime);
+                                int atk, const Game::CharacterDef *def) {
+    // B1-P4a/P3.3.b/c (d) dispatch: charId -> per-hero ICharSkill adapter. C01/C02/
+    // C03/C04/C05/C07/C08/C10/C11/C12/C13 have real bodies; C06/C09 stay gate+cooldown
+    // stubs. The skill starts READY (each brain ctor). Single owned member, parallel
+    // to m_Weapon. m_PlayerAtk feeds RoleAtkMelee (C04's cut damage = atk + 3/7);
+    // @p atk also seeds C12's RGHand.AtkCut (role_attribute.atk) and C03's none.
+    m_Skill = MakeCharSkill(charId, skillCd, inSkillTime, def, atk);
     m_PlayerAtk = atk;
 }
 

@@ -83,8 +83,13 @@ public:
     /// needs it (C04's sword cut: atk + 3/7); default 0 leaves every caller that does
     /// not pass it byte-identical for heroes with no atk-driven effect. The skill is
     /// a SINGLE owned member parallel to the weapon.
+    ///
+    /// P3.3.c: @p def (optional) is the resolved CharacterDef; heroes whose ultimate
+    /// reads effect-prefab data (C05 bottle variants, C07 BulletBat.damage via
+    /// CharacterDef::skillRefs/skillParams) take it from there instead of a C++
+    /// literal. Null -> the decompile ctor defaults.
     void SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime,
-                        int atk = 0);
+                        int atk = 0, const Game::CharacterDef *def = nullptr);
     /// Seed the player's combat vitals (enemy bullets damage these; read back via PlayerStats).
     void SetPlayerStats(const Game::CombatStats &stats);
 
@@ -117,6 +122,12 @@ public:
     EntityView BossView() const;
     const Game::CombatStats &PlayerStats() const { return m_PlayerStats; }
     int PlayerShotsLastAdvance() const { return m_PlayerShotsLastAdvance; }
+    /// P3.3.c: energy a skill restored during the last Advance() (C07 BatBack's
+    /// RoleAttributePlayer.RestoreEnergy). Energy is scene-owned (the sim never
+    /// mutates it), so the shell adds this to its own stats, like it spends
+    /// PlayerShotsLastAdvance(). Reset at the top of every Advance(). PORT CHOICE (T-46):
+    /// the sim never owns energy, so a skill's RestoreEnergy is reported, not applied.
+    int PlayerEnergyGrantedLastAdvance() const { return m_PlayerEnergyGrantedLastAdvance; }
     /// The player's skill brain (the (d) ICharSkill), or nullptr if SetPlayerSkill was
     /// never called. Exposed for inspection/tests (InSkill / SkillReady / cooldown).
     const ICharSkill *PlayerSkill() const { return m_Skill.get(); }
@@ -177,6 +188,13 @@ private:
     /// EntityState::deathSource (DeathSource::PlayerCut) on every entity hit (Cull's kill-attribution) and emits a
     /// "hurt" AnimTrigger per landed cut, same shape as a bullet hit.
     void ApplyMeleeCut(int damage);
+    /// P3.3.c: build the ICharSkill world snapshot (live + awake hostiles, player
+    /// vitals, wall line-of-sight query) handed to TickEffects.
+    ICharSkill::SkillWorldView BuildSkillWorld() const;
+    /// P3.3.c: apply a skill's world-effect output -- skill damage on hostiles
+    /// (DeathSource::PlayerSkill), player heal / energy, the melee cut (T-36 reach)
+    /// and the "skill_effect:<cue>" log events.
+    void ApplySkillEffects(const ICharSkill::SkillEffectOut &out);
     static EntityView ViewOf(const EntityState &s, std::uint32_t id);
 
     int m_RunSeed;
@@ -237,6 +255,7 @@ private:
     int m_PlayerArmorGranted = 0; ///< so the Armor buff's end can revert exactly this much.
     WorldInputs m_Input{};
     int m_PlayerShotsLastAdvance = 0;
+    int m_PlayerEnergyGrantedLastAdvance = 0; ///< P3.3.c: skill energy restore this Advance().
     std::vector<SimEvent> m_Events;
 };
 

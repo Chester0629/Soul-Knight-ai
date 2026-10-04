@@ -1,67 +1,105 @@
 #include "combat/CharSkillC11.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace Game {
 
 namespace {
 constexpr float kMsPerSecond = 1000.0F;
+constexpr float kTimerEpsilonSec = 1.0e-4F;
 } // namespace
+
+// ---------------------------------------------------------------------------
+// HolyLightZone
+// ---------------------------------------------------------------------------
+
+// SetSourceObject (DISASM 0xafa2e4-0xafa3a0): TurnCanHit() -> can_hit = true and the
+// 0.8 s re-arm; Invoke(GasEnd, 1.8f); Destroy(gameObject, 4.5f).
+void HolyLightZone::Start(glm::vec2 centre, bool buffDigestive) {
+    m_Alive = true;
+    m_CanHit = true;
+    m_IsEnd = false;
+    m_Digestive = buffDigestive;
+    m_TurnTimer = kPulseIntervalSec;
+    m_GasTimer = kGasEndSec;
+    m_Life = kLifetimeSec;
+    m_Pulses = 0;
+    m_Centre = centre;
+}
+
+int HolyLightZone::Step(float dtSec, glm::vec2 playerPos) {
+    if (!m_Alive) {
+        return 0;
+    }
+    // Update-phase Invokes: TurnCanHit re-arms itself every 0.8 s; GasEnd fires once.
+    m_TurnTimer -= dtSec;
+    if (m_TurnTimer <= kTimerEpsilonSec) {
+        m_CanHit = true; // TurnCanHit: can_hit = true; Invoke(TurnCanHit, 0.8f)
+        m_TurnTimer = kPulseIntervalSec;
+    }
+    m_GasTimer -= dtSec;
+    if (m_GasTimer <= kTimerEpsilonSec) {
+        m_IsEnd = true; // GasEnd: is_end = true (+ the end animation, presentation).
+    }
+    int healed = 0;
+    // FixedUpdate: if (can_hit && !is_end) { can_hit = false; pulse }.
+    if (m_CanHit && !m_IsEnd) {
+        m_CanHit = false;
+        ++m_Pulses;
+        const glm::vec2 d = playerPos - m_Centre;
+        if (std::sqrt(d.x * d.x + d.y * d.y) <= kRadiusUnits) {
+            healed = m_Digestive ? kHealDigestive : kHealNormal;
+        }
+    }
+    m_Life -= dtSec;
+    if (m_Life <= kTimerEpsilonSec) {
+        m_Alive = false; // Destroy(gameObject, 4.5f)
+    }
+    return healed;
+}
+
+// ---------------------------------------------------------------------------
+// CharSkillC11
+// ---------------------------------------------------------------------------
 
 CharSkillC11::CharSkillC11(float skillCd)
     : m_SkillCd(skillCd < 0.0F ? 0.0F : skillCd),
-      // Start ready: a freshly SetUpChar hero has its first ultimate available
-      // (skill_ready == skill_cd <= this_skill_time). Matches PlayerDash / C01.
       m_ThisSkillTime(skillCd < 0.0F ? 0.0F : skillCd) {}
 
-// FAITHFUL: C11Controller__RoleSkill @ game_full.c:158277 gate --
-// awake && role_attribute.skill_ready && !in_skill. (The awake check, this+0xC, is
-// the caller's responsibility; the gate this unit owns is skill_ready && !in_skill,
-// exactly the recovered nested-if at 158291/158294/158296.) NO RGRandom draw.
+// RoleSkill: gate TYPED 3552-3580; body DISASM 0x26ac10-0x26af94 (in_skill = 1 @0x26ad10,
+// the light spawn, then RoleSkillEnd @0x26af90 in the same call).
 bool CharSkillC11::TryActivateSkill() {
     if (m_InSkill || !SkillReady()) {
-        return false; // already in skill, or still on cooldown -> no-op
+        return false;
     }
-    // Enter the skill state (in_skill = true, this+0x55). The hero-specific effect
-    // is the skill_obj get_transform tail-call at 158298 (owner concern); the
-    // cooldown spend is deferred to EndSkill (RoleSkillEnd -> ReSetSkillReload),
-    // exactly as the decomp -- RoleSkill itself does NOT spend the charge.
     m_InSkill = true;
+    m_SpawnPending = true;
+    EndSkill();
     return true;
 }
 
-// FAITHFUL: C11Controller__RoleSkillEnd @ game_full.c:158395 (recovered, pure):
-//   in_skill = 0 (this+0x55);
-//   role_attribute.ReSetSkillReload() (this_skill_time/+0x5c = 0, restart cooldown);
-//   UpdateShadowLock() (owner concern -- shadow sprite, not modeled).
-void CharSkillC11::EndSkill() {
-    if (!m_InSkill) {
-        return; // not active -> the brain state is unchanged (guard for re-tests)
-    }
-    m_InSkill = false;      // 158397: *(this+0x55) = 0
-    m_ThisSkillTime = 0.0F; // 158403: ReSetSkillReload() -> this_skill_time = 0
+bool CharSkillC11::ConsumeSpawn() {
+    const bool s = m_SpawnPending;
+    m_SpawnPending = false;
+    return s;
 }
 
-// FAITHFUL: C11Controller__Update @ game_full.c:158264 (fully recovered, pure).
-// Order preserved: awake gate -> AttributeUpdate (SkillReload cooldown count-up,
-// run EVERY awake frame, NOT frozen while in_skill) -> SeachUpdate (owner concern).
-// CRITICAL: unlike C01, there is NO in_skill_time countdown and NO auto-end here,
-// so Tick advances the cooldown ONLY and never ends the skill. NO RGRandom draw.
+// RoleSkillEnd: TYPED 3587-3601 (in_skill = false @3592; ReSetSkillReload @3598;
+// UpdateShadowLock @3599 -> T-51).
+void CharSkillC11::EndSkill() {
+    m_InSkill = false;
+    m_ThisSkillTime = 0.0F;
+}
+
+// Update: TYPED 3521-3530 -> SkillReload(dt), unconditional.
 void CharSkillC11::Tick(float dtMs) {
     if (dtMs <= 0.0F) {
         return;
     }
-    const float dt = dtMs / kMsPerSecond;
-
-    // 158270: AttributeUpdate() -> SkillReload(dt). this_skill_time (+0x5c) counts
-    // up, clamped to skill_cd (+0x44). Unconditional: it advances even while
-    // in_skill (C11's Update has no in_skill branch at all).
     if (m_ThisSkillTime < m_SkillCd) {
-        m_ThisSkillTime = std::min(m_ThisSkillTime + dt, m_SkillCd);
+        m_ThisSkillTime = std::min(m_ThisSkillTime + dtMs / kMsPerSecond, m_SkillCd);
     }
-
-    // 158271: SeachUpdate() -- the 0.05s aim re-acquire is an owner concern with no
-    // recoverable pure brain logic / RNG; intentionally not modeled.
 }
 
 float CharSkillC11::CooldownRemaining() const {

@@ -93,7 +93,30 @@ run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=6
 # so 250 fixed steps land well inside the 240-frame gap between the two pulses) --
 # the 2nd pulse at 300 is then a harmless no-op for them (TryActivateSkill's
 # !in_skill gate has nothing to re-enter or close).
-for c in c04 c08 c10 c13; do run_case "H12_$c" "Skill:" 6 SK_SKIP_MENU=1 SK_MUTE=1 SK_START_CHAR=$c SK_FORCE_SKILL_PULSE=60,300 SK_MAX_FRAMES=600; grep -q "Skill: $c activated" "$E/H12_$c.txt" || fail "H12_$c has no activated line"; grep -q "Skill: $c ended" "$E/H12_$c.txt" || fail "H12_$c has no ended line"; done
+# P3.3.c: c03/c05/c07/c11/c12 join the loop. "ended" is asserted ONLY for the heroes whose
+# in_skill really closes within the 600 frames of this run:
+#   c03 -- Invoke("CreateTunder", 0.4 s) -> RoleSkillEnd (ends ~0.4 s after each press, even
+#          with no enemy to strike, DISASM 0x264bf4);
+#   c07 -- ends when the 6th bat is back (BatBack -> RoleSkillEnd; with no enemy every bat
+#          misses and the 6-bat flock is home in ~0.62 s).
+# For the others only "activated" (plus the effect cue) is asserted, by construction:
+#   c05, c11 -- INSTANT ultimates: RoleSkillEnd is called at the tail of RoleSkill itself
+#               (DISASM 0x2661e8 / 0x26af90), so in_skill is never true across a frame
+#               boundary and GameScene's InSkill() edge detector never sees an "ended";
+#   c12      -- RoleSkillEnd (game_typed.c:3736-3755) restarts the cooldown but never clears
+#               in_skill (T-49), so the hero stays in_skill after the first summon cast.
+# c05/c07/c11/c12 additionally log their world-effect cue ("Skill: <c> effect ...").
+for c in c03 c04 c05 c07 c08 c10 c11 c12 c13; do
+  run_case "H12_$c" "Skill:" 6 SK_SKIP_MENU=1 SK_MUTE=1 SK_START_CHAR=$c SK_FORCE_SKILL_PULSE=60,300 SK_MAX_FRAMES=600
+  grep -q "Skill: $c activated" "$E/H12_$c.txt" || fail "H12_$c has no activated line"
+  case "$c" in
+    c05|c11|c12) ;; # activated-only (see above)
+    *) grep -q "Skill: $c ended" "$E/H12_$c.txt" || fail "H12_$c has no ended line" ;;
+  esac
+  case "$c" in
+    c05|c07|c11|c12) grep -q "Skill: $c effect" "$E/H12_$c.txt" || fail "H12_$c has no effect cue line" ;;
+  esac
+done
 run_case H10 "Buff:" 40 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 SK_FORCE_HIT=0 SK_MAX_FRAMES=600
 grep -q "Buff: Fire ended" "$E/H10.txt" \
   || fail "H10: no 'Buff: Fire ended' line -- the bullet-triggered Fire buff never expired"

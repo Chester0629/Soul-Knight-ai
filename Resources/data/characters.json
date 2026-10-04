@@ -73,7 +73,15 @@
       "atk": 3,
       "skill_cd": 6,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "thunder": [
+          "thunder"
+        ]
+      },
+      "skill_params": {
+        "BulletThunder.intensify": 0
+      }
     },
     {
       "id": "c04",
@@ -92,7 +100,12 @@
       "atk": 5,
       "skill_cd": 11,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "sword_obj": [
+          "sword_2_5_assassin"
+        ]
+      }
     },
     {
       "id": "c05",
@@ -111,7 +124,15 @@
       "atk": 4,
       "skill_cd": 6,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "bottle_objs": [
+          "bullet_bottle_0",
+          "bullet_bottle_1",
+          "bullet_bottle_2",
+          "bullet_bottle_3"
+        ]
+      }
     },
     {
       "id": "c06",
@@ -130,7 +151,12 @@
       "atk": 3,
       "skill_cd": 12,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "battery": [
+          "battery"
+        ]
+      }
     },
     {
       "id": "c07",
@@ -149,7 +175,16 @@
       "atk": 3,
       "skill_cd": 8,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "bullet_bat": [
+          "bullet_bat"
+        ]
+      },
+      "skill_params": {
+        "BulletBat.damage": 5,
+        "BulletBat.move_angle": 0
+      }
     },
     {
       "id": "c08",
@@ -187,7 +222,15 @@
       "atk": 4,
       "skill_cd": 6,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "skill_arrow": [
+          "bullet_c09"
+        ],
+        "clip_arrow": [
+          "fx_magic1"
+        ]
+      }
     },
     {
       "id": "c10",
@@ -206,7 +249,15 @@
       "atk": 5,
       "skill_cd": 12,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "skill_atk_obj": [
+          "c10_skill_atk"
+        ],
+        "paw_clip": [
+          "fx_sword1"
+        ]
+      }
     },
     {
       "id": "c11",
@@ -225,7 +276,15 @@
       "atk": 3,
       "skill_cd": 14,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "skill_obj": [
+          "Holy_light_c11"
+        ]
+      },
+      "skill_params": {
+        "BulletGreenLight.strengthen": 0
+      }
     },
     {
       "id": "c12",
@@ -244,7 +303,22 @@
       "atk": 5,
       "skill_cd": 2.5,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "skill_obj1": [
+          "wolf1"
+        ],
+        "skill_obj2": [
+          "wolf2"
+        ],
+        "skill_clips": [
+          "fx_wolf_show",
+          "fx_wolf_show",
+          "fx_wolf_show",
+          "fx_wolf_show",
+          "fx_wolf_show_s4"
+        ]
+      }
     },
     {
       "id": "c13",
@@ -263,7 +337,15 @@
       "atk": 5,
       "skill_cd": 12,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "skill_refs": {
+        "skill_atk_obj": [
+          "c10_skill_atk"
+        ],
+        "paw_clip": [
+          "fx_sword1"
+        ]
+      }
     }
   ],
   "_note": "per-character stats from c##.prefab RoleAttributePlayer (FAITHFUL); was one shared template + id list"

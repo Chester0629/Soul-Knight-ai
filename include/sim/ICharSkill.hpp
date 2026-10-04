@@ -1,7 +1,13 @@
 #ifndef GAME_SIM_ICHARSKILL_HPP
 #define GAME_SIM_ICHARSKILL_HPP
 
+#include <cstdint>
+#include <functional>
+#include <string>
 #include <utility>
+#include <vector>
+
+#include <glm/glm.hpp>
 
 namespace Game::Sim {
 
@@ -86,7 +92,58 @@ public:
                                           ///< reaching hand.SetAttack on that branch).
     };
 
+    /// P3.3.c: one live, awake hostile the sim exposes to a skill's world effect
+    /// (enemy view id == index into the sim's enemy list; the boss uses
+    /// Simulation::kBossViewId). Positions are sim pixels.
+    struct HostileView {
+        std::uint32_t id = 0;
+        glm::vec2 pos{0.0F, 0.0F};
+    };
+
+    /// P3.3.c: the read-only world snapshot handed to @ref TickEffects each fixed
+    /// step (only built when @ref NeedsWorld is true, so every other hero is
+    /// untouched). All positions are sim pixels; @c kWorldUnitPx converts to the
+    /// Unity world units the decompiled radii/speeds are expressed in.
+    struct SkillWorldView {
+        float dtSec = 0.0F;               ///< the fixed step, seconds.
+        glm::vec2 playerPos{0.0F, 0.0F};
+        glm::vec2 aimDir{1.0F, 0.0F};
+        int playerHp = 0;
+        int playerMaxHp = 0;
+        std::vector<HostileView> hostiles; ///< live + awake enemies, then the boss.
+        /// Wall line-of-sight query (Physics2D.Linecast on layer "Wall", approximated
+        /// by sampling WorldCollision::Blocks -- see Simulation::SkillLineBlocked).
+        /// Null -> nothing blocks.
+        std::function<bool(glm::vec2, glm::vec2)> lineBlocked;
+    };
+
+    /// P3.3.c: what a skill's world effect asks the sim to do this step.
+    struct SkillEffectOut {
+        struct Hit {
+            std::uint32_t targetId = 0; ///< HostileView::id.
+            int damage = 0;             ///< straight damage (RGEController.GetHurt).
+        };
+        std::vector<Hit> hits;           ///< skill damage on hostiles (DeathSource::PlayerSkill).
+        int healHp = 0;                  ///< player RoleAttribute.RestoreHealth.
+        int restoreEnergy = 0;           ///< player RoleAttributePlayer.RestoreEnergy.
+        int meleeCutDamage = 0;          ///< >0 -> RGHand.AtkCut at the player (T-36 reach).
+        std::vector<std::string> cues;   ///< "skill_effect:<cue>" sim events (log / NOT PORTED).
+    };
+
     virtual ~ICharSkill() = default;
+
+    /// P3.3.c hook: true when this skill needs the per-step world snapshot. Default
+    /// false -> the Simulation never builds a view for the other heroes.
+    virtual bool NeedsWorld() const { return false; }
+
+    /// P3.3.c hook: called once per fixed step AFTER the press edge + Tick, with the
+    /// world snapshot, when NeedsWorld(). Skills with a spawned effect (thunder chain,
+    /// bat swarm, holy light, melee cut) advance it here and return what the sim must
+    /// apply. Default no-op.
+    virtual void TickEffects(const SkillWorldView &world, SkillEffectOut &out) {
+        (void)world;
+        (void)out;
+    }
 
     /// Seed the hero's deterministic stream (never advanced; parity only).
     virtual void SetSeed(int seed) = 0;

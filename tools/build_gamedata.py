@@ -212,6 +212,72 @@ def _i2_hero_names() -> dict:
     return {int(m.group(1)): m.group(2).strip() for m in _I2_NAME_RE.finditer(text)}
 
 
+# P3.3.c: the hero-specific serialized fields of each c##.prefab's C##Controller
+# MonoBehaviour -- everything that follows the shared RGController block, which
+# ends at `skinIndex:` (c03 `thunder`, c05 `bottle_objs`, c07 `bullet_bat`, c11
+# `skill_obj`, c12 `skill_obj1/skill_obj2/skill_clips`). They are all asset
+# REFERENCES (guids); each is resolved to its asset stem and emitted as
+# `skill_refs` so the C++ side never hard-codes a prefab name. Numeric fields of
+# the referenced EFFECT prefabs the ported skill bodies read are emitted as
+# `skill_params` ("<Class>.<field>" -> number), e.g. BulletBat.damage = 5 (the
+# prefab overrides the ctor default 2, game_typed.c:89494-89500).
+_SKILL_EFFECT_SCALARS = {
+    "BulletBat": ("damage", "move_angle"),
+    "BulletThunder": ("intensify",),
+    "BulletGreenLight": ("strengthen",),
+}
+
+
+def _controller_skill_refs(text: str, idx: dict):
+    """({field: [asset stem, ...]}, [asset Path, ...]) of the hero controller's
+    serialized refs (the lines after `skinIndex:` in the block that carries
+    `in_skill:`). Null refs ({fileID: 0}) carry no guid and are dropped."""
+    block = next((b for b in re.split(r"(?m)^--- ", text)
+                  if re.search(r"(?m)^\s+in_skill:", b)), None)
+    if block is None or "skinIndex:" not in block:
+        return {}, []
+    tail = block.split("skinIndex:", 1)[1].splitlines()[1:]
+    refs: dict = {}
+    paths: list = []
+    cur = None
+    for line in tail:
+        m = re.match(r"^  (\w+):(.*)$", line)
+        if m:
+            cur = m.group(1)
+            g = re.search(r"guid: ([0-9a-f]{32})", m.group(2))
+            refs[cur] = []
+            if g and g.group(1) in idx:
+                refs[cur].append(idx[g.group(1)].stem)
+                paths.append(idx[g.group(1)])
+            continue
+        m = re.match(r"^  - .*guid: ([0-9a-f]{32})", line)
+        if m and cur is not None and m.group(1) in idx:
+            refs[cur].append(idx[m.group(1)].stem)
+            paths.append(idx[m.group(1)])
+    return {k: v for k, v in refs.items() if v}, paths
+
+
+def _skill_effect_params(paths: list) -> dict:
+    """"<Class>.<field>" -> number for the effect prefabs a hero's refs point at
+    (only the classes/fields in _SKILL_EFFECT_SCALARS). Missing fields (the ctor
+    default stays live) are simply absent."""
+    out: dict = {}
+    for path in paths:
+        if path.suffix != ".prefab":
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        for cls, fields in _SKILL_EFFECT_SCALARS.items():
+            g = _class_guid(cls)
+            block = _mono_block(text, g) if g else None
+            if block is None:
+                continue
+            for fld in fields:
+                v = _field(block, fld)
+                if v is not None:
+                    out[f"{cls}.{fld}"] = v
+    return out
+
+
 def build_character_roster():
     """PER-CHARACTER RE-KEY: one roster entry per playable character (c01..c13)
     with its REAL base stats, read from the c##.prefab RoleAttributePlayer
@@ -221,15 +287,24 @@ def build_character_roster():
     if not CHAR_PREFAB_DIR.is_dir():
         return None
     names = _i2_hero_names()
+    idx = _guid_index()
     roster = []
     for f in sorted(CHAR_PREFAB_DIR.glob("c[0-9]*.prefab")):
         cid = f.stem
         if not re.fullmatch(r"c\d+", cid):
             continue
-        stats = _prefab_role_attr(f.read_text(encoding="utf-8", errors="ignore"))
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        stats = _prefab_role_attr(text)
         if stats:
             # name: FAITHFUL @ i2 Character<N>_name_skin0 (English); id if unknown.
-            roster.append({"id": cid, "name": names.get(int(cid[1:]), cid), **stats})
+            entry = {"id": cid, "name": names.get(int(cid[1:]), cid), **stats}
+            refs, ref_paths = _controller_skill_refs(text, idx)
+            if refs:
+                entry["skill_refs"] = refs
+                params = _skill_effect_params(ref_paths)
+                if params:
+                    entry["skill_params"] = params
+            roster.append(entry)
     if not roster:
         return None
     tmpl = next((e for e in roster if e["id"] == "c01"), roster[0])
