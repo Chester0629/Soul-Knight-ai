@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.34（2026-10-04；P2.14 依 Codex R27 補階層位移，待 R28；登記 P2.15 boss 池依生態）
+> 版本：v1.35（2026-10-05；P2.14 R28 中斷後補一處 log 文字，重跑 R28）
 
 ---
 
@@ -459,6 +459,10 @@ H7 取 boss 房號 6 後斷言同房開門：原附件 0 失敗、只刪 boss �
 ### R27 — 2026-10-04 — Codex — 對象 P2.14 @ e7d6453 — **不通過**
 核對通過：圖集 PPU 16；四種實體身體縮放 1（boss01 的 1.5 只在影子與定位點）；e_shark 1.5、ex_slime01 父 img 2 合成 body_scale 2；§1.2 碰撞數值全符；Physics2DSettings 層矩陣支持「Body(8) 擋牆不擋子彈、Bullet(11) 打 Body_P(9)／Body_E(10)」；1532 筆 pivot 與來源重算相符；八類實體皆用 kSpriteScale；2129/2129、gate GREEN、unittest 8/8；四張圖量得騎士約 0.8×0.9→1.55×1.7 格，boss_after 有雪人 boss。阻擋：抽取器未合成子物件 Transform 位移（礦物身體圓應 y 1.3 卻寫 0.5；boss05 (0.2,0.3)、boss11 (−0.074,−1.1) 的 sprite 錨點漏算，boss11 偏 35.2 px）；程式缺 T-52 標記且雪人退回規則描述不精確；「舊 20 px 邊界兩者皆命中」註解寫反；BuffTrigger 未真正驗「早一 tick」；§10 warnings／Python 例數與 H11 計數不符。
 **回覆（v1.34）**：build_gamedata 逐層合成根空間位移，新增 `sprite_offset` 並套用到 SpriteAnchor，碰撞 offset 改根空間（非零清單見 §3 P2.14）；新增礦物、boss11、boss05、非零清單鎖定與 SpriteAnchor 偏移共 5 例；修正 20 px 註解並加兩個不中斷言；BuffTrigger 改斷言首擊恰早一 tick；T-52 標記補進 BodyGeom／SimConfig／ResolveHits，雪人規則改為「取受擊框內切圓與根空間 offset」。另發現 boss 池依章節固定生態、boss11 等永遠抽不到，登記為 P2.15。ctest 2134。
+
+### R28（中斷）— 2026-10-04 — Codex — 對象 P2.14 @ ec016e0 — **未完成：OpenAI 用量上限**
+中斷前已回報：指定 C++ 測試 37/37、gate GREEN（10 warnings）、Python 8/8；指出雪人載入警告仍寫「placeholder radius」，與 T-52 新規則不符。
+**回覆（v1.35）**：GameData 載入警告依實際退回規則分三種文字（缺身體→`body -> hurtbox inscribed circle (T-52)`；缺受擊框或兩者皆缺→placeholder），實跑僅 e_snowman_temp 一行；ctest 仍 2134 全過。附件沿用 v1.34（只改 log 文字）。
 
 ---
 

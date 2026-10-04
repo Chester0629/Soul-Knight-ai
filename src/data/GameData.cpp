@@ -329,17 +329,25 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         m_PlayerTemplate = *knight; // faithful default (was a hand-patched mix)
     }
     // COLLIDER DATA: log once per entity whose prefab carried no physical-body / hurtbox
-    // collider -- the sim/scene then fall back to their documented placeholder radii.
+    // collider. PORT CHOICE (T-52): a missing body uses the hurtbox's inscribed circle and
+    // root-space offset (MakeBodyGeom); only a missing hurtbox, or both, falls back to the
+    // documented placeholder radii.
+    const auto fallbackText = [](bool hasBody, bool hasHurtbox) {
+        if (!hasBody && hasHurtbox) {
+            return "body -> hurtbox inscribed circle (T-52)";
+        }
+        return hasBody ? "hurtbox -> placeholder radius" : "body/hurtbox -> placeholder radius";
+    };
     for (const CharacterDef &c : m_Characters) {
         if (!c.body.Present() || !c.hurtbox.Present()) {
-            LOG_WARN("GameData: hero {} has no {} collider in data -> placeholder radius", c.id,
-                     c.body.Present() ? "hurtbox" : "body");
+            LOG_WARN("GameData: hero {} missing collider: {}", c.id,
+                     fallbackText(c.body.Present(), c.hurtbox.Present()));
         }
     }
     for (const EnemyDef &e : m_Enemies) {
         if (!e.body.Present() || !e.hurtbox.Present()) {
-            LOG_WARN("GameData: enemy {} has no {} collider in data -> placeholder radius", e.id,
-                     e.body.Present() ? "hurtbox" : "body");
+            LOG_WARN("GameData: enemy {} missing collider: {}", e.id,
+                     fallbackText(e.body.Present(), e.hurtbox.Present()));
         }
     }
 
