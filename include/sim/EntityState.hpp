@@ -5,6 +5,7 @@
 
 #include "combat/Buff.hpp"
 #include "combat/CombatStats.hpp"
+#include "sim/BodyGeom.hpp"
 
 namespace Game::Sim {
 
@@ -45,6 +46,9 @@ struct EntityState {
     bool dead = false;
     bool kinematic = false;
     int roomId = -1;
+    /// Collision geometry from prefab data (body circle + hurtbox); the placeholder
+    /// fallback until Simulation::AddEnemy/SetBoss installs the data-derived one.
+    BodyGeom geom{};
 
     // --- P3.1: buff engine (Game::Combat::BuffList; see Simulation::TickBuffs) ---
     Combat::BuffList buffs{};

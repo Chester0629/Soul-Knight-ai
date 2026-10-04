@@ -558,4 +558,7 @@ set(TEST_FILES
 
     # Audio: audio.json -> GameData wiring
     AudioTableTest.cpp
+
+    # Character scale + prefab colliders from data
+    ScaleColliderTest.cpp
 )

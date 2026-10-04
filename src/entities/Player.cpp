@@ -33,6 +33,7 @@ Player::Player(const CharacterDef &def, const std::string &resourceRoot,
     SetDrawable(m_Anim);
     SetZIndex(5.0F);
     m_Transform.translation = {0.0F, 0.0F};
+    SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
 }
 
 void Player::Update(float dtMs) {
@@ -55,5 +56,6 @@ void Player::Update(float dtMs) {
         dir /= len;
         m_Transform.translation += dir * (m_Speed * dtMs / 1000.0F);
     }
+    SyncSprite();
 }
 } // namespace Game

@@ -29,6 +29,38 @@ std::string GetS(const json &j, const char *key,
                                               : fallback;
 }
 
+// A prefab collider object ({shape, radius|size, offset, trigger}, units) under @p key, or a
+// Shape::None def when absent/unknown (callers then keep their documented fallback).
+ColliderDef GetCollider(const json &j, const char *key) {
+    ColliderDef c;
+    auto it = j.find(key);
+    if (it == j.end() || !it->is_object()) {
+        return c;
+    }
+    const std::string shape = GetS(*it, "shape");
+    if (shape == "circle") {
+        c.shape = ColliderDef::Shape::Circle;
+        c.radius = GetF(*it, "radius");
+    } else if (shape == "box") {
+        c.shape = ColliderDef::Shape::Box;
+        auto sz = it->find("size");
+        if (sz != it->end() && sz->is_array() && sz->size() >= 2) {
+            c.sizeX = (*sz)[0].is_number() ? (*sz)[0].get<float>() : 0.0F;
+            c.sizeY = (*sz)[1].is_number() ? (*sz)[1].get<float>() : 0.0F;
+        }
+    } else {
+        return c;
+    }
+    auto off = it->find("offset");
+    if (off != it->end() && off->is_array() && off->size() >= 2) {
+        c.offsetX = (*off)[0].is_number() ? (*off)[0].get<float>() : 0.0F;
+        c.offsetY = (*off)[1].is_number() ? (*off)[1].get<float>() : 0.0F;
+    }
+    auto trig = it->find("trigger");
+    c.trigger = trig != it->end() && trig->is_boolean() && trig->get<bool>();
+    return c;
+}
+
 // P3.2: bullets.json "buff.kind" ("fire"/"poison"/...) -> the buffs.json row id
 // ("BuffFire"/"BuffPoison"/...) GameData::FindBuff resolves. See
 // tools/build_gamedata.py's attach_bullet_buffs()/_BUFF_ID_TO_KIND (inverse map).
@@ -96,6 +128,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.rotateAngle = GetI(e, "rotate_angle");
             d.canRebound = GetI(e, "can_rebound");
             d.manualDestroy = GetI(e, "manual_destroy");
+            d.collider = GetCollider(e, "collider"); // prefab hit collider (units)
             auto buffIt = e.find("buff"); // P3.2
             if (buffIt != e.end() && buffIt->is_object()) {
                 d.buffId = BuffIdFromKind(GetS(*buffIt, "kind"));
@@ -141,6 +174,9 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.camp = GetI(e, "camp");
             d.critical = GetI(e, "critical");
             d.deviation = GetI(e, "deviation");
+            d.body = GetCollider(e, "collider");   // physical body circle (units)
+            d.hurtbox = GetCollider(e, "hurtbox"); // bullet-hit trigger (units)
+            d.bodyScale = GetF(e, "body_scale", 1.0F);
             m_EnemyIndex[d.id] = m_Enemies.size();
             m_Enemies.push_back(std::move(d));
         }
@@ -245,6 +281,9 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.skillCd = GetF(c, "skill_cd");
             d.inSkillTime = GetF(c, "in_skill_time");
             d.fireRate = GetF(c, "fire_rate");
+            d.body = GetCollider(c, "collider");
+            d.hurtbox = GetCollider(c, "hurtbox");
+            d.bodyScale = GetF(c, "body_scale", 1.0F);
             // P3.3.c: hero-specific serialized skill refs + effect-prefab numbers.
             if (auto sr = c.find("skill_refs"); sr != c.end() && sr->is_object()) {
                 for (auto it = sr->begin(); it != sr->end(); ++it) {
@@ -276,6 +315,20 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
     if (const CharacterDef *knight = FindCharacter("c01")) {
         m_PlayerTemplate = *knight; // faithful default (was a hand-patched mix)
     }
+    // COLLIDER DATA: log once per entity whose prefab carried no physical-body / hurtbox
+    // collider -- the sim/scene then fall back to their documented placeholder radii.
+    for (const CharacterDef &c : m_Characters) {
+        if (!c.body.Present() || !c.hurtbox.Present()) {
+            LOG_WARN("GameData: hero {} has no {} collider in data -> placeholder radius", c.id,
+                     c.body.Present() ? "hurtbox" : "body");
+        }
+    }
+    for (const EnemyDef &e : m_Enemies) {
+        if (!e.body.Present() || !e.hurtbox.Present()) {
+            LOG_WARN("GameData: enemy {} has no {} collider in data -> placeholder radius", e.id,
+                     e.body.Present() ? "hurtbox" : "body");
+        }
+    }
 
     // SPRITE MANIFEST (OPTIONAL, never flips `ok`): per-entity animation frames
     // from sprites.json -- the FAITHFUL prefab -> Animator -> clip -> frame chain.
@@ -305,6 +358,14 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                         }
                     }
                     s.states[sit.key()] = std::move(frames);
+                }
+            }
+            if (auto pv = e.find("pivots"); pv != e.end() && pv->is_object()) {
+                for (auto pit = pv->begin(); pit != pv->end(); ++pit) {
+                    if (pit->is_array() && pit->size() >= 2 && (*pit)[0].is_number() &&
+                        (*pit)[1].is_number()) {
+                        s.pivots[pit.key()] = {(*pit)[0].get<float>(), (*pit)[1].get<float>()};
+                    }
                 }
             }
             m_SpriteIndex[s.id] = m_Sprites.size();
@@ -721,6 +782,34 @@ const SpriteSet *GameData::FindSprites(const std::string &id) const {
     auto it = m_SpriteIndex.find(id);
     return it == m_SpriteIndex.end() ? nullptr : &m_Sprites[it->second];
 }
+namespace {
+// Requested state, else the Animator default (idle), else the usual base
+// states, else the lexicographically FIRST state with frames -- deterministic
+// on purpose (never unordered_map iteration order; the sim is seeded/golden).
+// Shared by SpriteFrames and SpriteFramePivots so the two stay index-aligned.
+const std::vector<std::string> *PickSpriteFrames(const SpriteSet &s,
+                                                 const std::string &state) {
+    auto pick = [&s](const std::string &name) -> const std::vector<std::string> * {
+        auto it = s.states.find(name);
+        return (it != s.states.end() && !it->second.empty()) ? &it->second : nullptr;
+    };
+    const std::vector<std::string> *frames = nullptr;
+    for (const std::string &name :
+         {state, s.defaultState, std::string("ide"), std::string("run")}) {
+        if (!name.empty() && (frames = pick(name)) != nullptr) {
+            return frames;
+        }
+    }
+    const std::string *best = nullptr;
+    for (const auto &kv : s.states) {
+        if (!kv.second.empty() && (best == nullptr || kv.first < *best)) {
+            best = &kv.first;
+        }
+    }
+    return best != nullptr ? &s.states.at(*best) : nullptr;
+}
+} // namespace
+
 std::vector<std::string> GameData::SpriteFrames(const std::string &id,
                                                 const std::string &resourceRoot,
                                                 const std::string &state) const {
@@ -728,31 +817,7 @@ std::vector<std::string> GameData::SpriteFrames(const std::string &id,
     if (s == nullptr) {
         return {};
     }
-    auto pick = [s](const std::string &name) -> const std::vector<std::string> * {
-        auto it = s->states.find(name);
-        return (it != s->states.end() && !it->second.empty()) ? &it->second : nullptr;
-    };
-    const std::vector<std::string> *frames = nullptr;
-    // Requested state, else the Animator default (idle), else the usual base
-    // states, else the lexicographically FIRST state with frames -- deterministic
-    // on purpose (never unordered_map iteration order; the sim is seeded/golden).
-    for (const std::string &name :
-         {state, s->defaultState, std::string("ide"), std::string("run")}) {
-        if (!name.empty() && (frames = pick(name)) != nullptr) {
-            break;
-        }
-    }
-    if (frames == nullptr) {
-        const std::string *best = nullptr;
-        for (const auto &kv : s->states) {
-            if (!kv.second.empty() && (best == nullptr || kv.first < *best)) {
-                best = &kv.first;
-            }
-        }
-        if (best != nullptr) {
-            frames = &s->states.at(*best);
-        }
-    }
+    const std::vector<std::string> *frames = PickSpriteFrames(*s, state);
     if (frames == nullptr) {
         return {};
     }
@@ -760,6 +825,24 @@ std::vector<std::string> GameData::SpriteFrames(const std::string &id,
     out.reserve(frames->size());
     for (const std::string &f : *frames) {
         out.push_back(resourceRoot + "/sprites/" + f);
+    }
+    return out;
+}
+std::vector<std::array<float, 2>> GameData::SpriteFramePivots(const std::string &id,
+                                                              const std::string &state) const {
+    const SpriteSet *s = FindSprites(id);
+    if (s == nullptr) {
+        return {};
+    }
+    const std::vector<std::string> *frames = PickSpriteFrames(*s, state);
+    if (frames == nullptr) {
+        return {};
+    }
+    std::vector<std::array<float, 2>> out;
+    out.reserve(frames->size());
+    for (const std::string &f : *frames) {
+        const auto it = s->pivots.find(f);
+        out.push_back(it != s->pivots.end() ? it->second : std::array<float, 2>{0.5F, 0.0F});
     }
     return out;
 }

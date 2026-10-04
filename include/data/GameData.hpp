@@ -1,6 +1,7 @@
 #ifndef GAME_DATA_HPP
 #define GAME_DATA_HPP
 
+#include <array>
 #include <cstddef>
 #include <map>
 #include <string>
@@ -66,9 +67,30 @@ inline int WeaponEnergyCost(const WeaponDef &def) {
     return def.consume > 0 ? def.consume : 1;
 }
 
+/// A prefab collider (tools/build_gamedata.py prefab_geometry/bullet_collider), in
+/// Unity UNITS (1 unit = 1 map cell = Scale::kCellPx px), already multiplied by its
+/// GameObject's lossy scale. `offset` is relative to the prefab root origin (the
+/// feet for a character). FAITHFUL @ CircleCollider2D.m_Radius/m_Offset,
+/// BoxCollider2D.m_Size/m_Offset, m_IsTrigger.
+struct ColliderDef {
+    enum class Shape { None, Circle, Box };
+    Shape shape = Shape::None;
+    float radius = 0.0F;   ///< Circle: units.
+    float sizeX = 0.0F;    ///< Box: full width, units.
+    float sizeY = 0.0F;    ///< Box: full height, units.
+    float offsetX = 0.0F;  ///< units, from the root origin.
+    float offsetY = 0.0F;
+    bool trigger = false;  ///< m_IsTrigger.
+    bool Present() const { return shape != Shape::None; }
+};
+
 /// Bullet definition (from Resources/data/bullets.json).
 struct BulletDef {
     std::string id;
+    /// FAITHFUL @ the bullet prefab's first enabled Circle/Box collider (units); Shape::None
+    /// when the prefab has none / only a capsule or polygon (the sim then keeps its
+    /// fallback Sim::kBulletRadius).
+    ColliderDef collider;
     float speed = 0.0F;
     int camp = 0;            ///< 0 = player, 1 = enemy (Soul Knight convention)
     float destroyTime = 0.0F; ///< lifetime in seconds
@@ -132,6 +154,14 @@ struct EnemyDef {
     int camp = 0;         ///< FAITHFUL: ra_camp @ enemies.csv (0 = player, 1 = enemy).
     int critical = 0;     ///< FAITHFUL: ra_critical @ enemies.csv.
     int deviation = 0;    ///< FAITHFUL: ra_deviation @ enemies.csv.
+    /// FAITHFUL @ the species prefab (build_gamedata.py prefab_geometry): the PHYSICAL
+    /// body (root's "collider" child CircleCollider2D, layer Body -- walls/bodies, not
+    /// bullets) and the HURTBOX (root collider, IsTrigger -- what bullets hit).
+    ColliderDef body;
+    ColliderDef hurtbox;
+    /// FAITHFUL: lossy localScale of root/img/body (1 unless the prefab says otherwise:
+    /// e_shark 1.5, ex_* elites 1.5/2.0); multiplies Scale::kSpriteScale.
+    float bodyScale = 1.0F;
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -164,6 +194,10 @@ struct CharacterDef {
     float skillCd = 0.0F;
     float inSkillTime = 0.0F;
     float fireRate = 0.0F;
+    /// FAITHFUL @ c##.prefab (see EnemyDef::body/hurtbox/bodyScale).
+    ColliderDef body;
+    ColliderDef hurtbox;
+    float bodyScale = 1.0F;
     /// P3.3.c: the hero-specific serialized refs of the c##.prefab controller
     /// MonoBehaviour (everything after the shared `skinIndex:` -- c03 `thunder`,
     /// c05 `bottle_objs`, c07 `bullet_bat`, c11 `skill_obj`, c12 `skill_obj1/2`,
@@ -194,6 +228,10 @@ struct SpriteSet {
     std::string defaultState;  ///< the Animator's default (idle) state
     int sampleRate = 0;        ///< clip fps; frame interval = 1000 / sampleRate
     std::unordered_map<std::string, std::vector<std::string>> states;
+    /// FAITHFUL @ rgtexture/**/<frame>.asset m_Pivot: png name -> pivot fractions of the
+    /// sprite rect from its bottom-left (the Unity transform origin: the FEET for a
+    /// character). A frame absent here is anchored bottom-centre {0.5, 0}.
+    std::unordered_map<std::string, std::array<float, 2>> pivots;
 };
 
 /// Status-effect definition (from Resources/data/buffs.json).
@@ -483,6 +521,11 @@ public:
     std::vector<std::string> SpriteFrames(const std::string &id,
                                           const std::string &resourceRoot,
                                           const std::string &state = "") const;
+    /// Pivot fractions (x, y; from the frame rect's bottom-left) of each frame
+    /// SpriteFrames(id, root, state) returns, index-aligned with it ({0.5, 0} when a
+    /// frame has no pivot data; empty if unknown id).
+    std::vector<std::array<float, 2>> SpriteFramePivots(const std::string &id,
+                                                        const std::string &state = "") const;
     /// Frame interval from the clip's sample rate (1000 / fps), or @p fallbackMs.
     int SpriteIntervalMs(const std::string &id, int fallbackMs) const;
 

@@ -1,4 +1,5 @@
 #include "entities/Chest.hpp"
+#include "game/WorldScale.hpp"
 
 #include <memory>
 #include <utility>
@@ -8,7 +9,7 @@ namespace Game {
 namespace {
 constexpr float kChestRadius = 18.0F;
 constexpr float kChestZIndex = 2.0F;
-constexpr float kScale = 2.0F; // 16 px per unit -> 32 px cell
+constexpr float kScale = Scale::kSpriteScale; // 16 px per unit -> 32 px cell (shared rule)
 
 // FAITHFUL @ res/item/chest*.prefab SpriteRenderers (objects_common atlas).
 const char *ClosedSprite(int tier, Chest::Kind kind) {

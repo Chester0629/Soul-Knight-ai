@@ -37,6 +37,8 @@ struct FireIntent {
     bool canThrough = false;
     int pierce = 0;
     int camp = 0;
+    /// Bullet collision radius (px) from the bullet prefab's collider; 0 => fallback.
+    float radiusPx = 0.0F;
     // P3.2: the firing weapon's bullet buff (resolved once at EquipWeapon time
     // from BulletDef::buffId + buffs.json -> Combat::BuffParams, so it travels
     // with the bullet unchanged even if the player swaps weapons before this

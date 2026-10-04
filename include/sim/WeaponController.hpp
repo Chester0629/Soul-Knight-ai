@@ -53,6 +53,10 @@ public:
         bool hasBuff = false;
         Game::Combat::BuffParams buffParams{};
         float buffProbability = 0.0F;
+        /// This weapon's bullet collision radius (px), resolved once from the bullet
+        /// prefab collider (BrainFactory::MakeWeapon) and stamped onto every intent;
+        /// 0 => the sim's fallback Sim::kBulletRadius.
+        float bulletRadiusPx = 0.0F;
     };
 
     WeaponController(const Params &params, int seed);

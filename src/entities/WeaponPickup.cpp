@@ -4,6 +4,8 @@
 
 #include "Util/Image.hpp"
 
+#include "game/WorldScale.hpp"
+
 namespace Game {
 
 namespace {
@@ -20,6 +22,8 @@ WeaponPickup::WeaponPickup(const std::string &resourceRoot, glm::vec2 pos,
         (def != nullptr && !def->icon.empty()) ? def->icon : std::string("weapons_9.png");
     SetDrawable(std::make_shared<Util::Image>(resourceRoot + "/sprites/" + icon));
     SetZIndex(kPickupZIndex);
+    // SCALE (FAITHFUL): PPU-16 weapon atlas, localScale-1 -> kCellPx / 16.
+    m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
     m_Transform.translation = pos;
 }
 

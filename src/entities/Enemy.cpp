@@ -32,6 +32,7 @@ Enemy::Enemy(const EnemyDef &def, const std::string &resourceRoot,
     SetDrawable(m_Anim);
     SetZIndex(5);
     m_Transform.translation = spawnPos;
+    SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
 }
 
 EnemyAI::Decision Enemy::Think(float dtMs, glm::vec2 playerPos) {
@@ -55,7 +56,7 @@ glm::vec2 Enemy::Position() const {
 }
 
 Util::Collider Enemy::GetCollider() const {
-    return Util::Collider::MakeCircle(Position(), 16.0F);
+    return Util::Collider::MakeCircle(Position(), m_Anchor.bodyRadiusPx);
 }
 
 const CombatStats &Enemy::Stats() const {

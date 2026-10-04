@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <glm/glm.hpp>
@@ -12,6 +13,7 @@
 #include "Util/GameObject.hpp"
 
 #include "combat/CombatStats.hpp"
+#include "entities/SpriteAnchor.hpp"
 #include "combat/EnemyAI.hpp"
 #include "data/GameData.hpp"
 
@@ -83,7 +85,16 @@ public:
     void SetRoomId(int id) { m_RoomId = id; }
     int RoomId() const { return m_RoomId; }
 
+    /// Install the data-driven sprite anchor (see SpriteAnchor) and re-apply it.
+    void SetAnchor(SpriteAnchor anchor) {
+        m_Anchor = std::move(anchor);
+        SyncSprite();
+    }
+    /// Apply scale + the current frame's pivot (called each frame before the draw).
+    void SyncSprite() { m_Anchor.Apply(*this, *m_Anim); }
+
 private:
+    SpriteAnchor m_Anchor;
     EnemyAI m_AI;
     CombatStats m_Stats{3, 3, 0, 0, 0, 0};
     float m_Speed{60.0F};

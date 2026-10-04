@@ -57,6 +57,9 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
         ctx.stepAngle = m_Params.fanStepDeg;
         const std::size_t before = out.size(); // P3.2: stamp buff onto intents THIS call adds.
         const int pulls = m_Brain->Tick(ctx, out);
+        for (std::size_t i = before; i < out.size(); ++i) {
+            out[i].radiusPx = m_Params.bulletRadiusPx; // bullet prefab collider (data)
+        }
         if (m_Params.hasBuff) {
             for (std::size_t i = before; i < out.size(); ++i) {
                 out[i].hasBuff = true;
@@ -98,6 +101,7 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
     intent.repel = m_Params.repel;
     intent.canThrough = m_Params.canThrough;
     intent.pierce = m_Params.pierce;
+    intent.radiusPx = m_Params.bulletRadiusPx;
     intent.hasBuff = m_Params.hasBuff; // P3.2
     intent.buffParams = m_Params.buffParams;
     intent.buffProbability = m_Params.buffProbability;

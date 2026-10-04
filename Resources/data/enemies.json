@@ -26,7 +26,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss02",
@@ -55,7 +76,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss03",
@@ -84,7 +126,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss04",
@@ -113,7 +176,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss05",
@@ -142,7 +226,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.8,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss06",
@@ -171,7 +276,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss07",
@@ -200,7 +326,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.8,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss08",
@@ -229,7 +376,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss09",
@@ -258,7 +426,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss10",
@@ -287,7 +476,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss11",
@@ -316,7 +526,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.6,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 1.0,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss12_1",
@@ -345,7 +576,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.7
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.7
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss12_2",
@@ -374,7 +626,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.7
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.7
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "boss13",
@@ -403,7 +676,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.47,
+        2.64
+      ],
+      "offset": [
+        0.0,
+        1.34
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_alien01",
@@ -432,7 +726,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_alien02",
@@ -461,7 +776,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_alien03",
@@ -490,7 +826,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_battery01",
@@ -519,7 +876,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        -0.1,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        -0.1,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_boar01",
@@ -548,7 +926,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_boar02",
@@ -577,7 +976,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_chest1",
@@ -606,7 +1026,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_chest2",
@@ -635,7 +1076,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_creeper",
@@ -664,7 +1126,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_creeper_fly",
@@ -693,7 +1176,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_crystal",
@@ -722,7 +1226,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_fireknight01",
@@ -751,7 +1276,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_fireknight02",
@@ -780,7 +1326,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_fireknight03",
@@ -809,7 +1376,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_giant",
@@ -838,7 +1426,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_golem01",
@@ -867,7 +1476,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_golem02",
@@ -896,7 +1526,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_hammer",
@@ -925,7 +1576,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight01",
@@ -954,7 +1626,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight02",
@@ -983,7 +1676,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight03",
@@ -1012,7 +1726,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight04",
@@ -1041,7 +1776,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight05",
@@ -1070,7 +1826,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_knight06",
@@ -1099,7 +1876,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner01",
@@ -1128,7 +1926,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner02",
@@ -1157,7 +1976,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner03",
@@ -1186,7 +2026,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner04",
@@ -1215,7 +2076,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner05",
@@ -1244,7 +2126,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_miner06",
@@ -1273,7 +2176,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mosquito",
@@ -1302,7 +2226,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mummy01",
@@ -1331,7 +2276,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mummy02",
@@ -1360,7 +2326,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mummy03",
@@ -1389,7 +2376,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mummy04",
@@ -1418,7 +2426,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_mummy05",
@@ -1447,7 +2476,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc01",
@@ -1476,7 +2526,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc02",
@@ -1505,7 +2576,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc03",
@@ -1534,7 +2626,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc04",
@@ -1563,7 +2676,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc05",
@@ -1592,7 +2726,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc06",
@@ -1621,7 +2776,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc07",
@@ -1650,7 +2826,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_orc08",
@@ -1679,7 +2876,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_shaman",
@@ -1708,7 +2926,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_shark",
@@ -1737,7 +2976,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "e_skeleton01",
@@ -1766,7 +3027,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton02",
@@ -1795,7 +3077,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton02_temp",
@@ -1824,7 +3127,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton03",
@@ -1853,7 +3177,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton04",
@@ -1882,7 +3227,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton05",
@@ -1911,7 +3277,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_skeleton06",
@@ -1940,7 +3327,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_slime01",
@@ -1969,7 +3377,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_snowman_temp",
@@ -1998,7 +3427,19 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "e_spider01",
@@ -2027,7 +3468,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_spider02",
@@ -2056,7 +3518,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_spider03",
@@ -2085,7 +3568,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_spider04",
@@ -2114,7 +3618,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_spider05",
@@ -2143,7 +3668,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_succulent",
@@ -2172,7 +3718,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_tentacle",
@@ -2201,7 +3768,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.2
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_tentacle_temp",
@@ -2230,7 +3818,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.2
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_tortoise",
@@ -2259,7 +3868,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_ufo",
@@ -2288,7 +3918,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_wizard01",
@@ -2317,7 +3968,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_worm01",
@@ -2346,7 +4018,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_yeti01",
@@ -2375,7 +4068,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "e_yeti02",
@@ -2404,7 +4118,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_alien01",
@@ -2433,7 +4168,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_alien02",
@@ -2462,7 +4219,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_alien03",
@@ -2491,7 +4270,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_battery01",
@@ -2520,7 +4321,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        -0.1,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        -0.1,
+        0.6
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_boar02",
@@ -2549,7 +4372,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_boar03",
@@ -2578,7 +4423,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_creeper",
@@ -2607,7 +4474,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_creeper_fly",
@@ -2636,7 +4525,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_crystal",
@@ -2665,7 +4576,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_fireknight",
@@ -2694,7 +4627,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_fireknight2",
@@ -2723,7 +4678,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_giant",
@@ -2752,7 +4729,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_golem01",
@@ -2781,7 +4780,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_golem02",
@@ -2810,7 +4831,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_hammer",
@@ -2839,7 +4882,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight01",
@@ -2868,7 +4933,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight02",
@@ -2897,7 +4984,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight03",
@@ -2926,7 +5035,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight04",
@@ -2955,7 +5086,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight05",
@@ -2984,7 +5137,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_knight06",
@@ -3013,7 +5188,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner01",
@@ -3042,7 +5239,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner02",
@@ -3071,7 +5290,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner03",
@@ -3100,7 +5341,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner04",
@@ -3129,7 +5392,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner05",
@@ -3158,7 +5443,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_miner06",
@@ -3187,7 +5494,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_mosquito",
@@ -3216,7 +5545,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_mummy01",
@@ -3245,7 +5596,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_mummy02",
@@ -3274,7 +5646,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_mummy03",
@@ -3303,7 +5696,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_mummy04",
@@ -3332,7 +5746,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_mummy05",
@@ -3361,7 +5797,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_orc01",
@@ -3390,7 +5847,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc02",
@@ -3419,7 +5898,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc03",
@@ -3448,7 +5949,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc04",
@@ -3477,7 +6000,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc06",
@@ -3506,7 +6051,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc07",
@@ -3535,7 +6102,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_orc08",
@@ -3564,7 +6153,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        1.3
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_shaman",
@@ -3593,7 +6204,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton01",
@@ -3622,7 +6255,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton02",
@@ -3651,7 +6306,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton03",
@@ -3680,7 +6357,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton04",
@@ -3709,7 +6408,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton05",
@@ -3738,7 +6459,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_skeleton06",
@@ -3767,7 +6510,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_slime01",
@@ -3796,7 +6561,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_spider01",
@@ -3825,7 +6612,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_spider02",
@@ -3854,7 +6663,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_spider03",
@@ -3883,7 +6714,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_spider04",
@@ -3912,7 +6765,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_spider05",
@@ -3941,7 +6816,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_succulent",
@@ -3970,7 +6867,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_tortoise",
@@ -3999,7 +6918,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_ufo",
@@ -4028,7 +6969,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_wizard",
@@ -4057,7 +7020,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_worm",
@@ -4086,7 +7071,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.6
+      ],
+      "trigger": false
+    },
+    "body_scale": 2.0
   },
   {
     "id": "ex_yeti01",
@@ -4115,7 +7122,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "ex_yeti02",
@@ -4144,7 +7173,29 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.2,
+        1.8
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.6,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   },
   {
     "id": "mineral_crystal",
@@ -4173,7 +7224,28 @@
     "speed_rate": 0.0,
     "camp": 0,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.5,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "mineral_gold",
@@ -4202,7 +7274,28 @@
     "speed_rate": 0.0,
     "camp": 0,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        1.5,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "ex_orc05",
@@ -4231,6 +7324,28 @@
     "speed_rate": 0.0,
     "camp": 1,
     "critical": 0,
-    "deviation": 0
+    "deviation": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.8,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.8
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    },
+    "body_scale": 1.5
   }
 ]

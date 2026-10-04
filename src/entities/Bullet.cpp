@@ -12,10 +12,13 @@
 
 #include "Util/Image.hpp"
 
+#include "game/WorldScale.hpp"
+
 namespace Game {
 
 namespace {
-/// Radius (in pixels) of the bullet's circular collider.
+/// Placeholder radius (px) of the entity's own GetCollider(); the sim's hit radius comes
+/// from the bullet prefab collider (BulletState::radiusPx).
 constexpr float kColliderRadius = 6.0f;
 /// Z-index for rendering bullets above the floor and most actors.
 constexpr float kBulletZIndex = 4.0f;
@@ -27,6 +30,8 @@ Bullet::Bullet(const std::string &resourceRoot) {
     SetDrawable(std::make_shared<Util::Image>(
         std::string(resourceRoot) + "/sprites/bullet_0.png"));
     SetZIndex(kBulletZIndex);
+    // SCALE (FAITHFUL): PPU-16 bullet atlas, localScale-1 bullet prefabs.
+    m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
     SetVisible(false);
 }
 

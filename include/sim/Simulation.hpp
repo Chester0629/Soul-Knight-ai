@@ -77,8 +77,14 @@ public:
     /// Spawn an EnemyAI01 enemy (slice hp) in @p roomId; Activated immediately (asleep).
     void AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId, int seed);
     /// Spawn the single boss in @p roomId; Activated immediately (asleep).
+    /// @p def (optional) is the boss's species def: its prefab colliders become the body
+    /// circle + hurtbox (BodyGeom); null keeps the placeholder Sim::kBossBodyRadius.
     void SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed,
-                 const std::string &bossId = "BossAI01");
+                 const std::string &bossId = "BossAI01", const Game::EnemyDef *def = nullptr);
+    /// The player's collision geometry (hurtbox for enemy bullets), from the hero
+    /// prefab data. The default is the placeholder Sim::kPlayerBodyRadius circle.
+    void SetPlayerGeom(const BodyGeom &geom) { m_PlayerGeom = geom; }
+    const BodyGeom &PlayerGeom() const { return m_PlayerGeom; }
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
     /// @p data (P3.2), when non-null, resolves the weapon's bullet's buff-application
     /// trigger (BrainFactory::MakeWeapon) so ResolveHits() auto-applies it on a landed
@@ -257,6 +263,7 @@ private:
     bool m_SkillPressPending = false;
 
     Game::CombatStats m_PlayerStats{};
+    BodyGeom m_PlayerGeom = BodyGeom::Fallback(kPlayerBodyRadius);
     // --- P3.1: player buff state (the sim does not own the player's position, so
     // GameScene polls PlayerFrozen()/PlayerSpeedMul() to gate its own movement). ---
     Game::Combat::BuffList m_PlayerBuffs;

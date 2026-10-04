@@ -18,6 +18,9 @@ struct BulletState {
     float lifeMs = 0.0F;
     int damage = 0;
     int camp = 0; ///< 0 = player bullet, 1 = enemy bullet.
+    /// Hit/wall radius (px) from the bullet prefab collider (BulletDef::collider, via
+    /// FireIntent::radiusPx); 0 => the fallback Sim::kBulletRadius.
+    float radiusPx = 0.0F;
     float repel = 0.0F;
     int critical = 0;
     bool canThrough = false;

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "sim/BodyGeom.hpp"
 #include "sim/BossBrainAdapters.hpp"
 #include "sim/EnemyBrainAdapters.hpp"
 #include "sim/SimConfig.hpp"
@@ -79,6 +80,8 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
     // ONCE here, from GameData -- see MakeWeapon's doc comment.
     if (data != nullptr) {
         if (const Game::BulletDef *bulletDef = data->BulletForWeapon(def)) {
+            // Bullet prefab collider -> hit radius (0 when the prefab has none -> fallback).
+            p.bulletRadiusPx = EquivalentRadiusPx(bulletDef->collider);
             if (!bulletDef->buffId.empty()) {
                 if (const Game::BuffDef *buffDef = data->FindBuff(bulletDef->buffId)) {
                     p.hasBuff = true;

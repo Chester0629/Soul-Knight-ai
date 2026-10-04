@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include <glm/glm.hpp>
 
@@ -11,6 +12,7 @@
 
 #include "combat/CombatStats.hpp"
 #include "data/GameData.hpp"
+#include "entities/SpriteAnchor.hpp"
 
 namespace Game {
 /**
@@ -33,7 +35,19 @@ public:
     const CombatStats &Stats() const { return m_Stats; }
     CombatStats &Stats() { return m_Stats; }
 
+    /// Install the data-driven sprite anchor (pivots / feet offset / body scale) and
+    /// re-apply it. See SpriteAnchor for the FAITHFUL scale + pivot rule.
+    void SetAnchor(SpriteAnchor anchor) {
+        m_Anchor = std::move(anchor);
+        SyncSprite();
+    }
+    /// Apply scale + the current frame's pivot (called each frame before the draw).
+    void SyncSprite() { m_Anchor.Apply(*this, *m_Anim); }
+    /// Physical body radius (px) from the hero prefab's "collider" child.
+    float BodyRadiusPx() const { return m_Anchor.bodyRadiusPx; }
+
 private:
+    SpriteAnchor m_Anchor;
     CombatStats m_Stats;
     float m_Speed; ///< pixels per second
     std::shared_ptr<Util::Animation> m_Anim;

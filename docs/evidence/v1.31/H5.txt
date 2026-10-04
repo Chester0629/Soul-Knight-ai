@@ -1,2 +1,0 @@
- [info] Player died on floor 0 -> EndScene
- [info] EndScene: game over at 1-1 -- hero c01 time 0:00:03 kills 0 coins 0 gems +0

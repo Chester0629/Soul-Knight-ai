@@ -1,4 +1,5 @@
 #include "entities/VendingMachine.hpp"
+#include "game/WorldScale.hpp"
 
 #include <memory>
 
@@ -10,7 +11,7 @@
 namespace Game {
 
 namespace {
-constexpr float kScale = 2.0F; // 16 px per unit -> 32 px cell
+constexpr float kScale = Scale::kSpriteScale; // 16 px per unit -> 32 px cell (shared rule)
 constexpr float kZBody = 1.3F;
 constexpr float kZDisplay = 1.32F;
 constexpr float kZIcon = 1.33F;

@@ -92,6 +92,30 @@ class TestBulletRefBoundary(unittest.TestCase):
         errors, _warnings = validate_data.run_checks(data)
         self.assertTrue(any("bottle_objs" in e for e in errors), errors)
 
+    def test_hero_collider_is_required(self) -> None:
+        """Scale/collider pass: a hero without its prefab body circle must fail the gate."""
+        data = copy.deepcopy(self.data)
+        c01 = next(c for c in data["chars"]["roster"] if c["id"] == "c01")
+        self.assertEqual(c01["collider"]["radius"], 0.4)
+        del c01["collider"]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("c01 collider" in e for e in errors), errors)
+
+    def test_enemy_hurtbox_is_required(self) -> None:
+        data = copy.deepcopy(self.data)
+        boss = next(e for e in data["enemies"] if e["id"] == "boss01")
+        self.assertEqual(boss["hurtbox"]["size"], [1.2, 1.8])
+        del boss["hurtbox"]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("boss01 hurtbox" in e for e in errors), errors)
+
+    def test_enemy_body_collider_is_required_except_allow_list(self) -> None:
+        data = copy.deepcopy(self.data)
+        slime = next(e for e in data["enemies"] if e["id"] == "e_slime01")
+        del slime["collider"]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("e_slime01 collider" in e for e in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

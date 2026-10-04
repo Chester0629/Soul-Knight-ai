@@ -1,6 +1,8 @@
 #ifndef GAME_SIM_SIMCONFIG_HPP
 #define GAME_SIM_SIMCONFIG_HPP
 
+#include "game/WorldScale.hpp"
+
 namespace Game::Sim {
 
 /// The simulation's fixed timestep, matching Unity's default FixedUpdate (0.02s).
@@ -29,8 +31,11 @@ static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
 /// kBulletSpeedScale; promote that to use this when the weapon path is wired.
 inline constexpr float kDataSpeedToPxPerSec = 15.0F;
 
-/// Slice collision radii (px). The sim is geometry-light: bodies/bullets are circles.
-/// These mirror GameScene's kPlayerRadius(16)/kBossBodyRadius(24) placeholders.
+/// FALLBACK collision radii (px), used ONLY when the prefab collider data is missing
+/// (a default-constructed def, an entity whose prefab has no collider, an enemy
+/// bullet with no resolvable bullet prefab). The live values come from data:
+/// Sim::BodyGeom (hero/enemy/boss body circle + hurtbox) and BulletState::radiusPx
+/// (the bullet prefab collider) -- see sim/BodyGeom.hpp and tools/build_gamedata.py.
 inline constexpr float kBulletRadius = 4.0F;
 inline constexpr float kPlayerBodyRadius = 16.0F;
 inline constexpr float kEnemyBodyRadius = 16.0F;
@@ -68,7 +73,8 @@ inline constexpr float kMeleeCutHalfAngleDeg = 60.0F;
 /// geometry already uses; T-25 (the RGBullet `speed` data-unit audit) is a separate,
 /// still-pending question and is NOT reused here because Rigidbody2D.velocity is a
 /// direct units/s value, not a bullet-data speed.
-inline constexpr float kWorldUnitPx = 32.0F;
+inline constexpr float kWorldUnitPx = Game::Scale::kCellPx;
+static_assert(kWorldUnitPx == 32.0F, "one unit == one map cell == 32 px");
 
 } // namespace Game::Sim
 

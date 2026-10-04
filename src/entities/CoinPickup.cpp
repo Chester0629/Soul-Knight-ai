@@ -1,4 +1,5 @@
 #include "entities/CoinPickup.hpp"
+#include "game/WorldScale.hpp"
 
 #include <memory>
 #include <vector>
@@ -9,7 +10,7 @@
 namespace Game {
 namespace {
 constexpr float kZIndex = 3.5F; // above floor tiles / weapon pickups, below actors.
-constexpr float kScale = 2.0F;  // 16 px per unit -> 32 px cell (geometry, not game data)
+constexpr float kScale = Scale::kSpriteScale; // 16 px per unit -> 32 px cell (shared rule)
 } // namespace
 
 CoinPickup::CoinPickup(const std::string &resourceRoot, glm::vec2 pos, RewardKind kind,

@@ -109,6 +109,8 @@ def load_all_tables() -> dict:
     # such checkout's gate RED.
     audio_path = DATA / "audio.json"
     data["audio"] = json.loads(audio_path.read_text(encoding="utf-8")) if audio_path.exists() else None
+    sprites_path = DATA / "sprites.json"  # optional like audio (AssetRipper-derived)
+    data["sprites"] = json.loads(sprites_path.read_text(encoding="utf-8")) if sprites_path.exists() else None
     data["_load_errors"] = load_errors
     return data
 
@@ -521,6 +523,68 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                             "(run tools/extract_audio.py)")
     elif audio_dir.is_dir():
         errors.append("Resources/audio/ exists but audio.json is missing (run build_gamedata.py)")
+
+    # --- COLLIDER DATA (scale/collider pass): every hero/enemy/boss must carry its prefab
+    # body circle + hurtbox (the sim/scene fall back to placeholder radii otherwise).
+    def check_collider(c, label, want_shape=None) -> None:
+        if not isinstance(c, dict):
+            errors.append(f"{label}: collider missing")
+            return
+        shape = c.get("shape")
+        if shape == "circle":
+            need(isinstance(c.get("radius"), (int, float)) and c["radius"] > 0,
+                 f"{label}: circle radius must be > 0 (got {c.get('radius')!r})")
+        elif shape == "box":
+            sz = c.get("size")
+            need(isinstance(sz, list) and len(sz) == 2 and all(isinstance(v, (int, float)) and v > 0 for v in sz),
+                 f"{label}: box size must be [w>0, h>0] (got {sz!r})")
+        else:
+            errors.append(f"{label}: unknown collider shape {shape!r}")
+        off = c.get("offset")
+        need(isinstance(off, list) and len(off) == 2 and all(isinstance(v, (int, float)) for v in off),
+             f"{label}: offset must be [x, y] (got {off!r})")
+        need(isinstance(c.get("trigger"), bool), f"{label}: trigger flag missing")
+        if want_shape:
+            need(shape == want_shape, f"{label}: expected a {want_shape} collider, got {shape!r}")
+
+    hero_rows = chars.get("roster", []) if isinstance(chars, dict) else []
+    if hero_rows and isinstance(hero_rows[0], dict):
+        need(len(hero_rows) == 13, f"characters.json roster has {len(hero_rows)} heroes, expected 13")
+        for c in hero_rows:
+            check_collider(c.get("collider"), f"characters.json {c.get('id')} collider", "circle")
+            check_collider(c.get("hurtbox"), f"characters.json {c.get('id')} hurtbox")
+            if isinstance(c.get("hurtbox"), dict):
+                need(c["hurtbox"].get("trigger") is True, f"{c.get('id')}: hurtbox must be IsTrigger")
+            if isinstance(c.get("collider"), dict):
+                need(c["collider"].get("trigger") is False, f"{c.get('id')}: body collider must not be IsTrigger")
+    # Prefabs whose root has no physical "collider" child (hurtbox only): the sim then
+    # derives the body circle from the hurtbox. e_snowman_temp is the only one today.
+    NO_BODY_COLLIDER = {"e_snowman_temp"}
+    if enemies and any("hurtbox" in e for e in enemies):
+        for e in enemies:
+            eid = e.get("id")
+            check_collider(e.get("hurtbox"), f"enemies.json {eid} hurtbox")
+            if eid in NO_BODY_COLLIDER:
+                continue
+            check_collider(e.get("collider"), f"enemies.json {eid} collider", "circle")
+        n_body = sum(1 for e in enemies if isinstance(e.get("collider"), dict))
+        warnings.append(f"colliders: {n_body}/{len(enemies)} enemies/bosses have a body circle "
+                        f"(no-body-collider allow-list: {sorted(NO_BODY_COLLIDER)})")
+    elif enemies:
+        errors.append("enemies.json rows carry no 'hurtbox' collider data (run build_gamedata.py)")
+    if bullets:
+        n_bc = sum(1 for b in bullets if isinstance(b.get("collider"), dict))
+        for b in bullets:
+            if isinstance(b.get("collider"), dict):
+                check_collider(b["collider"], f"bullets.json {b.get('id')} collider")
+        need(n_bc > 0, "bullets.json has no bullet prefab colliders (run build_gamedata.py)")
+        warnings.append(f"colliders: {n_bc}/{len(bullets)} bullet rows carry a prefab collider "
+                        f"(others use the sim fallback radius)")
+    sprites = data.get("sprites")
+    if isinstance(sprites, dict):
+        n_p = sum(1 for v in sprites.values() if isinstance(v, dict) and v.get("pivots"))
+        need(n_p == len([v for v in sprites.values() if isinstance(v, dict)]),
+             "sprites.json: every entity must carry per-frame 'pivots' (run build_gamedata.py)")
 
     # --- reference-resolution report (non-fatal) ---
     if weapons:

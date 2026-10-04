@@ -5,6 +5,7 @@
 // BulletState -> Simulation::RollBulletBuff/ApplyBuff).
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <vector>
 
@@ -373,9 +374,17 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         }
         return trace;
     };
-    // Passing GameData in (P3.2) must not change a no-buff weapon's trace at all
-    // versus the old (nullptr) call sites' behaviour.
-    EXPECT_EQ(run(/*passData=*/true), run(/*passData=*/false));
+    // Passing GameData in (P3.2) must not change a no-buff weapon's DAMAGE SEQUENCE
+    // versus the old (nullptr) call sites' behaviour. COLLIDER DATA (scale pass): with
+    // data the weapon's bullet takes its prefab collider radius (bullet_0: 0.5x0.4-unit box
+    // -> 6.4 px) instead of the 4 px fallback, so it reaches the enemy one tick EARLIER;
+    // the exact tick of each hit therefore legitimately differs by that radius. Compare
+    // the sequence of distinct hp values (same hits, same damage), not the tick alignment.
+    auto distinct = [](std::vector<float> v) {
+        v.erase(std::unique(v.begin(), v.end()), v.end());
+        return v;
+    };
+    EXPECT_EQ(distinct(run(/*passData=*/true)), distinct(run(/*passData=*/false)));
 }
 
 // NOLINTEND(readability-magic-numbers)

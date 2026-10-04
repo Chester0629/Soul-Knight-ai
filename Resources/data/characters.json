@@ -15,7 +15,28 @@
     "atk": 4,
     "skill_cd": 10,
     "in_skill_time": 5,
-    "fire_rate": 0
+    "fire_rate": 0,
+    "hurtbox": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.7
+      ],
+      "trigger": true
+    },
+    "collider": {
+      "shape": "circle",
+      "radius": 0.4,
+      "offset": [
+        0.0,
+        0.5
+      ],
+      "trigger": false
+    }
   },
   "roster": [
     {
@@ -35,7 +56,28 @@
       "atk": 4,
       "skill_cd": 10,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      }
     },
     {
       "id": "c02",
@@ -54,7 +96,28 @@
       "atk": 5,
       "skill_cd": 2.5,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      }
     },
     {
       "id": "c03",
@@ -74,6 +137,27 @@
       "skill_cd": 6,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "thunder": [
           "thunder"
@@ -101,6 +185,27 @@
       "skill_cd": 11,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "sword_obj": [
           "sword_2_5_assassin"
@@ -125,6 +230,27 @@
       "skill_cd": 6,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "bottle_objs": [
           "bullet_bottle_0",
@@ -152,6 +278,27 @@
       "skill_cd": 12,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "battery": [
           "battery"
@@ -176,6 +323,27 @@
       "skill_cd": 8,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "bullet_bat": [
           "bullet_bat"
@@ -203,7 +371,28 @@
       "atk": 4,
       "skill_cd": 12,
       "in_skill_time": 5,
-      "fire_rate": 0
+      "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      }
     },
     {
       "id": "c09",
@@ -223,6 +412,27 @@
       "skill_cd": 6,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "skill_arrow": [
           "bullet_c09"
@@ -250,6 +460,27 @@
       "skill_cd": 12,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"
@@ -277,6 +508,27 @@
       "skill_cd": 14,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "skill_obj": [
           "Holy_light_c11"
@@ -304,6 +556,27 @@
       "skill_cd": 2.5,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "skill_obj1": [
           "wolf1"
@@ -338,6 +611,27 @@
       "skill_cd": 12,
       "in_skill_time": 5,
       "fire_rate": 0,
+      "hurtbox": {
+        "shape": "box",
+        "size": [
+          0.5,
+          0.5
+        ],
+        "offset": [
+          0.0,
+          0.7
+        ],
+        "trigger": true
+      },
+      "collider": {
+        "shape": "circle",
+        "radius": 0.4,
+        "offset": [
+          0.0,
+          0.5
+        ],
+        "trigger": false
+      },
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"

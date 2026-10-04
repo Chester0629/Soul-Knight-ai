@@ -5,7 +5,7 @@
 > **狀態詞彙**（兩欄分開記）：
 > 功能欄：`未開始 / 進行中 / 功能完成`。驗收欄：`未驗收 / 驗收完成 / 驗收完成（有取捨）`。
 > 「功能完成」＝接線可玩；「驗收完成」＝§1 證據齊全且 Codex 通過。
-> 版本：v1.32（2026-10-04；R26 通過 P3.3.c，小版號 +1）
+> 版本：v1.33（2026-10-04；P2.14 人物比例與碰撞框（使用者回報人物過小），待 Codex R27）
 
 ---
 
@@ -80,6 +80,7 @@
 - boss chests：chest_boss01 level 2 weapon_077；chest_boss13 weapon_175；無 chest_boss05/06/11/12。
 - pickups：coin_0 value 5 speed 20 range 6 frames objects_common_31..34；coin_1 3；coin_2 1；energy value 8 speed 14；_rgcoin.friction 0.9。
 - P1.10（詳 `docs/evidence/p1_10_diff.md`）：`GameObject/ex_orc05.prefab` RoleAttribute.max_hp=50、EGun001.bullet_speed=16（1.07 為 10）；`res/effect/buff_statue_1.prefab` BuffStatue01.speed=12、count=4（1.07 為 24、1）；`res/enemy/1-forest/boss07.prefab` BossAI07.bullet01=bullet_e_24；`rgprefab/bullet/bullet_0.prefab` RGBullet.destroy_time=5；`res/enemy/e_battery01.prefab` EGun008.atk=5。
+- colliders（P2.14）：c01 身體圓 r 0.4 @ (0,0.5)、受擊框 0.5×0.5 @ (0,0.7)；e_slime01 r 0.4 @ (0,0.5)、框 1×1 @ (0,0.5)；boss01 r 0.6 @ (0,1.0)、框 1.2×1.8 @ (0,1.3)；bullet_0 框 0.5×0.4 @ (0.25,0)；e_shark body_scale 1.5。
 - statues：7 座 statue_01..07，item_value 皆 15；底座 objects3_6、光 objects3_7 @ y 0.69375；身體 1→objects3_0、2→objects3_3、3→objects3_2、4→objects3_1、5→objects3_4、6→objects3_5、7→objects3_3 @ y 1.1。
 
 ---
@@ -89,7 +90,7 @@
 | 區塊 | 功能 | 驗收 | 主要 commit | 缺口 |
 |---|---|---|---|---|
 | P1 資料層 | 進行中（P1.1–P1.7、P1.10–P1.12 功能完成） | P1.10 驗收完成（有取捨）；其餘未驗收 | 12c3750 … 本版 | P1.8 內嵌物件、P1.9 未解析掉落物、P1.13 每實例子彈／敵槍表（T-30、T-31） |
-| P2 地圖 | 進行中（P2.1–P2.9 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
+| P2 地圖 | 進行中（P2.1–P2.9、P2.14 功能完成） | 未驗收 | 3eded10 … 本版 | P2.10–P2.13；T-05 加級本體待原碼 |
 | P3 戰鬥忠實度 | 進行中（每擊數學、dash、AI 派發、18 boss brain、P3.1、P3.2、P3.3.a/b/c 功能完成；P3.0 稽核完成待裁決） | P3.2、P3.3.a、P3.3.b、P3.3.c 驗收完成；其餘未驗收 | phase 1–5、本版 | P3.0 裁決、P3.4–P3.9、P3.3.c 效果未移植部分（T-43–T-48） |
 | P4 進度循環 | 進行中（P4.1、P4.6a 功能完成） | 未驗收 | 5c8c4b0、1cfb297 | P4.2–P4.5、P4.6b |
 | P5 大廳 | 未開始 | 未驗收 | — | 全部 |
@@ -134,6 +135,7 @@
 | P2.11 視覺補完 | 外牆裝飾變體門檻、角色影子、P1.8 繪製 | CreateWall、shadow2 | 渲染 | V-S | — | 未開始・未驗收 |
 | P2.12 一般房清場獎勵 | GetRoomReward | P1.9 | GameScene | V-T | T-10 | 未開始・未驗收 |
 | P2.13 CreateMap 對照 | 房間數語意 | game_full.c CreateMap | MapManager | V-R | T-17 | 未開始・未驗收 |
+| P2.14 人物比例與碰撞框 | 使用者回報人物比原版小：地圖與物件畫 2 倍，玩家／敵人／子彈／地上武器卻是 1 倍、boss 1.5 倍。改為一律與地圖同比例，碰撞改讀預製件 | FAITHFUL：人物與敵人圖集 `spritePixelsToUnits: 16`（SpriteAtlasTexture-character01）；c01／e_slime01／e_yeti01／boss01 身體 localScale 1（boss01 的 1.5 只在 shadow／shadow_lock／point_1）；58 種 ex_* 精英與 e_shark 身體 1.5／2.0 由資料 `body_scale` 帶入；每幀 sprite pivot（c01_4 為 0.486,−0.002，底部置中）寫入 sprites.json；碰撞：子物件 `collider` 圓（Body 層，擋牆不擋子彈）＋根物件 IsTrigger 受擊框（子彈打這個），依 Physics2DSettings 碰撞矩陣確認 | `include/game/WorldScale.hpp`（kSpriteScale＝kCellPx/16＝2，全物件共用）、`include/entities/SpriteAnchor.hpp`（腳底對齊 pivot）、`include/sim/BodyGeom.hpp`（單位→px、子彈圓對受擊圓／框）；characters／enemies／bullets.json 的 `collider`／`hurtbox`／`body_scale`；c01 身體圓 r 0.4@(0,0.5)、受擊框 0.5×0.5@(0,0.7)；boss01 r 0.6@(0,1.0)、框 1.2×1.8@(0,1.3)；bullet_0 框 0.5×0.4→內切圓 6.4 px；玩家碰撞半徑 16→12.8 px，門鎖內縮 49→45.8 px | ScaleColliderTest 15 例（縮放常數、四種實體與 bullet_0 碰撞值、e_shark／ex_slime01 body_scale、全英雄全敵人有碰撞、邊界內 0.5 px 命中／外 0.5 px 不中、pivot 腳底在身體中心下 16 px）；tools/tests 8 例；V-S `docs/evidence/scale/`：scale_before／scale_after（騎士 0.8×0.9 格→1.54×1.69 格，原版約 1.6×1.8）、enemies_after、boss_after（雪人 boss） | T-52（子彈框取內切圓且忽略偏移；敵彈無預製件沿用 4 px；e_snowman_temp 無身體碰撞沿用 16 px）| 功能完成・未驗收 |
 
 ### P3 戰鬥忠實度
 | 子階段 | 目標 | 資料來源 | 交付物 | 驗證 | 取捨 | 狀態 |
@@ -277,6 +279,7 @@
 | T-49 | FAITHFUL：C12 RoleSkillEnd（3736–3749）不寫 in_skill；game_full.c FUN_0026b1dc（158490）在召喚時寫 in_skill=1。INFERRED：在 game_typed.c／game_full.c／game.c／game_named.c 只找到 C01/C02/C04/C05/C06/C07/C11 的 RoleSkillEnd 與 C03 DeadChild 會寫 in_skill=false，RGController 各方法皆不寫；故視首次召喚後 in_skill 常駐、之後每次施放為斬擊。未掃描原始 .so 的 `strb [rX,#0x55]`，不能證明原版完全沒有清除 | FAITHFUL＋INFERRED | CharSkillC12、CharSkillAdapters.hpp | 技能只召喚一次 | 實機驗證 |
 | T-50 | C03 DeadChild（943–956）只在 brain 層實作與測試；sim 無英雄死亡／復活鉤子 | NOT WIRED | CharSkillC03 | 召喚物死亡處理 | P4.3 |
 | T-51 | 表現層未移植：UpdateShadowLock 色調（含 C05 色值）、粒子、Animator 觸發、PlayEffect 音效、光環預製件 | NOT PORTED | 各 brain | 視覺／音效 | P6 |
+| T-52 | 碰撞簡化：子彈 BoxCollider2D 取內切圓、忽略 offset；敵人子彈沒有可解析的子彈預製件，沿用 4 px 半徑；e_snowman_temp 預製件沒有身體碰撞子物件，沿用 16 px（validate_data 白名單、載入時 log 一次） | PORT CHOICE | BodyGeom.hpp、GameData 載入、validate_data.py | 子彈命中邊界、該雪人推擠 | P1.13（敵彈預製件）／需完整物理 |
 | T-29 | CreatePart 在 part ≥ 1 時 `Invoke("ShowUpEffect", 0.8f)`（字串表有 ShowUpEffect、無 CreatePart；ShowUpEffect 只播音效 7）；分波本身無延遲。**v1.17 起音效已接線**：第 2 波以後生成後 0.8 s 播 effect 7（GameScene 計時器，用 kShowUpEffectDelayMs） | INFERRED（字串） | WaveScheduler.hpp kShowUpEffectDelayMs、GameScene 分波處 | 音效 | 已接線；字串仍為推論 |
 
 ---
@@ -449,12 +452,15 @@ Codex 在暫存複本重做 R24 刪行：原附件 0 失敗；刪 H1 B2、H3 任
 ### R26 — 2026-10-04 — Codex — 對象 P3.3.c v1.31 @ c908354 — **驗收完成（有取捨 T-39–T-51；C12 近戰沿用 T-36）**
 H7 取 boss 房號 6 後斷言同房開門：原附件 0 失敗、只刪 boss 房開門 1 失敗；§10 行數一致；附件 STATUS OK、ctest 2114。§7 全過（5 不適用）。已驗收切片：P1.10、P3.2、P3.3.a、P3.3.b、P3.3.c、P6.7；架構書 R7 通過。
 
+### 使用者回報 — 2026-10-04 — 人物比原版小
+查證：地圖、寶箱、金幣、販賣機皆畫 2 倍（16 px→32 px），玩家／一般敵人／子彈／地上武器 1 倍、boss 1.5 倍；原版人物圖集同為 16 px/單位且身體縮放 1，故移植版人物只有原版一半（騎士約 0.8×0.9 格，應約 1.6×1.8）。使用者決定先修比例再決定 P3.0 速度。修正為 P2.14（v1.33）。實作過程：agent 一度因用量上限中斷後續跑；其回報的 boss_after.png 實際沒拍到 boss，已改用 440 幀那張（雪人 boss 在畫面中）。
+
 ---
 
 ## 10. 證據附錄（每版最新一次實跑；檔案在 `docs/evidence/<版本>/`，由 `tools/evidence_chain.sh <版本>` 產生；腳本把結尾 `STATUS: OK|FAILED` 與 UTC 時戳寫入 `status.txt`，只有 OK 的附件有效）
 
-v1.31（`docs/evidence/v1.31/`；`head.txt` = 建置時的基底 commit a3773b9，提交後 HEAD 見 git log；各案經 `require_order`／`require_count`／`require` 斷言）：
-- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2114`（P3.3.c：五角 brain 測試 61 例、CharSkillSimTest +15；golden 含在內）；`gate_tests.txt` 5 例。`H7.txt` 實際 12 行（摘錄上限 20 行；前四行為 B1–B4 的開門），依序含 `Level B5 (1-5)` → `BossRoom: room 6 uses r1_boss4` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`（700 幀；腳本從 BossRoom 行取房號，要求同一房號開門）。
+v1.33（`docs/evidence/v1.33/`；`head.txt` = 建置時的基底 commit d8c1c94，提交後 HEAD 見 git log；各案經 `require_order`／`require_count`／`require` 斷言）：
+- 測試報告：`ctest.txt` = `100% tests passed, 0 tests failed out of 2129`（+ScaleColliderTest 15；BuffTriggerTest 一例改比對去重後的血量序列，因子彈半徑 4→6.4 px 提早一個 tick 命中；golden 未變）；`gate_tests.txt` 8 例；資料閘 10 warnings。`H7.txt` 實際 12 行（摘錄上限 20 行；前四行為 B1–B4 的開門），依序含 `Level B5 (1-5)` → `BossRoom: room 6 uses r1_boss4` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`（700 幀；腳本從 BossRoom 行取房號，要求同一房號開門）。
 - 資料閘：`gate.txt` = `GATE: GREEN -- 0 errors, 8 warning(s)`；`gate_tests.txt` = 邊界 unittest（5 例：注入假引用必須報錯、P3.3.c 角色 skill_refs 必填）。
 - H1–H9：`H1.txt` … `H9.txt`、`H2neg.txt`（=1）；截圖 `H5.png`；`status.txt`。H9 = `Buff: Fire applied to 61453 for 2.000000s` → `Buff: Fire ended on 61453`；`H9armor.txt` = `Buff: Armor applied to 61453 for 6.000000s` → `Buff: Armor ended on 61453`；`H10.txt`（40 行）= `Buff: Fire applied to <id>` … `Buff: Fire ended on <id>`（腳本斷言 ended）；`H12_<c>.txt` 九角：c03／c04／c07／c08／c10／c13 為 `activated` → `ended`（c07 另有 `effect bat_swarm n=6`）；c05 `effect bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)`；c11 `effect holy_light`（14 s 冷卻內第二次按鍵無效）；c12 `effect wolf_summon n=2 NOT_PORTED(T-48)` 後第二次為 `effect atk_cut dmg=5`；`H11.txt`（40 行）本次 = `sfx fx_gun_1.wav` x23、`sfx enermy_die3.wav` x15、`bgm bgm_5Low.ogg` x1、`sfx fx_door.wav` x1（本次無 `fx_hit.wav`）。各音效次數隨實跑時序浮動（v1.29 死亡 13／命中 1、v1.30 死亡 12／命中 2），腳本只斷言 BGM 先於開火、死亡音至少 1 次。關鍵事件與 v1.4 相同（H7 摘錄上限 20 行（v1.29 起；v1.16–v1.28 為 12 行），前面多出前幾層的 `TransferGate: open` 四行）：H1 `hero c12 on floor 0` → `Level B1 (1-1)` → `Floor 0 CLEARED` → `floor 1` → `Level B2`；H2 `TransferGate: open in room 4` → `entered -> next floor` → `hero c01 on floor 1`；H3 `part spawned 9 (15 pending)` → `level 3 points 25 -> 24 planned, wave size 9` → `StartRoom -> Active` → `9 (6 pending)` → `6 (0 pending)` → `room 1 cleared`；H4 `Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)` …；H5 `Player died on floor 0 -> EndScene` → `EndScene: game over at 1-1`；H6 `bought health_pot_big for 10`；H7 `BossRoom: room 6 uses r1_boss4 (21x21, 27 objects)` → `Boss defeated!` → `Chest: boss chest chest_boss13` → `TransferGate: open in room 6`；H8 `Statue: worshipped statue_05 (Elf) -> statue_index 5`。
 - V-S r2_boss3：`r2boss3_seed.txt`（含 `SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-2624,1312)`）、`r2_boss3.png`（zoom 1.5 局部）、`r2boss3_full.txt`（含 `SK_ZOOM override 0.6`）、`r2_boss3_full.png`（整房）。對照 boss_rooms.json r2_boss3 21×21：box03 ×16 = 四角 2×2 叢（(3–4,2–3)、(3–4,18–19)、(16–17,2–3)、(16–17,18–19)）→ 截圖四角各見 2×2 箱體；obj22_stone ×4 與 rail ×4（y=0）未繪製＝P1.8；dropped_outside 4（rail y=21）＝T-28；boss 在房中央、門在下與右。**更正（v1.4 起）**：v1.3 的 `r2_boss3.png` 拍到的是起始房（當時 `SK_ROOM_TELEPORT` 對 level-0 房靜默跳過）。

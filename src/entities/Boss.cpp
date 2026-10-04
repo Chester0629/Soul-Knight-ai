@@ -9,9 +9,8 @@
 namespace Game {
 
 namespace {
-constexpr float kBossRadius = 28.0F;
+constexpr float kBossRadius = 28.0F; // placeholder GetCollider() radius until data is installed
 constexpr float kBossZIndex = 6.0F;
-constexpr float kBossScale = 1.5F;
 constexpr int kBossFrames = 6;
 
 std::vector<std::string> BossFrames(const std::string &resourceRoot) {
@@ -43,7 +42,11 @@ Boss::Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
     SetDrawable(m_Anim);
     SetZIndex(kBossZIndex);
     m_Transform.translation = spawnPos;
-    m_Transform.scale = glm::vec2(kBossScale, kBossScale);
+    // SCALE: bosses draw at Scale::kSpriteScale like everything else (FAITHFUL: boss01's
+    // img/body is localScale 1; the old 1.5 here belongs to shadow/shadow_lock/point_1
+    // only). A boss prefab's own body scale arrives with the data anchor (body_scale).
+    m_Anchor.bodyRadiusPx = kBossRadius;
+    SyncSprite();
 }
 
 glm::vec2 Boss::Think(float dtMs, glm::vec2 playerPos, bool &outShoot,
@@ -66,7 +69,7 @@ void Boss::TakeDamage(int dmg) {
 }
 
 Util::Collider Boss::GetCollider() const {
-    return Util::Collider::MakeCircle(m_Transform.translation, kBossRadius);
+    return Util::Collider::MakeCircle(m_Transform.translation, m_Anchor.bodyRadiusPx);
 }
 
 } // namespace Game

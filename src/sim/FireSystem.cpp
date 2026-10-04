@@ -15,6 +15,7 @@ BulletState MakeBullet(const FireIntent &in, glm::vec2 dir, std::uint32_t &nextI
     b.lifeMs = in.lifeMs;
     b.damage = in.damage;
     b.camp = in.camp;
+    b.radiusPx = in.radiusPx;
     b.repel = in.repel;
     b.critical = in.critical;
     b.canThrough = in.canThrough;

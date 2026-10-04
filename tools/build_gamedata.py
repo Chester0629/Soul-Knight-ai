@@ -297,7 +297,8 @@ def build_character_roster():
         stats = _prefab_role_attr(text)
         if stats:
             # name: FAITHFUL @ i2 Character<N>_name_skin0 (English); id if unknown.
-            entry = {"id": cid, "name": names.get(int(cid[1:]), cid), **stats}
+            entry = {"id": cid, "name": names.get(int(cid[1:]), cid), **stats,
+                     **prefab_geometry(f)}
             refs, ref_paths = _controller_skill_refs(text, idx)
             if refs:
                 entry["skill_refs"] = refs
@@ -451,6 +452,18 @@ def build_sprite_manifest():
         if out_states:
             manifest[pid] = {"controller": base, "default": default,
                              "sample_rate": sample_rate, "states": out_states}
+            # FAITHFUL @ rgtexture/**/<frame>.asset m_Pivot: where the sprite's anchor
+            # (the Unity transform origin, i.e. the FEET for characters) sits inside
+            # the frame rect, as fractions from the bottom-left. Per frame, because
+            # a sprite's pivot is a property of the sprite (trim rects differ).
+            piv = _sprite_pivots()
+            frame_piv = {}
+            for frames in out_states.values():
+                for png in frames:
+                    if png not in frame_piv and png[:-4] in piv:
+                        frame_piv[png] = list(piv[png[:-4]])
+            if frame_piv:
+                manifest[pid]["pivots"] = frame_piv
         else:
             skipped.append(pid)
     print(f"  sprites: {len(manifest)} entities, {len(skipped)} skipped "
@@ -458,6 +471,220 @@ def build_sprite_manifest():
     if skipped:
         print(f"    skipped: {skipped[:12]}{' ...' if len(skipped) > 12 else ''}")
     return manifest
+
+
+# ---------------------------------------------------------------------------
+# PREFAB GEOMETRY (scale/collider pass). FAITHFUL @ the AssetRipper prefabs:
+#   * collider -- the PHYSICAL body: the CircleCollider2D on the root's direct child
+#     GameObject named "collider" (layer Body: collides with walls/doors/obstacles/
+#     other bodies, NOT with bullets per Physics2DSettings). Drives movement blocking.
+#   * hurtbox  -- the collider on the ROOT GameObject (the one carrying RoleAttribute /
+#     the controller; always IsTrigger, layer Body_P/Body_E): what bullets hit.
+#   * body_scale -- lossy localScale of the sprite-bearing GameObject root/img/body
+#     (only emitted when != 1: e_shark 1.5, the ex_* elites 1.5/2.0). Every other
+#     hero/enemy/boss body is 1 (boss01's 1.5 is only on shadow/shadow_lock/point_1).
+# All lengths are in Unity UNITS (1 unit = 1 map cell = kCellPx screen-world px);
+# a collider's size/radius/offset are already multiplied by its GameObject's lossy
+# scale, exactly as Unity's physics does. `offset` is relative to the root origin
+# (the feet), so Position() = body-collider centre = feet + collider.offset.
+# ---------------------------------------------------------------------------
+_TYPED_DOC_RE2 = re.compile(r"(?m)^--- !u!(\d+) &(\d+)\s*\n")
+_VEC2_RE = r"\{x: ([-0-9.eE+]+), y: ([-0-9.eE+]+)"
+
+
+def _vec2(body: str, key: str):
+    m = re.search(rf"{key}: " + _VEC2_RE, body)
+    return (float(m.group(1)), float(m.group(2))) if m else None
+
+
+def _parse_prefab(text: str):
+    """-> (docs{fid:(classId, body)}, names{go:str}, scale{go:(x,y)}, father{go:go|None},
+    root_go). Old-format (Unity 2017) prefab: one root Transform with m_Father 0."""
+    heads = list(_TYPED_DOC_RE2.finditer(text))
+    docs = {}
+    for i, h in enumerate(heads):
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        docs[h.group(2)] = (int(h.group(1)), text[h.end():end])
+    names, tr_go = {}, {}
+    for fid, (cid, b) in docs.items():
+        if cid == 1:
+            m = re.search(r"m_Name: (.*)", b)
+            names[fid] = m.group(1).strip() if m else ""
+        elif cid == 4:
+            m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+            if m:
+                tr_go[fid] = m.group(1)
+    scale, father = {}, {}
+    for fid, (cid, b) in docs.items():
+        if cid != 4 or fid not in tr_go:
+            continue
+        g = tr_go[fid]
+        scale[g] = _vec2(b, "m_LocalScale") or (1.0, 1.0)
+        m = re.search(r"m_Father: \{fileID: (\d+)\}", b)
+        father[g] = tr_go.get(m.group(1)) if m else None
+    roots = [g for g, f in father.items() if f is None]
+    return docs, names, scale, father, (roots[0] if roots else None)
+
+
+def _lossy(go, scale, father):
+    sx = sy = 1.0
+    while go is not None:
+        s = scale.get(go, (1.0, 1.0))
+        sx *= s[0]
+        sy *= s[1]
+        go = father.get(go)
+    return sx, sy
+
+
+def _collider_json(cid: int, body: str, lossy):
+    """Circle(58)/Box(61) collider -> {shape, radius|size, offset, trigger} in units
+    (lossy-scaled), or None for any other collider class (capsule/polygon/edge)."""
+    sx, sy = lossy
+    off = _vec2(body, "m_Offset") or (0.0, 0.0)
+    trig = re.search(r"m_IsTrigger: (\d)", body)
+    out = {}
+    if cid == 58:
+        m = re.search(r"m_Radius: ([-0-9.eE+]+)", body)
+        if not m:
+            return None
+        out["shape"] = "circle"
+        out["radius"] = round(float(m.group(1)) * max(abs(sx), abs(sy)), 4)
+    elif cid == 61:
+        size = _vec2(body, "m_Size")
+        if size is None:
+            return None
+        out["shape"] = "box"
+        out["size"] = [round(size[0] * abs(sx), 4), round(size[1] * abs(sy), 4)]
+    else:
+        return None
+    out["offset"] = [round(off[0] * sx, 4), round(off[1] * sy, 4)]
+    out["trigger"] = bool(trig and trig.group(1) == "1")
+    return out
+
+
+def _enabled(body: str) -> bool:
+    m = re.search(r"m_Enabled: (\d)", body)
+    return not m or m.group(1) == "1"
+
+
+def prefab_geometry(path: Path) -> dict:
+    """{collider?, hurtbox?, body_scale?} of a hero/enemy/boss prefab (see above)."""
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    docs, names, scale, father, root = _parse_prefab(text)
+    if root is None:
+        return {}
+    out = {}
+    for fid, (cid, b) in docs.items():  # doc order == file order (dict keeps insertion)
+        if cid not in (58, 61) or not _enabled(b):
+            continue
+        m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+        go = m.group(1) if m else None
+        if go is None:
+            continue
+        key = None
+        if go == root:
+            key = "hurtbox"
+        elif father.get(go) == root and names.get(go) == "collider":
+            key = "collider"
+        if key is None or key in out:
+            continue
+        cj = _collider_json(cid, b, _lossy(go, scale, father))
+        if cj is not None:
+            out[key] = cj
+    # sprite-bearing GameObject: root/img/body (else root/img); lossy |scale|.
+    body_go = None
+    for g, n in names.items():
+        f = father.get(g)
+        if n == "body" and f is not None and names.get(f) == "img" and father.get(f) == root:
+            body_go = g
+            break
+    if body_go is None:
+        for g, n in names.items():
+            if n == "img" and father.get(g) == root:
+                body_go = g
+                break
+    if body_go is not None:
+        sx, sy = _lossy(body_go, scale, father)
+        s = round(abs(sx), 4)
+        if abs(abs(sx) - abs(sy)) < 1e-3 and abs(s - 1.0) > 1e-3:
+            out["body_scale"] = s
+    return out
+
+
+def bullet_collider(path: Path):
+    """First enabled Circle/Box collider (file order) on a bullet prefab, in units
+    (lossy-scaled), or None (no collider / capsule / polygon only)."""
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    docs, names, scale, father, root = _parse_prefab(text)
+    for fid, (cid, b) in docs.items():
+        if cid not in (58, 61) or not _enabled(b):
+            continue
+        m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+        if m is None:
+            continue
+        cj = _collider_json(cid, b, _lossy(m.group(1), scale, father))
+        if cj is not None:
+            return cj
+    return None
+
+
+def _entity_prefab_index() -> dict:
+    """prefab stem -> Path for every hero (res/player/c##), enemy/boss (res/enemy/**)
+    and ex_orc05 (GameObject/, outside res/enemy/**)."""
+    idx = {}
+    for p in sorted(EP_ASSETS.glob("res/enemy/**/*.prefab")):
+        idx.setdefault(p.stem, p)
+    for p in sorted(EP_ASSETS.glob("res/player/c[0-9]*.prefab")):
+        if re.fullmatch(r"c\d+", p.stem):
+            idx.setdefault(p.stem, p)
+    extra = EP_ASSETS / "GameObject" / "ex_orc05.prefab"
+    if extra.is_file():
+        idx.setdefault("ex_orc05", extra)
+    return idx
+
+
+def attach_enemy_geometry(rows: list) -> list:
+    """Add collider/hurtbox/body_scale to every enemies.json row (in place)."""
+    if not EP_ASSETS.is_dir():
+        return rows
+    idx = _entity_prefab_index()
+    n_col = n_hurt = n_scaled = 0
+    missing = []
+    for r in rows:
+        p = idx.get(r["id"])
+        if p is None:
+            missing.append(r["id"])
+            continue
+        g = prefab_geometry(p)
+        r.update(g)
+        n_col += "collider" in g
+        n_hurt += "hurtbox" in g
+        n_scaled += "body_scale" in g
+    print(f"  enemy geometry: {n_col}/{len(rows)} collider, {n_hurt}/{len(rows)} hurtbox, "
+          f"{n_scaled} body_scale!=1" + (f", no prefab: {missing}" if missing else ""))
+    return rows
+
+
+_SPRITE_PIVOT_CACHE = None
+
+
+def _sprite_pivots() -> dict:
+    """png stem -> (pivot_x, pivot_y) fractions of the sprite rect (Unity origin at
+    the rect's bottom-left, y up), read from every rgtexture/**/<stem>.asset."""
+    global _SPRITE_PIVOT_CACHE
+    if _SPRITE_PIVOT_CACHE is not None:
+        return _SPRITE_PIVOT_CACHE
+    out = {}
+    for p in sorted((EP_ASSETS / "rgtexture").rglob("*.asset")):
+        try:
+            head = p.read_text(encoding="utf-8", errors="ignore")[:1500]
+        except OSError:
+            continue
+        m = re.search(r"m_Pivot: \{x: ([-0-9.eE+]+), y: ([-0-9.eE+]+)\}", head)
+        if m:
+            out.setdefault(p.stem, (round(float(m.group(1)), 4), round(float(m.group(2)), 4)))
+    _SPRITE_PIVOT_CACHE = out
+    return out
 
 
 CSV_WEAPONS = ROOT.parent / "_reverse" / "analysis" / "data_tables" / "weapons.csv"
@@ -756,6 +983,9 @@ def build_bullet_table(bullet_groups, idx: Index):
             v = _field(block, k)
             if v is not None:
                 rec[k] = v
+        bc = bullet_collider(p)
+        if bc is not None:
+            rec["collider"] = bc
         out.append(rec)
         n_class_real += 1
     family_guids = [g for g in (_class_guid(c) for c in _RGBULLET_FAMILY) if g]
@@ -772,6 +1002,9 @@ def build_bullet_table(bullet_groups, idx: Index):
             v = _field(block, k)
             if v is not None:
                 rec[k] = v
+        bc = bullet_collider(f)
+        if bc is not None:
+            rec["collider"] = bc
         out.append(rec)
         n_real += 1
     print(f"  bullets: {n_class_real}/{len(bullet_groups)} 1.07 class rows resolved to a "
@@ -1918,6 +2151,7 @@ def main() -> int:
     # checkout without the sibling _reverse/ dir), so the pipeline still runs.
     species = build_enemy_species_table()
     if species:
+        attach_enemy_geometry(species)
         counts["enemies"] = write("enemies", species)
     else:
         print("FALLBACK: enemies.csv missing -- enemies.json degrades to the 1.07 per-AI-class table (16)")

@@ -88,6 +88,10 @@ private:
     Util::Renderer m_Renderer;
 
     std::shared_ptr<Player> m_Player;
+    /// The hero's physical body radius (px) for wall/door blocking: the c##.prefab
+    /// "collider" child CircleCollider2D radius * kCellPx (data). 16 px placeholder only
+    /// while the hero has no collider data (logged once at load).
+    float m_PlayerRadiusPx = 16.0F;
     /// One Enemy per spawned enemy across the whole floor.
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
     /// Bosses on the floor (one, in the room farthest from the start).

@@ -611,11 +611,12 @@ void Simulation::MoveControllers() {
         glm::vec2 pos = e->State().pos;
         // Axis-separated wall slide (same shape as the GameScene player pattern).
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
-        if (!m_World->Blocks(tryX, kEnemyBodyRadius)) {
+        const float bodyR = e->State().geom.bodyRadiusPx; // prefab body circle (data)
+        if (!m_World->Blocks(tryX, bodyR)) {
             pos.x = tryX.x;
         }
         const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
-        if (!m_World->Blocks(tryY, kEnemyBodyRadius)) {
+        if (!m_World->Blocks(tryY, bodyR)) {
             pos.y = tryY.y;
         }
         e->MutableState().pos = pos;
@@ -635,11 +636,12 @@ void Simulation::MoveControllers() {
         const glm::vec2 vel = moveDir * BossController::kSpeed * m_Boss->State().buffSpeedMul;
         glm::vec2 pos = m_Boss->State().pos;
         const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
-        if (!m_World->Blocks(tryX, kBossBodyRadius)) {
+        const float bodyR = m_Boss->State().geom.bodyRadiusPx; // prefab body circle (data)
+        if (!m_World->Blocks(tryX, bodyR)) {
             pos.x = tryX.x;
         }
         const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
-        if (!m_World->Blocks(tryY, kBossBodyRadius)) {
+        if (!m_World->Blocks(tryY, bodyR)) {
             pos.y = tryY.y;
         }
         m_Boss->MutableState().pos = pos;
@@ -659,12 +661,13 @@ void Simulation::IntegrateBullets() {
         }
         b.pos += b.vel * kFixedStepSeconds;
         b.lifeMs -= kFixedStepMs;
-        if (!b.canThrough && m_World->Blocks(b.pos, kBulletRadius)) {
+        const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
+        if (!b.canThrough && m_World->Blocks(b.pos, bulletR)) {
             b.active = false;
             // Phase 3: a consumed bullet damages a destructible design-room box at
             // the impact point (no-op for walls / under NullWorldCollision, so the
             // combat hash is unchanged). Scene-side mutation; sim RNG untouched.
-            m_World->DamageObstacle(b.pos, kBulletRadius);
+            m_World->DamageObstacle(b.pos, bulletR);
         }
     }
 }
@@ -678,6 +681,7 @@ void Simulation::ResolveHits() {
         if (!b.active) {
             continue;
         }
+        const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
         if (b.camp == 0) {
             // Player bullet -> enemies, then boss. One target per bullet per step.
             // The enemy gate tests the `dead` FLAG (set later in Cull), not stats.IsDead():
@@ -686,8 +690,9 @@ void Simulation::ResolveHits() {
             bool consumed = false;
             for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
                 auto &e = m_Enemies[ei];
-                if (e->State().dead || !CirclesOverlap(b.pos, kBulletRadius, e->State().pos,
-                                                       kEnemyBodyRadius)) {
+                // The bullet circle hits the target's HURTBOX (prefab root trigger collider).
+                if (e->State().dead ||
+                    !e->State().geom.HurtOverlaps(e->State().pos, b.pos, bulletR)) {
                     continue;
                 }
                 Game::Combat::AttackerInput in;
@@ -717,7 +722,7 @@ void Simulation::ResolveHits() {
                 break;
             }
             if (!consumed && m_Boss != nullptr && !m_Boss->State().dead &&
-                CirclesOverlap(b.pos, kBulletRadius, m_Boss->State().pos, kBossBodyRadius)) {
+                m_Boss->State().geom.HurtOverlaps(m_Boss->State().pos, b.pos, bulletR)) {
                 Game::Combat::AttackerInput in;
                 in.baseDamage = b.damage;
                 in.critical = b.critical;
@@ -745,7 +750,7 @@ void Simulation::ResolveHits() {
         } else {
             // Enemy bullet -> player.
             if (m_Input.playerAlive &&
-                CirclesOverlap(b.pos, kBulletRadius, m_Input.playerPos, kPlayerBodyRadius)) {
+                m_PlayerGeom.HurtOverlaps(m_Input.playerPos, b.pos, bulletR)) {
                 Game::Combat::AttackerInput in;
                 in.baseDamage = b.damage;
                 in.critical = b.critical;
@@ -863,6 +868,9 @@ int Simulation::Advance(float dtMs, const WorldInputs &in) {
 void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId, int seed) {
     std::unique_ptr<EnemyController> ec = BrainFactory::MakeEnemyPtr(def, spawn, seed);
     ec->MutableState().roomId = roomId;
+    // COLLIDER DATA: body circle + hurtbox from the species prefab (placeholder
+    // kEnemyBodyRadius only for a def with no collider data, e.g. a bare EnemyDef{}).
+    ec->MutableState().geom = MakeBodyGeom(def.body, def.hurtbox, kEnemyBodyRadius);
     // ENEMY RE-KEY: FAITHFUL @ enemies.csv -- seed the real per-species maxHp when
     // the def carries one; kSliceEnemyHp is only the fallback for a def with no
     // species data (e.g. a default-constructed test EnemyDef{}), so old tests that
@@ -874,11 +882,14 @@ void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId
     m_Enemies.push_back(std::move(ec));
 }
 void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int roomId, int seed,
-                         const std::string &bossId) {
+                         const std::string &bossId, const Game::EnemyDef *def) {
     // (d) dispatch: BrainFactory routes bossId -> its brain adapter. The default
     // "BossAI01" keeps the legacy path byte-identical.
     m_Boss = BrainFactory::MakeBossPtr(bossId, baseShootCd, spawn, maxHp, seed);
     m_Boss->MutableState().roomId = roomId;
+    m_Boss->MutableState().geom =
+        def != nullptr ? MakeBodyGeom(def->body, def->hurtbox, kBossBodyRadius)
+                       : BodyGeom::Fallback(kBossBodyRadius);
     m_Boss->Activate(m_Scheduler, m_FireIntents); // asleep until WakeByRoom().
 }
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,

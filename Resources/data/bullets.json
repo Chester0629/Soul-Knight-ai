@@ -9,7 +9,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8125,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "Bullet02",
@@ -21,7 +33,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "Bullet02Percentage",
@@ -38,7 +62,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.1,
+        1.2
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "Bullet04",
@@ -50,7 +86,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "Bullet05",
@@ -62,7 +110,19 @@
     "rotate_angle": 570,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletBat",
@@ -79,7 +139,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletBoom",
@@ -90,7 +162,19 @@
     "id": "BulletBottle",
     "_source": "1.7.10",
     "_prefab": "bullet_bottle_0",
-    "camp": 0
+    "camp": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletBuleLight",
@@ -110,7 +194,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletEPoly",
@@ -139,7 +235,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletGas",
@@ -167,7 +275,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 4.0,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletLaterFixedTarget",
@@ -179,7 +296,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        -0.1,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletParabola",
@@ -191,7 +320,16 @@
     "rotate_angle": 17,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.5,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "BulletPolymerization",
@@ -209,7 +347,16 @@
   {
     "id": "BulletReboundPercentage",
     "_source": "1.7.10",
-    "_prefab": "bullet_23_rebound"
+    "_prefab": "bullet_23_rebound",
+    "collider": {
+      "shape": "circle",
+      "radius": 0.5,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "BulletRoundabout",
@@ -221,7 +368,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.7425,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "BulletThunder",
@@ -248,7 +404,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_26",
@@ -259,7 +427,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_4",
@@ -270,7 +450,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8125,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_53",
@@ -281,7 +473,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_68",
@@ -292,7 +496,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_69",
@@ -303,7 +519,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_7",
@@ -314,7 +542,16 @@
     "rotate_angle": 30,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 1.005,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_70",
@@ -325,7 +562,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_71",
@@ -336,7 +585,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_8",
@@ -347,7 +608,19 @@
     "rotate_angle": 570,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_82",
@@ -358,7 +631,19 @@
     "rotate_angle": 23,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6225,
+        0.876
+      ],
+      "offset": [
+        0.7441,
+        -0.0016
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_83",
@@ -369,7 +654,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0804,
+        0.3145
+      ],
+      "offset": [
+        0.9451,
+        -0.0013
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "_bullet_9",
@@ -380,7 +677,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_0",
@@ -391,7 +700,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.4
+      ],
+      "offset": [
+        0.25,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_1",
@@ -402,7 +723,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_11",
@@ -413,7 +746,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_12",
@@ -424,7 +769,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_13",
@@ -435,7 +792,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_14",
@@ -446,7 +815,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_15",
@@ -457,7 +838,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_16",
@@ -468,7 +861,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_17",
@@ -479,7 +884,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_18",
@@ -490,7 +907,19 @@
     "rotate_angle": 8,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_19",
@@ -501,7 +930,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_2",
@@ -513,6 +954,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -531,7 +984,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_200",
@@ -542,7 +1007,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_201",
@@ -553,7 +1030,19 @@
     "rotate_angle": 22,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_202",
@@ -564,7 +1053,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_202_lion",
@@ -575,7 +1076,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_21",
@@ -586,7 +1099,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_22",
@@ -619,7 +1144,16 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.5,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "bullet_24",
@@ -641,7 +1175,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_26",
@@ -652,7 +1198,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_27",
@@ -663,7 +1221,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_28",
@@ -674,7 +1244,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_29",
@@ -685,7 +1267,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_2_2",
@@ -697,6 +1291,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -716,6 +1322,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -734,7 +1352,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_31",
@@ -745,7 +1375,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_32",
@@ -757,6 +1399,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "electric",
       "buff_prefab": "buff_ele",
@@ -775,7 +1429,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_34",
@@ -786,7 +1452,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.2
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_35",
@@ -876,7 +1554,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_3_2",
@@ -888,6 +1578,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -907,6 +1609,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "fire",
       "buff_prefab": "buff_fire",
@@ -925,7 +1639,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_45",
@@ -936,7 +1662,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_46",
@@ -947,7 +1685,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_47",
@@ -958,7 +1708,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.45,
+        0.45
+      ],
+      "offset": [
+        0.6,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_49",
@@ -980,7 +1742,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_50",
@@ -991,7 +1765,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_50_1",
@@ -1002,7 +1788,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_51",
@@ -1014,6 +1812,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -1033,6 +1843,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "fire",
       "buff_prefab": "buff_fire",
@@ -1051,7 +1873,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_54",
@@ -1062,7 +1896,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_55",
@@ -1073,7 +1919,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_56",
@@ -1084,7 +1942,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_56_3",
@@ -1095,7 +1965,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_57",
@@ -1106,7 +1988,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_58",
@@ -1117,7 +2011,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_59",
@@ -1128,7 +2034,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_6",
@@ -1140,6 +2058,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -1158,7 +2088,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_61",
@@ -1169,7 +2111,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_62",
@@ -1180,7 +2134,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_63",
@@ -1202,7 +2168,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_65",
@@ -1213,7 +2191,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_66",
@@ -1224,7 +2214,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_67",
@@ -1235,7 +2237,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_68",
@@ -1246,7 +2260,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_69",
@@ -1257,7 +2283,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.1,
+        1.2
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_6_yellow",
@@ -1268,7 +2306,19 @@
     "rotate_angle": 15,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_7",
@@ -1279,7 +2329,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.5,
+        0.5
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_70",
@@ -1290,7 +2352,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_71",
@@ -1312,7 +2386,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        -0.1,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_73",
@@ -1323,7 +2409,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_74",
@@ -1334,7 +2432,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_75",
@@ -1345,7 +2455,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_76",
@@ -1356,7 +2478,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        -0.1,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_78",
@@ -1367,7 +2501,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.2,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_79",
@@ -1378,7 +2524,19 @@
     "rotate_angle": 15,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.1375,
+        1.1375
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_8",
@@ -1389,7 +2547,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.5,
+        0.5
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_80",
@@ -1400,7 +2570,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.7425,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_81",
@@ -1412,6 +2591,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.3
+      ],
+      "offset": [
+        0.35,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -1430,7 +2621,16 @@
     "rotate_angle": 30,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.375,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_83",
@@ -1442,6 +2642,15 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.5938,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "electric",
       "buff_prefab": "buff_ele",
@@ -1460,7 +2669,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 4.0,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_84_temp",
@@ -1471,7 +2689,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 4.0,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_85",
@@ -1482,7 +2709,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_86",
@@ -1493,7 +2732,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_88",
@@ -1504,7 +2755,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.3,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_89",
@@ -1515,7 +2778,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_90",
@@ -1526,7 +2801,16 @@
     "rotate_angle": 17,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.5,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "bullet_91",
@@ -1537,7 +2821,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.1275,
+        0.5
+      ],
+      "offset": [
+        0.3406,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "bullet_92",
@@ -1559,7 +2855,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.7,
+        0.3
+      ],
+      "offset": [
+        0.27,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_94",
@@ -1582,6 +2890,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.375,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -1600,7 +2920,19 @@
     "rotate_angle": 24,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_boss_03_atk3",
@@ -1644,7 +2976,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_bottle_1",
@@ -1655,7 +2999,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_bottle_2",
@@ -1666,7 +3022,19 @@
     "rotate_angle": -17,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_bottle_3",
@@ -1677,7 +3045,19 @@
     "rotate_angle": -17,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_c09",
@@ -1699,7 +3079,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_10",
@@ -1710,7 +3102,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_11",
@@ -1721,7 +3125,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_12",
@@ -1754,7 +3170,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        3.2,
+        1.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_16",
@@ -1765,7 +3193,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_17",
@@ -1776,7 +3216,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_18",
@@ -1809,7 +3261,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_22",
@@ -1820,7 +3284,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_23",
@@ -1831,7 +3307,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_24",
@@ -1842,7 +3330,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_25",
@@ -1853,7 +3353,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_26",
@@ -1864,7 +3376,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        -0.1,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_27",
@@ -1875,7 +3399,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_28",
@@ -1886,7 +3422,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_29",
@@ -1897,7 +3445,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        -0.5,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_3",
@@ -1908,7 +3468,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.5,
+        0.75
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_30",
@@ -1919,7 +3491,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_31",
@@ -1930,7 +3514,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_32",
@@ -1941,7 +3537,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_33",
@@ -1952,7 +3560,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_34",
@@ -1963,7 +3583,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_35",
@@ -1974,7 +3606,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_36",
@@ -1985,7 +3629,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_37",
@@ -1997,6 +3653,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.3,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -2015,7 +3683,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_39",
@@ -2026,7 +3706,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_4",
@@ -2037,7 +3729,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_40",
@@ -2048,7 +3752,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.6,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_41",
@@ -2060,6 +3776,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -2078,7 +3806,19 @@
     "rotate_angle": 5,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_42_less",
@@ -2089,7 +3829,19 @@
     "rotate_angle": 5,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_43",
@@ -2100,7 +3852,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_44",
@@ -2111,7 +3875,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_45",
@@ -2122,7 +3898,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_46",
@@ -2133,7 +3921,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_47",
@@ -2144,7 +3944,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.6,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_49",
@@ -2155,7 +3967,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        -0.1,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_5",
@@ -2166,7 +3990,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_50",
@@ -2177,7 +4013,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.375,
+        1.375
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_51",
@@ -2188,7 +4036,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.5,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_52",
@@ -2199,7 +4059,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.8,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_53",
@@ -2210,7 +4079,16 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "circle",
+      "radius": 0.625,
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": false
+    }
   },
   {
     "id": "bullet_e_54",
@@ -2221,7 +4099,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_6",
@@ -2232,7 +4122,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_7",
@@ -2243,7 +4145,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_9",
@@ -2254,7 +4168,19 @@
     "rotate_angle": 6,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_e_shock",
@@ -2265,7 +4191,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_follow_ice",
@@ -2276,7 +4214,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_follow_ice_e",
@@ -2287,7 +4237,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_nofollow_ice_e",
@@ -2298,7 +4260,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_z_01",
@@ -2310,6 +4284,18 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    },
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -2328,7 +4314,19 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true
+    }
   },
   {
     "id": "bullet_9",
