@@ -12,7 +12,7 @@ using Game::Sim::kFixedStepSeconds;
 
 // P3.3.c C05 (Alchemist) brain. Expected numbers: characters.json (skill_cd 6, bottle_objs
 // has 4 serialized refs, through GameData) and the decompile constants cited at their
-// declarations in CharSkillC05.hpp (DISASM 0x265df4-0x2661e8, typed 1549-1638).
+// declarations in CharSkillC05.hpp (DISASM 0x265df4-0x2661ec, typed 1549-1638).
 
 // NOLINTBEGIN(readability-magic-numbers)
 
@@ -26,6 +26,8 @@ const Game::CharacterDef &Hero() {
     static const Game::CharacterDef fallback{};
     return c != nullptr ? *c : fallback;
 }
+
+int Variants() { return static_cast<int>(Hero().SkillRefCount("bottle_objs")); }
 
 void TickSteps(CharSkillC05 &c, int n) {
     for (int i = 0; i < n; ++i) {
@@ -45,18 +47,18 @@ TEST(CharSkillC05Test, DataRowIsTheAlchemist) {
 TEST(CharSkillC05Test, GateIsSkillReadyAndNotInSkill) {
     CharSkillC05 c(Hero().skillCd);
     EXPECT_TRUE(c.SkillReady());
-    const CharSkillC05::RoleSkillResult r = c.RoleSkill(0, 4, false);
+    const CharSkillC05::RoleSkillResult r = c.RoleSkill(0, Variants(), false);
     EXPECT_TRUE(r.activated);
     // Still on cooldown (RoleSkillEnd restarted it): a second press does nothing.
-    const CharSkillC05::RoleSkillResult again = c.RoleSkill(0, 4, false);
+    const CharSkillC05::RoleSkillResult again = c.RoleSkill(0, Variants(), false);
     EXPECT_FALSE(again.activated);
     EXPECT_EQ(again.bottleCount, 0);
 }
 
 TEST(CharSkillC05Test, TheUltimateIsInstantInSkillNeverObservableAfterTheCall) {
-    // DISASM 0x2661e8: RoleSkillEnd is vcall'd at the tail of the SAME RoleSkill body.
+    // DISASM 0x2661e8-0x2661ec (args, then blx): RoleSkillEnd is vcall'd at the tail of the SAME RoleSkill body.
     CharSkillC05 c(Hero().skillCd);
-    EXPECT_TRUE(c.TryActivateSkill());
+    EXPECT_TRUE(c.TryActivateSkill(Variants()));
     EXPECT_FALSE(c.InSkill());
     EXPECT_FALSE(c.SkillReady());
 }
@@ -65,11 +67,11 @@ TEST(CharSkillC05Test, TheUltimateIsInstantInSkillNeverObservableAfterTheCall) {
 
 TEST(CharSkillC05Test, OneBottleNormallyThreeInAFanWhenStrengthened) {
     CharSkillC05 a(Hero().skillCd);
-    const CharSkillC05::RoleSkillResult n = a.RoleSkill(0, 4, /*skillStrengthen=*/false);
+    const CharSkillC05::RoleSkillResult n = a.RoleSkill(0, Variants(), /*skillStrengthen=*/false);
     EXPECT_EQ(n.bottleCount, 1); // DISASM 0x265df4-0x265e00
     EXPECT_EQ(n.fanOffsetsDeg, (std::vector<float>{0.0F}));
     CharSkillC05 b(Hero().skillCd);
-    const CharSkillC05::RoleSkillResult s = b.RoleSkill(0, 4, /*skillStrengthen=*/true);
+    const CharSkillC05::RoleSkillResult s = b.RoleSkill(0, Variants(), /*skillStrengthen=*/true);
     EXPECT_EQ(s.bottleCount, 3);
     EXPECT_EQ(s.fanOffsetsDeg, (std::vector<float>{-20.0F, 0.0F, 20.0F})); // -20 then += 0x14
     EXPECT_EQ(CharSkillC05::kBottlesNormal, 1);
@@ -77,7 +79,7 @@ TEST(CharSkillC05Test, OneBottleNormallyThreeInAFanWhenStrengthened) {
 }
 
 TEST(CharSkillC05Test, TheBottleVariantFollowsTheCurrentSkinElseElementZero) {
-    const int variants = static_cast<int>(Hero().SkillRefCount("bottle_objs")); // 4
+    const int variants = Variants(); // 4
     CharSkillC05 a(Hero().skillCd);
     EXPECT_EQ(a.RoleSkill(2, variants, false).variantIndex, 2); // bottle_objs[skin 2]
     CharSkillC05 b(Hero().skillCd);
@@ -92,14 +94,14 @@ TEST(CharSkillC05Test, TheBottleVariantFollowsTheCurrentSkinElseElementZero) {
 
 TEST(CharSkillC05Test, CooldownRestartsAtTheCastAndCountsUpEveryFixedStep) {
     CharSkillC05 c(Hero().skillCd);
-    ASSERT_TRUE(c.TryActivateSkill());
+    ASSERT_TRUE(c.TryActivateSkill(Variants()));
     EXPECT_FLOAT_EQ(c.CooldownRemaining(), 6.0F); // ReSetSkillReload: this_skill_time = 0
     TickSteps(c, 150); // 150 * 0.02 s = 3.0 s
     EXPECT_NEAR(c.CooldownRemaining(), 6.0F - 150 * kFixedStepSeconds, 1e-3F); // 3.0
     EXPECT_FALSE(c.SkillReady());
     TickSteps(c, 160); // past 6 s
     EXPECT_TRUE(c.SkillReady());
-    EXPECT_TRUE(c.TryActivateSkill());
+    EXPECT_TRUE(c.TryActivateSkill(Variants()));
 }
 
 TEST(CharSkillC05Test, EndSkillIsUnconditionalAndRestartsTheCooldown) {
@@ -120,7 +122,7 @@ TEST(CharSkillC05Test, NegativeCooldownClampsAndNoRngIsDrawn) {
     a.SetSeed(5);
     b.SetSeed(5);
     for (int i = 0; i < 4; ++i) {
-        a.TryActivateSkill();
+        a.TryActivateSkill(Variants());
         TickSteps(a, 301);
     }
     EXPECT_EQ(a.Rng().Range(0, 1000000), b.Rng().Range(0, 1000000));

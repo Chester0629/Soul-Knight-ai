@@ -1115,6 +1115,22 @@ TEST(CharSkillSimTest, C03AThunderKillIsCreditedToThePlayerAndTheEnemyDies) {
     RunSteps(sim, 19, &evs);
     EXPECT_FALSE(sim.EnemyViews()[0].alive);
     EXPECT_EQ(CountEvent(evs, "death"), 1);
+    // Attribution, not just death: the thunder kill is credited as PlayerSkill.
+    EXPECT_EQ(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::PlayerSkill);
+    EXPECT_EQ(sim.PlayerKillCount(), 1);
+}
+
+TEST(CharSkillSimTest, C03AForcedKillIsNotCreditedToThePlayer) {
+    // Negative companion: the same death through the KillAllHostiles test hook (Forced).
+    Simulation sim(35, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(8), glm::vec2{160.0F, 0.0F}, 0, 1);
+    SetHero(sim, "c03");
+    sim.KillAllHostiles();
+    RunSteps(sim, 2);
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::Forced);
+    EXPECT_NE(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::PlayerSkill);
+    EXPECT_EQ(sim.PlayerKillCount(), 0);
 }
 
 // --- C05 Alchemist: skill_cd 6. The ultimate is instant; the bottle volley is NOT PORTED (T-44) ---
@@ -1272,7 +1288,7 @@ TEST(CharSkillSimTest, C12FirstCastSummonsTwoWolvesThenEveryLaterCastCutsForAtk)
     EXPECT_EQ(CountEvent(evs, "skill_use"), 1);
     EXPECT_EQ(CountEvent(evs, "skill_effect:wolf_summon n=2 NOT_PORTED(T-48)"), 1);
     EXPECT_EQ(EnemyHp(sim, 0), 50); // a summon deals no damage
-    EXPECT_TRUE(sim.PlayerSkill()->InSkill()); // in_skill = 1 and never cleared (T-49)
+    EXPECT_TRUE(sim.PlayerSkill()->InSkill()); // in_skill = 1; no clear site found (INFERRED, T-49)
     EXPECT_NEAR(sim.PlayerStats().skillCdProgress, 0.02F / 2.5F, 1e-4F);
 
     RunSteps(sim, 5); // release; a press inside the cooldown does nothing
@@ -1306,6 +1322,22 @@ TEST(CharSkillSimTest, C12ACutKillIsAttributedToThePlayerCut) {
     for (SimEvent &e : sim.DrainEvents()) { evs.push_back(std::move(e)); }
     EXPECT_FALSE(sim.EnemyViews()[0].alive);
     EXPECT_EQ(CountEvent(evs, "death"), 1);
+    // Attribution, not just death: the AtkCut kill is credited as PlayerCut.
+    EXPECT_EQ(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::PlayerCut);
+    EXPECT_EQ(sim.PlayerKillCount(), 1);
+}
+
+TEST(CharSkillSimTest, C12AForcedKillIsNotCreditedAsACut) {
+    // Negative companion: the same death through KillAllHostiles (Forced) is not credited.
+    Simulation sim(43, &g_NullWorld);
+    sim.AddEnemy(StationaryEnemyWithHp(5), glm::vec2{30.0F, 0.0F}, 0, 1);
+    SetHero(sim, "c12");
+    sim.KillAllHostiles();
+    RunSteps(sim, 2);
+    EXPECT_FALSE(sim.EnemyViews()[0].alive);
+    EXPECT_EQ(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::Forced);
+    EXPECT_NE(sim.LastDeathSourceForTest(), Game::Sim::DeathSource::PlayerCut);
+    EXPECT_EQ(sim.PlayerKillCount(), 0);
 }
 
 // NOLINTEND(readability-magic-numbers)

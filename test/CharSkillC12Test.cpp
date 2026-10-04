@@ -77,8 +77,8 @@ TEST(CharSkillC12Test, EveryLaterCastIsAnAtkCutWithTheHeroAtkAndCritical) {
     EXPECT_EQ(cut.cutDamage, 5); // role_attribute.atk (+0x40), DISASM 0x26b2b4-0x26b2e0
     EXPECT_EQ(cut.cutCritical, 5); // role_attribute.critical (+0x24)
     EXPECT_EQ(cut.wolves, 0);
-    // in_skill is NEVER cleared (RoleSkillEnd 3736-3749 has no in_skill store): the next
-    // cast after the cooldown is again a cut, not another summon.
+    // RoleSkillEnd (3736-3749) has no in_skill store (FAITHFUL); no other clear site was
+    // found, so in_skill stays set (INFERRED, T-49): the next cast is again a cut.
     EXPECT_TRUE(c.InSkill());
     TickSteps(c, 130);
     EXPECT_EQ(c.RoleSkill(Hero().atk, Hero().critical, false).phase, CharSkillC12::Phase::Cut);
@@ -100,7 +100,7 @@ TEST(CharSkillC12Test, RoleSkillEndRestartsTheCooldownAndItCountsUpEveryFixedSte
     EXPECT_NEAR(c.CooldownRemaining(), 2.5F - 62 * kFixedStepSeconds, 1e-3F); // 1.26
 }
 
-TEST(CharSkillC12Test, EndSkillOnlyResetsTheCooldownAndNeverClearsInSkill) {
+TEST(CharSkillC12Test, EndSkillOnlyResetsTheCooldownAndDoesNotClearInSkill) {
     CharSkillC12 c(Hero().skillCd);
     ASSERT_EQ(c.RoleSkill(5, 5, false).phase, CharSkillC12::Phase::Summon);
     TickSteps(c, 130);

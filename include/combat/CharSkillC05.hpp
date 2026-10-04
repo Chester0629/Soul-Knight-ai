@@ -28,7 +28,8 @@ namespace Game {
  *        array is shorter, @0x265ef4-0x265f88) at a fan offset -20*strengthen + 20*i
  *        degrees (sb = -20 or 0, += 0x14 per bottle @0x265e0c/0x2661a4).
  *      * PlayEffect(clip_skill) @0x2661d8, then vcall slot 25 = RoleSkillEnd
- *        @0x2661e8 -- IN THE SAME CALL, so the ultimate is instantaneous: it is
+ *        @0x2661e8-0x2661ec (0x2661e8 sets the args, the blx is
+ *        @0x2661ec) -- IN THE SAME CALL, so the ultimate is instantaneous: it is
  *        "in skill" only inside RoleSkill itself and the cooldown starts at once.
  *  - RoleSkillEnd (TYPED 1584-1638): in_skill = false ; ReSetSkillReload (this_skill_time
  *    = 0) ; shadow_lock tint by get_skill_ready (presentation, T-51). FAITHFUL; the
@@ -72,8 +73,10 @@ public:
     /// skillRefs["bottle_objs"].size(), prefab data). @param skillStrengthen T-42 (false).
     RoleSkillResult RoleSkill(int skinIndex, int variantCount, bool skillStrengthen);
 
-    /// Thin wrapper for the brain-level tests / uniform callers: RoleSkill(0, 4, false).
-    bool TryActivateSkill();
+    /// Thin wrapper for the brain-level tests / uniform callers: RoleSkill(0,
+    /// variantCount, false). @param variantCount bottle_objs.Length (data-driven, from
+    /// CharacterDef::SkillRefCount("bottle_objs")); no default -- the caller supplies it.
+    bool TryActivateSkill(int variantCount);
 
     /// RoleSkillEnd (TYPED 1584-1638): in_skill = false ; this_skill_time = 0.
     void EndSkill();

@@ -32,9 +32,14 @@ namespace Game {
  *        (skill_clips[GetSkinIndex()] when that index exists, else clip_skill);
  *        then RoleSkillEnd @0x26b7d4.
  *  - RoleSkillEnd (TYPED 3736-3749): ReSetSkillReload (this_skill_time = 0) ;
- *    UpdateShadowLock tint (T-51). NOTE it does NOT clear in_skill (3736-3749 contain no
- *    in_skill store, and no other recovered C12 body clears it) -> once summoned, in_skill
- *    stays set and every later cast is the CUT phase (T-49). FAITHFUL to the visible code.
+ *    UpdateShadowLock tint (T-51). FAITHFUL fact: C12 RoleSkillEnd (game_typed.c
+ *    3736-3749) does not store in_skill (unlike C01/C02/C04/C05/C06/C07/C11, whose
+ *    RoleSkillEnd each contain an in_skill = false store).
+ *    INFERRED (T-49): no other clear site was found (searched game_typed.c / game_full.c
+ *    for stores to RGController.in_skill, offset 0x55: only the C01-C07/C11 clears and the
+ *    C02/C06/C07/C11/C12 sets exist), so in_skill is TREATED as staying set after the first
+ *    summon and every later cast is the CUT phase. This is an inference from the absence
+ *    of a store in the recovered code, NOT proof the original never clears it.
  *  - NOT PORTED: the two wolf pets (RGPetController/WolfController -- the sim has no
  *    ally entities, T-48): the summon phase only emits its cue (count 2, strengthened
  *    flag); the AtkCut RGSword prefab's own hitbox is the sim's T-36 melee reach.

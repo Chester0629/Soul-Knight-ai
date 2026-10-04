@@ -781,6 +781,10 @@ void Simulation::Cull() {
         auto &e = m_Enemies[ei];
         if (!e->State().dead && e->State().stats.IsDead()) {
             const bool byPlayer = IsPlayerDeathSource(e->State().deathSource); // read before Kill().
+            m_LastDeathSource = e->State().deathSource;
+            if (byPlayer) {
+                ++m_PlayerKillCount;
+            }
             e->Kill(); // cancels its scheduler cadence; kept in m_Enemies for stable view id.
             m_Events.push_back(SimEvent{SimEventType::AnimTrigger,
                                         static_cast<std::uint32_t>(ei), "death"}); // A
@@ -791,6 +795,10 @@ void Simulation::Cull() {
     }
     if (m_Boss != nullptr && !m_Boss->State().dead && m_Boss->State().stats.IsDead()) {
         const bool byPlayer = IsPlayerDeathSource(m_Boss->State().deathSource);
+        m_LastDeathSource = m_Boss->State().deathSource;
+        if (byPlayer) {
+            ++m_PlayerKillCount;
+        }
         m_Boss->Kill();
         m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "death"}); // A
         if (byPlayer && m_Skill != nullptr) {

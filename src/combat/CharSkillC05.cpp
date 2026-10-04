@@ -31,11 +31,13 @@ CharSkillC05::RoleSkillResult CharSkillC05::RoleSkill(int skinIndex, int variant
         r.fanOffsetsDeg.push_back(offset);
         offset += kFanStepDeg;
     }
-    EndSkill(); // vcall slot 25 (RoleSkillEnd) @0x2661e8, inside the same RoleSkill call.
+    EndSkill(); // vcall slot 25 (RoleSkillEnd) @0x2661e8-0x2661ec (blx), inside the same RoleSkill call.
     return r;
 }
 
-bool CharSkillC05::TryActivateSkill() { return RoleSkill(0, 4, false).activated; }
+bool CharSkillC05::TryActivateSkill(int variantCount) {
+    return RoleSkill(0, variantCount, false).activated;
+}
 
 // RoleSkillEnd: TYPED 1584-1638 (in_skill = false @1600; ReSetSkillReload @1606;
 // get_skill_ready + shadow_lock SetColor tint @1612-1636 -> T-51, presentation).

@@ -340,7 +340,7 @@ private:
 };
 
 /// C05 -- the Alchemist's bottle volley. The ultimate is INSTANT (RoleSkillEnd runs in
-/// the same RoleSkill call, DISASM 0x2661e8): it is never observably "in skill" and the
+/// the same RoleSkill call, DISASM 0x2661e8-0x2661ec): it is never observably "in skill" and the
 /// cooldown starts at once. The thrown BulletBottle + Gas zone are NOT PORTED (T-44):
 /// the adapter emits the "bottle_throw" cue (count / variant / fan) instead.
 class CharSkillC05Adapter : public CharSkillBase<Game::CharSkillC05> {
@@ -454,7 +454,8 @@ private:
 };
 
 /// C12 -- the Druid's two-phase skill (see CharSkillC12): the first cast summons two
-/// wolves (NOT PORTED, T-48: cue only) and leaves in_skill set (T-49); every later cast
+/// wolves (NOT PORTED, T-48: cue only) and in_skill stays set (INFERRED, T-49: RoleSkillEnd
+/// does not store it and no other clear site was found); every later cast
 /// is RGHand.AtkCut(atk) -> the sim's melee cut (T-36 reach). Each cast restarts the
 /// cooldown (RoleSkillEnd), 2.5 s.
 class CharSkillC12Adapter : public CharSkillBase<Game::CharSkillC12> {

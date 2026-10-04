@@ -32,6 +32,17 @@ run_case() {
   [ -s "$E/$name.txt" ] || fail "$name produced no matching log lines"
 }
 
+# require <name> <regex>...: every regex must match the case's excerpt; one FAIL per missing
+# event, so STATUS: OK can never hide an excerpt that lost its key lines (R23: H7 kept only
+# three gate lines and still passed).
+require() {
+  local name="$1"; shift
+  local re
+  for re in "$@"; do
+    grep -qE "$re" "$E/$name.txt" || fail "$name missing required event: $re"
+  done
+}
+
 check_png() { # <path>
   if [ ! -s "$1" ]; then fail "$(basename "$1") missing or empty"; else echo "$(basename "$1"): $(stat -c %s "$1") bytes"; fi
 }
@@ -64,20 +75,32 @@ env SK_SKIP_MENU=1 SK_MUTE=1 SK_MAX_FRAMES=1 timeout 600 "$G" > /dev/null 2>&1 |
 echo "warm-up took $(( $(date +%s) - WSTART )) s"
 
 run_case H1 "GameScene: hero|Level |CLEARED" 8 SK_START_CHAR=c12 SK_FORCE_CLEAR=60 SK_MAX_FRAMES=200
+require H1 "hero c12 on floor 0" "Level B1 \(1-1\)" "Floor 0 CLEARED" "hero c12 on floor 1"
 run_case H2 "TransferGate|GameScene: hero" 6 SK_SKIP_MENU=1 SK_GATE_TELEPORT=200 SK_MAX_FRAMES=400
+require H2 "TransferGate: open in room" "TransferGate: entered -> next floor" "hero c01 on floor 1"
 echo "=== H2neg (no SK_GATE_TELEPORT: floors visited must be 1) ==="
 env SK_SKIP_MENU=1 SK_MAX_FRAMES=400 timeout "$CASE_TIMEOUT" "$G" > "$E/H2neg.log" 2>&1 || fail "H2neg exited $?"
 grep -c "GameScene: hero" "$E/H2neg.log" | tee "$E/H2neg.txt"
 [ "$(cat "$E/H2neg.txt")" = "1" ] || fail "H2neg floors != 1"
 run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700
+require H3 "planned, wave size" "StartRoom -> Active" "part spawned [0-9]+ \(0 pending\)" "room 1 cleared"
 run_case H4 "Reward:|Pickup:" 6 SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700
+require H4 "Reward: .* dropped [0-9]+ pickups"
 run_case H5 "died|EndScene: game" 3 SK_SKIP_MENU=1 SK_FORCE_DIE=100 SK_MAX_FRAMES=300 SK_SHOT="$E/H5.png"
 check_png "$E/H5.png"
+require H5 "Player died on floor 0 -> EndScene" "EndScene: game over at 1-1"
 run_case H6 "Shop:" 5 SK_SKIP_MENU=1 SK_COINS=30 SK_SHOP_BUY=100 SK_MAX_FRAMES=130
-run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 12 SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=447
+require H6 "Shop: vending_machine" "Shop: bought"
+# H7: 447 frames only just covered five floors (the v1.28 run stopped on floor 3 and the
+# old excerpt still passed); 700 frames, a 20-line excerpt, and explicit boss events.
+run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 20 SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=700
+require H7 "Level B5 \(1-5\)" "BossRoom: room [0-9]+ uses r1_boss" "Boss defeated!" "Chest: boss chest chest_boss"
 run_case H8 "Statue:" 4 SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130
+require H8 "Statue: worshipped statue_0[0-9] .* -> statue_index [0-9]"
 run_case H9 "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,fire SK_MAX_FRAMES=200
+require H9 "Buff: Fire applied to 61453" "Buff: Fire ended on 61453"
 run_case H9armor "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,armor SK_MAX_FRAMES=600
+require H9armor "Buff: Armor applied to 61453" "Buff: Armor ended on 61453"
 # H10 keeps 40 lines (was 6): a bullet-triggered Fire buff logs one "applied"
 # line per landed hit, so a 6-line excerpt was all "applied" and truncated the
 # "ended" lines that prove the P3.1 expiry path actually runs.
@@ -121,14 +144,17 @@ run_case H10 "Buff:" 40 SK_SKIP_MENU=1 SK_FORCE_WEAPON=weapon_013 SK_AUTOWALK=1 
 grep -q "Buff: Fire ended" "$E/H10.txt" \
   || fail "H10: no 'Buff: Fire ended' line -- the bullet-triggered Fire buff never expired"
 run_case H11 "Audio:" 40 SK_SKIP_MENU=1 SK_MUTE=1 SK_AUTOWALK=1 SK_AUTOFIRE=1 SK_FORCE_HIT=30 SK_FORCE_KILL=120 SK_MAX_FRAMES=300
+require H11 "Audio: bgm bgm_" "Audio: sfx fx_gun_"
 echo "=== V-S r2_boss3 (seed 1: variant D, floor 9 room 3; zoom 1.5 partial) ==="
 run_case r2boss3_seed "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre" 40 \
   SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3.png"
 check_png "$E/r2_boss3.png"
+require r2boss3_seed "Level D5" "BossRoom: room 3 uses r2_boss3" "SK_ROOM_TELEPORT -> room 3 centre"
 echo "=== V-S r2_boss3 whole room (SK_ZOOM=0.6) ==="
 run_case r2boss3_full "Level D5|BossRoom: room 3 uses r2_boss3|SK_ROOM_TELEPORT -> room 3 centre|SK_ZOOM override" 40 \
   SK_SEED=1 SK_SKIP_MENU=1 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3 SK_ZOOM=0.6 SK_MAX_FRAMES=245 SK_SHOT="$E/r2_boss3_full.png"
 check_png "$E/r2_boss3_full.png"
+require r2boss3_full "BossRoom: room 3 uses r2_boss3" "SK_ROOM_TELEPORT -> room 3 centre" "SK_ZOOM override"
 git rev-parse --short HEAD | tee "$E/head.txt"
 rm -f "$E"/*.log
 if [ "${#FAILS[@]}" -eq 0 ]; then

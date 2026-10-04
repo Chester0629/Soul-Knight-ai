@@ -35,8 +35,9 @@ CharSkillC12::RoleSkillResult CharSkillC12::RoleSkill(int atk, int critical,
     return r;
 }
 
-// RoleSkillEnd: TYPED 3736-3749 -- ReSetSkillReload + UpdateShadowLock; in_skill is NOT
-// written here (T-49).
+// RoleSkillEnd: TYPED 3736-3749 -- ReSetSkillReload + UpdateShadowLock. FAITHFUL: in_skill
+// is not stored here. INFERRED (T-49): no other clear site was found, so in_skill is treated
+// as staying set after the first summon.
 void CharSkillC12::EndSkill() { m_ThisSkillTime = 0.0F; }
 
 // Update: TYPED 3674-3683 -> SkillReload(dt), unconditional.

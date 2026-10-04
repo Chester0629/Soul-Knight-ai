@@ -52,6 +52,16 @@ public:
     /// headlessly. Not game logic; never called in normal play.
     void KillAllHostiles();
 
+    /// TEST ACCESSOR (read-only): number of hostiles whose death Cull() credited to the
+    /// player (DeathSource PlayerBullet/PlayerCut/PlayerDot/PlayerSkill -- the same
+    /// condition that fires ICharSkill::OnEnemyKilled). Forced/Other/None deaths never
+    /// count, so a wrong DeathSource on a skill path flips this.
+    int PlayerKillCount() const { return m_PlayerKillCount; }
+
+    /// TEST ACCESSOR (read-only): the deathSource of the most recent hostile Cull() killed
+    /// (DeathSource::None before any death).
+    DeathSource LastDeathSourceForTest() const { return m_LastDeathSource; }
+
     static constexpr std::uint32_t kBossViewId = 0xB055;   ///< sentinel id for the boss view.
     static constexpr std::uint32_t kPlayerViewId = 0xF00D; ///< sentinel id for the player in SimEvents
                                                            ///< (enemy view ids are small indices 0..N).
@@ -257,6 +267,8 @@ private:
     int m_PlayerShotsLastAdvance = 0;
     int m_PlayerEnergyGrantedLastAdvance = 0; ///< P3.3.c: skill energy restore this Advance().
     std::vector<SimEvent> m_Events;
+    int m_PlayerKillCount = 0;                      ///< Cull() deaths credited to the player.
+    DeathSource m_LastDeathSource = DeathSource::None; ///< most recent Cull() death's source.
 };
 
 } // namespace Game::Sim
