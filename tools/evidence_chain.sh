@@ -112,7 +112,10 @@ require_order H6 "vending_machine_i at room [0-9]+ sells .health_pot_big. for 10
 # H7: 447 frames only just covered five floors (the v1.28 run stopped on floor 3 and the
 # old excerpt still passed); 700 frames, a 20-line excerpt, and explicit boss events.
 run_case H7 "Level B5|BossRoom:|Boss defeated|Chest: boss|TransferGate: open" 20 SK_SKIP_MENU=1 SK_FORCE_CLEAR=90 SK_FORCE_KILL=30 SK_MAX_FRAMES=700
-require_order H7 "Level B5 \\(1-5\\)" "BossRoom: room [0-9]+ uses r1_boss" "Boss defeated!" "Chest: boss chest chest_boss" "TransferGate: open in room"
+# The gate must open in the BOSS room itself (R25: a later floor's gate line satisfied the
+# generic pattern even when the boss-room gate line was deleted).
+H7_BOSS_ROOM=$(sed -nE 's/.*BossRoom: room ([0-9]+) uses.*/\1/p' "$E/H7.txt" | head -1)
+require_order H7 "Level B5 \\(1-5\\)" "BossRoom: room [0-9]+ uses r1_boss" "Boss defeated!" "Chest: boss chest chest_boss" "TransferGate: open in room ${H7_BOSS_ROOM:-NONE} at"
 run_case H8 "Statue:" 4 SK_SKIP_MENU=1 SK_EVENT_ROOM=statue SK_COINS=30 SK_STATUE_WORSHIP=100 SK_MAX_FRAMES=130
 require_order H8 "Statue: worshipped statue_0[0-9] .* -> statue_index [0-9]"
 run_case H9 "Buff:" 4 SK_SKIP_MENU=1 SK_FORCE_BUFF=30,fire SK_MAX_FRAMES=200
