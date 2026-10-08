@@ -22,14 +22,19 @@ inline constexpr int kMaxStepsPerAdvance = 8;
 static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,
               "kFixedStepMs must equal kFixedStepSeconds * 1000");
 
-/// T-25 (unit audit pending, P3.0): 15 px per data unit here vs. 32 px per map cell
-/// in GameScene::kCellPx. The decompile (T-26 truncation) does not show how RGBullet
-/// applies `speed`; the source atlas PPU is 16 (2x render = 32 px/unit).
-/// Data bulletSpeed (raw units from the JSON tables) -> pixels/second. The shell
-/// (GameScene) and the sim's WeaponController must agree on this factor, so it
-/// lives here rather than as an anonymous constant. Mirrors GameScene's historical
-/// kBulletSpeedScale; promote that to use this when the weapon path is wired.
-inline constexpr float kDataSpeedToPxPerSec = 15.0F;
+/// P3.0 (closes T-25): Unity data units -> screen-world px. Every speed / distance read
+/// from the data tables is in Unity UNITS (units/s, units): the Rigidbody2D.velocity
+/// writes of RGEController / RGBullet / RGCoin and the RGCoin.range field are all in
+/// world units. One unit is 16 source px (every atlas is PPU 16, see
+/// Game::Scale::kSourcePxPerUnit) drawn at Scale::kSpriteScale 2 = 32 world px = one
+/// map cell (Scale::kCellPx). This is the SINGLE conversion for data speeds and
+/// distances (bullet_speed, enemy/hero speed, RGCoin speed/range, GetForce
+/// impulses); it is deliberately derived from Scale::kCellPx so it can never drift from
+/// the room geometry, the sprites/colliders or Sim::kWorldUnitPx. The shell
+/// (GameScene) and the sim's WeaponController share it. Replaces the legacy,
+/// unsourced 15 px per unit (ortho 7.5 x 2 guess).
+inline constexpr float kDataSpeedToPxPerSec = Game::Scale::kCellPx;
+static_assert(kDataSpeedToPxPerSec == 32.0F, "1 Unity unit == 32 world px (PPU 16 at 2x)");
 
 /// FALLBACK collision radii (px), used ONLY when the prefab collider data is missing
 /// (a default-constructed def, an entity whose prefab has no collider, an enemy
@@ -50,8 +55,15 @@ inline constexpr float kBossBodyRadius = 24.0F;
 /// so the Simulation seeds it; mirrors the old Enemy entity's CombatStats{3,3,...}.
 inline constexpr int kSliceEnemyHp = 3;
 
-/// Repel input scale fed to Combat::AttackerInput (mirrors GameScene's kRepelScale=30).
-inline constexpr float kRepelScale = 30.0F;
+/// Repel input scale fed to Combat::AttackerInput: data repel (weapons.json `repel`, 1..~9)
+/// -> GetForce power in Unity units/s. PORT CHOICE (T-53, P3.0): identity (1). The previous 30 was
+/// documented as a "unit-reconciliation tunable" (PORT_PHASE3_REPORT) from the px/s era: it
+/// pushed every hit to the 28 cap, applied in px/s. The units->px reconciliation now lives in
+/// ONE place (EnemyController::ComputeVelocity multiplies the knockback by
+/// kDataSpeedToPxPerSec), so the repel->power map is left at the data value; the original's
+/// real map (bullet repel -> RGEController.GetForce power) is not recovered. The FAITHFUL
+/// caps (28 enemy / 30 player, Combat::kEnemyRepelCap) are in the same units/s.
+inline constexpr float kRepelScale = 1.0F;
 
 /// Salt mixed into runSeed for the hit-resolution RNG stream, so the crit-roll stream
 /// is distinct from every brain stream (which are seeded from runSeed + offsets).
@@ -75,9 +87,9 @@ inline constexpr float kMeleeCutHalfAngleDeg = 60.0F;
 /// recovered from ARM disassembly in WORLD UNITS (Physics2D radii, Rigidbody2D.velocity
 /// units/s: thunder search 14u, chain 10u, bat speed 6u/s, holy light radius 4u).
 /// One unit == one map cell == GameScene::kCellPx (32 px) -- the same scale the room
-/// geometry already uses; T-25 (the RGBullet `speed` data-unit audit) is a separate,
-/// still-pending question and is NOT reused here because Rigidbody2D.velocity is a
-/// direct units/s value, not a bullet-data speed.
+/// geometry already uses. Since P3.0 (T-25 closed) the data-speed factor
+/// kDataSpeedToPxPerSec is the same 32; the two names are kept for readability
+/// (geometry/skill positions vs. speeds) and both derive from Scale::kCellPx.
 inline constexpr float kWorldUnitPx = Game::Scale::kCellPx;
 static_assert(kWorldUnitPx == 32.0F, "one unit == one map cell == 32 px");
 

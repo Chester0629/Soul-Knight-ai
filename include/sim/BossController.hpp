@@ -25,8 +25,13 @@ public:
     static constexpr int kFanEven = 3;
     static constexpr int kFanOdd = 5;
     static constexpr float kFanSpreadDeg = 30.0F;
+    /// PORT CHOICE (T-55, P3.0 audit): flat boss chase/strafe speed in px/s (1.4 cells/s). NOT a data
+    /// value and NOT converted: the species speed (enemies.json boss01..13: 3..6 units/s,
+    /// i.e. 96..192 px/s through kDataSpeedToPxPerSec) is not wired into BossController yet.
     static constexpr float kSpeed = 45.0F;
     static constexpr float kWanderSeconds = 0.5F;
+    /// PORT CHOICE (T-55, P3.0 audit): flat slice boss-bullet speed in px/s (9.4 cells/s, the same
+    /// 300 px/s slice value the enemy bullet had); not read from data, so not converted.
     static constexpr float kBulletSpeedPxPerSec = 300.0F;
     static constexpr float kBulletLifeMs = 1500.0F;
 

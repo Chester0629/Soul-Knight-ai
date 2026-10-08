@@ -70,6 +70,8 @@ constexpr float kScatterImpulseUnits = 6.0F;
 /// hardcoded array keyed by statue_index (index 0 unused).
 const char *const kStatueName[8] = {"", "Knight", "Priest", "Assassin", "Rabbit", "Elf", "Thief", "Sorcerer"};
 // SK_AUTOWALK steering speed (px/s): drives headless room->corridor->room traversal.
+// PORT CHOICE (T-56, test hook, P3.0 audit): not a data value and not converted (9.4 cells/s, a
+// little above the knight's 6.5 u/s walk so the headless runs reach the target in time).
 constexpr float kAutoWalkSpeed = 300.0F;
 // Inset (px) from a room edge before the clear-room door lock may arm. The door-
 // seal cells occupy the outermost cell ring, and a room's interior rect edge
@@ -1677,6 +1679,19 @@ void GameScene::Update(float dtMs) {
 
     m_Sim->SetPlayerStats(m_Player->Stats());      // push current vitals in
     m_Sim->Advance(dtMs, in);                       // sim damages its player-stats copy
+    // SK_TRACE_BULLETS test hook (env, NO-OP if unset): log every live player bullet's sim
+    // position each frame ("BulletTrace: frame id x y" in px and cells), for the P3.0
+    // speed-scale measurement. Read-only; not game logic.
+    static const bool traceBullets = std::getenv("SK_TRACE_BULLETS") != nullptr;
+    if (traceBullets) {
+        for (const Sim::BulletState &tb : m_Sim->Bullets()) {
+            if (tb.active && tb.camp == 0) {
+                LOG_INFO("BulletTrace: frame {} id {} px=({:.2f},{:.2f}) cells=({:.3f},{:.3f}) player=({:.2f},{:.2f})",
+                         m_Frame, tb.id, tb.pos.x, tb.pos.y, tb.pos.x / kCellPx, tb.pos.y / kCellPx,
+                         resolved.x, resolved.y);
+            }
+        }
+    }
     const CombatStats &simPlayer = m_Sim->PlayerStats();
     // MARKER (decision C): pull back ONLY hp + armor. Energy is scene-owned (regen + spend
     // below); the sim never modifies energy, so do NOT copy simPlayer.energy back -- doing so

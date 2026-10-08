@@ -20,7 +20,8 @@ namespace Game {
  * @brief The player-controlled hero entity.
  *
  * Renders the c01 character animation and moves with WASD at a speed derived
- * from the character definition. Carries its CombatStats (hp/armor/energy).
+ * from the character definition (characters.json speed, Unity units/s, times
+ * Sim::kDataSpeedToPxPerSec = 32 px per unit). Carries its CombatStats (hp/armor/energy).
  * World space is center-origin Cartesian (y up), matching the engine.
  */
 class Player : public Util::GameObject {

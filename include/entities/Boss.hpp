@@ -64,6 +64,8 @@ private:
     SpriteAnchor m_Anchor;
     BossAI01 m_Boss;
     CombatStats m_Stats;
+    /// LEGACY, unused by the live game (BossController owns boss movement). PORT CHOICE (T-55) px/s,
+    /// not a data value (P3.0 audit).
     float m_Speed{45.0F};
     float m_ShootTimerMs{0.0F};
     std::shared_ptr<Util::Animation> m_Anim;

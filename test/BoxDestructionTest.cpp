@@ -64,7 +64,7 @@ TEST(BoxDestructionTest, BulletBreaksBoxBlocksBeforePassableAfter) {
     Simulation sim(7, &world);
     Game::WeaponDef def{};
     def.weaponSpeed = 1.0F;
-    def.bulletSpeed = 10.0F; // 150 px/s
+    def.bulletSpeed = 10.0F; // 320 px/s (10 units/s * 32)
     def.atk = 4;
     def.deviation = 0;
     sim.EquipWeapon(def, "Gun001", 808);

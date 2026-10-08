@@ -14,6 +14,8 @@ namespace Game::Sim {
 /// GetForce(dir, mag) velocity impulse + a -0.15 friction carry (CharSkillC02.hpp
 /// :51-62); the `mag` operand was not captured in the decomp, so this fixed 80px
 /// step is a hand-tuned owner stand-in (debt, like kBoxHp / kSecondHandOffsetPx).
+/// P3.0 audit: a PORT CHOICE (T-56) in px, deliberately NOT converted (the real distance is an
+/// unrecovered GetForce magnitude in units/s, capped at 30).
 /// SINGLE source: both the GameScene owner and the RealBodyDriver test mirror dash
 /// by this exact constant -- there is no second hand-copied value.
 inline constexpr float kSkillDashPx = 80.0F;

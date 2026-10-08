@@ -1,0 +1,11 @@
+P3.0 bullet-flight measurement (weapon_000, bullet_speed 36 units/s, 1 unit = 32 px = 1 cell)
+Run: SK_SKIP_MENU=1 SK_MUTE=1 SK_AUTOWALK=1 SK_AUTOFIRE=1 SK_DT_MS=20 SK_TRACE_BULLETS=1 SK_MAX_FRAMES=K SK_SHOT=bullet_fK.png  (K = 4, 7, 10)
+SK_DT_MS=20 makes every frame exactly one 20 ms fixed step (deterministic), 3 frames = 0.06 s.
+Zoom 1.5: one map cell is 48 screen px.
+
+Sim trace (bullet id 1, world px): frame4 y=-1.99, frame7 y=-70.99, frame10 y=-139.98 -> 69.0 px per 3 frames = 2.156 cells / 0.06 s = 35.9 cells/s
+Screenshot measurement (bullet blob centroid, background shift removed by registration):
+  K=4 -> 7 : bullet screen dy +91.1, background dy -13 -> world-relative 104.1 screen px
+  K=7 -> 10: bullet screen dy +86.9, background dy -16 -> world-relative 102.9 screen px
+  mean 103.5 screen px / 48 px per cell = 2.156 cells per 0.06 s = 35.9 cells/s
+Expected from data: 36 units/s = 36 cells/s (before P3.0: 36*15 = 540 px/s = 16.9 cells/s).

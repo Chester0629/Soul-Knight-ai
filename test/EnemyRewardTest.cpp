@@ -117,8 +117,10 @@ TEST(EnemyRewardTest, RateGatesTheDropAndDrawsOnce) {
 TEST(CoinMagnetTest, ScattersThenHomesAndCollects) {
     // FAITHFUL prefab numbers: speed 20 units/s, range 6 units.
     Game::CoinMagnet m = Game::CoinMagnet::Make({0.0F, 0.0F}, 20.0F, 6.0F);
-    EXPECT_FLOAT_EQ(m.rangePx, 90.0F);
-    EXPECT_FLOAT_EQ(m.speedPxPerSec, 300.0F);
+    // P3.0: units -> px at 32 per unit: range 6 units = 192 px (6 cells), speed 20 units/s =
+    // 640 px/s (were 90 / 300 at the legacy 15 px per unit).
+    EXPECT_FLOAT_EQ(m.rangePx, 6.0F * 32.0F);
+    EXPECT_FLOAT_EQ(m.speedPxPerSec, 20.0F * 32.0F);
     m.GetForce({1.0F, 0.0F}, 6.0F);
     const glm::vec2 farPlayer{1000.0F, 1000.0F};
     // Scatter: drifts +x, decays (0.9 per 20 ms step), never homes on a far player.
@@ -127,9 +129,13 @@ TEST(CoinMagnetTest, ScattersThenHomesAndCollects) {
     EXPECT_FALSE(m.findTarget);
     const float afterScatter = m.pos.x;
     EXPECT_FALSE(m.Step(2000.0F, farPlayer));
-    EXPECT_LT(m.pos.x - afterScatter, 10.0F); // friction has killed the impulse
+    // friction has killed the impulse: the whole scatter is the geometric series of the
+    // 6 units/s * 32 = 192 px/s impulse, 192 * 0.02 / (1 - 0.9) = 38.4 px (the 0.5 px/s cut-off
+    // trims < 1 px). P3.0: it was 6 * 15 -> 18 px at the legacy 15 px per unit.
+    EXPECT_NEAR(m.pos.x, 38.4F, 1.0F);
+    EXPECT_LT(m.pos.x - afterScatter, 20.0F);
 
-    // Magnet: a player 80 px away (inside 90) latches homing; 300 px/s closes it.
+    // Magnet: a player 80 px away (inside 192) latches homing; 640 px/s closes it.
     const glm::vec2 near{m.pos.x + 80.0F, m.pos.y};
     EXPECT_FALSE(m.Step(20.0F, near));
     EXPECT_TRUE(m.findTarget);

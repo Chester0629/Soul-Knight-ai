@@ -23,6 +23,8 @@ public:
     struct Params {
         Kind kind = Kind::Single;
         float fireIntervalSeconds = 0.15F;
+        /// px/s. The 120 default is a PORT CHOICE (T-56) for a bare Params (tests / no def); the real
+        /// value is WeaponDef.bulletSpeed (units/s) * kDataSpeedToPxPerSec (BrainFactory).
         float bulletSpeedPxPerSec = 120.0F;
         float lifeMs = 1500.0F;
         int damage = 1;

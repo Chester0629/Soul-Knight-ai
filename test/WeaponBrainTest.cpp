@@ -245,7 +245,7 @@ TEST(WeaponBrainIntegration, Gun004EquipFiresBurstAcrossTicksNotAtOnce) {
 TEST(WeaponBrainIntegration, Gun005EquipChargesWhileHeldThenReleasesScaled) {
     Game::Sim::Simulation sim(/*runSeed=*/3, nullptr);
     Game::WeaponDef def{};
-    def.bulletSpeed = 10.0F; // 150 px/s base (x kDataSpeedToPxPerSec)
+    def.bulletSpeed = 10.0F; // 320 px/s base (10 units/s x kDataSpeedToPxPerSec = 32)
     sim.EquipWeapon(def, "Gun005", 1);
 
     for (int i = 0; i < 100; ++i) {
@@ -255,7 +255,9 @@ TEST(WeaponBrainIntegration, Gun005EquipChargesWhileHeldThenReleasesScaled) {
 
     sim.Advance(20.0F, SimInput(false)); // release -> one charge bullet at the accrued ratio
     ASSERT_EQ(sim.Bullets().size(), 1U);
-    EXPECT_NEAR(Mag(sim.Bullets()[0].vel), 150.0F, 5.0F); // full charge -> full base speed
+    // P3.0: full charge -> full base speed = 10 units/s * 32 px/unit = 320 px/s (was 150 at
+    // the legacy 15 px per unit); the +-5 band absorbs the charge ratio's last fraction.
+    EXPECT_NEAR(Mag(sim.Bullets()[0].vel), 320.0F, 5.0F);
 }
 
 // NOLINTEND(readability-magic-numbers)

@@ -21,7 +21,8 @@ namespace Game {
  *      `range` world units; it then moves straight at the player at `speed`
  *      units/s and is collected on contact (GetItem).
  * World units -> pixels use the same factor as every other data speed
- * (Sim::kDataSpeedToPxPerSec = 15 px per unit).
+ * (Sim::kDataSpeedToPxPerSec = 32 px per unit: PPU 16 drawn at 2x). RGCoin.speed (20)
+ * is units/s and RGCoin.range (6) is units, so a coin homes at 640 px/s from 192 px away.
  */
 struct CoinMagnet {
     /// RGCoin.friction (pickups.json _rgcoin.friction; RGCoin__ctor 0.9f), per fixed step (50 Hz).
@@ -33,8 +34,8 @@ struct CoinMagnet {
     glm::vec2 pos{0.0F, 0.0F};
     glm::vec2 forceDir{0.0F, 0.0F}; ///< RGCoin.force_direction (unit).
     float inertialPxPerSec = 0.0F;  ///< RGCoin.inertial_vel, in px/s.
-    float speedPxPerSec = 0.0F;     ///< RGCoin.speed * 15.
-    float rangePx = 0.0F;           ///< RGCoin.range * 15.
+    float speedPxPerSec = 0.0F;     ///< RGCoin.speed (units/s) * kDataSpeedToPxPerSec.
+    float rangePx = 0.0F;           ///< RGCoin.range (units) * kDataSpeedToPxPerSec.
     bool findTarget = false;        ///< RGCoin.find_target: homing latched.
     float stepAccum = 0.0F;
 

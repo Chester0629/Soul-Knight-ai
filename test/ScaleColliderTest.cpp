@@ -390,10 +390,18 @@ Game::Sim::WorldInputs FireAlongX() {
     return in;
 }
 
+// P3.0: the boundary probes below fire a SLOW bullet. The hit test is a discrete circle/box
+// overlap once per fixed step, and at the real weapon_000 speed (36 units/s = 1152 px/s =
+// 23 px per step) a glancing 0.5 px-deep overlap (a chord of ~9 px) is sampled by only some
+// of the steps, so the probe would test step aliasing, not the radius. 5 units/s = 160 px/s
+// = 3.2 px/step samples every such chord; the geometry under test is unchanged.
+constexpr float kProbeBulletUnitsPerSec = 5.0F;
+
 // Fire straight along +x past a slime whose hurtbox centre is @p enemyY above the line of
 // fire; true if its hp dropped.
 bool SlimeHit(const Game::GameData &gd, Game::WeaponDef w, float enemyY, bool stripData = false) {
     Game::EnemyDef slimeCopy = *gd.FindEnemy("e_slime01");
+    w.bulletSpeed = kProbeBulletUnitsPerSec;
     if (stripData) { // the old placeholder geometry: 16 px circle + 4 px bullet
         slimeCopy.body = ColliderDef{};
         slimeCopy.hurtbox = ColliderDef{};
@@ -445,6 +453,7 @@ TEST(SimColliderTest, DefWithoutColliderDataKeepsPlaceholderRadii) {
     Game::WeaponDef w = *w0;
     w.deviation = 0;
     w.bulletPrefab.clear(); // no bullet prefab -> fallback bullet radius (4 px)
+    w.bulletSpeed = kProbeBulletUnitsPerSec; // slow probe: see kProbeBulletUnitsPerSec
     auto hit = [&](float y) {
         Game::Sim::Simulation sim(20240607, &g_NullWorld);
         Game::EnemyDef bare;

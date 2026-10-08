@@ -16,8 +16,11 @@ EnemyController::Params BrainFactory::EnemyParams(const Game::EnemyDef &def) {
     // ENEMY RE-KEY: EnemyDef now carries a real per-species speed (FAITHFUL @
     // enemies.csv). A def with no species data (e.g. a default-constructed test
     // EnemyDef{}, or a future gap in the table) has speed==0 -- keep the old
-    // slice default (60) rather than freezing the enemy in place.
-    p.speed = def.speed > 0.0F ? def.speed : 60.0F;
+    // slice default (60 px/s, PORT CHOICE (T-56), not a data value) rather than freezing the
+    // enemy in place. P3.0: EnemyDef.speed is the RoleAttribute speed in Unity units/s
+    // (3..12), so it goes through the single data-speed factor (1 unit = 32 px) to give the
+    // controller's px/s steering speed.
+    p.speed = def.speed > 0.0F ? def.speed * kDataSpeedToPxPerSec : 60.0F;
     p.speedRate = def.speedRate;
     p.friction = def.friction;
     p.scoutRateSeconds = def.scoutRate;

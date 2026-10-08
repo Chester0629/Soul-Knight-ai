@@ -71,13 +71,21 @@ int main(int, char **) {
     const long maxFrames = (maxFramesEnv != nullptr) ? std::atol(maxFramesEnv) : -1;
     const char *shotPath = std::getenv("SK_SHOT");
     long frame = 0;
+    const char *dtEnv = std::getenv("SK_DT_MS");
+    const float fixedDtMs = (dtEnv != nullptr) ? static_cast<float>(std::atof(dtEnv)) : 0.0F;
 
     while (!context->GetExit()) {
         // Begins a new ImGui frame and pumps SDL events. Must be paired with
         // ImGui::Render() below before Context::Update() swaps the buffer.
         context->Setup();
 
-        const float dtMs = Util::Time::GetDeltaTimeMs();
+        // SK_DT_MS=N test hook (NO-OP if unset): run every frame with a fixed N ms delta instead
+        // of the wall-clock delta, so a frame count maps to exact sim time (N=20 is one fixed
+        // step per frame). Used by the P3.0 bullet-flight measurement; not game logic.
+        float dtMs = Util::Time::GetDeltaTimeMs();
+        if (fixedDtMs > 0.0F) {
+            dtMs = fixedDtMs;
+        }
         run.Update(dtMs);
         run.Render();
 

@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "sim/BossBrainAdapters.hpp"
+#include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
 
 namespace Game::Sim {
@@ -81,7 +82,10 @@ void BossController::OnWanderTick() {
     // supplies the player as the target. Two int/float draws either way -- the same
     // stream length, so the shoot-tick attack roll is unchanged.
     const glm::vec2 chase = ChaseDir();
-    const float dist = glm::distance(m_Target, m_State.pos);
+    // P3.0: the retreat threshold the brain compares against (Range(5,10), game_named.c:122666)
+    // is in Unity UNITS (a Vector3.Distance of the two transforms), so hand it the distance in
+    // units (px / 32), not px -- compared in px the boss would only back off from 5..9 px.
+    const float dist = glm::distance(m_Target, m_State.pos) / kWorldUnitPx;
     m_MoveDir = m_Brain->MoveDecision(chase, dist);
 }
 

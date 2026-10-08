@@ -6,6 +6,7 @@
 
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
+#include "sim/SimConfig.hpp"
 
 namespace Game {
 namespace {
@@ -18,7 +19,10 @@ std::vector<std::string> C01Frames(const std::string &root) {
     }
     return frames;
 }
-constexpr float kPixelsPerSpeedUnit = 30.0F;
+// P3.0: characters.json `speed` is the RoleAttribute move speed in Unity units/s (c01 6.5), so
+// the walk speed in px/s goes through the single data-speed factor (1 unit = 32 px). It was
+// a private 30 px per unit literal before, a second, unsourced scale.
+constexpr float kPixelsPerSpeedUnit = Sim::kDataSpeedToPxPerSec;
 } // namespace
 
 Player::Player(const CharacterDef &def, const std::string &resourceRoot,

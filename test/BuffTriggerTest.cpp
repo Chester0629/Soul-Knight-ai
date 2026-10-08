@@ -389,8 +389,12 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
     const std::vector<float> fallback = run(/*passData=*/false);
     EXPECT_EQ(distinct(withData), distinct(fallback));
     // ...and that tick shift is exactly what the radius change predicts: the first hit
-    // lands precisely ONE tick earlier with the data radius (6.4 px) than with the 4 px
-    // fallback (the 2.4 px of extra reach is less than one tick of bullet travel).
+    // lands NO LATER than with the 4 px fallback and at most ONE tick earlier (the 2.4 px of
+    // extra reach is less than one tick of bullet travel). P3.0: weapon_000 flies 36 units/s
+    // = 1152 px/s = 23.04 px per fixed step (was 10.8 at the legacy 15 px per unit), so the
+    // 2.4 px of reach crosses a step boundary in only ~10% of alignments: here both runs hit
+    // on the SAME tick (it was exactly one tick earlier at 10.8 px/step, where the old
+    // equality was asserted). Both outcomes are allowed; a LATER hit would be a bug.
     auto firstHit = [](const std::vector<float> &t) {
         for (std::size_t i = 1; i < t.size(); ++i) {
             if (t[i] < t[0]) {
@@ -400,7 +404,8 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         return -1;
     };
     ASSERT_GT(firstHit(fallback), 1);
-    EXPECT_EQ(firstHit(withData), firstHit(fallback) - 1);
+    EXPECT_LE(firstHit(withData), firstHit(fallback));
+    EXPECT_GE(firstHit(withData), firstHit(fallback) - 1);
 }
 
 // NOLINTEND(readability-magic-numbers)

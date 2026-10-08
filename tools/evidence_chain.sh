@@ -100,7 +100,11 @@ echo "=== H2neg (no SK_GATE_TELEPORT: floors visited must be 1) ==="
 env SK_SKIP_MENU=1 SK_MAX_FRAMES=400 timeout "$CASE_TIMEOUT" "$G" > "$E/H2neg.log" 2>&1 || fail "H2neg exited $?"
 grep -c "GameScene: hero" "$E/H2neg.log" | tee "$E/H2neg.txt"
 [ "$(cat "$E/H2neg.txt")" = "1" ] || fail "H2neg floors != 1"
-run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=90 SK_MAX_FRAMES=700
+# P3.0 (data speeds at 32 px/unit): enemies now really walk and their bullets really fly, so the
+# stationary, never-dodging hero in this case used to die on the third wave (frame ~240) before
+# the last forced kill (frame 300) could clear the room. KILL_EVERY 90 -> 45 shortens each wave's
+# exposure (kills at 120/165/210); the wave sequence and every require_order below are unchanged.
+run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=45 SK_MAX_FRAMES=700
 require_order H3 "part spawned 9 \\(15 pending\\)" "level 3 points [0-9]+ -> 24 planned, wave size 9" "StartRoom -> Active" "part spawned 9 \\(6 pending\\)" "part spawned 6 \\(0 pending\\)" "room 1 cleared"
 run_case H4 "Reward:|Pickup:" 6 SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700
 require_count H4 "Reward: .* dropped [0-9]+ pickups" 3

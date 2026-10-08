@@ -97,6 +97,8 @@ private:
     SpriteAnchor m_Anchor;
     EnemyAI m_AI;
     CombatStats m_Stats{3, 3, 0, 0, 0, 0};
+    /// LEGACY, unused by the live game (the sim's EnemyController owns enemy movement). PORT
+    /// CHOICE (T-55) px/s, not a data value (P3.0 audit).
     float m_Speed{60.0F};
     std::shared_ptr<Util::Animation> m_Anim;
     int m_RoomId{-1};

@@ -21,7 +21,8 @@ struct FireIntent {
     int count = 1;             ///< number of bullets (Fan).
     float spreadDeg = 0.0F;    ///< total fan spread (Fan only).
     /// pixels/second. If sourced from a data bulletSpeed, the caller multiplies by
-    /// Sim::kDataSpeedToPxPerSec (see SimConfig.hpp) -- raw data units are not px/s.
+    /// Sim::kDataSpeedToPxPerSec (see SimConfig.hpp: 1 Unity unit = 32 px) -- raw data
+    /// units are not px/s.
     float speedPxPerSec = 0.0F;
     /// milliseconds. If sourced from BulletDef::destroyTime (seconds), the caller
     /// multiplies by 1000.0F -- a missed conversion gives 1000x-too-short bullets.

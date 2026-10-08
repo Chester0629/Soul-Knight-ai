@@ -761,16 +761,18 @@ TEST(CharSkillSimTest, KillAttributionMixedDotsDyingOnPlayerTickCallsOnEnemyKill
 TEST(CharSkillSimTest, KillAttributionNonPlayerDotLocksOutALaterSameStepPlayerBullet) {
     Simulation sim(90, &g_NullWorld);
     // Stationary, hp=1 so a single tickDamage=1 poison tick is exactly lethal.
-    // BulletDef::bulletSpeed is in DATA units, scaled to px/fixed-step by
-    // Sim::kDataSpeedToPxPerSec(15) * kFixedStepSeconds(0.02) -- see
-    // BrainFactory::MakeWeapon -- so bulletSpeed=100 moves 100*15*0.02=30px per
-    // fixed step. Placed at x=115 so the bullet lands EXACTLY on it on the 4th
-    // IntegrateBullets call (30, 60, 90, 120), never sooner (the radius-sum
+    // BulletDef::bulletSpeed is in DATA units (Unity units/s), scaled to px/fixed-step by
+    // Sim::kDataSpeedToPxPerSec(32) * kFixedStepSeconds(0.02) -- see
+    // BrainFactory::MakeWeapon -- so bulletSpeed=50 moves 50*32*0.02=32px per
+    // fixed step (P3.0: was bulletSpeed=100 at the legacy 15 px per unit = 30 px/step;
+    // 50 keeps the per-step travel, and so the event order, essentially unchanged).
+    // Placed at x=120 so the bullet lands EXACTLY on it on the 4th
+    // IntegrateBullets call (32, 64, 96, 128), never sooner (the radius-sum
     // overlap gate is kBulletRadius(4)+kEnemyBodyRadius(16)=20px, and
-    // 115-90=25 > 20, so step 3 is still a clean miss; 120-115=5 <= 20 lands).
-    sim.AddEnemy(StationaryEnemyWithHp(1), glm::vec2{115.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    // 120-96=24 > 20, so step 3 is still a clean miss; 128-120=8 <= 20 lands).
+    sim.AddEnemy(StationaryEnemyWithHp(1), glm::vec2{120.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
     Game::WeaponDef wdef{};
-    wdef.bulletSpeed = 100.0F;
+    wdef.bulletSpeed = 50.0F;
     wdef.atk = 1; // irrelevant -- the DoT is what kills it.
     sim.EquipWeapon(wdef, "Gun001", 7);
     sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);
@@ -779,7 +781,7 @@ TEST(CharSkillSimTest, KillAttributionNonPlayerDotLocksOutALaterSameStepPlayerBu
 
     // Step 1: fire the bullet BEFORE the skill window opens (in_skill_effect==false
     // here, so this press is a plain shot -- C04 only hijacks "firing" into a cut
-    // once the window is up). Bullet now at x=30, still far from the enemy.
+    // once the window is up). Bullet now at x=32, still far from the enemy.
     WorldInputs fire = Idle();
     fire.firing = true;
     sim.Advance(kFixedStepMs, fire);
@@ -787,18 +789,18 @@ TEST(CharSkillSimTest, KillAttributionNonPlayerDotLocksOutALaterSameStepPlayerBu
     ASSERT_TRUE(sim.EnemyViews()[0].alive);
 
     // Step 2: open the cut window (idle otherwise -- the bullet keeps flying via
-    // IntegrateBullets regardless of `firing`). Bullet now at x=60.
+    // IntegrateBullets regardless of `firing`). Bullet now at x=64.
     WorldInputs cast = Idle();
     cast.skill = true;
     sim.Advance(kFixedStepMs, cast);
     ASSERT_TRUE(adapter->Brain().InSkillEffect()) << "the cut window is open";
 
-    // Step 3: idle. Bullet now at x=90 (still a clean miss, see the setup comment).
+    // Step 3: idle. Bullet now at x=96 (still a clean miss, see the setup comment).
     sim.Advance(kFixedStepMs, Idle());
     ASSERT_TRUE(sim.EnemyViews()[0].alive) << "the bullet has not reached the enemy yet";
 
     // Arm the lethal non-player DoT right before the landing step: it ticks in
-    // TickBuffs, BEFORE this same step's ResolveHits moves the bullet to x=120 and
+    // TickBuffs, BEFORE this same step's ResolveHits moves the bullet to x=128 and
     // resolves the (now-redundant, but still gate-passing) hit.
     Game::Combat::BuffParams poison; // NOT player-sourced.
     poison.kind = Game::Combat::BuffKind::Poison;
@@ -870,18 +872,18 @@ TEST(CharSkillSimTest, KillAttributionPlayerCutLocksOutALaterSameStepNonPlayerDo
 
 TEST(CharSkillSimTest, KillAttributionForcedDeathLocksOutAnInFlightPlayerBullet) {
     Simulation sim(86, &g_NullWorld);
-    // Stationary, far enough (x=205) that the bullet needs several steps to
+    // Stationary, far enough (x=225) that the bullet needs several steps to
     // arrive, well outside C04's ~48px cut reach so the "latch has_cut" press
     // below cannot itself touch it. BulletDef::bulletSpeed is in DATA units,
-    // scaled to px/fixed-step by Sim::kDataSpeedToPxPerSec(15) *
+    // scaled to px/fixed-step by Sim::kDataSpeedToPxPerSec(32) *
     // kFixedStepSeconds(0.02) -- see BrainFactory::MakeWeapon -- so
-    // bulletSpeed=100 moves 100*15*0.02=30px per fixed step: the real shot
-    // (below) reaches x=180 after 5 idle steps (30*6=180, distance 25 > the
-    // kBulletRadius(4)+kEnemyBodyRadius(16)=20px overlap gate -- a clean miss),
-    // then x=210 one step later (distance 5 <= 20 -- lands).
-    sim.AddEnemy(StationaryEnemyWithHp(1000), glm::vec2{205.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
+    // bulletSpeed=50 moves 50*32*0.02=32px per fixed step (P3.0: was bulletSpeed=100 at
+    // 15 px per unit = 30 px/step): the real shot (below) reaches x=192 after 5 idle
+    // steps (32*6=192, distance 33 > the kBulletRadius(4)+kEnemyBodyRadius(16)=20px
+    // overlap gate -- a clean miss), then x=224 one step later (distance 1 <= 20 -- lands).
+    sim.AddEnemy(StationaryEnemyWithHp(1000), glm::vec2{225.0F, 0.0F}, /*roomId=*/0, /*seed=*/1);
     Game::WeaponDef wdef{};
-    wdef.bulletSpeed = 100.0F;
+    wdef.bulletSpeed = 50.0F;
     wdef.atk = 1;               // 1 dmg: nowhere near lethal on a 1000-hp enemy.
     sim.EquipWeapon(wdef, "Gun001", 7);
     sim.SetPlayerSkill("c04", /*skillCd=*/11.0F, /*inSkillTime=*/5.0F, /*atk=*/5);

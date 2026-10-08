@@ -58,7 +58,7 @@ TEST(SimulationTest, EquippedWeaponFiresPlayerBulletsOnCadence) {
     Simulation sim(55, &g_NullWorld);
     Game::WeaponDef def{};
     def.weaponSpeed = 1.0F;
-    def.bulletSpeed = 10.0F; // *15 = 150 px/s
+    def.bulletSpeed = 10.0F; // 10 units/s * 32 px/unit = 320 px/s
     def.atk = 4;
     def.deviation = 0;       // clean +x direction
     sim.EquipWeapon(def, "Gun001", 808);
@@ -100,7 +100,7 @@ public:
 TEST(SimulationTest, BulletAdvancesAndExpires) {
     Simulation sim(1, &g_NullWorld);
     Game::WeaponDef def{};
-    def.bulletSpeed = 10.0F; // 150 px/s -> 3 px/step
+    def.bulletSpeed = 10.0F; // 320 px/s -> 6.4 px/step
     sim.EquipWeapon(def, "Gun001", 1);
     WorldInputs in = Idle();
     in.firing = true;
@@ -108,7 +108,7 @@ TEST(SimulationTest, BulletAdvancesAndExpires) {
     ASSERT_EQ(sim.Bullets().size(), 1U);
     const float x0 = sim.Bullets()[0].pos.x;
     in.firing = false;
-    sim.Advance(20.0F, in);           // one more step: pos advances ~3px, life -20ms
+    sim.Advance(20.0F, in);           // one more step: pos advances ~6.4px, life -20ms
     ASSERT_EQ(sim.Bullets().size(), 1U);
     EXPECT_GT(sim.Bullets()[0].pos.x, x0);
     EXPECT_LT(sim.Bullets()[0].lifeMs, 1500.0F);
@@ -123,7 +123,7 @@ TEST(SimulationTest, BulletCulledByWallUnlessCanThrough) {
     RightWall wall;
     Simulation sim(1, &wall);
     Game::WeaponDef def{};
-    def.bulletSpeed = 40.0F; // 600 px/s -> 12 px/step, crosses x=100 quickly
+    def.bulletSpeed = 40.0F; // 1280 px/s -> 25.6 px/step, crosses x=100 quickly
     sim.EquipWeapon(def, "Gun001", 1);
     WorldInputs in = Idle();
     in.firing = true;
@@ -422,8 +422,14 @@ TEST(SimulationTest, EmitsPlayerFireEnemyHurtAndDeathEvents) {
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
 
+    // P3.0: e_alien01 now really walks its data speed (5 units/s = 160 px/s) and wanders off
+    // the +x line of fire within the 4 s, so the shots would miss. This test is about the
+    // fire/hurt/death EVENTS, not movement: pin the target in place (kinematic = fixed
+    // turret) so the shot sequence stays the one the comment below counts.
+    Game::EnemyDef pinned = *edef;
+    pinned.kinematic = 1;
     Simulation sim(20240607, &g_NullWorld);
-    sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
+    sim.AddEnemy(pinned, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
     sim.EquipWeapon(*wdef, "Gun001", 5);
 
     WorldInputs in = Idle();

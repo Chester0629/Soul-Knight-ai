@@ -5,6 +5,7 @@
 #include "combat/BossAI01.hpp"
 #include "combat/EnemyAI01.hpp"
 #include "data/GameData.hpp"
+#include "game/WorldScale.hpp"
 #include "sim/BossController.hpp"
 #include "sim/BrainFactory.hpp"
 #include "sim/EnemyController.hpp"
@@ -63,7 +64,7 @@ TEST(BrainFactoryTest, MakeWeaponSingleFromDef) {
 TEST(BrainFactoryTest, MakeWeaponMapsDefFieldsToShot) {
     Game::WeaponDef def{};
     def.weaponSpeed = 2.0F;  // fire-rate multiplier (still fires on the first tick)
-    def.bulletSpeed = 10.0F; // * kDataSpeedToPxPerSec(15) -> 150 px/s
+    def.bulletSpeed = 10.0F; // 10 units/s * kDataSpeedToPxPerSec(32 px/unit) -> 320 px/s
     def.atk = 7;
     def.deviation = 0;       // no spread: keep the shot direction clean
     Game::Sim::WeaponController w = BrainFactory::MakeWeapon(def, "Gun001", 1);
@@ -71,7 +72,10 @@ TEST(BrainFactoryTest, MakeWeaponMapsDefFieldsToShot) {
     w.Tick(true, glm::vec2{0.0F, 0.0F}, glm::vec2{1.0F, 0.0F}, out);
     ASSERT_EQ(out.size(), 1U);
     EXPECT_EQ(out.back().damage, 7);                  // def.atk -> damage
-    EXPECT_FLOAT_EQ(out.back().speedPxPerSec, 150.0F); // def.bulletSpeed * 15
+    // P3.0: data speeds are Unity units/s and 1 unit = 32 px (PPU 16 drawn at 2x = kCellPx),
+    // so 10 units/s is 320 px/s (it was 150 under the legacy, unsourced 15 px per unit).
+    EXPECT_FLOAT_EQ(out.back().speedPxPerSec, 10.0F * Game::Scale::kCellPx);
+    EXPECT_FLOAT_EQ(out.back().speedPxPerSec, 320.0F);
 }
 
 TEST(BrainFactoryTest, MakeWeaponGun016SelectsHeatMinigun) {

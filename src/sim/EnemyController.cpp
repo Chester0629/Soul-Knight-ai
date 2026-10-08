@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "sim/EnemyBrainAdapters.hpp"
+#include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
 
 namespace Game::Sim {
@@ -41,10 +42,15 @@ glm::vec2 EnemyController::ComputeVelocity() {
         m_State.vel = glm::vec2(0.0F, 0.0F);
         return m_State.vel;
     }
+    // Steering is already px/s (Params.speed). The knockback term is kept in the data domain
+    // (m_InertialVel is the GetForce power in Unity units/s, capped at kForceCap 28,
+    // threshold 1.0, both FAITHFUL values in units/s) and converted here with the single
+    // data-speed factor, so it composes with the steering in the same unit as the original's
+    // Rigidbody2D.velocity (move_dir*speed*(rate+1) + force_dir*inertial_vel).
     const float scale = m_Params.speed * (m_Params.speedRate + 1.0F);
     glm::vec2 velocity = m_MoveDir * scale;
     if (m_InertialVel > kKnockbackThreshold) {
-        velocity += m_ForceDir * m_InertialVel;
+        velocity += m_ForceDir * (m_InertialVel * kDataSpeedToPxPerSec);
         m_InertialVel *= m_Params.friction;
     }
     m_State.vel = velocity;
@@ -88,7 +94,7 @@ void EnemyController::OnShootTick() {
             intent.pattern = FirePattern::Single;
             intent.origin = m_State.pos;
             intent.dir = Normalize(m_Target - m_State.pos);
-            intent.speedPxPerSec = m_Params.speed * kSliceBulletSpeedMul;
+            intent.speedPxPerSec = kSliceBulletSpeedUnits * kDataSpeedToPxPerSec;
             intent.lifeMs = kSliceBulletLifeMs;
             intent.damage = 1;
             intent.camp = 1; // enemy bullet

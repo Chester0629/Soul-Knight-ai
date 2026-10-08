@@ -661,6 +661,9 @@ void Simulation::IntegrateBullets() {
         }
         b.pos += b.vel * kFixedStepSeconds;
         b.lifeMs -= kFixedStepMs;
+        // PORT CHOICE (T-57): this bullet-vs-wall test is a DISCRETE overlap once per fixed step. Since P3.0
+        // (data speeds at 32 px/unit) weapon bullets reach 64 units/s = ~41 px per fixed step, so a
+        // grazing contact can be skipped between two steps; a swept test is a follow-up.
         const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
         if (!b.canThrough && m_World->Blocks(b.pos, bulletR)) {
             b.active = false;
@@ -681,6 +684,9 @@ void Simulation::ResolveHits() {
         if (!b.active) {
             continue;
         }
+        // PORT CHOICE (T-57): the hit tests below are DISCRETE per fixed step (circle/box overlap at the
+        // bullet's end-of-step position). At the P3.0 speeds (weapon bullets up to 64 units/s = ~41 px
+        // per step) a grazing hit can be skipped; centre hits cannot. A swept test is a follow-up.
         // PORT CHOICE (T-52): enemy bullets (radiusPx 0) use the 4 px kBulletRadius fallback,
         // not their prefab collider (see SimConfig.hpp); player bullets use the data radius.
         const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;

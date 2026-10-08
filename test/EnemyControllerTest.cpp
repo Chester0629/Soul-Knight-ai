@@ -6,6 +6,7 @@
 #include "combat/EnemyAI01.hpp"
 #include "sim/EnemyController.hpp"
 #include "sim/FireIntent.hpp"
+#include "sim/SimConfig.hpp"
 #include "sim/Scheduler.hpp"
 
 using Game::Sim::EnemyController;
@@ -46,7 +47,11 @@ TEST(EnemyControllerTest, KnockbackAddsForceThenDecays) {
     e.ApplyForce(glm::vec2{1.0F, 0.0F}, 10.0F);
     EXPECT_FLOAT_EQ(e.InertialVel(), 10.0F);
     const glm::vec2 v = e.ComputeVelocity();
-    EXPECT_FLOAT_EQ(v.x, 10.0F);
+    // P3.0: the GetForce power is Unity units/s (cap 28), added to the steering velocity in
+    // the original's Rigidbody2D.velocity; the controller outputs px/s, so 10 units/s is
+    // 10 * 32 = 320 px/s (it was a bare 10 px/s). InertialVel() stays in units/s.
+    EXPECT_FLOAT_EQ(v.x, 10.0F * Game::Sim::kDataSpeedToPxPerSec);
+    EXPECT_FLOAT_EQ(v.x, 320.0F);
     EXPECT_FLOAT_EQ(e.InertialVel(), 5.0F);
 }
 
@@ -99,8 +104,8 @@ TEST(EnemyControllerTest, SteerAndKnockbackCompose) {
     e.SetMoveDir(glm::vec2{1.0F, 0.0F});   // steer 60 px/s along +x
     e.ApplyForce(glm::vec2{0.0F, 1.0F}, 10.0F); // knockback 10 along +y
     const glm::vec2 v = e.ComputeVelocity();
-    EXPECT_FLOAT_EQ(v.x, 60.0F);
-    EXPECT_FLOAT_EQ(v.y, 10.0F);
+    EXPECT_FLOAT_EQ(v.x, 60.0F);   // steering: Params.speed is already px/s
+    EXPECT_FLOAT_EQ(v.y, 320.0F);  // knockback: 10 units/s * 32 px/unit (P3.0)
 }
 
 TEST(EnemyControllerTest, DoubleComputeViolatesCallOnceContract) {

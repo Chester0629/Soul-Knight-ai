@@ -31,12 +31,19 @@ public:
     static constexpr float kKnockbackThreshold = 1.0F;
 
     // Slice placeholders for the enemy bullet (greppable + obviously temporary).
-    // Plan 3/4 will source these from EnemyGunDef.bulletSpeed * kDataSpeedToPxPerSec
-    // and the bullet's destroy_time instead of these flat values.
-    static constexpr float kSliceBulletSpeedMul = 5.0F;  ///< bullet speed = speed * this.
-    static constexpr float kSliceBulletLifeMs = 1500.0F; ///< bullet lifetime (ms).
+    // PORT CHOICE (T-54, P3.0): the enemy fire path does not read EnemyGunDef.bulletSpeed yet
+    // (only 10 of 146 species have an EGun row, and EnemyDef carries no gun link), so every
+    // enemy bullet flies at one flat speed. It is given in Unity units/s and goes through the
+    // single data-speed factor like every other speed: 10 u/s = 320 px/s, inside the real
+    // EGun range (6..24 u/s) and close to the slice's original 300 px/s. Plan 3/4 will source
+    // it from EnemyGunDef.bulletSpeed * kDataSpeedToPxPerSec and the bullet's destroy_time.
+    static constexpr float kSliceBulletSpeedUnits = 10.0F; ///< bullet speed, Unity units/s.
+    static constexpr float kSliceBulletLifeMs = 1500.0F;   ///< bullet lifetime (ms).
 
     struct Params {
+        /// Steering speed in px/s (BrainFactory converts EnemyDef.speed, units/s, with
+        /// kDataSpeedToPxPerSec). The 60 default is a PORT CHOICE (T-56) for a def with no species
+        /// data (a bare test EnemyDef{}), not a data value.
         float speed = 60.0F;
         float speedRate = 0.0F;
         float friction = 0.9F;     ///< inertial_vel decay per step; must be in (0,1).
@@ -69,7 +76,8 @@ public:
     /// Set the aim target (the player position), updated each tick by the owner.
     void SetTarget(glm::vec2 target) { m_Target = target; }
 
-    /// Seed knockback (FAITHFUL: RGEController__GetForce @473583).
+    /// Seed knockback (FAITHFUL: RGEController__GetForce @473583). @p power is in Unity
+    /// units/s (capped at kForceCap); ComputeVelocity converts it to px/s.
     void ApplyForce(glm::vec2 dir, float power);
 
     /// Compose this fixed step's velocity and decay knockback.
@@ -91,6 +99,7 @@ public:
         m_FiredThisStep = false;
         return fired;
     }
+    /// Remaining knockback magnitude, Unity units/s (NOT px/s).
     float InertialVel() const { return m_InertialVel; }
     glm::vec2 MoveDir() const { return m_MoveDir; }
     void SetMoveDir(glm::vec2 dir) { m_MoveDir = dir; }
