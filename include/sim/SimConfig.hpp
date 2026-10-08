@@ -51,6 +51,14 @@ inline constexpr float kPlayerBodyRadius = 16.0F;
 inline constexpr float kEnemyBodyRadius = 16.0F;
 inline constexpr float kBossBodyRadius = 24.0F;
 
+/// PORT CHOICE (T-57, swept bullet collision): the player's own displacement between two consecutive
+/// fixed steps (WorldInputs::playerPos is supplied by the shell, not integrated by the sim)
+/// is folded into a bullet-vs-player sweep only when it is at most this long. A larger jump
+/// (dash, door teleport, respawn) is NOT a continuous motion, so the player is then treated
+/// as stationary at its new position for that step. 64 px = 2 cells = ~16x the walk speed
+/// per step; the value only needs to separate walking from teleporting.
+inline constexpr float kMaxPlayerSweepPx = 64.0F;
+
 /// Slice enemy HP. EnemyDef carries no hp field and EnemyController leaves stats.hp=0,
 /// so the Simulation seeds it; mirrors the old Enemy entity's CombatStats{3,3,...}.
 inline constexpr int kSliceEnemyHp = 3;

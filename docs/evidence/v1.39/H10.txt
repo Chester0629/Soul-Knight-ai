@@ -1,40 +1,40 @@
  [info] Buff: Fire applied to 4 for 2.000000s
  [info] Buff: Fire applied to 4 for 2.000000s
- [info] Buff: Fire applied to 4 for 2.000000s
  [info] Buff: Fire applied to 6 for 2.000000s
  [info] Buff: Fire applied to 6 for 2.000000s
  [info] Buff: Fire applied to 6 for 2.000000s
  [info] Buff: Fire applied to 8 for 2.000000s
- [info] Buff: Fire applied to 2 for 2.000000s
+ [info] Buff: Fire applied to 8 for 2.000000s
  [info] Buff: Fire applied to 2 for 2.000000s
  [info] Buff: Fire applied to 2 for 2.000000s
  [info] Buff: Fire ended on 4
  [info] Buff: Fire applied to 5 for 2.000000s
+ [info] Buff: Fire applied to 5 for 2.000000s
+ [info] Buff: Fire applied to 5 for 2.000000s
  [info] Buff: Fire ended on 6
- [info] Buff: Fire applied to 5 for 2.000000s
- [info] Buff: Fire applied to 5 for 2.000000s
- [info] Buff: Fire ended on 8
- [info] Buff: Fire applied to 7 for 2.000000s
  [info] Buff: Fire applied to 7 for 2.000000s
  [info] Buff: Fire applied to 0 for 2.000000s
+ [info] Buff: Fire applied to 7 for 2.000000s
+ [info] Buff: Fire ended on 8
  [info] Buff: Fire applied to 0 for 2.000000s
  [info] Buff: Fire ended on 2
  [info] Buff: Fire applied to 3 for 2.000000s
  [info] Buff: Fire applied to 3 for 2.000000s
  [info] Buff: Fire applied to 3 for 2.000000s
- [info] Buff: Fire applied to 1 for 2.000000s
  [info] Buff: Fire ended on 5
+ [info] Buff: Fire applied to 1 for 2.000000s
+ [info] Buff: Fire applied to 1 for 2.000000s
+ [info] Buff: Fire applied to 1 for 2.000000s
  [info] Buff: Fire applied to 1 for 2.000000s
  [info] Buff: Fire applied to 1 for 2.000000s
  [info] Buff: Fire ended on 7
  [info] Buff: Fire applied to 1 for 2.000000s
- [info] Buff: Fire applied to 1 for 2.000000s
- [info] Buff: Fire applied to 1 for 2.000000s
+ [info] Buff: Fire applied to 26 for 2.000000s
+ [info] Buff: Fire applied to 28 for 2.000000s
  [info] Buff: Fire ended on 0
  [info] Buff: Fire applied to 28 for 2.000000s
  [info] Buff: Fire applied to 28 for 2.000000s
  [info] Buff: Fire applied to 26 for 2.000000s
  [info] Buff: Fire ended on 3
- [info] Buff: Fire applied to 26 for 2.000000s
- [info] Buff: Fire applied to 28 for 2.000000s
+ [info] Buff: Fire applied to 23 for 2.000000s
  [info] Buff: Fire applied to 29 for 2.000000s

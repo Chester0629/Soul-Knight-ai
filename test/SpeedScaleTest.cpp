@@ -48,8 +48,11 @@ TEST(SpeedScaleTest, ConversionIsTheMapCellAndSharesOneSource) {
     EXPECT_FLOAT_EQ(Game::Sim::kDataSpeedToPxPerSec, 32.0F);
 }
 
-// weapon_000 (the starter pistol, Gun001): bullets.json/weapons.json bullet_speed = 36
-// units/s. Fired in a straight line it must cover exactly speed * t cells in t seconds.
+// weapon_000 (the starter pistol, Gun001): the speed the sim uses is weapons.json weapon_000
+// bullet_speed = 36 units/s (WeaponDef::bulletSpeed -> BrainFactory). bullets.json bullet_0.speed
+// is 10 (the bullet prefab's own default); the weapon's value overrides it, bullet_0's 10 is
+// never read for the flight speed. Fired in a straight line it must cover exactly speed * t
+// cells in t seconds.
 TEST(SpeedScaleTest, Weapon000BulletFliesSpeedTimesTCells) {
     Game::GameData gd;
     ASSERT_TRUE(gd.LoadAll(kResourceRoot));

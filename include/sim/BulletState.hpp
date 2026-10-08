@@ -32,6 +32,10 @@ struct BulletState {
     bool hasBuff = false;
     Game::Combat::BuffParams buffParams{};
     float buffProbability = 0.0F;
+    // T-57 (swept collision) per-step scratch, written by Simulation::IntegrateBullets and
+    // read by ResolveHits in the SAME fixed step; meaningless between steps.
+    glm::vec2 prevPos{0.0F, 0.0F}; ///< position at the START of the current step (sweep origin).
+    bool wallStop = false;         ///< the step's path hit a wall: pos = contact point.
 };
 
 } // namespace Game::Sim

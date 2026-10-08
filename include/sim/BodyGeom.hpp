@@ -9,6 +9,7 @@
 #include "game/WorldScale.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
+#include "sim/SweptCollision.hpp"
 
 namespace Game::Sim {
 
@@ -58,6 +59,30 @@ struct BodyGeom {
                                 std::clamp(d.y, -hurtHalfPx.y, hurtHalfPx.y)};
         const glm::vec2 gap = d - nearest;
         return (gap.x * gap.x + gap.y * gap.y) <= r * r;
+    }
+
+    /// SWEPT hit test over one fixed step (T-57). The body moves linearly from @p pos0 to
+    /// @p pos1 while the circle centre moves linearly from @p c0 to @p c1 (radius @p r).
+    /// Works on the RELATIVE motion rel(t) = (c0 + t (c1-c0)) - (pos0 + t (pos1-pos0) + hurtOffset)
+    /// against the hurtbox grown by @p r: a circle hurtbox becomes a disc of radius
+    /// hurtRadius + r, a box hurtbox the exact rounded box (Minkowski sum). Returns the
+    /// earliest touching time @p t in [0,1] (0 = already touching at the start). The result
+    /// is a strict superset of the discrete end-of-step HurtOverlaps(pos1, c1, r): that
+    /// exact inclusive test is also run so boundary probes stay bit-identical.
+    bool HurtSweep(glm::vec2 pos0, glm::vec2 pos1, glm::vec2 c0, glm::vec2 c1, float r,
+                   float &t) const {
+        const glm::vec2 rel0 = c0 - (pos0 + hurtOffsetPx);
+        const glm::vec2 rel1 = c1 - (pos1 + hurtOffsetPx);
+        const bool swept = hurtIsBox ? Swept::SegmentRoundedBoxEntry(rel0, rel1, hurtHalfPx, r, t)
+                                     : Swept::SegmentCircleEntry(rel0, rel1, hurtRadiusPx + r, t);
+        if (swept) {
+            return true;
+        }
+        if (HurtOverlaps(pos1, c1, r)) {
+            t = 1.0F;
+            return true;
+        }
+        return false;
     }
 };
 

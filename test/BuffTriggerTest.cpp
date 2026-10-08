@@ -14,6 +14,8 @@
 #include "combat/Buff.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
+#include "sim/BodyGeom.hpp"
+#include "sim/SimConfig.hpp"
 #include "sim/SimEvent.hpp"
 #include "sim/Simulation.hpp"
 #include "sim/WorldCollision.hpp"
@@ -361,40 +363,63 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
     ASSERT_NE(edef, nullptr);
     ASSERT_NE(wdef, nullptr);
 
+    // T-57 (swept collision): the tick of each hit is the first fixed step whose bullet path
+    // (start -> end of step, relative to the walking enemy) touches the hurtbox grown by the
+    // bullet radius -- a continuous quantity, so `run` also re-derives that tick independently
+    // from the recorded positions (BodyGeom::HurtSweep over the first bullet's straight flight
+    // and the enemy's per-step motion) and the sim must agree with it EXACTLY.
+    const Game::BulletDef *bd = gd.BulletForWeapon(*wdef);
+    ASSERT_NE(bd, nullptr);
+    const Game::Sim::BodyGeom geom = Game::Sim::MakeBodyGeom(edef->body, edef->hurtbox, 16.0F);
+    struct Run {
+        std::vector<float> trace;
+        int oracleTick = -1;
+    };
     auto run = [&](bool passData) {
         Simulation sim(20240607, &g_NullWorld);
         sim.AddEnemy(*edef, glm::vec2{60.0F, 0.0F}, /*roomId=*/0, 21000);
         sim.EquipWeapon(*wdef, "Gun001", 5, passData ? &gd : nullptr);
+        const float bulletR =
+            passData ? Game::Sim::EquivalentRadiusPx(bd->collider) : Game::Sim::kBulletRadius;
         const WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
-        std::vector<float> trace;
-        trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp)); // [0] = hp before any tick
+        Run r;
+        r.trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp)); // [0] = hp before any tick
+        glm::vec2 prevEnemy = sim.EnemyViews()[0].pos;
+        glm::vec2 bulletStep{0.0F, 0.0F}; // first bullet's displacement per step (straight flight)
+        glm::vec2 bulletEnd{0.0F, 0.0F};
         for (int i = 0; i < 150; ++i) {
             sim.Advance(20.0F, in);
-            trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp));
+            r.trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp));
             EXPECT_FALSE(HasBuffApplied(sim.DrainEvents(), "")); // no buff_applied event AT ALL.
+            const glm::vec2 enemy = sim.EnemyViews()[0].pos;
+            if (i == 0) {
+                EXPECT_EQ(sim.Bullets().size(), 1U);
+                bulletStep = sim.Bullets()[0].vel * Game::Sim::kFixedStepSeconds;
+                bulletEnd = sim.Bullets()[0].pos; // end of step 1 (it spawned at the muzzle and moved once)
+            } else {
+                bulletEnd += bulletStep;
+            }
+            float t = 0.0F;
+            if (r.oracleTick < 0 &&
+                geom.HurtSweep(prevEnemy, enemy, bulletEnd - bulletStep, bulletEnd, bulletR, t)) {
+                r.oracleTick = i + 1; // trace index of this step
+            }
+            prevEnemy = enemy;
         }
-        return trace;
+        return r;
     };
     // Passing GameData in (P3.2) must not change a no-buff weapon's DAMAGE SEQUENCE
     // versus the old (nullptr) call sites' behaviour. COLLIDER DATA (scale pass): with
     // data the weapon's bullet takes its prefab collider radius (bullet_0: 0.5x0.4-unit box
-    // -> 6.4 px) instead of the 4 px fallback, so it reaches the enemy one tick EARLIER;
-    // the exact tick of each hit therefore legitimately differs by that radius. Compare
-    // the sequence of distinct hp values (same hits, same damage), not the tick alignment.
+    // -> 6.4 px) instead of the 4 px fallback, so it touches the enemy up to one tick EARLIER.
+    // Compare the sequence of distinct hp values (same hits, same damage) first.
     auto distinct = [](std::vector<float> v) {
         v.erase(std::unique(v.begin(), v.end()), v.end());
         return v;
     };
-    const std::vector<float> withData = run(/*passData=*/true);
-    const std::vector<float> fallback = run(/*passData=*/false);
-    EXPECT_EQ(distinct(withData), distinct(fallback));
-    // ...and that tick shift is exactly what the radius change predicts: the first hit
-    // lands NO LATER than with the 4 px fallback and at most ONE tick earlier (the 2.4 px of
-    // extra reach is less than one tick of bullet travel). P3.0: weapon_000 flies 36 units/s
-    // = 1152 px/s = 23.04 px per fixed step (was 10.8 at the legacy 15 px per unit), so the
-    // 2.4 px of reach crosses a step boundary in only ~10% of alignments: here both runs hit
-    // on the SAME tick (it was exactly one tick earlier at 10.8 px/step, where the old
-    // equality was asserted). Both outcomes are allowed; a LATER hit would be a bug.
+    const Run withData = run(/*passData=*/true);
+    const Run fallback = run(/*passData=*/false);
+    EXPECT_EQ(distinct(withData.trace), distinct(fallback.trace));
     auto firstHit = [](const std::vector<float> &t) {
         for (std::size_t i = 1; i < t.size(); ++i) {
             if (t[i] < t[0]) {
@@ -403,9 +428,20 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         }
         return -1;
     };
-    ASSERT_GT(firstHit(fallback), 1);
-    EXPECT_LE(firstHit(withData), firstHit(fallback));
-    EXPECT_GE(firstHit(withData), firstHit(fallback) - 1);
+    // PRECISE (T-57): each run's first-damage tick IS the independently derived swept-contact
+    // tick. (P3.0 had loosened this to "no later, at most one earlier" because the discrete
+    // end-of-step test aliased with the 23 px step; the swept hit time is continuous, so the
+    // radius change moves the tick only when a tick boundary lies inside the 2.4 px of extra
+    // reach, and the oracle pins which of the two outcomes the data gives.)
+    ASSERT_GT(firstHit(fallback.trace), 1);
+    RecordProperty("firstHitData", firstHit(withData.trace));
+    RecordProperty("firstHitFallback", firstHit(fallback.trace));
+    EXPECT_EQ(firstHit(withData.trace), withData.oracleTick);
+    EXPECT_EQ(firstHit(fallback.trace), fallback.oracleTick);
+    // ...and the larger data radius can never be LATER, nor more than one tick (23 px of
+    // travel > 2.4 px of reach) EARLIER.
+    EXPECT_LE(firstHit(withData.trace), firstHit(fallback.trace));
+    EXPECT_GE(firstHit(withData.trace), firstHit(fallback.trace) - 1);
 }
 
 // NOLINTEND(readability-magic-numbers)

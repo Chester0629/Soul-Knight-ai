@@ -223,6 +223,15 @@ private:
     FireSystem m_FireSystem;
     std::vector<FireIntent> m_FireIntents; ///< controllers push here; cleared each step.
     std::vector<BulletState> m_Bullets;
+    /// T-57 (swept bullet collision): hurtbox-owner positions at the START of the current
+    /// fixed step (snapshotted at the top of MoveControllers, i.e. after every brain /
+    /// scheduler teleport, so the step's motion is exactly the controller's own linear
+    /// walk). ResolveHits sweeps the bullet against the relative motion prev -> current.
+    std::vector<glm::vec2> m_EnemyStepStart;
+    glm::vec2 m_BossStepStart{0.0F, 0.0F};
+    /// Player position used as the previous-step sweep origin (see kMaxPlayerSweepPx).
+    glm::vec2 m_PlayerPrevPos{0.0F, 0.0F};
+    bool m_PlayerPrevValid = false;
     std::uint32_t m_NextBulletId = 1;
     Game::RGRandom m_HitRng;
 

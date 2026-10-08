@@ -390,18 +390,21 @@ Game::Sim::WorldInputs FireAlongX() {
     return in;
 }
 
-// P3.0: the boundary probes below fire a SLOW bullet. The hit test is a discrete circle/box
-// overlap once per fixed step, and at the real weapon_000 speed (36 units/s = 1152 px/s =
-// 23 px per step) a glancing 0.5 px-deep overlap (a chord of ~9 px) is sampled by only some
-// of the steps, so the probe would test step aliasing, not the radius. 5 units/s = 160 px/s
-// = 3.2 px/step samples every such chord; the geometry under test is unchanged.
-constexpr float kProbeBulletUnitsPerSec = 5.0F;
+// T-57: the boundary probes fire at the REAL weapon speed (weapon_000: 36 units/s = 1152 px/s =
+// 23 px per fixed step), and `bulletUnitsPerSec` > 0 overrides it (the 64 units/s fastest-weapon
+// probe). P3.0 had to slow these probes to 5 units/s because the hit test was a discrete overlap
+// once per step: a glancing 0.5 px-deep overlap (a chord of ~9 px) is sampled by only some of
+// the steps, so the probe tested step aliasing, not the radius. The swept (continuous) test
+// reports that chord at ANY speed, so the probes are deterministic at the real speed again.
 
 // Fire straight along +x past a slime whose hurtbox centre is @p enemyY above the line of
 // fire; true if its hp dropped.
-bool SlimeHit(const Game::GameData &gd, Game::WeaponDef w, float enemyY, bool stripData = false) {
+bool SlimeHit(const Game::GameData &gd, Game::WeaponDef w, float enemyY, bool stripData = false,
+              float bulletUnitsPerSec = 0.0F) {
     Game::EnemyDef slimeCopy = *gd.FindEnemy("e_slime01");
-    w.bulletSpeed = kProbeBulletUnitsPerSec;
+    if (bulletUnitsPerSec > 0.0F) {
+        w.bulletSpeed = bulletUnitsPerSec;
+    }
     if (stripData) { // the old placeholder geometry: 16 px circle + 4 px bullet
         slimeCopy.body = ColliderDef{};
         slimeCopy.hurtbox = ColliderDef{};
@@ -442,6 +445,11 @@ TEST(SimColliderTest, BulletHitsEnemyAtTheDataRadiusBoundary) {
     EXPECT_GT(half + bulletR - 0.5F, Game::Sim::kBulletRadius + Game::Sim::kEnemyBodyRadius);
     EXPECT_FALSE(SlimeHit(gd, w, half + bulletR - 0.5F, /*stripData=*/true));
     EXPECT_FALSE(SlimeHit(gd, w, half + bulletR + 0.5F, /*stripData=*/true));
+    // The same boundary at the fastest data speed (64 units/s = 41 px per step) and a slow one.
+    for (const float speed : {5.0F, 64.0F}) {
+        EXPECT_TRUE(SlimeHit(gd, w, half + bulletR - 0.5F, false, speed)) << speed;
+        EXPECT_FALSE(SlimeHit(gd, w, half + bulletR + 0.5F, false, speed)) << speed;
+    }
 }
 
 TEST(SimColliderTest, DefWithoutColliderDataKeepsPlaceholderRadii) {
@@ -453,7 +461,6 @@ TEST(SimColliderTest, DefWithoutColliderDataKeepsPlaceholderRadii) {
     Game::WeaponDef w = *w0;
     w.deviation = 0;
     w.bulletPrefab.clear(); // no bullet prefab -> fallback bullet radius (4 px)
-    w.bulletSpeed = kProbeBulletUnitsPerSec; // slow probe: see kProbeBulletUnitsPerSec
     auto hit = [&](float y) {
         Game::Sim::Simulation sim(20240607, &g_NullWorld);
         Game::EnemyDef bare;

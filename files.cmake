@@ -504,6 +504,7 @@ set(TEST_FILES
     BossBrainDispatchTest.cpp
     SimulationTest.cpp
     SpeedScaleTest.cpp
+    SweptCollisionTest.cpp
     WeaponControllerTest.cpp
 
     # ENEMY RE-KEY: per-species data-driven enemy/boss stats (enemies.csv, 145 rows)
