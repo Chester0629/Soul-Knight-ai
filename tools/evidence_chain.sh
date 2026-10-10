@@ -198,6 +198,12 @@ run_case p215_graveyard "Level D5|BossPool: biome 2-graveyard -> boss0[34]|SK_RO
 check_png "$E/p215_graveyard.png"
 require_order p215_graveyard "Level D5" "BossPool: biome 2-graveyard -> boss0[34]" "SK_ROOM_TELEPORT -> room 3 centre"
 require p215_graveyard "SK_ROOM_TELEPORT offset \(0,-160\)"
+echo "=== teleport_nan (SK_ROOM_TELEPORT with a NaN offset must be rejected and never teleport) ==="
+run_case teleport_nan "SK_ROOM_TELEPORT" 40 \
+  SK_SKIP_MENU=1 SK_MUTE=1 SK_MAX_FRAMES=30 SK_ROOM_TELEPORT=12,4,nan,0
+require teleport_nan "SK_ROOM_TELEPORT rejected: bad offset"
+# require_count only has a minimum, so the zero-count check is explicit (H2neg style).
+[ "$(grep -cE "SK_ROOM_TELEPORT -> room" "$E/teleport_nan.txt")" = "0" ] || fail "teleport_nan still teleported"
 git rev-parse --short HEAD | tee "$E/head.txt"
 rm -f "$E"/*.log
 if [ "${#FAILS[@]}" -eq 0 ]; then

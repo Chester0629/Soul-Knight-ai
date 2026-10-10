@@ -68,4 +68,16 @@ TEST(RoomTeleportHookTest, RejectedSpecCarriesReasonAndNoOffset) {
     EXPECT_EQ(r.dy, 0.0F);
 }
 
+TEST(RoomTeleportHookTest, RejectsIntegerOverflow) {
+    EXPECT_FALSE(ParseRoomTeleport("99999999999999999999,4").ok);
+    EXPECT_FALSE(ParseRoomTeleport("12,99999999999").ok);
+}
+
+TEST(RoomTeleportHookTest, ValidDxInvalidDyZeroesBothOffsets) {
+    const auto r = ParseRoomTeleport("12,4,5,nan");
+    EXPECT_FALSE(r.ok);
+    EXPECT_EQ(r.dx, 0.0F);
+    EXPECT_EQ(r.dy, 0.0F);
+}
+
 } // namespace
