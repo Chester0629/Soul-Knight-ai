@@ -521,6 +521,7 @@ set(TEST_FILES
 
     # CHAPTER PROGRESSION: per-chapter biome mob pools + boss rosters
     ChapterProgressionTest.cpp
+    TestHooksTest.cpp
 
     # B5/B6 ENTRY FLOW: hero-select model, i2 names, RunState hero
     CharSelectTest.cpp

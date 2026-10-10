@@ -1,4 +1,5 @@
 #include "scenes/GameScene.hpp"
+#include "game/TestHooks.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -1208,18 +1209,17 @@ void GameScene::OnEnter() {
         }
     }
     if (const char *rt = std::getenv("SK_ROOM_TELEPORT")) {
-        m_RoomTeleportFrame = std::atol(rt);
-        if (const char *comma = std::strchr(rt, ',')) {
-            m_RoomTeleportRoom = std::atoi(comma + 1);
-            // Optional SK_ROOM_TELEPORT=K,R,dx,dy: pixel offset from the landing point
-            // (e.g. dy=-160 stands the player below the boss instead of on it).
-            // Applied only to the centre landing (boss / gate rooms).
-            if (const char *c2 = std::strchr(comma + 1, ',')) {
-                m_RoomTeleportDx = static_cast<float>(std::atof(c2 + 1));
-                if (const char *c3 = std::strchr(c2 + 1, ',')) {
-                    m_RoomTeleportDy = static_cast<float>(std::atof(c3 + 1));
-                }
-            }
+        // SK_ROOM_TELEPORT=K,R[,dx,dy] (strict parse, see game/TestHooks.hpp). The pixel
+        // offset (e.g. dy=-160 stands the player below the boss instead of on it) applies
+        // only to the centre landing (boss / gate rooms). Invalid -> hook stays unset.
+        const Game::RoomTeleportSpec spec = Game::ParseRoomTeleport(rt);
+        if (spec.ok) {
+            m_RoomTeleportFrame = spec.frame;
+            m_RoomTeleportRoom = spec.room;
+            m_RoomTeleportDx = spec.dx;
+            m_RoomTeleportDy = spec.dy;
+        } else {
+            LOG_WARN("SK_ROOM_TELEPORT rejected: {}", spec.error);
         }
     }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
