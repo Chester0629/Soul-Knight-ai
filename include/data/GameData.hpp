@@ -508,6 +508,10 @@ public:
     /// The chapter's bossNN prefabs (helper parts like boss06_c / boss12_parent
     /// excluded), sorted by id.
     std::vector<const EnemyDef *> ChapterBossPool(int chapter) const;
+    /// P2.15: the bossNN prefabs of one biome folder ("1-forest", "3-volcano", ...),
+    /// sorted by id. ChapterBossPool(c) == BiomeBossPool(ChapterBiome(c)). The
+    /// composite boss12 halves are excluded (see the .cpp comment).
+    std::vector<const EnemyDef *> BiomeBossPool(const std::string &biome) const;
     /// Look up a REPRESENTATIVE species for an AI-class (e.g. "EnemyAI07",
     /// "BossAI01"): the first enemies.csv row with that @c enemyClass, in load
     /// order. For callers that only have a class-keyed roster (e.g. the

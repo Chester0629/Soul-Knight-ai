@@ -966,8 +966,17 @@ std::vector<const EnemyDef *> GameData::ChapterMobPool(int chapter) const {
     }
     return pool;
 }
-std::vector<const EnemyDef *> GameData::ChapterBossPool(int chapter) const {
-    const std::string biome = ChapterBiome(chapter);
+// P2.15: boss roster of one biome folder (the floor's REAL biome, LevelDef::biome).
+// FAITHFUL @ ExportedProject res/enemy/<biome>/bossNN.prefab (enemies.json biome tag).
+// BOSS12 DECISION (PORT CHOICE T-58; the composite reading is INFERRED): boss12_1 and boss12_2 are the two halves of ONE
+// composite boss -- identical rows (BossAI12, 500 hp each) and bosses.json has a
+// BossAI12Parent (prefab boss12_parent, no enemy_id) as their HP coordinator, while
+// the BossAI12 row itself points only at boss12_1. IsBossId() keeps both halves out
+// of the pool on purpose: spawning one half as an independent boss would be half a
+// boss, and spawning both as separate bosses would be wrong. Until the two-half
+// spawn + composite HP exists, 3-volcano therefore rolls only boss11. The original
+// spawns BossAI12Parent with the two halves; the port never spawns boss12 (gap).
+std::vector<const EnemyDef *> GameData::BiomeBossPool(const std::string &biome) const {
     std::vector<const EnemyDef *> pool;
     for (const EnemyDef &d : m_Enemies) {
         if (IsBossId(d.id) && d.biome == biome) {
@@ -975,6 +984,9 @@ std::vector<const EnemyDef *> GameData::ChapterBossPool(int chapter) const {
         }
     }
     return pool;
+}
+std::vector<const EnemyDef *> GameData::ChapterBossPool(int chapter) const {
+    return BiomeBossPool(ChapterBiome(chapter));
 }
 const EnemyDef *GameData::FindEnemyByClass(const std::string &enemyClass) const {
     // Linear scan: ~145 species, called only at spawn-roster setup time (not

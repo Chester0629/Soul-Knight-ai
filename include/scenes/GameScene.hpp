@@ -200,6 +200,8 @@ private:
     /// first spawn point) so a locked room can be screenshotted. NO-OP in play.
     long m_RoomTeleportFrame = -1;
     int m_RoomTeleportRoom = -1;
+    float m_RoomTeleportDx = 0.0F; ///< SK_ROOM_TELEPORT=K,R,dx,dy pixel offset (default 0)
+    float m_RoomTeleportDy = 0.0F;
     /// Permanent corridor flank-wall colliders across the whole floor (the strip
     /// is walled on its long sides, open at both ends). Always block movement;
     /// unlike m_RoomDoors they are never sealed/unsealed (seam 2: corridors are

@@ -1,0 +1,4 @@
+ [info] Skill: c12 activated
+ [info] Skill: c12 effect wolf_summon n=2 NOT_PORTED(T-48)
+ [info] Skill: c12 activated
+ [info] Skill: c12 effect atk_cut dmg=5

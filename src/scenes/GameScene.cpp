@@ -840,14 +840,20 @@ void GameScene::OnEnter() {
                 // matching brain; AI06 summon / AI12 composite-HP are no-op (debt
                 // s7). floor->boss is NOT recoverable (no boss_list; the dump is
                 // chapter-3) -> reversible C downgrade pending a chapter-1 dump.
-                // CHAPTER PROGRESSION: pick from THIS chapter's real boss roster
-                // (its biome folder's bossNN prefabs, FAITHFUL @ ExportedProject:
-                // ch1 ice = boss09/10/13, ch2 castle = boss01/02, ch3 alien =
-                // boss05/06) instead of a fixed cross-chapter 5-slot roster. The
-                // pick stays a pure DETERMINISTIC function of (room type, boss-room
-                // index) -- nothing is drawn from the per-floor RNG.
-                const std::vector<const EnemyDef *> bossPool =
-                    m_Data.ChapterBossPool(ChapterOf(m_FloorIndex));
+                // P2.15 BOSS POOL BY REAL BIOME: pick from the roster of THIS
+                // floor's actual biome (LevelDef::biome, chosen per run seed:
+                // A forest / B ice, C castle / D graveyard, E alien / F volcano),
+                // FAITHFUL @ ExportedProject res/enemy/<biome>/bossNN: 1-forest
+                // boss07/08, 1-ice boss09/10/13, 2-castle boss01/02, 2-graveyard
+                // boss03/04, 3-alien boss05/06, 3-volcano boss11 (boss12 halves are
+                // not poolable, see GameData::BiomeBossPool). Without levels.json the
+                // old fixed-per-chapter biome is kept. The pick stays a pure
+                // DETERMINISTIC function of (room type, boss-room index) -- nothing
+                // is drawn from the per-floor RNG.
+                const std::string bossBiome = m_Level != nullptr
+                                                   ? LevelBiome()
+                                                   : std::string(ChapterBiome(ChapterOf(m_FloorIndex)));
+                const std::vector<const EnemyDef *> bossPool = m_Data.BiomeBossPool(bossBiome);
                 const EnemyDef *bossDef =
                     bossPool.empty()
                         ? m_Data.FindEnemyByClass("BossAI01") // defensive fallback
@@ -862,6 +868,8 @@ void GameScene::OnEnter() {
                     bossDef != nullptr ? bossDef->enemyClass : std::string("BossAI01");
                 const std::string bossPrefab = bossDef != nullptr ? bossDef->id : bossId;
                 m_BossDef = bossDef;
+                LOG_INFO("BossPool: biome {} -> {} (pool {})", bossBiome, bossPrefab,
+                         bossPool.size());
                 const int bossMaxHp = (bossDef != nullptr && bossDef->maxHp > 0)
                                           ? bossDef->maxHp
                                           : 500;
@@ -1203,6 +1211,15 @@ void GameScene::OnEnter() {
         m_RoomTeleportFrame = std::atol(rt);
         if (const char *comma = std::strchr(rt, ',')) {
             m_RoomTeleportRoom = std::atoi(comma + 1);
+            // Optional SK_ROOM_TELEPORT=K,R,dx,dy: pixel offset from the landing point
+            // (e.g. dy=-160 stands the player below the boss instead of on it).
+            // Applied only to the centre landing (boss / gate rooms).
+            if (const char *c2 = std::strchr(comma + 1, ',')) {
+                m_RoomTeleportDx = static_cast<float>(std::atof(c2 + 1));
+                if (const char *c3 = std::strchr(c2 + 1, ',')) {
+                    m_RoomTeleportDy = static_cast<float>(std::atof(c3 + 1));
+                }
+            }
         }
     }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
@@ -1510,10 +1527,15 @@ void GameScene::Update(float dtMs) {
         } else if (m_RoomTeleportRoom == m_GateRoom) {
             // Level-0 makers (boss / gate rooms) have no spawn points: use the
             // room's centre cell, which the gate placement already computed.
-            m_Player->m_Transform.translation = m_GatePos;
+            m_Player->m_Transform.translation =
+                m_GatePos + glm::vec2(m_RoomTeleportDx, m_RoomTeleportDy);
             m_Camera.SetPosition(m_Player->Position());
             LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} centre (no spawn points) at ({},{})",
                      m_RoomTeleportRoom, m_GatePos.x, m_GatePos.y);
+            if (m_RoomTeleportDx != 0.0F || m_RoomTeleportDy != 0.0F) {
+                LOG_INFO("GameScene: SK_ROOM_TELEPORT offset ({},{})", m_RoomTeleportDx,
+                         m_RoomTeleportDy);
+            }
         } else {
             LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} skipped (no spawn points)",
                      m_RoomTeleportRoom);

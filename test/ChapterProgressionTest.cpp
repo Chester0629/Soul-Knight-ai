@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <typeinfo>
 #include <vector>
 
 #include "data/GameData.hpp"
+#include "sim/BossBrainAdapters.hpp"
 #include "game/RunState.hpp"
 
 // CHAPTER PROGRESSION (B2-P5): species and bosses are tagged with the AssetRipper
@@ -93,6 +95,56 @@ TEST(ChapterProgressionTest, BossRosterIsTheChaptersBosses) {
     for (const Game::EnemyDef *b : gd.ChapterBossPool(1)) {
         EXPECT_GT(b->maxHp, 0) << b->id;
         EXPECT_FALSE(b->enemyClass.empty()) << b->id;
+    }
+}
+
+// P2.15: the boss pool follows the floor's REAL biome (levels.json), not the fixed
+// per-chapter one. Expected ids = enemies.json biome tags (FAITHFUL @ res/enemy/<biome>/).
+// boss12_1 / boss12_2 are the two halves of one composite boss (boss12_parent) and are
+// deliberately not poolable, so 3-volcano rolls only boss11.
+TEST(ChapterProgressionTest, BiomeBossPoolPerRealBiome) {
+    const Game::GameData gd = LoadGameData();
+    using V = std::vector<std::string>;
+    EXPECT_EQ(Ids(gd.BiomeBossPool("1-forest")), (V{"boss07", "boss08"}));
+    EXPECT_EQ(Ids(gd.BiomeBossPool("1-ice")), (V{"boss09", "boss10", "boss13"}));
+    EXPECT_EQ(Ids(gd.BiomeBossPool("2-castle")), (V{"boss01", "boss02"}));
+    EXPECT_EQ(Ids(gd.BiomeBossPool("2-graveyard")), (V{"boss03", "boss04"}));
+    EXPECT_EQ(Ids(gd.BiomeBossPool("3-alien")), (V{"boss05", "boss06"}));
+    EXPECT_EQ(Ids(gd.BiomeBossPool("3-volcano")), (V{"boss11"}));
+    EXPECT_TRUE(gd.BiomeBossPool("no-such-biome").empty());
+    for (int c = 1; c <= 6; ++c) {
+        EXPECT_EQ(gd.ChapterBossPool(c), gd.BiomeBossPool(Game::ChapterBiome(c))) << c;
+    }
+}
+
+TEST(ChapterProgressionTest, EveryLevelBiomeHasUsableBosses) {
+    const Game::GameData gd = LoadGameData();
+    int checked = 0;
+    for (char variant = 'A'; variant <= 'F'; ++variant) {
+        for (int stage = 1; stage <= 5; ++stage) {
+            const std::string id = std::string(1, variant) + std::to_string(stage);
+            const Game::LevelDef *lv = gd.FindLevel(id);
+            ASSERT_NE(lv, nullptr) << id;
+            const auto pool = gd.BiomeBossPool(lv->biome);
+            EXPECT_FALSE(pool.empty()) << id << " biome " << lv->biome;
+            ++checked;
+        }
+    }
+    EXPECT_EQ(checked, 30);
+    for (const char *biome : {"1-forest", "1-ice", "2-castle", "2-graveyard", "3-alien",
+                              "3-volcano"}) {
+        for (const Game::EnemyDef *b : gd.BiomeBossPool(biome)) {
+            EXPECT_GT(b->maxHp, 0) << b->id;
+            EXPECT_FALSE(b->enemyClass.empty()) << b->id;
+            EXPECT_FALSE(gd.SpriteFrames(b->id, kResourceRoot).empty()) << b->id;
+            // The class must be a real registered brain (not the BossAI01 fallback).
+            const auto brain = Game::Sim::MakeBossBrain(b->enemyClass, 2.0F);
+            ASSERT_NE(brain, nullptr) << b->id;
+            if (b->enemyClass != "BossAI01") {
+                EXPECT_NE(typeid(*brain), typeid(*Game::Sim::MakeBossBrain("BossAI01", 2.0F)))
+                    << b->id << " falls back to BossAI01";
+            }
+        }
     }
 }
 
