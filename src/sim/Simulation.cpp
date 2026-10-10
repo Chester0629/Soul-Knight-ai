@@ -666,41 +666,40 @@ void Simulation::DrainFireIntents() {
 // prevPos -> prevPos + vel * dt. Since P3.0 (1 unit = 32 px) weapon bullets reach 64 units/s =
 // ~41 px per step, more than a hurtbox is wide, so testing only the end-of-step position
 // lets a bullet jump clean over a target (Codex R30: weapon_033 vs a head-on e_alien01) or a
-// 1-cell wall. Instead:
-//   * here: the WALL sweep. WorldCollision::SweepBlocked finds the first fraction tw of the path
-//     at which the bullet circle touches a blocker; the bullet is shortened to that contact
-//     point (b.pos) and flagged wallStop, but stays ACTIVE so ResolveHits can still award a
-//     target that was struck EARLIER on the same shortened path (earliest event wins);
-//   * ResolveHits: the TARGET sweep (relative motion vs the hurtbox grown by the bullet
-//     radius, BodyGeom::HurtSweep), then consumes a still-active wallStop bullet at its
-//     contact point (DamageObstacle).
+// 1-cell wall. Instead, ONE time scale t in [0,1] (0 = step start, 1 = step end) is shared by
+// every moving thing of the step, and the bullet keeps its FULL path:
+//   * IntegrateBullets: only moves the bullet (prevPos, pos = full end of step, lifetime);
+//   * ResolveHits, per bullet in ascending id order: (1) the WALL fraction tw of the full path
+//     (WorldCollision::SweepBlocked, -1 = free), (2) the TARGET sweep on the same full path
+//     (BodyGeom::HurtSweepBeforeWall: relative motion vs the hurtbox grown by the bullet
+//     radius), accepted only when t_hit <= tw, (3) a bullet that survived (missed, or pierced)
+//     and has a wall on its path is consumed at the contact point (DamageObstacle).
+// TIE RULE: t_hit == tw is TARGET-FIRST (the target is struck, then the wall stops the bullet).
+// The wall fraction is the sampled contact rounded UP by the bisection, so a near-tie within
+// ~1/256 of one sample gap (< 0.1 px of bullet travel) also resolves target-first.
+// Wall query and DamageObstacle happen per bullet IN ORDER (not as a first pass over all
+// bullets), so a box broken by bullet A is already gone when bullet B of the same step
+// queries the wall -- the pre-swept behaviour (IntegrateBullets did query + damage per bullet).
 // canThrough bullets skip the wall sweep exactly as they skipped the old wall test. The step
 // order (melee cut -> DoT -> bullets -> Cull) and DeathSource locking are unchanged.
-// PORT CHOICE (T-57): the default WorldCollision::SweepBlocked samples Blocks() every <= radius px
-// along the path and bisects the first blocked gap (8 halvings), because the world interface is a
-// circle query, not geometry. A blocker is missed only if it intrudes less than ~0.134 * radius
-// (about 1 px for an 8 px bullet) into the swept capsule between two samples, i.e. a pure graze;
-// a 1-cell (32 px) wall can never be tunnelled. The contact point is accurate to 1/256 of a
-// sample gap.
+// PORT CHOICE (T-57): the default WorldCollision::SweepBlocked ASSUMES the path start is free
+// (it was the previous step's end, already tested; a bullet spawned inside a wall is reported
+// stopped within the first sample gap) and samples Blocks() every <= max(radius, 1) px along
+// the path, then bisects the first blocked gap (8 halvings), because the world interface is a
+// circle query, not geometry. With spacing <= r the sampled discs overlap, and a blocker is
+// missed only if it intrudes less than ~0.134 * r (about 1 px for an 8 px bullet) into the
+// swept capsule between two samples, i.e. a pure graze; a wall that spans the path's width can
+// never be tunnelled (it blocks an interval of at least 2r >= spacing along the path). The
+// contact point is accurate to 1/256 of a sample gap. A bullet spawned inside a wall AND a
+// target (start overlap, t = 0 <= tw) hits the target first, then the wall consumes it.
 void Simulation::IntegrateBullets() {
     for (BulletState &b : m_Bullets) {
         if (!b.active) {
             continue;
         }
         b.prevPos = b.pos;
-        b.wallStop = false;
         b.pos += b.vel * kFixedStepSeconds;
         b.lifeMs -= kFixedStepMs;
-        const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
-        if (!b.canThrough) {
-            const float tw = m_World->SweepBlocked(b.prevPos, b.pos, bulletR);
-            if (tw >= 0.0F) {
-                if (tw < 1.0F) {
-                    b.pos = b.prevPos + (b.pos - b.prevPos) * tw; // stop at the first contact.
-                }
-                b.wallStop = true;
-            }
-        }
     }
 }
 void Simulation::ResolveHits() {
@@ -713,10 +712,13 @@ void Simulation::ResolveHits() {
         if (!b.active) {
             continue;
         }
-        // T-57: swept test. The bullet centre moves b.prevPos -> b.pos (shortened to the wall
-        // contact point by IntegrateBullets) while the target hurtbox moves linearly from its
-        // step-start position to its current one; BodyGeom::HurtSweep tests the RELATIVE segment
-        // against the hurtbox grown by the bullet radius and returns the earliest hit time.
+        // T-57: swept test. The bullet centre moves b.prevPos -> b.pos (its FULL step path) while
+        // the target hurtbox moves linearly from its step-start position to its current one;
+        // BodyGeom::HurtSweepBeforeWall tests the RELATIVE segment against the hurtbox grown by
+        // the bullet radius, returns the earliest hit time t on that same [0,1] step scale and
+        // accepts it only if t <= tw, the wall contact fraction of the same full path (see the
+        // T-57 block above IntegrateBullets; the wall is queried HERE, per bullet in id order, so
+        // a box destroyed by an earlier bullet of this step no longer blocks later ones).
         // PORT CHOICE (T-57): a target is assumed to move LINEARLY (start -> end of step) inside
         // the step (enemies walk axis-separated: x then y, so the true path is an L; the
         // linear chord differs from it by less than one step of enemy travel, a few px).
@@ -729,6 +731,11 @@ void Simulation::ResolveHits() {
         // PORT CHOICE (T-52): enemy bullets (radiusPx 0) use the 4 px kBulletRadius fallback,
         // not their prefab collider (see SimConfig.hpp); player bullets use the data radius.
         const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
+        const glm::vec2 stepEnd = b.pos;
+        float tw = -1.0F; // wall contact fraction of the full path; < 0 = free (or canThrough).
+        if (!b.canThrough) {
+            tw = m_World->SweepBlocked(b.prevPos, stepEnd, bulletR);
+        }
         if (b.camp == 0) {
             // Player bullet -> enemies and boss; ONE target per bullet per step, the EARLIEST
             // hit time wins (ties: lowest enemy index, then the boss -- the old scan order).
@@ -747,7 +754,8 @@ void Simulation::ResolveHits() {
                                                                     : e->State().pos;
                 float t = 0.0F;
                 // The bullet circle hits the target's HURTBOX (prefab root trigger collider).
-                if (e->State().geom.HurtSweep(from, e->State().pos, b.prevPos, b.pos, bulletR, t) &&
+                if (e->State().geom.HurtSweepBeforeWall(from, e->State().pos, b.prevPos, stepEnd,
+                                                        bulletR, tw, t) &&
                     t < bestT) {
                     bestT = t;
                     bestEi = ei;
@@ -756,8 +764,8 @@ void Simulation::ResolveHits() {
             bool bossFirst = false;
             if (m_Boss != nullptr && !m_Boss->State().dead) {
                 float t = 0.0F;
-                if (m_Boss->State().geom.HurtSweep(m_BossStepStart, m_Boss->State().pos, b.prevPos,
-                                                   b.pos, bulletR, t) &&
+                if (m_Boss->State().geom.HurtSweepBeforeWall(m_BossStepStart, m_Boss->State().pos,
+                                                             b.prevPos, stepEnd, bulletR, tw, t) &&
                     t < bestT) {
                     bestT = t;
                     bossFirst = true;
@@ -828,8 +836,8 @@ void Simulation::ResolveHits() {
             }
             float hitT = 0.0F; // hit time unused: one target, so no ordering needed.
             if (m_Input.playerAlive &&
-                m_PlayerGeom.HurtSweep(playerFrom, m_Input.playerPos, b.prevPos, b.pos, bulletR,
-                                       hitT)) {
+                m_PlayerGeom.HurtSweepBeforeWall(playerFrom, m_Input.playerPos, b.prevPos, stepEnd,
+                                                 bulletR, tw, hitT)) {
                 Game::Combat::AttackerInput in;
                 in.baseDamage = b.damage;
                 in.critical = b.critical;
@@ -849,9 +857,12 @@ void Simulation::ResolveHits() {
             }
         }
         // T-57: a bullet that survived its target test (missed, or pierced) and whose path hit a
-        // wall is consumed at the contact point. A target struck earlier on the shortened path
-        // already won above; a wall nearer than any target means no hit at all.
-        if (b.active && b.wallStop) {
+        // wall is consumed at the contact point. A target struck at t <= tw already won above
+        // (target-first tie rule); a target only reachable after the wall was never accepted.
+        if (b.active && tw >= 0.0F) {
+            if (tw < 1.0F) {
+                b.pos = b.prevPos + (stepEnd - b.prevPos) * tw; // the first contact point.
+            }
             b.active = false;
             // Phase 3: a consumed bullet damages a destructible design-room box at
             // the impact point (no-op for walls / under NullWorldCollision, so the

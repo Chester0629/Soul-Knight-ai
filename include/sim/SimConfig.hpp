@@ -56,7 +56,9 @@ inline constexpr float kBossBodyRadius = 24.0F;
 /// is folded into a bullet-vs-player sweep only when it is at most this long. A larger jump
 /// (dash, door teleport, respawn) is NOT a continuous motion, so the player is then treated
 /// as stationary at its new position for that step. 64 px = 2 cells = ~16x the walk speed
-/// per step; the value only needs to separate walking from teleporting.
+/// per step; the value only needs to separate walking from teleporting. The very first step
+/// (no previous position yet) also treats the player as stationary. The player moves linearly
+/// from the previous step's position to this step's on the same [0,1] step scale as the bullet.
 inline constexpr float kMaxPlayerSweepPx = 64.0F;
 
 /// Slice enemy HP. EnemyDef carries no hp field and EnemyController leaves stats.hp=0,

@@ -22,18 +22,22 @@ public:
     /// -- the deterministic combat hash is unaffected. Non-const (mutates boxes).
     virtual void DamageObstacle(glm::vec2 /*pos*/, float /*radius*/) {}
 
-    /// SWEPT wall query (PORT CHOICE (T-57), sampled not exact): the first point of the straight path @p from -> @p to at
-    /// which a circle of @p radius is blocked. Returns the path fraction t in (0,1] of that
-    /// first contact, or a negative value when the whole path is free. The START point is
-    /// assumed free (it was the previous step's end, already tested); the END (t = 1) is
-    /// always tested, so a path that is blocked only at its end behaves exactly like the
-    /// old discrete Blocks(to, radius) test.
+    /// SWEPT wall query (PORT CHOICE (T-57), sampled not exact): the first point of the straight
+    /// path @p from -> @p to at which a circle of @p radius is blocked. Returns the path fraction
+    /// t in (0,1] of that first contact (t = 0 is the step start, t = 1 the step end -- the SAME
+    /// scale the target sweep uses, so the caller can order a wall contact against a target hit),
+    /// or a negative value when the whole path is free. The START point is assumed free (it was
+    /// the previous step's end, already tested) and is never sampled: a path that starts blocked
+    /// is reported as stopped within its first sample gap (about 1/256 of it). The END (t = 1) is
+    /// always tested, so a path that is blocked only at its end behaves exactly like the old
+    /// discrete Blocks(to, radius) test.
     ///
-    /// Default implementation: sample Blocks() along the path every <= radius px (so the
-    /// sampled discs overlap and sweep a gap-free capsule except for ~0.134 * radius deep
-    /// scallops between samples), then bisect the first blocked interval to the contact
-    /// point. A fast bullet therefore cannot tunnel through a 1-cell wall. Worlds with exact
-    /// geometry may override this.
+    /// Default implementation: sample Blocks() along the path every <= max(radius, 1) px (so for
+    /// radius >= 1 the sampled discs overlap and sweep a gap-free capsule except for ~0.134 *
+    /// radius deep scallops between samples), then bisect the first blocked interval to the
+    /// contact point (the returned fraction is the blocked side of the final bracket, i.e. at most
+    /// 1/256 of a sample gap AFTER the true contact). A fast bullet therefore cannot tunnel through
+    /// a 1-cell wall. Worlds with exact geometry may override this.
     virtual float SweepBlocked(glm::vec2 from, glm::vec2 to, float radius) const {
         const glm::vec2 d = to - from;
         const float len = std::sqrt(d.x * d.x + d.y * d.y);

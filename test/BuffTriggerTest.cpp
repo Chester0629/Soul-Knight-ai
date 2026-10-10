@@ -11,6 +11,7 @@
 
 #include <glm/glm.hpp>
 
+#include "SweptOracle.hpp"
 #include "combat/Buff.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
@@ -366,8 +367,10 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
     // T-57 (swept collision): the tick of each hit is the first fixed step whose bullet path
     // (start -> end of step, relative to the walking enemy) touches the hurtbox grown by the
     // bullet radius -- a continuous quantity, so `run` also re-derives that tick independently
-    // from the recorded positions (BodyGeom::HurtSweep over the first bullet's straight flight
-    // and the enemy's per-step motion) and the sim must agree with it EXACTLY.
+    // from the recorded positions with the INDEPENDENT brute-force oracle of SweptOracle.hpp
+    // (2000 sub-steps of the first bullet's straight flight and the enemy's per-step motion,
+    // a separately written discrete overlap test; no production collision code) and the sim
+    // must agree with it EXACTLY.
     const Game::BulletDef *bd = gd.BulletForWeapon(*wdef);
     ASSERT_NE(bd, nullptr);
     const Game::Sim::BodyGeom geom = Game::Sim::MakeBodyGeom(edef->body, edef->hurtbox, 16.0F);
@@ -399,9 +402,9 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
             } else {
                 bulletEnd += bulletStep;
             }
-            float t = 0.0F;
             if (r.oracleTick < 0 &&
-                geom.HurtSweep(prevEnemy, enemy, bulletEnd - bulletStep, bulletEnd, bulletR, t)) {
+                sktest::oracle::FirstTouchSub(geom, prevEnemy, enemy, bulletEnd - bulletStep,
+                                              bulletEnd, bulletR) >= 0) {
                 r.oracleTick = i + 1; // trace index of this step
             }
             prevEnemy = enemy;

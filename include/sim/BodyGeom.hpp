@@ -68,7 +68,8 @@ struct BodyGeom {
     /// hurtRadius + r, a box hurtbox the exact rounded box (Minkowski sum). Returns the
     /// earliest touching time @p t in [0,1] (0 = already touching at the start). The result
     /// is a strict superset of the discrete end-of-step HurtOverlaps(pos1, c1, r): that
-    /// exact inclusive test is also run so boundary probes stay bit-identical.
+    /// exact inclusive test is also run so boundary probes stay bit-identical (reported as
+    /// t = 1 when only that fallback fires).
     bool HurtSweep(glm::vec2 pos0, glm::vec2 pos1, glm::vec2 c0, glm::vec2 c1, float r,
                    float &t) const {
         const glm::vec2 rel0 = c0 - (pos0 + hurtOffsetPx);
@@ -83,6 +84,27 @@ struct BodyGeom {
             return true;
         }
         return false;
+    }
+
+    /// HurtSweep restricted to the part of the step that comes BEFORE a wall contact: the
+    /// bullet keeps its FULL step path (c0 -> c1) and the target its full step motion, so the
+    /// hit time @p t and the wall contact fraction @p tWall are on the SAME time scale
+    /// (t = 0 step start, t = 1 step end). A hit counts only if t <= tWall; @p tWall < 0
+    /// means "no wall on the path" (every hit counts). TIE RULE (documented, pinned by
+    /// SweptCollisionTest): t == tWall is a TARGET-FIRST tie, the target is struck and then the
+    /// wall stops the bullet (a wall at the very end of the step, tWall = 1, therefore never
+    /// hides a target touched at or before the end).
+    bool HurtSweepBeforeWall(glm::vec2 pos0, glm::vec2 pos1, glm::vec2 c0, glm::vec2 c1, float r,
+                             float tWall, float &t) const {
+        float th = 0.0F;
+        if (!HurtSweep(pos0, pos1, c0, c1, r, th)) {
+            return false;
+        }
+        if (tWall >= 0.0F && th > tWall) {
+            return false;
+        }
+        t = th;
+        return true;
     }
 };
 
