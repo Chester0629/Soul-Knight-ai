@@ -1,5 +1,6 @@
 #include "entities/VendingMachine.hpp"
 #include "game/WorldScale.hpp"
+#include "game/RenderLayout.hpp"
 
 #include <memory>
 
@@ -12,10 +13,10 @@ namespace Game {
 
 namespace {
 constexpr float kScale = Scale::kSpriteScale; // 16 px per unit -> 32 px cell (shared rule)
-constexpr float kZBody = 1.3F;
-constexpr float kZDisplay = 1.32F;
-constexpr float kZIcon = 1.33F;
-constexpr float kZText = 1.34F;
+constexpr float kZBody = RenderLayout::kZMachineBody;
+constexpr float kZDisplay = RenderLayout::kZMachineDisplay;
+constexpr float kZIcon = RenderLayout::kZMachineIcon;
+constexpr float kZText = RenderLayout::kZMachineText;
 } // namespace
 
 VendingMachine::VendingMachine(const std::string &resourceRoot, glm::vec2 pos, Kind kind,

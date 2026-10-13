@@ -1,5 +1,6 @@
 #include "entities/CoinPickup.hpp"
 #include "game/WorldScale.hpp"
+#include "game/RenderLayout.hpp"
 
 #include <memory>
 #include <vector>
@@ -9,7 +10,7 @@
 
 namespace Game {
 namespace {
-constexpr float kZIndex = 3.5F; // above floor tiles / weapon pickups, below actors.
+constexpr float kZIndex = RenderLayout::kZCoin; // above floor tiles / weapon pickups, below actors.
 constexpr float kScale = Scale::kSpriteScale; // 16 px per unit -> 32 px cell (shared rule)
 } // namespace
 

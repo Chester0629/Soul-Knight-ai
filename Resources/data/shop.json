@@ -90,7 +90,19 @@
       "body_sprite": "objects3_0",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_02": {
       "statue_index": 2,
@@ -99,7 +111,19 @@
       "body_sprite": "objects3_3",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_03": {
       "statue_index": 3,
@@ -108,7 +132,19 @@
       "body_sprite": "objects3_2",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_04": {
       "statue_index": 4,
@@ -117,7 +153,19 @@
       "body_sprite": "objects3_1",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_05": {
       "statue_index": 5,
@@ -126,7 +174,19 @@
       "body_sprite": "objects3_4",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_06": {
       "statue_index": 6,
@@ -135,7 +195,19 @@
       "body_sprite": "objects3_5",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     },
     "statue_07": {
       "statue_index": 7,
@@ -144,7 +216,19 @@
       "body_sprite": "objects3_3",
       "light_sprite": "objects3_7",
       "body_dy": 1.1,
-      "light_dy": 0.69375
+      "light_dy": 0.69375,
+      "base_sort": [
+        4,
+        0
+      ],
+      "body_sort": [
+        6,
+        0
+      ],
+      "light_sort": [
+        5,
+        0
+      ]
     }
   }
 }

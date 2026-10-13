@@ -5,12 +5,13 @@
 #include "Util/Image.hpp"
 
 #include "game/WorldScale.hpp"
+#include "game/RenderLayout.hpp"
 
 namespace Game {
 
 namespace {
 constexpr float kPickupRadius = 16.0F;
-constexpr float kPickupZIndex = 3.0F;
+constexpr float kPickupZIndex = RenderLayout::kZWeaponPickup;
 } // namespace
 
 WeaponPickup::WeaponPickup(const std::string &resourceRoot, glm::vec2 pos,

@@ -26,13 +26,29 @@
         "prefab": "wall_bush1",
         "top": "objects2_50",
         "face": "objects2_55",
-        "face_dy": 1.0
+        "face_dy": 1.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -40,73 +56,169 @@
         "prefab": "wall_tree1",
         "sprite": "objects2_68",
         "alt": "objects2_69",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box02",
         "sprite": "objects2_31",
         "alt": "objects2_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_2",
         "sprite": "objects2_31",
         "alt": "objects2_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_2",
         "sprite": "objects2_31",
         "alt": "objects2_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_04",
         "sprite": "objects2_57",
         "alt": "objects2_56",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_05",
         "sprite": "objects2_62",
         "alt": "objects2_63",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier03",
         "sprite": "objects2_38",
         "alt": "objects2_39",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -164,13 +276,29 @@
         "prefab": "wall_bush1",
         "top": "objects2_50",
         "face": "objects2_55",
-        "face_dy": 1.0
+        "face_dy": 1.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -178,73 +306,169 @@
         "prefab": "wall_tree1",
         "sprite": "objects2_68",
         "alt": "objects2_69",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box02",
         "sprite": "objects2_31",
         "alt": "objects2_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_2",
         "sprite": "objects2_31",
         "alt": "objects2_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_2",
         "sprite": "objects2_31",
         "alt": "objects2_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_04",
         "sprite": "objects2_57",
         "alt": "objects2_56",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_05",
         "sprite": "objects2_62",
         "alt": "objects2_63",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier03",
         "sprite": "objects2_38",
         "alt": "objects2_39",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -308,13 +532,29 @@
         "prefab": "wall_bush1",
         "top": "objects2_50",
         "face": "objects2_55",
-        "face_dy": 1.0
+        "face_dy": 1.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -322,73 +562,169 @@
         "prefab": "wall_tree1",
         "sprite": "objects2_68",
         "alt": "objects2_69",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box02",
         "sprite": "objects2_31",
         "alt": "objects2_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_2",
         "sprite": "objects2_31",
         "alt": "objects2_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_2",
         "sprite": "objects2_31",
         "alt": "objects2_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_04",
         "sprite": "objects2_57",
         "alt": "objects2_56",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_05",
         "sprite": "objects2_62",
         "alt": "objects2_63",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier03",
         "sprite": "objects2_38",
         "alt": "objects2_39",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -455,13 +791,29 @@
         "prefab": "wall_bush1",
         "top": "objects2_50",
         "face": "objects2_55",
-        "face_dy": 1.0
+        "face_dy": 1.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -469,73 +821,169 @@
         "prefab": "wall502",
         "sprite": "w503",
         "alt": "w504",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box02",
         "sprite": "objects2_31",
         "alt": "objects2_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_2",
         "sprite": "objects2_31",
         "alt": "objects2_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_2",
         "sprite": "objects2_31",
         "alt": "objects2_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_05",
         "sprite": "objects2_48",
         "alt": "objects2_49",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_05",
         "sprite": "objects2_62",
         "alt": "objects2_63",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier03",
         "sprite": "objects2_38",
         "alt": "objects2_39",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -606,13 +1054,29 @@
         "prefab": "wall_bush1",
         "top": "objects2_50",
         "face": "objects2_55",
-        "face_dy": 1.0
+        "face_dy": 1.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -620,73 +1084,169 @@
         "prefab": "wall502",
         "sprite": "w503",
         "alt": "w504",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box02",
         "sprite": "objects2_31",
         "alt": "objects2_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_2",
         "sprite": "objects2_31",
         "alt": "objects2_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_2",
         "sprite": "objects2_31",
         "alt": "objects2_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_05",
         "sprite": "objects2_48",
         "alt": "objects2_49",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_05",
         "sprite": "objects2_62",
         "alt": "objects2_63",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier03",
         "sprite": "objects2_38",
         "alt": "objects2_39",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -761,13 +1321,29 @@
         "prefab": "wall602",
         "top": "w603",
         "face": "w604",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall601",
         "top": "w601",
         "face": "w602",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -775,73 +1351,169 @@
         "prefab": "wall603",
         "sprite": "objects4_1",
         "alt": "objects4_0",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box04",
         "sprite": "objects4_2",
         "alt": "objects4_3",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_3",
         "sprite": "objects4_6",
         "alt": "objects4_7",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_3",
         "sprite": "objects4_6",
         "alt": "objects4_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_06",
         "sprite": "objects4_22",
         "alt": "objects4_23",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_06",
         "sprite": "objects4_5",
         "alt": "objects4_4",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -899,13 +1571,29 @@
         "prefab": "wall602",
         "top": "w603",
         "face": "w604",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall601",
         "top": "w601",
         "face": "w602",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -913,73 +1601,169 @@
         "prefab": "wall603",
         "sprite": "objects4_1",
         "alt": "objects4_0",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box04",
         "sprite": "objects4_2",
         "alt": "objects4_3",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_3",
         "sprite": "objects4_6",
         "alt": "objects4_7",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_3",
         "sprite": "objects4_6",
         "alt": "objects4_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_06",
         "sprite": "objects4_22",
         "alt": "objects4_23",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_06",
         "sprite": "objects4_5",
         "alt": "objects4_4",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1043,13 +1827,29 @@
         "prefab": "wall602",
         "top": "w603",
         "face": "w604",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall601",
         "top": "w601",
         "face": "w602",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1057,73 +1857,169 @@
         "prefab": "wall603",
         "sprite": "objects4_1",
         "alt": "objects4_0",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box04",
         "sprite": "objects4_2",
         "alt": "objects4_3",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_3",
         "sprite": "objects4_6",
         "alt": "objects4_7",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_3",
         "sprite": "objects4_6",
         "alt": "objects4_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_06",
         "sprite": "objects4_22",
         "alt": "objects4_23",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_06",
         "sprite": "objects4_5",
         "alt": "objects4_4",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1192,13 +2088,29 @@
         "prefab": "wall602",
         "top": "w603",
         "face": "w604",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall601",
         "top": "w601",
         "face": "w602",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1206,73 +2118,169 @@
         "prefab": "wall603",
         "sprite": "objects4_1",
         "alt": "objects4_0",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box04",
         "sprite": "objects4_2",
         "alt": "objects4_3",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_3",
         "sprite": "objects4_6",
         "alt": "objects4_7",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_3",
         "sprite": "objects4_6",
         "alt": "objects4_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_06",
         "sprite": "objects4_22",
         "alt": "objects4_23",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_06",
         "sprite": "objects4_5",
         "alt": "objects4_4",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1345,13 +2353,29 @@
         "prefab": "wall602",
         "top": "w603",
         "face": "w604",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall601",
         "top": "w601",
         "face": "w602",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1359,73 +2383,169 @@
         "prefab": "wall603",
         "sprite": "objects4_1",
         "alt": "objects4_0",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box04",
         "sprite": "objects4_2",
         "alt": "objects4_3",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_3",
         "sprite": "objects4_6",
         "alt": "objects4_7",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_3",
         "sprite": "objects4_6",
         "alt": "objects4_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_2",
         "sprite": "objects2_31",
         "alt": "objects2_33",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_06",
         "sprite": "objects4_22",
         "alt": "objects4_23",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_06",
         "sprite": "objects4_5",
         "alt": "objects4_4",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1500,13 +2620,29 @@
         "prefab": "wall201",
         "top": "w201",
         "face": "w202",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall202",
         "top": "w201",
         "face": "w203",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1514,73 +2650,169 @@
         "prefab": "wall201",
         "sprite": "w201",
         "alt": "w202",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_01",
         "sprite": "objects1_9",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_01",
         "sprite": "objects1_25",
         "alt": "objects1_26",
-        "alt_dy": 1.78
+        "alt_dy": 1.78,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1642,13 +2874,29 @@
         "prefab": "wall201",
         "top": "w201",
         "face": "w202",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall202",
         "top": "w201",
         "face": "w203",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1656,73 +2904,169 @@
         "prefab": "wall201",
         "sprite": "w201",
         "alt": "w202",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_01",
         "sprite": "objects1_9",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_01",
         "sprite": "objects1_25",
         "alt": "objects1_26",
-        "alt_dy": 1.78
+        "alt_dy": 1.78,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1786,13 +3130,29 @@
         "prefab": "wall201",
         "top": "w201",
         "face": "w202",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall202",
         "top": "w201",
         "face": "w203",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1800,73 +3160,169 @@
         "prefab": "wall201",
         "sprite": "w201",
         "alt": "w202",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_01",
         "sprite": "objects1_9",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_01",
         "sprite": "objects1_25",
         "alt": "objects1_26",
-        "alt_dy": 1.78
+        "alt_dy": 1.78,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -1932,13 +3388,29 @@
         "prefab": "wall101",
         "top": "w101",
         "face": "w102",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall102",
         "top": "w101",
         "face": "w103",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -1946,73 +3418,169 @@
         "prefab": "wall101",
         "sprite": "w101",
         "alt": "w102",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_01",
         "sprite": "objects1_9",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2082,13 +3650,29 @@
         "prefab": "wall101",
         "top": "w101",
         "face": "w102",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall102",
         "top": "w101",
         "face": "w103",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2096,73 +3680,169 @@
         "prefab": "wall101",
         "sprite": "w101",
         "alt": "w102",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_01",
         "sprite": "objects1_9",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2233,13 +3913,29 @@
         "prefab": "wall301",
         "top": "w301",
         "face": "w302",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall302",
         "top": "w301",
         "face": "w303",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2247,73 +3943,169 @@
         "prefab": "wall301",
         "sprite": "w301",
         "alt": "w302",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box03",
         "sprite": "objects1_19",
         "alt": "objects1_20",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_02",
         "sprite": "objects1_14",
         "alt": "texiao_01",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          7,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2377,13 +4169,29 @@
         "prefab": "wall301",
         "top": "w301",
         "face": "w302",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall302",
         "top": "w301",
         "face": "w303",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2391,73 +4199,169 @@
         "prefab": "wall301",
         "sprite": "w301",
         "alt": "w302",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box03",
         "sprite": "objects1_19",
         "alt": "objects1_20",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_02",
         "sprite": "objects1_14",
         "alt": "texiao_01",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          7,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2523,13 +4427,29 @@
         "prefab": "wall301",
         "top": "w301",
         "face": "w302",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall302",
         "top": "w301",
         "face": "w303",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2537,73 +4457,169 @@
         "prefab": "wall301",
         "sprite": "w301",
         "alt": "w302",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box03",
         "sprite": "objects1_19",
         "alt": "objects1_20",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_02",
         "sprite": "objects1_14",
         "alt": "texiao_01",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          7,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2674,13 +4690,29 @@
         "prefab": "wall303",
         "top": "w304",
         "face": "w302",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall304",
         "top": "w304",
         "face": "w303",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2688,73 +4720,169 @@
         "prefab": "wall303",
         "sprite": "w304",
         "alt": "w302",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box03",
         "sprite": "objects1_19",
         "alt": "objects1_20",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_02",
         "sprite": "objects1_14",
         "alt": "texiao_01",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          7,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2825,13 +4953,29 @@
         "prefab": "wall303",
         "top": "w304",
         "face": "w302",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall304",
         "top": "w304",
         "face": "w303",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2839,73 +4983,169 @@
         "prefab": "wall303",
         "sprite": "w304",
         "alt": "w302",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box03",
         "sprite": "objects1_19",
         "alt": "objects1_20",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_02",
         "sprite": "objects1_14",
         "alt": "texiao_01",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          7,
+          0
+        ]
       },
       {
         "prefab": "obj22_02",
         "sprite": "objects1_27",
         "alt": "objects1_28",
-        "alt_dy": 1.25
+        "alt_dy": 1.25,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -2977,13 +5217,29 @@
         "prefab": "wall401",
         "top": "w402",
         "face": "w403",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall402",
         "top": "w402",
         "face": "w404",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -2991,73 +5247,169 @@
         "prefab": "wall403",
         "sprite": "w408",
         "alt": "w405",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_03",
         "sprite": "objects2_0",
         "alt": "objects2_1",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_03",
         "sprite": "objects2_12",
         "alt": "objects2_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3119,13 +5471,29 @@
         "prefab": "wall401",
         "top": "w402",
         "face": "w403",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall402",
         "top": "w402",
         "face": "w404",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3133,73 +5501,169 @@
         "prefab": "wall403",
         "sprite": "w408",
         "alt": "w405",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_03",
         "sprite": "objects2_0",
         "alt": "objects2_1",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_03",
         "sprite": "objects2_12",
         "alt": "objects2_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3261,13 +5725,29 @@
         "prefab": "wall401",
         "top": "w402",
         "face": "w403",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall402",
         "top": "w402",
         "face": "w404",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3275,73 +5755,169 @@
         "prefab": "wall403",
         "sprite": "w408",
         "alt": "w405",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_03",
         "sprite": "objects2_0",
         "alt": "objects2_1",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_03",
         "sprite": "objects2_12",
         "alt": "objects2_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3406,13 +5982,29 @@
         "prefab": "wall401",
         "top": "w402",
         "face": "w403",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall402",
         "top": "w402",
         "face": "w404",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3420,73 +6012,169 @@
         "prefab": "wall403",
         "sprite": "w408",
         "alt": "w405",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_03",
         "sprite": "objects2_0",
         "alt": "objects2_1",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_03",
         "sprite": "objects2_12",
         "alt": "objects2_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3553,13 +6241,29 @@
         "prefab": "wall401",
         "top": "w402",
         "face": "w403",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall402",
         "top": "w402",
         "face": "w404",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3567,73 +6271,169 @@
         "prefab": "wall403",
         "sprite": "w408",
         "alt": "w405",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box01",
         "sprite": "box01",
         "alt": "box02",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_green_1",
         "sprite": "objects1_33",
         "alt": "objects1_32",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_blue_1",
         "sprite": "objects1_35",
         "alt": "objects1_34",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_down",
         "sprite": "objects1_83",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj11_03",
         "sprite": "objects2_0",
         "alt": "objects2_1",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       },
       {
         "prefab": "obj22_03",
         "sprite": "objects2_12",
         "alt": "objects2_11",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3701,13 +6501,29 @@
         "prefab": "wall701",
         "top": "w701",
         "face": "w702",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall702",
         "top": "w703",
         "face": "w704",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3715,73 +6531,169 @@
         "prefab": "wall703",
         "sprite": "objects4_10",
         "alt": "objects4_9",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box05",
         "sprite": "objects4_26",
         "alt": "objects4_13",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_07",
         "sprite": "objects4_38",
         "alt": "objects4_39",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_10",
         "sprite": "objects4_29",
         "alt": "objects4_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3841,13 +6753,29 @@
         "prefab": "wall701",
         "top": "w701",
         "face": "w702",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall702",
         "top": "w703",
         "face": "w704",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3855,73 +6783,169 @@
         "prefab": "wall703",
         "sprite": "objects4_10",
         "alt": "objects4_9",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box05",
         "sprite": "objects4_26",
         "alt": "objects4_13",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_07",
         "sprite": "objects4_38",
         "alt": "objects4_39",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_10",
         "sprite": "objects4_29",
         "alt": "objects4_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -3984,13 +7008,29 @@
         "prefab": "wall701",
         "top": "w701",
         "face": "w702",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall702",
         "top": "w703",
         "face": "w704",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -3998,73 +7038,169 @@
         "prefab": "wall703",
         "sprite": "objects4_10",
         "alt": "objects4_9",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box05",
         "sprite": "objects4_26",
         "alt": "objects4_13",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_07",
         "sprite": "objects4_38",
         "alt": "objects4_39",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_10",
         "sprite": "objects4_29",
         "alt": "objects4_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -4130,13 +7266,29 @@
         "prefab": "wall701",
         "top": "w701",
         "face": "w702",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall702",
         "top": "w703",
         "face": "w704",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -4144,73 +7296,169 @@
         "prefab": "wall703",
         "sprite": "objects4_10",
         "alt": "objects4_9",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box05",
         "sprite": "objects4_26",
         "alt": "objects4_13",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_07",
         "sprite": "objects4_38",
         "alt": "objects4_39",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_10",
         "sprite": "objects4_29",
         "alt": "objects4_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -4280,13 +7528,29 @@
         "prefab": "wall701",
         "top": "w701",
         "face": "w702",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall702",
         "top": "w703",
         "face": "w704",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [
@@ -4294,73 +7558,169 @@
         "prefab": "wall703",
         "sprite": "objects4_10",
         "alt": "objects4_9",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "box05",
         "sprite": "objects4_26",
         "alt": "objects4_13",
-        "alt_dy": 0.5
+        "alt_dy": 0.5,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_write_1",
         "sprite": "objects1_86",
         "alt": "objects1_85",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "cask_red_1",
         "sprite": "objects1_31",
         "alt": "objects1_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "speed_up",
         "sprite": "objects1_82",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "sting01",
         "sprite": "objects1_0",
         "alt": "objects1_1",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          2,
+          1
+        ],
+        "alt_sort": [
+          4,
+          1
+        ]
       },
       {
         "prefab": "obj11_07",
         "sprite": "objects4_38",
         "alt": "objects4_39",
-        "alt_dy": 0.75
+        "alt_dy": 0.75,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "obj22_10",
         "sprite": "objects4_29",
         "alt": "objects4_30",
-        "alt_dy": 1.0
+        "alt_dy": 1.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "signs01",
         "sprite": "objects_common_35",
         "alt": "",
-        "alt_dy": 0.0
+        "alt_dy": 0.0,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          0
+        ]
       },
       {
         "prefab": "brazier01",
         "sprite": "objects1_4",
         "alt": "objects1_5",
-        "alt_dy": 1.3
+        "alt_dy": 1.3,
+        "sort": [
+          4,
+          0
+        ],
+        "alt_sort": [
+          6,
+          3
+        ]
       }
     ],
     "rooms": {
@@ -4428,13 +7788,29 @@
         "prefab": "wall502",
         "top": "w503",
         "face": "w504",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       },
       {
         "prefab": "wall504",
         "top": "w505",
         "face": "w506",
-        "face_dy": 0.0
+        "face_dy": 0.0,
+        "top_sort": [
+          4,
+          0
+        ],
+        "face_sort": [
+          6,
+          2
+        ]
       }
     ],
     "obstacles": [],

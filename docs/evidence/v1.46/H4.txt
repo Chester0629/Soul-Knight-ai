@@ -1,0 +1,5 @@
+ [info] Reward: e_miner02 dropped 2 pickups (coins 1 energy 8)
+ [info] Reward: ex_miner03 dropped 6 pickups (coins 4 energy 16)
+ [info] Reward: e_yeti01 dropped 2 pickups (coins 1 energy 8)
+ [info] Reward: e_yeti01 dropped 2 pickups (coins 1 energy 8)
+ [info] Reward: e_miner01 dropped 2 pickups (coins 1 energy 8)

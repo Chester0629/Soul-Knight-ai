@@ -1,4 +1,5 @@
 #include "entities/Enemy.hpp"
+#include "game/RenderLayout.hpp"
 
 #include <string>
 #include <vector>
@@ -30,7 +31,7 @@ Enemy::Enemy(const EnemyDef &def, const std::string &resourceRoot,
           frames.empty() ? MakeBatFrames(resourceRoot) : frames, true,
           frameIntervalMs, true)) {
     SetDrawable(m_Anim);
-    SetZIndex(5);
+    SetZIndex(RenderLayout::kZEnemy); // sorting layer 5 (Character), below the layer-6 overlays
     m_Transform.translation = spawnPos;
     SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
 }

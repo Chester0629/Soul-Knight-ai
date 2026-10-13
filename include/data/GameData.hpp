@@ -299,12 +299,21 @@ struct DesignRoomDef {
     std::vector<DesignObstacle> obstacles;
 };
 
+/// A SpriteRenderer's Unity sorting key (P2.17): layer = TagManager sortingLayers index
+/// (2 Floor, 3 Shadow, 4 Wall, 5 Character, 6 WallFont, 7 Effect, 8 UI), order = m_SortingOrder.
+struct SortKey {
+    int layer = 4;
+    int order = 0;
+};
+
 /// MAP M1: one wall prefab of MapManager.wall_list -- its top tile + front face.
 struct LevelWallDef {
     std::string prefab;
     std::string top;  ///< sprite stem, e.g. "w601" (Resources/sprites/tiles/<top>.png)
     std::string face; ///< the wall's front face sprite, e.g. "w602"
     float faceDy = 0.0F; ///< w2 child local y (units) -- 0 for walls
+    SortKey topSort{4, 0};  ///< base sprite: layer 4 (Wall), under the characters
+    SortKey faceSort{6, 0}; ///< w2 overlay: layer 6 (WallFont), OVER the characters
 };
 
 /// MAP M1: one MapManager.obstacle_list[obj_index] entry (RGObjectSkin skin).
@@ -313,6 +322,8 @@ struct LevelObstacleDef {
     std::string sprite; ///< main sprite stem (tiles/<sprite>.png)
     std::string alt;    ///< second sprite (broken box / lit face), "" if none
     float altDy = 0.0F; ///< w2 child local y (units): 0.5 = a crate's top sits half a unit up
+    SortKey sort{4, 0};    ///< main sprite sorting layer/order (sting01: 2/1, boxes: 4/0)
+    SortKey altSort{6, 0}; ///< w2 overlay sorting layer/order (boxes 6/0, sting01 `ding` 4/1)
 };
 
 /**
@@ -367,6 +378,8 @@ struct PrefabSkin {
     std::string alt;    ///< w2 overlay stem, "" if none
     float altDy = 0.0F; ///< w2 local y in units
     std::string kind;   ///< "wall" (grid solid) / "box" (destructible) / "solid" / "pad"
+    SortKey sort{4, 0};    ///< main sprite sorting layer/order
+    SortKey altSort{6, 0}; ///< w2 overlay sorting layer/order
 };
 
 /// M3b: a boss's chest (res/item/chest_boss<NN>.prefab, RGChestBoss): its drop
@@ -408,6 +421,9 @@ struct StatueDef {
     std::string lightSprite; ///< glow sprite stem (objects3_7 for all 7)
     float bodyDy = 0.0F;     ///< body child local y, units (prefab: 1.1)
     float lightDy = 0.0F;    ///< light child local y, units (prefab: 0.69375)
+    SortKey baseSort{4, 0};  ///< pedestal: layer 4 (Wall)
+    SortKey bodySort{6, 0};  ///< the god: layer 6 (WallFont) -- over the heroes
+    SortKey lightSort{5, 0}; ///< glow: layer 5 (Character)
 };
 
 /// P1.12: a coin / energy pickup (res/register/coin_N | energy prefab: RGCoin
@@ -564,6 +580,16 @@ public:
     const BossRoomDef *FindBossRoom(const std::string &id) const;
     /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
     const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
+    /// P2.17: Unity sprite pivot (fractions of the sprite rect from its bottom-left, y up)
+    /// of room sprite @p stem (tile_pivots.json, FAITHFUL @ rgtexture m_Pivot). Stems
+    /// without data use the 16x24 wall/floor convention {0.5, 0}.
+    std::array<float, 2> TilePivot(const std::string &stem) const;
+    /// Number of sprites in tile_pivots.json (0 when the table is absent).
+    std::size_t TilePivotCount() const { return m_TilePivots.size(); }
+    /// The whole tile_pivots.json table (stem -> pivot fractions).
+    const std::unordered_map<std::string, std::array<float, 2>> &TilePivots() const {
+        return m_TilePivots;
+    }
     const std::unordered_map<std::string, BossRoomDef> &BossRooms() const { return m_BossRooms; }
     /// P1.12: pickups.json; nullptr when the table or kind is absent.
     const PickupDef *FindPickup(const std::string &kind) const;
@@ -623,6 +649,7 @@ private:
     std::vector<LevelDef> m_Levels;
     std::unordered_map<std::string, BossRoomDef> m_BossRooms;
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
+    std::unordered_map<std::string, std::array<float, 2>> m_TilePivots; ///< P2.17 tile_pivots.json
     std::unordered_map<std::string, BossChestDef> m_BossChests;
     std::unordered_map<std::string, PotDef> m_Pots;
     std::vector<StatueDef> m_Statues;

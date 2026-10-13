@@ -3050,193 +3050,449 @@
       "sprite": "objects2_31",
       "alt": "objects2_30",
       "alt_dy": 1.0,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "wall_tree1": {
       "sprite": "objects2_68",
       "alt": "objects2_69",
       "alt_dy": 0.5,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "wall503": {
       "sprite": "w507",
       "alt": "w508",
       "alt_dy": 0.0,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "wall504": {
       "sprite": "w505",
       "alt": "w506",
       "alt_dy": 0.0,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "obj22_house": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "brazier03": {
       "sprite": "objects2_38",
       "alt": "objects2_39",
       "alt_dy": 0.5,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "obj11_05": {
       "sprite": "objects2_48",
       "alt": "objects2_49",
       "alt_dy": 1.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "obj22_06": {
       "sprite": "objects4_5",
       "alt": "objects4_4",
       "alt_dy": 0.5,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "obj22_08": {
       "sprite": "objects4_24",
       "alt": "objects4_25",
       "alt_dy": 1.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "box04": {
       "sprite": "objects4_2",
       "alt": "objects4_3",
       "alt_dy": 0.5,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "wall603": {
       "sprite": "objects4_1",
       "alt": "objects4_0",
       "alt_dy": 0.75,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "mineral_crystal": {
       "sprite": "objects1_80",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        5,
+        1
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "obj22_07": {
       "sprite": "objects4_20",
       "alt": "objects4_21",
       "alt_dy": 0.5,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "cask_red_3": {
       "sprite": "objects4_6",
       "alt": "objects4_7",
       "alt_dy": 0.5,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "obj11_06": {
       "sprite": "objects4_22",
       "alt": "objects4_23",
       "alt_dy": 0.5,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "box01": {
       "sprite": "box01",
       "alt": "box02",
       "alt_dy": 0.0,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "wall101": {
       "sprite": "w101",
       "alt": "w102",
       "alt_dy": 0.0,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "box_weapon": {
       "sprite": "objects1_3",
       "alt": "objects1_2",
       "alt_dy": 1.375,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "box_spell": {
       "sprite": "objects1_21",
       "alt": "objects1_22",
       "alt_dy": 1.0,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "carpet": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "pad"
+      "kind": "pad",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "obj22_table": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "brazier01": {
       "sprite": "objects1_4",
       "alt": "objects1_5",
       "alt_dy": 1.3,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        3
+      ]
     },
     "obj22_stone": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "rail": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "box03": {
       "sprite": "objects1_19",
       "alt": "objects1_20",
       "alt_dy": 1.0,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "wall301": {
       "sprite": "w301",
       "alt": "w302",
       "alt_dy": 0.0,
-      "kind": "wall"
+      "kind": "wall",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        2
+      ]
     },
     "speed_up": {
       "sprite": "objects1_82",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "pad"
+      "kind": "pad",
+      "sort": [
+        2,
+        1
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "stone02": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "rail2": {
       "sprite": "",
       "alt": "",
       "alt_dy": 0.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "box05": {
       "sprite": "objects4_26",
       "alt": "objects4_13",
       "alt_dy": 0.5,
-      "kind": "box"
+      "kind": "box",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "obj11_07": {
       "sprite": "objects4_38",
       "alt": "objects4_39",
       "alt_dy": 0.75,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     },
     "obj22_10": {
       "sprite": "objects4_29",
       "alt": "objects4_30",
       "alt_dy": 1.0,
-      "kind": "solid"
+      "kind": "solid",
+      "sort": [
+        4,
+        0
+      ],
+      "alt_sort": [
+        6,
+        0
+      ]
     }
   }
 }

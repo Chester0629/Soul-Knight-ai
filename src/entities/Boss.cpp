@@ -1,4 +1,5 @@
 #include "entities/Boss.hpp"
+#include "game/RenderLayout.hpp"
 
 #include <cmath>
 #include <string>
@@ -10,7 +11,9 @@ namespace Game {
 
 namespace {
 constexpr float kBossRadius = 28.0F; // placeholder GetCollider() radius until data is installed
-constexpr float kBossZIndex = 6.0F;
+// P2.17: boss body is sorting layer 5 like the heroes, kept just above the hero but BELOW the
+// layer-6 wall/box overlays (RenderLayout::kZBoss, PORT CHOICE T-59).
+constexpr float kBossZIndex = RenderLayout::kZBoss;
 constexpr int kBossFrames = 6;
 
 std::vector<std::string> BossFrames(const std::string &resourceRoot) {

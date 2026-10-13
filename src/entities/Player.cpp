@@ -1,4 +1,5 @@
 #include "entities/Player.hpp"
+#include "game/RenderLayout.hpp"
 
 #include <cmath>
 #include <string>
@@ -35,7 +36,7 @@ Player::Player(const CharacterDef &def, const std::string &resourceRoot,
           frames.empty() ? C01Frames(resourceRoot) : frames, true,
           frameIntervalMs, true, 100)) {
     SetDrawable(m_Anim);
-    SetZIndex(5.0F);
+    SetZIndex(RenderLayout::kZPlayer); // sorting layer 5 (Character), below the layer-6 overlays
     m_Transform.translation = {0.0F, 0.0F};
     SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
 }

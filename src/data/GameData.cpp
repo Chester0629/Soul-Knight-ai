@@ -29,6 +29,16 @@ std::string GetS(const json &j, const char *key,
                                               : fallback;
 }
 
+/// `[layer, order]` array under @p key (P2.17 sorting key), @p fallback when absent/malformed.
+SortKey GetSort(const json &j, const char *key, SortKey fallback) {
+    auto it = j.find(key);
+    if (it != j.end() && it->is_array() && it->size() >= 2 && (*it)[0].is_number() &&
+        (*it)[1].is_number()) {
+        return SortKey{(*it)[0].get<int>(), (*it)[1].get<int>()};
+    }
+    return fallback;
+}
+
 /// `sprite_offset: [x, y]` (units, prefab-root space) -> (x, y); (0, 0) when absent.
 void ReadSpriteOffset(const json &j, float &x, float &y) {
     x = 0.0F;
@@ -475,13 +485,17 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             if (const auto ws = v.find("walls"); ws != v.end() && ws->is_array()) {
                 for (const json &w : *ws) {
                     d.walls.push_back(LevelWallDef{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face"),
-                                                   GetF(w, "face_dy")});
+                                                   GetF(w, "face_dy"),
+                                                   GetSort(w, "top_sort", SortKey{4, 0}),
+                                                   GetSort(w, "face_sort", SortKey{6, 0})});
                 }
             }
             if (const auto os = v.find("obstacles"); os != v.end() && os->is_array()) {
                 for (const json &o : *os) {
                     d.obstacles.push_back(LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"),
-                                                           GetS(o, "alt"), GetF(o, "alt_dy")});
+                                                           GetS(o, "alt"), GetF(o, "alt_dy"),
+                                                           GetSort(o, "sort", SortKey{4, 0}),
+                                                           GetSort(o, "alt_sort", SortKey{6, 0})});
                 }
             }
             if (const auto rs = v.find("rooms"); rs != v.end() && rs->is_object()) {
@@ -518,7 +532,22 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         if (const auto pf = bossRooms.find("prefabs"); pf != bossRooms.end() && pf->is_object()) {
             for (auto it = pf->begin(); it != pf->end(); ++it) {
                 m_PrefabSkins.emplace(it.key(), PrefabSkin{GetS(it.value(), "sprite"), GetS(it.value(), "alt"),
-                                                           GetF(it.value(), "alt_dy"), GetS(it.value(), "kind")});
+                                                           GetF(it.value(), "alt_dy"), GetS(it.value(), "kind"),
+                                                           GetSort(it.value(), "sort", SortKey{4, 0}),
+                                                           GetSort(it.value(), "alt_sort", SortKey{6, 0})});
+            }
+        }
+    }
+
+    // P2.17: tile_pivots.json -- room-sprite pivots (rgtexture m_Pivot). Absent -> every
+    // room sprite keeps the bottom-centre convention (pre-P2.17 behaviour).
+    const json &tilePivots = store.Load(dir + "tile_pivots.json");
+    if (tilePivots.is_object()) {
+        for (auto it = tilePivots.begin(); it != tilePivots.end(); ++it) {
+            if (it.value().is_array() && it.value().size() >= 2 && it.value()[0].is_number() &&
+                it.value()[1].is_number()) {
+                m_TilePivots.emplace(it.key(), std::array<float, 2>{it.value()[0].get<float>(),
+                                                                    it.value()[1].get<float>()});
             }
         }
     }
@@ -585,6 +614,9 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 d.lightSprite = GetS(it.value(), "light_sprite");
                 d.bodyDy = GetF(it.value(), "body_dy");
                 d.lightDy = GetF(it.value(), "light_dy");
+                d.baseSort = GetSort(it.value(), "base_sort", SortKey{4, 0});
+                d.bodySort = GetSort(it.value(), "body_sort", SortKey{6, 0});
+                d.lightSort = GetSort(it.value(), "light_sort", SortKey{5, 0});
                 m_Statues.push_back(std::move(d));
             }
         }
@@ -724,6 +756,11 @@ const BossRoomDef *GameData::FindBossRoom(const std::string &id) const {
 const PrefabSkin *GameData::FindPrefabSkin(const std::string &prefab) const {
     auto it = m_PrefabSkins.find(prefab);
     return it == m_PrefabSkins.end() ? nullptr : &it->second;
+}
+
+std::array<float, 2> GameData::TilePivot(const std::string &stem) const {
+    auto it = m_TilePivots.find(stem);
+    return it == m_TilePivots.end() ? std::array<float, 2>{0.5F, 0.0F} : it->second;
 }
 
 const LevelDef *GameData::FindLevel(const std::string &id) const {

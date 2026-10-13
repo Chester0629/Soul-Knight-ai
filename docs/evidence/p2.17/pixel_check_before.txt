@@ -1,0 +1,7 @@
+FAIL AC1 bottom bush row starts at y=531 (expected 555; pre-fix 531)
+FAIL AC3 A1 void colour (0, 0, 0) == camera_bg (5,31,40)
+FAIL AC3 B1 void colour (0, 0, 0) == camera_bg (7,26,49)
+FAIL AC4 seam dips >10 lum: vertical [(519, 29.5), (520, 24.4), (567, 28.5), (568, 26.0), (615, 25.8), (616, 22.7), (663, 23.5), (664, 12.3), (711, 30.1), (712, 24.9)], horizontal [(479, 18.6), (480, 12.9)] (pre-fix 13..30)
+FAIL AC2 behind: bush overlay covers the hero's feet (0.14 of rect is bush, need > 0.6)
+ok   AC2 front: hero drawn over the wall base (0.00 of rect is bush, need < 0.05)
+P217 PIXELS: FAILED 5

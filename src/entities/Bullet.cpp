@@ -13,6 +13,7 @@
 #include "Util/Image.hpp"
 
 #include "game/WorldScale.hpp"
+#include "game/RenderLayout.hpp"
 
 namespace Game {
 
@@ -21,7 +22,7 @@ namespace {
 /// from the bullet prefab collider (BulletState::radiusPx).
 constexpr float kColliderRadius = 6.0f;
 /// Z-index for rendering bullets above the floor and most actors.
-constexpr float kBulletZIndex = 4.0f;
+constexpr float kBulletZIndex = RenderLayout::kZBullet; // above wall bases, under actors (T-59)
 /// Conversion factor from milliseconds to seconds.
 constexpr float kMsToSec = 1.0f / 1000.0f;
 } // namespace

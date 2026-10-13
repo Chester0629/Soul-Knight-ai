@@ -16,6 +16,7 @@
 
 #include "game/FloorClear.hpp"
 #include "game/WorldScale.hpp"
+#include "game/RenderLayout.hpp"
 #include "game/RunController.hpp"
 #include "game/EnemyReward.hpp"
 #include "game/EnemyMaker.hpp"
@@ -275,16 +276,28 @@ void GameScene::OnEnter() {
     // variants, indexed by RoomGen's pass-3 roll), wall_list[0] top + front face,
     // and obstacle_list[obj_index] skins. Falls back to the pre-M1 single ice
     // set when the level table is absent.
+    // P2.17 (d): every ROOM sprite is point-filtered. FAITHFUL: all gameplay atlases are
+    // filterMode 0 (Texture2D/*.png.meta); PORT CHOICE (T-60): only the room sprites are
+    // switched here -- characters / bullets / effects / HUD keep PTSD's bilinear default. PTSD's default (bilinear + CLAMP_TO_BORDER)
+    // blended each tile's edge texels with the transparent-black border, which showed as
+    // dark grid lines between adjacent floor tiles. Util::Image(path, false) selects
+    // GL_NEAREST in the existing PTSD API (no vendored-source change).
+    const auto roomImage = [](const std::string &path) {
+        return std::make_shared<Util::Image>(path, /*useAA=*/false);
+    };
     std::vector<std::shared_ptr<Util::Image>> floorImgs;
+    std::vector<std::string> floorStems; // parallel to floorImgs (pivot lookup)
     if (m_Level != nullptr) {
         for (const std::string &f : m_Level->floors) {
             if (!f.empty()) {
-                floorImgs.push_back(std::make_shared<Util::Image>(root + "/sprites/tiles/" + f + ".png"));
+                floorImgs.push_back(roomImage(root + "/sprites/tiles/" + f + ".png"));
+                floorStems.push_back(f);
             }
         }
     }
     if (floorImgs.empty()) {
-        floorImgs.push_back(std::make_shared<Util::Image>(root + "/sprites/tiles/floor.png"));
+        floorImgs.push_back(roomImage(root + "/sprites/tiles/floor.png"));
+        floorStems.push_back("floor");
     }
     // MapManager.wall_list holds the basic wall + a decorated variant (CreateWall rolls
     // Range(0,100) per tile; the threshold did not survive). Draw the basic wall:
@@ -305,40 +318,51 @@ void GameScene::OnEnter() {
     const std::string wallFace = (wallDef != nullptr && !wallDef->face.empty())
                                      ? "tiles/" + wallDef->face
                                      : wallTop;
-    auto wallImg = std::make_shared<Util::Image>(root + "/sprites/" + wallTop + ".png");
-    auto wallFaceImg = std::make_shared<Util::Image>(root + "/sprites/" + wallFace + ".png");
+    auto wallImg = roomImage(root + "/sprites/" + wallTop + ".png");
+    auto wallFaceImg = roomImage(root + "/sprites/" + wallFace + ".png");
+    const std::string wallTopStem = wallTop.substr(wallTop.rfind('/') + 1); // "tiles/w601" -> "w601"
+    const std::string wallFaceStem = wallFace.substr(wallFace.rfind('/') + 1);
     const float wallFaceDy = wallDef != nullptr ? wallDef->faceDy : 0.0F;
+    // FAITHFUL @ wall601.prefab: base on layer 4 (Wall), the w2 overlay on layer 6 (WallFont).
+    const SortKey wallTopSort = wallDef != nullptr ? wallDef->topSort : SortKey{4, 0};
+    const SortKey wallFaceSort = wallDef != nullptr ? wallDef->faceSort : SortKey{6, 2};
     const glm::vec2 floorSz = floorImgs.front()->GetSize();
-    const glm::vec2 wallSz = wallImg->GetSize();
-    const glm::vec2 wallFaceSz = wallFaceImg->GetSize();
     // M3d shadows (PORT CHOICE T-16): the original's wall/prop shadow0 is an OPAQUE
     // black 16x24 block tinted by a multiply material the port has no equivalent
     // for, so it is not drawn; shadow2 (the alpha ellipse from the character atlas, pivot (0.5,0))
     // goes under props, boxes and door bars.
-    auto shadowImg2 = std::make_shared<Util::Image>(root + "/sprites/shadow2.png");
-    auto doorBaseImg = std::make_shared<Util::Image>(root + "/sprites/door02.png");
-    auto doorBarImg = std::make_shared<Util::Image>(root + "/sprites/door01.png");
-    (void)wallSz;
-    (void)wallFaceSz;
+    auto shadowImg2 = roomImage(root + "/sprites/shadow2.png");
+    auto doorBaseImg = roomImage(root + "/sprites/door02.png");
+    auto doorBarImg = roomImage(root + "/sprites/door01.png");
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list).
     // MAP M1: from THIS level's obstacle_list; pre-M1 obj_N crops as fallback.
     std::array<std::shared_ptr<Util::Image>, 12> objImg{};
     std::array<std::shared_ptr<Util::Image>, 12> objAltImg{}; // the prefab's w2 overlay (crate top ...)
     std::array<float, 12> objAltDy{};
+    std::array<std::string, 12> objStem{};    // pivot lookup keys (tile_pivots.json)
+    std::array<std::string, 12> objAltStem{};
+    std::array<SortKey, 12> objSort{};        // prefab SpriteRenderer layer/order (default 4/0)
+    std::array<SortKey, 12> objAltSort{};
+    objAltSort.fill(SortKey{6, 0});
     for (int i : {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}) {
         const std::size_t oi = static_cast<std::size_t>(i);
         if (m_Level != nullptr && oi < m_Level->obstacles.size() &&
             !m_Level->obstacles[oi].sprite.empty()) {
-            objImg[oi] = std::make_shared<Util::Image>(
+            objImg[oi] = roomImage(
                 root + "/sprites/tiles/" + m_Level->obstacles[oi].sprite + ".png");
+            objStem[oi] = m_Level->obstacles[oi].sprite;
+            objSort[oi] = m_Level->obstacles[oi].sort;
             if (!m_Level->obstacles[oi].alt.empty()) {
-                objAltImg[oi] = std::make_shared<Util::Image>(
+                objAltImg[oi] = roomImage(
                     root + "/sprites/tiles/" + m_Level->obstacles[oi].alt + ".png");
+                objAltStem[oi] = m_Level->obstacles[oi].alt;
                 objAltDy[oi] = m_Level->obstacles[oi].altDy;
+                objAltSort[oi] = m_Level->obstacles[oi].altSort;
             }
         } else if (i != 9 && i != 10) {
-            objImg[oi] = std::make_shared<Util::Image>(
+            objImg[oi] = roomImage(
                 root + "/sprites/tiles/obj_" + std::to_string(i) + ".png");
+            objStem[oi] = "obj_" + std::to_string(i);
         }
     }
     // The start room repositions the player onto a guaranteed floor cell (set
@@ -497,38 +521,42 @@ void GameScene::OnEnter() {
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
         };
+        // P2.17 (a)+(b): ONE placement rule for every room sprite. FAITHFUL @ the room
+        // prefabs: the prefab root is the cell's bottom-centre (collider (0, 0.5) 1x1 above
+        // it) and a child sits at root + (0, dy units); a Unity sprite is positioned by its
+        // PIVOT (tile_pivots.json = rgtexture m_Pivot), so the sprite centre is
+        // anchor + (0.5 - pivot) * size * scale (RenderLayout::PivotCentre). A 16x24 (0.5, 0) wall
+        // is unchanged; a 16x16 (0.5, 0.5) bush/crate now centres on the anchor instead of
+        // floating half a unit high. z comes from the prefab's (sorting layer, order) via
+        // RenderLayout::RoomSortZ, y-sorted by the cell anchor (shared by an object's parts).
         const auto addObjSprite = [&](const std::shared_ptr<Util::Image> &img,
-                                      int cx, int cy)
+                                      const std::string &stem, int cx, int cy, SortKey sort,
+                                      float dyUnits = 0.0F)
             -> std::shared_ptr<Util::GameObject> {
             auto tile = std::make_shared<Util::GameObject>();
             tile->SetDrawable(img);
-            tile->SetZIndex(1.0F);
-            const glm::vec2 sz = img->GetSize();
             const float scale = Scale::kSpriteScale; // pixelsToUnits 16 -> 2x cell fit
             tile->m_Transform.scale = glm::vec2(scale, scale);
-            // Bottom of the sprite at the cell's bottom edge (pivot 0.5,0).
-            tile->m_Transform.translation =
-                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin) +
-                glm::vec2(0.0F, sz.y * scale * 0.5F - kCellPx * 0.5F);
+            const RenderLayout::RoomSpritePlacement pl = RenderLayout::PlaceRoomSprite(
+                m_Data, stem, img->GetSize(),
+                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin), sort, dyUnits);
+            tile->m_Transform.translation = pl.translation;
+            tile->SetZIndex(pl.z);
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
             return tile;
         };
-        // Shadow under a cell object: shadow0 pivot (0.5,0.3) -> its centre sits
-        // 0.2 * 24 px * 2 above the cell's bottom edge; shadow2 pivot (0.5,0).
-        const auto addShadow = [&](const std::shared_ptr<Util::Image> &img, int cx, int cy,
-                                   float pivotY) {
-            auto sh = std::make_shared<Util::GameObject>();
-            sh->SetDrawable(img);
-            const glm::vec2 sz = img->GetSize();
-            const float scale = Scale::kSpriteScale;
-            sh->m_Transform.scale = glm::vec2(scale, scale);
-            sh->m_Transform.translation =
-                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin) +
-                glm::vec2(0.0F, sz.y * scale * (0.5F - pivotY) - kCellPx * 0.5F);
-            sh->SetZIndex(0.9F - sh->m_Transform.translation.y * 1e-5F);
-            m_RoomTiles.push_back(sh);
-            m_Renderer.AddChild(sh);
+        // Shadow under a cell object (layer 3 Shadow). Pivot from the data (shadow2 (0.5,0)).
+        // @p mainSort is the object's own sorting key: a floor-layer prop (sting01 spikes,
+        // speed pads: layer 2 order 1) must keep its shadow UNDER its plate, as before P2.17,
+        // so that shadow sits between the floor tiles and the plate (2.05).
+        const auto addShadow = [&](const std::shared_ptr<Util::Image> &img, const std::string &stem,
+                                   int cx, int cy, SortKey mainSort) {
+            auto sh = addObjSprite(img, stem, cx, cy, SortKey{RenderLayout::kLayerShadow, 0});
+            if (mainSort.layer < RenderLayout::kLayerWall) {
+                sh->SetZIndex(sh->GetZIndex() - 1.0F + 0.05F); // layer 3 -> 2.05
+            }
+            return sh;
         };
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
@@ -538,10 +566,8 @@ void GameScene::OnEnter() {
                     // face overlay at the same spot; a 16-px cell is 1 unit, so the
                     // wall rises 1.5 units. Draw both bottom-anchored at native aspect,
                     // sorted by y so a lower wall overdraws the one behind it.
-                    {
-                        auto ground = addObjSprite(floorImgs[0], x, y); // ground under the wall
-                        ground->SetZIndex(0.1F - ground->m_Transform.translation.y * 1e-5F);
-                    }
+                    // ground under the wall (layer 2 Floor)
+                    addObjSprite(floorImgs[0], floorStems[0], x, y, SortKey{RenderLayout::kLayerFloor, 0});
                     // A design-room obj_index-0 wall wears the level's obstacle_list[0]
                     // skin (wall603 ice crystals / wall_tree1 ...), not the perimeter wall.
                     const bool designWall = std::find(ropt.designSolidCells.begin(),
@@ -551,21 +577,15 @@ void GameScene::OnEnter() {
                         continue; // MAP M3: the boss-room object pass draws this wall's skin
                     }
                     if (designWall && objImg[0] != nullptr) {
-                        auto dw = addObjSprite(objImg[0], x, y);
-                        dw->SetZIndex(1.3F - dw->m_Transform.translation.y * 1e-5F);
+                        addObjSprite(objImg[0], objStem[0], x, y, objSort[0]);
                         if (objAltImg[0] != nullptr) {
-                            auto dwTop = addObjSprite(objAltImg[0], x, y);
-                            dwTop->m_Transform.translation.y += objAltDy[0] * kCellPx;
-                            dwTop->SetZIndex(1.31F - dw->m_Transform.translation.y * 1e-5F);
+                            addObjSprite(objAltImg[0], objAltStem[0], x, y, objAltSort[0], objAltDy[0]);
                         }
                         continue;
                     }
-                    const auto solidTile = addObjSprite(wallImg, x, y);
-                    solidTile->SetZIndex(1.2F - solidTile->m_Transform.translation.y * 1e-5F);
+                    addObjSprite(wallImg, wallTopStem, x, y, wallTopSort);
                     if (wallFaceImg != wallImg) {
-                        const auto face = addObjSprite(wallFaceImg, x, y);
-                        face->m_Transform.translation.y += wallFaceDy * kCellPx;
-                        face->SetZIndex(1.21F - face->m_Transform.translation.y * 1e-5F);
+                        addObjSprite(wallFaceImg, wallFaceStem, x, y, wallFaceSort, wallFaceDy);
                     }
                 } else {
                     // MAP M1: the floor variant RoomGen rolled for this cell. Floor
@@ -573,8 +593,8 @@ void GameScene::OnEnter() {
                     // lip), pivot (0.5,0): draw bottom-anchored at native aspect, upper
                     // rows first, so the lip overlaps the row above instead of squashing.
                     const std::size_t v = static_cast<std::size_t>(rg.FloorVariantAt(x, y));
-                    auto ft = addObjSprite(floorImgs[v < floorImgs.size() ? v : 0], x, y);
-                    ft->SetZIndex(0.1F - ft->m_Transform.translation.y * 1e-5F);
+                    const std::size_t fv = v < floorImgs.size() ? v : 0;
+                    addObjSprite(floorImgs[fv], floorStems[fv], x, y, SortKey{RenderLayout::kLayerFloor, 0});
                 }
             }
         }
@@ -606,15 +626,15 @@ void GameScene::OnEnter() {
                     objImg[oi] == nullptr) {
                     continue; // 0 is the grid wall; 9/10 unused -> null
                 }
-                addShadow(shadowImg2, o.x, o.y, 0.0F); // alpha ellipse under the prop
-                auto tile = addObjSprite(objImg[oi], o.x, o.y);
-                tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                addShadow(shadowImg2, "shadow2", o.x, o.y, objSort[oi]); // alpha ellipse under the prop
+                auto tile = addObjSprite(objImg[oi], objStem[oi], o.x, o.y, objSort[oi]);
+                std::shared_ptr<Util::GameObject> top;
                 if (objAltImg[oi] != nullptr) {
                     // FAITHFUL @ box04.prefab: the w2 overlay (crate top, 16x16) sits
-                    // alt_dy units above the 16x8 base -> the crate reads as a box.
-                    auto top = addObjSprite(objAltImg[oi], o.x, o.y);
-                    top->m_Transform.translation.y += objAltDy[oi] * kCellPx;
-                    top->SetZIndex(1.31F - tile->m_Transform.translation.y * 1e-5F);
+                    // alt_dy units above the 16x8 base -> the crate reads as a box. It is
+                    // on layer 6 (WallFont): drawn OVER a hero standing behind the crate.
+                    top = addObjSprite(objAltImg[oi], objAltStem[oi], o.x, o.y, objAltSort[oi],
+                                       objAltDy[oi]);
                 }
 
                 const bool box = o.objIndex >= 1 && o.objIndex <= 4;
@@ -626,6 +646,7 @@ void GameScene::OnEnter() {
                     ob.collider = Util::Collider::MakeAABB(
                         wpos, glm::vec2{kCellPx, kCellPx});
                     ob.tile = tile;
+                    ob.top = top;
                     ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
                     if (box) {
                         ob.box.SetHp(kBoxHp);
@@ -658,19 +679,17 @@ void GameScene::OnEnter() {
                     if (it != m_SkinCache.end()) {
                         return it->second;
                     }
-                    auto img = std::make_shared<Util::Image>(root + "/sprites/tiles/" + stem + ".png");
+                    auto img = roomImage(root + "/sprites/tiles/" + stem + ".png");
                     m_SkinCache.emplace(stem, img);
                     return img;
                 };
                 if (sk->kind != "pad") {
-                    addShadow(shadowImg2, o.x, o.y, 0.0F);
+                    addShadow(shadowImg2, "shadow2", o.x, o.y, sk->sort);
                 }
-                auto tile = addObjSprite(skinImg(sk->sprite), o.x, o.y);
-                tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                auto tile = addObjSprite(skinImg(sk->sprite), sk->sprite, o.x, o.y, sk->sort);
+                std::shared_ptr<Util::GameObject> top;
                 if (!sk->alt.empty()) {
-                    auto top = addObjSprite(skinImg(sk->alt), o.x, o.y);
-                    top->m_Transform.translation.y += sk->altDy * kCellPx;
-                    top->SetZIndex(1.31F - tile->m_Transform.translation.y * 1e-5F);
+                    top = addObjSprite(skinImg(sk->alt), sk->alt, o.x, o.y, sk->altSort, sk->altDy);
                 }
                 if (sk->kind == "box" || sk->kind == "solid") {
                     const glm::vec2 wpos = Room::CellToWorld(o.x, o.y, rg.Width(), rg.Height(),
@@ -678,6 +697,7 @@ void GameScene::OnEnter() {
                     ObstacleBox ob;
                     ob.collider = Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
                     ob.tile = tile;
+                    ob.top = top;
                     ob.destructible = sk->kind == "box";
                     if (ob.destructible) {
                         ob.box.SetHp(kBoxHp);
@@ -716,26 +736,27 @@ void GameScene::OnEnter() {
         // size, bottom on the cell bottom edge, z sorted by -y -- so corridor floors
         // and flank walls line up with the perimeter walls instead of squashed
         // 32x32 tiles clashing with the 16x24 walls.
-        const auto addBlockSprite = [&](const std::shared_ptr<Util::Image> &img, int bx, int by,
-                                        float zBase) {
+        const auto addBlockSprite = [&](const std::shared_ptr<Util::Image> &img,
+                                        const std::string &stem, int bx, int by, SortKey sort,
+                                        float dyUnits = 0.0F) {
             auto tile = std::make_shared<Util::GameObject>();
             tile->SetDrawable(img);
-            const glm::vec2 sz = img->GetSize();
             const float scale = Scale::kSpriteScale;
             tile->m_Transform.scale = glm::vec2(scale, scale);
-            tile->m_Transform.translation =
-                blockToWorld(bx, by) + glm::vec2(0.0F, sz.y * scale * 0.5F - kCellPx * 0.5F);
-            tile->SetZIndex(zBase - tile->m_Transform.translation.y * 1e-5F);
+            const RenderLayout::RoomSpritePlacement pl = RenderLayout::PlaceRoomSprite(
+                m_Data, stem, img->GetSize(), blockToWorld(bx, by), sort, dyUnits);
+            tile->m_Transform.translation = pl.translation;
+            tile->SetZIndex(pl.z);
             m_RoomTiles.push_back(tile);
             m_Renderer.AddChild(tile);
             return tile;
         };
         const auto addCorridorWall = [&](int bx, int by) {
-            addBlockSprite(floorImgs.front(), bx, by, 0.1F); // ground under the wall
-            addBlockSprite(wallImg, bx, by, 1.2F);
+            addBlockSprite(floorImgs.front(), floorStems.front(), bx, by,
+                           SortKey{RenderLayout::kLayerFloor, 0}); // ground under the wall
+            addBlockSprite(wallImg, wallTopStem, bx, by, wallTopSort);
             if (wallFaceImg != wallImg) {
-                auto face = addBlockSprite(wallFaceImg, bx, by, 1.21F);
-                face->m_Transform.translation.y += wallFaceDy * kCellPx;
+                addBlockSprite(wallFaceImg, wallFaceStem, bx, by, wallFaceSort, wallFaceDy);
             }
             m_Corridors.push_back(Util::Collider::MakeAABB(
                 blockToWorld(bx, by), glm::vec2{kCellPx, kCellPx}));
@@ -747,7 +768,8 @@ void GameScene::OnEnter() {
             const FloorBlock::Rect s = FloorBlock::CorridorStrip(dir, rg);
             for (int bx = s.x0; bx <= s.x1; ++bx) {
                 for (int by = s.y0; by <= s.y1; ++by) {
-                    addBlockSprite(floorImgs.front(), bx, by, 0.1F); // walkable corridor floor
+                    addBlockSprite(floorImgs.front(), floorStems.front(), bx, by,
+                                   SortKey{RenderLayout::kLayerFloor, 0}); // walkable corridor floor
                 }
             }
             const bool horiz = (dir == FloorBlock::DIR_EAST ||
@@ -786,26 +808,32 @@ void GameScene::OnEnter() {
             if (rg.At(c.first, c.second) != -2) {
                 continue; // d1..d5 sit on the five aisle cells; the code-11 flanks are the frame
             }
-            auto base = addObjSprite(doorBaseImg, c.first, c.second);
-            base->SetZIndex(1.15F - base->m_Transform.translation.y * 1e-5F);
+            // FAITHFUL @ door_n.prefab: base d1..d5 (door02) layer 4, shadow layer 3 order 1,
+            // bar `d` (door01) layer 6 order 3 at local (0, 1).
+            addObjSprite(doorBaseImg, "door02", c.first, c.second, SortKey{RenderLayout::kLayerWall, 0});
             DoorPiece piece;
             piece.room = roomIndex;
+            // Same PlaceRoomSprite path as every other room sprite; the two pieces start
+            // hidden (scale 0) and the door-state loop reveals them with kSpriteScale.
+            const glm::vec2 doorCell =
+                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin);
+            const RenderLayout::RoomSpritePlacement shPl = RenderLayout::PlaceRoomSprite(
+                m_Data, "shadow2", shadowImg2->GetSize(), doorCell,
+                SortKey{RenderLayout::kLayerShadow, 1});
             piece.shadow = std::make_shared<Util::GameObject>();
             piece.shadow->SetDrawable(shadowImg2);
             piece.shadow->m_Transform.scale = {0.0F, 0.0F};
-            piece.shadow->m_Transform.translation =
-                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin) +
-                glm::vec2(0.0F, shadowImg2->GetSize().y * (Scale::kSpriteScale) * 0.5F - kCellPx * 0.5F);
-            piece.shadow->SetZIndex(1.16F - piece.shadow->m_Transform.translation.y * 1e-5F);
+            piece.shadow->m_Transform.translation = shPl.translation;
+            piece.shadow->SetZIndex(shPl.z);
             m_Renderer.AddChild(piece.shadow);
+            const RenderLayout::RoomSpritePlacement barPl = RenderLayout::PlaceRoomSprite(
+                m_Data, "door01", doorBarImg->GetSize(), doorCell,
+                SortKey{RenderLayout::kLayerWallFont, 3}, /*dyUnits=*/1.0F); // d at (0, 1)
             piece.bar = std::make_shared<Util::GameObject>();
             piece.bar->SetDrawable(doorBarImg);
             piece.bar->m_Transform.scale = {0.0F, 0.0F}; // hidden: doors start open
-            piece.bar->m_Transform.translation =
-                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin) +
-                glm::vec2(0.0F, doorBarImg->GetSize().y * (Scale::kSpriteScale) * 0.5F - kCellPx * 0.5F +
-                                    kCellPx); // d at (0, 1): one unit above the base
-            piece.bar->SetZIndex(1.25F - piece.bar->m_Transform.translation.y * 1e-5F);
+            piece.bar->m_Transform.translation = barPl.translation;
+            piece.bar->SetZIndex(barPl.z);
             m_Renderer.AddChild(piece.bar);
             m_DoorPieces.push_back(std::move(piece));
         }
@@ -1042,20 +1070,17 @@ void GameScene::OnEnter() {
                 m_Statue.index = idx;
                 m_Statue.cost = sd->cost;
                 m_Statue.pos = Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin);
+                // FAITHFUL @ statue_01.prefab: pedestal layer 4, the god `statue` layer 6
+                // (over the heroes), glow `light` layer 5; pivots (0.5,0.1) / (0.6,0) / (0.5,0).
                 auto base = addObjSprite(m_SkinCache.count(sd->baseSprite) != 0
                                              ? m_SkinCache[sd->baseSprite]
-                                             : (m_SkinCache[sd->baseSprite] = std::make_shared<Util::Image>(
+                                             : (m_SkinCache[sd->baseSprite] = roomImage(
                                                     root + "/sprites/" + sd->baseSprite + ".png")),
-                                         cx, cy);
-                base->SetZIndex(1.3F - base->m_Transform.translation.y * 1e-5F);
-                auto bodyImg = std::make_shared<Util::Image>(root + "/sprites/" + sd->bodySprite + ".png");
-                auto body = addObjSprite(bodyImg, cx, cy);
-                body->m_Transform.translation.y += sd->bodyDy * kCellPx;
-                body->SetZIndex(1.31F - base->m_Transform.translation.y * 1e-5F);
-                auto lightImg = std::make_shared<Util::Image>(root + "/sprites/" + sd->lightSprite + ".png");
-                auto light = addObjSprite(lightImg, cx, cy);
-                light->m_Transform.translation.y += sd->lightDy * kCellPx;
-                light->SetZIndex(1.32F - base->m_Transform.translation.y * 1e-5F);
+                                         sd->baseSprite, cx, cy, sd->baseSort);
+                auto bodyImg = roomImage(root + "/sprites/" + sd->bodySprite + ".png");
+                addObjSprite(bodyImg, sd->bodySprite, cx, cy, sd->bodySort, sd->bodyDy);
+                auto lightImg = roomImage(root + "/sprites/" + sd->lightSprite + ".png");
+                addObjSprite(lightImg, sd->lightSprite, cx, cy, sd->lightSort, sd->lightDy);
                 m_RoomObstacles.push_back(ObstacleBox{
                     Util::Collider::MakeAABB(m_Statue.pos, glm::vec2{kCellPx, kCellPx}), RGBox{}, nullptr,
                     false, true, 0});
@@ -1066,7 +1091,7 @@ void GameScene::OnEnter() {
                 auto tagObj = std::make_shared<Util::GameObject>();
                 tagObj->SetDrawable(m_Statue.tag);
                 tagObj->m_Transform.translation = m_Statue.pos + glm::vec2(0.0F, 2.6F * kCellPx);
-                tagObj->SetZIndex(1.34F);
+                tagObj->SetZIndex(RenderLayout::kZStatueTag);
                 m_RoomTiles.push_back(tagObj);
                 m_Renderer.AddChild(tagObj);
                 LOG_INFO("Event room {}: statue_{:02d} ({}) -- worship for {} coins", roomIndex, idx,
@@ -1086,10 +1111,11 @@ void GameScene::OnEnter() {
                     }
                     const bool gold = (k % 2) == 1;
                     const std::string stem = gold ? "objects1_77" : "objects1_80";
-                    auto img = std::make_shared<Util::Image>(root + "/sprites/" + stem + ".png");
-                    addShadow(shadowImg2, mx, my, 0.0F);
-                    auto tile = addObjSprite(img, mx, my);
-                    tile->SetZIndex(1.3F - tile->m_Transform.translation.y * 1e-5F);
+                    auto img = roomImage(root + "/sprites/" + stem + ".png");
+                    addShadow(shadowImg2, "shadow2", mx, my, SortKey{RenderLayout::kLayerCharacter, 1});
+                    // mineral_gold/crystal body is layer 5 in the prefab; kept in the Wall band
+                    // (RoomSortZ maps the actors' layer there) so the hero never sorts randomly.
+                    auto tile = addObjSprite(img, stem, mx, my, SortKey{RenderLayout::kLayerCharacter, 1});
                     ObstacleBox ob;
                     ob.collider = Util::Collider::MakeAABB(
                         Room::CellToWorld(mx, my, rg.Width(), rg.Height(), kCellPx, origin),
@@ -1321,6 +1347,7 @@ void GameScene::OnExit() {
     // destruction). Logging it proves the dying floor is EXITED on a death/clear
     // Replace -- not Pushed-over-and-leaked at the bottom of the stack (step 2b).
     LOG_INFO("Floor {} GameScene OnExit (scene torn down, not leaked)", m_FloorIndex);
+    glClearColor(0.0F, 0.0F, 0.0F, 1.0F); // menus / the next scene start from black again (P2.17 c)
 }
 
 glm::vec2 GameScene::AimDirection() const {
@@ -1424,6 +1451,9 @@ void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
             }
             if (ob.tile != nullptr) {
                 ob.tile->SetVisible(false); // hide the broken box's placeholder skin
+            }
+            if (ob.top != nullptr) {
+                ob.top->SetVisible(false); // ... and its w2 lid (now drawn over the heroes, P2.17)
             }
             LOG_INFO("RGBox: design box broken at ({:.0f},{:.0f}) -> now passable",
                      pos.x, pos.y);
@@ -2096,7 +2126,7 @@ void GameScene::Update(float dtMs) {
             m_GateLight->m_Transform.scale = {2.0F * kCellPx / std::max(1.0F, sz.x),
                                               3.0F * kCellPx / std::max(1.0F, sz.y)};
         }
-        m_GateLight->SetZIndex(1.5F);
+        m_GateLight->SetZIndex(RenderLayout::kZGateLight);
         m_Renderer.AddChild(m_GateLight);
         m_Gate = std::make_shared<Util::GameObject>();
         // FAITHFUL @ transfer_gate_1.controller: effect04_5..12, 8 fps loop; img 2.5x3.5.
@@ -2111,7 +2141,7 @@ void GameScene::Update(float dtMs) {
             m_Gate->m_Transform.scale = {2.5F * kCellPx / std::max(1.0F, sz.x),
                                          3.5F * kCellPx / std::max(1.0F, sz.y)};
         }
-        m_Gate->SetZIndex(2.0F);
+        m_Gate->SetZIndex(RenderLayout::kZGate);
         m_Renderer.AddChild(m_Gate);
         LOG_INFO("TransferGate: open in room {} at ({:.0f},{:.0f})", m_GateRoom, m_GatePos.x,
                  m_GatePos.y);
@@ -2498,7 +2528,7 @@ void GameScene::SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, floa
     auto obj = std::make_shared<Util::GameObject>();
     obj->SetDrawable(std::make_shared<Util::Animation>(std::move(frames), /*play=*/true,
                                                        interval, /*looping=*/false));
-    obj->SetZIndex(7.0F); // above actors (player 5, boss 6)
+    obj->SetZIndex(RenderLayout::kZEffect); // above actors (player 5, boss 5.5) and the w2 overlays (6.x)
     // SCALE (FAITHFUL): effect sprites are PPU-16 like everything else.
     obj->m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
     obj->m_Transform.translation = pos;
@@ -2507,6 +2537,14 @@ void GameScene::SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, floa
 }
 
 void GameScene::Render() {
+    // P2.17 (c): Camera.backgroundColor = MapManager.camera_bg of this level (FAITHFUL @
+    // map_<V><N>.prefab MapManager.camera_bg -> levels.json `camera_bg`; A1 (0.020, 0.122,
+    // 0.157), B1 (0.027, 0.103, 0.191)). INFERRED (T-60): the set call into the Camera is in
+    // Ghidra-truncated code, but the reference frames show the same navy void. Clearing here
+    // (not only via Context::Update's end-of-frame glClear) makes the first frame correct.
+    const glm::vec3 bg = RenderLayout::ClearColor(m_Level);
+    glClearColor(bg.r, bg.g, bg.b, 1.0F);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Util::SetActiveViewMatrix(m_Camera.GetViewMatrix());
     m_Renderer.Update();
     Util::SetActiveViewMatrix(glm::mat4(1.0F)); // screen-space from here on

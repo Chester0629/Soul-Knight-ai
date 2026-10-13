@@ -102,6 +102,7 @@ def load_all_tables() -> dict:
         "boss_chests": load("boss_chests", load_errors),
         "shop": load("shop", load_errors),
         "pickups": load("pickups", load_errors),
+        "tile_pivots": load("tile_pivots", load_errors),
     }
     # audio.json is optional (build_gamedata.py's build_audio_table() returns
     # None, and skips the write, on a checkout without the sibling _reverse
@@ -410,6 +411,50 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                 for rid in lv.get("rooms", {}).get("type2", []):
                     if rid not in rooms:
                         errors.append(f"level '{lv.get('id')}' boss room '{rid}' missing from boss_rooms")
+    # --- P2.17: room-sprite pivots + sorting layers (render slice 1) ---------------
+    tile_pivots = data.get("tile_pivots")
+    if tile_pivots is not None and levels is not None:
+        for stem, pv in tile_pivots.items():
+            if not (isinstance(pv, list) and len(pv) == 2 and all(isinstance(v, (int, float)) for v in pv)
+                    and all(-1.0 <= v <= 2.0 for v in pv)):
+                errors.append(f"tile_pivots['{stem}'] must be [x, y] fractions, got {pv}")
+
+        def need_pivot(stem, where):
+            if stem and stem not in tile_pivots:
+                errors.append(f"{where}: sprite '{stem}' has no entry in tile_pivots.json")
+
+        for lv in levels:
+            lid = lv.get("id", "?")
+            for f in lv.get("floors", []):
+                need_pivot(f, f"level '{lid}' floor")
+            for w in lv.get("walls", []):
+                need_pivot(w.get("top"), f"level '{lid}' wall '{w.get('prefab')}' top")
+                need_pivot(w.get("face"), f"level '{lid}' wall '{w.get('prefab')}' face")
+                ts, fs = w.get("top_sort"), w.get("face_sort")
+                if not (isinstance(ts, list) and isinstance(fs, list) and len(ts) == 2 and len(fs) == 2):
+                    errors.append(f"level '{lid}' wall '{w.get('prefab')}' needs top_sort/face_sort [layer, order]")
+                elif w.get("face") and not fs[0] > ts[0]:
+                    # FAITHFUL @ wall601/box02 prefabs: the w2 overlay is on a HIGHER layer
+                    # (WallFont 6) than the base (Wall 4) -- it draws over characters (5).
+                    errors.append(f"level '{lid}' wall '{w.get('prefab')}' overlay layer must exceed base layer")
+            for i, o in enumerate(lv.get("obstacles", [])):
+                need_pivot(o.get("sprite"), f"level '{lid}' obstacle[{i}]")
+                need_pivot(o.get("alt"), f"level '{lid}' obstacle[{i}] alt")
+                if not (isinstance(o.get("sort"), list) and len(o["sort"]) == 2
+                        and isinstance(o.get("alt_sort"), list) and len(o["alt_sort"]) == 2):
+                    errors.append(f"level '{lid}' obstacle[{i}] needs sort/alt_sort [layer, order]")
+        for pn, sk in (boss_rooms or {}).get("prefabs", {}).items():
+            need_pivot(sk.get("sprite"), f"boss prefab '{pn}'")
+            need_pivot(sk.get("alt"), f"boss prefab '{pn}' alt")
+            if not (isinstance(sk.get("sort"), list) and len(sk["sort"]) == 2):
+                errors.append(f"boss prefab '{pn}' needs sort [layer, order]")
+        for st, sd in ((shop or {}).get("statues") or {}).items():
+            for key in ("base_sprite", "body_sprite", "light_sprite"):
+                need_pivot(sd.get(key), f"statue '{st}' {key}")
+        for stem in ("door01", "door02", "door03", "shadow0", "shadow1", "shadow2", "shadow3"):
+            need_pivot(stem, "room extras")
+    elif levels is not None:
+        errors.append("tile_pivots.json missing (run build_gamedata.py)")
     if boss_chests is not None:
         for cid, c in boss_chests.items():
             for wid in c.get("weapons", []):

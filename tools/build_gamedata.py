@@ -1543,6 +1543,45 @@ def _prefab_sprites(path, idx: dict) -> list:
     return out
 
 
+def _prefab_sorts(path, idx: dict) -> list:
+    """[layer, order] (SpriteRenderer m_SortingLayer / m_SortingOrder) of every
+    SpriteRenderer in @p path, in the SAME order and with the SAME shadow filter as
+    _prefab_sprites() -- so sorts[i] belongs to sprites[i]. FAITHFUL: m_SortingLayer
+    is the index into ProjectSettings/TagManager.asset sortingLayers (0 Default,
+    1 BackGround, 2 Floor, 3 Shadow, 4 Wall, 5 Character, 6 WallFont, 7 Effect, 8 UI).
+    Walls/boxes: base on 4, the w2 overlay on 6 -- the overlay draws ABOVE characters."""
+    if path is None:
+        return []
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return []
+    out = []
+    for m in _DOC_TYPED_RE.finditer(text):
+        if m.group(1) != "212":
+            continue
+        nxt = _DOC_TYPED_RE.search(text, m.end())
+        body = text[m.end(): nxt.start() if nxt else len(text)]
+        g = _SPRITE_REF_RE.search(body)
+        if not g:
+            continue
+        p = idx.get(g.group(1))
+        if p is None or p.stem.startswith("shadow"):
+            continue
+        lay = re.search(r"m_SortingLayer: (-?\d+)", body)
+        order = re.search(r"m_SortingOrder: (-?\d+)", body)
+        out.append([int(lay.group(1)) if lay else 0, int(order.group(1)) if order else 0])
+    return out
+
+
+def _sorts_for(path, idx: dict, sprites: list) -> list:
+    """_prefab_sorts() with a hard length check against the sprite list."""
+    s = _prefab_sorts(path, idx)
+    if len(s) != len(sprites):
+        raise RuntimeError(f"sort/sprite mismatch for {path}: {len(s)} vs {len(sprites)}")
+    return s
+
+
 def _prefab_w2_dy(path) -> float:
     """Local y of the prefab's 'w2' child (the wall face / box top overlay), in
     units; 0 when absent. wall601: 0, box04: 0.5 (the crate top sits half a unit up)."""
@@ -1591,14 +1630,21 @@ def build_level_table():
         walls = []
         for w in _mm_list(seg, "wall_list", idx):
             sp = _prefab_sprites(by_name.get(w), idx)
+            so = _sorts_for(by_name.get(w), idx, sp)
             walls.append({"prefab": w, "top": sp[0] if sp else "", "face": sp[1] if len(sp) > 1 else "",
-                          "face_dy": _prefab_w2_dy(by_name.get(w))})
+                          "face_dy": _prefab_w2_dy(by_name.get(w)),
+                          # sorting [layer, order] of the base and of the w2 overlay (layer 6 = above characters)
+                          "top_sort": so[0] if so else [4, 0],
+                          "face_sort": so[1] if len(so) > 1 else [6, 0]})
         obstacles = []
         for o in _mm_list(seg, "obstacle_list", idx):
             sp = _prefab_sprites(by_name.get(o), idx)
+            so = _sorts_for(by_name.get(o), idx, sp)
             obstacles.append({"prefab": o, "sprite": sp[0] if sp else "",
                               "alt": sp[1] if len(sp) > 1 else "",
-                              "alt_dy": _prefab_w2_dy(by_name.get(o))})
+                              "alt_dy": _prefab_w2_dy(by_name.get(o)),
+                              "sort": so[0] if so else [4, 0],
+                              "alt_sort": so[1] if len(so) > 1 else [6, 0]})
         floors = []
         for fl in _mm_list(seg, "floor_list", idx):
             sp = _prefab_sprites(by_name.get(fl), idx)
@@ -1711,8 +1757,11 @@ def build_boss_rooms():
             objects.append({"p": base, "x": cx, "y": cy})
             if base not in prefabs:
                 sp = _prefab_sprites(by_name.get(base), idx)
+                so = _sorts_for(by_name.get(base), idx, sp)
                 prefabs[base] = {"sprite": sp[0] if sp else "", "alt": sp[1] if len(sp) > 1 else "",
-                                 "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base)}
+                                 "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base),
+                                 "sort": so[0] if so else [4, 0],
+                                 "alt_sort": so[1] if len(so) > 1 else [6, 0]}
         objects.sort(key=lambda o: (o["x"], o["y"], o["p"]))
         rooms[f.stem] = {"w": w, "h": h, "objects": objects, "dropped_outside": dropped}
     return {"rooms": rooms, "prefabs": prefabs} if rooms else None
@@ -1780,6 +1829,7 @@ def build_statue_table():
         if val is None or si is None:
             continue
         sp = _prefab_sprites(f, idx)
+        so = _sorts_for(f, idx, sp)
         out[f.stem] = {
             "statue_index": int(si.group(1)),
             "cost": int(val.group(1)),
@@ -1788,8 +1838,42 @@ def build_statue_table():
             "light_sprite": sp[2] if len(sp) > 2 else "",
             "body_dy": _prefab_child_dy(text, "statue"),
             "light_dy": _prefab_child_dy(text, "light"),
+            # [layer, order] per SpriteRenderer (statue_01: base 4, god body 6, light 5)
+            "base_sort": so[0] if len(so) > 0 else [4, 0],
+            "body_sort": so[1] if len(so) > 1 else [6, 0],
+            "light_sort": so[2] if len(so) > 2 else [5, 0],
         }
     return out or None
+
+
+# Room-geometry sprites that GameScene places outside levels.json / boss_rooms.json
+# (door pieces rganim/room/door_*.prefab, the shadow family, r_mineral ore nodes).
+_ROOM_EXTRA_STEMS = ("door01", "door02", "door03", "shadow0", "shadow1", "shadow2", "shadow3",
+                     "objects1_77", "objects1_80")
+
+
+def build_tile_pivots(levels, boss_rooms, shop):
+    """Resources/data/tile_pivots.json: sprite stem -> [pivot_x, pivot_y] (fractions of
+    the sprite rect from its bottom-left, y up). FAITHFUL @ rgtexture/**/<stem>.asset
+    `m_Pivot`. A Unity sprite is positioned by its pivot, so a 16x16 center-pivot
+    (0.5, 0.5) bush sits HALF A UNIT lower than a bottom-pivot (0.5, 0) 16x24 wall at
+    the same transform -- the port used to bottom-anchor every room sprite. Covers every
+    stem the room builder places: floors, wall top/face, obstacle skins (+w2 overlays),
+    boss-room prefab skins, statue pedestal/god/light, doors, shadows, mineral ore."""
+    piv = _sprite_pivots()
+    stems = set(_ROOM_EXTRA_STEMS)
+    for lv in levels or []:
+        stems.update(n for n in lv["floors"] if n)
+        for w in lv["walls"]:
+            stems.update(n for n in (w["top"], w["face"]) if n)
+        for o in lv["obstacles"]:
+            stems.update(n for n in (o["sprite"], o["alt"]) if n)
+    for pf in (boss_rooms or {}).get("prefabs", {}).values():
+        stems.update(n for n in (pf.get("sprite", ""), pf.get("alt", "")) if n)
+    for st in ((shop or {}).get("statues") or {}).values():
+        stems.update(n for n in (st.get("base_sprite", ""), st.get("body_sprite", ""),
+                                 st.get("light_sprite", "")) if n)
+    return {k: list(piv[k]) for k in sorted(stems) if k in piv}
 
 
 def build_shop_table():
@@ -2262,6 +2346,10 @@ def main() -> int:
     if statues is None:
         print("FALLBACK: statues not built (AssetRipper source missing) -- shop.json has no "
               "'statues' section, so GameScene skips statue-room content at runtime")
+    if levels is not None:
+        tile_pivots = build_tile_pivots(levels, boss_rooms, shop)
+        write("tile_pivots", tile_pivots)
+        counts["tile_pivots"] = len(tile_pivots)
     pickups = build_pickup_table()
     if pickups is not None:
         write("pickups", pickups)

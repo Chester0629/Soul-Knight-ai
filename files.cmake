@@ -344,6 +344,9 @@ set(INCLUDE_FILES
 
     # Audio: data-driven SFX/BGM wrapper (audio.json -> GameData -> AudioPlayer)
     game/AudioPlayer.hpp
+
+    # P2.17 render slice 1: room-sprite pivot + sorting-layer -> z + camera background
+    game/RenderLayout.hpp
 )
 
 set(TEST_FILES
@@ -534,6 +537,7 @@ set(TEST_FILES
 
     # MAP M1: level table, biome variant, EnemyMaker budget
     LevelTableTest.cpp
+    RenderLayoutTest.cpp
     BossRoomTest.cpp
     ShopTest.cpp
 

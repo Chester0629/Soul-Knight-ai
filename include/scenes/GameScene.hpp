@@ -218,6 +218,7 @@ private:
         bool destructible = false;                    ///< box -> true; brazier -> false.
         int breakCoins = 0;                           ///< M3e minerals: copper coins dropped on break.
         bool alive = true;                            ///< false once broken (stops blocking).
+        std::shared_ptr<Util::GameObject> top;        ///< w2 overlay (layer 6), hidden with `tile` on break.
     };
     std::vector<ObstacleBox> m_RoomObstacles;
     /// Phase 3 (#3a): per-room lifecycle state machine -- the SINGLE authority for
