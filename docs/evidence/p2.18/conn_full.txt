@@ -1,0 +1,2 @@
+[RoomConnectivityDiffTest] FULL (all 30 levels with an obstacle table): 30 level signature(s) x 108 design rooms x 3 seeds = 9720 configs (+42 boss-room configs); door pairs connected under the old rules 55620; pairs lost under the new rules 0, doors lost 0 (design) / 0 (boss); sealed rooms (configs) old 540 new 540, rooms sealed under the new rules: r1_50 r1_52 r1_55 r1_74 r1_75 r1_78 ; 35.8 s
+[  PASSED  ] 4 tests.

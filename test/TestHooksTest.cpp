@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 #include "game/TestHooks.hpp"
 
 namespace {
@@ -78,6 +81,81 @@ TEST(RoomTeleportHookTest, ValidDxInvalidDyZeroesBothOffsets) {
     EXPECT_FALSE(r.ok);
     EXPECT_EQ(r.dx, 0.0F);
     EXPECT_EQ(r.dy, 0.0F);
+}
+
+// --- P2.18 evidence hooks: SK_FORCE_DASH / SK_WALK_DIR / SK_DT_SPIKE / SK_TRACE_POS --------------
+TEST(ForceDashHookTest, ParsesStrictly) {
+    auto r = Game::ParseForceDash("10,1,0");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.frame, 10);
+    EXPECT_EQ(r.dx, 1.0F);
+    EXPECT_EQ(r.dy, 0.0F);
+    r = Game::ParseForceDash("0,-0.5,2.5");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.dx, -0.5F);
+    EXPECT_FALSE(Game::ParseForceDash("10,1").ok);
+    EXPECT_FALSE(Game::ParseForceDash("10,1,0,0").ok);
+    EXPECT_FALSE(Game::ParseForceDash("-1,1,0").ok) << "negative frame";
+    EXPECT_FALSE(Game::ParseForceDash("10,0,0").ok) << "zero direction";
+    EXPECT_FALSE(Game::ParseForceDash("10,nan,1").ok);
+    EXPECT_FALSE(Game::ParseForceDash("10,1,inf").ok);
+    EXPECT_FALSE(Game::ParseForceDash("10,1,9999999").ok);
+    EXPECT_FALSE(Game::ParseForceDash("x,1,0").ok);
+    const auto bad = Game::ParseForceDash("10,1,junk");
+    EXPECT_FALSE(bad.ok);
+    EXPECT_EQ(bad.dx, 0.0F);
+    EXPECT_EQ(bad.dy, 0.0F);
+}
+
+TEST(WalkDirHookTest, ParsesStrictly) {
+    auto r = Game::ParseWalkDir("1,0");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.dx, 1.0F);
+    r = Game::ParseWalkDir("-3,4");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.dy, 4.0F);
+    EXPECT_FALSE(Game::ParseWalkDir("").ok);
+    EXPECT_FALSE(Game::ParseWalkDir("1").ok);
+    EXPECT_FALSE(Game::ParseWalkDir("1,2,3").ok);
+    EXPECT_FALSE(Game::ParseWalkDir("0,0").ok);
+    EXPECT_FALSE(Game::ParseWalkDir("1,nan").ok);
+    EXPECT_FALSE(Game::ParseWalkDir("1,2x").ok);
+}
+
+TEST(DtSpikeHookTest, ParsesStrictly) {
+    auto r = Game::ParseDtSpike("5,5000");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.frame, 5);
+    EXPECT_EQ(r.ms, 5000.0F);
+    EXPECT_TRUE(Game::ParseDtSpike("0,3600000").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("0,3600001").ok) << "above the 1 hour cap";
+    EXPECT_FALSE(Game::ParseDtSpike("5,0").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("5,-3").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("5").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("-1,100").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("5,nan").ok);
+    EXPECT_FALSE(Game::ParseDtSpike("5,1e999").ok);
+    const auto bad = Game::ParseDtSpike("5,zzz");
+    EXPECT_FALSE(bad.ok);
+    EXPECT_EQ(bad.ms, 0.0F);
+}
+
+TEST(TraceFramesHookTest, ParsesStrictly) {
+    auto r = Game::ParseFrameList("3,250");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.frames, (std::vector<long>{3, 250}));
+    EXPECT_TRUE(Game::ParseFrameList("7").ok);
+    EXPECT_FALSE(Game::ParseFrameList("").ok);
+    EXPECT_FALSE(Game::ParseFrameList("3,").ok);
+    EXPECT_FALSE(Game::ParseFrameList("3,-1").ok);
+    EXPECT_FALSE(Game::ParseFrameList("3,x").ok);
+    const auto bad = Game::ParseFrameList("3,x");
+    EXPECT_TRUE(bad.frames.empty()) << "a rejected list carries no frames";
+    std::string many;
+    for (int i = 0; i < 33; ++i) {
+        many += (i ? "," : "") + std::to_string(i);
+    }
+    EXPECT_FALSE(Game::ParseFrameList(many).ok) << "more than 32 frames";
 }
 
 } // namespace

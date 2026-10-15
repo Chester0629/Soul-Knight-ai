@@ -1,0 +1,2 @@
+ [info] Skill: c08 activated
+ [info] Skill: c08 ended

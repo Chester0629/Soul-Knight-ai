@@ -17,6 +17,23 @@ inline constexpr float kFixedStepMs = 20.0F;
 /// (e.g. a debugger pause) cannot spiral into thousands of catch-up steps.
 inline constexpr int kMaxStepsPerAdvance = 8;
 
+/// PORT CHOICE (T-62): the longest frame delta (ms) the scene lets any frame-rate-driven movement
+/// consume. FixedClock already drops everything past kMaxStepsPerAdvance fixed steps, so the sim
+/// can never run more than this much game time per frame; the scene's own player motion,
+/// regeneration and timers use the SAME bound, so a hitch (debugger pause, window drag, a 2 s
+/// stall) slows the game down instead of teleporting the player: every hero walks 6.5 u/s = 208 px/s,
+/// so a clamped frame is at most 33.3 px (about one cell), and MoveBody sub-steps even that.
+/// The run clock (RunController::RecordTime) still takes the unclamped wall-clock delta.
+inline constexpr float kMaxFrameDtMs = kFixedStepMs * static_cast<float>(kMaxStepsPerAdvance);
+
+/// Clamp a frame delta to [0, kMaxFrameDtMs]; NaN / negative / infinite -> 0 or the bound.
+inline float ClampFrameDtMs(float dtMs) {
+    if (!(dtMs > 0.0F)) { // NaN, 0 and negatives
+        return 0.0F;
+    }
+    return dtMs < kMaxFrameDtMs ? dtMs : kMaxFrameDtMs; // +inf -> bound
+}
+
 /// The ms and seconds step constants must stay in lockstep; enforce it at compile
 /// time so a future edit to one cannot silently desync the other.
 static_assert(kFixedStepMs == kFixedStepSeconds * 1000.0F,

@@ -1,0 +1,4 @@
+[RoomBlockersTest] design-room obj_index 8/9/10 placements now colliding: 12 (x4 levels)
+[RoomBlockersTest] spawn sweep: 8 levels x 108 design rooms x 2 seeds = 1728 room builds; floor cells 337328, centre-blocked before 27570 after 0; wave picks 13824, blocked before 1168 after 0; rooms left with no free cell 0
+[RoomBlockersTest] big-body re-seat: 1187/2592 picks moved to a roomier cell, 16 left to the depenetration fallback
+[RoomBlockersTest] boss rooms: 14 rooms, floor cells blocked before 344 after 0; the boss/start 'middle cell' pick blocked before 0 after 0

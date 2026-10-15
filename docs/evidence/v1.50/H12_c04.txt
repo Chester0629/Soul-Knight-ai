@@ -1,0 +1,2 @@
+ [info] Skill: c04 activated
+ [info] Skill: c04 ended

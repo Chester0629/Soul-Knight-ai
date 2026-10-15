@@ -64,6 +64,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -78,6 +92,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -92,6 +120,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -106,6 +148,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -120,6 +176,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -134,7 +204,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -148,7 +219,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -162,7 +234,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_04",
@@ -176,6 +249,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -190,6 +277,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -204,6 +305,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -218,6 +330,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -314,6 +440,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -328,6 +468,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -342,6 +496,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -356,6 +524,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -370,6 +552,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -384,7 +580,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -398,7 +595,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -412,7 +610,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_04",
@@ -426,6 +625,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -440,6 +653,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -454,6 +681,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -468,6 +706,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -570,6 +822,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -584,6 +850,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -598,6 +878,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -612,6 +906,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -626,6 +934,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -640,7 +962,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -654,7 +977,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -668,7 +992,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_04",
@@ -682,6 +1007,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -696,6 +1035,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -710,6 +1063,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -724,6 +1088,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -829,6 +1207,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -843,6 +1235,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -857,6 +1263,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -871,6 +1291,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -885,6 +1319,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -899,7 +1347,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -913,7 +1362,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -927,7 +1377,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_05",
@@ -941,6 +1392,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -955,6 +1420,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -969,6 +1448,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -983,6 +1473,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -1092,6 +1596,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1106,6 +1624,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1120,6 +1652,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1134,6 +1680,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1148,6 +1708,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1162,7 +1736,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -1176,7 +1751,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -1190,7 +1766,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_05",
@@ -1204,6 +1781,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1218,6 +1809,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1232,6 +1837,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1246,6 +1862,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -1359,6 +1989,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1373,6 +2017,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1387,6 +2045,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1401,6 +2073,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1415,6 +2101,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1429,7 +2129,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -1443,7 +2144,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -1457,7 +2159,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_06",
@@ -1471,6 +2174,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1485,6 +2202,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1499,6 +2230,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1513,6 +2255,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -1609,6 +2365,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1623,6 +2393,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1637,6 +2421,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1651,6 +2449,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1665,6 +2477,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1679,7 +2505,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -1693,7 +2520,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -1707,7 +2535,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_06",
@@ -1721,6 +2550,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1735,6 +2578,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1749,6 +2606,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1763,6 +2631,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -1865,6 +2747,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1879,6 +2775,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1893,6 +2803,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1907,6 +2831,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1921,6 +2859,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1935,7 +2887,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -1949,7 +2902,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -1963,7 +2917,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_06",
@@ -1977,6 +2932,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -1991,6 +2960,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2005,6 +2988,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2019,6 +3013,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -2126,6 +3134,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2140,6 +3162,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2154,6 +3190,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2168,6 +3218,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2182,6 +3246,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2196,7 +3274,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -2210,7 +3289,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -2224,7 +3304,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_06",
@@ -2238,6 +3319,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2252,6 +3347,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2266,6 +3375,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2280,6 +3400,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -2391,6 +3525,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2405,6 +3553,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2419,6 +3581,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2433,6 +3609,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2447,6 +3637,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2461,7 +3665,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -2475,7 +3680,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -2489,7 +3695,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_06",
@@ -2503,6 +3710,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2517,6 +3738,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2531,6 +3766,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2545,6 +3791,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -2658,6 +3918,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2672,6 +3946,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2686,6 +3974,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2700,6 +4002,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2714,6 +4030,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2728,7 +4058,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -2742,7 +4073,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -2756,7 +4088,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_01",
@@ -2770,6 +4103,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.4
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2784,6 +4128,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              2.0,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2798,6 +4156,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2812,6 +4181,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -2912,6 +4295,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2926,6 +4323,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2940,6 +4351,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2954,6 +4379,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2968,6 +4407,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -2982,7 +4435,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -2996,7 +4450,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3010,7 +4465,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_01",
@@ -3024,6 +4480,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.4
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3038,6 +4505,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              2.0,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3052,6 +4533,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3066,6 +4558,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -3168,6 +4674,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3182,6 +4702,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3196,6 +4730,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3210,6 +4758,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3224,6 +4786,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3238,7 +4814,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3252,7 +4829,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3266,7 +4844,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_01",
@@ -3280,6 +4859,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.4
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3294,6 +4884,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              2.0,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3308,6 +4912,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3322,6 +4937,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -3426,6 +5055,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3440,6 +5083,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3454,6 +5111,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3468,6 +5139,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3482,6 +5167,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3496,7 +5195,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3510,7 +5210,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3524,7 +5225,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_01",
@@ -3538,6 +5240,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.4
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3552,6 +5265,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3566,6 +5293,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3580,6 +5318,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -3688,6 +5440,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3702,6 +5468,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3716,6 +5496,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3730,6 +5524,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3744,6 +5552,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3758,7 +5580,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3772,7 +5595,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -3786,7 +5610,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_01",
@@ -3800,6 +5625,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.4
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3814,6 +5650,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3828,6 +5678,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3842,6 +5703,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -3951,6 +5826,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3965,6 +5854,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3979,6 +5882,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -3993,6 +5910,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4007,6 +5938,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4021,7 +5966,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -4035,7 +5981,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -4049,7 +5996,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_02",
@@ -4063,7 +6011,8 @@
         "alt_sort": [
           7,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj22_02",
@@ -4077,6 +6026,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4091,6 +6054,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4105,6 +6079,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -4207,6 +6195,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4221,6 +6223,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4235,6 +6251,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4249,6 +6279,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4263,6 +6307,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4277,7 +6335,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -4291,7 +6350,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -4305,7 +6365,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_02",
@@ -4319,7 +6380,8 @@
         "alt_sort": [
           7,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj22_02",
@@ -4333,6 +6395,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4347,6 +6423,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4361,6 +6448,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -4465,6 +6566,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4479,6 +6594,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4493,6 +6622,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4507,6 +6650,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4521,6 +6678,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4535,7 +6706,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -4549,7 +6721,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -4563,7 +6736,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_02",
@@ -4577,7 +6751,8 @@
         "alt_sort": [
           7,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj22_02",
@@ -4591,6 +6766,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4605,6 +6794,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4619,6 +6819,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -4728,6 +6942,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4742,6 +6970,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4756,6 +6998,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4770,6 +7026,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4784,6 +7054,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4798,7 +7082,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -4812,7 +7097,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -4826,7 +7112,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_02",
@@ -4840,7 +7127,8 @@
         "alt_sort": [
           7,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj22_02",
@@ -4854,6 +7142,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4868,6 +7170,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -4882,6 +7195,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -4991,6 +7318,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5005,6 +7346,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5019,6 +7374,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5033,6 +7402,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5047,6 +7430,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5061,7 +7458,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -5075,7 +7473,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -5089,7 +7488,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_02",
@@ -5103,7 +7503,8 @@
         "alt_sort": [
           7,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj22_02",
@@ -5117,6 +7518,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5131,6 +7546,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5145,6 +7571,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -5255,6 +7695,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5269,6 +7723,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5283,6 +7751,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5297,6 +7779,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5311,6 +7807,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5325,7 +7835,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -5339,7 +7850,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -5353,7 +7865,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_03",
@@ -5367,6 +7880,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5381,6 +7908,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5395,6 +7936,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5409,6 +7961,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -5509,6 +8075,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5523,6 +8103,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5537,6 +8131,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5551,6 +8159,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5565,6 +8187,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5579,7 +8215,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -5593,7 +8230,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -5607,7 +8245,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_03",
@@ -5621,6 +8260,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5635,6 +8288,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5649,6 +8316,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5663,6 +8341,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -5763,6 +8455,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5777,6 +8483,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5791,6 +8511,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5805,6 +8539,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5819,6 +8567,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5833,7 +8595,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -5847,7 +8610,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -5861,7 +8625,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_03",
@@ -5875,6 +8640,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5889,6 +8668,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5903,6 +8696,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -5917,6 +8721,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -6020,6 +8838,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6034,6 +8866,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6048,6 +8894,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6062,6 +8922,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6076,6 +8950,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6090,7 +8978,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -6104,7 +8993,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -6118,7 +9008,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_03",
@@ -6132,6 +9023,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6146,6 +9051,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6160,6 +9079,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6174,6 +9104,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -6279,6 +9223,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6293,6 +9251,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6307,6 +9279,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6321,6 +9307,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6335,6 +9335,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6349,7 +9363,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -6363,7 +9378,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_down",
@@ -6377,7 +9393,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_03",
@@ -6391,6 +9408,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.2
+            ],
+            "offset": [
+              0.0,
+              0.6
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6405,6 +9436,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6419,6 +9464,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6433,6 +9489,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -6539,6 +9609,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6553,6 +9637,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6567,6 +9665,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6581,6 +9693,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6595,6 +9721,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6609,7 +9749,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -6623,7 +9764,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -6637,7 +9779,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_07",
@@ -6651,6 +9794,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6665,6 +9822,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6679,6 +9850,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6693,6 +9875,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -6791,6 +9987,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6805,6 +10015,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6819,6 +10043,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6833,6 +10071,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6847,6 +10099,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6861,7 +10127,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -6875,7 +10142,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -6889,7 +10157,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_07",
@@ -6903,6 +10172,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6917,6 +10200,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6931,6 +10228,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -6945,6 +10253,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -7046,6 +10368,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7060,6 +10396,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7074,6 +10424,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7088,6 +10452,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7102,6 +10480,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7116,7 +10508,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -7130,7 +10523,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -7144,7 +10538,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_07",
@@ -7158,6 +10553,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7172,6 +10581,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7186,6 +10609,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7200,6 +10634,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -7304,6 +10752,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7318,6 +10780,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7332,6 +10808,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7346,6 +10836,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7360,6 +10864,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7374,7 +10892,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -7388,7 +10907,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -7402,7 +10922,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_07",
@@ -7416,6 +10937,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7430,6 +10965,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7444,6 +10993,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7458,6 +11018,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],
@@ -7566,6 +11140,20 @@
         "alt_sort": [
           6,
           2
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7580,6 +11168,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7594,6 +11196,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7608,6 +11224,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7622,6 +11252,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7636,7 +11280,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "speed_up",
@@ -7650,7 +11295,8 @@
         "alt_sort": [
           6,
           0
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "sting01",
@@ -7664,7 +11310,8 @@
         "alt_sort": [
           4,
           1
-        ]
+        ],
+        "blockers": []
       },
       {
         "prefab": "obj11_07",
@@ -7678,6 +11325,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7692,6 +11353,20 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.5,
+              1.5
+            ],
+            "offset": [
+              0.0,
+              0.75
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7706,6 +11381,17 @@
         "alt_sort": [
           6,
           0
+        ],
+        "blockers": [
+          {
+            "shape": "circle",
+            "radius": 0.5,
+            "offset": [
+              0.0,
+              1.25
+            ],
+            "trigger": false
+          }
         ]
       },
       {
@@ -7720,6 +11406,20 @@
         "alt_sort": [
           6,
           3
+        ],
+        "blockers": [
+          {
+            "shape": "box",
+            "size": [
+              1.0,
+              1.0
+            ],
+            "offset": [
+              0.0,
+              0.5
+            ],
+            "trigger": false
+          }
         ]
       }
     ],

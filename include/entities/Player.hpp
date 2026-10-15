@@ -46,6 +46,8 @@ public:
     void SyncSprite() { m_Anchor.Apply(*this, *m_Anim); }
     /// Physical body radius (px) from the hero prefab's "collider" child.
     float BodyRadiusPx() const { return m_Anchor.bodyRadiusPx; }
+    /// Walk speed (px/s) -- read by the SK_WALK_DIR test hook.
+    float Speed() const { return m_Speed; }
 
 private:
     SpriteAnchor m_Anchor;

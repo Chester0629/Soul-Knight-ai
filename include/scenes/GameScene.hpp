@@ -74,6 +74,13 @@ public:
 
     /// WorldCollision: a circle at @p pos / @p radius overlaps a wall or sealed door.
     bool Blocks(glm::vec2 pos, float radius) const override { return BlocksAny(pos, radius); }
+    /// WorldCollision (P2.18, PORT CHOICE T-61): exact circle-vs-AABB / circle minimum-translation
+    /// push of a body out of every wall, corridor flank, standing obstacle and sealed door;
+    /// falls back to the sampled search when a pocket cannot be left by an exit.
+    glm::vec2 Depenetrate(glm::vec2 pos, float radius) const override;
+    /// WorldCollision (P2.18, T-62): EXACT swept test -- the segment against the Minkowski sum of
+    /// every active blocker (sim/Depenetration.hpp SegmentBlockedByAny), so no graze slips through.
+    bool MoveBlocked(glm::vec2 from, glm::vec2 to, float radius) const override;
     /// WorldCollision: a consumed bullet at @p pos damages a destructible design
     /// box there; once broken the box stops blocking. No-op on walls/braziers.
     void DamageObstacle(glm::vec2 pos, float radius) override;
@@ -82,6 +89,16 @@ private:
     glm::vec2 AimDirection() const;
     /// @return true if a circle at @p pos / @p radius overlaps any room's walls.
     bool BlocksAny(glm::vec2 pos, float radius) const;
+    /// Append every currently ACTIVE blocker collider (room walls, corridor flanks, standing
+    /// obstacles, sealed doors) whose bounds lie within @p reach px of @p pos to @p out.
+    void GatherBlockersNear(glm::vec2 pos, float reach, std::vector<Util::Collider> &out) const;
+    /// P2.18 (T-63): BlocksAny OR the room's door-seal band (even while its doors are open): the
+    /// test the spawn-point filter and the per-species seating use.
+    bool SpawnBlocked(std::size_t room, glm::vec2 pos, float radius) const;
+    /// P2.18: a dropped item's position nudged to the nearest spot that is not inside a blocker.
+    glm::vec2 FreeDropPoint(glm::vec2 want) const;
+    /// P2.18 SK_TRACE_POS hook: log the player and every hostile with an overlap flag.
+    void TracePositions() const;
 
     GameData m_Data;
     Core::Camera2D m_Camera;
@@ -304,6 +321,22 @@ private:
     /// drive the death-reward / kill-count paths headlessly. NO-OP in normal play.
     long m_ForceKillFrame = -1;
     long m_ForceKillEvery = -1; ///< SK_FORCE_KILL_EVERY=N: repeat the kill every N frames
+    /// P2.18 test hooks (all env-gated, strict parse in game/TestHooks.hpp, NO-OP unless set):
+    /// SK_FORCE_DASH=K,dx,dy -- dash along (dx,dy) on frame K through Sim::ApplyDash;
+    /// SK_WALK_DIR=dx,dy -- hold that movement direction every frame (keys are ignored);
+    /// SK_TRACE_POS=F1,F2,... -- log player + hostile positions on those frames.
+    long m_ForceDashFrame = -1;
+    glm::vec2 m_ForceDashDir{0.0F, 0.0F};
+    bool m_WalkDirSet = false;
+    glm::vec2 m_WalkDir{0.0F, 0.0F};
+    std::vector<long> m_TraceFrames;
+    /// P2.18 (T-63): how many connected floor cells the blocker filter removed from the spawn pools
+    /// (of how many), logged once at the end of OnEnter.
+    /// Wall-clock and clamped frame time summed over the floor, for the DeathTrace log line (H3 A/B).
+    float m_RawMsTotal = 0.0F;
+    float m_SimMsTotal = 0.0F;
+    int m_SpawnCellsRemoved = 0;
+    int m_SpawnCellsTotal = 0;
     /// SK_FORCE_SKILL=K test hook (env, -1 = off): press the skill button on frame K
     /// (and hold-fire while it is active) to drive the skill path headlessly. NO-OP off.
     long m_ForceSkillFrame = -1;

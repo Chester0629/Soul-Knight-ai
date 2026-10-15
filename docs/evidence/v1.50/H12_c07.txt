@@ -1,0 +1,6 @@
+ [info] Skill: c07 activated
+ [info] Skill: c07 effect bat_swarm n=6
+ [info] Skill: c07 ended
+ [info] Skill: c07 activated
+ [info] Skill: c07 effect bat_swarm n=6
+ [info] Skill: c07 ended

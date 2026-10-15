@@ -3058,6 +3058,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall_tree1": {
@@ -3072,6 +3086,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall503": {
@@ -3086,6 +3114,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall504": {
@@ -3100,6 +3142,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj22_house": {
@@ -3114,7 +3170,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "brazier03": {
       "sprite": "objects2_38",
@@ -3128,6 +3185,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj11_05": {
@@ -3142,6 +3213,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.2
+          ],
+          "offset": [
+            0.0,
+            0.6
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj22_06": {
@@ -3156,6 +3241,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj22_08": {
@@ -3170,6 +3269,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "box04": {
@@ -3184,6 +3297,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall603": {
@@ -3198,6 +3325,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "mineral_crystal": {
@@ -3212,7 +3353,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "obj22_07": {
       "sprite": "objects4_20",
@@ -3226,6 +3368,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "cask_red_3": {
@@ -3240,6 +3396,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj11_06": {
@@ -3254,6 +3424,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "box01": {
@@ -3268,6 +3452,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall101": {
@@ -3282,6 +3480,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "box_weapon": {
@@ -3296,6 +3508,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.7,
+            1.0
+          ],
+          "offset": [
+            -0.15,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "box_spell": {
@@ -3310,6 +3536,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "carpet": {
@@ -3324,7 +3564,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "obj22_table": {
       "sprite": "",
@@ -3338,7 +3579,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "brazier01": {
       "sprite": "objects1_4",
@@ -3352,6 +3594,20 @@
       "alt_sort": [
         6,
         3
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj22_stone": {
@@ -3366,7 +3622,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "rail": {
       "sprite": "",
@@ -3380,7 +3637,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "box03": {
       "sprite": "objects1_19",
@@ -3394,6 +3652,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "wall301": {
@@ -3408,6 +3680,20 @@
       "alt_sort": [
         6,
         2
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "speed_up": {
@@ -3422,7 +3708,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "stone02": {
       "sprite": "",
@@ -3436,7 +3723,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "rail2": {
       "sprite": "",
@@ -3450,7 +3738,8 @@
       "alt_sort": [
         6,
         0
-      ]
+      ],
+      "blockers": []
     },
     "box05": {
       "sprite": "objects4_26",
@@ -3464,6 +3753,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj11_07": {
@@ -3478,6 +3781,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
       ]
     },
     "obj22_10": {
@@ -3492,6 +3809,20 @@
       "alt_sort": [
         6,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.5,
+            1.5
+          ],
+          "offset": [
+            0.0,
+            0.75
+          ],
+          "trigger": false
+        }
       ]
     }
   }

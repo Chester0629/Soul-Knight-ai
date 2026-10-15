@@ -23,8 +23,12 @@
 #include "entities/CoinPickup.hpp"
 
 #include "world/FloorBlock.hpp"
+#include "world/RoomBlockers.hpp"
 
 #include "sim/BodyGeom.hpp"
+#include "sim/BodyMove.hpp"
+#include "sim/Depenetration.hpp"
+#include "sim/SimConfig.hpp"
 #include "sim/SkillDash.hpp"
 
 #include "Util/Animation.hpp"
@@ -483,25 +487,9 @@ void GameScene::OnEnter() {
         // anchor here so the player can never start trapped in an obstacle pocket
         // -- RoomGen::FloorList can include cells isolated from every exit. Same
         // source FloorConnectivityTest anchors its reachability assertion on.
-        const auto spawnCells = FloorBlock::ConnectedFloorCells(rg);
-        if (roomIndex == m_GateRoom && !spawnCells.empty()) {
-            // The gate stands at the room's b_point = its geometric centre cell
-            // ((w-1)/2, (h-1)/2); if that cell is not open floor, the nearest
-            // connected floor cell to it.
-            const int gx = (rg.Width() - 1) / 2;
-            const int gy = (rg.Height() - 1) / 2;
-            std::pair<int, int> best = spawnCells[spawnCells.size() / 2];
-            int bestD = 1 << 30;
-            for (const auto &c : spawnCells) {
-                const int d = (c.first - gx) * (c.first - gx) + (c.second - gy) * (c.second - gy);
-                if (d < bestD) {
-                    bestD = d;
-                    best = c;
-                }
-            }
-            m_GatePos = Room::CellToWorld(best.first, best.second, rg.Width(), rg.Height(),
-                                          kCellPx, origin);
-        }
+        // P2.18: the RAW list; `spawnCells` (the blocker-free subset) is derived below, once this
+        // room's box / brazier / obstacle colliders exist.
+        const auto allFloorCells = FloorBlock::ConnectedFloorCells(rg);
 
         // Tile every cell so the floor is actually drawn: a floor sprite under
         // walkable cells (floor/aisle/door), a wall sprite on solid cells.
@@ -637,14 +625,18 @@ void GameScene::OnEnter() {
                                        objAltDy[oi]);
                 }
 
+                // P2.18 (RC4): the collider is the PREFAB's own (levels.json obstacles[].blockers =
+                // BoxCollider2D / CircleCollider2D size|radius + offset from the cell's bottom-centre
+                // root), not a hard-wired 32x32 cell; obj_index 8/9/10 (obj11_* / obj22_* / signs01)
+                // now block too. See DesignObstacleCollider for the per-index rule and fallback.
                 const bool box = o.objIndex >= 1 && o.objIndex <= 4;
-                const bool brazier = o.objIndex == 11; // conservative blocker (TODO)
-                if (box || brazier) {
-                    const glm::vec2 wpos = Room::CellToWorld(
-                        o.x, o.y, rg.Width(), rg.Height(), kCellPx, origin);
+                const glm::vec2 wpos = Room::CellToWorld(
+                    o.x, o.y, rg.Width(), rg.Height(), kCellPx, origin);
+                const std::optional<Util::Collider> blockCol =
+                    DesignObstacleCollider(m_Level, o.objIndex, wpos, kCellPx);
+                if (blockCol.has_value()) {
                     ObstacleBox ob;
-                    ob.collider = Util::Collider::MakeAABB(
-                        wpos, glm::vec2{kCellPx, kCellPx});
+                    ob.collider = *blockCol;
                     ob.tile = tile;
                     ob.top = top;
                     ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
@@ -695,7 +687,13 @@ void GameScene::OnEnter() {
                     const glm::vec2 wpos = Room::CellToWorld(o.x, o.y, rg.Width(), rg.Height(),
                                                              kCellPx, origin);
                     ObstacleBox ob;
-                    ob.collider = Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
+                    // P2.18 (RC4): the prefab's own collider (boss_rooms.json prefabs[].blockers:
+                    // obj22_10 1.5x1.5, obj11_05 1x1.2, box_weapon 1.7x1 at -0.15 ...). PORT CHOICE (T-61):
+                    // a solid prop whose prefab has no solid collider (mineral shells, whose body
+                    // collider sits on the Body layer) keeps the old 32x32 cell.
+                    const std::optional<Util::Collider> dataCol = FirstBlocker(sk->blockers, wpos, kCellPx);
+                    ob.collider = dataCol.has_value() ? *dataCol
+                                                      : Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
                     ob.tile = tile;
                     ob.top = top;
                     ob.destructible = sk->kind == "box";
@@ -838,6 +836,42 @@ void GameScene::OnEnter() {
             m_DoorPieces.push_back(std::move(piece));
         }
 
+        // P2.18 (RC1) PORT CHOICE (T-63): the connected floor list ignores the box
+        // / brazier overlay (RoomGen stamps no boxes into the grid), so it contained cells INSIDE
+        // boxes -- enemies spawned there stayed pinned for good. Keep only the cells where a hero-
+        // sized body is free of every wall, corridor flank, standing obstacle and door-seal
+        // collider that exists now (SpawnBlocked: the seal band counts even while the doors are open). Order is preserved (the spread formula index*7+3 % size is
+        // unchanged and no RNG is drawn); an all-blocked room falls back to the raw list.
+        // A species with a bigger body is re-seated per spawn in SpawnEnemy (ResolveSpawnPoint).
+        std::vector<std::pair<int, int>> spawnCells = FilterFreeCells(
+            allFloorCells, rg.Width(), rg.Height(), kCellPx, origin, m_PlayerRadiusPx,
+            [this, roomIndex](glm::vec2 p, float r) {
+                return SpawnBlocked(static_cast<std::size_t>(roomIndex), p, r);
+            });
+        m_SpawnCellsRemoved += static_cast<int>(allFloorCells.size() - spawnCells.size());
+        m_SpawnCellsTotal += static_cast<int>(allFloorCells.size());
+        if (spawnCells.empty()) {
+            spawnCells = allFloorCells;
+        }
+        if (roomIndex == m_GateRoom && !spawnCells.empty()) {
+            // The gate stands at the room's b_point = its geometric centre cell
+            // ((w-1)/2, (h-1)/2); if that cell is not open floor, the nearest
+            // connected floor cell to it.
+            const int gx = (rg.Width() - 1) / 2;
+            const int gy = (rg.Height() - 1) / 2;
+            std::pair<int, int> best = spawnCells[spawnCells.size() / 2];
+            int bestD = 1 << 30;
+            for (const auto &c : spawnCells) {
+                const int d = (c.first - gx) * (c.first - gx) + (c.second - gy) * (c.second - gy);
+                if (d < bestD) {
+                    bestD = d;
+                    best = c;
+                }
+            }
+            m_GatePos = Room::CellToWorld(best.first, best.second, rg.Width(), rg.Height(),
+                                          kCellPx, origin);
+        }
+
         // Put the player on a corridor-connected floor cell of the start room
         // (spawning at the origin can land in a wall, and a raw FloorList cell can
         // be an isolated pocket -> the player would start unable to reach a door).
@@ -850,7 +884,7 @@ void GameScene::OnEnter() {
         // Boss room gets a boss; every other non-start room gets one enemy.
         if (roomIndex != floor.StartIndex() && !spawnCells.empty()) {
             const auto &fc = spawnCells[spawnCells.size() / 2];
-            const glm::vec2 spawn = Room::CellToWorld(
+            glm::vec2 spawn = Room::CellToWorld(
                 fc.first, fc.second, rg.Width(), rg.Height(), kCellPx, origin);
             if (roomIndex == bossRoom && IsBossFloor(m_FloorIndex)) {
                 // Chapter gate: the boss only spawns on the chapter's LAST floor
@@ -897,6 +931,24 @@ void GameScene::OnEnter() {
                     bossDef != nullptr ? bossDef->enemyClass : std::string("BossAI01");
                 const std::string bossPrefab = bossDef != nullptr ? bossDef->id : bossId;
                 m_BossDef = bossDef;
+                {
+                    // P2.18 (T-63): seat the boss where ITS body (r up to 32 px) is free: the
+                    // nearest free cell of this room, else a depenetrated centre.
+                    std::vector<glm::vec2> cellPts;
+                    for (const auto &sc : spawnCells) {
+                        cellPts.push_back(Room::CellToWorld(sc.first, sc.second, rg.Width(),
+                                                            rg.Height(), kCellPx, origin));
+                    }
+                    const float bossR = bossDef != nullptr
+                                            ? Sim::MakeBodyGeom(bossDef->body, bossDef->hurtbox,
+                                                                Sim::kBossBodyRadius).bodyRadiusPx
+                                            : Sim::kBossBodyRadius;
+                    const auto blocks = [this, roomIndex](glm::vec2 p, float r) {
+                        return SpawnBlocked(static_cast<std::size_t>(roomIndex), p, r);
+                    };
+                    spawn = ResolveSpawnPoint(cellPts, spawn, bossR, blocks);
+                    spawn = Depenetrate(spawn, bossR);
+                }
                 LOG_INFO("BossPool: biome {} -> {} (pool {})", bossBiome, bossPrefab,
                          bossPool.size());
                 const int bossMaxHp = (bossDef != nullptr && bossDef->maxHp > 0)
@@ -1039,9 +1091,14 @@ void GameScene::OnEnter() {
                     m_Renderer.AddChild(m->Icon());
                 }
                 m_Renderer.AddChild(m->PriceTag());
+                // P2.18 (RC4): the machine prefab's own `collider` child (vending_machine_i 2x1,
+                // vending_machine_w 2.5x1, water_dispenser 1x1; shop.json machines[].blockers).
+                // Fallback: the old 2x1-cell box.
+                const std::optional<Util::Collider> machCol = FirstBlocker(md->blockers, at, kCellPx);
                 m_RoomObstacles.push_back(ObstacleBox{
-                    Util::Collider::MakeAABB(at, glm::vec2{2.0F * kCellPx, kCellPx}), RGBox{}, nullptr,
-                    false, true});
+                    machCol.has_value() ? *machCol
+                                        : Util::Collider::MakeAABB(at, glm::vec2{2.0F * kCellPx, kCellPx}),
+                    RGBox{}, nullptr, false, true});
                 LOG_INFO("Shop: {} at room {} sells '{}' for {} coins", id, roomIndex, stock, md->price);
             };
             place("vending_machine_i", -4);
@@ -1081,9 +1138,13 @@ void GameScene::OnEnter() {
                 addObjSprite(bodyImg, sd->bodySprite, cx, cy, sd->bodySort, sd->bodyDy);
                 auto lightImg = roomImage(root + "/sprites/" + sd->lightSprite + ".png");
                 addObjSprite(lightImg, sd->lightSprite, cx, cy, sd->lightSort, sd->lightDy);
+                // P2.18 (RC4): the statue prefab's `collider` child is a 2x2-unit box at (0, 1) --
+                // FOUR cells, not the one the port had (statue_0N.prefab, shop.json blockers).
+                const std::optional<Util::Collider> statueCol = FirstBlocker(sd->blockers, m_Statue.pos, kCellPx);
                 m_RoomObstacles.push_back(ObstacleBox{
-                    Util::Collider::MakeAABB(m_Statue.pos, glm::vec2{kCellPx, kCellPx}), RGBox{}, nullptr,
-                    false, true, 0});
+                    statueCol.has_value() ? *statueCol
+                                          : Util::Collider::MakeAABB(m_Statue.pos, glm::vec2{kCellPx, kCellPx}),
+                    RGBox{}, nullptr, false, true, 0});
                 m_Statue.tag = std::make_shared<Util::Text>(root + "/fonts/pixel_bold.ttf", 14,
                                                             std::string(kStatueName[idx]) + "  " +
                                                                 std::to_string(sd->cost) + " G",
@@ -1248,6 +1309,33 @@ void GameScene::OnEnter() {
             LOG_WARN("SK_ROOM_TELEPORT rejected: {}", spec.error);
         }
     }
+    // P2.18 evidence hooks (strict parse; invalid -> the hook stays unset). NO-OP unless set.
+    if (const char *fd = std::getenv("SK_FORCE_DASH")) {
+        const Game::ForceDashSpec spec = Game::ParseForceDash(fd);
+        if (spec.ok) {
+            m_ForceDashFrame = spec.frame;
+            m_ForceDashDir = glm::vec2{spec.dx, spec.dy};
+        } else {
+            LOG_WARN("SK_FORCE_DASH rejected: {}", spec.error);
+        }
+    }
+    if (const char *wd = std::getenv("SK_WALK_DIR")) {
+        const Game::WalkDirSpec spec = Game::ParseWalkDir(wd);
+        if (spec.ok) {
+            m_WalkDirSet = true;
+            m_WalkDir = glm::vec2{spec.dx, spec.dy};
+        } else {
+            LOG_WARN("SK_WALK_DIR rejected: {}", spec.error);
+        }
+    }
+    if (const char *tp = std::getenv("SK_TRACE_POS")) {
+        const Game::FrameListSpec spec = Game::ParseFrameList(tp);
+        if (spec.ok) {
+            m_TraceFrames = spec.frames;
+        } else {
+            LOG_WARN("SK_TRACE_POS rejected: {}", spec.error);
+        }
+    }
     if (const char *fs = std::getenv("SK_FORCE_SKILL")) {
         m_ForceSkillFrame = std::atol(fs);
     }
@@ -1339,6 +1427,8 @@ void GameScene::OnEnter() {
         LOG_INFO("GameScene: SK_ZOOM override {}", zoom);
     }
     m_Camera.SetZoom(zoom);
+    LOG_INFO("SpawnFilter: {} of {} connected floor cells removed from the spawn pools (inside a box / brazier / "
+             "prop / wall collider for a {:.1f} px body)", m_SpawnCellsRemoved, m_SpawnCellsTotal, m_PlayerRadiusPx);
     LOG_INFO("GameScene: multi-room floor ready");
 }
 
@@ -1413,6 +1503,124 @@ bool GameScene::BlocksAny(glm::vec2 pos, float radius) const {
         }
     }
     return false;
+}
+
+void GameScene::GatherBlockersNear(glm::vec2 pos, float reach, std::vector<Util::Collider> &out) const {
+    const auto within = [&](const Util::Collider &c) {
+        const glm::vec2 lo = c.Min();
+        const glm::vec2 hi = c.Max();
+        return hi.x >= pos.x - reach && lo.x <= pos.x + reach && hi.y >= pos.y - reach &&
+               lo.y <= pos.y + reach;
+    };
+    for (const auto &room : m_Rooms) {
+        for (const Util::Collider &wall : room->Walls()) {
+            if (within(wall)) {
+                out.push_back(wall);
+            }
+        }
+    }
+    for (const Util::Collider &wall : m_Corridors) {
+        if (within(wall)) {
+            out.push_back(wall);
+        }
+    }
+    for (const ObstacleBox &ob : m_RoomObstacles) {
+        if (ob.alive && within(ob.collider)) {
+            out.push_back(ob.collider);
+        }
+    }
+    for (std::size_t i = 0; i < m_RoomDoors.size() && i < m_RoomLife.size(); ++i) {
+        if (m_RoomLife[i].DoorOpen()) {
+            continue; // doors open -> not sealed (same rule as BlocksAny)
+        }
+        for (const Util::Collider &door : m_RoomDoors[i]) {
+            if (within(door)) {
+                out.push_back(door);
+            }
+        }
+    }
+}
+
+// P2.18 (RC1, PORT CHOICE T-61): push a body that overlaps a blocker out to the nearest free
+// position. One BlocksAny() query when nothing overlaps (the common case). Otherwise the blockers
+// within reach (radius + 3 cells: a 2x2 statue and the neighbouring cells a candidate exit may
+// land in) are gathered and solved exactly (circle-vs-AABB / circle minimum translation, see
+// sim/Depenetration.hpp); if that solve cannot leave the pocket or its result still collides with
+// something outside the gathered set, the generic sampled search over Blocks() finishes the job.
+glm::vec2 GameScene::Depenetrate(glm::vec2 pos, float radius) const {
+    if (!BlocksAny(pos, radius)) {
+        return pos;
+    }
+    std::vector<Util::Collider> nearby;
+    GatherBlockersNear(pos, radius + 3.0F * kCellPx, nearby);
+    bool resolved = true;
+    const glm::vec2 out = Sim::DepenetrateAgainst(nearby, pos, radius, &resolved);
+    if (resolved && !BlocksAny(out, radius)) {
+        return out;
+    }
+    return WorldCollision::Depenetrate(pos, radius);
+}
+
+// P2.18 (R37, T-62): exact swept test. The blockers whose bounds lie within reach of the
+// segment's bounding circle are gathered (same collections as BlocksAny, active ones only) and the
+// segment is tested against the exact Minkowski sum of each; a graze between two free end points
+// is caught. A zero-length segment is the plain overlap test.
+bool GameScene::MoveBlocked(glm::vec2 from, glm::vec2 to, float radius) const {
+    const glm::vec2 mid = 0.5F * (from + to);
+    const glm::vec2 half = 0.5F * (to - from);
+    const float reach = std::sqrt(half.x * half.x + half.y * half.y) + radius + 1.0F;
+    static thread_local std::vector<Util::Collider> nearby; // reused: this runs twice per mover per tick
+    nearby.clear();
+    GatherBlockersNear(mid, reach, nearby);
+    return Sim::SegmentBlockedByAny(nearby, from, to, radius);
+}
+
+bool GameScene::SpawnBlocked(std::size_t room, glm::vec2 pos, float radius) const {
+    if (BlocksAny(pos, radius)) {
+        return true;
+    }
+    // A spawn must also stay clear of the room's door-seal band even while the doors are open:
+    // the seal closes on the whole opening the moment the player enters, and a body standing in it
+    // would be pushed out of the room.
+    if (room < m_RoomDoors.size()) {
+        const Util::Collider circle = Util::Collider::MakeCircle(pos, radius);
+        for (const Util::Collider &door : m_RoomDoors[room]) {
+            if (Util::Overlap(door, circle)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+glm::vec2 GameScene::FreeDropPoint(glm::vec2 want) const {
+    // A dropped weapon is a point-like pickup: an 8 px probe keeps it off boxes, walls and doors.
+    return Depenetrate(want, 8.0F);
+}
+
+void GameScene::TracePositions() const {
+    LOG_INFO("PosTrace: frame {} player ({:.1f},{:.1f}) r={:.1f} blocked={}", m_Frame,
+             m_Player->Position().x, m_Player->Position().y, m_PlayerRadiusPx,
+             BlocksAny(m_Player->Position(), m_PlayerRadiusPx) ? 1 : 0);
+    const std::vector<Sim::Simulation::EntityView> evs = m_Sim->EnemyViews();
+    for (const Sim::Simulation::EntityView &ev : evs) {
+        const float r = ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr
+                            ? Sim::MakeBodyGeom(m_EnemyDefs[ev.id]->body, m_EnemyDefs[ev.id]->hurtbox,
+                                                Sim::kEnemyBodyRadius).bodyRadiusPx
+                            : Sim::kEnemyBodyRadius;
+        LOG_INFO("PosTrace: frame {} enemy {} room {} {} ({:.1f},{:.1f}) r={:.1f} alive={} blocked={}", m_Frame,
+                 ev.id, ev.roomId,
+                 ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr ? m_EnemyDefs[ev.id]->id : "?",
+                 ev.pos.x, ev.pos.y, r, ev.alive ? 1 : 0, BlocksAny(ev.pos, r) ? 1 : 0);
+    }
+    if (m_Sim->HasBoss()) {
+        const Sim::Simulation::EntityView bv = m_Sim->BossView();
+        const float r = m_BossDef != nullptr
+                            ? Sim::MakeBodyGeom(m_BossDef->body, m_BossDef->hurtbox, Sim::kBossBodyRadius).bodyRadiusPx
+                            : Sim::kBossBodyRadius;
+        LOG_INFO("PosTrace: frame {} boss room {} ({:.1f},{:.1f}) r={:.1f} alive={} blocked={}", m_Frame,
+                 bv.roomId, bv.pos.x, bv.pos.y, r, bv.alive ? 1 : 0, BlocksAny(bv.pos, r) ? 1 : 0);
+    }
 }
 
 // Phase 3 (#3a): a consumed bullet at @p pos damages a destructible design box
@@ -1532,6 +1740,21 @@ void GameScene::Update(float dtMs) {
     if (m_Run != nullptr) {
         m_Run->RecordTime(dtMs); // B4: run clock (RGGameProcess.start_time analog)
     }
+    // P2.18 (RC3, PORT CHOICE T-62): a frame hitch must slow the game down, not teleport the hero.
+    // The run clock above keeps the wall-clock delta; everything frame-driven below (player
+    // motion, regeneration, timers, the sim's own Advance) sees at most kMaxFrameDtMs (= the
+    // 8 fixed steps FixedClock already allows per Advance), so no frame moves the player more
+    // than 33.3 px (6.5 u/s * 32 px * 0.16 s) -- and MoveBody sub-steps even that.
+    {
+        static int clampLogs = 0;
+        if (dtMs > Sim::kMaxFrameDtMs && clampLogs < 3) {
+            ++clampLogs;
+            LOG_INFO("Frame dt {} ms clamped to {} ms (frame {})", dtMs, Sim::kMaxFrameDtMs, m_Frame);
+        }
+        m_RawMsTotal += dtMs; // diagnostics for the DeathTrace line (H3 A/B)
+        dtMs = Sim::ClampFrameDtMs(dtMs);
+        m_SimMsTotal += dtMs;
+    }
     // SK_FORCE_DIE=K test hook (env, NO-OP if unset): kill the player on frame K to
     // drive the death->EndScene path headlessly (no combat needed). Runs BEFORE the
     // death check below.
@@ -1593,7 +1816,11 @@ void GameScene::Update(float dtMs) {
     }
 
     // --- Player movement with axis-separated wall sliding (stays scene-side) ---
-    const glm::vec2 before = m_Player->Position();
+    // P2.18: first resolve any overlap left by a teleport hook, a door that just sealed, a
+    // knock-in or a spawn (WorldCollision::Depenetrate, same tick), then walk with the swept
+    // MoveBody below.
+    const glm::vec2 before = Depenetrate(m_Player->Position(), m_PlayerRadiusPx);
+    m_Player->m_Transform.translation = before;
     m_Player->Update(dtMs);
     glm::vec2 after = m_Player->Position();
     if (m_AutoWalk) { // SK_AUTOWALK: override input with a steer toward the target
@@ -1601,6 +1828,12 @@ void GameScene::Update(float dtMs) {
         const float len = std::sqrt(d.x * d.x + d.y * d.y);
         if (len > 1.0F) {
             after = before + (d / len) * (kAutoWalkSpeed * dtMs / 1000.0F);
+        }
+    }
+    if (m_WalkDirSet) { // SK_WALK_DIR: hold a fixed direction (P2.18 wall / dt-spike evidence)
+        const float len = std::sqrt(m_WalkDir.x * m_WalkDir.x + m_WalkDir.y * m_WalkDir.y);
+        if (len > 0.0F) {
+            after = before + (m_WalkDir / len) * (m_Player->Speed() * dtMs / 1000.0F);
         }
     }
     // P3.1: the sim owns the player's buff state (TickBuffs, ticked in the PREVIOUS
@@ -1614,14 +1847,22 @@ void GameScene::Update(float dtMs) {
             after = before + (after - before) * m_Sim->PlayerSpeedMul();
         }
     }
-    glm::vec2 resolved = before;
-    if (!BlocksAny(glm::vec2(after.x, before.y), m_PlayerRadiusPx)) {
-        resolved.x = after.x;
-    }
-    if (!BlocksAny(glm::vec2(resolved.x, after.y), m_PlayerRadiusPx)) {
-        resolved.y = after.y;
+    // Swept, axis-sliding commit (T-62): same slide as before, but in sub-steps of at most one body
+    // radius and each axis move is a swept test, so a step cannot land on the far side of a 1-cell wall.
+    glm::vec2 resolved = Sim::MoveBody(*this, before, after - before, m_PlayerRadiusPx);
+    // SK_FORCE_DASH=K,dx,dy (P2.18 evidence): the C02 dash applier, driven without the skill.
+    if (m_ForceDashFrame >= 0 && m_Frame == m_ForceDashFrame) {
+        const glm::vec2 from = resolved;
+        Sim::ApplyDash(*this, resolved, m_ForceDashDir, Sim::kSkillDashPx, m_PlayerRadiusPx);
+        LOG_INFO("Dash: SK_FORCE_DASH frame {} from ({:.1f},{:.1f}) to ({:.1f},{:.1f}) blocked={}", m_Frame,
+                 from.x, from.y, resolved.x, resolved.y, BlocksAny(resolved, m_PlayerRadiusPx) ? 1 : 0);
     }
     m_Player->m_Transform.translation = resolved;
+
+    if (!m_TraceFrames.empty() &&
+        std::find(m_TraceFrames.begin(), m_TraceFrames.end(), static_cast<long>(m_Frame)) != m_TraceFrames.end()) {
+        TracePositions(); // SK_TRACE_POS (P2.18 evidence)
+    }
 
     // --- Energy regen (scene-owned, decision C) ---
     // FAITHFUL: drive the decomp-grounded 2.0s cadence via CombatStats::EnergyReloadTick
@@ -1951,6 +2192,18 @@ void GameScene::Update(float dtMs) {
         if (m_Run != nullptr) {
             if (!m_Transitioning) {
                 m_Transitioning = true;
+                {
+                    // DeathTrace (P2.18 H3 A/B diagnostics, no behaviour): when, in simulated time, and
+                    // against how many live hostiles the hero died.
+                    int alive = 0;
+                    for (const Sim::Simulation::EntityView &ev : m_Sim->EnemyViews()) {
+                        alive += ev.alive ? 1 : 0;
+                    }
+                    LOG_INFO("DeathTrace: frame {} rawMs {:.0f} simMs {:.0f} meanFrameMs {:.2f} enemiesAlive {} bossAlive {}",
+                             m_Frame, m_RawMsTotal, m_SimMsTotal,
+                             m_Frame > 0 ? m_RawMsTotal / static_cast<float>(m_Frame) : 0.0F, alive,
+                             (m_Sim->HasBoss() && m_Sim->BossView().alive) ? 1 : 0);
+                }
                 LOG_INFO("Player died on floor {} -> EndScene", m_FloorIndex);
                 m_Run->OnPlayerDied();
             }
@@ -1988,7 +2241,7 @@ void GameScene::Update(float dtMs) {
         for (std::size_t di = 0; di < drops.size(); ++di) {
             const float dx = (static_cast<float>(di) - 0.5F * static_cast<float>(drops.size() - 1)) * kCellPx;
             auto pickup = std::make_shared<WeaponPickup>(
-                std::string(RESOURCE_DIR), chest->Position() + glm::vec2(dx, -kCellPx), drops[di]);
+                std::string(RESOURCE_DIR), FreeDropPoint(chest->Position() + glm::vec2(dx, -kCellPx)), drops[di]);
             m_Pickups.push_back(pickup);
             m_Renderer.AddChild(pickup);
             LOG_INFO("Chest: opened -> {}", drops[di]->id);
@@ -2181,6 +2434,24 @@ void GameScene::SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, i
     if (rdef == nullptr) {
         return;
     }
+    // P2.18 (RC1, PORT CHOICE T-63): seat the body where ITS radius is free of every blocker --
+    // the requested spawn point if it fits, else the nearest of the room's spawn points that does,
+    // else a depenetrated position. Without this an enemy spawned inside a box stayed pinned.
+    {
+        const float bodyR = Sim::MakeBodyGeom(rdef->body, rdef->hurtbox, Sim::kEnemyBodyRadius).bodyRadiusPx;
+        const std::vector<glm::vec2> noPoints;
+        const std::vector<glm::vec2> &pts = (roomIndex >= 0 && static_cast<std::size_t>(roomIndex) < m_Waves.size())
+                                                ? m_Waves[static_cast<std::size_t>(roomIndex)].points
+                                                : noPoints;
+        const glm::vec2 want = at;
+        const std::size_t roomU = roomIndex >= 0 ? static_cast<std::size_t>(roomIndex) : m_RoomDoors.size();
+        at = ResolveSpawnPoint(pts, at, bodyR, [this, roomU](glm::vec2 p, float r) { return SpawnBlocked(roomU, p, r); });
+        at = Depenetrate(at, bodyR);
+        if (at != want) {
+            LOG_INFO("Spawn: {} room {} moved ({:.1f},{:.1f}) -> ({:.1f},{:.1f}) (body r={:.1f} did not fit)",
+                     rdef->id, roomIndex, want.x, want.y, at.x, at.y, bodyR);
+        }
+    }
     const int seed = m_FloorSeed + 1000 + roomIndex + serial * 131;
     auto enemy = std::make_shared<Enemy>(*rdef, root, at, 450.0F, 260.0F,
                                          m_Data.SpriteFrames(rdef->id, root),
@@ -2323,7 +2594,7 @@ void GameScene::Purchase(VendingMachine &m) {
     case VendingMachine::Kind::Weapon: {
         if (const WeaponDef *wd = m_Data.FindWeapon(m.Stock())) {
             auto pickup = std::make_shared<WeaponPickup>(
-                std::string(RESOURCE_DIR), m.Position() + glm::vec2(0.0F, -1.5F * kCellPx), wd);
+                std::string(RESOURCE_DIR), FreeDropPoint(m.Position() + glm::vec2(0.0F, -1.5F * kCellPx)), wd);
             m_Pickups.push_back(pickup);
             m_Renderer.AddChild(pickup);
             LOG_INFO("Shop: bought weapon {} for {}", wd->id, m.Price());

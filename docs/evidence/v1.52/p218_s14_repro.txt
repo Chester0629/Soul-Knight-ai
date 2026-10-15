@@ -1,0 +1,22 @@
+ [info] SpawnFilter: 91 of 822 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 1 spawn point
+ [info] PosTrace: frame 3 player (1312.0,0.0) r=12.8 blocked=0
+ [info] PosTrace: frame 3 enemy 0 room 1 e_boar01 (1152.0,32.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 1 room 1 e_orc02 (1216.0,-64.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 2 room 1 e_boar01 (1248.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 3 room 2 ex_orc02 (2432.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 4 room 2 e_boar01 (2464.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 5 room 2 e_boar01 (2464.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 6 room 5 e_orc02 (-1504.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 7 room 5 e_orc01 (-1504.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 3 enemy 8 room 5 e_boar01 (-1472.0,-64.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 player (1312.0,0.0) r=12.8 blocked=0
+ [info] PosTrace: frame 250 enemy 0 room 1 e_boar01 (1316.9,72.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 1 room 1 e_orc02 (1349.9,-52.3) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 2 room 1 e_boar01 (1329.9,-58.4) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 3 room 2 ex_orc02 (2432.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 4 room 2 e_boar01 (2464.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 5 room 2 e_boar01 (2464.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 6 room 5 e_orc02 (-1504.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 7 room 5 e_orc01 (-1504.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PosTrace: frame 250 enemy 8 room 5 e_boar01 (-1472.0,-64.0) r=12.8 alive=1 blocked=0

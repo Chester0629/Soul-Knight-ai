@@ -1602,6 +1602,49 @@ def _prefab_w2_dy(path) -> float:
     return float(m.group(1)) if m else 0.0
 
 
+# Layers of the 2D physics matrix that stop a character BODY (layer 8): Default (0), Obstacle
+# (12), Wall (13) -- ProjectSettings/Physics2DSettings.asset (INFERRED decode, diag A 2.1).
+# Body (8), Body_P/Body_E (9/10: hurtboxes), Bullet (11) and Door (14, sealed doors are
+# modelled separately) never block a walking body. T-61.
+_BLOCKING_LAYERS = (0, 12, 13)
+
+
+def _prefab_blockers(path) -> list:
+    """Solid (non-trigger, enabled) Circle/Box colliders of a room-object prefab that stop a
+    character body, in prefab-ROOT space in units: [{shape, size|radius, offset, trigger}] in
+    document order. FAITHFUL @ the prefab's BoxCollider2D / CircleCollider2D (m_Size, m_Radius,
+    m_Offset composed through the Transform chain, see _to_root). root = the cell's
+    bottom-centre; the GameObject's m_Layer filters out hurtbox/Body colliders (mineral)."""
+    if path is None:
+        return []
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return []
+    docs, names, scale, father, root, pos = _parse_prefab(text)
+    if root is None:
+        return []
+    layer = {}
+    for fid, (cid, b) in docs.items():
+        if cid == 1:
+            m = re.search(r"m_Layer: (\d+)", b)
+            layer[fid] = int(m.group(1)) if m else 0
+    out = []
+    for fid, (cid, b) in docs.items():
+        if cid not in (58, 61) or not _enabled(b):
+            continue
+        m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+        go = m.group(1) if m else None
+        if go is None or layer.get(go, 0) not in _BLOCKING_LAYERS:
+            continue
+        centre = _to_root(go, _vec2(b, "m_Offset") or (0.0, 0.0), scale, father, pos, root)
+        cj = _collider_json(cid, b, _lossy(go, scale, father), centre)
+        if cj is not None and not cj["trigger"]:
+            out.append(cj)
+    return out
+
+
+
 def build_level_table():
     """Returns the level list, or None when the AssetRipper source is absent."""
     if not MAP_MANAGER_DIR.is_dir():
@@ -1644,7 +1687,8 @@ def build_level_table():
                               "alt": sp[1] if len(sp) > 1 else "",
                               "alt_dy": _prefab_w2_dy(by_name.get(o)),
                               "sort": so[0] if so else [4, 0],
-                              "alt_sort": so[1] if len(so) > 1 else [6, 0]})
+                              "alt_sort": so[1] if len(so) > 1 else [6, 0],
+                              "blockers": _prefab_blockers(by_name.get(o))})
         floors = []
         for fl in _mm_list(seg, "floor_list", idx):
             sp = _prefab_sprites(by_name.get(fl), idx)
@@ -1761,7 +1805,8 @@ def build_boss_rooms():
                 prefabs[base] = {"sprite": sp[0] if sp else "", "alt": sp[1] if len(sp) > 1 else "",
                                  "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base),
                                  "sort": so[0] if so else [4, 0],
-                                 "alt_sort": so[1] if len(so) > 1 else [6, 0]}
+                                 "alt_sort": so[1] if len(so) > 1 else [6, 0],
+                                 "blockers": _prefab_blockers(by_name.get(base))}
         objects.sort(key=lambda o: (o["x"], o["y"], o["p"]))
         rooms[f.stem] = {"w": w, "h": h, "objects": objects, "dropped_outside": dropped}
     return {"rooms": rooms, "prefabs": prefabs} if rooms else None
@@ -1842,6 +1887,7 @@ def build_statue_table():
             "base_sort": so[0] if len(so) > 0 else [4, 0],
             "body_sort": so[1] if len(so) > 1 else [6, 0],
             "light_sort": so[2] if len(so) > 2 else [5, 0],
+            "blockers": _prefab_blockers(f),
         }
     return out or None
 
@@ -1913,7 +1959,8 @@ def build_shop_table():
                     items.append(p.stem)
         sp = _prefab_sprites(f, idx)
         machines[stem] = {"price": int(val.group(1)) if val else 0, "items": items,
-                          "sprite": sp[0] if sp else "", "display": sp[1] if len(sp) > 1 else ""}
+                          "sprite": sp[0] if sp else "", "display": sp[1] if len(sp) > 1 else "",
+                          "blockers": _prefab_blockers(f)}
     return {"pots": pots, "machines": machines} if pots and machines else None
 
 

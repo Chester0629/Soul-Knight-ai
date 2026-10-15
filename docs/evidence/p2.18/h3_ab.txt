@@ -1,0 +1,43 @@
+# H3 A/B: base 0912b66 (+DeathTrace diagnostics) vs current P2.18 working tree (+DeathTrace)
+# command: SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=45 SK_MAX_FRAMES=700 [SK_DT_MS=<dt>] SoulKnight.exe ; default seed
+build    SK_DT_MS  run  outcome  frame  simMs     rawMs     meanFrameMs enemiesAlive wallMsPerFrame
+base     20        1    cleared  -      -         -         -          -         28          
+base     20        2    cleared  -      -         -         -          -         28          
+current  20        1    cleared  -      -         -         -          -         28          
+current  20        2    cleared  -      -         -         -          -         28          
+base     30        1    cleared  -      -         -         -          -         22          
+base     30        2    cleared  -      -         -         -          -         22          
+current  30        1    died     208    6240      6240      30.00      6         22          
+current  30        2    died     208    6240      6240      30.00      6         22          
+base     40        1    died     204    8160      8160      40.00      6         22          
+base     40        2    died     204    8160      8160      40.00      6         22          
+current  40        1    died     197    7880      7880      40.00      6         21          
+current  40        2    died     197    7880      7880      40.00      6         22          
+base     80        1    died     114    9120      9120      80.00      21        20          
+base     80        2    died     114    9120      9120      80.00      21        20          
+current  80        1    died     107    8560      8560      80.00      21        20          
+current  80        2    died     107    8560      8560      80.00      21        20          
+base     unset     1    cleared  -      -         -         -          -         22          
+base     unset     2    cleared  -      -         -         -          -         23          
+base     unset     3    cleared  -      -         -         -          -         23          
+current  unset     1    died     209    6193      6716      32.14      6         22          
+current  unset     2    died     209    6191      6702      32.07      6         22          
+current  unset     3    cleared  -      -         -         -          -         22          
+
+# Method: base = `git worktree add D:/wtb 0912b66` (outside the repo tree, own build dir, PTSD/lib junctioned to the main tree's
+# dependency sources), patched ONLY with the DeathTrace diagnostics (two float counters in GameScene, one log line before
+# "Player died on floor"); current = this working tree with the same DeathTrace line. Worktree removed afterwards.
+# Fixed SK_DT_MS runs are deterministic (the two runs per cell are identical); SK_DT_MS unset = wall clock, 3 runs.
+# frame/simMs/rawMs = scene frame, summed simulated ms and summed wall ms at the hero's death; "cleared" = `room 1 cleared`
+# appeared before any death. wallMsPerFrame = whole-process wall time / 700 frames (includes ~3-4 s of startup).
+#
+# Reading:
+#  * dt 20: base and current both clear. dt 30: base clears, current dies (frame 208, 6.2 s sim, 6 enemies alive).
+#    dt 40 / 80: both die; current dies 7 frames earlier (-0.28 s at 40 ms, -0.56 s at 80 ms) with the same enemies alive.
+#  * wall clock (mean ~32 ms/frame while it ran): base cleared 3 of 3, current died 2 of 3 (frame 209, ~6.2 s sim).
+#  => P2.18 makes this scenario harder for the stationary, never-dodging H3 hero at the same dt. The earlier "0 of 7" wall-clock
+#     failures were machine-speed dependent (slower frames = more simulated time per forced kill, which is counted in frames).
+#  => the clamp (160 ms) is not involved (every dt here is below it). The earlier note "unrelated to the collision code" was wrong.
+#     Plausible cause (NOT isolated between spawn filtering/seating, depenetration and the exact sweep): enemies are no longer
+#     stuck in boxes, spawn on free cells and are re-seated, so they reach the hero sooner -- an expected consequence of
+#     un-sticking them, recorded under T-63. H3 stays pinned to SK_DT_MS=20, where base and current both clear.

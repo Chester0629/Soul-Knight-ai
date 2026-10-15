@@ -55,16 +55,18 @@ TEST(SkillDashTest, DashNormalizesAimDirection) {
     EXPECT_NEAR(body.y, kSkillDashPx, 0.001F);
 }
 
-// (b) SCAR-CLOSING: a dash toward a near wall is CLAMPED -- the collision gate refuses
-// the step, so the body never tunnels through/past the wall. A wall sits 40px ahead; an
-// 80px dash would otherwise land the body at x=80, deep PAST the wall. ApplyDash must
-// refuse the blocked axis-step entirely (the air-wall lesson: gate owner moves like walks).
-TEST(SkillDashTest, DashIntoNearWallIsClampedNoTunnel) {
+// (b) SCAR-CLOSING: a dash toward a near wall must not tunnel through it (WallAtX is a half-plane wall). A wall sits 40px ahead;
+// an 80px dash would otherwise land the body at x=80, deep PAST the wall. P2.18 (T-62): the dash is
+// no longer refused outright (the old all-or-nothing clamp left the body where it stood); it is
+// swept and ends FLUSH against the wall, like the original's Continuous Rigidbody2D (Box2D stops
+// the impulse at the wall). The no-tunnel property over a whole sweep of start distances lives in
+// BodyMoveTest.DashTowardAOneCellWallFromAnyDistanceEndsOnTheNearSide.
+TEST(SkillDashTest, DashIntoNearWallStopsFlushAgainstItNoTunnel) {
     WallAtX wall(40.0F); // wall half-plane at x>=40; body starts at the origin
     glm::vec2 body{0.0F, 0.0F};
     ApplyDash(wall, body, glm::vec2{1.0F, 0.0F}, kSkillDashPx, kRadius);
     EXPECT_LT(body.x + kRadius, 40.0F) << "dashed body must not cross the wall (no tunnel)";
-    EXPECT_FLOAT_EQ(body.x, 0.0F) << "the blocked dash step is refused (clamped), not teleported through";
+    EXPECT_NEAR(body.x + kRadius, 40.0F, 0.1F) << "the dash ends flush against the wall, not cancelled";
 }
 
 // NOLINTEND(readability-magic-numbers)

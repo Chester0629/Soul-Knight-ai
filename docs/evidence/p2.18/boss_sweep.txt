@@ -1,0 +1,11 @@
+seed 1 (1-5)  PosTrace: frame 3 boss room 3 (-1312.0,-2624.0) r=19.2 alive=1 blocked=0
+seed 1 (2-5)  PosTrace: frame 3 boss room 3 (-2624.0,1248.0) r=19.2 alive=1 blocked=0
+seed 2 (1-5)  PosTrace: frame 3 boss room 7 (2624.0,-1248.0) r=19.2 alive=1 blocked=0
+seed 2 (2-5)  PosTrace: frame 3 boss room 5 (1312.0,2720.0) r=19.2 alive=1 blocked=0
+seed 3 (1-5)  PosTrace: frame 3 boss room 7 (2624.0,-1216.0) r=19.2 alive=1 blocked=0
+seed 3 (2-5)  PosTrace: frame 3 boss room 7 (2624.0,-2624.0) r=19.2 alive=1 blocked=0
+seed 5 (1-5)  PosTrace: frame 3 boss room 2 (1312.0,-1184.0) r=19.2 alive=1 blocked=0
+seed 5 (2-5)  PosTrace: frame 3 boss room 3 (1312.0,-2624.0) r=19.2 alive=1 blocked=0
+seed 7 (1-5)  PosTrace: frame 3 boss room 4 (-1312.0,-1408.0) r=19.2 alive=1 blocked=0
+seed 7 (2-5)  PosTrace: frame 3 boss room 4 (2624.0,-1312.0) r=19.2 alive=1 blocked=0
+BOSS SWEEP bosses=10 blocked=0

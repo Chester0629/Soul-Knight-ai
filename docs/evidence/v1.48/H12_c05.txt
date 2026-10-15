@@ -1,0 +1,4 @@
+ [info] Skill: c05 activated
+ [info] Skill: c05 effect bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)
+ [info] Skill: c05 activated
+ [info] Skill: c05 effect bottle_throw n=1 variant=0/4 NOT_PORTED(T-44)

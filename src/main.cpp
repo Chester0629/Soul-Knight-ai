@@ -9,9 +9,11 @@
 
 #include "Core/Context.hpp"
 
+#include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 
 #include "game/RunController.hpp"
+#include "game/TestHooks.hpp"
 
 namespace {
 // Save the just-rendered back buffer to a PNG (GL is bottom-up; flip to top-down).
@@ -73,6 +75,13 @@ int main(int, char **) {
     long frame = 0;
     const char *dtEnv = std::getenv("SK_DT_MS");
     const float fixedDtMs = (dtEnv != nullptr) ? static_cast<float>(std::atof(dtEnv)) : 0.0F;
+    Game::DtSpikeSpec dtSpike;
+    if (const char *spikeEnv = std::getenv("SK_DT_SPIKE")) {
+        dtSpike = Game::ParseDtSpike(spikeEnv);
+        if (!dtSpike.ok) {
+            LOG_WARN("SK_DT_SPIKE rejected: {}", dtSpike.error);
+        }
+    }
 
     while (!context->GetExit()) {
         // Begins a new ImGui frame and pumps SDL events. Must be paired with
@@ -85,6 +94,12 @@ int main(int, char **) {
         float dtMs = Util::Time::GetDeltaTimeMs();
         if (fixedDtMs > 0.0F) {
             dtMs = fixedDtMs;
+        }
+        // SK_DT_SPIKE=K,ms test hook (NO-OP if unset, strict parse): main-loop frame K (0-based,
+        // counted only while SK_MAX_FRAMES is set) runs with a frame delta of `ms` -- a simulated
+        // hitch -- so the P2.18 dt clamp can be proven headlessly.
+        if (dtSpike.ok && frame == dtSpike.frame) {
+            dtMs = dtSpike.ms;
         }
         run.Update(dtMs);
         run.Render();

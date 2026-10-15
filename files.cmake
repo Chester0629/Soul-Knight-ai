@@ -305,6 +305,8 @@ set(INCLUDE_FILES
     sim/SimEvent.hpp
     sim/WorldCollision.hpp
     sim/SkillDash.hpp
+    sim/Depenetration.hpp
+    sim/BodyMove.hpp
     sim/EnemyController.hpp
     sim/BrainFactory.hpp
     sim/BossController.hpp
@@ -332,6 +334,7 @@ set(INCLUDE_FILES
     entities/WeaponPickup.hpp
     world/Room.hpp
     world/FloorBlock.hpp
+    world/RoomBlockers.hpp
     ui/Hud.hpp
     ui/HudLayout.hpp
     scenes/GameScene.hpp
@@ -568,4 +571,12 @@ set(TEST_FILES
 
     # Character scale + prefab colliders from data
     ScaleColliderTest.cpp
+
+    # P2.18 slice 2: depenetration, swept movement + dash + dt clamp, data-driven blocker shapes,
+    # spawn-point filtering (characters stuck in boxes / walls)
+    DepenetrationTest.cpp
+    BodyMoveTest.cpp
+    RoomBlockersTest.cpp
+    BodyCollisionSimTest.cpp
+    RoomConnectivityDiffTest.cpp
 )

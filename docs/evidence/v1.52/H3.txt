@@ -1,0 +1,6 @@
+ [info] EnemyMaker: room 1 part spawned 9 (15 pending)
+ [info] EnemyMaker: room 1 (type 1) level 3 points 25 -> 24 planned, wave size 9
+ [info] RGRoomX: room 1 StartRoom -> Active (door_open=0, sealed)
+ [info] EnemyMaker: room 1 part spawned 9 (6 pending)
+ [info] EnemyMaker: room 1 part spawned 6 (0 pending)
+ [info] RGRoomX: room 1 cleared -> reward gate fired (room_type==1)

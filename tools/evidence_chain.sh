@@ -104,7 +104,12 @@ grep -c "GameScene: hero" "$E/H2neg.log" | tee "$E/H2neg.txt"
 # stationary, never-dodging hero in this case used to die on the third wave (frame ~240) before
 # the last forced kill (frame 300) could clear the room. KILL_EVERY 90 -> 45 shortens each wave's
 # exposure (kills at 120/165/210); the wave sequence and every require_order below are unchanged.
-run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=45 SK_MAX_FRAMES=700
+# v1.50: SK_DT_MS=20 pins H3 to one fixed step per frame. Forced kills count FRAMES while combat runs in TIME, so the outcome
+# of this stationary-hero case depends on the frame delta. A/B (docs/evidence/p2.18/h3_ab.txt, base 0912b66 vs P2.18, same
+# seed): both clear at 20 ms; at 30 ms base clears and the P2.18 build dies; at 40 / 80 ms both die, P2.18 7 frames earlier.
+# P2.18 makes the hero die earlier at the same dt (enemies are no longer stuck in boxes; causes not isolated, T-63), so
+# the case is pinned to the dt where both builds clear.
+run_case H3 "RGRoomX: room 1|EnemyMaker: room 1" 12 SK_DT_MS=20 SK_SKIP_MENU=1 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=120 SK_FORCE_KILL_EVERY=45 SK_MAX_FRAMES=700
 require_order H3 "part spawned 9 \\(15 pending\\)" "level 3 points [0-9]+ -> 24 planned, wave size 9" "StartRoom -> Active" "part spawned 9 \\(6 pending\\)" "part spawned 6 \\(0 pending\\)" "room 1 cleared"
 run_case H4 "Reward:|Pickup:" 6 SK_SKIP_MENU=1 SK_FORCE_KILL=120 SK_MAX_FRAMES=700
 require_count H4 "Reward: .* dropped [0-9]+ pickups" 3
@@ -224,6 +229,25 @@ run_case teleport_nan "SK_ROOM_TELEPORT" 40 \
 require teleport_nan "SK_ROOM_TELEPORT rejected: bad offset"
 # require_count only has a minimum, so the zero-count check is explicit (H2neg style).
 [ "$(grep -cE "SK_ROOM_TELEPORT -> room" "$E/teleport_nan.txt")" = "0" ] || fail "teleport_nan still teleported"
+echo "=== P2.18 collision slice: spawn filter + depenetration (seed 14 room 1), dash vs wall, dt spike ==="
+# AC1: the repro that used to leave three room-1 enemies pinned inside boxes for 5 s.
+run_case p218_s14_repro "PosTrace|SpawnFilter|Spawn:|SK_ROOM_TELEPORT" 80   SK_SEED=14 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=1,1 SK_ZOOM=1.4 SK_DT_MS=20 SK_MAX_FRAMES=251 SK_TRACE_POS=3,250 SK_SHOT="$E/p218_s14_repro.png"
+check_png "$E/p218_s14_repro.png"
+require p218_s14_repro "SpawnFilter: [1-9][0-9]* of [0-9]+ connected floor cells removed" "PosTrace: frame 3 enemy" "PosTrace: frame 250 enemy"
+# AC4: a dash toward the outer wall of the exit room (offset 120 px east of the room centre).
+run_case p218_dash_wall "PosTrace: frame [0-9]+ player|Dash:|SK_ROOM_TELEPORT" 20   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=5,4,120,0 SK_FORCE_DASH=10,1,0 SK_DT_MS=20 SK_MAX_FRAMES=20 SK_ZOOM=3 SK_TRACE_POS=4,12 SK_SHOT="$E/p218_dash_wall.png"
+check_png "$E/p218_dash_wall.png"
+require p218_dash_wall "Dash: SK_FORCE_DASH frame 10 from"
+# AC5: a 5000 ms frame spike while holding east toward the same wall.
+run_case p218_dt_spike "PosTrace: frame [0-9]+ player|clamped|SK_ROOM_TELEPORT|rejected" 20   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=5,4,100,0 SK_WALK_DIR=1,0 SK_DT_SPIKE=5,5000 SK_DT_MS=20 SK_MAX_FRAMES=30 SK_TRACE_POS=5,6,7,29
+require p218_dt_spike "Frame dt 5000 ms clamped to 160 ms"
+python tools/p218_check.py "$E" > "$E/p218_check.txt" 2>&1 || fail "p218 assertions"
+cat "$E/p218_check.txt"
+grep -q "P218 CHECK: OK" "$E/p218_check.txt" || fail "p218 assertions not OK"
+# Bad hook values are rejected (strict parse) and never act.
+run_case p218_hooks_bad "rejected|Dash:|clamped" 12   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=5,4,100,0 SK_FORCE_DASH=10,nan,0 SK_WALK_DIR=0,0 SK_DT_SPIKE=5,-1 SK_TRACE_POS=3,x SK_DT_MS=20 SK_MAX_FRAMES=30
+require p218_hooks_bad "SK_FORCE_DASH rejected" "SK_WALK_DIR rejected" "SK_DT_SPIKE rejected" "SK_TRACE_POS rejected"
+[ "$(grep -cE "Dash:|clamped" "$E/p218_hooks_bad.txt")" = "0" ] || fail "p218_hooks_bad still acted on a rejected hook"
 git rev-parse --short HEAD | tee "$E/head.txt"
 rm -f "$E"/*.log
 if [ "${#FAILS[@]}" -eq 0 ]; then

@@ -9,6 +9,7 @@
 #include "combat/Buff.hpp"
 #include "combat/CharSkillC01.hpp"
 #include "combat/Damage.hpp"
+#include "sim/BodyMove.hpp"
 #include "sim/BrainFactory.hpp"
 #include "sim/CharSkillAdapters.hpp"
 #include "sim/SimConfig.hpp"
@@ -600,7 +601,30 @@ void Simulation::TickBuffs() {
     }
 }
 
+// P2.18 (PORT CHOICE T-61/T-62): movement is wall-gated AND swept, and a body that overlaps a
+// blocker is pushed out first.
+//   1. Depenetrate: every live hostile that overlaps a blocker at the START of the tick (spawned
+//      inside one, teleported by a brain, caught by a door that just sealed, knocked in) is pushed
+//      to the nearest free position -- INFERRED to match what Box2D does to the Dynamic
+//      Rigidbody2D bodies (Kinematic / body-less prefabs are the exceptions; exit POSITIONS are the
+//      T-61 approximation). Without it the move gate below (swept or not) refuses every step of a body that starts overlapping, pinning it for good. It runs
+//      BEFORE the step-start snapshot, so the push is a reposition, not a motion the swept bullet
+//      test would credit. One cheap Blocks() query per entity when nothing overlaps.
+//   2. MoveBody: the same axis-separated slide as before, with each axis move tested as a swept
+//      segment (WorldCollision::MoveBlocked, exact in GameScene) in sub-steps of at most one body
+//      radius, so neither a long knockback / charge nor a short graze can cross a blocker.
 void Simulation::MoveControllers() {
+    for (auto &e : m_Enemies) {
+        if (e->State().dead) {
+            continue;
+        }
+        EntityState &st = e->MutableState();
+        st.pos = m_World->Depenetrate(st.pos, st.geom.bodyRadiusPx);
+    }
+    if (m_Boss != nullptr && !m_Boss->State().dead) {
+        EntityState &st = m_Boss->MutableState();
+        st.pos = m_World->Depenetrate(st.pos, st.geom.bodyRadiusPx);
+    }
     // T-57: snapshot every hurtbox owner's step-start position for ResolveHits' swept test.
     m_EnemyStepStart.resize(m_Enemies.size());
     for (std::size_t i = 0; i < m_Enemies.size(); ++i) {
@@ -616,17 +640,11 @@ void Simulation::MoveControllers() {
         // P3.1: buffSpeedMul folds in Ice/Electric freeze (0.0) and ChangeSpeed's
         // slow (< 1.0); 1.0 (no buff) leaves movement byte-identical to before.
         const glm::vec2 vel = e->ComputeVelocity() * e->State().buffSpeedMul;
-        glm::vec2 pos = e->State().pos;
-        // Axis-separated wall slide (same shape as the GameScene player pattern).
-        const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
         const float bodyR = e->State().geom.bodyRadiusPx; // prefab body circle (data)
-        if (!m_World->Blocks(tryX, bodyR)) {
-            pos.x = tryX.x;
-        }
-        const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
-        if (!m_World->Blocks(tryY, bodyR)) {
-            pos.y = tryY.y;
-        }
+        // Axis-separated wall slide (same shape as the GameScene player pattern), swept.
+        const glm::vec2 pos = MoveBody(*m_World, e->State().pos,
+                                       glm::vec2{vel.x * kFixedStepSeconds, vel.y * kFixedStepSeconds},
+                                       bodyR);
         e->MutableState().pos = pos;
         const glm::vec2 md = e->MoveDir(); // steering heading (excludes knockback shove).
         if (md.x != 0.0F || md.y != 0.0F) {
@@ -642,16 +660,10 @@ void Simulation::MoveControllers() {
         // P3.1: buffSpeedMul folds in Ice/Electric freeze (0.0); 1.0 (no buff)
         // leaves boss movement byte-identical to before.
         const glm::vec2 vel = moveDir * BossController::kSpeed * m_Boss->State().buffSpeedMul;
-        glm::vec2 pos = m_Boss->State().pos;
-        const glm::vec2 tryX{pos.x + vel.x * kFixedStepSeconds, pos.y};
         const float bodyR = m_Boss->State().geom.bodyRadiusPx; // prefab body circle (data)
-        if (!m_World->Blocks(tryX, bodyR)) {
-            pos.x = tryX.x;
-        }
-        const glm::vec2 tryY{pos.x, pos.y + vel.y * kFixedStepSeconds};
-        if (!m_World->Blocks(tryY, bodyR)) {
-            pos.y = tryY.y;
-        }
+        const glm::vec2 pos = MoveBody(*m_World, m_Boss->State().pos,
+                                       glm::vec2{vel.x * kFixedStepSeconds, vel.y * kFixedStepSeconds},
+                                       bodyR);
         m_Boss->MutableState().pos = pos;
         m_Boss->MutableState().facing = chase; // the boss faces the player it chases.
     }

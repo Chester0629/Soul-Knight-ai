@@ -324,6 +324,11 @@ struct LevelObstacleDef {
     float altDy = 0.0F; ///< w2 child local y (units): 0.5 = a crate's top sits half a unit up
     SortKey sort{4, 0};    ///< main sprite sorting layer/order (sting01: 2/1, boxes: 4/0)
     SortKey altSort{6, 0}; ///< w2 overlay sorting layer/order (boxes 6/0, sting01 `ding` 4/1)
+    /// P2.18 FAITHFUL @ the prefab's solid BoxCollider2D / CircleCollider2D on a body-blocking
+    /// layer (Default / Obstacle / Wall): shape, size|radius, offset from the prefab ROOT (= the
+    /// cell's bottom-centre), units. Empty = the prefab has no solid collider (decor such as
+    /// obj11_02, or a trigger-only pad such as sting01 / speed_up).
+    std::vector<ColliderDef> blockers;
 };
 
 /**
@@ -380,6 +385,7 @@ struct PrefabSkin {
     std::string kind;   ///< "wall" (grid solid) / "box" (destructible) / "solid" / "pad"
     SortKey sort{4, 0};    ///< main sprite sorting layer/order
     SortKey altSort{6, 0}; ///< w2 overlay sorting layer/order
+    std::vector<ColliderDef> blockers; ///< P2.18: solid body-blocking colliders (see LevelObstacleDef)
 };
 
 /// M3b: a boss's chest (res/item/chest_boss<NN>.prefab, RGChestBoss): its drop
@@ -407,6 +413,7 @@ struct MachineDef {
     std::vector<std::string> items; ///< object_list (pots); empty = weapon sample
     std::string sprite;             ///< body sprite stem
     std::string display;            ///< display frame sprite stem
+    std::vector<ColliderDef> blockers; ///< P2.18: the prefab `collider` child (2x1 / 2.5x1 / 1x1)
 };
 
 /// M3e statue (P1.12 continuation): rgprefab/room/statue/statue_0N.prefab
@@ -424,6 +431,7 @@ struct StatueDef {
     SortKey baseSort{4, 0};  ///< pedestal: layer 4 (Wall)
     SortKey bodySort{6, 0};  ///< the god: layer 6 (WallFont) -- over the heroes
     SortKey lightSort{5, 0}; ///< glow: layer 5 (Character)
+    std::vector<ColliderDef> blockers; ///< P2.18: the `collider` child, 2x2 units at (0, 1)
 };
 
 /// P1.12: a coin / energy pickup (res/register/coin_N | energy prefab: RGCoin

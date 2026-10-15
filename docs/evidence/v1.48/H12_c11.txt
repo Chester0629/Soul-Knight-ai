@@ -1,0 +1,2 @@
+ [info] Skill: c11 activated
+ [info] Skill: c11 effect holy_light

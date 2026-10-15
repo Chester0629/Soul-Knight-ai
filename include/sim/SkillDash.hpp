@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+#include "sim/BodyMove.hpp"
 #include "sim/WorldCollision.hpp"
 
 namespace Game::Sim {
@@ -20,26 +21,27 @@ namespace Game::Sim {
 /// by this exact constant -- there is no second hand-copied value.
 inline constexpr float kSkillDashPx = 80.0F;
 
-/// Apply a dash displacement to @p body along @p aimDir of length @p dist, gated by
-/// @p wc so the dash can NEVER tunnel through a wall (the air-wall lesson: an owner
-/// displacement must be wall-gated exactly like walking): axis-separated, each axis
-/// committed only if the destination circle (centre, @p radius) does not Block.
-/// @p aimDir need not be unit-length (zero-length falls back to +x). This is the
-/// SINGLE shared owner-side dash-apply: GameScene::ConsumeSimEvents and the
-/// RealBodyDriver test both call this exact function (no duplicated implementation).
+/// Apply a dash displacement to @p body along @p aimDir of length @p dist, gated by @p wc like walking
+/// (the air-wall lesson: an owner displacement must be wall-gated exactly like walking). In a world
+/// with exact MoveBlocked (GameScene) the dash cannot tunnel through any blocker; in a world on the
+/// default sampled MoveBlocked (test doubles) a shallow graze can slip through (see WorldCollision). P2.18 (PORT CHOICE T-62): the old version tested only the
+/// 80 px END point per axis, so a 1-cell (32 px) wall between start and end was jumped. It now
+/// (1) depenetrates the start (a body that begins overlapping a blocker can dash out) and
+/// (2) moves with the swept, axis-sliding MoveBody in sub-steps of at most one body radius, flush
+/// to contact: a dash toward a wall ends ON the near side of it, a dash along a wall slides.
+/// FAITHFUL (source chain): the original dash calls GetForce (game_typed.c:714), which writes the
+/// direction and inertia velocity (:43958) and hands it to Rigidbody2D.set_velocity (:51043); it is
+/// not cancelled when a wall is near. INFERRED: Box2D then stops the body at the wall, so ending
+/// flush against it is an approximation of that outcome (T-62), not a point-exact reproduction.
+/// @p aimDir need not be unit-length (zero-length falls back to +x). This is the SINGLE shared
+/// owner-side dash-apply: GameScene::ConsumeSimEvents and the RealBodyDriver test both call this
+/// exact function (no duplicated implementation).
 inline void ApplyDash(const WorldCollision &wc, glm::vec2 &body, glm::vec2 aimDir,
                       float dist, float radius) {
     const float len = std::sqrt(aimDir.x * aimDir.x + aimDir.y * aimDir.y);
     const glm::vec2 dir = len > 0.0F ? aimDir / len : glm::vec2{1.0F, 0.0F};
-    const glm::vec2 step = dir * dist;
-    // Axis-separated, collision-gated -- the SAME shape as the walk slide so a dash
-    // toward a wall is refused (clamped), never teleporting the body through it.
-    if (!wc.Blocks(glm::vec2{body.x + step.x, body.y}, radius)) {
-        body.x += step.x;
-    }
-    if (!wc.Blocks(glm::vec2{body.x, body.y + step.y}, radius)) {
-        body.y += step.y;
-    }
+    body = wc.Depenetrate(body, radius);
+    body = MoveBody(wc, body, dir * dist, radius, /*flushToContact=*/true);
 }
 
 } // namespace Game::Sim

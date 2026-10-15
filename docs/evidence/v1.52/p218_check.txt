@@ -1,0 +1,5 @@
+ok:   AC1: all 9 enemies free of blockers at frame 3
+ok:   AC1: room-1 enemies moved (id, species, px): [(0, 'e_boar01', 169.7), (1, 'e_orc02', 134.4), (2, 'e_boar01', 107.5)]
+ok:   AC4: dash from x=2744.0 stopped flush at x=2755.2 (wall face 2768.0; the old end-point test ended at x=2824.0, past the wall: circle edge 2811.2 > 2800.0)
+ok:   AC5: 5000 ms spike clamped to 160 ms; player x per traced frame [(5, 2728.2), (6, 2750.3), (7, 2754.5), (29, 2754.5)], wall face 2768.0: never crossed
+P218 CHECK: OK

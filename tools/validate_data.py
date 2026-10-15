@@ -411,6 +411,47 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
                 for rid in lv.get("rooms", {}).get("type2", []):
                     if rid not in rooms:
                         errors.append(f"level '{lv.get('id')}' boss room '{rid}' missing from boss_rooms")
+    # --- P2.18: blocker colliders of room objects (prefab BoxCollider2D / CircleCollider2D) -----
+    import math as _math
+
+    def check_blockers(where, bl, need_at_least=0):
+        if not isinstance(bl, list):
+            errors.append(f"{where}: 'blockers' must be a list (run build_gamedata.py)")
+            return
+        if len(bl) < need_at_least:
+            errors.append(f"{where}: expected >= {need_at_least} blocker collider(s), got {len(bl)}")
+        for c in bl:
+            ok = isinstance(c, dict) and c.get("shape") in ("box", "circle") and c.get("trigger") is False
+            off = c.get("offset") if isinstance(c, dict) else None
+            ok = ok and isinstance(off, list) and len(off) == 2 and all(
+                isinstance(v, (int, float)) and _math.isfinite(v) and abs(v) <= 8 for v in off)
+            if ok and c["shape"] == "box":
+                sz = c.get("size")
+                ok = isinstance(sz, list) and len(sz) == 2 and all(
+                    isinstance(v, (int, float)) and _math.isfinite(v) and 0 < v <= 8 for v in sz)
+            elif ok:
+                r = c.get("radius")
+                ok = isinstance(r, (int, float)) and _math.isfinite(r) and 0 < r <= 4
+            if not ok:
+                errors.append(f"{where}: malformed blocker collider {c}")
+        if len(bl) > 1:
+            errors.append(f"{where}: the scene supports ONE blocker collider per object, got {len(bl)}")
+
+    if levels is not None:
+        for lv in levels:
+            lid = lv.get("id", "?")
+            for i, o in enumerate(lv.get("obstacles", [])):
+                # boxes (1..4) and braziers (11) are the always-colliding families
+                check_blockers(f"level '{lid}' obstacle[{i}] '{o.get('prefab')}'", o.get("blockers"),
+                               1 if i in (1, 2, 3, 4, 11) else 0)
+    if boss_rooms is not None:
+        for pn, sk in boss_rooms.get("prefabs", {}).items():
+            check_blockers(f"boss prefab '{pn}'", sk.get("blockers"), 1 if sk.get("kind") == "box" else 0)
+    if shop is not None:
+        for sid, sd in (shop.get("statues") or {}).items():
+            check_blockers(f"statue '{sid}'", sd.get("blockers"), 1)
+        for mid, m in (shop.get("machines") or {}).items():
+            check_blockers(f"machine '{mid}'", m.get("blockers"), 1)
     # --- P2.17: room-sprite pivots + sorting layers (render slice 1) ---------------
     tile_pivots = data.get("tile_pivots")
     if tile_pivots is not None and levels is not None:

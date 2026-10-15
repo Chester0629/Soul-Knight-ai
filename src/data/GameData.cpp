@@ -52,33 +52,60 @@ void ReadSpriteOffset(const json &j, float &x, float &y) {
 
 // A prefab collider object ({shape, radius|size, offset, trigger}, units) under @p key, or a
 // Shape::None def when absent/unknown (callers then keep their documented fallback).
+ColliderDef ColliderFromJson(const json &node);
+
 ColliderDef GetCollider(const json &j, const char *key) {
-    ColliderDef c;
     auto it = j.find(key);
     if (it == j.end() || !it->is_object()) {
-        return c;
+        return ColliderDef{};
     }
-    const std::string shape = GetS(*it, "shape");
+    return ColliderFromJson(*it);
+}
+
+// P2.18: a list of prefab colliders (`blockers`: the solid Box/Circle colliders that stop a body,
+// in prefab-root units) under @p key; empty when absent. Malformed entries are skipped (the
+// data gate rejects them before they can ship).
+std::vector<ColliderDef> GetColliderList(const json &j, const char *key) {
+    std::vector<ColliderDef> out;
+    auto it = j.find(key);
+    if (it == j.end() || !it->is_array()) {
+        return out;
+    }
+    for (const json &e : *it) {
+        if (!e.is_object()) {
+            continue;
+        }
+        const ColliderDef c = ColliderFromJson(e);
+        if (c.Present()) {
+            out.push_back(c);
+        }
+    }
+    return out;
+}
+
+ColliderDef ColliderFromJson(const json &node) {
+    ColliderDef c;
+    const std::string shape = GetS(node, "shape");
     if (shape == "circle") {
         c.shape = ColliderDef::Shape::Circle;
-        c.radius = GetF(*it, "radius");
+        c.radius = GetF(node, "radius");
     } else if (shape == "box") {
         c.shape = ColliderDef::Shape::Box;
-        auto sz = it->find("size");
-        if (sz != it->end() && sz->is_array() && sz->size() >= 2) {
+        auto sz = node.find("size");
+        if (sz != node.end() && sz->is_array() && sz->size() >= 2) {
             c.sizeX = (*sz)[0].is_number() ? (*sz)[0].get<float>() : 0.0F;
             c.sizeY = (*sz)[1].is_number() ? (*sz)[1].get<float>() : 0.0F;
         }
     } else {
         return c;
     }
-    auto off = it->find("offset");
-    if (off != it->end() && off->is_array() && off->size() >= 2) {
+    auto off = node.find("offset");
+    if (off != node.end() && off->is_array() && off->size() >= 2) {
         c.offsetX = (*off)[0].is_number() ? (*off)[0].get<float>() : 0.0F;
         c.offsetY = (*off)[1].is_number() ? (*off)[1].get<float>() : 0.0F;
     }
-    auto trig = it->find("trigger");
-    c.trigger = trig != it->end() && trig->is_boolean() && trig->get<bool>();
+    auto trig = node.find("trigger");
+    c.trigger = trig != node.end() && trig->is_boolean() && trig->get<bool>();
     return c;
 }
 
@@ -495,7 +522,8 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                     d.obstacles.push_back(LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"),
                                                            GetS(o, "alt"), GetF(o, "alt_dy"),
                                                            GetSort(o, "sort", SortKey{4, 0}),
-                                                           GetSort(o, "alt_sort", SortKey{6, 0})});
+                                                           GetSort(o, "alt_sort", SortKey{6, 0}),
+                                                           GetColliderList(o, "blockers")});
                 }
             }
             if (const auto rs = v.find("rooms"); rs != v.end() && rs->is_object()) {
@@ -534,7 +562,8 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 m_PrefabSkins.emplace(it.key(), PrefabSkin{GetS(it.value(), "sprite"), GetS(it.value(), "alt"),
                                                            GetF(it.value(), "alt_dy"), GetS(it.value(), "kind"),
                                                            GetSort(it.value(), "sort", SortKey{4, 0}),
-                                                           GetSort(it.value(), "alt_sort", SortKey{6, 0})});
+                                                           GetSort(it.value(), "alt_sort", SortKey{6, 0}),
+                                                           GetColliderList(it.value(), "blockers")});
             }
         }
     }
@@ -592,6 +621,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 d.price = GetI(it.value(), "price");
                 d.sprite = GetS(it.value(), "sprite");
                 d.display = GetS(it.value(), "display");
+                d.blockers = GetColliderList(it.value(), "blockers");
                 if (const auto items = it.value().find("items"); items != it.value().end() && items->is_array()) {
                     for (const json &i : *items) {
                         if (i.is_string()) {
@@ -617,6 +647,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 d.baseSort = GetSort(it.value(), "base_sort", SortKey{4, 0});
                 d.bodySort = GetSort(it.value(), "body_sort", SortKey{6, 0});
                 d.lightSort = GetSort(it.value(), "light_sort", SortKey{5, 0});
+                d.blockers = GetColliderList(it.value(), "blockers");
                 m_Statues.push_back(std::move(d));
             }
         }

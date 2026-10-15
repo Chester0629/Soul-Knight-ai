@@ -145,5 +145,39 @@ class TestBulletRefBoundary(unittest.TestCase):
         self.assertTrue(any("overlay layer must exceed base" in e for e in errors), errors)
 
 
+    def test_blocker_colliders_are_the_prefab_colliders(self) -> None:
+        """P2.18: statue 2x2 @ (0,1), obj22_02 1.5x1.5, obj11_01 / signs01 circles and the sprite-only
+        obj11_02 (no collider) must flow from the prefabs -- the port used to collapse every one of
+        them to a 1x1 cell (or to nothing for obj_index 8/9/10)."""
+        statue = self.data["shop"]["statues"]["statue_01"]["blockers"]
+        self.assertEqual(statue, [{"shape": "box", "size": [2.0, 2.0], "offset": [0.0, 1.0], "trigger": False}])
+        by_id = {l["id"]: l for l in self.data["levels"]}
+        self.assertEqual(by_id["D1"]["obstacles"][9]["blockers"][0]["size"], [1.5, 1.5])
+        self.assertEqual(by_id["D1"]["obstacles"][8]["blockers"], [])  # obj11_02: decor only
+        c1 = by_id["C1"]["obstacles"]
+        self.assertEqual(c1[8]["blockers"][0]["shape"], "circle")
+        self.assertEqual(c1[8]["blockers"][0]["offset"], [0.0, 1.4])
+        self.assertEqual(c1[10]["blockers"][0]["radius"], 0.5)
+        # trigger-only spikes never block; the mineral prefab's Body-layer collider is filtered out
+        self.assertEqual(by_id["A1"]["obstacles"][5]["blockers"], [])
+        self.assertEqual(self.data["boss_rooms"]["prefabs"]["mineral_crystal"]["blockers"], [])
+
+    def test_malformed_or_missing_blocker_is_an_error(self) -> None:
+        data = copy.deepcopy(self.data)
+        st = data["shop"]["statues"]["statue_01"]
+        st["blockers"][0]["size"] = [2.0, -1.0]
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("statue 'statue_01'" in e and "malformed blocker" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        lv = next(l for l in data["levels"] if l["id"] == "A1")
+        del lv["obstacles"][1]["blockers"]  # box02 without its collider
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("obstacle[1]" in e and "blockers" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        data["shop"]["machines"]["vending_machine_i"]["blockers"] = []
+        errors, _warnings = validate_data.run_checks(data)
+        self.assertTrue(any("machine 'vending_machine_i'" in e for e in errors), errors)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,2 @@
+ [info] Level A1 (1-1) biome 1-forest chest_level 1 map_long 3 pool 5 species
+ [info] GameScene: SK_ROOM_TELEPORT -> room 1 spawn point

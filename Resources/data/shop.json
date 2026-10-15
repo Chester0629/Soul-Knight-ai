@@ -67,19 +67,61 @@
         "health_pot"
       ],
       "sprite": "objects3_10",
-      "display": "objects3_13"
+      "display": "objects3_13",
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
+      ]
     },
     "vending_machine_w": {
       "price": 12,
       "items": [],
       "sprite": "objects3_11",
-      "display": "objects3_14"
+      "display": "objects3_14",
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.5,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
+      ]
     },
     "water_dispenser": {
       "price": 0,
       "items": [],
       "sprite": "c06_4",
-      "display": ""
+      "display": "",
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.5
+          ],
+          "trigger": false
+        }
+      ]
     }
   },
   "statues": {
@@ -102,6 +144,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_02": {
@@ -123,6 +179,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_03": {
@@ -144,6 +214,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_04": {
@@ -165,6 +249,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_05": {
@@ -186,6 +284,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_06": {
@@ -207,6 +319,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     },
     "statue_07": {
@@ -228,6 +354,20 @@
       "light_sort": [
         5,
         0
+      ],
+      "blockers": [
+        {
+          "shape": "box",
+          "size": [
+            2.0,
+            2.0
+          ],
+          "offset": [
+            0.0,
+            1.0
+          ],
+          "trigger": false
+        }
       ]
     }
   }
