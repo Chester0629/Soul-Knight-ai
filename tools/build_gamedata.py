@@ -32,6 +32,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import bullet_geometry as bgeo  # noqa: E402  (P3.0c bullet prefab geometry)
+
 SRC_MB = ROOT / "1.07" / "MonoBehaviour"
 SRC_TXT = ROOT / "1.07" / "TextAsset"
 OUT = ROOT / "Resources" / "data"
@@ -649,22 +652,41 @@ def prefab_geometry(path: Path) -> dict:
     return out
 
 
-def bullet_collider(path: Path):
-    """First enabled Circle/Box collider (file order) on a bullet prefab, in units
-    (lossy-scaled), or None (no collider / capsule / polygon only)."""
+_BGEO_CTX = None
+
+
+def _bullet_geom_ctx() -> dict:
+    """Cached lookup tables for bullet_geometry.bullet_geometry (guid -> class / stem)."""
+    global _BGEO_CTX
+    if _BGEO_CTX is not None:
+        return _BGEO_CTX
+    names = {}
+    trig = bgeo.class_closure(_ASM_CSHARP, "RGBulletTrigger")
+    for c in set(bgeo.RGBULLET_FAMILY) | trig:
+        g = _class_guid(c)
+        if g:
+            names[g] = c
+    gi = _guid_index()
+    sprite_dir = OUT.parent / "sprites"
+    _BGEO_CTX = {
+        "class_names": names,
+        "trigger_names": trig,
+        "guid_stem": {g: p.stem for g, p in gi.items()},
+        "guid_path": gi,
+        "sprite_exists": lambda png: (sprite_dir / png).is_file(),
+        "pivots": _sprite_pivots(),
+    }
+    return _BGEO_CTX
+
+
+def bullet_geometry_of(path: Path) -> dict:
+    """P3.0c: collider / visual / hit_object / bullet_class of one bullet prefab (see
+    tools/bullet_geometry.py). Replaces the old 'first enabled Circle/Box in file order'."""
+    ctx = _bullet_geom_ctx()
     text = path.read_text(encoding="utf-8", errors="ignore")
-    docs, names, scale, father, root, pos = _parse_prefab(text)
-    for fid, (cid, b) in docs.items():
-        if cid not in (58, 61) or not _enabled(b):
-            continue
-        m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
-        if m is None:
-            continue
-        centre = _to_root(m.group(1), _vec2(b, "m_Offset") or (0.0, 0.0), scale, father, pos, root)
-        cj = _collider_json(cid, b, _lossy(m.group(1), scale, father), centre)
-        if cj is not None:
-            return cj
-    return None
+    return bgeo.bullet_geometry(
+        text, class_names=ctx["class_names"], trigger_names=ctx["trigger_names"],
+        guid_stem=ctx["guid_stem"], sprite_exists=ctx["sprite_exists"], pivots=ctx["pivots"])
 
 
 def _entity_prefab_index() -> dict:
@@ -1012,6 +1034,7 @@ def build_bullet_table(bullet_groups, idx: Index):
         p = class_found.get(g) if g else None
         if p is None:
             rec = {"id": stem, **clean(data, idx, stem), "_source": "1.07"}
+            rec["collider_none"] = "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
             out.append(rec)
             class_fallback.append(stem)
             continue
@@ -1022,9 +1045,7 @@ def build_bullet_table(bullet_groups, idx: Index):
             v = _field(block, k)
             if v is not None:
                 rec[k] = v
-        bc = bullet_collider(p)
-        if bc is not None:
-            rec["collider"] = bc
+        rec.update(bullet_geometry_of(p))
         out.append(rec)
         n_class_real += 1
     family_guids = [g for g in (_class_guid(c) for c in _RGBULLET_FAMILY) if g]
@@ -1041,15 +1062,149 @@ def build_bullet_table(bullet_groups, idx: Index):
             v = _field(block, k)
             if v is not None:
                 rec[k] = v
-        bc = bullet_collider(f)
-        if bc is not None:
-            rec["collider"] = bc
+        rec.update(bullet_geometry_of(f))
         out.append(rec)
         n_real += 1
     print(f"  bullets: {n_class_real}/{len(bullet_groups)} 1.07 class rows resolved to a "
           f"real 1.7.10 bullet prefab ({len(class_fallback)} stayed 1.07: "
           f"{class_fallback if class_fallback else 'none'}) + {n_real} real 1.7.10 "
           f"prefab rows ({len(n_skip)} non-RGBullet-family prefabs skipped)")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# P3.0c: enemy / boss bullet prefab links + the bullet hit-effect table.
+# FAITHFUL @ the species prefab: an enemy's gun MonoBehaviour serialises `bullet:` (the
+# bullet prefab it fires) and `bullet_speed:`; a boss serialises bullet01..bullet06.
+# ---------------------------------------------------------------------------
+_ENEMY_BULLET_RE = re.compile(r"(?m)^\s*bullet: \{fileID: \d+, guid: ([0-9a-f]{32})")
+_ENEMY_BULLET_SPEED_RE = re.compile(r"(?m)^\s*bullet_speed: ([-0-9.eE+]+)\s*$")
+
+
+def attach_enemy_dead_tap(rows: list) -> list:
+    """P3.0c: `dead_tap` -- the root-space position (units) of the species prefab's `dead_tap`
+    child GameObject (the death emoticon: SpriteRenderer shown by the Animator state
+    `char_tap_dead` = biaoqing_11.png, the grey skull speech bubble). FAITHFUL @ the prefab
+    (e_orc01: (0.8, 1.2) above the feet). Species without that child get no key."""
+    if not EP_ASSETS.is_dir():
+        return rows
+    pidx = _entity_prefab_index()
+    n = 0
+    for r in rows:
+        p = pidx.get(r["id"])
+        if p is None:
+            continue
+        t = bgeo.PrefabTree(p.read_text(encoding="utf-8", errors="ignore"))
+        root = next((g for g in t.go_name if t.go_father.get(g) is None), None)
+        tap = next((g for g, nm in t.go_name.items() if nm == "dead_tap"), None)
+        if root is None or tap is None:
+            continue
+        x, y, _rot, _sx, _sy = t.world(tap, root, (0.0, 0.0))
+        r["dead_tap"] = [round(x, 4) + 0.0, round(y, 4) + 0.0]
+        n += 1
+    print(f"  dead_tap: {n}/{len(rows)} species carry the death-emoticon child")
+    return rows
+
+
+def attach_enemy_bullets(rows: list, bullet_ids: set) -> list:
+    """Add bullet_prefab (resolved into bullets.json), bullet_refs (every stem the prefab
+    names), bullet_unresolved (stems outside bullets.json: melee prefabs, lasers, ...) and
+    bullet_speed (first gun's data speed, Unity units/s) to every enemies.json row (in place).
+    A boss's bullet_prefab is the first of bullet01..06 that resolves: the boss attack
+    jump-table is truncated (PORT CHOICE T-65), so the primary attack's bullet stands in."""
+    if not EP_ASSETS.is_dir():
+        return rows
+    pidx = _entity_prefab_index()
+    gi = _guid_index()
+    n_ok, unresolved = 0, {}
+    for r in rows:
+        p = pidx.get(r["id"])
+        if p is None:
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        refs = []
+        for g in _ENEMY_BULLET_RE.findall(text):
+            bp = gi.get(g)
+            if bp is not None:
+                refs.append(bp.stem)
+        for bk in _BOSS_BULLET_KEYS:
+            m = re.search(r"(?m)^\s*" + bk + r": \{fileID: \d+, guid: ([0-9a-f]{32})", text)
+            bp = gi.get(m.group(1)) if m else None
+            if bp is not None:
+                refs.append(bp.stem)
+        if not refs:
+            continue
+        r["bullet_refs"] = refs
+        resolved = next((x for x in refs if x in bullet_ids), None)
+        if resolved is not None:
+            r["bullet_prefab"] = resolved
+            n_ok += 1
+        bad = [x for x in refs if x not in bullet_ids]
+        if bad:
+            r["bullet_unresolved"] = bad
+            unresolved[r["id"]] = bad
+        sp = _ENEMY_BULLET_SPEED_RE.findall(text)
+        if sp:
+            r["bullet_speed"] = float(sp[0])
+    print(f"  enemy bullets: {n_ok} species resolved to a bullets.json prefab, "
+          f"{sum(1 for r in rows if 'bullet_refs' in r)} reference a bullet; "
+          f"{len(unresolved)} have unresolved refs")
+    return rows
+
+
+def build_bullet_effects(bullet_rows: list):
+    """bullet_effects.json: the hit_object effect prefabs (rgprefab/item/hit_*.prefab) the
+    bullet rows reference. FAITHFUL per prefab: SpriteRenderer m_Color (tint), root localScale,
+    Animator controller -> default state clip -> m_Sprite key frames at the clip's sample rate,
+    ParticleSystem presence (NOT modelled: reported as `particles`), sorting layer. The clip
+    key list may end with a null sprite key (fileID 0) = the sprite disappears; `duration_s` is
+    the time of that key (else frames * step)."""
+    if not EP_ASSETS.is_dir():
+        return None
+    gi = _guid_index()
+    sprite_dir = OUT.parent / "sprites"
+    by_stem = {}
+    for g, p in gi.items():
+        if p.suffix == ".prefab":
+            by_stem.setdefault(p.stem, p)
+    wanted = sorted({r["hit_object"] for r in bullet_rows if r.get("hit_object")})
+    out = {}
+    for stem in wanted:
+        p = by_stem.get(stem)
+        if p is None or not p.is_file():
+            out[stem] = {"_unresolved": True}
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        rec = {"_source": "1.7.10", "_prefab": str(p.relative_to(EP_ASSETS)).replace("\\", "/")}
+        col = re.search(r"m_Color: \{r: ([-0-9.eE+]+), g: ([-0-9.eE+]+), b: ([-0-9.eE+]+), "
+                        r"a: ([-0-9.eE+]+)\}", text)
+        rec["color"] = [round(float(x), 4) for x in col.groups()] if col else [1.0, 1.0, 1.0, 1.0]
+        sc = re.search(r"m_LocalScale: \{x: ([-0-9.eE+]+), y: ([-0-9.eE+]+)", text)
+        rec["scale"] = [float(sc.group(1)), float(sc.group(2))] if sc else [1.0, 1.0]
+        so = re.search(r"m_SortingLayer: (\d+)", text)
+        rec["sorting_layer"] = int(so.group(1)) if so else 0
+        rec["particles"] = "ParticleSystem:" in text
+        g = re.search(r"m_Controller: \{fileID: \d+, guid: ([0-9a-f]{32})", text)
+        ctrl = gi.get(g.group(1)) if g else None
+        frames, sr = [], 0
+        if ctrl is not None and ctrl.is_file():
+            base, default, states = _controller_states(ctrl, stem)
+            clip_guid = states.get(default) or next(iter(states.values()), None)
+            clip = gi.get(clip_guid) if clip_guid else None
+            if clip is not None and clip.is_file():
+                frames, sr, _miss = _anim_frames(clip, gi, sprite_dir)
+                ctext = clip.read_text(encoding="utf-8", errors="ignore")
+                times = [float(x) for x in re.findall(
+                    r"- time: ([-0-9.eE+]+)\n\s+value: \{fileID: \d+", ctext)]
+                if times and sr:
+                    step = 1.0 / sr
+                    rec["duration_s"] = round(times[-1] if len(times) > len(frames)
+                                              else len(frames) * step, 4)
+        rec["frames"] = frames
+        rec["sample_rate"] = sr
+        out[stem] = rec
+    print(f"  bullet effects: {len(out)} hit prefabs "
+          f"({sum(1 for v in out.values() if v.get('frames'))} with a frame clip)")
     return out
 
 
@@ -1205,7 +1360,9 @@ def attach_bullet_buffs(bullet_rows: list) -> list:
         if row is not None:
             row["buff"] = rec
         else:
-            new_row = {"id": f.stem, "_source": "1.7.10", "_buff_only": True, "buff": rec}
+            new_row = {"id": f.stem, "_source": "1.7.10", "_buff_only": True, "buff": rec,
+                       "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), "
+                                        "driven by its own subsystem, not a flying bullet"}
             for k in _BULLET_FIELDS:
                 v = _field(text, k)
                 if v is not None:
@@ -2314,6 +2471,14 @@ def main() -> int:
             r["_source"] = "1.07"
     new_bullets = attach_bullet_buffs(new_bullets)
     counts["bullets"] = write("bullets", new_bullets)
+    # P3.0c: only rows that are real flying bullets (an RGBullet-family script, a collider AND a
+    # sprite) can be an enemy's bullet; buff-only sword/spear rows and glow-only carriers are not.
+    bullet_ids = {r["id"] for r in new_bullets
+                  if r.get("bullet_class") and isinstance(r.get("collider"), dict)
+                  and isinstance(r.get("visual"), dict) and r["visual"].get("sprite")}
+    effects = build_bullet_effects(new_bullets)
+    if effects is not None:
+        counts["bullet_effects"] = write("bullet_effects", effects)
 
     # ENEMY RE-KEY: enemies.json is now ONE ENTRY PER SPECIES (from the RE'd
     # enemies.csv ground truth), not one per AI-class template. Falls back to the
@@ -2322,6 +2487,8 @@ def main() -> int:
     species = build_enemy_species_table()
     if species:
         attach_enemy_geometry(species)
+        attach_enemy_bullets(species, bullet_ids)
+        attach_enemy_dead_tap(species)
         counts["enemies"] = write("enemies", species)
     else:
         print("FALLBACK: enemies.csv missing -- enemies.json degrades to the 1.07 per-AI-class table (16)")

@@ -118,6 +118,53 @@ inline bool SegmentBlockedByAny(const std::vector<Util::Collider> &blockers, glm
     return false;
 }
 
+/// P3.0c (T-64): EXACT swept test of an ORIENTED BOX against the blockers. The box (half extents
+/// @p half, x axis at @p angle) has its centre at origin + @p centreOffset; the origin moves
+/// @p from -> @p to. Returns the earliest contact fraction t in [0, 1] (0 = already touching at the start;
+/// touching counts), or -1 when the whole path is free. Per blocker the origin path is a segment
+/// against the exact Minkowski sum: circle blocker -> the box grown by the circle radius with rounded
+/// corners (Swept::SegmentOrientedRoundedBoxEntry); AABB blocker -> the octagon of the 16 corner sums
+/// (Swept::SegmentBoxSumEntry). @p contactOffset / @p contactRadius describe a probe circle for
+/// WorldCollision::DamageObstacle, relative to the bullet origin at the contact: a radius-1 circle on the
+/// blocker point nearest to the box centre (inside the blocker, so Util::Overlap sees it).
+inline float SweepBoxBlockedByAny(const std::vector<Util::Collider> &blockers, glm::vec2 from, glm::vec2 to,
+                                  glm::vec2 centreOffset, glm::vec2 half, float angle,
+                                  glm::vec2 &contactOffset, float &contactRadius) {
+    float best = -1.0F;
+    const Util::Collider *hit = nullptr;
+    for (const Util::Collider &b : blockers) {
+        const glm::vec2 p0 = from + centreOffset - b.center;
+        const glm::vec2 p1 = to + centreOffset - b.center;
+        float t = 0.0F;
+        const bool h = b.shape == Util::ColliderShape::Circle
+                           ? Swept::SegmentOrientedRoundedBoxEntry(p0, p1, half, angle, b.radius, t)
+                           : Swept::SegmentBoxSumEntry(p0, p1, b.halfSize, half, angle, t);
+        if (h && (best < 0.0F || t < best)) {
+            best = t;
+            hit = &b;
+        }
+    }
+    contactOffset = glm::vec2{0.0F, 0.0F};
+    contactRadius = 1.0F;
+    if (hit != nullptr) {
+        const glm::vec2 origin = from + (to - from) * best;
+        const glm::vec2 centre = origin + centreOffset;
+        glm::vec2 probe = centre;
+        if (hit->shape == Util::ColliderShape::Circle) {
+            const glm::vec2 d = centre - hit->center;
+            const float len = std::sqrt(d.x * d.x + d.y * d.y);
+            const float k = hit->radius * 0.98F;
+            probe = len > k && len > 1e-6F ? hit->center + d / len * k : centre;
+        } else {
+            const glm::vec2 lo = hit->Min();
+            const glm::vec2 hi = hit->Max();
+            probe = {std::clamp(centre.x, lo.x, hi.x), std::clamp(centre.y, lo.y, hi.y)};
+        }
+        contactOffset = probe - origin;
+    }
+    return best;
+}
+
 /// Sampled nearest-free search: the smallest-distance point around @p pos for which
 /// @p isFree(point) holds, or @p pos itself when @p isFree(pos) already holds or nothing free is
 /// found within @p maxPx. 2 px ring spacing x 32 directions, then the first free ring is refined

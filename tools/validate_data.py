@@ -74,6 +74,60 @@ KNOWN_UNRESOLVED_BULLET_REFS = {
 }
 
 
+# P3.0c: bullets.json rows that carry NO hit collider, each with the reason (AC4: every bullet
+# prefab's collider resolution is reported; the previously lost 41 are resolved or listed here).
+# The gate fails if a row loses its collider without being listed, or is listed while it has one.
+KNOWN_NO_COLLIDER = {
+    # class rows whose first prefab is a non-RGBullet subsystem prefab (skill / explosion bodies
+    # ported in src/combat/: BulletBat, BulletBoom, BulletThunder); no flying hit volume
+    "BulletBat": "class row -> bullet_bat prefab (BulletBat script): skill subsystem, not an RGBullet",
+    "BulletBoom": "class row -> bullet_boom prefab (BulletBoom script): explosion subsystem",
+    "BulletThunder": "class row -> thunder prefab (BulletThunder script): skill subsystem",
+    # 1.07-only class rows: no 1.7.10 prefab uses the script
+    "BulletBuleLight": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletCoinExplode": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletEPoly": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletFire": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletGas": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletGreenLight": "1.07-only class row (no 1.7.10 prefab)",
+    "BulletPolymerization": "1.07-only class row (no 1.7.10 prefab)",
+    # RGBullet prefabs with only the `light` glow child: no collider component at all
+    "_bullet_10": "RGSBullet02 prefab with only a `light` glow child (no collider, no sprite)",
+    "bullet_49": "RGBullet prefab with only a `light` glow child (no collider, no sprite)",
+    "bullet_e_18": "RGBullet prefab with only a `light` glow child (no collider, no sprite)",
+    "bullet_e_19": "RGBullet prefab with only a `light` glow child (no collider, no sprite)",
+    # buff-only rows appended by attach_bullet_buffs(): sword / spear / laser prefabs
+    "bullet_9": "buff-only row (laser prefab)",
+    "spear_2_fire": "buff-only row (spear prefab)",
+    "sword_1_75_gourd": "buff-only row (sword prefab)",
+    "sword_2_dizzy": "buff-only row (sword prefab)",
+    "sword_2_fire": "buff-only row (sword prefab)",
+    "sword_2_ice": "buff-only row (sword prefab)",
+    "sword_bit_fire": "buff-only row (sword prefab)",
+    "sword_bit_ice": "buff-only row (sword prefab)",
+}
+# P3.0c: rows with a collider but no sprite renderer other than `light` (the 4 glow carriers above
+# have neither); every other RGBullet-family row must carry a visual sprite.
+KNOWN_NO_VISUAL = {
+    # glow-only carriers (also in KNOWN_NO_COLLIDER)
+    "_bullet_10", "bullet_49", "bullet_e_18", "bullet_e_19",
+    # class-example prefabs whose body SpriteRenderer is DISABLED in the prefab (m_Enabled 0); no
+    # weapon or enemy references any of them (checked below)
+    "Bullet04", "Bullet05", "BulletBeetle", "_bullet_68", "_bullet_69", "_bullet_70", "_bullet_71",
+    "_bullet_8", "_bullet_9",
+}
+# P3.0c: the only KNOWN_NO_VISUAL row a weapon fires (weapon_054's bullet_49: a glow-only carrier,
+# drawn with the legacy weapon art by GameScene::SyncBulletViews).
+KNOWN_NO_VISUAL_WEAPON_REFS = {"bullet_49"}
+# P3.0c: species whose sprite set has no lying-corpse clip ("dead" / "<x>_dead"); GameScene logs
+# "Corpse: <id> has no dead clip" and draws no corpse for them (the body just disappears).
+KNOWN_NO_CORPSE = {"boss04", "boss06", "e_tentacle", "e_tentacle_temp"}
+# P3.0c: species whose prefab names no RGBullet-family bullet (melee sword / spear prefabs,
+# lasers, explosions, or no gun at all): the sim substitutes the generic bullet_e_1 (PORT CHOICE
+# T-66) and GameScene logs each one. The set is pinned so a regression cannot hide inside it.
+KNOWN_NO_BULLET_SPECIES_COUNT = 54
+
+
 def load(name: str, errors: list[str]):
     p = DATA / f"{name}.json"
     if not p.exists():
@@ -110,6 +164,8 @@ def load_all_tables() -> dict:
     # such checkout's gate RED.
     audio_path = DATA / "audio.json"
     data["audio"] = json.loads(audio_path.read_text(encoding="utf-8")) if audio_path.exists() else None
+    effects_path = DATA / "bullet_effects.json"  # optional like audio (AssetRipper-derived)
+    data["bullet_effects"] = json.loads(effects_path.read_text(encoding="utf-8")) if effects_path.exists() else None
     sprites_path = DATA / "sprites.json"  # optional like audio (AssetRipper-derived)
     data["sprites"] = json.loads(sprites_path.read_text(encoding="utf-8")) if sprites_path.exists() else None
     data["_load_errors"] = load_errors
@@ -679,7 +735,91 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
         need(n_bc > 0, "bullets.json has no bullet prefab colliders (run build_gamedata.py)")
         warnings.append(f"colliders: {n_bc}/{len(bullets)} bullet rows carry a prefab collider "
                         f"(others use the sim fallback radius)")
+    # --- P3.0c: bullet collider resolution / visual / hit effect, enemy bullet links ---
+    if bullets:
+        effects = data.get("bullet_effects")
+        by_id_b = {b.get("id"): b for b in bullets}
+        for b in bullets:
+            bid = b.get("id")
+            col = b.get("collider")
+            if isinstance(col, dict):
+                need(col.get("state") in ("enabled", "on_awake"),
+                     f"bullets.json {bid}: collider.state must be 'enabled' or 'on_awake' (run build_gamedata.py)")
+                if "rot" in col:
+                    need(isinstance(col["rot"], (int, float)), f"bullets.json {bid}: collider.rot must be a number")
+                need(bid not in KNOWN_NO_COLLIDER,
+                     f"bullets.json {bid} now has a collider: remove it from KNOWN_NO_COLLIDER")
+            else:
+                need(bid in KNOWN_NO_COLLIDER,
+                     f"bullets.json {bid}: no collider and not explained in KNOWN_NO_COLLIDER "
+                     f"(collider_none={b.get('collider_none')!r})")
+                need(bool(b.get("collider_none")),
+                     f"bullets.json {bid}: a row without a collider must say why (collider_none)")
+            vis = b.get("visual")
+            if bid in KNOWN_NO_COLLIDER and b.get("_buff_only") is None and b.get("_source") == "1.07":
+                pass  # 1.07-only class rows have no prefab: no visual either
+            elif isinstance(vis, dict):
+                need(bool(vis.get("sprite")), f"bullets.json {bid}: visual has no resolved sprite png")
+                for k in ("scale", "offset", "pivot"):
+                    need(isinstance(vis.get(k), list) and len(vis[k]) == 2,
+                         f"bullets.json {bid}: visual.{k} must be [x, y]")
+            elif bid not in KNOWN_NO_VISUAL and bid in by_id_b and isinstance(col, dict):
+                errors.append(f"bullets.json {bid}: has a collider but no visual (run build_gamedata.py)")
+            ho = b.get("hit_object")
+            if ho:
+                need(isinstance(effects, dict) and isinstance(effects.get(ho), dict) and
+                     effects[ho].get("frames"),
+                     f"bullets.json {bid}: hit_object {ho!r} has no frames in bullet_effects.json")
+        for w in (data.get("weapons") or []):
+            bp = w.get("bullet_prefab")
+            if bp in KNOWN_NO_VISUAL:
+                need(bp in KNOWN_NO_VISUAL_WEAPON_REFS,
+                     f"weapons.json {w.get('id')} fires {bp!r}, which has no sprite: not allowed")
+        for ko in KNOWN_NO_COLLIDER:
+            need(ko in by_id_b, f"KNOWN_NO_COLLIDER lists {ko!r}, which is not a bullets.json row")
+        if isinstance(effects, dict):
+            for eid, e in effects.items():
+                need(isinstance(e.get("frames"), list) and e["frames"] and isinstance(e.get("color"), list)
+                     and len(e["color"]) == 4 and e.get("sample_rate", 0) > 0,
+                     f"bullet_effects.json {eid}: needs frames, a 4-number color and a sample rate")
+                for f in e.get("frames", []):
+                    need((ROOT / "Resources" / "sprites" / f).exists() or not (ROOT / "Resources" / "sprites").is_dir(),
+                         f"bullet_effects.json {eid}: frame {f} missing from Resources/sprites")
+    if enemies and any("bullet_refs" in e for e in enemies):
+        bullet_ids = {b.get("id") for b in (bullets or [])}
+        no_bullet = []
+        for e in enemies:
+            bp = e.get("bullet_prefab")
+            if bp is not None:
+                need(bp in bullet_ids, f"enemies.json {e.get('id')}: bullet_prefab {bp!r} is not a bullets.json row")
+            else:
+                no_bullet.append(e.get("id"))
+        need(len(no_bullet) == KNOWN_NO_BULLET_SPECIES_COUNT,
+             f"enemies.json: {len(no_bullet)} species without a bullets.json bullet, pinned "
+             f"{KNOWN_NO_BULLET_SPECIES_COUNT} (T-66): {sorted(no_bullet)}")
+        warnings.append(f"enemy bullets: {len(enemies) - len(no_bullet)}/{len(enemies)} species fire an "
+                        f"RGBullet-family bullet; {len(no_bullet)} use the generic bullet_e_1 (T-66)")
+    elif enemies:
+        errors.append("enemies.json rows carry no bullet_refs (run build_gamedata.py)")
     sprites = data.get("sprites")
+    if isinstance(sprites, dict) and enemies:
+        # P3.0c: every sprited species needs a lying-corpse state ('dead' / '<x>_dead', never the
+        # char_* emoticons) and its death emoticon frame (char_tap_dead).
+        missing_dead, missing_tap = [], []
+        for e in enemies:
+            sp = sprites.get(e.get("id"))
+            if not isinstance(sp, dict):
+                continue
+            st = sp.get("states", {})
+            has_dead = any(("dead" in k) and not k.startswith("char_") and v for k, v in st.items())
+            if not has_dead:
+                missing_dead.append(e.get("id"))
+            if "dead_tap" in e and not st.get("char_tap_dead"):
+                missing_tap.append(e.get("id"))
+        need(set(missing_dead) == KNOWN_NO_CORPSE,
+             f"sprites.json: species without a corpse (dead) state {sorted(missing_dead)} != pinned "
+             f"{sorted(KNOWN_NO_CORPSE)}")
+        need(not missing_tap, f"sprites.json: species with dead_tap but no char_tap_dead frame: {missing_tap}")
     if isinstance(sprites, dict):
         n_p = sum(1 for v in sprites.values() if isinstance(v, dict) and v.get("pivots"))
         need(n_p == len([v for v in sprites.values() if isinstance(v, dict)]),
@@ -694,8 +834,35 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
     return errors, warnings
 
 
+def bullet_collider_report(bullets: list) -> list[str]:
+    """AC4: one line per bullets.json row -- the collider resolution (shape, size, offset, rot,
+    state) or the explained reason it has none."""
+    out = []
+    for b in bullets:
+        c = b.get("collider")
+        if isinstance(c, dict):
+            dims = (f"r={c.get('radius')}" if c.get("shape") == "circle" else f"size={c.get('size')}")
+            line = (f"{b.get('id'):<24} {c.get('state'):<9} {c.get('shape'):<6} {dims} off={c.get('offset')}"
+                    f"{' rot=' + str(c['rot']) if 'rot' in c else ''}"
+                    f"{'' if c.get('trigger') else ' NON-TRIGGER'}"
+                    f"{' [' + b['collider_note'] + ']' if b.get('collider_note') else ''}")
+        else:
+            line = f"{b.get('id'):<24} NONE      {b.get('collider_none')} | {KNOWN_NO_COLLIDER.get(b.get('id'), 'UNEXPLAINED')}"
+        out.append(line)
+    return out
+
+
 def main() -> int:
+    import sys
     data = load_all_tables()
+    if "--bullet-report" in sys.argv:
+        rows = data.get("bullets") or []
+        print(f"BULLET COLLIDER RESOLUTION: {len(rows)} rows, "
+              f"{sum(1 for b in rows if isinstance(b.get('collider'), dict))} with a collider, "
+              f"{sum(1 for b in rows if isinstance(b.get('collider'), dict) and b['collider'].get('state') == 'on_awake')} on_awake")
+        for line in bullet_collider_report(rows):
+            print("  " + line)
+        return 0
     errors, warnings = run_checks(data)
 
     print("=" * 56)

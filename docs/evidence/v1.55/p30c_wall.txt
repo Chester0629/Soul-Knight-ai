@@ -1,0 +1,2 @@
+ [info] SK_FORCE_FIRE: from frame 100 aim (0.00,1.00) for 40 frames
+ [info] BulletImpact: frame 111 wall bullet_0 camp 0 at (10.3,191.8) heading 87.7 deg effect hit_yellow

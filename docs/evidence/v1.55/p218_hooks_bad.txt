@@ -1,0 +1,4 @@
+ [warning] SK_FORCE_DASH rejected: bad direction (need finite, non-zero, |v| <= 4096)
+ [warning] SK_WALK_DIR rejected: bad direction (need finite, non-zero, |v| <= 4096)
+ [warning] SK_TRACE_POS rejected: bad frame 'x'
+ [warning] SK_DT_SPIKE rejected: bad ms (need finite, 0 < ms <= 3.6e6)

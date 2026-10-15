@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "data/GameData.hpp"
+#include "sim/BulletShape.hpp"
 #include "game/WorldScale.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimMath.hpp"
@@ -106,17 +107,53 @@ struct BodyGeom {
         t = th;
         return true;
     }
+
+    /// P3.0c: SWEPT hit test of an arbitrary bullet SHAPE (circle with offset, or an ORIENTED box)
+    /// over one fixed step. @p b0 / @p b1 are the bullet ORIGIN at the step start / end, @p w the
+    /// shape placed for this step (sim/BulletShape.hpp PlaceShape: centre offset rotated by the
+    /// bullet heading, box axis angle = heading + the prefab box rotation; the orientation is held
+    /// constant over the step). A circle reduces to HurtSweep at the shifted centre (bit-identical
+    /// to the legacy path when the offset is 0). A box is exact: the target's relative motion is a
+    /// segment tested against the Minkowski sum of the two shapes -- the oriented box grown by the
+    /// hurt radius for a circle hurtbox, the octagon of the 16 corner sums for a box hurtbox.
+    bool HurtSweepShape(glm::vec2 pos0, glm::vec2 pos1, glm::vec2 b0, glm::vec2 b1,
+                        const BulletShapeWorld &w, float &t) const {
+        if (w.kind != BulletShape::Kind::Box) {
+            return HurtSweep(pos0, pos1, b0 + w.centreOffset, b1 + w.centreOffset, w.radius, t);
+        }
+        const glm::vec2 q0 = b0 + w.centreOffset - (pos0 + hurtOffsetPx);
+        const glm::vec2 q1 = b1 + w.centreOffset - (pos1 + hurtOffsetPx);
+        return hurtIsBox ? Swept::SegmentBoxSumEntry(q0, q1, hurtHalfPx, w.half, w.boxAngle, t)
+                         : Swept::SegmentOrientedRoundedBoxEntry(q0, q1, w.half, w.boxAngle,
+                                                                 hurtRadiusPx, t);
+    }
+
+    /// HurtSweepShape restricted to the part of the step before a wall contact (same TARGET-FIRST
+    /// tie rule as HurtSweepBeforeWall).
+    bool HurtSweepShapeBeforeWall(glm::vec2 pos0, glm::vec2 pos1, glm::vec2 b0, glm::vec2 b1,
+                                  const BulletShapeWorld &w, float tWall, float &t) const {
+        float th = 0.0F;
+        if (!HurtSweepShape(pos0, pos1, b0, b1, w, th)) {
+            return false;
+        }
+        if (tWall >= 0.0F && th > tWall) {
+            return false;
+        }
+        t = th;
+        return true;
+    }
 };
 
 /// Equivalent circle radius (px) of a collider: a circle's radius, a box's inscribed
 /// circle (its smaller half extent); 0 when the collider is absent.
 ///
-/// PORT CHOICE (T-52): a BOX bullet collider is flattened to its inscribed circle and the
-/// collider's OFFSET IS IGNORED (the bullet's hit circle stays centred on the bullet
-/// position). The original tests the real oriented BoxCollider2D at its offset against
-/// the target; the sim keeps one circle per bullet (cheap, deterministic, rotation-free).
-/// Consequence: an elongated box bullet hits slightly SHORT along its long axis. Circle
-/// bullets (the large majority) are exact apart from the ignored offset.
+/// P3.0c: NO LONGER the sim's bullet collision. The sim sweeps the bullet's real prefab SHAPE
+/// (BulletShape: circle or oriented box at its offset, BodyGeom::HurtSweepShape); this inscribed
+/// radius survives as BulletShape::InscribedRadius()'s legacy twin, the fallback circle of a
+/// bullet with no shape (FireIntent::radiusPx), and the "old rule" the AC2 counterexample tests
+/// compare against. (The earlier T-52 rule flattened a box to this circle at the bullet origin and
+/// dropped its offset, so an elongated box bullet hit SHORT of its sprite: weapon_000's box
+/// reaches 16 px ahead, this circle 6.4 px.)
 inline float EquivalentRadiusPx(const ColliderDef &c) {
     switch (c.shape) {
     case ColliderDef::Shape::Circle:

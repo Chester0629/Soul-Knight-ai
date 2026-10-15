@@ -26,6 +26,31 @@ Simulation::Simulation(int runSeed, WorldCollision *world)
 
 void Simulation::SetPlayerStats(const Game::CombatStats &stats) { m_PlayerStats = stats; }
 
+std::vector<Simulation::BulletImpact> Simulation::DrainImpacts() {
+    std::vector<BulletImpact> out;
+    out.swap(m_Impacts);
+    return out;
+}
+
+namespace {
+/// PORT CHOICE (T-66): the bullet that stands in for a species whose prefab fires no
+/// RGBullet-family bullet (melee sword/spear prefabs, lasers, explosions: 54 of 146 species have
+/// no bullets.json bullet; the gate lists them). bullet_e_1 (16x16 red orb, box 0.3 x 0.3) is
+/// the most widely shared enemy bullet. The scene logs each substituted species.
+constexpr const char *kGenericEnemyBulletId = "bullet_e_1";
+} // namespace
+
+BulletLaunch Simulation::LaunchFor(const Game::EnemyDef &def) const {
+    if (m_Data == nullptr) {
+        return BulletLaunch{};
+    }
+    BulletLaunch l = MakeBulletLaunch(*m_Data, def.bulletPrefab);
+    if (l.bulletIdx < 0) {
+        l = MakeBulletLaunch(*m_Data, kGenericEnemyBulletId);
+    }
+    return l;
+}
+
 std::vector<SimEvent> Simulation::DrainEvents() {
     std::vector<SimEvent> out;
     out.swap(m_Events);
@@ -704,12 +729,44 @@ void Simulation::DrainFireIntents() {
 // never be tunnelled (it blocks an interval of at least 2r >= spacing along the path). The
 // contact point is accurate to 1/256 of a sample gap. A bullet spawned inside a wall AND a
 // target (start overlap, t = 0 <= tw) hits the target first, then the wall consumes it.
+namespace {
+/// P3.0c: the DamageObstacle probe of a wall contact, relative to the bullet origin. In the exact world
+/// (GameScene) it is a radius-1 circle on the blocker point nearest the box centre; in a circle-only
+/// world it is the covering-row circle that touched first (T-64, CoverCircles.hpp).
+struct WallContact {
+    glm::vec2 centre{0.0F, 0.0F}; ///< circle centre - bullet origin, world axes.
+    float radius = 0.0F;
+};
+
+/// A circle shape is one SweepBlocked call (offset 0 == the legacy origin circle, bit-identical); an
+/// oriented BOX goes through WorldCollision::SweepBoxBlocked (T-64): exact in the live GameScene world,
+/// a covering row of circles (with registered slivers, CoverCircles.hpp) in circle-only worlds.
+float SweepShapeBlocked(WorldCollision &world, glm::vec2 from, glm::vec2 to, const BulletShapeWorld &sw,
+                        WallContact &hit) {
+    if (sw.kind != BulletShape::Kind::Box) {
+        hit = WallContact{sw.centreOffset, sw.radius};
+        return world.SweepBlocked(from + sw.centreOffset, to + sw.centreOffset, sw.radius);
+    }
+    glm::vec2 off{0.0F, 0.0F};
+    float r = 0.0F;
+    const float t = world.SweepBoxBlocked(from, to, sw.centreOffset, sw.half, sw.boxAngle, off, r);
+    hit = WallContact{off, r};
+    return t;
+}
+} // namespace
+
 void Simulation::IntegrateBullets() {
     for (BulletState &b : m_Bullets) {
         if (!b.active) {
             continue;
         }
         b.prevPos = b.pos;
+        // P3.0c: Bullet01 / RGSBullet01 FixedUpdate: eulerAngles.z += rotate_angle once per fixed
+        // step while awake, velocity untouched (the bullet keeps flying straight while it spins; the
+        // oriented collider turns with it). The new heading holds for this whole step's tests.
+        if (b.launch.spinDegPerStep != 0.0F) {
+            b.angleRad += b.launch.spinDegPerStep * (3.14159265358979F / 180.0F);
+        }
         b.pos += b.vel * kFixedStepSeconds;
         b.lifeMs -= kFixedStepMs;
     }
@@ -740,13 +797,30 @@ void Simulation::ResolveHits() {
         // touching at the START of the step is reported at t = 0 (a bullet spawned inside a
         // hurtbox hits it; a piercing bullet that is still inside after a hit hits it again,
         // as the old end-of-step rule did while it stayed inside).
-        // PORT CHOICE (T-52): enemy bullets (radiusPx 0) use the 4 px kBulletRadius fallback,
-        // not their prefab collider (see SimConfig.hpp); player bullets use the data radius.
-        const float bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
+        // P3.0c: since this slice enemy / boss bullets carry their own prefab shape too (see the
+        // shape block below); the 4 px kBulletRadius circle is only the fallback of a bullet with NO
+        // shape (a sim without GameData, or a weapon whose bullet prefab is not in bullets.json).
+        // P3.0c (PORT CHOICE T-64): a bullet that carries its prefab shape tests THAT shape --
+        // a circle or an ORIENTED box at its prefab offset, turned with the bullet heading
+        // (b.angleRad) -- against the hurtboxes (exact Minkowski sweep, BodyGeom::HurtSweepShape)
+        // and, for walls, through WorldCollision::SweepBoxBlocked (live world = exact oriented-box
+        // sweep; the covering circle row exists only as the fallback of circle-only test doubles). A bullet with no prefab shape (legacy / data missing) keeps the old
+        // origin-centred circle of radiusPx (or the 4 px fallback), bit-identical to before.
+        BulletShapeWorld sw;
+        float bulletR = 0.0F;
+        if (b.launch.shape.Present()) {
+            sw = PlaceShape(b.launch.shape, b.angleRad);
+            bulletR = b.launch.shape.InscribedRadius();
+        } else {
+            bulletR = b.radiusPx > 0.0F ? b.radiusPx : kBulletRadius;
+            sw.kind = BulletShape::Kind::Circle;
+            sw.radius = bulletR;
+        }
         const glm::vec2 stepEnd = b.pos;
         float tw = -1.0F; // wall contact fraction of the full path; < 0 = free (or canThrough).
+        WallContact wallHit{{0.0F, 0.0F}, bulletR};
         if (!b.canThrough) {
-            tw = m_World->SweepBlocked(b.prevPos, stepEnd, bulletR);
+            tw = SweepShapeBlocked(*m_World, b.prevPos, stepEnd, sw, wallHit);
         }
         if (b.camp == 0) {
             // Player bullet -> enemies and boss; ONE target per bullet per step, the EARLIEST
@@ -766,8 +840,8 @@ void Simulation::ResolveHits() {
                                                                     : e->State().pos;
                 float t = 0.0F;
                 // The bullet circle hits the target's HURTBOX (prefab root trigger collider).
-                if (e->State().geom.HurtSweepBeforeWall(from, e->State().pos, b.prevPos, stepEnd,
-                                                        bulletR, tw, t) &&
+                if (e->State().geom.HurtSweepShapeBeforeWall(from, e->State().pos, b.prevPos, stepEnd,
+                                                             sw, tw, t) &&
                     t < bestT) {
                     bestT = t;
                     bestEi = ei;
@@ -776,8 +850,8 @@ void Simulation::ResolveHits() {
             bool bossFirst = false;
             if (m_Boss != nullptr && !m_Boss->State().dead) {
                 float t = 0.0F;
-                if (m_Boss->State().geom.HurtSweepBeforeWall(m_BossStepStart, m_Boss->State().pos,
-                                                             b.prevPos, stepEnd, bulletR, tw, t) &&
+                if (m_Boss->State().geom.HurtSweepShapeBeforeWall(m_BossStepStart, m_Boss->State().pos,
+                                                                  b.prevPos, stepEnd, sw, tw, t) &&
                     t < bestT) {
                     bestT = t;
                     bossFirst = true;
@@ -833,6 +907,7 @@ void Simulation::ResolveHits() {
             }
             if (consumed && b.pierce <= 0) {
                 b.active = false;
+                m_Impacts.push_back(BulletImpact{b.launch.bulletIdx, b.camp, false, b.pos, b.angleRad});
             } else if (consumed) {
                 --b.pierce; // canThrough/pierce: survive and keep going.
             }
@@ -848,8 +923,8 @@ void Simulation::ResolveHits() {
             }
             float hitT = 0.0F; // hit time unused: one target, so no ordering needed.
             if (m_Input.playerAlive &&
-                m_PlayerGeom.HurtSweepBeforeWall(playerFrom, m_Input.playerPos, b.prevPos, stepEnd,
-                                                 bulletR, tw, hitT)) {
+                m_PlayerGeom.HurtSweepShapeBeforeWall(playerFrom, m_Input.playerPos, b.prevPos,
+                                                      stepEnd, sw, tw, hitT)) {
                 Game::Combat::AttackerInput in;
                 in.baseDamage = b.damage;
                 in.critical = b.critical;
@@ -866,6 +941,7 @@ void Simulation::ResolveHits() {
                 // branch would APPLY it (see ShouldApplyBulletBuff).
                 RollBulletBuff(b, kPlayerViewId, hr.isCrit);
                 b.active = false;
+                m_Impacts.push_back(BulletImpact{b.launch.bulletIdx, b.camp, false, b.pos, b.angleRad});
             }
         }
         // T-57: a bullet that survived its target test (missed, or pierced) and whose path hit a
@@ -876,10 +952,13 @@ void Simulation::ResolveHits() {
                 b.pos = b.prevPos + (stepEnd - b.prevPos) * tw; // the first contact point.
             }
             b.active = false;
+            m_Impacts.push_back(BulletImpact{b.launch.bulletIdx, b.camp, true, b.pos, b.angleRad});
             // Phase 3: a consumed bullet damages a destructible design-room box at
             // the impact point (no-op for walls / under NullWorldCollision, so the
             // combat hash is unchanged). Scene-side mutation; sim RNG untouched.
-            m_World->DamageObstacle(b.pos, bulletR);
+            // P3.0c (T-64): at the contact probe (exact world: radius-1 circle on the blocker; circle-only
+            // fallback: the covering-row circle that touched); its centre rides on the bullet origin.
+            m_World->DamageObstacle(b.pos + wallHit.centre, wallHit.radius);
         }
     }
 }
@@ -992,6 +1071,7 @@ void Simulation::AddEnemy(const Game::EnemyDef &def, glm::vec2 spawn, int roomId
     const int seedHp = def.maxHp > 0 ? def.maxHp : kSliceEnemyHp;
     ec->MutableState().stats.hp = seedHp;
     ec->MutableState().stats.maxHp = seedHp;
+    ec->SetBulletLaunch(LaunchFor(def)); // P3.0c: its own bullet prefab (sprite / shape / spin)
     ec->Activate(m_Scheduler, m_FireIntents);        // asleep until WakeByRoom().
     m_Enemies.push_back(std::move(ec));
 }
@@ -1004,6 +1084,9 @@ void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int room
     m_Boss->MutableState().geom =
         def != nullptr ? MakeBodyGeom(def->body, def->hurtbox, kBossBodyRadius)
                        : BodyGeom::Fallback(kBossBodyRadius);
+    if (def != nullptr) {
+        m_Boss->SetBulletLaunch(LaunchFor(*def)); // P3.0c (T-65): the boss's primary bullet
+    }
     m_Boss->Activate(m_Scheduler, m_FireIntents); // asleep until WakeByRoom().
 }
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,

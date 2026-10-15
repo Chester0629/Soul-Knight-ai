@@ -73,6 +73,10 @@ public:
     ///      keeps raw pointers to both).
     void Activate(Scheduler &scheduler, std::vector<FireIntent> &fireOut);
 
+    /// P3.0c: the bullet prefab (row, oriented shape, spin) this species fires; stamped onto every
+    /// intent. Default (no prefab) keeps the legacy 4 px circle and the generic view.
+    void SetBulletLaunch(const BulletLaunch &launch) { m_Launch = launch; }
+
     /// Set the aim target (the player position), updated each tick by the owner.
     void SetTarget(glm::vec2 target) { m_Target = target; }
 
@@ -116,6 +120,7 @@ private:
     EntityState m_State;
     glm::vec2 m_MoveDir{0.0F, 0.0F};
     glm::vec2 m_ForceDir{0.0F, 0.0F};
+    BulletLaunch m_Launch{};      ///< P3.0c: see SetBulletLaunch.
     bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
     float m_InertialVel = 0.0F;
     glm::vec2 m_Target{0.0F, 0.0F};

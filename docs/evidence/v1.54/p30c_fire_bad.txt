@@ -1,0 +1,1 @@
+ [warning] SK_FORCE_FIRE rejected: bad direction (need finite, non-zero, |v| <= 4096)

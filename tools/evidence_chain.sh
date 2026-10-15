@@ -248,8 +248,47 @@ grep -q "P218 CHECK: OK" "$E/p218_check.txt" || fail "p218 assertions not OK"
 run_case p218_hooks_bad "rejected|Dash:|clamped" 12   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=5,4,100,0 SK_FORCE_DASH=10,nan,0 SK_WALK_DIR=0,0 SK_DT_SPIKE=5,-1 SK_TRACE_POS=3,x SK_DT_MS=20 SK_MAX_FRAMES=30
 require p218_hooks_bad "SK_FORCE_DASH rejected" "SK_WALK_DIR rejected" "SK_DT_SPIKE rejected" "SK_TRACE_POS rejected"
 [ "$(grep -cE "Dash:|clamped" "$E/p218_hooks_bad.txt")" = "0" ] || fail "p218_hooks_bad still acted on a rejected hook"
+echo "=== P3.0c bullet slice: heading at 6 aims, wall-hit effects, enemy bullet art, corpse ==="
+# Every case uses SK_SEED=5 (ice 1-1, the biome of the ground-truth capture) and a fixed 20 ms step so the
+# frames are reproducible. Aim cases: SK_FORCE_FIRE=100,dx,dy,40 (strictly parsed hook, TestHooks.hpp) holds fire
+# toward (dx, dy) from frame 100; the shot at frame 103 shows the first bullet 3 steps out (zoom 3: the hero sits
+# in the screen centre). p30c_check.py asserts the LOG heading and the PIXELS (axis + white head ahead of tail).
+P30C="SK_SEED=5 SK_SKIP_MENU=1 SK_MUTE=1 SK_DT_MS=20"
+for aim in "up 0,1" "down 0,-1" "left -1,0" "right 1,0" "diag_ur 1,1" "diag_dl -1,-1"; do
+  set -- $aim
+  run_case "p30c_aim_$1" "SK_FORCE_FIRE|BulletPose" 6 $P30C SK_FORCE_FIRE=100,$2,40 SK_TRACE_BULLETS=1 SK_ZOOM=3 SK_MAX_FRAMES=103 SK_SHOT="$E/p30c_aim_$1.png"
+  check_png "$E/p30c_aim_$1.png"
+  require "p30c_aim_$1" "SK_FORCE_FIRE: from frame 100" "BulletPose: frame 100 id 1 camp 0 prefab bullet_0"
+done
+# the checker reads the full p30c_*.log files; the final cleanup deletes every other .log and KEEPS p30c_*.log (evidence)
+run_case p30c_wall "BulletImpact|SK_FORCE_FIRE" 4 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=111 SK_SHOT="$E/p30c_wall.png"
+check_png "$E/p30c_wall.png"
+require p30c_wall "BulletImpact: frame 111 wall bullet_0 camp 0 at .* effect hit_yellow"
+run_case p30c_wall_ring "BulletImpact" 2 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=114 SK_SHOT="$E/p30c_wall_ring.png"
+check_png "$E/p30c_wall_ring.png"
+run_case p30c_enemy "Bullet:|BulletPose|BulletImpact" 12 $P30C SK_ROOM_TELEPORT=60,1 SK_TRACE_BULLETS=1 SK_ZOOM=2 SK_MAX_FRAMES=155 SK_SHOT="$E/p30c_enemy.png"
+check_png "$E/p30c_enemy.png"
+require p30c_enemy "Bullet: e_miner01 fires no RGBullet-family bullet \(refs: sword_0\)" "camp 1 prefab bullet_e_1"
+run_case p30c_enemy_hit "BulletImpact" 6 $P30C SK_ROOM_TELEPORT=60,1 SK_TRACE_BULLETS=1 SK_ZOOM=2 SK_MAX_FRAMES=157 SK_SHOT="$E/p30c_enemy_hit.png"
+check_png "$E/p30c_enemy_hit.png"
+require p30c_enemy_hit "BulletImpact: frame [0-9]+ wall bullet_e_1 camp 1 .* effect hit_red"
+run_case p30c_corpse "Corpse:|Boss defeated" 12 $P30C SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=170 SK_ZOOM=2 SK_MAX_FRAMES=180 SK_SHOT="$E/p30c_corpse.png"
+check_png "$E/p30c_corpse.png"
+require p30c_corpse "Corpse: e_yeti01 left at .* state 'dead'" "Corpse: e_miner03 left at .* state 'enemy01_dead'"
+python tools/p30c_check.py "$E" > "$E/p30c_check.txt" 2>&1 || fail "p30c assertions"
+tail -3 "$E/p30c_check.txt"
+grep -q "P30C CHECK: OK" "$E/p30c_check.txt" || fail "p30c assertions not OK"
+python tools/p30c_compare.py "$E" > "$E/p30c_compare.txt" 2>&1 || fail "p30c compare sheets"
+mkdir -p docs/evidence/p3.0c && cp "$E"/compare_*.png docs/evidence/p3.0c/ || fail "copy p30c compare sheets"
+python tools/validate_data.py --bullet-report > "$E/bullet_colliders.txt" 2>&1 || fail "bullet collider report"
+head -1 "$E/bullet_colliders.txt"
+# negative: a malformed SK_FORCE_FIRE is rejected and never fires
+run_case p30c_fire_bad "SK_FORCE_FIRE|BulletPose" 6 $P30C SK_FORCE_FIRE=100,nan,1 SK_TRACE_BULLETS=1 SK_MAX_FRAMES=130
+require p30c_fire_bad "SK_FORCE_FIRE rejected"
+[ "$(grep -cE "BulletPose" "$E/p30c_fire_bad.txt")" = "0" ] || fail "p30c_fire_bad still fired"
 git rev-parse --short HEAD | tee "$E/head.txt"
-rm -f "$E"/*.log
+# keep the FULL p30c_* logs: tools/p30c_check.py (documented re-check command) reads them
+find "$E" -maxdepth 1 -name "*.log" ! -name "p30c_*.log" -delete
 if [ "${#FAILS[@]}" -eq 0 ]; then
   echo "STATUS: OK (all steps passed) $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"
 else

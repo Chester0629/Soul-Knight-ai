@@ -81,6 +81,10 @@ public:
     /// WorldCollision (P2.18, T-62): EXACT swept test -- the segment against the Minkowski sum of
     /// every active blocker (sim/Depenetration.hpp SegmentBlockedByAny), so no graze slips through.
     bool MoveBlocked(glm::vec2 from, glm::vec2 to, float radius) const override;
+    /// WorldCollision (P3.0c, T-64): EXACT swept test of an oriented box bullet against every active
+    /// blocker (sim/Depenetration.hpp SweepBoxBlockedByAny).
+    float SweepBoxBlocked(glm::vec2 from, glm::vec2 to, glm::vec2 centreOffset, glm::vec2 half, float angle,
+                          glm::vec2 &contactOffset, float &contactRadius) const override;
     /// WorldCollision: a consumed bullet at @p pos damages a destructible design
     /// box there; once broken the box stops blocking. No-op on walls/braziers.
     void DamageObstacle(glm::vec2 pos, float radius) override;
@@ -325,6 +329,9 @@ private:
     /// SK_FORCE_DASH=K,dx,dy -- dash along (dx,dy) on frame K through Sim::ApplyDash;
     /// SK_WALK_DIR=dx,dy -- hold that movement direction every frame (keys are ignored);
     /// SK_TRACE_POS=F1,F2,... -- log player + hostile positions on those frames.
+    long m_ForceFireFrame = -1; ///< SK_FORCE_FIRE=K,dx,dy[,N] (P3.0c evidence): see TestHooks.hpp
+    glm::vec2 m_ForceFireDir{1.0F, 0.0F};
+    long m_ForceFireCount = 0;
     long m_ForceDashFrame = -1;
     glm::vec2 m_ForceDashDir{0.0F, 0.0F};
     bool m_WalkDirSet = false;
@@ -391,6 +398,21 @@ private:
     void ConsumeSimEvents(glm::vec2 playerPos);
     /// Spawn a one-shot effect animation at @p pos that auto-removes after @p lifeMs.
     void SpawnEffect(std::vector<std::string> frames, glm::vec2 pos, float lifeMs);
+    /// P3.0c: turn the wall / obstacle impacts the sim recorded this frame into each bullet
+    /// prefab's hit effect (RGBulletTrigger.hit_object -> bullet_effects.json).
+    void ConsumeBulletImpacts();
+    /// P3.0c (T-66): log once per species that fires no RGBullet-family bullet (melee / laser /
+    /// explosion prefabs) and therefore uses the generic fallback bullet.
+    void LogBulletSubstitute(const EnemyDef &def);
+    /// P3.0c: a one-shot tinted hit-effect animation at @p pos.
+    void SpawnHitEffect(const BulletEffectDef &fx, glm::vec2 pos);
+    /// P3.0c: leave the dead species' lying-corpse sprite (Animator state "dead") on the floor at
+    /// @p pos (the dead entity's Position()) and pop its death emoticon (the skull speech bubble).
+    void SpawnCorpse(const EnemyDef &def, glm::vec2 pos);
+    /// P3.0c: lying corpses (persist for the floor's lifetime, like the original's dead bodies).
+    std::vector<std::shared_ptr<Util::GameObject>> m_Corpses;
+    /// P3.0c: species whose bullets / corpse needed a substitute, logged once each.
+    std::vector<std::string> m_LoggedSubstitutes;
     /// Live transient presentation effects (muzzle/hit/death): {object, remaining ms}.
     std::vector<std::pair<std::shared_ptr<Util::GameObject>, float>> m_Effects;
 };

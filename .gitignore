@@ -524,3 +524,6 @@ CMakeCache.txt
 CMakeFiles/
 .codegraph/
 __pycache__/
+
+# P3.0c: the full p30c_* logs are evidence (tools/p30c_check.py reads them); keep them tracked
+!docs/evidence/**/p30c_*.log

@@ -3,6 +3,7 @@
     "weapons": 194,
     "enemy_guns": 10,
     "bullets": 211,
+    "bullet_effects": 5,
     "enemies": 146,
     "bosses": 16,
     "buffs": 12,

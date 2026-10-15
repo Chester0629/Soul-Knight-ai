@@ -1,0 +1,46 @@
+ok   aim_up: BulletPose line for prefab bullet_0
+ok   aim_up: heading 87.7 deg vs aim 90.0 deg (+-10, scatter +-5)
+ok   aim_up: white head (344 px) and warm tail (899 px) found
+ok   aim_up: long axis 90.0 deg vs aim 90.0 deg (+-20)
+ok   aim_up: white head is 15.7 px AHEAD of the orange tail along the travel direction
+ok   aim_down: BulletPose line for prefab bullet_0
+ok   aim_down: heading -92.3 deg vs aim -90.0 deg (+-10, scatter +-5)
+ok   aim_down: white head (344 px) and warm tail (984 px) found
+ok   aim_down: long axis 269.1 deg vs aim -90.0 deg (+-20)
+ok   aim_down: white head is 15.5 px AHEAD of the orange tail along the travel direction
+ok   aim_left: BulletPose line for prefab bullet_0
+ok   aim_left: heading 177.7 deg vs aim 180.0 deg (+-10, scatter +-5)
+ok   aim_left: white head (344 px) and warm tail (980 px) found
+ok   aim_left: long axis 179.1 deg vs aim 180.0 deg (+-20)
+ok   aim_left: white head is 15.1 px AHEAD of the orange tail along the travel direction
+ok   aim_right: BulletPose line for prefab bullet_0
+ok   aim_right: heading -2.3 deg vs aim 0.0 deg (+-10, scatter +-5)
+ok   aim_right: white head (344 px) and warm tail (888 px) found
+ok   aim_right: long axis 358.4 deg vs aim 0.0 deg (+-20)
+ok   aim_right: white head is 15.0 px AHEAD of the orange tail along the travel direction
+ok   aim_diag_ur: BulletPose line for prefab bullet_0
+ok   aim_diag_ur: heading 42.7 deg vs aim 45.0 deg (+-10, scatter +-5)
+ok   aim_diag_ur: white head (345 px) and warm tail (905 px) found
+ok   aim_diag_ur: long axis 44.0 deg vs aim 45.0 deg (+-20)
+ok   aim_diag_ur: white head is 15.0 px AHEAD of the orange tail along the travel direction
+ok   aim_diag_dl: BulletPose line for prefab bullet_0
+ok   aim_diag_dl: heading -137.3 deg vs aim -135.0 deg (+-10, scatter +-5)
+ok   aim_diag_dl: white head (345 px) and warm tail (899 px) found
+ok   aim_diag_dl: long axis 223.2 deg vs aim -135.0 deg (+-20)
+ok   aim_diag_dl: white head is 15.0 px AHEAD of the orange tail along the travel direction
+ok   wall: BulletImpact of bullet_0 with effect hit_yellow logged
+ok   p30c_wall: orange hit-effect pixels found (1037)
+ok   p30c_wall: disc is filled (centre fill 1.00)
+ok   p30c_wall_ring: orange hit-effect pixels found (662)
+ok   p30c_wall_ring: ring has an empty centre (centre fill 0.00)
+ok   enemy: 14 BulletPose lines for enemy bullets
+ok   enemy: prefabs used ['bullet_e_1', 'bullet_e_39'] (never bullet_0)
+ok   enemy: bullet_e_1 (the red orb, bullet_29.png) flew
+ok   enemy: red orb pixels present (985)
+ok   enemy_hit: BulletImpact of bullet_e_1 (camp 1) with effect hit_red logged
+ok   enemy_hit: the red hit-effect disc is on screen (2915 px)
+ok   corpse: 18 corpse(s) left (['e_miner01', 'e_miner02', 'e_miner03', 'e_yeti01'])
+ok   corpse: no killed species lacked a dead clip
+ok   corpse: the 23-frame effect04 death puff (the blue hexagon) is gone from GameScene.cpp
+ok   corpse: skull-bubble grey pixels present (1079)
+P30C CHECK: OK

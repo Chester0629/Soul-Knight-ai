@@ -62,6 +62,7 @@ void BossController::OnShootTick() {
             intent.lifeMs = kBulletLifeMs;
             intent.damage = 1;
             intent.camp = 1;
+            intent.launch = m_Launch; // P3.0c
             m_FireOut->push_back(intent);
             m_FiredThisStep = true; // A: latch a shot for the boss "attack" AnimTrigger.
         }

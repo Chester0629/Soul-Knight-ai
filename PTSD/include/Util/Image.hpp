@@ -66,6 +66,13 @@ public:
     void UseAntiAliasing(bool useAA);
 
     /**
+     * @brief Multiplies every drawn texel by @p rgba (Unity SpriteRenderer.m_Color: RGB and alpha).
+     * Default (1,1,1,1) = unchanged. P3.0c: bullet / hit-effect tints.
+     */
+    void SetTint(const glm::vec4 &rgba) { m_Tint = rgba; }
+    const glm::vec4 &GetTint() const { return m_Tint; }
+
+    /**
      * @brief Draws the image with a given transform and z-index.
      *
      * This function draws the image at the specified z-index and applies the
@@ -94,6 +101,7 @@ private:
 
     std::string m_Path;
     glm::vec2 m_Size;
+    glm::vec4 m_Tint{1.0F, 1.0F, 1.0F, 1.0F};
 };
 } // namespace Util
 

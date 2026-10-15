@@ -51,6 +51,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1",
+      "bullet_e_7",
+      "bullet_e_28",
+      "bullet_e_26"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -105,6 +116,22 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_8",
+      "bullet_e_6",
+      "bullet_e_27",
+      "bullet_e_5",
+      "bullet_e_9",
+      "bullet_e_10"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_unresolved": [
+      "bullet_e_8"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -159,6 +186,21 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1",
+      "bullet_e_14",
+      "bullet_boss_03_atk3",
+      "e_skeleton02_temp",
+      "bullet_e_26"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_unresolved": [
+      "e_skeleton02_temp"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -213,6 +255,22 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_13",
+      "bullet_e_1",
+      "bullet_e_3",
+      "explode_hit_player",
+      "bullet_e_8"
+    ],
+    "bullet_prefab": "bullet_e_13",
+    "bullet_unresolved": [
+      "explode_hit_player",
+      "bullet_e_8"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -267,6 +325,22 @@
     "sprite_offset": [
       0.2,
       0.3
+    ],
+    "bullet_refs": [
+      "bullet_e_17",
+      "bullet_e_18",
+      "Gas_boss5",
+      "bullet_e_20"
+    ],
+    "bullet_prefab": "bullet_e_17",
+    "bullet_unresolved": [
+      "bullet_e_18",
+      "Gas_boss5",
+      "bullet_e_20"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -321,6 +395,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_2",
+      "bullet_e_11",
+      "bullet_e_22",
+      "bullet_e_34"
+    ],
+    "bullet_prefab": "bullet_e_2",
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -375,6 +460,23 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_24",
+      "bullet_e_1",
+      "bullet_e_34",
+      "explode_E_poly",
+      "bullet_e_37",
+      "Gas"
+    ],
+    "bullet_prefab": "bullet_e_24",
+    "bullet_unresolved": [
+      "explode_E_poly",
+      "Gas"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -429,6 +531,20 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "e_fireball",
+      "bullet_e_32",
+      "bullet_e_16",
+      "bullet_e_30"
+    ],
+    "bullet_prefab": "bullet_e_32",
+    "bullet_unresolved": [
+      "e_fireball"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -483,6 +599,22 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_shock",
+      "bullet_follow_ice_e",
+      "bullet_e_28",
+      "effect_shock2",
+      "bullet_e_42",
+      "bullet_e_41"
+    ],
+    "bullet_prefab": "bullet_e_shock",
+    "bullet_unresolved": [
+      "effect_shock2"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -537,6 +669,21 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_25",
+      "explode_ice2",
+      "bullet_e_19",
+      "bullet_e_40"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_unresolved": [
+      "explode_ice2",
+      "bullet_e_19"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -591,6 +738,22 @@
     "sprite_offset": [
       -0.074,
       -1.1
+    ],
+    "bullet_refs": [
+      "bullet_e_14",
+      "bullet_e_39",
+      "bullet_e_43",
+      "effect_shock3",
+      "bullet_e_44",
+      "bullet_e_24"
+    ],
+    "bullet_prefab": "bullet_e_14",
+    "bullet_unresolved": [
+      "effect_shock3"
+    ],
+    "dead_tap": [
+      0.3,
+      1.3
     ]
   },
   {
@@ -645,6 +808,23 @@
     "sprite_offset": [
       0.0,
       -0.2
+    ],
+    "bullet_refs": [
+      "bullet_e_46",
+      "bullet_e_8",
+      "bullet_e_45",
+      "bullet_e_48",
+      "bullet_e_15"
+    ],
+    "bullet_prefab": "bullet_e_46",
+    "bullet_unresolved": [
+      "bullet_e_8",
+      "bullet_e_48",
+      "bullet_e_15"
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -699,6 +879,23 @@
     "sprite_offset": [
       0.0,
       -0.2
+    ],
+    "bullet_refs": [
+      "bullet_e_47",
+      "bullet_e_8",
+      "bullet_e_49",
+      "Fire",
+      "bullet_e_15"
+    ],
+    "bullet_prefab": "bullet_e_47",
+    "bullet_unresolved": [
+      "bullet_e_8",
+      "Fire",
+      "bullet_e_15"
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -753,6 +950,21 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_nofollow_ice_e",
+      "bullet_e_42_less",
+      "bullet_e_25",
+      "effect_shock3",
+      "bullet_e_41"
+    ],
+    "bullet_prefab": "bullet_nofollow_ice_e",
+    "bullet_unresolved": [
+      "effect_shock3"
+    ],
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -807,6 +1019,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_15"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_15"
+    ],
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -861,6 +1084,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -915,6 +1147,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2_red"
+    ],
+    "bullet_unresolved": [
+      "sword_2_red"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -969,6 +1212,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_7"
+    ],
+    "bullet_prefab": "bullet_e_7",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1023,6 +1275,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -1077,6 +1333,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.8
     ]
   },
   {
@@ -1131,6 +1391,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -1185,6 +1454,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -1239,6 +1517,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1293,6 +1580,17 @@
     "sprite_offset": [
       0.0,
       -0.7
+    ],
+    "bullet_refs": [
+      "bullet_e_19"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_19"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1347,6 +1645,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_33",
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_33",
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1401,6 +1708,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "spear_2_fire"
+    ],
+    "bullet_unresolved": [
+      "spear_2_fire"
+    ],
+    "bullet_speed": 0.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1455,6 +1773,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2_fire"
+    ],
+    "bullet_unresolved": [
+      "sword_2_fire"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1509,6 +1838,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_47",
+      "bullet_e_35"
+    ],
+    "bullet_prefab": "bullet_e_47",
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1563,6 +1901,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -1617,6 +1964,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_6"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1671,6 +2027,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_26"
+    ],
+    "bullet_prefab": "bullet_e_26",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1725,6 +2090,14 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -1779,6 +2152,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1833,6 +2215,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1887,6 +2280,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1941,6 +2343,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -1995,6 +2406,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_35"
+    ],
+    "bullet_prefab": "bullet_e_35",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2049,6 +2469,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2103,6 +2534,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2157,6 +2599,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "spear_1_5"
+    ],
+    "bullet_unresolved": [
+      "spear_1_5"
+    ],
+    "bullet_speed": 0.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2211,6 +2664,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_39"
+    ],
+    "bullet_prefab": "bullet_e_39",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2265,6 +2727,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_24"
+    ],
+    "bullet_prefab": "bullet_e_24",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2319,6 +2790,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_2"
+    ],
+    "bullet_prefab": "bullet_e_2",
+    "bullet_speed": 15.0,
+    "dead_tap": [
+      0.6,
+      0.8
     ]
   },
   {
@@ -2373,6 +2853,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_38"
+    ],
+    "bullet_prefab": "bullet_e_38",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2427,6 +2916,15 @@
     "sprite_offset": [
       0.0,
       -0.2
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2481,6 +2979,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_36"
+    ],
+    "bullet_prefab": "bullet_e_36",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2535,6 +3042,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_6"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_speed": 10.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2589,6 +3105,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2643,6 +3163,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_health_skill"
+    ],
+    "bullet_unresolved": [
+      "effect_health_skill"
+    ],
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2697,6 +3228,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_33"
+    ],
+    "bullet_prefab": "bullet_e_33",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2751,6 +3291,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2805,6 +3354,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "spear_1_5"
+    ],
+    "bullet_unresolved": [
+      "spear_1_5"
+    ],
+    "bullet_speed": 0.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2859,6 +3419,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_12"
+    ],
+    "bullet_prefab": "bullet_e_12",
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2913,6 +3482,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -2967,6 +3545,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_37"
+    ],
+    "bullet_prefab": "bullet_e_37",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3021,6 +3608,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3075,6 +3673,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_30"
+    ],
+    "bullet_prefab": "bullet_e_30",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3129,6 +3736,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -3183,6 +3799,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_27"
+    ],
+    "bullet_prefab": "bullet_e_27",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3238,6 +3863,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3292,6 +3921,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_28"
+    ],
+    "bullet_prefab": "bullet_e_28",
+    "bullet_speed": 10.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3346,6 +3984,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3400,6 +4049,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3454,6 +4114,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_12"
+    ],
+    "bullet_prefab": "bullet_e_12",
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3508,6 +4177,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3562,6 +4242,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 10.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3616,6 +4305,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3670,6 +4368,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3715,6 +4417,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_shock1"
+    ],
+    "bullet_unresolved": [
+      "effect_shock1"
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -3769,6 +4481,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3823,6 +4539,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3877,6 +4597,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3931,6 +4655,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -3985,6 +4713,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_8"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_8"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4039,6 +4777,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_24"
+    ],
+    "bullet_prefab": "bullet_e_24",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4093,6 +4840,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4147,6 +4903,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4201,6 +4966,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "e_fireball"
+    ],
+    "bullet_unresolved": [
+      "e_fireball"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4255,6 +5030,15 @@
     "sprite_offset": [
       0.0,
       -0.7
+    ],
+    "bullet_refs": [
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_speed": 20.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4309,6 +5093,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_27"
+    ],
+    "bullet_prefab": "bullet_e_27",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4363,6 +5156,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4417,6 +5214,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_shock1"
+    ],
+    "bullet_unresolved": [
+      "effect_shock1"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -4471,6 +5278,18 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_shock1",
+      "bullet_e_41"
+    ],
+    "bullet_prefab": "bullet_e_41",
+    "bullet_unresolved": [
+      "effect_shock1"
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4526,6 +5345,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_15"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_15"
+    ],
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4581,6 +5411,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4636,6 +5475,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2_red"
+    ],
+    "bullet_unresolved": [
+      "sword_2_red"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4691,6 +5541,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_7"
+    ],
+    "bullet_prefab": "bullet_e_7",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4746,6 +5605,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.8
     ]
   },
   {
@@ -4801,6 +5664,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.8
     ]
   },
   {
@@ -4856,6 +5723,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4911,6 +5787,17 @@
     "sprite_offset": [
       0.0,
       -1.1
+    ],
+    "bullet_refs": [
+      "bullet_e_19"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_19"
+    ],
+    "bullet_speed": 4.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -4966,6 +5853,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_25",
+      "bullet_e_40"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5021,6 +5917,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "spear_2_fire"
+    ],
+    "bullet_unresolved": [
+      "spear_2_fire"
+    ],
+    "bullet_speed": 0.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5076,6 +5983,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_14",
+      "bullet_e_35"
+    ],
+    "bullet_prefab": "bullet_e_14",
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5131,6 +6047,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_3"
+    ],
+    "bullet_prefab": "bullet_e_3",
+    "bullet_speed": 10.0,
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -5186,6 +6111,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_6"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5241,6 +6175,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_26"
+    ],
+    "bullet_prefab": "bullet_e_26",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5296,6 +6239,14 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_28"
+    ],
+    "bullet_prefab": "bullet_e_28",
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -5351,6 +6302,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5406,6 +6366,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2_5"
+    ],
+    "bullet_unresolved": [
+      "sword_2_5"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5461,6 +6432,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5516,6 +6496,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5571,6 +6560,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_35"
+    ],
+    "bullet_prefab": "bullet_e_35",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5626,6 +6624,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2_5"
+    ],
+    "bullet_unresolved": [
+      "sword_2_5"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5681,6 +6690,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2"
+    ],
+    "bullet_unresolved": [
+      "sword_2"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5736,6 +6756,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_34"
+    ],
+    "bullet_prefab": "bullet_e_34",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5791,6 +6820,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_34"
+    ],
+    "bullet_prefab": "bullet_e_34",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5846,6 +6884,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_24"
+    ],
+    "bullet_prefab": "bullet_e_24",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -5901,6 +6948,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_2"
+    ],
+    "bullet_prefab": "bullet_e_2",
+    "bullet_speed": 15.0,
+    "dead_tap": [
+      0.6,
+      0.8
     ]
   },
   {
@@ -5956,6 +7012,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_38"
+    ],
+    "bullet_prefab": "bullet_e_38",
+    "bullet_speed": 7.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6011,6 +7076,15 @@
     "sprite_offset": [
       0.0,
       -0.35
+    ],
+    "bullet_refs": [
+      "bullet_e_3"
+    ],
+    "bullet_prefab": "bullet_e_3",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6065,6 +7139,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_36"
+    ],
+    "bullet_prefab": "bullet_e_36",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6119,6 +7202,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_6"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_speed": 13.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6173,6 +7265,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6228,6 +7324,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_health_skill"
+    ],
+    "bullet_unresolved": [
+      "effect_health_skill"
+    ],
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6282,6 +7389,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_33"
+    ],
+    "bullet_prefab": "bullet_e_33",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6337,6 +7453,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6392,6 +7517,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "spear_3"
+    ],
+    "bullet_unresolved": [
+      "spear_3"
+    ],
+    "bullet_speed": 0.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6447,6 +7583,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_12"
+    ],
+    "bullet_prefab": "bullet_e_12",
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6502,6 +7647,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6557,6 +7711,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_2"
+    ],
+    "bullet_unresolved": [
+      "sword_2"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6612,6 +7777,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_30"
+    ],
+    "bullet_prefab": "bullet_e_30",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6667,6 +7841,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_1"
+    ],
+    "bullet_prefab": "bullet_e_1",
+    "bullet_speed": 6.0,
+    "dead_tap": [
+      1.0,
+      2.0
     ]
   },
   {
@@ -6722,6 +7905,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_28"
+    ],
+    "bullet_prefab": "bullet_e_28",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6777,6 +7969,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_6"
+    ],
+    "bullet_prefab": "bullet_e_6",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6832,6 +8033,17 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "sword_0"
+    ],
+    "bullet_unresolved": [
+      "sword_0"
+    ],
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6887,6 +8099,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_12"
+    ],
+    "bullet_prefab": "bullet_e_12",
+    "bullet_speed": 24.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6942,6 +8163,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_26"
+    ],
+    "bullet_prefab": "bullet_e_26",
+    "bullet_speed": 12.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -6997,6 +8227,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_23"
+    ],
+    "bullet_prefab": "bullet_e_23",
+    "bullet_speed": 10.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7052,6 +8291,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_28"
+    ],
+    "bullet_prefab": "bullet_e_28",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7107,6 +8355,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7162,6 +8414,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7217,6 +8473,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7272,6 +8532,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7327,6 +8591,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7382,6 +8650,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_8"
+    ],
+    "bullet_unresolved": [
+      "bullet_e_8"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7437,6 +8715,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_24"
+    ],
+    "bullet_prefab": "bullet_e_24",
+    "bullet_speed": 8.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7492,6 +8779,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "e_fireball"
+    ],
+    "bullet_unresolved": [
+      "e_fireball"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7547,6 +8844,15 @@
     "sprite_offset": [
       0.0,
       -1.1
+    ],
+    "bullet_refs": [
+      "bullet_e_25"
+    ],
+    "bullet_prefab": "bullet_e_25",
+    "bullet_speed": 20.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7602,6 +8908,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_11"
+    ],
+    "bullet_prefab": "bullet_e_11",
+    "bullet_speed": 9.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7657,6 +8972,10 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7712,6 +9031,16 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_shock2"
+    ],
+    "bullet_unresolved": [
+      "effect_shock2"
+    ],
+    "dead_tap": [
+      0.6,
+      0.6
     ]
   },
   {
@@ -7767,6 +9096,18 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "effect_shock2",
+      "bullet_e_41"
+    ],
+    "bullet_prefab": "bullet_e_41",
+    "bullet_unresolved": [
+      "effect_shock2"
+    ],
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   },
   {
@@ -7930,6 +9271,15 @@
     "sprite_offset": [
       0.0,
       0.0
+    ],
+    "bullet_refs": [
+      "bullet_e_37"
+    ],
+    "bullet_prefab": "bullet_e_37",
+    "bullet_speed": 16.0,
+    "dead_tap": [
+      0.8,
+      1.2
     ]
   }
 ]

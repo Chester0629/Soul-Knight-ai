@@ -78,6 +78,7 @@ inline constexpr float kZGateLight = 4.45F;  ///< transfer_gate `light` is layer
 inline constexpr float kZChest = 4.5F;       ///< ... chest00/01 box05/box06 are layer 4 order 0/2 (chest >= light)
 inline constexpr float kZGate = 4.6F;        ///< transfer_gate `img` is layer 5 (kept under the hero)
 inline constexpr float kZWeaponPickup = 4.7F;
+inline constexpr float kZCorpse = 4.72F;     ///< P3.0c: lying enemy corpses: on the floor, under pickups and bullets
 inline constexpr float kZCoin = 4.75F;
 inline constexpr float kZBullet = 4.9F;
 inline constexpr float kZPlayer = 5.0F;      ///< c01.prefab body: layer 5, order 5

@@ -98,6 +98,7 @@ void EnemyController::OnShootTick() {
             intent.lifeMs = kSliceBulletLifeMs;
             intent.damage = 1;
             intent.camp = 1; // enemy bullet
+            intent.launch = m_Launch; // P3.0c: its own bullet prefab (sprite / shape / spin)
             m_FireOut->push_back(intent);
             m_FiredThisStep = true; // A: latch a shot for the "attack" AnimTrigger.
         }

@@ -106,7 +106,41 @@ ColliderDef ColliderFromJson(const json &node) {
     }
     auto trig = node.find("trigger");
     c.trigger = trig != node.end() && trig->is_boolean() && trig->get<bool>();
+    c.rotDeg = GetF(node, "rot"); // P3.0c: rotated child GameObject (box axes), 0 otherwise
+    c.onAwake = GetS(node, "state") == "on_awake";
     return c;
+}
+
+// P3.0c: bullets.json "visual" object -> BulletVisual (absent -> not Present()).
+BulletVisual VisualFromJson(const json &row) {
+    BulletVisual v;
+    auto it = row.find("visual");
+    if (it == row.end() || !it->is_object()) {
+        return v;
+    }
+    const json &n = *it;
+    v.sprite = GetS(n, "sprite");
+    auto pair = [&n](const char *key, float &x, float &y) {
+        auto a = n.find(key);
+        if (a != n.end() && a->is_array() && a->size() >= 2 && (*a)[0].is_number() &&
+            (*a)[1].is_number()) {
+            x = (*a)[0].get<float>();
+            y = (*a)[1].get<float>();
+        }
+    };
+    pair("scale", v.scaleX, v.scaleY);
+    pair("offset", v.offsetX, v.offsetY);
+    pair("pivot", v.pivotX, v.pivotY);
+    v.rotDeg = GetF(n, "rot");
+    auto fl = n.find("flip_x");
+    v.flipX = fl != n.end() && fl->is_boolean() && fl->get<bool>();
+    auto col = n.find("color");
+    if (col != n.end() && col->is_array() && col->size() >= 4) {
+        for (std::size_t k = 0; k < 4; ++k) {
+            v.color[k] = (*col)[k].is_number() ? (*col)[k].get<float>() : 1.0F;
+        }
+    }
+    return v;
 }
 
 // P3.2: bullets.json "buff.kind" ("fire"/"poison"/...) -> the buffs.json row id
@@ -177,6 +211,12 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.canRebound = GetI(e, "can_rebound");
             d.manualDestroy = GetI(e, "manual_destroy");
             d.collider = GetCollider(e, "collider"); // prefab hit collider (units)
+            d.bulletClass = GetS(e, "bullet_class");
+            d.visual = VisualFromJson(e);
+            d.hitObject = GetS(e, "hit_object");
+            d.composite = GetI(e, "composite");
+            d.colliderNone = GetS(e, "collider_none");
+            d.colliderNote = GetS(e, "collider_note");
             auto buffIt = e.find("buff"); // P3.2
             if (buffIt != e.end() && buffIt->is_object()) {
                 d.buffId = BuffIdFromKind(GetS(*buffIt, "kind"));
@@ -188,6 +228,41 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
     } else {
         LOG_ERROR("GameData: bullets.json is not an array");
         ok = false;
+    }
+
+    // P3.0c: bullet hit-effect prefabs (optional: absent -> bullets simply vanish silently).
+    const json &bulletEffects = store.Load(dir + "bullet_effects.json");
+    if (bulletEffects.is_object()) {
+        for (auto it = bulletEffects.begin(); it != bulletEffects.end(); ++it) {
+            if (!it.value().is_object() || it.value().contains("_unresolved")) {
+                continue;
+            }
+            const json &e = it.value();
+            BulletEffectDef d;
+            d.id = it.key();
+            d.sampleRate = GetI(e, "sample_rate", 12);
+            d.durationS = GetF(e, "duration_s");
+            d.particles = e.contains("particles") && e["particles"].is_boolean() &&
+                          e["particles"].get<bool>();
+            if (auto fr = e.find("frames"); fr != e.end() && fr->is_array()) {
+                for (const auto &x : *fr) {
+                    if (x.is_string()) {
+                        d.frames.push_back(x.get<std::string>());
+                    }
+                }
+            }
+            if (auto c = e.find("color"); c != e.end() && c->is_array() && c->size() >= 4) {
+                for (std::size_t k = 0; k < 4; ++k) {
+                    d.color[k] = (*c)[k].is_number() ? (*c)[k].get<float>() : 1.0F;
+                }
+            }
+            if (auto sc = e.find("scale"); sc != e.end() && sc->is_array() && sc->size() >= 2) {
+                d.scaleX = (*sc)[0].is_number() ? (*sc)[0].get<float>() : 1.0F;
+                d.scaleY = (*sc)[1].is_number() ? (*sc)[1].get<float>() : 1.0F;
+            }
+            m_BulletEffectIndex[d.id] = m_BulletEffects.size();
+            m_BulletEffects.push_back(std::move(d));
+        }
     }
 
     const json &enemies = store.Load(dir + "enemies.json");
@@ -226,6 +301,20 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.hurtbox = GetCollider(e, "hurtbox"); // bullet-hit trigger (units)
             d.bodyScale = GetF(e, "body_scale", 1.0F);
             ReadSpriteOffset(e, d.spriteOffsetX, d.spriteOffsetY);
+            d.bulletPrefab = GetS(e, "bullet_prefab"); // P3.0c
+            if (auto dt = e.find("dead_tap"); dt != e.end() && dt->is_array() && dt->size() >= 2 &&
+                                              (*dt)[0].is_number() && (*dt)[1].is_number()) {
+                d.hasDeadTap = true;
+                d.deadTapX = (*dt)[0].get<float>();
+                d.deadTapY = (*dt)[1].get<float>();
+            }
+            if (auto br = e.find("bullet_refs"); br != e.end() && br->is_array()) {
+                for (const auto &x : *br) {
+                    if (x.is_string()) {
+                        d.bulletRefs.push_back(x.get<std::string>());
+                    }
+                }
+            }
             m_EnemyIndex[d.id] = m_Enemies.size();
             m_Enemies.push_back(std::move(d));
         }
@@ -854,6 +943,46 @@ const BulletDef *GameData::FindBullet(const std::string &id) const {
     return it == m_BulletIndex.end() ? nullptr : &m_Bullets[it->second];
 }
 
+int GameData::BulletIndex(const std::string &id) const {
+    auto it = m_BulletIndex.find(id);
+    return it == m_BulletIndex.end() ? -1 : static_cast<int>(it->second);
+}
+const BulletEffectDef *GameData::FindBulletEffect(const std::string &id) const {
+    auto it = m_BulletEffectIndex.find(id);
+    return it == m_BulletEffectIndex.end() ? nullptr : &m_BulletEffects[it->second];
+}
+std::string GameData::DeadState(const std::string &spriteId) const {
+    const SpriteSet *s = FindSprites(spriteId);
+    if (s == nullptr) {
+        return "";
+    }
+    // Deterministic: prefer the plain "dead" state, else the lexicographically first state whose
+    // name contains "dead" and does not start with "char_" (the emoticon clips).
+    auto has = [s](const std::string &n) {
+        auto it = s->states.find(n);
+        return it != s->states.end() && !it->second.empty();
+    };
+    // The species' own prefix first: a clip family named after the default state
+    // ("e_chest_sleep" -> "e_chest_dead"), else the plain "dead".
+    const std::size_t us = s->defaultState.rfind('_');
+    if (us != std::string::npos && has(s->defaultState.substr(0, us + 1) + "dead")) {
+        return s->defaultState.substr(0, us + 1) + "dead";
+    }
+    if (has("dead")) {
+        return "dead";
+    }
+    std::string best;
+    for (const auto &kv : s->states) {
+        if (kv.second.empty() || kv.first.rfind("char_", 0) == 0 ||
+            kv.first.find("dead") == std::string::npos) {
+            continue;
+        }
+        if (best.empty() || kv.first < best) {
+            best = kv.first;
+        }
+    }
+    return best;
+}
 const BulletDef *GameData::BulletForWeapon(const WeaponDef &def) const {
     if (def.bulletPrefab.empty()) {
         return nullptr;

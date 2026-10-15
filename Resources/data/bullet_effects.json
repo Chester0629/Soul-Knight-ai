@@ -1,0 +1,117 @@
+{
+  "hit_blue": {
+    "_source": "1.7.10",
+    "_prefab": "rgprefab/item/hit_blue.prefab",
+    "color": [
+      0.1533,
+      0.4717,
+      0.9926,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "sorting_layer": 7,
+    "particles": true,
+    "duration_s": 0.25,
+    "frames": [
+      "bullet_85.png",
+      "bullet_93.png",
+      "bullet_96.png"
+    ],
+    "sample_rate": 12
+  },
+  "hit_green": {
+    "_source": "1.7.10",
+    "_prefab": "rgprefab/item/hit_green.prefab",
+    "color": [
+      0.4948,
+      0.9926,
+      0.1533,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "sorting_layer": 7,
+    "particles": true,
+    "duration_s": 0.25,
+    "frames": [
+      "bullet_85.png",
+      "bullet_93.png",
+      "bullet_96.png"
+    ],
+    "sample_rate": 12
+  },
+  "hit_red": {
+    "_source": "1.7.10",
+    "_prefab": "rgprefab/item/hit_red.prefab",
+    "color": [
+      0.8309,
+      0.1344,
+      0.1344,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "sorting_layer": 7,
+    "particles": true,
+    "duration_s": 0.25,
+    "frames": [
+      "bullet_85.png",
+      "bullet_93.png",
+      "bullet_96.png"
+    ],
+    "sample_rate": 12
+  },
+  "hit_white": {
+    "_source": "1.7.10",
+    "_prefab": "rgprefab/item/hit_white.prefab",
+    "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "sorting_layer": 7,
+    "particles": true,
+    "duration_s": 0.25,
+    "frames": [
+      "bullet_85.png",
+      "bullet_93.png",
+      "bullet_96.png"
+    ],
+    "sample_rate": 12
+  },
+  "hit_yellow": {
+    "_source": "1.7.10",
+    "_prefab": "rgprefab/item/hit_yellow.prefab",
+    "color": [
+      1.0,
+      0.6,
+      0.0,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "sorting_layer": 7,
+    "particles": true,
+    "duration_s": 0.25,
+    "frames": [
+      "bullet_85.png",
+      "bullet_93.png",
+      "bullet_96.png"
+    ],
+    "sample_rate": 12
+  }
+}

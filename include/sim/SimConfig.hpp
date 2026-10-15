@@ -59,10 +59,11 @@ static_assert(kDataSpeedToPxPerSec == 32.0F, "1 Unity unit == 32 world px (PPU 1
 /// Sim::BodyGeom (hero/enemy/boss body circle + hurtbox) and BulletState::radiusPx
 /// (the bullet prefab collider) -- see sim/BodyGeom.hpp and tools/build_gamedata.py.
 ///
-/// PORT CHOICE (T-52): ENEMY bullets never carry a prefab radius (the enemy fire path sets
-/// FireIntent::radiusPx = 0), so they always use this 4 px fallback instead of their
-/// bullet prefab's own collider; only player-weapon bullets (BrainFactory ->
-/// EquivalentRadiusPx) use the data radius.
+/// P3.0c: this 4 px circle is now ONLY the fallback of a bullet with no prefab shape (a Simulation
+/// without GameData::SetGameData, or a weapon whose bullet prefab is not in bullets.json). With
+/// data, enemy and boss bullets carry their own prefab shape (EnemyDef::bulletPrefab ->
+/// BulletLaunch), the generic bullet_e_1 standing in for species with no RGBullet-family bullet
+/// (T-66).
 inline constexpr float kBulletRadius = 4.0F;
 inline constexpr float kPlayerBodyRadius = 16.0F;
 inline constexpr float kEnemyBodyRadius = 16.0F;

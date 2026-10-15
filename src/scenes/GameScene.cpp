@@ -110,6 +110,11 @@ std::vector<std::string> EffectFrames(const std::string &root, const std::string
     return frames;
 }
 
+/// PORT CHOICE (T-67): how long the death emoticon (skull speech bubble, prefab child dead_tap =
+/// biaoqing_11.png, Animator state char_tap_dead) stays up. The reference capture shows it for at
+/// least 12 recorded frames; the clip's own length / fade is not recovered, so a flat 1.5 s.
+constexpr float kDeathBubbleMs = 1500.0F;
+
 } // namespace
 
 GameScene::GameScene(int floorSeed, int floorIndex,
@@ -132,6 +137,7 @@ void GameScene::OnEnter() {
     m_Rng.SetRandomSeed(m_FloorSeed);
     m_RewardRng.SetRandomSeed(m_FloorSeed + 7000); // B3: own window, never perturbs combat
     m_Sim.emplace(m_FloorSeed, this); // headless sim driven from Update; `this` is the WorldCollision.
+    m_Sim->SetGameData(&m_Data);      // P3.0c: enemy / boss bullets resolve their own prefab
 
     // PER-CHARACTER: build the player from the selected character's real stats.
     // charId is carried across floors (default "c01"/Knight until HeroRoom, B5).
@@ -969,6 +975,9 @@ void GameScene::OnEnter() {
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, bossMaxHp, roomIndex,
                                m_FloorSeed + 9000, bossId, bossDef);
+                if (bossDef != nullptr) {
+                    LogBulletSubstitute(*bossDef); // P3.0c
+                }
                 LOG_INFO("BossMaker-lite: room {} spawned {} maxHp={} (type {})", roomIndex,
                          bossId, bossMaxHp, slot);
             } else if (slot != 1) {
@@ -1310,6 +1319,18 @@ void GameScene::OnEnter() {
         }
     }
     // P2.18 evidence hooks (strict parse; invalid -> the hook stays unset). NO-OP unless set.
+    if (const char *ff = std::getenv("SK_FORCE_FIRE")) {
+        const Game::ForceFireSpec spec = Game::ParseForceFire(ff);
+        if (spec.ok) {
+            m_ForceFireFrame = spec.frame;
+            m_ForceFireDir = glm::vec2{spec.ux, spec.uy}; // unit, stable normalisation
+            m_ForceFireCount = spec.count;
+            LOG_INFO("SK_FORCE_FIRE: from frame {} aim ({:.2f},{:.2f}) for {} frames", spec.frame,
+                     spec.dx, spec.dy, spec.count);
+        } else {
+            LOG_WARN("SK_FORCE_FIRE rejected: {}", spec.error);
+        }
+    }
     if (const char *fd = std::getenv("SK_FORCE_DASH")) {
         const Game::ForceDashSpec spec = Game::ParseForceDash(fd);
         if (spec.ok) {
@@ -1575,6 +1596,20 @@ bool GameScene::MoveBlocked(glm::vec2 from, glm::vec2 to, float radius) const {
     return Sim::SegmentBlockedByAny(nearby, from, to, radius);
 }
 
+// P3.0c (T-64): exact oriented-box sweep. Blockers within the path's bounding circle grown by the box's
+// reach (|centreOffset| + |half|) are gathered (same collections as BlocksAny) and tested exactly.
+float GameScene::SweepBoxBlocked(glm::vec2 from, glm::vec2 to, glm::vec2 centreOffset, glm::vec2 half, float angle,
+                                 glm::vec2 &contactOffset, float &contactRadius) const {
+    const glm::vec2 mid = 0.5F * (from + to);
+    const glm::vec2 hp = 0.5F * (to - from);
+    const float reach = std::sqrt(hp.x * hp.x + hp.y * hp.y) + std::sqrt(centreOffset.x * centreOffset.x + centreOffset.y * centreOffset.y) +
+                        std::sqrt(half.x * half.x + half.y * half.y) + 1.0F;
+    static thread_local std::vector<Util::Collider> nearby;
+    nearby.clear();
+    GatherBlockersNear(mid, reach, nearby);
+    return Sim::SweepBoxBlockedByAny(nearby, from, to, centreOffset, half, angle, contactOffset, contactRadius);
+}
+
 bool GameScene::SpawnBlocked(std::size_t room, glm::vec2 pos, float radius) const {
     if (BlocksAny(pos, radius)) {
         return true;
@@ -1695,23 +1730,147 @@ void GameScene::SyncBulletViews() {
         if (found == m_BulletViews.end()) {
             view = m_BulletPool.Acquire();
             view->Init(b.pos, b.vel, kBulletLifeMs, b.damage, b.camp); // arms the sprite; not Update()d.
-            // WEAPON RE-KEY: a player bullet wears its weapon's real bullet art
-            // (weapons.json bullet_sprite); enemy/unknown keeps the bullet_0
-            // default. Set on every acquire: pooled views are reused across weapons.
-            std::string bulletPng = "bullet_0.png";
-            if (b.camp == 0) {
-                if (const WeaponDef *w = m_Data.FindWeapon(m_CurrentWeaponId);
-                    w != nullptr && !w->bulletSprite.empty()) {
-                    bulletPng = w->bulletSprite;
+            // P3.0c: the bullet wears ITS OWN prefab (bullets.json visual: sprite, child scale /
+            // offset / rotation / flip / pivot / tint), whoever fired it. Set on every acquire:
+            // pooled views are reused across bullets.
+            const std::size_t bIdx = b.launch.bulletIdx >= 0 ? static_cast<std::size_t>(b.launch.bulletIdx)
+                                                             : m_Data.Bullets().size();
+            const BulletDef *bd = bIdx < m_Data.Bullets().size() ? &m_Data.Bullets()[bIdx] : nullptr;
+            if (bd != nullptr && bd->visual.Present()) {
+                view->SetPrefabVisual(std::string(RESOURCE_DIR) + "/sprites/" + bd->visual.sprite,
+                                      bd->visual);
+            } else {
+                // Genuinely no prefab sprite (the 4 glow-only carrier rows, or no bullets.json row):
+                // the legacy art -- the weapon's bullet_sprite for the player, bullet_0 otherwise.
+                view->ClearPrefabVisual();
+                std::string bulletPng = "bullet_0.png";
+                if (b.camp == 0) {
+                    if (const WeaponDef *w = m_Data.FindWeapon(m_CurrentWeaponId);
+                        w != nullptr && !w->bulletSprite.empty()) {
+                        bulletPng = w->bulletSprite;
+                    }
                 }
+                view->SetSprite(std::string(RESOURCE_DIR) + "/sprites/" + bulletPng);
             }
-            view->SetSprite(std::string(RESOURCE_DIR) + "/sprites/" + bulletPng);
             m_Renderer.AddChild(view);
             m_BulletViews.emplace(b.id, view);
         } else {
             view = found->second;
         }
-        view->m_Transform.translation = b.pos;
+        view->SyncPose(b.pos, b.angleRad); // P3.0c: heading + child offset, every frame
+    }
+}
+
+void GameScene::LogBulletSubstitute(const EnemyDef &def) {
+    if (m_Data.BulletIndex(def.bulletPrefab) >= 0) {
+        return;
+    }
+    const std::string key = "bullet:" + def.id;
+    if (std::find(m_LoggedSubstitutes.begin(), m_LoggedSubstitutes.end(), key) != m_LoggedSubstitutes.end()) {
+        return;
+    }
+    m_LoggedSubstitutes.push_back(key);
+    std::string refs;
+    for (const std::string &r : def.bulletRefs) {
+        refs += (refs.empty() ? "" : ",") + r;
+    }
+    LOG_INFO("Bullet: {} fires no RGBullet-family bullet (refs: {}) -> generic bullet_e_1 stands in (T-66)",
+             def.id, refs.empty() ? "none" : refs);
+}
+
+void GameScene::SpawnHitEffect(const BulletEffectDef &fx, glm::vec2 pos) {
+    if (fx.frames.empty()) {
+        return;
+    }
+    const std::string root(RESOURCE_DIR);
+    std::vector<std::string> paths;
+    paths.reserve(fx.frames.size());
+    for (const std::string &f : fx.frames) {
+        paths.push_back(root + "/sprites/" + f);
+    }
+    const float frameMs = 1000.0F / static_cast<float>(std::max(1, fx.sampleRate));
+    const float lifeMs = fx.durationS > 0.0F ? fx.durationS * 1000.0F
+                                             : frameMs * static_cast<float>(paths.size());
+    auto anim = std::make_shared<Util::Animation>(std::move(paths), /*play=*/true,
+                                                  static_cast<std::size_t>(std::max(1.0F, frameMs)),
+                                                  /*looping=*/false);
+    anim->SetTint({fx.color[0], fx.color[1], fx.color[2], fx.color[3]});
+    auto obj = std::make_shared<Util::GameObject>();
+    obj->SetDrawable(anim);
+    obj->SetZIndex(RenderLayout::kZEffect);
+    obj->m_Transform.scale = {Scale::kSpriteScale * fx.scaleX, Scale::kSpriteScale * fx.scaleY};
+    obj->m_Transform.translation = pos;
+    m_Renderer.AddChild(obj);
+    m_Effects.emplace_back(std::move(obj), lifeMs);
+}
+
+void GameScene::ConsumeBulletImpacts() {
+    for (const Sim::Simulation::BulletImpact &im : m_Sim->DrainImpacts()) {
+        // Scope (P3.0c): wall / obstacle contacts. A bullet that lands on a target keeps the
+        // existing "hurt" cue; the prefab hit effect there is not wired (documented).
+        if (!im.wall || im.bulletIdx < 0 ||
+            static_cast<std::size_t>(im.bulletIdx) >= m_Data.Bullets().size()) {
+            continue;
+        }
+        const BulletDef &bd = m_Data.Bullets()[static_cast<std::size_t>(im.bulletIdx)];
+        const BulletEffectDef *fx = m_Data.FindBulletEffect(bd.hitObject);
+        LOG_INFO("BulletImpact: frame {} wall {} camp {} at ({:.1f},{:.1f}) heading {:.1f} deg effect {}", m_Frame,
+                 bd.id, im.camp, im.pos.x, im.pos.y, im.angleRad * 57.29578F,
+                 fx != nullptr ? bd.hitObject : std::string("none"));
+        if (fx != nullptr) {
+            SpawnHitEffect(*fx, im.pos);
+        }
+    }
+}
+
+void GameScene::SpawnCorpse(const EnemyDef &def, glm::vec2 pos) {
+    const std::string root(RESOURCE_DIR);
+    const std::string state = m_Data.DeadState(def.id);
+    std::vector<std::string> frames =
+        state.empty() ? std::vector<std::string>{} : m_Data.SpriteFrames(def.id, root, state);
+    if (frames.empty()) {
+        if (std::find(m_LoggedSubstitutes.begin(), m_LoggedSubstitutes.end(), "corpse:" + def.id) ==
+            m_LoggedSubstitutes.end()) {
+            m_LoggedSubstitutes.push_back("corpse:" + def.id);
+            LOG_WARN("Corpse: {} has no dead clip in sprites.json -> no corpse drawn", def.id);
+        }
+        return;
+    }
+    SpriteAnchor anchor = MakeSpriteAnchor(m_Data, def.id, def.body, def.hurtbox, def.bodyScale,
+                                           {def.spriteOffsetX, def.spriteOffsetY}, Sim::kEnemyBodyRadius);
+    anchor.framePivots = m_Data.SpriteFramePivots(def.id, state); // pivots of the DEAD frames
+    const int interval = m_Data.SpriteIntervalMs(def.id, 120);
+    auto anim = std::make_shared<Util::Animation>(frames, /*play=*/true,
+                                                  static_cast<std::size_t>(std::max(1, interval)),
+                                                  /*looping=*/false); // plays through, holds the last frame
+    auto obj = std::make_shared<Util::GameObject>();
+    obj->SetDrawable(anim);
+    obj->SetZIndex(RenderLayout::kZCorpse);
+    obj->m_Transform.translation = pos;
+    anchor.Apply(*obj, *anim);
+    m_Renderer.AddChild(obj);
+    m_Corpses.push_back(obj);
+    LOG_INFO("Corpse: {} left at ({:.0f},{:.0f}) state '{}' ({} frame(s))", def.id, pos.x, pos.y, state,
+             frames.size());
+    // The death emoticon: the prefab's dead_tap child shows biaoqing_11 (state char_tap_dead).
+    if (def.hasDeadTap) {
+        const std::vector<std::string> tap = m_Data.SpriteFrames(def.id, root, "char_tap_dead");
+        const std::vector<std::array<float, 2>> piv = m_Data.SpriteFramePivots(def.id, "char_tap_dead");
+        if (!tap.empty()) {
+            auto tapAnim = std::make_shared<Util::Animation>(tap, /*play=*/false, 1000, /*looping=*/false);
+            auto bubble = std::make_shared<Util::GameObject>();
+            bubble->SetDrawable(tapAnim);
+            bubble->SetZIndex(RenderLayout::kZEffect);
+            bubble->m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
+            const glm::vec2 sz = tapAnim->GetSize();
+            const std::array<float, 2> pv = piv.empty() ? std::array<float, 2>{0.5F, 0.5F} : piv[0];
+            bubble->SetPivot({(pv[0] - 0.5F) * sz.x, (pv[1] - 0.5F) * sz.y});
+            bubble->m_Transform.translation = pos - anchor.feetOffsetPx +
+                                              glm::vec2{Scale::UnitsToPx(def.deadTapX),
+                                                        Scale::UnitsToPx(def.deadTapY)};
+            m_Renderer.AddChild(bubble);
+            m_Effects.emplace_back(std::move(bubble), kDeathBubbleMs);
+        }
     }
 }
 
@@ -1967,6 +2126,14 @@ void GameScene::Update(float dtMs) {
             in.firing = true;
         }
     }
+    // SK_FORCE_FIRE=K,dx,dy[,N] (P3.0c evidence hook, NO-OP unless set): aim along a fixed direction
+    // and hold fire from frame K for N frames. Applied last so it wins over the other aim hooks.
+    if (m_ForceFireFrame >= 0 && m_Frame >= m_ForceFireFrame &&
+        m_Frame - m_ForceFireFrame < m_ForceFireCount &&
+        m_Player->Stats().energy >= m_WeaponEnergyCost) {
+        in.aimDir = m_ForceFireDir; // already a unit vector (ParseForceFire)
+        in.firing = true;
+    }
     in.playerAlive = !m_Player->Stats().IsDead();
     in.playerRoomId = playerRoomId;
 
@@ -1978,6 +2145,15 @@ void GameScene::Update(float dtMs) {
     static const bool traceBullets = std::getenv("SK_TRACE_BULLETS") != nullptr;
     if (traceBullets) {
         for (const Sim::BulletState &tb : m_Sim->Bullets()) {
+            if (tb.active) {
+                // P3.0c: every bullet's prefab and heading (any camp).
+                const std::size_t ti = tb.launch.bulletIdx >= 0 ? static_cast<std::size_t>(tb.launch.bulletIdx)
+                                                                : m_Data.Bullets().size();
+                LOG_INFO("BulletPose: frame {} id {} camp {} prefab {} heading {:.1f} deg px=({:.1f},{:.1f})",
+                         m_Frame, tb.id, tb.camp,
+                         ti < m_Data.Bullets().size() ? m_Data.Bullets()[ti].id : std::string("none"),
+                         tb.angleRad * 57.29578F, tb.pos.x, tb.pos.y);
+            }
             if (tb.active && tb.camp == 0) {
                 LOG_INFO("BulletTrace: frame {} id {} px=({:.2f},{:.2f}) cells=({:.3f},{:.3f}) player=({:.2f},{:.2f})",
                          m_Frame, tb.id, tb.pos.x, tb.pos.y, tb.pos.x / kCellPx, tb.pos.y / kCellPx,
@@ -2022,6 +2198,7 @@ void GameScene::Update(float dtMs) {
     // --- A: present the sim's anim/sfx cues (muzzle/hit/death). Drained before the view
     // sync below so a dying entity's view is still alive to anchor its death effect. ---
     ConsumeSimEvents(resolved);
+    ConsumeBulletImpacts(); // P3.0c: wall hits -> the bullet prefab's hit effect
 
     // --- Clear-room gating: RGRoomX is the SINGLE authority (#3a) ---
     // Enter combat: the player is in an Uncleared room that still has hostiles ->
@@ -2142,6 +2319,9 @@ void GameScene::Update(float dtMs) {
         if (!ev.alive) {
             m_Renderer.RemoveChild(view);
             view = nullptr;
+            if (ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr) {
+                SpawnCorpse(*m_EnemyDefs[ev.id], ev.pos); // P3.0c: the body stays on the floor
+            }
         }
     }
     if (!m_Bosses.empty() && m_Bosses[0] != nullptr && m_Sim->HasBoss()) {
@@ -2151,6 +2331,9 @@ void GameScene::Update(float dtMs) {
         if (!bv.alive) {
             m_Renderer.RemoveChild(m_Bosses[0]);
             m_Bosses[0] = nullptr;
+            if (m_BossDef != nullptr) {
+                SpawnCorpse(*m_BossDef, bv.pos); // P3.0c: the boss body stays too
+            }
             LOG_INFO("Boss defeated!");
             // M3b: RGChestBoss -- the boss's chest (chest_boss<NN>: tier + its
             // signature weapon) drops where the boss fell.
@@ -2466,6 +2649,7 @@ void GameScene::SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, i
     m_EnemyDefs.push_back(rdef);
     m_Renderer.AddChild(enemy);
     m_Sim->AddEnemy(*rdef, at, roomIndex, seed);
+    LogBulletSubstitute(*rdef); // P3.0c: which species fall back to the generic bullet (T-66)
     m_HadHostiles = true;
 }
 
@@ -2718,7 +2902,9 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
                                      : UiClip(isPlayer ? "player_hurt" : "enemy_hurt"));
             }
         } else if (e.name == "death") {
-            SpawnEffect(EffectFrames(root, "effect04", 23), pos, 600.0F); // explosion puff
+            // P3.0c: NO explosion on death. The old 23-frame "effect04" puff played an atlas of 23
+            // unrelated sprites (effect04_19 is the blue hexagon); the original leaves the lying
+            // corpse + a skull bubble instead (GameScene::SpawnCorpse, from the view sync below).
             // PORT CHOICE (T-35) for all three rows -- see audio.json
             // ui_effects.player_death._why (c01.prefab declares clip_skill and
             // clip_hit but no death clip, so the port borrows an enemy clip_dead),

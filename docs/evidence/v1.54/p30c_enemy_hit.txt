@@ -1,0 +1,2 @@
+ [info] BulletImpact: frame 152 wall bullet_e_1 camp 1 at (-80.8,-1163.2) heading -69.2 deg effect hit_red
+ [info] BulletImpact: frame 156 wall bullet_e_1 camp 1 at (-148.8,-1413.7) heading 14.2 deg effect hit_red

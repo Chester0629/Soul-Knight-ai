@@ -69,6 +69,10 @@ public:
     /// F2: the per-cycle move decision (chase / strafe / retreat / wander) the boss moves
     /// along; {0,0} before the first think tick. Consumed by Simulation::MoveControllers.
     glm::vec2 MoveDir() const { return m_MoveDir; }
+    /// P3.0c: the bullet prefab (row, oriented shape, spin) the boss's shots use; PORT CHOICE
+    /// (T-65): one bullet per boss (the first resolvable of its bullet01..06) because the attack
+    /// jump-table that would pick bullet0N per attack is truncated. Default = legacy 4 px circle.
+    void SetBulletLaunch(const BulletLaunch &launch) { m_Launch = launch; }
     /// A (presentation): true iff the boss fired since the last call; reading clears the
     /// latch. Simulation drains it per step to emit a boss "attack" AnimTrigger SimEvent.
     bool ConsumeFiredThisStep() {
@@ -86,6 +90,7 @@ private:
     EntityState m_State;
     glm::vec2 m_Target{0.0F, 0.0F};
     glm::vec2 m_MoveDir{0.0F, 0.0F}; ///< F2: move decision; consumed by MoveControllers.
+    BulletLaunch m_Launch{};      ///< P3.0c: see SetBulletLaunch.
     bool m_FiredThisStep = false; ///< A: latched in OnShootTick, drained by ConsumeFiredThisStep.
 
     Scheduler *m_Scheduler = nullptr;

@@ -1,0 +1,2 @@
+ [info] Buff: Fire applied to 61453 for 2.000000s
+ [info] Buff: Fire ended on 61453

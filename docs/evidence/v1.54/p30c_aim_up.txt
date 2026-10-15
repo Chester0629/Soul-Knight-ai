@@ -1,0 +1,5 @@
+ [info] SK_FORCE_FIRE: from frame 100 aim (0.00,1.00) for 40 frames
+ [info] BulletPose: frame 100 id 1 camp 0 prefab bullet_0 heading 87.7 deg px=(0.9,-41.0)
+ [info] BulletPose: frame 101 id 1 camp 0 prefab bullet_0 heading 87.7 deg px=(1.9,-18.0)
+ [info] BulletPose: frame 102 id 1 camp 0 prefab bullet_0 heading 87.7 deg px=(2.8,5.1)
+ [info] BulletPose: frame 103 id 1 camp 0 prefab bullet_0 heading 87.7 deg px=(3.7,28.1)

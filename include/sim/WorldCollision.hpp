@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include "sim/CoverCircles.hpp"
 #include "sim/Depenetration.hpp"
 
 namespace Game::Sim {
@@ -65,6 +66,30 @@ public:
         return -1.0F;
     }
 
+    /// P3.0c (T-64): swept wall test of an ORIENTED BOX bullet -- box half extents @p half, x axis at
+    /// @p angle, centre at the bullet origin + @p centreOffset (world axes); the origin moves @p from ->
+    /// @p to. Returns the first contact fraction (< 0 = free) like SweepBlocked, and @p contactOffset /
+    /// @p contactRadius = the circle (relative to the origin at the contact) to hand to DamageObstacle.
+    /// Default implementation (worlds that only answer circle queries): SweepBlocked of a ROW of circles
+    /// covering the box (CoverCircles.hpp), which leaves slivers up to (sqrt(2) - 1) r deep along the box
+    /// perimeter uncovered (pinned in BulletShapeTest). GameScene overrides it with the exact sweep
+    /// (SweepBoxBlockedByAny).
+    virtual float SweepBoxBlocked(glm::vec2 from, glm::vec2 to, glm::vec2 centreOffset, glm::vec2 half,
+                                  float angle, glm::vec2 &contactOffset, float &contactRadius) const {
+        const CoverCircles row = MakeCoverCircles(centreOffset, half, angle);
+        float best = -1.0F;
+        contactOffset = centreOffset;
+        contactRadius = row.radius;
+        for (int i = 0; i < row.n; ++i) {
+            const float t = SweepBlocked(from + row.centre[i], to + row.centre[i], row.radius);
+            if (t >= 0.0F && (best < 0.0F || t < best)) {
+                best = t;
+                contactOffset = row.centre[i];
+            }
+        }
+        return best;
+    }
+
     static constexpr int kSweepBisectSteps = 8; ///< contact refinement: 1/256 of a sample gap.
 
     /// SWEPT MOVE TEST (P2.18, PORT CHOICE T-62): does a circle of @p radius moving along the straight
@@ -116,6 +141,10 @@ class NullWorldCollision : public WorldCollision {
 public:
     bool Blocks(glm::vec2 /*pos*/, float /*radius*/) const override { return false; }
     float SweepBlocked(glm::vec2, glm::vec2, float) const override { return -1.0F; } // open arena.
+    float SweepBoxBlocked(glm::vec2, glm::vec2, glm::vec2, glm::vec2, float, glm::vec2 &,
+                          float &) const override {
+        return -1.0F; // open arena.
+    }
     bool MoveBlocked(glm::vec2, glm::vec2, float) const override { return false; } // open arena.
     glm::vec2 Depenetrate(glm::vec2 pos, float /*radius*/) const override { return pos; }
 };

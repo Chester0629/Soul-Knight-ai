@@ -10,6 +10,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -20,8 +22,29 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b",
+      "rot": 90.0
+    },
+    "visual": {
+      "sprite": "weapons2_20.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 90.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "Bullet02",
@@ -34,6 +57,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -44,13 +69,68 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_2.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "Bullet02Percentage",
     "_source": "1.7.10",
-    "_prefab": "bullet_94"
+    "_prefab": "bullet_94",
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "Bullet03",
@@ -63,6 +143,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet03",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -73,8 +155,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_2.png",
+      "scale": [
+        0.2,
+        0.2
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "Bullet04",
@@ -87,6 +189,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet04",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -97,8 +201,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "Bullet05",
@@ -111,6 +219,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet05",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -121,13 +231,18 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "BulletBat",
     "_source": "1.7.10",
-    "_prefab": "bullet_bat"
+    "_prefab": "bullet_bat",
+    "collider_none": "no RGBullet-family script"
   },
   {
     "id": "BulletBeetle",
@@ -140,6 +255,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletBeetle",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -150,19 +267,26 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "BulletBoom",
     "_source": "1.7.10",
-    "_prefab": "bullet_boom"
+    "_prefab": "bullet_boom",
+    "collider_none": "no RGBullet-family script"
   },
   {
     "id": "BulletBottle",
     "_source": "1.7.10",
     "_prefab": "bullet_bottle_0",
     "camp": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -173,16 +297,38 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_48.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "BulletBuleLight",
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletCoinExplode",
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletColor",
@@ -195,6 +341,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletColor",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -205,8 +353,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "BulletEPoly",
@@ -216,14 +384,16 @@
       "_unresolved_ref": 7714463989765790460
     },
     "is_poly": 1,
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletFire",
     "damage": 2,
     "hit_player": 0,
     "hit_enemy": 1,
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletFollow",
@@ -236,6 +406,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletFollow",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -246,15 +418,43 @@
         0.0,
         2.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        2.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.4118,
+        1.0,
+        0.9757,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "BulletGas",
     "damage": 1,
     "hit_player": 1,
     "hit_enemy": 1,
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletGreenLight",
@@ -263,7 +463,8 @@
     "audio_clip": {
       "_unresolved_ref": 5778059149852892030
     },
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletImmediately",
@@ -276,6 +477,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletImmediately",
+    "collider_candidates": 3,
     "collider": {
       "shape": "circle",
       "radius": 4.0,
@@ -283,8 +486,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "gravity_source"
+    },
+    "visual": {
+      "sprite": "effect04_5.png",
+      "scale": [
+        2.2,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5105,
+        0.5165
+      ],
+      "color": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "BulletLaterFixedTarget",
@@ -297,6 +526,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletLaterFixedTarget",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -307,8 +538,28 @@
         -0.1,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_104.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "BulletParabola",
@@ -321,6 +572,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletParabola",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.5,
@@ -328,8 +581,29 @@
         0.0,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": false,
+      "state": "enabled",
+      "go": "bullet_90"
+    },
+    "collider_note": "the only live collider is a NON-trigger shape (physical bounce volume); the trigger collider is disabled",
+    "visual": {
+      "sprite": "weapons2_68.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "BulletPolymerization",
@@ -342,21 +616,48 @@
     "delay": 0.8,
     "range": 7.0,
     "is_poly": 1,
-    "_source": "1.07"
+    "_source": "1.07",
+    "collider_none": "1.07-only class row: no 1.7.10 prefab uses this script (non-RGBullet class)"
   },
   {
     "id": "BulletReboundPercentage",
     "_source": "1.7.10",
     "_prefab": "bullet_23_rebound",
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
-      "shape": "circle",
-      "radius": 0.5,
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
       "offset": [
         0.0,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "BulletRoundabout",
@@ -369,6 +670,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletRoundabout",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.7425,
@@ -376,13 +679,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_6.png",
+      "scale": [
+        1.35,
+        1.35
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "BulletThunder",
     "_source": "1.7.10",
-    "_prefab": "thunder"
+    "_prefab": "thunder",
+    "collider_none": "no RGBullet-family script"
   },
   {
     "id": "_bullet_10",
@@ -393,7 +717,11 @@
     "rotate_angle": 12,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "RGSBullet02",
+    "collider_candidates": 0,
+    "collider_none": "prefab has no collider component at all",
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)"
   },
   {
     "id": "_bullet_13",
@@ -405,6 +733,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -415,8 +745,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_2.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "_bullet_26",
@@ -428,6 +778,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -438,8 +790,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_71.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_4",
@@ -451,6 +823,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -461,8 +835,29 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b",
+      "rot": 90.0
+    },
+    "visual": {
+      "sprite": "weapons2_20.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 90.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "_bullet_53",
@@ -474,6 +869,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -484,8 +881,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_106.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_68",
@@ -497,6 +914,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGBDelayDivision",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -507,8 +926,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_69",
@@ -520,6 +943,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -530,8 +955,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_red"
   },
   {
     "id": "_bullet_7",
@@ -543,6 +972,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "circle",
       "radius": 1.005,
@@ -550,8 +981,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_64.png",
+      "scale": [
+        1.5,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "_bullet_70",
@@ -563,6 +1014,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletBeetle",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -573,8 +1026,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_71",
@@ -586,6 +1043,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet04",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -596,8 +1055,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_8",
@@ -609,6 +1072,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet05",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -619,8 +1084,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_blue"
   },
   {
     "id": "_bullet_82",
@@ -632,6 +1101,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -642,8 +1113,28 @@
         0.7441,
         -0.0016
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_22.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "_bullet_83",
@@ -655,6 +1146,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -665,8 +1158,28 @@
         0.9451,
         -0.0013
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons_101.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.25,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "_bullet_9",
@@ -678,6 +1191,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet05",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -688,8 +1203,12 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)",
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_0",
@@ -701,6 +1220,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -711,8 +1232,28 @@
         0.25,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_5.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_1",
@@ -724,6 +1265,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -734,8 +1277,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_11",
@@ -747,6 +1316,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -757,8 +1328,28 @@
         0.4,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_33.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_12",
@@ -770,6 +1361,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -780,8 +1373,28 @@
         0.4,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_32.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_13",
@@ -793,6 +1406,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -803,8 +1418,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_2.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_14",
@@ -816,6 +1451,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -826,8 +1463,28 @@
         0.4,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_34.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_15",
@@ -839,6 +1496,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -849,8 +1508,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_38.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_16",
@@ -862,6 +1541,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -872,8 +1553,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_28.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_17",
@@ -885,6 +1586,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -895,8 +1598,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_82.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_18",
@@ -908,6 +1631,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -918,8 +1643,29 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_82.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_19",
@@ -931,6 +1677,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -941,8 +1689,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_36.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_2",
@@ -954,6 +1722,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -964,8 +1734,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.0,
+        0.9172,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -985,6 +1781,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -995,8 +1793,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_36.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_200",
@@ -1008,6 +1826,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1018,8 +1838,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_87.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.15,
+        0.62
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_201",
@@ -1031,6 +1871,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1041,8 +1883,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_19.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_202",
@@ -1054,6 +1916,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1064,8 +1928,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_86.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.15,
+        0.68
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_202_lion",
@@ -1077,6 +1961,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1087,8 +1973,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_86.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.15,
+        0.68
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_21",
@@ -1100,6 +2006,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1110,8 +2018,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_36.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_22",
@@ -1122,7 +2050,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_39.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_23",
@@ -1133,7 +2096,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_23_rebound",
@@ -1145,15 +2143,41 @@
     "awake": 0,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
-      "shape": "circle",
-      "radius": 0.5,
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
       "offset": [
         0.0,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_24",
@@ -1164,7 +2188,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_43.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_25",
@@ -1176,6 +2235,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1186,8 +2247,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_72.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_26",
@@ -1199,6 +2280,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1209,8 +2292,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_71.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_27",
@@ -1222,6 +2325,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1232,8 +2337,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_11.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.45
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_28",
@@ -1245,6 +2370,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1255,8 +2382,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_10.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_29",
@@ -1268,6 +2415,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1278,8 +2427,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_74.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_2_2",
@@ -1291,6 +2460,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1301,8 +2472,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.0,
+        0.0863,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -1322,6 +2519,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1332,8 +2531,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.6379,
+        1.0,
+        0.2279,
+        1.0
+      ]
+    },
+    "hit_object": "hit_green",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -1353,6 +2578,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -1363,8 +2590,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_76.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_31",
@@ -1376,6 +2623,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -1386,8 +2635,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_77.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_32",
@@ -1399,6 +2668,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1409,8 +2680,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_81.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "electric",
       "buff_prefab": "buff_ele",
@@ -1430,6 +2721,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1440,8 +2733,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_49.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_34",
@@ -1453,6 +2766,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1463,8 +2778,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_35",
@@ -1475,7 +2810,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_35_plus",
@@ -1486,7 +2856,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_121.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.0,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_36",
@@ -1498,6 +2903,47 @@
     "awake": 0,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_114.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6507,
+        0.3824,
+        1.0
+      ]
+    },
+    "hit_object": "hit_yellow",
     "buff": {
       "kind": "fire",
       "buff_prefab": "buff_fire",
@@ -1517,6 +2963,47 @@
     "awake": 0,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.5608,
+        1.0,
+        0.4779,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -1536,6 +3023,47 @@
     "awake": 0,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.5735,
+        0.9118,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -1555,6 +3083,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1565,8 +3095,28 @@
         0.4,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_3_2",
@@ -1578,6 +3128,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1588,8 +3140,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.6078,
+        0.0,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -1609,6 +3187,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1619,8 +3199,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.3059,
+        0.1471,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red",
     "buff": {
       "kind": "fire",
       "buff_prefab": "buff_fire",
@@ -1640,6 +3246,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletFollow",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -1650,8 +3258,35 @@
         0.0,
         2.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        2.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.4118,
+        1.0,
+        0.9757,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_45",
@@ -1663,6 +3298,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletFollow",
+    "collider_candidates": 4,
     "collider": {
       "shape": "box",
       "size": [
@@ -1673,8 +3310,35 @@
         0.0,
         2.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        2.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.4118,
+        1.0,
+        0.9757,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_46",
@@ -1686,6 +3350,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1696,8 +3362,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_3.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_47",
@@ -1709,6 +3395,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1719,8 +3407,28 @@
         0.6,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.5,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_49",
@@ -1731,7 +3439,11 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "RGSBullet02",
+    "collider_candidates": 0,
+    "collider_none": "prefab has no collider component at all",
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)"
   },
   {
     "id": "bullet_5",
@@ -1743,6 +3455,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1753,8 +3467,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_39.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_50",
@@ -1766,6 +3500,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1776,8 +3512,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_98.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_50_1",
@@ -1789,6 +3545,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1799,8 +3557,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_106.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.7373,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_51",
@@ -1812,6 +3596,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1822,8 +3608,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_99.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.0,
+        0.9172,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -1843,6 +3655,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1853,8 +3667,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_105.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red",
     "buff": {
       "kind": "fire",
       "buff_prefab": "buff_fire",
@@ -1874,6 +3708,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1884,8 +3720,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_106.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.0,
+        0.7517,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_54",
@@ -1897,6 +3759,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1907,8 +3771,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_55",
@@ -1920,6 +3804,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1930,8 +3816,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.8813,
+        0.2931,
+        1.0
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_56",
@@ -1943,6 +3855,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "RGBDelayDivision",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1953,8 +3867,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_36.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_56_3",
@@ -1966,6 +3900,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "RGBDelayDivision",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -1976,8 +3912,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_36.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_57",
@@ -1989,6 +3945,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 3,
     "collider": {
       "shape": "box",
       "size": [
@@ -1999,8 +3957,29 @@
         0.8,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_82.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.8,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_58",
@@ -2012,6 +3991,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2022,8 +4003,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_103.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_59",
@@ -2035,6 +4036,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2045,8 +4048,34 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_7.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.2335,
+        0.9338,
+        0.4701,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_6",
@@ -2058,6 +4087,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2068,8 +4099,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_27.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -2089,6 +4140,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletColor",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2099,8 +4152,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_8.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_61",
@@ -2112,6 +4185,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2122,8 +4197,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.3162,
+        1.0,
+        0.3209,
+        1.0
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_62",
@@ -2135,6 +4236,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2145,8 +4248,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.3162,
+        0.8302,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_63",
@@ -2157,7 +4286,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_31.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_64",
@@ -2169,6 +4333,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2179,8 +4345,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_65",
@@ -2192,6 +4378,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet04",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2202,8 +4390,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6324,
+        0.9746,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_66",
@@ -2215,6 +4429,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2225,8 +4441,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_7.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6544,
+        0.919,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_67",
@@ -2238,6 +4480,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -2248,8 +4492,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_28.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_68",
@@ -2261,6 +4525,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -2271,8 +4537,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_28.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_69",
@@ -2284,6 +4570,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet03",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2294,8 +4582,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_2.png",
+      "scale": [
+        0.2,
+        0.2
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_6_yellow",
@@ -2307,6 +4615,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2317,8 +4627,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_122.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_7",
@@ -2330,6 +4660,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2340,8 +4672,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_20.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.1838,
+        1.0,
+        0.5947,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_70",
@@ -2353,6 +4711,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2363,8 +4723,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_39.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_71",
@@ -2375,7 +4755,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.4,
+        0.4
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_72",
@@ -2387,6 +4802,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletLaterFixedTarget",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2397,8 +4814,28 @@
         -0.1,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_104.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_73",
@@ -2410,6 +4847,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2420,8 +4859,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "nothing.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_74",
@@ -2433,6 +4892,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2443,8 +4904,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_112.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_75",
@@ -2456,6 +4937,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2466,8 +4949,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_112.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_76",
@@ -2479,6 +4982,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletLaterFixedTarget",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2489,8 +4994,28 @@
         -0.1,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_113.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_78",
@@ -2502,6 +5027,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2512,8 +5039,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_105.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_79",
@@ -2525,6 +5072,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2535,8 +5084,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_81.png",
+      "scale": [
+        1.75,
+        1.75
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_8",
@@ -2548,6 +5117,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2558,8 +5129,34 @@
         0.3,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_21.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.625,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_80",
@@ -2571,6 +5168,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletRoundabout",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.7425,
@@ -2578,8 +5177,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_6.png",
+      "scale": [
+        1.35,
+        1.35
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_81",
@@ -2591,6 +5210,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2601,8 +5222,28 @@
         0.35,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "weapons2_59.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.125,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -2622,6 +5263,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "circle",
       "radius": 0.375,
@@ -2629,8 +5272,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_60.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_83",
@@ -2642,6 +5305,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.5938,
@@ -2649,8 +5314,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "weapons2_61.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "electric",
       "buff_prefab": "buff_ele",
@@ -2670,6 +5355,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletImmediately",
+    "collider_candidates": 3,
     "collider": {
       "shape": "circle",
       "radius": 4.0,
@@ -2677,8 +5364,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "gravity_source"
+    },
+    "visual": {
+      "sprite": "effect04_5.png",
+      "scale": [
+        2.2,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5105,
+        0.5165
+      ],
+      "color": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_84_temp",
@@ -2690,6 +5403,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletImmediately",
+    "collider_candidates": 3,
     "collider": {
       "shape": "circle",
       "radius": 4.0,
@@ -2697,8 +5412,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "gravity_source"
+    },
+    "visual": {
+      "sprite": "effect04_5.png",
+      "scale": [
+        2.2,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5105,
+        0.5165
+      ],
+      "color": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_85",
@@ -2710,6 +5451,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGBDelayDivision",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2720,8 +5463,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_10.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_86",
@@ -2733,6 +5496,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2743,8 +5508,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_72.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_88",
@@ -2756,6 +5541,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2766,8 +5553,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_74.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_89",
@@ -2779,6 +5586,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2789,8 +5598,28 @@
         1.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_18.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        1.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_90",
@@ -2802,6 +5631,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletParabola",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.5,
@@ -2809,8 +5640,29 @@
         0.0,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": false,
+      "state": "enabled",
+      "go": "bullet_90"
+    },
+    "collider_note": "the only live collider is a NON-trigger shape (physical bounce volume); the trigger collider is disabled",
+    "visual": {
+      "sprite": "weapons2_68.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_91",
@@ -2822,6 +5674,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletParabola",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2832,8 +5686,29 @@
         0.3406,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": false,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "the only live collider is a NON-trigger shape (physical bounce volume); the trigger collider is disabled",
+    "visual": {
+      "sprite": "weapons2_67.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.17,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_92",
@@ -2844,7 +5719,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_39.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_93",
@@ -2856,6 +5766,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2866,8 +5778,28 @@
         0.27,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_94.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.1,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_94",
@@ -2878,7 +5810,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.3,
+        0.3
+      ],
+      "offset": [
+        0.4,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_95",
@@ -2890,6 +5857,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2900,8 +5869,28 @@
         0.375,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_111.png",
+      "scale": [
+        1.25,
+        1.25
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -2921,6 +5910,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2931,8 +5922,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "weapons2_103.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_boss_03_atk3",
@@ -2943,7 +5954,43 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "composite": 8,
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.9,
+        1.12
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D); composite prefab: 8 RGBullet children, the first one's volume is used",
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        1.5,
+        1.4
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_boss_05_atk3",
@@ -2954,7 +6001,43 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "composite": 6,
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D); composite prefab: 6 RGBullet children, the first one's volume is used",
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_boss_14_atk2",
@@ -2965,7 +6048,43 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "composite": 5,
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.9,
+        1.12
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D); composite prefab: 5 RGBullet children, the first one's volume is used",
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        1.5,
+        1.4
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_bottle_0",
@@ -2977,6 +6096,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -2987,8 +6108,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_48.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_bottle_1",
@@ -3000,6 +6141,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3010,8 +6153,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_118.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_bottle_2",
@@ -3023,6 +6186,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3033,8 +6198,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_117.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_bottle_3",
@@ -3046,6 +6231,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3056,8 +6243,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_119.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_c09",
@@ -3068,7 +6275,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.6,
+        0.6
+      ],
+      "offset": [
+        0.5,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "effect_08_14.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.2,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green"
   },
   {
     "id": "bullet_e_1",
@@ -3080,6 +6322,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3090,8 +6334,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_10",
@@ -3103,6 +6367,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 12,
     "collider": {
       "shape": "box",
       "size": [
@@ -3113,8 +6379,29 @@
         0.665,
         1.2
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.665,
+        1.2
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_11",
@@ -3126,6 +6413,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3136,8 +6425,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_12",
@@ -3148,7 +6457,48 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        1.0,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_40.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.3162,
+        0.3162,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_13",
@@ -3159,7 +6509,42 @@
     "rotate_angle": 0,
     "awake": 0,
     "can_rebound": 1,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
+    "collider": {
+      "shape": "box",
+      "size": [
+        0.8,
+        0.8
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "trigger": true,
+      "state": "on_awake",
+      "go": "b"
+    },
+    "collider_note": "disabled in the prefab, enabled by RGBullet.SetAwakeTrue (child 0 BoxCollider2D)",
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_14",
@@ -3171,6 +6556,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3181,8 +6568,28 @@
         -0.31,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        4.0,
+        2.0
+      ],
+      "offset": [
+        -0.31,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_16",
@@ -3194,6 +6601,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletFollow",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -3204,8 +6613,29 @@
         0.0,
         2.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_37.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        2.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_17",
@@ -3217,6 +6647,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3227,8 +6659,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_18",
@@ -3239,7 +6691,11 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "RGSBullet02",
+    "collider_candidates": 0,
+    "collider_none": "prefab has no collider component at all",
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)"
   },
   {
     "id": "bullet_e_19",
@@ -3250,7 +6706,11 @@
     "rotate_angle": 0,
     "awake": 1,
     "can_rebound": 0,
-    "manual_destroy": 0
+    "manual_destroy": 0,
+    "bullet_class": "RGSBullet02",
+    "collider_candidates": 0,
+    "collider_none": "prefab has no collider component at all",
+    "visual_none": "no enabled SpriteRenderer outside the `light` glow child (renderer disabled in the prefab, or a glow-only prefab)"
   },
   {
     "id": "bullet_e_2",
@@ -3262,6 +6722,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3272,8 +6734,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6146,
+        0.4412,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_22",
@@ -3285,6 +6773,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3295,8 +6785,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_23",
@@ -3308,6 +6818,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3318,8 +6830,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_86.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_24",
@@ -3331,6 +6863,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet04",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3341,8 +6875,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_107.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_25",
@@ -3354,6 +6908,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3364,8 +6920,28 @@
         0.3,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_87.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_26",
@@ -3377,6 +6953,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3387,8 +6965,28 @@
         -0.1,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_92.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_27",
@@ -3400,6 +6998,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3410,8 +7010,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_91.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_28",
@@ -3423,6 +7043,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3433,8 +7055,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_90.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_29",
@@ -3446,6 +7088,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3456,8 +7100,28 @@
         -0.5,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_97.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_3",
@@ -3469,6 +7133,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3479,8 +7145,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_26.png",
+      "scale": [
+        1.5,
+        1.5
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_30",
@@ -3492,6 +7178,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "RGBDelayDivision",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3502,8 +7190,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_89.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_31",
@@ -3515,6 +7223,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3525,8 +7235,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_89.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_32",
@@ -3538,6 +7268,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3548,8 +7280,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_89.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_33",
@@ -3561,6 +7313,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3571,8 +7325,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_108.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_34",
@@ -3584,6 +7358,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3594,8 +7370,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_109.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.3,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_35",
@@ -3607,6 +7403,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3617,8 +7415,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_109.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.3,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_36",
@@ -3630,6 +7448,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -3640,8 +7460,29 @@
         0.0,
         1.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_37",
@@ -3653,6 +7494,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3663,8 +7506,28 @@
         0.3,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_87.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_green",
     "buff": {
       "kind": "poison",
       "buff_prefab": "buff_posion",
@@ -3684,6 +7547,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3694,8 +7559,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_73.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_e_39",
@@ -3707,6 +7592,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3717,8 +7604,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_4",
@@ -3730,6 +7637,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3740,8 +7649,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_40",
@@ -3753,6 +7682,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3763,8 +7694,28 @@
         0.6,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_87.png",
+      "scale": [
+        2.0,
+        2.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_41",
@@ -3776,6 +7727,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3786,8 +7739,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_111.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -3807,6 +7780,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3817,8 +7792,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_3.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_42_less",
@@ -3830,6 +7825,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3840,8 +7837,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_3.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_43",
@@ -3853,6 +7870,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3863,8 +7882,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_89.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_44",
@@ -3876,6 +7915,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -3886,8 +7927,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6742,
+        0.4632,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_45",
@@ -3899,6 +7966,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3909,8 +7978,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_yellow"
   },
   {
     "id": "bullet_e_46",
@@ -3922,6 +8011,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3932,8 +8023,28 @@
         -0.31,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_35.png",
+      "scale": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        -0.31,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_47",
@@ -3945,6 +8056,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3955,8 +8068,28 @@
         -0.31,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_26.png",
+      "scale": [
+        2.0,
+        1.0
+      ],
+      "offset": [
+        -0.31,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_49",
@@ -3968,6 +8101,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "BulletLaterFixedTarget",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -3978,8 +8113,28 @@
         -0.1,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_109.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.3,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_5",
@@ -3991,6 +8146,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 16,
     "collider": {
       "shape": "box",
       "size": [
@@ -4001,8 +8158,29 @@
         0.7,
         1.4
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.7,
+        1.4
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_50",
@@ -4014,6 +8192,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4024,8 +8204,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_37.png",
+      "scale": [
+        1.25,
+        1.25
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_51",
@@ -4037,6 +8237,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4047,8 +8249,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_9.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.2206,
+        0.2206,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_52",
@@ -4060,6 +8288,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "BulletParabola",
+    "collider_candidates": 1,
     "collider": {
       "shape": "circle",
       "radius": 0.8,
@@ -4067,8 +8297,28 @@
         -0.31,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet2_20.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        -0.31,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_53",
@@ -4080,6 +8330,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "RGSBullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "circle",
       "radius": 0.625,
@@ -4087,8 +8339,29 @@
         0.0,
         0.0
       ],
-      "trigger": false
-    }
+      "trigger": false,
+      "state": "enabled",
+      "go": "effect_rebound"
+    },
+    "collider_note": "the only live collider is a NON-trigger shape (physical bounce volume); the trigger collider is disabled",
+    "visual": {
+      "sprite": "bullet_109.png",
+      "scale": [
+        1.25,
+        1.25
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.3,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_54",
@@ -4100,6 +8373,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4110,8 +8385,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_106.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue"
   },
   {
     "id": "bullet_e_6",
@@ -4123,6 +8424,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 2,
     "collider": {
       "shape": "box",
       "size": [
@@ -4133,8 +8436,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        1.0,
+        0.6742,
+        0.4632,
+        1.0
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_7",
@@ -4146,6 +8475,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4156,8 +8487,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_30.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_9",
@@ -4169,6 +8520,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 12,
     "collider": {
       "shape": "box",
       "size": [
@@ -4179,8 +8532,29 @@
         0.0,
         1.4
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "collider_note": "several trigger colliders; the first on the RGBulletTrigger object is used",
+    "visual": {
+      "sprite": "bullet_29.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        1.4
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_red"
   },
   {
     "id": "bullet_e_shock",
@@ -4192,6 +8566,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4202,8 +8578,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "nothing.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_follow_ice",
@@ -4215,6 +8611,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4225,8 +8623,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "nothing.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_follow_ice_e",
@@ -4238,6 +8656,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet02",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4248,8 +8668,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "nothing.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_nofollow_ice_e",
@@ -4261,6 +8701,8 @@
     "awake": 1,
     "can_rebound": 0,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4271,8 +8713,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "nothing.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_z_01",
@@ -4284,6 +8746,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4294,8 +8758,34 @@
         0.0,
         0.0
       ],
-      "trigger": true
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
     },
+    "visual": {
+      "sprite": "bullet_99.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "color": [
+        0.0,
+        0.9172,
+        1.0,
+        1.0
+      ]
+    },
+    "hit_object": "hit_blue",
     "buff": {
       "kind": "ice",
       "buff_prefab": "buff_ice",
@@ -4315,6 +8805,8 @@
     "awake": 1,
     "can_rebound": 1,
     "manual_destroy": 0,
+    "bullet_class": "Bullet01",
+    "collider_candidates": 1,
     "collider": {
       "shape": "box",
       "size": [
@@ -4325,8 +8817,28 @@
         0.0,
         0.0
       ],
-      "trigger": true
-    }
+      "trigger": true,
+      "state": "enabled",
+      "go": "b"
+    },
+    "visual": {
+      "sprite": "bullet_103.png",
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "rot": 0.0,
+      "flip_x": false,
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hit_object": "hit_white"
   },
   {
     "id": "bullet_9",
@@ -4341,6 +8853,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGLaserBuff.cs declares `buff_probability` (int) but no comparison against it is visible in the decompile (RGLaserBuff only overrides ShowCollider, itself an empty stub; the real trigger/compare lives in the obfuscated RGLaser base). Value > 1 treated as a 0..100 percent (matching BuffEffectTrigger's confirmed convention), else as an already-0..1 fraction."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4355,6 +8868,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4369,6 +8883,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4383,6 +8898,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4397,6 +8913,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4411,6 +8928,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4425,6 +8943,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   },
   {
@@ -4439,6 +8958,7 @@
       "_probability_inferred": true,
       "_why": "INFERRED (T-33): RGSwordBuffTrigger declares no serialized probability field (only `buff`), and its OnTriggerEnter2D truncates/delegates in the decompile before any gate would be visible; hidden checks after the truncation cannot be excluded. Modeled here as probability 1.0 (always applies)."
     },
+    "collider_none": "buff-only row: non-RGBullet prefab (sword/spear/laser), driven by its own subsystem, not a flying bullet",
     "camp": 0
   }
 ]

@@ -299,6 +299,8 @@ set(INCLUDE_FILES
     sim/FixedClock.hpp
     sim/Scheduler.hpp
     sim/BulletState.hpp
+    sim/BulletShape.hpp
+    sim/CoverCircles.hpp
     sim/EntityState.hpp
     sim/FireIntent.hpp
     sim/FireSystem.hpp
@@ -328,6 +330,7 @@ set(INCLUDE_FILES
     # Phase 2 entities + scenes
     entities/Player.hpp
     entities/Bullet.hpp
+    entities/BulletPose.hpp
     entities/Enemy.hpp
     entities/Boss.hpp
     entities/Chest.hpp
@@ -511,6 +514,7 @@ set(TEST_FILES
     SimulationTest.cpp
     SpeedScaleTest.cpp
     SweptCollisionTest.cpp
+    BulletShapeTest.cpp
     WeaponControllerTest.cpp
 
     # ENEMY RE-KEY: per-species data-driven enemy/boss stats (enemies.csv, 145 rows)

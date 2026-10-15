@@ -170,6 +170,81 @@ inline WalkDirSpec ParseWalkDir(const std::string &text) {
     return r;
 }
 
+/// Parsed SK_FORCE_FIRE test hook: "K,dx,dy" or "K,dx,dy,N" -- from frame K the player aims along
+/// (dx, dy) and holds fire for N frames (default: until the run ends), without the mouse. P3.0c
+/// evidence (bullet heading at 4+ directions); NO-OP unless set.
+struct ForceFireSpec {
+    bool ok = false;
+    long frame = -1;
+    float dx = 0.0F;
+    float dy = 0.0F;
+    /// Unit aim vector computed with a STABLE normalisation (see NormalizeHookDir): a direction such as
+    /// (1e-30, 0) passes the range check, but squaring it in float underflows to a zero length.
+    float ux = 0.0F;
+    float uy = 0.0F;
+    long count = 1000000000L; ///< frames to hold fire (>= 1).
+    std::string error;
+};
+
+/// Unit vector of (dx, dy) without squaring tiny / huge components in float: both are first divided
+/// by max(|dx|, |dy|) and the length is taken in double. Returns false (outputs 0) when the vector is
+/// zero, non-finite, or still has no usable length.
+inline bool NormalizeHookDir(double dx, double dy, float &ux, float &uy) {
+    ux = uy = 0.0F;
+    if (!std::isfinite(dx) || !std::isfinite(dy)) {
+        return false;
+    }
+    const double m = std::fmax(std::fabs(dx), std::fabs(dy));
+    if (!(m > 0.0) || !std::isfinite(m)) {
+        return false;
+    }
+    const double sx = dx / m;
+    const double sy = dy / m;
+    const double len = std::sqrt(sx * sx + sy * sy); // in [1, sqrt(2)]
+    if (!(len > 0.0) || !std::isfinite(len)) {
+        return false;
+    }
+    ux = static_cast<float>(sx / len);
+    uy = static_cast<float>(sy / len);
+    return true;
+}
+
+/// Strict parse of SK_FORCE_FIRE: 3 or 4 fields; K a whole integer >= 0; dx/dy whole-field finite
+/// floats with |v| <= 4096, not both zero; N a whole integer >= 1. Anything else rejects the hook.
+inline ForceFireSpec ParseForceFire(const std::string &text) {
+    ForceFireSpec r;
+    const std::vector<std::string> f = TestHooksDetail::SplitCommas(text);
+    if (f.size() != 3 && f.size() != 4) {
+        r.error = "expected 3 or 4 comma-separated fields K,dx,dy[,N]";
+        return r;
+    }
+    if (!TestHooksDetail::ParseWholeLong(f[0], r.frame) || r.frame < 0) {
+        r.error = "bad frame K";
+        return r;
+    }
+    if (!TestHooksDetail::ParseWholeFloat(f[1], r.dx) || !TestHooksDetail::ParseWholeFloat(f[2], r.dy) ||
+        (r.dx == 0.0F && r.dy == 0.0F)) {
+        r.error = "bad direction (need finite, non-zero, |v| <= 4096)";
+        r.dx = r.dy = 0.0F;
+        return r;
+    }
+    if (!NormalizeHookDir(r.dx, r.dy, r.ux, r.uy)) {
+        r.error = "direction has no usable length";
+        r.dx = r.dy = 0.0F;
+        return r;
+    }
+    if (f.size() == 4) {
+        long n = 0;
+        if (!TestHooksDetail::ParseWholeLong(f[3], n) || n < 1) {
+            r.error = "bad frame count N (need whole number >= 1)";
+            return r;
+        }
+        r.count = n;
+    }
+    r.ok = true;
+    return r;
+}
+
 /// Parsed SK_DT_SPIKE test hook: "K,ms" -- frame K runs with a frame delta of @c ms instead of the
 /// wall-clock / SK_DT_MS delta (a simulated hitch). 0 < ms <= 3.6e6.
 struct DtSpikeSpec {

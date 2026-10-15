@@ -59,6 +59,7 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
         const int pulls = m_Brain->Tick(ctx, out);
         for (std::size_t i = before; i < out.size(); ++i) {
             out[i].radiusPx = m_Params.bulletRadiusPx; // bullet prefab collider (data)
+            out[i].launch = m_Params.bulletLaunch;     // P3.0c: prefab row + oriented shape + spin
         }
         if (m_Params.hasBuff) {
             for (std::size_t i = before; i < out.size(); ++i) {
@@ -102,6 +103,7 @@ int WeaponController::Tick(bool firing, glm::vec2 origin, glm::vec2 aimDir,
     intent.canThrough = m_Params.canThrough;
     intent.pierce = m_Params.pierce;
     intent.radiusPx = m_Params.bulletRadiusPx;
+    intent.launch = m_Params.bulletLaunch; // P3.0c
     intent.hasBuff = m_Params.hasBuff; // P3.2
     intent.buffParams = m_Params.buffParams;
     intent.buffProbability = m_Params.buffProbability;

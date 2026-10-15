@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -120,6 +121,62 @@ TEST(WalkDirHookTest, ParsesStrictly) {
     EXPECT_FALSE(Game::ParseWalkDir("0,0").ok);
     EXPECT_FALSE(Game::ParseWalkDir("1,nan").ok);
     EXPECT_FALSE(Game::ParseWalkDir("1,2x").ok);
+}
+
+TEST(ForceFireHookTest, ParsesStrictly) {
+    auto r = Game::ParseForceFire("60,0,1");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.frame, 60);
+    EXPECT_EQ(r.dy, 1.0F);
+    EXPECT_GT(r.count, 1000000L); // default: until the run ends
+    r = Game::ParseForceFire("60,-1,0,30");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.dx, -1.0F);
+    EXPECT_EQ(r.count, 30);
+    EXPECT_FALSE(Game::ParseForceFire("").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,1").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,1,0,5,6").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,0,0").ok);
+    EXPECT_FALSE(Game::ParseForceFire("-1,1,0").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,nan,0").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,1,0,0").ok);
+    EXPECT_FALSE(Game::ParseForceFire("60,1,0,x").ok);
+    // R42: a tiny / huge component must not underflow / overflow the normalisation.
+    for (const char *txt : {"60,1e-30,0", "60,0,-1e-30", "60,1e-30,1e-30", "60,3e-39,0", "60,4096,4096"}) {
+        const auto t = Game::ParseForceFire(txt);
+        if (!t.ok) {
+            continue; // a parser-level rejection (e.g. a float-denormal ERANGE) is also acceptable
+        }
+        const double len = std::sqrt(static_cast<double>(t.ux) * t.ux + static_cast<double>(t.uy) * t.uy);
+        EXPECT_NEAR(len, 1.0, 1e-6) << txt;
+        EXPECT_TRUE(std::isfinite(t.ux) && std::isfinite(t.uy)) << txt;
+    }
+    {
+        const auto t = Game::ParseForceFire("100,1e-30,0");
+        ASSERT_TRUE(t.ok);
+        EXPECT_FLOAT_EQ(t.ux, 1.0F);
+        EXPECT_FLOAT_EQ(t.uy, 0.0F);
+        const auto d = Game::ParseForceFire("100,1e-30,1e-30");
+        ASSERT_TRUE(d.ok);
+        EXPECT_NEAR(d.ux, 0.70710678F, 1e-6F);
+        EXPECT_NEAR(d.uy, 0.70710678F, 1e-6F);
+    }
+    EXPECT_FALSE(Game::ParseForceFire("60,1e30,0").ok); // beyond |v| <= 4096
+    EXPECT_FALSE(Game::ParseForceFire("60,1e30,1e30").ok);
+    // the normaliser itself (double, any magnitude)
+    float ux = 0.0F;
+    float uy = 0.0F;
+    EXPECT_TRUE(Game::NormalizeHookDir(1e30, 1e30, ux, uy));
+    EXPECT_NEAR(ux, 0.70710678F, 1e-6F);
+    EXPECT_TRUE(Game::NormalizeHookDir(5e-324, 0.0, ux, uy)); // a double denormal
+    EXPECT_FLOAT_EQ(ux, 1.0F);
+    EXPECT_FALSE(Game::NormalizeHookDir(0.0, 0.0, ux, uy));
+    EXPECT_FLOAT_EQ(ux, 0.0F);
+    EXPECT_FALSE(Game::NormalizeHookDir(std::nan(""), 1.0, ux, uy));
+    EXPECT_FALSE(Game::NormalizeHookDir(INFINITY, 0.0, ux, uy));
+    const auto bad = Game::ParseForceFire("60,1,junk");
+    EXPECT_FALSE(bad.ok);
+    EXPECT_EQ(bad.dx, 0.0F);
 }
 
 TEST(DtSpikeHookTest, ParsesStrictly) {

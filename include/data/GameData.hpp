@@ -83,7 +83,31 @@ struct ColliderDef {
     float offsetX = 0.0F;  ///< units, from the root origin.
     float offsetY = 0.0F;
     bool trigger = false;  ///< m_IsTrigger.
+    /// P3.0c: rotation (degrees, CCW) of a BOX's local axes relative to the prefab root's frame
+    /// (a rotated child GameObject: _bullet_4 / dash_big have 90). 0 for every other collider.
+    float rotDeg = 0.0F;
+    /// P3.0c: the prefab ships this collider DISABLED and RGBullet.SetAwakeTrue enables it
+    /// (bullet_e_12, bullet_35, bullet_boss_03_atk3 ...); it is the bullet's hit volume once released.
+    bool onAwake = false;
     bool Present() const { return shape != Shape::None; }
+};
+
+/// P3.0c: how a bullet prefab's sprite child sits on the bullet root (tools/bullet_geometry.py).
+/// FAITHFUL @ the prefab's SpriteRenderer GameObject (name != "light"): lossy localScale, the
+/// child's root-space position (units; bullet_28 draws its 2x sprite 1 unit AHEAD of the root),
+/// its accumulated rotation, flipX and the sprite asset's m_Pivot.
+struct BulletVisual {
+    std::string sprite;       ///< png under Resources/sprites; "" = none resolved
+    float scaleX = 1.0F;
+    float scaleY = 1.0F;
+    float offsetX = 0.0F;     ///< units, bullet-local (x = travel direction)
+    float offsetY = 0.0F;
+    float rotDeg = 0.0F;      ///< child rotation on top of the bullet's own heading
+    bool flipX = false;
+    float pivotX = 0.5F;      ///< sprite pivot fractions from the bottom-left
+    float pivotY = 0.5F;
+    float color[4] = {1.0F, 1.0F, 1.0F, 1.0F};
+    bool Present() const { return !sprite.empty(); }
 };
 
 /// Bullet definition (from Resources/data/bullets.json).
@@ -116,6 +140,34 @@ struct BulletDef {
     /// "buff.probability" / "buff._why" for the per-row citation. The decision
     /// itself (including the crit/camp branch) is Simulation::ShouldApplyBulletBuff.
     float buffProbability = 0.0F;
+    /// P3.0c: RGBullet-family script class of the bullet GameObject ("Bullet01", "RGSBullet01",
+    /// ...); "" for a 1.07-only / buff-only row. Selects the spin model (Bullet01 / RGSBullet01).
+    std::string bulletClass;
+    /// P3.0c: sprite placement from the prefab (see BulletVisual).
+    BulletVisual visual;
+    /// P3.0c: RGBulletTrigger.hit_object prefab stem ("hit_red"...), "" = none; resolved by
+    /// GameData::FindBulletEffect.
+    std::string hitObject;
+    /// P3.0c: >1 for a composite prefab (several RGBullet children: boss atk3 volleys).
+    int composite = 0;
+    /// P3.0c: why `collider` is absent (bullets.json "collider_none"), "" when present.
+    std::string colliderNone;
+    /// P3.0c: collider selection note (bullets.json "collider_note").
+    std::string colliderNote;
+};
+
+/// P3.0c: a bullet hit-effect prefab (rgprefab/item/hit_*.prefab via bullet_effects.json): tinted
+/// sprite animation at the clip's sample rate. The prefab's ParticleSystem (spark dashes) is NOT
+/// modelled (particles == true marks the rows that have one).
+struct BulletEffectDef {
+    std::string id;
+    std::vector<std::string> frames; ///< png names under Resources/sprites
+    int sampleRate = 12;
+    float durationS = 0.0F;          ///< clip length incl. the trailing null key; 0 = frames/rate
+    float color[4] = {1.0F, 1.0F, 1.0F, 1.0F};
+    float scaleX = 1.0F;
+    float scaleY = 1.0F;
+    bool particles = false;
 };
 
 /// Enemy AI/behaviour definition (from Resources/data/enemies.json).
@@ -170,6 +222,17 @@ struct EnemyDef {
     /// the flyers e_creeper_fly/e_mosquito/e_ufo and their ex_* elites.
     float spriteOffsetX = 0.0F;
     float spriteOffsetY = 0.0F;
+    /// P3.0c FAITHFUL @ the species prefab (build_gamedata.py attach_enemy_bullets): the bullets.json
+    /// prefab id this species fires ("" = none / not an RGBullet-family bullet). For a boss it is the
+    /// first of bullet01..06 that resolves (PORT CHOICE T-65: the attack jump-table is truncated).
+    std::string bulletPrefab;
+    /// P3.0c: every bullet stem the prefab names (guns, bullet01..06), resolved or not.
+    std::vector<std::string> bulletRefs;
+    /// P3.0c FAITHFUL @ the prefab's `dead_tap` child (root-space units): where the death emoticon
+    /// (skull speech bubble, state char_tap_dead) sits above the feet. hasDeadTap false = none.
+    bool hasDeadTap = false;
+    float deadTapX = 0.0F;
+    float deadTapY = 0.0F;
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -518,6 +581,14 @@ public:
     const WeaponDef *ResolveDropWeapon(const std::string &dropId) const;
 
     const BulletDef *FindBullet(const std::string &id) const;
+    /// P3.0c: index of @p id in Bullets() (the stable per-run bullet visual id), -1 if unknown.
+    int BulletIndex(const std::string &id) const;
+    /// P3.0c: bullet_effects.json row by stem ("hit_red"), nullptr if unknown.
+    const BulletEffectDef *FindBulletEffect(const std::string &id) const;
+    const std::vector<BulletEffectDef> &BulletEffects() const { return m_BulletEffects; }
+    /// P3.0c: the sprite state name holding an entity's lying-corpse frame ("dead", or the
+    /// species-specific "<x>_dead"; never the "char_tap_dead" emoticon), "" if none.
+    std::string DeadState(const std::string &spriteId) const;
     /// P3.2: resolve @p def's own bullet (WeaponDef::bulletPrefab -> FindBullet),
     /// or nullptr when the weapon carries no bulletPrefab or it doesn't resolve.
     const BulletDef *BulletForWeapon(const WeaponDef &def) const;
@@ -652,6 +723,8 @@ private:
     std::vector<EnemyDef> m_Enemies;
     std::vector<EnemyGunDef> m_EnemyGuns;
     std::vector<BuffDef> m_Buffs;
+    std::vector<BulletEffectDef> m_BulletEffects;
+    std::unordered_map<std::string, std::size_t> m_BulletEffectIndex;
     std::vector<RoomLayoutDef> m_RoomLayouts;
     std::unordered_map<std::string, DesignRoomDef> m_DesignRooms;
     std::vector<LevelDef> m_Levels;

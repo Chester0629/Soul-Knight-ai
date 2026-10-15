@@ -45,6 +45,13 @@ public:
      */
     int GetInterval() const { return m_Interval; }
 
+    /// P3.0c: tint every frame (Image::SetTint).
+    void SetTint(const glm::vec4 &rgba) {
+        for (auto &f : m_Frames) {
+            f->SetTint(rgba);
+        }
+    }
+
     /**
      * @brief Check if the animation loops.
      * @return True if the animation loops, false otherwise.

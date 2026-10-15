@@ -85,6 +85,9 @@ WeaponController BrainFactory::MakeWeapon(const Game::WeaponDef &def,
         if (const Game::BulletDef *bulletDef = data->BulletForWeapon(def)) {
             // Bullet prefab collider -> hit radius (0 when the prefab has none -> fallback).
             p.bulletRadiusPx = EquivalentRadiusPx(bulletDef->collider);
+            // P3.0c: the same collider as an oriented shape (offset + rotation kept) + the
+            // prefab row for the view and the spin model.
+            p.bulletLaunch = MakeBulletLaunch(*bulletDef, data->BulletIndex(bulletDef->id));
             if (!bulletDef->buffId.empty()) {
                 if (const Game::BuffDef *buffDef = data->FindBuff(bulletDef->buffId)) {
                     p.hasBuff = true;

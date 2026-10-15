@@ -59,6 +59,9 @@ public:
         /// prefab collider (BrainFactory::MakeWeapon) and stamped onto every intent;
         /// 0 => the sim's fallback Sim::kBulletRadius.
         float bulletRadiusPx = 0.0F;
+        /// P3.0c: the bullet prefab row + oriented collision shape + spin of this weapon's own
+        /// bullet (BrainFactory::MakeWeapon from BulletForWeapon), stamped onto every intent.
+        BulletLaunch bulletLaunch;
     };
 
     WeaponController(const Params &params, int seed);

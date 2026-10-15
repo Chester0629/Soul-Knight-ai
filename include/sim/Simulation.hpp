@@ -47,6 +47,22 @@ public:
         int roomId = -1;
     };
 
+    /// P3.0c: where a bullet ended -- consumed by a wall / obstacle (wall = true) or by a target.
+    /// The shell turns wall impacts into the bullet prefab's hit effect (RGBulletTrigger.hit_object).
+    struct BulletImpact {
+        int bulletIdx = -1;       ///< BulletLaunch::bulletIdx of the consumed bullet (-1 = none).
+        int camp = 0;             ///< bullet camp (0 player, 1 enemy).
+        bool wall = false;        ///< true: wall / obstacle contact; false: a target hit.
+        glm::vec2 pos{0.0F, 0.0F}; ///< bullet origin at the contact.
+        float angleRad = 0.0F;    ///< heading at the contact.
+    };
+    /// Move out the impacts recorded since the last call (view-only; never read by the sim).
+    std::vector<BulletImpact> DrainImpacts();
+    /// P3.0c: the data tables the sim resolves enemy / boss bullet prefabs from (AddEnemy /
+    /// SetBoss read EnemyDef::bulletPrefab). nullptr (the default, every test that does not call
+    /// it) keeps the legacy 4 px circle with no prefab, so no existing golden moves.
+    void SetGameData(const Game::GameData *data) { m_Data = data; }
+
     /// TEST HOOK (SK_FORCE_KILL): zero every live hostile's hp so the next step's
     /// Cull emits their death events -- drives the reward / kill-count paths
     /// headlessly. Not game logic; never called in normal play.
@@ -223,6 +239,11 @@ private:
     FireSystem m_FireSystem;
     std::vector<FireIntent> m_FireIntents; ///< controllers push here; cleared each step.
     std::vector<BulletState> m_Bullets;
+    std::vector<BulletImpact> m_Impacts;   ///< P3.0c: drained by DrainImpacts (view only).
+    const Game::GameData *m_Data = nullptr; ///< P3.0c: see SetGameData (non-owning).
+    /// P3.0c: the launch record of an enemy / boss species (its own bullet prefab, or the generic
+    /// fallback bullet when the species fires no RGBullet-family bullet).
+    BulletLaunch LaunchFor(const Game::EnemyDef &def) const;
     /// T-57 (swept bullet collision): hurtbox-owner positions at the START of the current
     /// fixed step (snapshotted at the top of MoveControllers, i.e. after every brain /
     /// scheduler teleport, so the step's motion is exactly the controller's own linear

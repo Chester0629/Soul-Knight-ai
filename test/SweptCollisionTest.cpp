@@ -113,6 +113,10 @@ struct Codex {
     const Game::EnemyDef *e = nullptr;
     BodyGeom geom;
     float bulletR = 0.0F;
+    /// P3.0c: the bullet's prefab shape for a heading of 0 (the tests fire along +x), for the
+    /// shape-aware oracle. Since P3.0c the Simulation sweeps THIS shape (an oriented box at its
+    /// prefab offset) instead of the inscribed circle at the origin (bulletR).
+    oracle::ShapeSpec shape;
     bool Load() {
         if (!gd.LoadAll(kResourceRoot)) {
             return false;
@@ -127,6 +131,13 @@ struct Codex {
             return false;
         }
         bulletR = Game::Sim::EquivalentRadiusPx(bd->collider);
+        const Game::Sim::BulletShape bs = Game::Sim::MakeBulletShape(bd->collider);
+        shape.box = bs.kind == Game::Sim::BulletShape::Kind::Box;
+        shape.r = bs.radiusPx;
+        shape.hx = bs.halfPx.x;
+        shape.hy = bs.halfPx.y;
+        shape.ox = bs.offsetPx.x;
+        shape.oy = bs.offsetPx.y;
         geom = MakeBodyGeom(e->body, e->hurtbox, 16.0F);
         return true;
     }
@@ -461,15 +472,16 @@ TEST(SweptCollisionTest, CodexCounterexampleThroughTheSimulationMatchesTheBruteF
                 const glm::vec2 enemy = sim.EnemyViews()[0].pos;
                 const glm::vec2 endBullet = prevBullet + glm::vec2{kStepPx, 0.0F};
                 if (oracleStep < 0) {
+                    // P3.0c: the shape-aware oracle (the bullet is weapon_033's prefab box).
                     const int j =
-                        oracle::FirstTouchSub(c.geom, prevEnemy, enemy, prevBullet, endBullet, c.bulletR);
+                        oracle::FirstTouchSubShape(c.geom, c.shape, prevEnemy, enemy, prevBullet, endBullet);
                     if (j >= 0) {
                         oracleStep = step;
                         oracleTunnel =
-                            !oracle::Touches(c.geom, oracle::Lerp(prevBullet, endBullet, 0.0), c.bulletR,
-                                             oracle::Lerp(prevEnemy, enemy, 0.0)) &&
-                            !oracle::Touches(c.geom, oracle::Lerp(prevBullet, endBullet, 1.0), c.bulletR,
-                                             oracle::Lerp(prevEnemy, enemy, 1.0));
+                            !oracle::TouchesShape(c.geom, c.shape, oracle::Lerp(prevBullet, endBullet, 0.0),
+                                                  oracle::Lerp(prevEnemy, enemy, 0.0)) &&
+                            !oracle::TouchesShape(c.geom, c.shape, oracle::Lerp(prevBullet, endBullet, 1.0),
+                                                  oracle::Lerp(prevEnemy, enemy, 1.0));
                     }
                 }
                 if (sim.EnemyViews()[0].hp < hp0) {
@@ -492,8 +504,16 @@ TEST(SweptCollisionTest, CodexCounterexampleThroughTheSimulationMatchesTheBruteF
     RecordProperty("hits", hits);
     RecordProperty("tunnelHits", tunnelHits);
     EXPECT_EQ(runs, 2816);
-    EXPECT_EQ(hits, 2774);
-    EXPECT_EQ(tunnelHits, 226);
+    // P3.0c ITEMISED CHANGE (docs/MASTER_PLAN.md P3.0c, golden list): hits 2774 -> 2816 and
+    // tunnelHits 226 -> 0. Old: the sim swept weapon_033's bullet as its inscribed circle (r 8 px)
+    // at the origin: 42 of the 2816 alignments produced no hit at all and 226 of the hits were pure
+    // tunnels (neither step end overlapped). New: the sim sweeps the real prefab box (bullet_8, 48 x 16 px at
+    // +9.6 px), longer than one 40.96 px step, so every alignment overlaps the box at some step end
+    // (no tunnelling left for this bullet; the circle tunnel cases live in the primitive tests, the
+    // 4 px fallback wall test and BulletShapeTest). simStep == oracleStep still holds for all 2816
+    // runs against the shape-aware oracle.
+    EXPECT_EQ(hits, 2816);
+    EXPECT_EQ(tunnelHits, 0);
 }
 
 // ---- (b) near misses stay misses ---------------------------------------------------------
@@ -547,8 +567,25 @@ TEST(SweptCollisionTest, EarliestHitWinsWhenTwoEnemiesAreCrossedInOneStep) {
     const BodyGeom g = MakeBodyGeom(slime->body, slime->hurtbox, 16.0F);
     // index 0 = FAR enemy, index 1 = NEAR enemy. Both grown hurtboxes are touched by the step-2
     // segment and both contain its end point, so the old rule (lowest index) hits the far one.
-    sim.AddEnemy(*slime, glm::vec2{x1 + 60.0F, by - g.hurtOffsetPx.y}, 0, 21000);
-    sim.AddEnemy(*slime, glm::vec2{x1 + 25.0F, by - g.hurtOffsetPx.y}, 0, 21001);
+    // P3.0c: the bullet is its prefab box (reach Front() ahead of the origin), so the hurtbox
+    // centres are derived from that reach: the NEAR centre leaves an 8 px gap beyond the box front
+    // at the END of step 1 (not touched yet), the FAR one a further 25 px. Step 2's segment then
+    // grows into both (near first), and its end position overlaps both.
+    const oracle::ShapeSpec shp = [&] {
+        oracle::ShapeSpec sp;
+        const Game::BulletDef *bd = c.gd.BulletForWeapon(w);
+        const Game::Sim::BulletShape bs = Game::Sim::MakeBulletShape(bd->collider);
+        sp.box = bs.kind == Game::Sim::BulletShape::Kind::Box;
+        sp.r = bs.radiusPx;
+        sp.hx = bs.halfPx.x;
+        sp.hy = bs.halfPx.y;
+        sp.ox = bs.offsetPx.x;
+        sp.oy = bs.offsetPx.y;
+        return sp;
+    }();
+    const float nearX = x1 + static_cast<float>(shp.Front()) + g.hurtHalfPx.x + 8.0F;
+    sim.AddEnemy(*slime, glm::vec2{nearX + 25.0F, by - g.hurtOffsetPx.y}, 0, 21000);
+    sim.AddEnemy(*slime, glm::vec2{nearX, by - g.hurtOffsetPx.y}, 0, 21001);
     sim.EquipWeapon(w, "Gun001", 5, &c.gd);
     const int farHp = sim.EnemyViews()[0].hp;
     const int nearHp = sim.EnemyViews()[1].hp;
@@ -915,13 +952,17 @@ TEST(SweptCollisionTest, MovingTargetAndWallThroughTheSimulationMatchTheBruteFor
                     const glm::vec2 enemy = sim.EnemyViews()[0].pos;
                     const glm::vec2 endBullet = prevBullet + glm::vec2{kStepPx, 0.0F};
                     if (oracleKind == 0) {
-                        const int jh = oracle::FirstTouchSub(c.geom, prevEnemy, enemy, prevBullet, endBullet,
-                                                             c.bulletR);
+                        // P3.0c: the bullet is weapon_033's prefab box; against this y-spanning slab the
+                        // box is blocked exactly when its x extent [x + rear, x + front] meets the slab.
+                        const int jh = oracle::FirstTouchSubShape(c.geom, c.shape, prevEnemy, enemy,
+                                                                  prevBullet, endBullet);
+                        const float front = static_cast<float>(c.shape.Front());
+                        const float rear = static_cast<float>(c.shape.Rear());
                         // pre-filter: a path that stays left of the wall face cannot be blocked.
-                        const int js = std::max(prevBullet.x, endBullet.x) + c.bulletR < face
+                        const int js = std::max(prevBullet.x, endBullet.x) + front < face
                                            ? -1
                                            : oracle::FirstBlockedSub(prevBullet, endBullet, [&](glm::vec2 p) {
-                                                 return world.Blocks(p, c.bulletR);
+                                                 return p.x + front >= face && p.x + rear <= face + 64.0F;
                                              });
                         if (jh >= 0 || js >= 0) {
                             oracleStep = step;

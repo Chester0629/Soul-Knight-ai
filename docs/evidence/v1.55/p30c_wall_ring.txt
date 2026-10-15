@@ -1,0 +1,1 @@
+ [info] BulletImpact: frame 111 wall bullet_0 camp 0 at (10.3,191.8) heading 87.7 deg effect hit_yellow

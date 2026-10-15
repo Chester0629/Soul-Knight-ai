@@ -13,6 +13,8 @@
 #include "Util/Collider.hpp"
 #include "Util/GameObject.hpp"
 
+#include "data/GameData.hpp"
+
 namespace Game {
 
 /**
@@ -40,6 +42,29 @@ public:
     /// Swap the bullet art (full PNG path). Pooled views are reused across
     /// weapons, so the scene sets this on every acquire.
     void SetSprite(const std::string &path);
+
+    /**
+     * @brief P3.0c: dress the view as its OWN bullet prefab.
+     *
+     * Loads @p spritePath, tints it with the prefab colour and stores the sprite child's pose
+     * relative to the bullet root: lossy scale (x kSpriteScale), the child offset (units, bullet
+     * local: bullet_28 draws its 2x sprite one unit AHEAD of the root), its rotation, flipX and
+     * the sprite asset's pivot. @ref SyncPose then places it every frame.
+     */
+    void SetPrefabVisual(const std::string &spritePath, const BulletVisual &visual);
+
+    /// Back to the legacy look (centred sprite, scale kSpriteScale, no child offset / pivot).
+    /// Pooled views are reused, so the scene calls one of the two on every acquire.
+    void ClearPrefabVisual();
+
+    /**
+     * @brief P3.0c: place the view for a bullet at @p pos flying along @p headingRad.
+     *
+     * The bullet root is rotated to its travel direction (RGBullet.SetBulletVelocity:
+     * transform.right = dir, DISASM 0x5b8f98), so the drawn rotation is the heading plus the
+     * sprite child's own rotation, and the child offset rotates with it.
+     */
+    void SyncPose(glm::vec2 pos, float headingRad);
 
     /**
      * @brief (Re)initializes the bullet for reuse from an object pool.
@@ -134,6 +159,12 @@ private:
     bool m_CanThrough{false};
     int m_Pierce{0};
     bool m_Active{false};
+    // P3.0c prefab pose (see SetPrefabVisual); all identity for the legacy look.
+    bool m_HasVisual{false};
+    glm::vec2 m_VisScale{1.0F, 1.0F};
+    glm::vec2 m_VisOffsetPx{0.0F, 0.0F};
+    float m_VisRotRad{0.0F};
+    bool m_VisFlipX{false};
 };
 
 } // namespace Game

@@ -68,6 +68,14 @@ void Image::Draw(const Core::Matrices &data) {
     m_Texture->Bind(UNIFORM_SURFACE_LOCATION);
     s_Program->Bind();
     s_Program->Validate();
+    {
+        // P3.0c: modulation colour (stored minus one so an unset uniform is the identity).
+        static GLint s_TintLoc = glGetUniformLocation(s_Program->GetId(), "tintMinusOne");
+        if (s_TintLoc >= 0) {
+            glUniform4f(s_TintLoc, m_Tint.r - 1.0F, m_Tint.g - 1.0F, m_Tint.b - 1.0F,
+                        m_Tint.a - 1.0F);
+        }
+    }
 
     s_VertexArray->Bind();
     s_VertexArray->DrawTriangles();

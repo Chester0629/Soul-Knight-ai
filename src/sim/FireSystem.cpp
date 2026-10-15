@@ -11,11 +11,15 @@ BulletState MakeBullet(const FireIntent &in, glm::vec2 dir, std::uint32_t &nextI
     BulletState b;
     b.id = nextId++;
     b.pos = in.origin;
-    b.vel = dir * in.speedPxPerSec;
+    SetBulletVelocity(b, dir * in.speedPxPerSec); // vel + heading (transform.right = dir)
+    if (b.vel.x == 0.0F && b.vel.y == 0.0F) {
+        b.angleRad = std::atan2(dir.y, dir.x); // a zero-speed bullet still faces its aim
+    }
     b.lifeMs = in.lifeMs;
     b.damage = in.damage;
     b.camp = in.camp;
     b.radiusPx = in.radiusPx;
+    b.launch = in.launch; // P3.0c
     b.repel = in.repel;
     b.critical = in.critical;
     b.canThrough = in.canThrough;
@@ -65,7 +69,7 @@ void FireSystem::Expand(const FireIntent &intent, std::uint32_t &nextId,
         // renders through the Single path below -- a same-tick Expand burst would be
         // unfaithful to the guns' time-spaced salvo.
         BulletState b = MakeBullet(intent, intent.dir, nextId);
-        b.vel = intent.dir * (intent.speedPxPerSec * intent.chargeRatio);
+        SetBulletVelocity(b, intent.dir * (intent.speedPxPerSec * intent.chargeRatio));
         out.push_back(b);
         return;
     }
