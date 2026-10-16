@@ -1,0 +1,79 @@
+ [warning] config.json not found, using default configurations.
+ [info] OpenGL Info
+ [info]   Vendor: NVIDIA Corporation
+ [info]   Renderer: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2
+ [info]   Version: 4.1.0 NVIDIA 610.88
+ [info]   GLSL Version: 4.10 NVIDIA via Cg compiler
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 0
+ [info] Level B1 (1-1) biome 1-ice chest_level 1 map_long 3 pool 5 species
+ [info] Audio: bgm bgm_5Low.ogg
+ [info] Floor 0 rooms (design-pool=108): r1_43(15x21) r1_105(15x15) r1_50(15x21) r1_29(15x15) r1_102(15x15) r1_108(21x21) r1_60(15x21) 
+ [info] Bullet: e_yeti01 fires no RGBullet-family bullet (refs: effect_shock1) -> generic bullet_e_1 stands in (T-66)
+ [info] Spawn: e_miner03 room 1 moved (-160.0,-1376.0) -> (-160.0,-1440.0) (body r=19.2 did not fit)
+ [info] EnemyMaker: room 1 part spawned 3 (4 pending)
+ [info] EnemyMaker: room 1 (type 1) level 1 points 9 -> 7 planned, wave size 3
+ [info] Bullet: e_miner01 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_miner02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 2 part spawned 6 (9 pending)
+ [info] EnemyMaker: room 2 (type 1) level 2 points 17 -> 15 planned, wave size 6
+ [info] EnemyMaker: room 3 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 3: mineral room (6 ore nodes, hp 40, 10 coins each)
+ [info] EnemyMaker: room 4 (type 2) special prefab -> level 0, no spawns
+ [info] EnemyMaker: room 5 part spawned 9 (15 pending)
+ [info] EnemyMaker: room 5 (type 1) level 3 points 27 -> 24 planned, wave size 9
+ [info] EnemyMaker: room 6 (type 4) special prefab -> level 0, no spawns
+ [info] Shop: vending_machine_i at room 6 sells 'health_pot' for 10 coins
+ [info] Shop: water_dispenser at room 6 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 6 sells 'weapon_153' for 12 coins
+ [info] SK_FORCE_AIM: from frame 0 aim (-1.00,0.00) for 1000000000 frames
+ [info] Floor 0 fresh start (template) hp=6 weapon='weapon_000' (seed=5)
+ [info] GameScene: SK_ZOOM override 2
+ [info] SpawnFilter: 36 of 1180 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 4 at (0,-3936)
+ [info] PosTrace: frame 30 player (0.0,-64.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 30 player facing -1 clip 0 aim (-1.000,0.000) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot 0.0000 scalex -2.00 muzzle (-19.20,-59.20) hand layer z 6.1000
+ [info] PoseTrace: frame 30 enemy 0 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 0 room 1 e_yeti01 (-192.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 1 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 1 room 1 e_yeti01 (-192.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 2 e_miner03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 2 room 1 e_miner03 (-160.0,-1440.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 3 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 3 room 2 e_miner01 (1120.0,-192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 4 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 4 room 2 e_miner01 (1120.0,256.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 5 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 5 room 2 e_yeti01 (1152.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 6 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 6 room 2 e_yeti01 (1152.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 7 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 7 room 2 e_miner02 (1184.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 8 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 8 room 2 e_miner01 (1184.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 9 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 9 room 5 e_yeti01 (1024.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 10 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 10 room 5 e_yeti01 (1024.0,-1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 11 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 11 room 5 e_yeti01 (1056.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 12 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 12 room 5 e_miner01 (1056.0,-1280.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 13 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 13 room 5 e_miner02 (1056.0,-1056.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 14 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 14 room 5 e_miner01 (1088.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 15 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 15 room 5 e_yeti01 (1088.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 16 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 16 room 5 e_miner02 (1120.0,-1600.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 30 enemy 17 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 30 enemy 17 room 5 e_miner02 (1120.0,-1376.0) r=12.8 alive=1 blocked=0
+ [warning] OpenGL Severity: MEDIUM
+ [warning]  ID: 131154
+ [warning]  Source: API
+ [warning]  Type: PERFORMANCE
+ [warning]  Message: Pixel-path performance warning: Pixel transfer is synchronized with 3D rendering.

@@ -381,9 +381,19 @@ TEST(SpriteAnchorTest, NoDataAnchorsBottomCentre) {
 
 // ---- (c) sim: a bullet hits an enemy exactly at the data radius boundary -------------
 namespace {
-Game::Sim::WorldInputs FireAlongX() {
+// SLICE 4: the shot leaves the weapon's gun_point, not the body centre. FireAlongX stands the player so the
+// MUZZLE (hand + gun_point at aim +x, facing +1) lands on the old origin (0, 0): every geometry below (enemy
+// offsets from the line of fire, the 6.4 px bullet, the boundary values) keeps its pre-slice meaning, and the
+// expectations are unchanged. The muzzle is the data value (weapons.json held.gun_point * kCellPx).
+glm::vec2 MuzzleOffsetPx(const Game::WeaponDef &w) {
+    return w.held.hasGunPoint ? glm::vec2{Game::Scale::UnitsToPx(w.held.gunPointX),
+                                          Game::Scale::UnitsToPx(w.held.gunPointY)}
+                              : glm::vec2{0.0F, 0.0F};
+}
+
+Game::Sim::WorldInputs FireAlongX(const Game::WeaponDef &w) {
     Game::Sim::WorldInputs in;
-    in.playerPos = glm::vec2{0.0F, 0.0F};
+    in.playerPos = -MuzzleOffsetPx(w);
     in.aimDir = glm::vec2{1.0F, 0.0F};
     in.firing = true;
     in.playerRoomId = 1; // not the enemy's room: it stays asleep and does not move
@@ -417,7 +427,7 @@ bool SlimeHit(const Game::GameData &gd, Game::WeaponDef w, float enemyY, bool st
     sim.AddEnemy(*slime, glm::vec2{120.0F, enemyY}, /*roomId=*/0, 21000);
     sim.EquipWeapon(w, "Gun001", 5, &gd);
     const int hp0 = sim.EnemyViews()[0].hp;
-    const Game::Sim::WorldInputs in = FireAlongX();
+    const Game::Sim::WorldInputs in = FireAlongX(w);
     for (int i = 0; i < 60; ++i) {
         sim.Advance(20.0F, in);
     }
@@ -467,7 +477,7 @@ TEST(SimColliderTest, DefWithoutColliderDataKeepsPlaceholderRadii) {
         sim.AddEnemy(bare, glm::vec2{120.0F, y}, 0, 21000);
         sim.EquipWeapon(w, "Gun001", 5, &gd);
         const int hp0 = sim.EnemyViews()[0].hp;
-        const Game::Sim::WorldInputs in = FireAlongX();
+        const Game::Sim::WorldInputs in = FireAlongX(w);
         for (int i = 0; i < 60; ++i) {
             sim.Advance(20.0F, in);
         }

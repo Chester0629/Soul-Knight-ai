@@ -15,6 +15,7 @@
 #include "combat/Buff.hpp"
 #include "data/GameData.hpp"
 #include "data/RGRandom.hpp"
+#include "game/WorldScale.hpp"
 #include "sim/BodyGeom.hpp"
 #include "sim/SimConfig.hpp"
 #include "sim/SimEvent.hpp"
@@ -384,7 +385,12 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
         sim.EquipWeapon(*wdef, "Gun001", 5, passData ? &gd : nullptr);
         const float bulletR =
             passData ? Game::Sim::EquivalentRadiusPx(bd->collider) : Game::Sim::kBulletRadius;
-        const WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
+        // SLICE 4: the shot leaves the gun_point (19.2, 4.8) px of the held weapon; stand the player so the muzzle
+        // is the old origin (0, 0) and the bullet-vs-enemy geometry of this golden run is unchanged (the enemy
+        // now steers toward a player 19.2 / 4.8 px away, which the oracle below re-derives from the positions).
+        WorldInputs in = FiringAt(glm::vec2{1.0F, 0.0F});
+        in.playerPos = -glm::vec2{Game::Scale::UnitsToPx(wdef->held.gunPointX),
+                                  Game::Scale::UnitsToPx(wdef->held.gunPointY)};
         Run r;
         r.trace.push_back(static_cast<float>(sim.EnemyViews()[0].hp)); // [0] = hp before any tick
         glm::vec2 prevEnemy = sim.EnemyViews()[0].pos;
@@ -399,6 +405,11 @@ TEST(BuffTriggerTest, NoBuffWeaponUnaffectedByP32Wiring) {
                 EXPECT_EQ(sim.Bullets().size(), 1U);
                 bulletStep = sim.Bullets()[0].vel * Game::Sim::kFixedStepSeconds;
                 bulletEnd = sim.Bullets()[0].pos; // end of step 1 (it spawned at the muzzle and moved once)
+                // SLICE 4, independent of the geometry oracle below: the player stands at -muzzle, so the first
+                // bullet must have been born at the old origin (0,0). A regression to "spawn at the body centre"
+                // would give (-19.2,-4.8) here.
+                EXPECT_NEAR(sim.Bullets()[0].prevPos.x, 0.0F, 1e-3F);
+                EXPECT_NEAR(sim.Bullets()[0].prevPos.y, 0.0F, 1e-3F);
             } else {
                 bulletEnd += bulletStep;
             }

@@ -1,0 +1,5 @@
+ [info] PosTrace: frame 4 player (0.0,32.0) r=12.8 blocked=0
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (2624,-1312)
+ [info] GameScene: SK_ROOM_TELEPORT offset (120,0)
+ [info] Dash: SK_FORCE_DASH frame 10 from (2744.0,-1312.0) to (2755.2,-1312.0) blocked=0
+ [info] PosTrace: frame 12 player (2755.2,-1312.0) r=12.8 blocked=0

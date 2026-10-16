@@ -31,9 +31,21 @@ Enemy::Enemy(const EnemyDef &def, const std::string &resourceRoot,
           frames.empty() ? MakeBatFrames(resourceRoot) : frames, true,
           frameIntervalMs, true)) {
     SetDrawable(m_Anim);
+    m_Vis.SetClip(ActorPose::ActorClip::Idle, m_Anim, {});
     SetZIndex(RenderLayout::kZEnemy); // sorting layer 5 (Character), below the layer-6 overlays
     m_Transform.translation = spawnPos;
+    m_PrevPos = spawnPos;
     SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
+}
+
+void Enemy::UpdatePose(glm::vec2 position, float dtMs, float faceDx, bool locked) {
+    const bool moving = ActorPose::IsMoving(position - m_PrevPos, dtMs);
+    m_PrevPos = position;
+    m_Transform.translation = position;
+    m_Vis.SetFacing(ActorPose::ResolveFacing(m_Vis.Facing(), faceDx));
+    m_Vis.SetClipState(ActorPose::SelectClip(false, moving));
+    m_Vis.SetRingVisible(locked);
+    SyncSprite();
 }
 
 EnemyAI::Decision Enemy::Think(float dtMs, glm::vec2 playerPos) {
@@ -57,7 +69,7 @@ glm::vec2 Enemy::Position() const {
 }
 
 Util::Collider Enemy::GetCollider() const {
-    return Util::Collider::MakeCircle(Position(), m_Anchor.bodyRadiusPx);
+    return Util::Collider::MakeCircle(Position(), m_Vis.Anchor().bodyRadiusPx);
 }
 
 const CombatStats &Enemy::Stats() const {

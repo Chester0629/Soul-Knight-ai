@@ -261,10 +261,12 @@ for aim in "up 0,1" "down 0,-1" "left -1,0" "right 1,0" "diag_ur 1,1" "diag_dl -
   require "p30c_aim_$1" "SK_FORCE_FIRE: from frame 100" "BulletPose: frame 100 id 1 camp 0 prefab bullet_0"
 done
 # the checker reads the full p30c_*.log files; the final cleanup deletes every other .log and KEEPS p30c_*.log (evidence)
-run_case p30c_wall "BulletImpact|SK_FORCE_FIRE" 4 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=111 SK_SHOT="$E/p30c_wall.png"
+# P2.19: the bullet now leaves the weapon's gun_point (19 px ahead of the hero), so the wall contact is one frame earlier
+# (impact frame 110, was 111): the disc shot is taken on frame 110, the ring shot three frames later (113, was 114)
+run_case p30c_wall "BulletImpact|SK_FORCE_FIRE" 4 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=110 SK_SHOT="$E/p30c_wall.png"
 check_png "$E/p30c_wall.png"
-require p30c_wall "BulletImpact: frame 111 wall bullet_0 camp 0 at .* effect hit_yellow"
-run_case p30c_wall_ring "BulletImpact" 2 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=114 SK_SHOT="$E/p30c_wall_ring.png"
+require p30c_wall "BulletImpact: frame 110 wall bullet_0 camp 0 at .* effect hit_yellow"
+run_case p30c_wall_ring "BulletImpact" 2 $P30C SK_FORCE_FIRE=100,0,1,40 SK_ZOOM=1.2 SK_MAX_FRAMES=113 SK_SHOT="$E/p30c_wall_ring.png"
 check_png "$E/p30c_wall_ring.png"
 run_case p30c_enemy "Bullet:|BulletPose|BulletImpact" 12 $P30C SK_ROOM_TELEPORT=60,1 SK_TRACE_BULLETS=1 SK_ZOOM=2 SK_MAX_FRAMES=155 SK_SHOT="$E/p30c_enemy.png"
 check_png "$E/p30c_enemy.png"
@@ -286,9 +288,48 @@ head -1 "$E/bullet_colliders.txt"
 run_case p30c_fire_bad "SK_FORCE_FIRE|BulletPose" 6 $P30C SK_FORCE_FIRE=100,nan,1 SK_TRACE_BULLETS=1 SK_MAX_FRAMES=130
 require p30c_fire_bad "SK_FORCE_FIRE rejected"
 [ "$(grep -cE "BulletPose" "$E/p30c_fire_bad.txt")" = "0" ] || fail "p30c_fire_bad still fired"
+echo "=== P2.19 characters slice: held weapon + aim, facing flip, shadow + lock ring, run clip, muzzle spawn ==="
+# Every case uses SK_SEED=5 (ice 1-1, the biome of the ground-truth capture) and a fixed 20 ms step. Aim cases:
+# SK_FORCE_AIM=0,dx,dy (strictly parsed, aim only, from frame 0) at 8 directions, zoom 2 (= the capture's 4 px per
+# source px), frame 30; p219_check.py asserts the PoseTrace line AND the pixels (weapon centroid vs the pose maths,
+# skin patch on the facing side, green ring under the feet).
+P219="SK_SEED=5 SK_SKIP_MENU=1 SK_MUTE=1 SK_DT_MS=20"
+for aim in "r 1,0" "ur 1,1" "u 0,1" "ul -1,1" "l -1,0" "dl -1,-1" "d 0,-1" "dr 1,-1"; do
+  set -- $aim
+  run_case "p219_aim_$1" "SK_FORCE_AIM|PoseTrace: frame 30 player|PosTrace: frame 30 player" 6 $P219 SK_FORCE_AIM=0,$2 SK_TRACE_POS=30 SK_ZOOM=2 SK_MAX_FRAMES=31 SK_SHOT="$E/p219_aim_$1.png"
+  check_png "$E/p219_aim_$1.png"
+  require "p219_aim_$1" "SK_FORCE_AIM: from frame 0" "PoseTrace: frame 30 player facing"
+done
+run_case p219_run "SK_FORCE_AIM|SK_WALK_DIR|PoseTrace: frame 30 player" 4 $P219 SK_FORCE_AIM=0,-1,0 SK_WALK_DIR=-1,0 SK_TRACE_POS=30 SK_ZOOM=2 SK_MAX_FRAMES=31 SK_SHOT="$E/p219_run.png"
+check_png "$E/p219_run.png"
+require p219_run "PoseTrace: frame 30 player facing -1 clip 1"
+run_case p219_enemy "Lock:|PoseTrace: frame 150|PosTrace: frame 150 (player|enemy)" 90 $P219 SK_ROOM_TELEPORT=60,1 SK_FORCE_AIM=0,1,0 SK_TRACE_POS=100,150 SK_ZOOM=3 SK_MAX_FRAMES=151 SK_SHOT="$E/p219_enemy.png"
+check_png "$E/p219_enemy.png"
+require p219_enemy "Lock: frame [0-9]+ target -1 -> [0-9]+" "PoseTrace: frame 150 enemy [0-9]+ e_yeti01 facing"
+# (SK_FORCE_CLEAR / SK_ROOM_TELEPORT / SK_TRACE_POS count scene frames: floors A1..A4 clear at their frame 25, the boss floor A5 is
+# on screen from main frame ~105, so the A5 scene's frame 14 is main frame ~119 -- the same pattern as p217_boss_forest)
+run_case p219_boss "PoseTrace: frame 14 boss|Level A5" 4 SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_DT_MS=20 SK_FORCE_CLEAR=25 SK_ROOM_TELEPORT=12,3,0,-160 SK_TRACE_POS=14 SK_ZOOM=1.2 SK_MAX_FRAMES=120 SK_SHOT="$E/p219_boss.png"
+check_png "$E/p219_boss.png"
+require p219_boss "PoseTrace: frame 14 boss boss0[78] facing"
+# muzzle spawn at 0 / 90 / 180 / 270 degrees (weapon_000 gun_point, hero facing from the aim side)
+for aim in "r 1,0" "u 0,1" "l -1,0" "d 0,-1"; do
+  set -- $aim
+  run_case "p219_muzzle_$1" "SK_FORCE_FIRE|Muzzle:|BulletSpawn" 6 $P219 SK_FORCE_FIRE=0,$2,40 SK_TRACE_BULLETS=1 SK_MAX_FRAMES=40
+  require "p219_muzzle_$1" "BulletSpawn: frame [0-9]+ id 1 spawn" "Muzzle: frame [0-9]+ player"
+done
+# negative: a malformed SK_FORCE_AIM is rejected and never aims
+run_case p219_aim_bad "SK_FORCE_AIM|PoseTrace: frame 30 player" 4 $P219 SK_FORCE_AIM=0,nan,1 SK_TRACE_POS=30 SK_MAX_FRAMES=31
+require p219_aim_bad "SK_FORCE_AIM rejected"
+python tools/p219_check.py "$E" > "$E/p219_check.txt" 2>&1 || fail "p219 assertions"
+tail -3 "$E/p219_check.txt"
+grep -q "P219 CHECK: OK" "$E/p219_check.txt" || fail "p219 assertions not OK"
+python tools/p219_compare.py "$E" > "$E/p219_compare.txt" 2>&1 || fail "p219 compare sheets"
+mkdir -p docs/evidence/p2.19 && cp "$E/compare_aim.png" "$E/compare_aim8.png" "$E/compare_run.png" "$E/compare_ring.png" docs/evidence/p2.19/ || fail "copy p219 compare sheets"
+python tools/validate_data.py --actor-report > "$E/actor_states.txt" 2>&1 || fail "actor state report"
+head -4 "$E/actor_states.txt"
 git rev-parse --short HEAD | tee "$E/head.txt"
-# keep the FULL p30c_* logs: tools/p30c_check.py (documented re-check command) reads them
-find "$E" -maxdepth 1 -name "*.log" ! -name "p30c_*.log" -delete
+# keep the FULL p30c_* and p219_* logs: tools/p30c_check.py / tools/p219_check.py (documented re-check commands) read them
+find "$E" -maxdepth 1 -name "*.log" ! -name "p30c_*.log" ! -name "p219_*.log" -delete
 if [ "${#FAILS[@]}" -eq 0 ]; then
   echo "STATUS: OK (all steps passed) $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"
 else

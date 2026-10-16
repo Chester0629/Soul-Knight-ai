@@ -88,8 +88,11 @@ TEST(SpeedScaleTest, Weapon000BulletFliesSpeedTimesTCells) {
         EXPECT_NEAR(cells, 36.0F * seconds, stepCells);
         EXPECT_NEAR(s.Bullets()[0].pos.y, start.y, 1e-3F); // straight line
     }
-    EXPECT_NEAR(y0, 0.0F, 1e-3F);
-    (void)x0;
+    // SLICE 4: the bullet leaves the weapon_000 gun_point, 0.15 unit (4.8 px) above the hand, and flies straight
+    // along the aim, so its y stays at the muzzle height (it was 0 when the shot left the body centre).
+    EXPECT_NEAR(y0, Game::Scale::UnitsToPx(w.held.gunPointY), 1e-3F);
+    EXPECT_NEAR(x0, Game::Scale::UnitsToPx(w.held.gunPointX) + 36.0F * Game::Scale::kCellPx * Game::Sim::kFixedStepSeconds,
+                1e-2F); // muzzle x + one fixed step of flight
 }
 
 // An enemy with data speed v (units/s) walks v cells per second. Pure steering, no wall.

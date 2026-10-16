@@ -1,0 +1,2 @@
+ [info] Level A5 (1-5) biome 1-forest chest_level 2 map_long 4 pool 16 species
+ [info] PoseTrace: frame 14 boss boss08 facing 1 clip 1 ring 1 shadow 1

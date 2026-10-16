@@ -1,0 +1,5 @@
+ACTOR STATES: 146 species rows, 143 with a sprite entity
+  no run clip  (19): boss06, boss07, boss10, boss12_1, boss12_2, e_battery01, e_creeper_fly, e_crystal, e_mosquito, e_succulent, e_tentacle, e_tentacle_temp, e_ufo, ex_battery01, ex_creeper_fly, ex_crystal, ex_mosquito, ex_succulent, ex_ufo
+  no dead clip (4): boss04, boss06, e_tentacle, e_tentacle_temp
+  no sprite entity (3): ex_orc05, mineral_crystal, mineral_gold
+  sprite states named hit/hurt: 0 [] (the Animator `hit` trigger drives HitLayer/char_hit = an empty 0.067 s clip whose event calls RGEController.HitBack -> a material swap, not a sprite state)

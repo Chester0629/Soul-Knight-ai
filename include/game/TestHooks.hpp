@@ -186,6 +186,11 @@ struct ForceFireSpec {
     std::string error;
 };
 
+/// SLICE 4 (characters): SK_FORCE_AIM=K,dx,dy[,N] -- from frame K aim along (dx, dy) for N frames (default:
+/// until the run ends) WITHOUT firing, so the held-weapon rotation and the body facing can be captured at
+/// chosen angles. Same strict grammar and result as SK_FORCE_FIRE (ParseForceFire); NO-OP unless set.
+/// Applied to the aim only (the fire hook still wins while it is active).
+
 /// Unit vector of (dx, dy) without squaring tiny / huge components in float: both are first divided
 /// by max(|dx|, |dy|) and the length is taken in double. Returns false (outputs 0) when the vector is
 /// zero, non-finite, or still has no usable length.
@@ -237,12 +242,18 @@ inline ForceFireSpec ParseForceFire(const std::string &text) {
         long n = 0;
         if (!TestHooksDetail::ParseWholeLong(f[3], n) || n < 1) {
             r.error = "bad frame count N (need whole number >= 1)";
+            r.dx = r.dy = r.ux = r.uy = 0.0F; // a rejected spec carries no direction (slice 4: SK_FORCE_AIM shares this)
             return r;
         }
         r.count = n;
     }
     r.ok = true;
     return r;
+}
+
+/// SK_FORCE_AIM shares SK_FORCE_FIRE's grammar (see above).
+inline ForceFireSpec ParseForceAim(const std::string &text) {
+    return ParseForceFire(text);
 }
 
 /// Parsed SK_DT_SPIKE test hook: "K,ms" -- frame K runs with a frame delta of @c ms instead of the

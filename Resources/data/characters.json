@@ -40,7 +40,66 @@
     "sprite_offset": [
       0.0,
       0.0
-    ]
+    ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.05
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.05
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.235294,
+          0.913725,
+          0.294118,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ],
+      "hand_layer": 6
+    }
   },
   "roster": [
     {
@@ -85,7 +144,66 @@
       "sprite_offset": [
         0.0,
         0.0
-      ]
+      ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.235294,
+            0.913725,
+            0.294118,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      }
     },
     {
       "id": "c02",
@@ -129,7 +247,66 @@
       "sprite_offset": [
         0.0,
         0.0
-      ]
+      ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      }
     },
     {
       "id": "c03",
@@ -174,6 +351,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.1
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.1
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.4
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "thunder": [
           "thunder"
@@ -226,6 +462,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "sword_obj": [
           "sword_2_5_assassin"
@@ -275,6 +570,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "bottle_objs": [
           "bullet_bottle_0",
@@ -327,6 +681,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "battery": [
           "battery"
@@ -376,6 +789,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.1,
+          0.45
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "bullet_bat": [
           "bullet_bat"
@@ -428,7 +900,66 @@
       "sprite_offset": [
         0.0,
         0.0
-      ]
+      ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.4,
+          0.6
+        ],
+        "hand_layer": 4
+      }
     },
     {
       "id": "c09",
@@ -473,6 +1004,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "skill_arrow": [
           "bullet_c09"
@@ -525,6 +1115,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"
@@ -577,6 +1226,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "skill_obj": [
           "Holy_light_c11"
@@ -629,6 +1337,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "skill_obj1": [
           "wolf1"
@@ -688,6 +1455,65 @@
         0.0,
         0.0
       ],
+      "rig": {
+        "shadow": {
+          "sprite": "shadow3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "ring": {
+          "sprite": "shadow_lock.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.05
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            3,
+            0
+          ],
+          "color": [
+            0.234645,
+            0.911765,
+            0.295353,
+            1.0
+          ],
+          "enabled": false
+        },
+        "hand": [
+          0.0,
+          0.5
+        ],
+        "hand_layer": 6
+      },
       "skill_refs": {
         "skill_atk_obj": [
           "c10_skill_atk"

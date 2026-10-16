@@ -39,6 +39,68 @@ SortKey GetSort(const json &j, const char *key, SortKey fallback) {
     return fallback;
 }
 
+/// SLICE 4: one rig node ({sprite, pivot, offset, scale, sort, color, enabled}) of weapons/enemies/
+/// characters.json, !present when @p j is not an object with a sprite.
+RigNodeDef RigNodeFromJson(const json &j) {
+    RigNodeDef n;
+    if (!j.is_object()) {
+        return n;
+    }
+    n.sprite = GetS(j, "sprite");
+    if (n.sprite.empty()) {
+        return n;
+    }
+    n.present = true;
+    auto pair = [&j](const char *key, float &a, float &b) {
+        auto it = j.find(key);
+        if (it != j.end() && it->is_array() && it->size() >= 2 && (*it)[0].is_number() &&
+            (*it)[1].is_number()) {
+            a = (*it)[0].get<float>();
+            b = (*it)[1].get<float>();
+        }
+    };
+    pair("pivot", n.pivotX, n.pivotY);
+    pair("offset", n.offsetX, n.offsetY);
+    pair("scale", n.scaleX, n.scaleY);
+    const SortKey sk = GetSort(j, "sort", SortKey{3, 0});
+    n.sortLayer = sk.layer;
+    n.sortOrder = sk.order;
+    if (auto c = j.find("color"); c != j.end() && c->is_array() && c->size() >= 4) {
+        for (std::size_t k = 0; k < 4; ++k) {
+            n.color[k] = (*c)[k].is_number() ? (*c)[k].get<float>() : 1.0F;
+        }
+    }
+    if (auto en = j.find("enabled"); en != j.end() && en->is_boolean()) {
+        n.enabled = en->get<bool>();
+    }
+    return n;
+}
+
+/// SLICE 4: the `rig` object of an enemy / character row (absent -> an empty ActorRigDef).
+ActorRigDef RigFromJson(const json &row) {
+    ActorRigDef r;
+    auto it = row.find("rig");
+    if (it == row.end() || !it->is_object()) {
+        return r;
+    }
+    if (auto sh = it->find("shadow"); sh != it->end()) {
+        r.shadow = RigNodeFromJson(*sh);
+    }
+    if (auto rg = it->find("ring"); rg != it->end()) {
+        r.ring = RigNodeFromJson(*rg);
+    }
+    if (auto h = it->find("hand"); h != it->end() && h->is_array() && h->size() >= 2 &&
+                                   (*h)[0].is_number() && (*h)[1].is_number()) {
+        r.hasHand = true;
+        r.handX = (*h)[0].get<float>();
+        r.handY = (*h)[1].get<float>();
+    }
+    if (auto hl = it->find("hand_layer"); hl != it->end() && hl->is_number_integer()) {
+        r.handLayer = hl->get<int>();
+    }
+    return r;
+}
+
 /// `sprite_offset: [x, y]` (units, prefab-root space) -> (x, y); (0, 0) when absent.
 void ReadSpriteOffset(const json &j, float &x, float &y) {
     x = 0.0F;
@@ -191,6 +253,16 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.angle = GetF(e, "angle");
             d.maxTime = GetF(e, "max_time");  // B1-P3: Charge ratio cap (charge guns).
             d.aCount = GetI(e, "a_count");    // B1-P3: charge burst / arrow count.
+            if (auto hd = e.find("held"); hd != e.end() && hd->is_object()) { // SLICE 4
+                d.held.sprite = RigNodeFromJson(*hd);
+                d.held.present = d.held.sprite.present;
+                if (auto gp = hd->find("gun_point"); gp != hd->end() && gp->is_array() && gp->size() >= 2 &&
+                                                     (*gp)[0].is_number() && (*gp)[1].is_number()) {
+                    d.held.hasGunPoint = true;
+                    d.held.gunPointX = (*gp)[0].get<float>();
+                    d.held.gunPointY = (*gp)[1].get<float>();
+                }
+            }
             m_WeaponIndex[d.id] = m_Weapons.size();
             m_Weapons.push_back(std::move(d));
         }
@@ -302,6 +374,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.bodyScale = GetF(e, "body_scale", 1.0F);
             ReadSpriteOffset(e, d.spriteOffsetX, d.spriteOffsetY);
             d.bulletPrefab = GetS(e, "bullet_prefab"); // P3.0c
+            d.rig = RigFromJson(e); // SLICE 4: shadow + lock ring
             if (auto dt = e.find("dead_tap"); dt != e.end() && dt->is_array() && dt->size() >= 2 &&
                                               (*dt)[0].is_number() && (*dt)[1].is_number()) {
                 d.hasDeadTap = true;
@@ -423,6 +496,7 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.hurtbox = GetCollider(c, "hurtbox");
             d.bodyScale = GetF(c, "body_scale", 1.0F);
             ReadSpriteOffset(c, d.spriteOffsetX, d.spriteOffsetY);
+            d.rig = RigFromJson(c); // SLICE 4: shadow + lock ring + hand mount
             // P3.3.c: hero-specific serialized skill refs + effect-prefab numbers.
             if (auto sr = c.find("skill_refs"); sr != c.end() && sr->is_object()) {
                 for (auto it = sr->begin(); it != sr->end(); ++it) {
@@ -982,6 +1056,23 @@ std::string GameData::DeadState(const std::string &spriteId) const {
         }
     }
     return best;
+}
+std::string GameData::RunState(const std::string &spriteId) const {
+    const SpriteSet *s = FindSprites(spriteId);
+    if (s == nullptr) {
+        return "";
+    }
+    auto has = [s](const std::string &n) {
+        auto it = s->states.find(n);
+        return it != s->states.end() && !it->second.empty();
+    };
+    // Same family rule as DeadState: the default state's prefix first ("enemy01_ide" -> "enemy01_run"),
+    // else the plain "run".
+    const std::size_t us = s->defaultState.rfind('_');
+    if (us != std::string::npos && has(s->defaultState.substr(0, us + 1) + "run")) {
+        return s->defaultState.substr(0, us + 1) + "run";
+    }
+    return has("run") ? "run" : "";
 }
 const BulletDef *GameData::BulletForWeapon(const WeaponDef &def) const {
     if (def.bulletPrefab.empty()) {

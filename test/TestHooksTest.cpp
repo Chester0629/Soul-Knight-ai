@@ -179,6 +179,32 @@ TEST(ForceFireHookTest, ParsesStrictly) {
     EXPECT_EQ(bad.dx, 0.0F);
 }
 
+// SLICE 4: SK_FORCE_AIM shares SK_FORCE_FIRE's strict grammar (aim only, never fires).
+TEST(ForceAimHookTest, ParsesStrictlyLikeForceFire) {
+    auto r = Game::ParseForceAim("40,-1,0");
+    ASSERT_TRUE(r.ok);
+    EXPECT_EQ(r.frame, 40);
+    EXPECT_FLOAT_EQ(r.ux, -1.0F);
+    EXPECT_FLOAT_EQ(r.uy, 0.0F);
+    EXPECT_GT(r.count, 1000000L);
+    r = Game::ParseForceAim("40,1,1,25");
+    ASSERT_TRUE(r.ok);
+    EXPECT_NEAR(r.ux, 0.70710678F, 1e-6F);
+    EXPECT_EQ(r.count, 25);
+    // every malformed form is rejected whole, and a rejected spec never carries a direction
+    for (const char *bad : {"", "40", "40,1", "40,0,0", "-1,1,0", "40,nan,1", "40,1,inf", "40,1e30,0",
+                            "40,1,0,0", "40,1,0,x", "40,1,0,5,6", "40.5,1,0", "40,1,0 ", "4x,1,0"}) {
+        const auto t = Game::ParseForceAim(bad);
+        EXPECT_FALSE(t.ok) << bad;
+        EXPECT_EQ(t.dx, 0.0F) << bad;
+        EXPECT_EQ(t.ux, 0.0F) << bad;
+    }
+    // a tiny component does not underflow the normalisation (R42 for the shared parser)
+    const auto tiny = Game::ParseForceAim("40,-1e-30,0");
+    ASSERT_TRUE(tiny.ok);
+    EXPECT_FLOAT_EQ(tiny.ux, -1.0F);
+}
+
 TEST(DtSpikeHookTest, ParsesStrictly) {
     auto r = Game::ParseDtSpike("5,5000");
     ASSERT_TRUE(r.ok);

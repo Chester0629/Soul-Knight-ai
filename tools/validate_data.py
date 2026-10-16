@@ -14,6 +14,7 @@ Run:  python tools/validate_data.py
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -727,6 +728,66 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
             need(isinstance(so, list) and len(so) == 2
                  and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in so),
                  f"{src} {r.get('id')}: sprite_offset must be [x, y] numbers (run build_gamedata.py)")
+    # --- SLICE 4 (characters): ground shadow / lock ring / hand mount per actor, held sprite + gun_point per weapon ---
+    SPRITE_DIR = ROOT / "Resources" / "sprites"
+    NO_SHADOW = {"boss11", "mineral_crystal", "mineral_gold"}  # prefabs without a `shadow` child
+
+    def check_rig_node(node, what: str) -> None:
+        need(isinstance(node, dict), f"{what}: rig node missing")
+        if not isinstance(node, dict):
+            return
+        sprite = node.get("sprite")
+        need(isinstance(sprite, str) and (SPRITE_DIR / sprite).is_file(), f"{what}: sprite {sprite!r} not on disk")
+        for key, n in (("pivot", 2), ("offset", 2), ("scale", 2), ("sort", 2), ("color", 4)):
+            v = node.get(key)
+            need(isinstance(v, list) and len(v) == n
+                 and all(isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x) for x in v),
+                 f"{what}: {key} must be {n} finite numbers")
+        need(isinstance(node.get("enabled"), bool), f"{what}: enabled must be a bool")
+        if isinstance(node.get("color"), list) and len(node["color"]) == 4:
+            need(all(0.0 <= x <= 1.0 for x in node["color"]), f"{what}: color outside 0..1")
+        if isinstance(node.get("scale"), list) and len(node["scale"]) == 2:
+            need(all(x > 0 for x in node["scale"]), f"{what}: scale must be positive")
+
+    for r in hero_rows:
+        if not isinstance(r, dict) or not r.get("id"):
+            continue
+        rig = r.get("rig")
+        need(isinstance(rig, dict), f"characters.json {r.get('id')}: rig missing (run build_gamedata.py)")
+        if not isinstance(rig, dict):
+            continue
+        check_rig_node(rig.get("shadow"), f"characters.json {r['id']} rig.shadow")
+        check_rig_node(rig.get("ring"), f"characters.json {r['id']} rig.ring")
+        h = rig.get("hand")
+        need(isinstance(h, list) and len(h) == 2 and all(isinstance(x, (int, float)) and math.isfinite(x) for x in h),
+             f"characters.json {r['id']}: rig.hand must be [x, y]")
+        need(isinstance(rig.get("hand_layer"), int) and not isinstance(rig.get("hand_layer"), bool),
+             f"characters.json {r['id']}: rig.hand_layer must be an int (RGHand.target_layer)")
+    for e in enemies or []:
+        eid = e.get("id")
+        rig = e.get("rig")
+        need(isinstance(rig, dict), f"enemies.json {eid}: rig missing (run build_gamedata.py)")
+        if not isinstance(rig, dict):
+            continue
+        check_rig_node(rig.get("ring"), f"enemies.json {eid} rig.ring")
+        if eid in NO_SHADOW:
+            need("shadow" not in rig, f"enemies.json {eid}: listed as shadowless but carries a shadow node")
+        else:
+            check_rig_node(rig.get("shadow"), f"enemies.json {eid} rig.shadow")
+        ring = rig.get("ring") if isinstance(rig.get("ring"), dict) else {}
+        col = ring.get("color")
+        need(isinstance(col, list) and len(col) == 4 and col[0] > 0.8 and col[1] < 0.3 and col[2] < 0.3,
+             f"enemies.json {eid}: the lock ring tint must be red (m_Color of shadow_lock)")
+    for w in weapons or []:
+        held = w.get("held")
+        need(isinstance(held, dict), f"weapons.json {w.get('id')}: held missing (run build_gamedata.py)")
+        if not isinstance(held, dict):
+            continue
+        check_rig_node(dict(held, enabled=True), f"weapons.json {w.get('id')} held")
+        need(held.get("sprite") == w.get("icon"), f"weapons.json {w.get('id')}: held sprite differs from icon")
+        gp = held.get("gun_point")
+        need(isinstance(gp, list) and len(gp) == 2 and all(isinstance(x, (int, float)) and math.isfinite(x) for x in gp),
+             f"weapons.json {w.get('id')}: held.gun_point must be [x, y]")
     if bullets:
         n_bc = sum(1 for b in bullets if isinstance(b.get("collider"), dict))
         for b in bullets:
@@ -852,9 +913,60 @@ def bullet_collider_report(bullets: list) -> list[str]:
     return out
 
 
+def actor_report(data: dict) -> list[str]:
+    """SLICE 4 AC4: which species lack an Animator clip the port plays (run -> idle fallback; no dead clip -> no
+    corpse), mirrored from GameData::RunState / DeadState (same family rule: the default state's prefix first)."""
+    sprites = data.get("sprites") or {}
+    enemies = data.get("enemies") or []
+
+    def has(entity: dict, name: str) -> bool:
+        return bool(entity.get("states", {}).get(name))
+
+    def family_state(entity: dict, suffix: str) -> str:
+        de = entity.get("default", "")
+        us = de.rfind("_")
+        if us >= 0 and has(entity, de[: us + 1] + suffix):
+            return de[: us + 1] + suffix
+        return suffix if has(entity, suffix) else ""
+
+    def dead_state(entity: dict) -> str:
+        got = family_state(entity, "dead")
+        if got:
+            return got
+        for k in sorted(entity.get("states", {})):
+            if entity["states"][k] and not k.startswith("char_") and "dead" in k:
+                return k
+        return ""
+
+    out = []
+    no_run, no_dead, no_sprite = [], [], []
+    for e in enemies:
+        ent = sprites.get(e["id"])
+        if ent is None:
+            no_sprite.append(e["id"])
+            continue
+        if not family_state(ent, "run"):
+            no_run.append(e["id"])
+        if not dead_state(ent):
+            no_dead.append(e["id"])
+    hit_states = sorted(k for ent in sprites.values() for k in ent.get("states", {}) if "hit" in k or "hurt" in k)
+    out.append(f"ACTOR STATES: {len(enemies)} species rows, {len(enemies) - len(no_sprite)} with a sprite entity")
+    out.append(f"  no run clip  ({len(no_run)}): {', '.join(sorted(no_run))}")
+    out.append(f"  no dead clip ({len(no_dead)}): {', '.join(sorted(no_dead))}")
+    out.append(f"  no sprite entity ({len(no_sprite)}): {', '.join(sorted(no_sprite))}")
+    out.append(f"  sprite states named hit/hurt: {len(hit_states)} {hit_states} "
+               "(the Animator `hit` trigger drives HitLayer/char_hit = an empty 0.067 s clip whose event calls "
+               "RGEController.HitBack -> a material swap, not a sprite state)")
+    return out
+
+
 def main() -> int:
     import sys
     data = load_all_tables()
+    if "--actor-report" in sys.argv:
+        for line in actor_report(data):
+            print(line)
+        return 0
     if "--bullet-report" in sys.argv:
         rows = data.get("bullets") or []
         print(f"BULLET COLLIDER RESOLUTION: {len(rows)} rows, "

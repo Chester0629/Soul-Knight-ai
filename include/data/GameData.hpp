@@ -13,6 +13,46 @@
 namespace Game {
 
 /// Player weapon definition (from Resources/data/weapons.json).
+/// SLICE 4 FAITHFUL @ a prefab SpriteRenderer child (tools/build_gamedata.py _rig_sprite): the png under
+/// Resources/sprites, the sprite asset's pivot fractions (from the rect's bottom-left), the child's
+/// root-space offset and |lossy scale| (units), the (sorting layer, order) and the m_Color tint.
+struct RigNodeDef {
+    bool present = false;
+    std::string sprite;
+    float pivotX = 0.5F;
+    float pivotY = 0.0F;
+    float offsetX = 0.0F; ///< units, prefab-root space (root origin = the feet)
+    float offsetY = 0.0F;
+    float scaleX = 1.0F;
+    float scaleY = 1.0F;
+    int sortLayer = 3;    ///< SpriteRenderer.m_SortingLayer (TagManager index)
+    int sortOrder = 0;    ///< SpriteRenderer.m_SortingOrder
+    float color[4] = {1.0F, 1.0F, 1.0F, 1.0F};
+    bool enabled = true;  ///< SpriteRenderer.m_Enabled in the prefab
+};
+
+/// SLICE 4: the presentation children of a hero / enemy / boss prefab -- the ground shadow (`shadow`,
+/// shadow3 / shadow1), the lock ring (`shadow_lock`, a white outline tinted by its m_Color) and, for
+/// heroes, the front hand mount `h1` (units, root space).
+struct ActorRigDef {
+    RigNodeDef shadow;
+    RigNodeDef ring;
+    bool hasHand = false;
+    float handX = 0.0F;
+    float handY = 0.0F;
+    int handLayer = 6;      ///< RGHand.target_layer of h1 (FAITHFUL prefab value); using it as the held weapon's layer is INFERRED (T-69)
+};
+
+/// SLICE 4 FAITHFUL @ weapon_NNN.prefab: how the weapon is HELD -- the child `w` sprite and the
+/// `gun_point` muzzle child (root-space units; weapon_000: w at (0,0), gun_point (0.6, 0.15)).
+struct HeldWeaponDef {
+    bool present = false;
+    RigNodeDef sprite;      ///< `w` (png = WeaponDef::icon for every shipped weapon)
+    bool hasGunPoint = false;
+    float gunPointX = 0.0F; ///< units, weapon-root space (x along the weapon's forward axis)
+    float gunPointY = 0.0F;
+};
+
 struct WeaponDef {
     std::string id;            ///< prefab id (weapon_NNN) after the WEAPON RE-KEY
     std::string weaponClass;   ///< gun-brain dispatch key (Gun001..); FAITHFUL @ weapons.csv
@@ -50,6 +90,8 @@ struct WeaponDef {
     /// Charge burst / arrow count (weapons.json a_count): Gun007 maxCount,
     /// GunHeroBow arrow count; 0 if absent. B1-P3 loader hole closed.
     int aCount = 0;
+    /// SLICE 4: the in-hand sprite + muzzle (weapons.json "held"); !present = not drawn / no muzzle.
+    HeldWeaponDef held;
 };
 
 /**
@@ -233,6 +275,8 @@ struct EnemyDef {
     bool hasDeadTap = false;
     float deadTapX = 0.0F;
     float deadTapY = 0.0F;
+    /// SLICE 4 FAITHFUL @ the species prefab: ground shadow + lock ring children (see ActorRigDef).
+    ActorRigDef rig;
 };
 
 /// Enemy weapon definition (from Resources/data/enemy_guns.json).
@@ -271,6 +315,8 @@ struct CharacterDef {
     float bodyScale = 1.0F;
     float spriteOffsetX = 0.0F; ///< see EnemyDef::spriteOffsetX (0 for every hero prefab).
     float spriteOffsetY = 0.0F;
+    /// SLICE 4 FAITHFUL @ c##.prefab: ground shadow, lock ring (green), front hand mount h1.
+    ActorRigDef rig;
     /// P3.3.c: the hero-specific serialized refs of the c##.prefab controller
     /// MonoBehaviour (everything after the shared `skinIndex:` -- c03 `thunder`,
     /// c05 `bottle_objs`, c07 `bullet_bat`, c11 `skill_obj`, c12 `skill_obj1/2`,
@@ -589,6 +635,13 @@ public:
     /// P3.0c: the sprite state name holding an entity's lying-corpse frame ("dead", or the
     /// species-specific "<x>_dead"; never the "char_tap_dead" emoticon), "" if none.
     std::string DeadState(const std::string &spriteId) const;
+    /// SLICE 4: the sprite state of the run clip in the species' own clip family ("run", or
+    /// "<prefix>_run" when the default state is "<prefix>_ide" / "<prefix>_sleep"), "" if the species
+    /// has no run clip (19 of the 143 species with art: boss06/07/10/12_1/12_2, the flyers creeper_fly /
+    /// mosquito / ufo, battery, crystal, succulent, tentacle(+_temp) and their ex_* elites -- T-70; the
+    /// miners, knights and giants DO have a run clip in their own family, e.g. enemy01_run -- they and the
+    /// 19 keep the idle clip only while standing / having no run clip).
+    std::string RunState(const std::string &spriteId) const;
     /// P3.2: resolve @p def's own bullet (WeaponDef::bulletPrefab -> FindBullet),
     /// or nullptr when the weapon carries no bulletPrefab or it doesn't resolve.
     const BulletDef *BulletForWeapon(const WeaponDef &def) const;

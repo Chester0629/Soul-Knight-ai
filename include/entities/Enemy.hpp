@@ -13,6 +13,7 @@
 #include "Util/GameObject.hpp"
 
 #include "combat/CombatStats.hpp"
+#include "entities/ActorVisual.hpp"
 #include "entities/SpriteAnchor.hpp"
 #include "combat/EnemyAI.hpp"
 #include "data/GameData.hpp"
@@ -87,14 +88,23 @@ public:
 
     /// Install the data-driven sprite anchor (see SpriteAnchor) and re-apply it.
     void SetAnchor(SpriteAnchor anchor) {
-        m_Anchor = std::move(anchor);
+        m_Vis.SetAnchor(std::move(anchor));
         SyncSprite();
     }
-    /// Apply scale + the current frame's pivot (called each frame before the draw).
-    void SyncSprite() { m_Anchor.Apply(*this, *m_Anim); }
+    /// Apply the clip, facing mirror, scale + pivot and the shadow / ring (called each frame before the draw).
+    void SyncSprite() { m_Vis.Sync(*this); }
+
+    /// SLICE 4: clip / facing / shadow + lock ring helper (the scene registers the run clip + rig).
+    ActorVisual &Visual() { return m_Vis; }
+    const ActorVisual &Visual() const { return m_Vis; }
+    /// Per-frame pose from the sim: moves to @p position, plays the run clip while it moved faster than
+    /// ActorPose::kRunSpeedEpsPxPerSec over @p dtMs, faces the side of @p faceDx (ActorPose::ResolveFacing:
+    /// a zero x keeps the last side), shows the lock ring iff @p locked, and re-syncs the sprite.
+    void UpdatePose(glm::vec2 position, float dtMs, float faceDx, bool locked);
 
 private:
-    SpriteAnchor m_Anchor;
+    ActorVisual m_Vis;
+    glm::vec2 m_PrevPos{0.0F, 0.0F};
     EnemyAI m_AI;
     CombatStats m_Stats{3, 3, 0, 0, 0, 0};
     /// LEGACY, unused by the live game (the sim's EnemyController owns enemy movement). PORT

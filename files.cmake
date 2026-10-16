@@ -145,6 +145,8 @@ set(SRC_FILES
     entities/Bullet.cpp
     entities/Enemy.cpp
     entities/Boss.cpp
+    entities/ActorVisual.cpp
+    entities/HeldWeapon.cpp
     entities/Chest.cpp
     entities/WeaponPickup.cpp
     entities/CoinPickup.cpp
@@ -333,6 +335,8 @@ set(INCLUDE_FILES
     entities/BulletPose.hpp
     entities/Enemy.hpp
     entities/Boss.hpp
+    entities/ActorVisual.hpp
+    entities/HeldWeapon.hpp
     entities/Chest.hpp
     entities/WeaponPickup.hpp
     world/Room.hpp
@@ -353,6 +357,7 @@ set(INCLUDE_FILES
 
     # P2.17 render slice 1: room-sprite pivot + sorting-layer -> z + camera background
     game/RenderLayout.hpp
+    game/ActorPose.hpp
 )
 
 set(TEST_FILES
@@ -532,6 +537,11 @@ set(TEST_FILES
     # CHAPTER PROGRESSION: per-chapter biome mob pools + boss rosters
     ChapterProgressionTest.cpp
     TestHooksTest.cpp
+
+    # SLICE 4 (characters): pose maths, muzzle spawn, rig data + Animator clip families
+    ActorPoseTest.cpp
+    SimMuzzleTest.cpp
+    ActorRigDataTest.cpp
 
     # B5/B6 ENTRY FLOW: hero-select model, i2 names, RunState hero
     CharSelectTest.cpp

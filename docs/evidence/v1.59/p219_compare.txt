@@ -1,0 +1,4 @@
+wrote compare_aim.png
+wrote compare_aim8.png
+wrote compare_run.png
+wrote compare_ring.png

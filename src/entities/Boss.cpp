@@ -43,12 +43,24 @@ Boss::Boss(const std::string &resourceRoot, glm::vec2 spawnPos, int maxHp,
           frameIntervalMs, true)) {
     m_Boss.SetSeed(seed);
     SetDrawable(m_Anim);
+    m_Vis.SetClip(ActorPose::ActorClip::Idle, m_Anim, {});
     SetZIndex(kBossZIndex);
     m_Transform.translation = spawnPos;
+    m_PrevPos = spawnPos;
     // SCALE: bosses draw at Scale::kSpriteScale like everything else (FAITHFUL: boss01's
     // img/body is localScale 1; the old 1.5 here belongs to shadow/shadow_lock/point_1
     // only). A boss prefab's own body scale arrives with the data anchor (body_scale).
-    m_Anchor.bodyRadiusPx = kBossRadius;
+    m_Vis.MutableAnchor().bodyRadiusPx = kBossRadius;
+    SyncSprite();
+}
+
+void Boss::UpdatePose(glm::vec2 position, float dtMs, float faceDx, bool locked) {
+    const bool moving = ActorPose::IsMoving(position - m_PrevPos, dtMs);
+    m_PrevPos = position;
+    m_Transform.translation = position;
+    m_Vis.SetFacing(ActorPose::ResolveFacing(m_Vis.Facing(), faceDx));
+    m_Vis.SetClipState(ActorPose::SelectClip(false, moving));
+    m_Vis.SetRingVisible(locked);
     SyncSprite();
 }
 
@@ -72,7 +84,7 @@ void Boss::TakeDamage(int dmg) {
 }
 
 Util::Collider Boss::GetCollider() const {
-    return Util::Collider::MakeCircle(m_Transform.translation, m_Anchor.bodyRadiusPx);
+    return Util::Collider::MakeCircle(m_Transform.translation, m_Vis.Anchor().bodyRadiusPx);
 }
 
 } // namespace Game

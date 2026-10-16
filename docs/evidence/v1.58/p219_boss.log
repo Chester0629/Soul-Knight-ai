@@ -1,0 +1,542 @@
+ [warning] config.json not found, using default configurations.
+ [info] OpenGL Info
+ [info]   Vendor: NVIDIA Corporation
+ [info]   Renderer: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2
+ [info]   Version: 4.1.0 NVIDIA 610.88
+ [info]   GLSL Version: 4.10 NVIDIA via Cg compiler
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 0
+ [info] Level A1 (1-1) biome 1-forest chest_level 1 map_long 3 pool 5 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 0 rooms (design-pool=108): r1_19(15x15) r1_16(15x15) r1_102(15x15) r1_63(15x21) r1_81(21x15) r1_20(15x15) r1_40(15x15) 
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 3 (5 pending)
+ [info] EnemyMaker: room 1 (type 1) level 1 points 8 -> 8 planned, wave size 3
+ [info] EnemyMaker: room 2 part spawned 3 (5 pending)
+ [info] EnemyMaker: room 2 (type 1) level 1 points 8 -> 8 planned, wave size 3
+ [info] EnemyMaker: room 3 (type 4) special prefab -> level 0, no spawns
+ [info] Chest: reward room 3 -> chest_room_reward (tier 1)
+ [info] EnemyMaker: room 4 (type 2) special prefab -> level 0, no spawns
+ [info] EnemyMaker: room 5 part spawned 3 (6 pending)
+ [info] EnemyMaker: room 5 (type 1) level 1 points 9 -> 9 planned, wave size 3
+ [info] EnemyMaker: room 6 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 6: statue_01 (Knight) -- worship for 15 coins
+ [info] Floor 0 fresh start (template) hp=6 weapon='weapon_000' (seed=1)
+ [info] GameScene: SK_ZOOM override 1.2
+ [info] SpawnFilter: 31 of 812 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 4 at (2624,-1312)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] PosTrace: frame 14 player (0.0,32.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 14 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-14.38,45.60) hand layer z 6.1000
+ [info] PoseTrace: frame 14 enemy 0 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 0 room 1 e_orc01 (-1504.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 1 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 1 room 1 e_boar01 (-1504.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 2 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 2 room 1 e_orc02 (-1472.0,0.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 3 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 3 room 2 e_orc02 (-192.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 4 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 4 room 2 e_orc01 (-160.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 5 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 5 room 2 e_orc03 (-160.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 6 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 6 room 5 e_boar01 (1120.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 7 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 7 room 5 e_boar01 (1152.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 8 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 8 room 5 e_orc03 (1152.0,96.0) r=12.8 alive=1 blocked=0
+ [info] Floor 0 CLEARED -> snapshot hp=5 armor=5 energy=180 weapon='weapon_000' (next floor 1)
+ [info] Floor 0 GameScene OnExit (scene torn down, not leaked)
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 1
+ [info] Level A2 (1-2) biome 1-forest chest_level 1 map_long 3 pool 10 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 1 rooms (design-pool=108): r1_21(15x15) r1_75(21x15) r1_66(21x15) r1_19(15x15) r1_11(15x15) r1_44(15x21) r1_28(15x15) 
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_orc06 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_boar02 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 9 (15 pending)
+ [info] EnemyMaker: room 1 (type 1) level 3 points 30 -> 24 planned, wave size 9
+ [info] Bullet: ex_orc02 fires no RGBullet-family bullet (refs: spear_3) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 2 part spawned 9 (15 pending)
+ [info] EnemyMaker: room 2 (type 1) level 3 points 34 -> 24 planned, wave size 9
+ [info] EnemyMaker: room 3 (type 4) special prefab -> level 0, no spawns
+ [info] Chest: reward room 3 -> chest_room_reward (tier 1)
+ [info] EnemyMaker: room 4 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 4: statue_02 (Priest) -- worship for 15 coins
+ [info] EnemyMaker: room 5 (type 2) special prefab -> level 0, no spawns
+ [info] EnemyMaker: room 6 part spawned 6 (8 pending)
+ [info] EnemyMaker: room 6 (type 1) level 2 points 18 -> 14 planned, wave size 6
+ [info] Floor 1 continuation LOADED: hp=5 armor=5 energy=180 weapon='weapon_000' (seed=1000004)
+ [info] GameScene: SK_ZOOM override 1.2
+ [info] SpawnFilter: 61 of 974 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [warning] OpenGL Severity: MEDIUM
+ [warning]  ID: 131218
+ [warning]  Source: API
+ [warning]  Type: PERFORMANCE
+ [warning]  Message: Program/shader state performance warning: Vertex shader in program 3 is being recompiled based on GL state.
+ [info] TransferGate: open in room 5 at (-1312,2624)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] PosTrace: frame 14 player (0.0,64.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 14 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-14.38,77.60) hand layer z 6.1000
+ [info] PoseTrace: frame 14 enemy 0 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 0 room 1 e_orc02 (-288.0,1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 1 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 1 room 1 e_orc04 (-256.0,1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 2 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 2 room 1 e_orc06 (-256.0,1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 3 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 3 room 1 e_boar01 (-224.0,1280.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 4 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 4 room 1 e_boar02 (-192.0,1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 5 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 5 room 1 e_orc02 (-192.0,1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 6 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 6 room 1 e_boar02 (-160.0,1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 7 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 7 room 1 e_orc06 (-160.0,1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 8 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 8 room 1 e_orc03 (-128.0,1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 9 ex_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 9 room 2 ex_orc02 (-1600.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 10 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 10 room 2 e_orc02 (-1568.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 11 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 11 room 2 e_boar01 (-1568.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 12 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 12 room 2 e_boar01 (-1536.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 13 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 13 room 2 e_boar01 (-1536.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 14 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 14 room 2 e_boar02 (-1504.0,-64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 15 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 15 room 2 e_orc04 (-1504.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 16 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 16 room 2 e_orc05 (-1472.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 17 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 17 room 2 e_boar02 (-1472.0,192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 18 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 18 room 6 e_orc05 (1120.0,1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 19 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 19 room 6 e_boar02 (1152.0,1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 20 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 20 room 6 e_orc01 (1152.0,1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 21 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 21 room 6 e_orc04 (1184.0,1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 22 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 22 room 6 e_boar02 (1184.0,1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 23 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 23 room 6 e_boar01 (1216.0,1248.0) r=12.8 alive=1 blocked=0
+ [info] Floor 1 CLEARED -> snapshot hp=4 armor=5 energy=180 weapon='weapon_000' (next floor 2)
+ [info] Floor 1 GameScene OnExit (scene torn down, not leaked)
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 2
+ [info] Level A3 (1-3) biome 1-forest chest_level 2 map_long 3 pool 12 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 2 rooms (design-pool=108): r1_17(15x15) r1_21(15x15) r1_37(15x15) r1_18(15x15) r1_6(15x15) r1_56(15x21) r1_98(15x15) 
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_boar02 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_orc06 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 9 (12 pending)
+ [info] EnemyMaker: room 1 (type 1) level 3 points 31 -> 21 planned, wave size 9
+ [info] EnemyMaker: room 2 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 2: mineral room (6 ore nodes, hp 40, 10 coins each)
+ [info] EnemyMaker: room 3 (type 4) special prefab -> level 0, no spawns
+ [info] Shop: vending_machine_i at room 3 sells 'energy_pot_big' for 10 coins
+ [info] Shop: water_dispenser at room 3 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 3 sells 'weapon_016' for 12 coins
+ [info] EnemyMaker: room 4 part spawned 9 (13 pending)
+ [info] EnemyMaker: room 4 (type 1) level 3 points 33 -> 22 planned, wave size 9
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 5 part spawned 12 (9 pending)
+ [info] EnemyMaker: room 5 (type 1) level 4 points 37 -> 21 planned, wave size 12
+ [info] EnemyMaker: room 6 (type 2) special prefab -> level 0, no spawns
+ [info] Floor 2 continuation LOADED: hp=4 armor=5 energy=180 weapon='weapon_000' (seed=2000007)
+ [info] GameScene: SK_ZOOM override 1.2
+ [info] SpawnFilter: 85 of 991 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 6 at (-2624,2624)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] PosTrace: frame 14 player (0.0,0.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 14 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-14.38,13.60) hand layer z 6.1000
+ [info] PoseTrace: frame 14 enemy 0 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 0 room 1 e_orc05 (-192.0,1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 1 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 1 room 1 e_boar01 (-192.0,1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 2 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 2 room 1 e_orc05 (-160.0,1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 3 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 3 room 1 e_orc04 (-160.0,1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 4 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 4 room 1 e_boar02 (-96.0,1152.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 5 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 5 room 1 e_boar02 (-96.0,1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 6 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 6 room 1 e_orc04 (-64.0,1312.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 7 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 7 room 1 e_orc06 (-32.0,1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 8 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 8 room 1 e_boar01 (0.0,1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 9 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 9 room 4 e_boar02 (-192.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 10 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 10 room 4 e_orc05 (-192.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 11 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 11 room 4 e_orc06 (-160.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 12 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 12 room 4 e_boar01 (-160.0,-1152.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 13 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 13 room 4 e_orc04 (-96.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 14 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 14 room 4 e_orc01 (-64.0,-1312.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 15 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 15 room 4 e_boar02 (-32.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 16 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 16 room 4 e_orc07 (0.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 17 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 17 room 4 e_orc06 (32.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 18 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 18 room 5 e_boar02 (1120.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 19 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 19 room 5 e_boar02 (1120.0,-1088.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 20 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 20 room 5 e_orc03 (1152.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 21 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 21 room 5 e_orc05 (1152.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 22 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 22 room 5 e_orc02 (1184.0,-1568.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 23 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 23 room 5 e_orc02 (1184.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 24 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 24 room 5 e_orc07 (1184.0,-1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 25 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 25 room 5 e_orc06 (1216.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 26 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 26 room 5 e_orc07 (1248.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 27 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 27 room 5 e_orc02 (1248.0,-1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 28 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 28 room 5 e_orc07 (1280.0,-1600.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 29 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 29 room 5 e_boar01 (1280.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] Floor 2 CLEARED -> snapshot hp=3 armor=5 energy=180 weapon='weapon_000' (next floor 3)
+ [info] Floor 2 GameScene OnExit (scene torn down, not leaked)
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 3
+ [info] Level A4 (1-4) biome 1-forest chest_level 2 map_long 3 pool 15 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 3 rooms (design-pool=108): r1_30(15x15) r1_56(15x21) r1_76(21x15) r1_31(15x15) r1_13(15x15) r1_29(15x15) r1_69(21x15) 
+ [info] Bullet: e_boar02 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: ex_orc02 fires no RGBullet-family bullet (refs: spear_3) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_orc06 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 15 (9 pending)
+ [info] EnemyMaker: room 1 (type 1) level 5 points 44 -> 24 planned, wave size 15
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 2 part spawned 15 (9 pending)
+ [info] EnemyMaker: room 2 (type 1) level 5 points 48 -> 24 planned, wave size 15
+ [info] EnemyMaker: room 3 (type 4) special prefab -> level 0, no spawns
+ [info] Shop: vending_machine_i at room 3 sells 'energy_pot' for 10 coins
+ [info] Shop: water_dispenser at room 3 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 3 sells 'weapon_060' for 12 coins
+ [info] EnemyMaker: room 4 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 4: statue_05 (Elf) -- worship for 15 coins
+ [info] EnemyMaker: room 5 part spawned 12 (9 pending)
+ [info] EnemyMaker: room 5 (type 1) level 4 points 38 -> 21 planned, wave size 12
+ [info] EnemyMaker: room 6 (type 2) special prefab -> level 0, no spawns
+ [info] Floor 3 continuation LOADED: hp=3 armor=5 energy=180 weapon='weapon_000' (seed=3000010)
+ [info] GameScene: SK_ZOOM override 1.2
+ [info] SpawnFilter: 15 of 1059 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 6 at (3936,0)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] PosTrace: frame 14 player (0.0,-64.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 14 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-14.38,-50.40) hand layer z 6.1000
+ [info] PoseTrace: frame 14 enemy 0 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 0 room 1 e_boar02 (1120.0,-160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 1 ex_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 1 room 1 ex_orc05 (1120.0,224.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 2 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 2 room 1 e_boar01 (1152.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 3 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 3 room 1 e_boar02 (1152.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 4 ex_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 4 room 1 ex_orc02 (1184.0,-256.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 5 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 5 room 1 e_succulent (1184.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 6 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 6 room 1 e_orc07 (1184.0,192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 7 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 7 room 1 e_orc01 (1216.0,-64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 8 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 8 room 1 e_orc06 (1248.0,-160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 9 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 9 room 1 e_boar01 (1248.0,64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 10 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 10 room 1 e_orc05 (1280.0,-288.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 11 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 11 room 1 e_orc04 (1280.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 12 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 12 room 1 e_orc01 (1280.0,224.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 13 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 13 room 1 e_orc04 (1312.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 14 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 14 room 1 e_boar01 (1312.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 15 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 15 room 2 e_orc07 (-288.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 16 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 16 room 2 e_orc01 (-256.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 17 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 17 room 2 e_orc08 (-256.0,-1216.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 18 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 18 room 2 e_boar02 (-224.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 19 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 19 room 2 e_orc05 (-224.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 20 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 20 room 2 e_orc02 (-192.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 21 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 21 room 2 e_boar02 (-192.0,-1152.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 22 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 22 room 2 e_orc04 (-160.0,-1312.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 23 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 23 room 2 e_boar01 (-128.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 24 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 24 room 2 e_orc07 (-128.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 25 ex_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 25 room 2 ex_orc07 (-96.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 26 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 26 room 2 e_orc05 (-64.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 27 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 27 room 2 e_orc06 (-64.0,-1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 28 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 28 room 2 e_succulent (-32.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 29 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 29 room 2 e_boar02 (0.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 30 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 30 room 5 e_orc07 (-192.0,-2720.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 31 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 31 room 5 e_orc02 (-192.0,-2496.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 32 ex_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 32 room 5 ex_orc05 (-160.0,-2688.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 33 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 33 room 5 e_succulent (-160.0,-2464.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 34 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 34 room 5 e_orc07 (-128.0,-2592.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 35 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 35 room 5 e_orc05 (-96.0,-2656.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 36 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 36 room 5 e_orc08 (-64.0,-2784.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 37 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 37 room 5 e_orc04 (-64.0,-2560.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 38 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 38 room 5 e_succulent (-32.0,-2720.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 39 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 39 room 5 e_boar01 (-32.0,-2496.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 40 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 40 room 5 e_boar02 (0.0,-2656.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 41 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 41 room 5 e_boar02 (32.0,-2816.0) r=12.8 alive=1 blocked=0
+ [info] Floor 3 CLEARED -> snapshot hp=2 armor=5 energy=180 weapon='weapon_000' (next floor 4)
+ [info] Floor 3 GameScene OnExit (scene torn down, not leaked)
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 4
+ [info] Level A5 (1-5) biome 1-forest chest_level 2 map_long 4 pool 16 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 4 rooms (design-pool=108): r1_1(15x15) r1_73(21x15) r1_72(21x15) r1_39(15x15) r1_107(21x21) r1_23(15x15) r1_76(21x15) r1_52(15x21) 
+ [info] Spawn: e_orc08 room 1 moved (-1600.0,-96.0) -> (-1568.0,-96.0) (body r=19.2 did not fit)
+ [info] Bullet: ex_orc02 fires no RGBullet-family bullet (refs: spear_3) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: ex_boar02 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_boar02 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 18 (6 pending)
+ [info] EnemyMaker: room 1 (type 1) level 6 points 60 -> 24 planned, wave size 18
+ [info] EnemyMaker: room 2 (type 4) special prefab -> level 0, no spawns
+ [info] Shop: vending_machine_i at room 2 sells 'health_pot_big' for 10 coins
+ [info] Shop: water_dispenser at room 2 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 2 sells 'weapon_027' for 12 coins
+ [info] BossRoom: room 3 uses r1_boss5 (21x21, 88 objects)
+ [info] BossPool: biome 1-forest -> boss08 (pool 2)
+ [info] BossMaker-lite: room 3 spawned BossAI08 maxHp=400 (type 2)
+ [info] EnemyMaker: room 4 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 4: statue_07 (Sorcerer) -- worship for 15 coins
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Spawn: e_orc08 room 5 moved (1312.0,32.0) -> (1280.0,32.0) (body r=19.2 did not fit)
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 5 part spawned 15 (9 pending)
+ [info] EnemyMaker: room 5 (type 1) level 5 points 51 -> 24 planned, wave size 15
+ [info] EnemyMaker: room 6 part spawned 18 (6 pending)
+ [info] EnemyMaker: room 6 (type 1) level 6 points 60 -> 24 planned, wave size 18
+ [info] Bullet: e_orc06 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 7 part spawned 18 (6 pending)
+ [info] EnemyMaker: room 7 (type 1) level 6 points 60 -> 24 planned, wave size 18
+ [info] Floor 4 continuation LOADED: hp=2 armor=5 energy=180 weapon='weapon_000' (seed=4000013)
+ [info] GameScene: SK_ZOOM override 1.2
+ [info] SpawnFilter: 105 of 1546 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-1312,-2624)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)
+ [info] RGRoomX: room 3 StartRoom -> Active (door_open=0, sealed)
+ [info] Audio: sfx fx_door.wav
+ [info] Audio: bgm bgm_1High.ogg
+ [info] Lock: frame 12 target -1 -> 69
+ [info] PosTrace: frame 14 player (-1312.0,-2784.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 14 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-1326.38,-2770.40) hand layer z 6.1000
+ [info] PoseTrace: frame 14 enemy 0 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 0 room 1 e_orc08 (-1568.0,-96.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 1 e_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 1 room 1 e_orc05 (-1600.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 2 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 2 room 1 e_orc07 (-1568.0,-64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 3 ex_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 3 room 1 ex_orc02 (-1568.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 4 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 4 room 1 e_orc04 (-1536.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 5 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 5 room 1 e_succulent (-1536.0,192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 6 ex_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 6 room 1 ex_boar02 (-1504.0,0.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 7 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 7 room 1 e_orc01 (-1472.0,-160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 8 ex_orc05 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 8 room 1 ex_orc05 (-1472.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 9 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 9 room 1 e_orc07 (-1440.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 10 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 10 room 1 e_orc08 (-1440.0,160.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 11 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 11 room 1 e_orc03 (-1408.0,0.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 12 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 12 room 1 e_boar02 (-1376.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 13 ex_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 13 room 1 ex_orc07 (-1376.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 14 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 14 room 1 e_boar02 (-1344.0,64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 15 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 15 room 1 e_succulent (-1312.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 16 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 16 room 1 e_succulent (-1280.0,-160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 17 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 17 room 1 e_orc03 (-1280.0,96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 18 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 18 room 5 e_succulent (1120.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 19 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 19 room 5 e_orc04 (1152.0,0.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 20 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 20 room 5 e_boar02 (1184.0,-192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 21 ex_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 21 room 5 ex_boar02 (1184.0,32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 22 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 22 room 5 e_succulent (1216.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 23 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 23 room 5 e_boar01 (1248.0,-160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 24 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 24 room 5 e_boar01 (1248.0,64.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 25 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 25 room 5 e_boar01 (1280.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 26 ex_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 26 room 5 ex_orc07 (1280.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 27 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 27 room 5 e_orc08 (1280.0,32.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 28 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 28 room 5 e_orc02 (1344.0,-96.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 29 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 29 room 5 e_orc04 (1344.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 30 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 30 room 5 e_succulent (1376.0,-32.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 31 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 31 room 5 e_orc01 (1376.0,192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 32 e_orc02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 32 room 5 e_orc02 (1408.0,128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 33 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 33 room 6 e_orc03 (-288.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 34 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 34 room 6 e_boar02 (-256.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 35 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 35 room 6 e_orc04 (-256.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 36 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 36 room 6 e_orc04 (-224.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 37 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 37 room 6 e_boar01 (-224.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 38 e_orc03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 38 room 6 e_orc03 (-192.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 39 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 39 room 6 e_orc04 (-192.0,-1152.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 40 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 40 room 6 e_boar01 (-160.0,-1312.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 41 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 41 room 6 e_boar01 (-128.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 42 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 42 room 6 e_succulent (-128.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 43 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 43 room 6 e_boar02 (-96.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 44 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 44 room 6 e_boar02 (-64.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 45 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 45 room 6 e_boar02 (-64.0,-1280.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 46 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 46 room 6 e_boar02 (-32.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 47 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 47 room 6 e_succulent (0.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 48 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 48 room 6 e_boar01 (0.0,-1184.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 49 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 49 room 6 e_orc01 (32.0,-1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 50 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 50 room 6 e_orc07 (64.0,-1408.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 51 ex_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 51 room 7 ex_orc07 (1120.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 52 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 52 room 7 e_boar02 (1120.0,-1088.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 53 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 53 room 7 e_orc01 (1152.0,-1472.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 54 ex_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 54 room 7 ex_boar02 (1152.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 55 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 55 room 7 e_succulent (1184.0,-1600.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 56 e_orc06 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 56 room 7 e_orc06 (1184.0,-1344.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 57 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 57 room 7 e_succulent (1184.0,-1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 58 ex_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 58 room 7 ex_boar02 (1216.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 59 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 59 room 7 e_succulent (1216.0,-1056.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 60 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 60 room 7 e_succulent (1248.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 61 e_boar01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 61 room 7 e_boar01 (1248.0,-1152.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 62 e_orc07 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 62 room 7 e_orc07 (1280.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 63 e_orc04 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 63 room 7 e_orc04 (1280.0,-1248.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 64 e_orc08 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 64 room 7 e_orc08 (1312.0,-1568.0) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 65 e_orc01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 65 room 7 e_orc01 (1312.0,-1312.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 66 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 66 room 7 e_boar02 (1312.0,-1056.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 67 e_boar02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 67 room 7 e_boar02 (1344.0,-1376.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 enemy 68 e_succulent facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 14 enemy 68 room 7 e_succulent (1344.0,-1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 14 boss boss08 facing 1 clip 1 ring 1 shadow 1
+ [info] PosTrace: frame 14 boss room 3 (-1312.0,-2625.8) r=19.2 alive=1 blocked=0
+ [warning] OpenGL Severity: MEDIUM
+ [warning]  ID: 131154
+ [warning]  Source: API
+ [warning]  Type: PERFORMANCE
+ [warning]  Message: Pixel-path performance warning: Pixel transfer is synchronized with 3D rendering.

@@ -52,6 +52,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.8,
+        1.1
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1",
       "bullet_e_7",
@@ -117,6 +175,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.4,
+        0.911
+      ]
+    },
     "bullet_refs": [
       "bullet_e_8",
       "bullet_e_6",
@@ -187,6 +303,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        1.05
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1",
       "bullet_e_14",
@@ -256,6 +430,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.5
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.5
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.6,
+        0.65
+      ]
+    },
     "bullet_refs": [
       "bullet_e_13",
       "bullet_e_1",
@@ -326,6 +558,64 @@
       0.2,
       0.3
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.9,
+        1.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_17",
       "bullet_e_18",
@@ -396,6 +686,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.5
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.18,
+        1.37
+      ]
+    },
     "bullet_refs": [
       "bullet_e_2",
       "bullet_e_11",
@@ -461,6 +809,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_24",
       "bullet_e_1",
@@ -532,6 +938,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.5,
+        0.911
+      ]
+    },
     "bullet_refs": [
       "e_fireball",
       "bullet_e_32",
@@ -600,6 +1064,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        1.3
+      ]
+    },
     "bullet_refs": [
       "bullet_e_shock",
       "bullet_follow_ice_e",
@@ -670,6 +1192,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        1.5,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25",
       "explode_ice2",
@@ -739,6 +1319,34 @@
       -0.074,
       -1.1
     ],
+    "rig": {
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "bullet_e_14",
       "bullet_e_39",
@@ -809,6 +1417,64 @@
       0.0,
       -0.2
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.5,
+        0.7
+      ]
+    },
     "bullet_refs": [
       "bullet_e_46",
       "bullet_e_8",
@@ -880,6 +1546,64 @@
       0.0,
       -0.2
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.5,
+        0.7
+      ]
+    },
     "bullet_refs": [
       "bullet_e_47",
       "bullet_e_8",
@@ -951,6 +1675,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.2458,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.531,
+        0.938
+      ]
+    },
     "bullet_refs": [
       "bullet_nofollow_ice_e",
       "bullet_e_42_less",
@@ -1020,6 +1802,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_15"
     ],
@@ -1085,6 +1925,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25"
     ],
@@ -1148,6 +2046,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_2_red"
     ],
@@ -1213,6 +2169,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.05,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_7"
     ],
@@ -1276,6 +2290,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -1334,6 +2402,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.8
@@ -1392,6 +2514,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.078431,
+          0.078431,
+          0.078431,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -1455,6 +2635,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.078431,
+          0.078431,
+          0.078431,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25"
     ],
@@ -1518,6 +2756,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.9
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -1581,6 +2877,64 @@
       0.0,
       -0.7
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.4,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_19"
     ],
@@ -1646,6 +3000,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_33",
       "bullet_e_25"
@@ -1709,6 +3121,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "spear_2_fire"
     ],
@@ -1774,6 +3244,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_2_fire"
     ],
@@ -1839,6 +3367,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -1.0,
+        1.2
+      ]
+    },
     "bullet_refs": [
       "bullet_e_47",
       "bullet_e_35"
@@ -1902,6 +3488,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.2,
+        1.2
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -1965,6 +3609,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_6"
     ],
@@ -2028,6 +3730,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_26"
     ],
@@ -2091,6 +3851,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -2153,6 +3971,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -2216,6 +4092,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -2281,6 +4215,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -2344,6 +4336,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -2407,6 +4457,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_35"
     ],
@@ -2470,6 +4578,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -2535,6 +4701,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -2600,6 +4824,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "spear_1_5"
     ],
@@ -2665,6 +4947,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_39"
     ],
@@ -2728,6 +5068,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_24"
     ],
@@ -2791,6 +5189,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.6979,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_2"
     ],
@@ -2854,6 +5310,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.5,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_38"
     ],
@@ -2917,6 +5431,64 @@
       0.0,
       -0.2
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.4,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -2980,6 +5552,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_36"
     ],
@@ -3043,6 +5673,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_6"
     ],
@@ -3106,6 +5794,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.8,
       1.2
@@ -3164,6 +5906,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.35,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "effect_health_skill"
     ],
@@ -3229,6 +6029,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_33"
     ],
@@ -3292,6 +6150,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -3355,6 +6271,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "spear_1_5"
     ],
@@ -3420,6 +6394,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "bullet_e_12"
     ],
@@ -3483,6 +6515,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -3546,6 +6636,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_37"
     ],
@@ -3609,6 +6757,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -3674,6 +6880,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.35,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "bullet_e_30"
     ],
@@ -3737,6 +7001,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.8
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -3800,6 +7122,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.35,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_27"
     ],
@@ -3864,6 +7244,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -3922,6 +7356,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "bullet_e_28"
     ],
@@ -3985,6 +7477,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.1,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -4050,6 +7600,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          2
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.1,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -4115,6 +7723,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_12"
     ],
@@ -4178,6 +7844,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.1,
+        0.4
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -4243,6 +7967,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -4306,6 +8088,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -4369,6 +8209,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -4418,6 +8312,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          2
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "effect_shock1"
     ],
@@ -4482,6 +8430,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -4540,6 +8542,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -4598,6 +8654,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -4656,6 +8766,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -4714,6 +8878,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.65
+      ]
+    },
     "bullet_refs": [
       "bullet_e_8"
     ],
@@ -4778,6 +9000,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.9
+      ]
+    },
     "bullet_refs": [
       "bullet_e_24"
     ],
@@ -4841,6 +9121,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -4904,6 +9242,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -4967,6 +9363,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "e_fireball"
     ],
@@ -5031,6 +9481,64 @@
       0.0,
       -0.7
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.4,
+        1.0
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25"
     ],
@@ -5094,6 +9602,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_27"
     ],
@@ -5157,6 +9723,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -5215,6 +9835,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "effect_shock1"
     ],
@@ -5279,6 +9953,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.5,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "effect_shock1",
       "bullet_e_41"
@@ -5346,6 +10078,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_15"
     ],
@@ -5412,6 +10202,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.9
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25"
     ],
@@ -5476,6 +10324,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "sword_2_red"
     ],
@@ -5542,6 +10448,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.075,
+        1.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_7"
     ],
@@ -5606,6 +10570,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.8
@@ -5665,6 +10683,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.8
@@ -5724,6 +10796,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        1.35
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -5788,6 +10918,64 @@
       0.0,
       -1.1
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.6,
+        1.45
+      ]
+    },
     "bullet_refs": [
       "bullet_e_19"
     ],
@@ -5854,6 +11042,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        1.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25",
       "bullet_e_40"
@@ -5918,6 +11164,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "spear_2_fire"
     ],
@@ -5984,6 +11288,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -1.5,
+        1.8
+      ]
+    },
     "bullet_refs": [
       "bullet_e_14",
       "bullet_e_35"
@@ -6048,6 +11410,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.3,
+        1.8
+      ]
+    },
     "bullet_refs": [
       "bullet_e_3"
     ],
@@ -6112,6 +11532,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_6"
     ],
@@ -6176,6 +11654,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_26"
     ],
@@ -6240,6 +11776,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        1.125
+      ]
+    },
     "bullet_refs": [
       "bullet_e_28"
     ],
@@ -6303,6 +11897,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -6367,6 +12019,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "sword_2_5"
     ],
@@ -6433,6 +12143,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -6497,6 +12265,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -6561,6 +12387,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_35"
     ],
@@ -6625,6 +12509,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "sword_2_5"
     ],
@@ -6691,6 +12633,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "sword_2"
     ],
@@ -6757,6 +12757,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_34"
     ],
@@ -6821,6 +12879,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_34"
     ],
@@ -6885,6 +13001,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_24"
     ],
@@ -6949,6 +13123,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.6979,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_2"
     ],
@@ -7013,6 +13245,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.75,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_38"
     ],
@@ -7077,6 +13367,64 @@
       0.0,
       -0.35
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.6,
+        1.45
+      ]
+    },
     "bullet_refs": [
       "bullet_e_3"
     ],
@@ -7140,6 +13488,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_36"
     ],
@@ -7203,6 +13609,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.1,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_6"
     ],
@@ -7266,6 +13730,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.8,
       1.2
@@ -7325,6 +13843,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.525,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "effect_health_skill"
     ],
@@ -7390,6 +13966,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        0.5
+      ]
+    },
     "bullet_refs": [
       "bullet_e_33"
     ],
@@ -7454,6 +14088,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -7518,6 +14210,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "spear_3"
     ],
@@ -7584,6 +14334,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_12"
     ],
@@ -7648,6 +14456,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -7712,6 +14578,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "sword_2"
     ],
@@ -7778,6 +14702,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.525,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_30"
     ],
@@ -7842,6 +14824,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        1.2
+      ]
+    },
     "bullet_refs": [
       "bullet_e_1"
     ],
@@ -7906,6 +14946,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.525,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_28"
     ],
@@ -7970,6 +15068,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_6"
     ],
@@ -8034,6 +15190,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.15,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "sword_0"
     ],
@@ -8100,6 +15314,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_12"
     ],
@@ -8164,6 +15436,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.15,
+        0.6
+      ]
+    },
     "bullet_refs": [
       "bullet_e_26"
     ],
@@ -8228,6 +15558,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_23"
     ],
@@ -8292,6 +15680,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.0,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_28"
     ],
@@ -8356,6 +15802,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -8415,6 +15915,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -8474,6 +16028,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -8533,6 +16141,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -8592,6 +16254,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -8651,6 +16367,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.45,
+        0.975
+      ]
+    },
     "bullet_refs": [
       "bullet_e_8"
     ],
@@ -8716,6 +16490,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.2,
+        1.8
+      ]
+    },
     "bullet_refs": [
       "bullet_e_24"
     ],
@@ -8780,6 +16612,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "e_fireball"
     ],
@@ -8845,6 +16731,64 @@
       0.0,
       -1.1
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.8
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.6,
+        1.45
+      ]
+    },
     "bullet_refs": [
       "bullet_e_25"
     ],
@@ -8909,6 +16853,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.15,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_11"
     ],
@@ -8973,6 +16975,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          2.0,
+          2.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "dead_tap": [
       0.6,
       0.6
@@ -9032,6 +17088,60 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    },
     "bullet_refs": [
       "effect_shock2"
     ],
@@ -9097,6 +17207,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.2
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        -0.75,
+        1.125
+      ]
+    },
     "bullet_refs": [
       "effect_shock2",
       "bullet_e_41"
@@ -9162,7 +17330,35 @@
     "sprite_offset": [
       0.0,
       0.0
-    ]
+    ],
+    "rig": {
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    }
   },
   {
     "id": "mineral_gold",
@@ -9216,7 +17412,35 @@
     "sprite_offset": [
       0.0,
       0.0
-    ]
+    ],
+    "rig": {
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      }
+    }
   },
   {
     "id": "ex_orc05",
@@ -9272,6 +17496,64 @@
       0.0,
       0.0
     ],
+    "rig": {
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ring": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.5,
+          1.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "hand": [
+        0.3,
+        0.75
+      ]
+    },
     "bullet_refs": [
       "bullet_e_37"
     ],

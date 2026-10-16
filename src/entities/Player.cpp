@@ -36,9 +36,38 @@ Player::Player(const CharacterDef &def, const std::string &resourceRoot,
           frames.empty() ? C01Frames(resourceRoot) : frames, true,
           frameIntervalMs, true, 100)) {
     SetDrawable(m_Anim);
+    m_Vis.SetClip(ActorPose::ActorClip::Idle, m_Anim, {});
     SetZIndex(RenderLayout::kZPlayer); // sorting layer 5 (Character), below the layer-6 overlays
     m_Transform.translation = {0.0F, 0.0F};
     SyncSprite(); // kSpriteScale + bottom-centre pivot until the scene installs the data anchor
+}
+
+void Player::SyncSprite() {
+    m_Vis.Sync(*this);
+    m_Held.Sync(Position(), m_Aim, m_Vis.Facing(), m_HandRootPx, m_Vis.Anchor().feetOffsetPx);
+}
+
+void Player::SetHeldWeapon(const WeaponDef *def, const std::string &resourceRoot) {
+    m_Held.SetWeapon(def, resourceRoot, m_HandLayer);
+    if (m_Held.Object() != nullptr && !m_HeldAttached) {
+        AddChild(m_Held.Object());
+        m_HeldAttached = true;
+    }
+}
+
+void Player::UpdatePose(glm::vec2 aim, int facing, bool moving, bool skillReady) {
+    m_Aim = aim;
+    m_Vis.SetFacing(facing);
+    m_Vis.SetClipState(ActorPose::SelectClip(m_Stats.IsDead(), moving));
+    // FAITHFUL @ RGController$$UpdateShadowLock 005cbc54 (DISASM float constants): the hero ring is
+    // (60,233,75)/255 while the skill is ready (== the prefab m_Color), (27,100,5)/255 otherwise.
+    m_Vis.SetRingTint(skillReady ? glm::vec4{0.235294F, 0.913725F, 0.294118F, 1.0F}
+                                 : glm::vec4{0.105882F, 0.392157F, 0.019608F, 1.0F});
+    SyncSprite();
+}
+
+glm::vec2 Player::Muzzle() const {
+    return m_Held.Muzzle(Position(), m_Aim, m_Vis.Facing(), m_HandRootPx, m_Vis.Anchor().feetOffsetPx);
 }
 
 void Player::Update(float dtMs) {

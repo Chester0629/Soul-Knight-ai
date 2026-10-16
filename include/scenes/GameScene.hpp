@@ -332,6 +332,14 @@ private:
     long m_ForceFireFrame = -1; ///< SK_FORCE_FIRE=K,dx,dy[,N] (P3.0c evidence): see TestHooks.hpp
     glm::vec2 m_ForceFireDir{1.0F, 0.0F};
     long m_ForceFireCount = 0;
+    long m_ForceAimFrame = -1; ///< SK_FORCE_AIM=K,dx,dy[,N] (slice 4 evidence): aim without firing
+    glm::vec2 m_ForceAimDir{1.0F, 0.0F};
+    long m_ForceAimCount = 0;
+    /// Slice 4: the player's position at the end of the previous frame (the run clip needs the displacement).
+    glm::vec2 m_PrevPlayerPos{0.0F, 0.0F};
+    bool m_PrevPlayerValid = false;
+    std::uint32_t m_LastSpawnLoggedId = 0; ///< slice 4: highest player bullet id whose "BulletSpawn:" line was logged
+    int m_LastLockIndex = -1; ///< slice 4: previous lock target (-1 none), for the "Lock:" trace line
     long m_ForceDashFrame = -1;
     glm::vec2 m_ForceDashDir{0.0F, 0.0F};
     bool m_WalkDirSet = false;
@@ -408,7 +416,7 @@ private:
     void SpawnHitEffect(const BulletEffectDef &fx, glm::vec2 pos);
     /// P3.0c: leave the dead species' lying-corpse sprite (Animator state "dead") on the floor at
     /// @p pos (the dead entity's Position()) and pop its death emoticon (the skull speech bubble).
-    void SpawnCorpse(const EnemyDef &def, glm::vec2 pos);
+    void SpawnCorpse(const EnemyDef &def, glm::vec2 pos, int facing = 1);
     /// P3.0c: lying corpses (persist for the floor's lifetime, like the original's dead bodies).
     std::vector<std::shared_ptr<Util::GameObject>> m_Corpses;
     /// P3.0c: species whose bullets / corpse needed a substitute, logged once each.

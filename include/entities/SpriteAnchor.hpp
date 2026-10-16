@@ -55,22 +55,33 @@ struct SpriteAnchor {
     /// translation - feetOffset + spriteOffset when
     ///   pivot = (feetOffset - spriteOffset) / scale + ((fx - 0.5) * w, (fy - 0.5) * h).
     /// Pure math (no GL), so it is unit-tested.
-    glm::vec2 PivotPx(glm::vec2 frameSize, std::size_t frameIndex) const {
+    ///
+    /// SLICE 4 FACING (RGController$$set_facing, game_typed.c:50534, turns the whole `img` subtree between
+    /// RotRight / RotLeft; the captured left-facing frames are the x MIRROR of the right-facing pose --
+    /// see game/ActorPose.hpp, T-69, for what is and is not verified): with @p facing -1 the sprite
+    /// is drawn mirrored (scale.x < 0 mirrors about the pivot point, which Util::GameObject keeps on
+    /// the translation) and the sprite GameObject's own x offset mirrors with it, so the pivot lands
+    /// on feet + (facing * spriteOffset.x, spriteOffset.y). Solving T + facing*s*(v - P) = target for
+    /// the pivot parameter P gives  P.x = (facing * feet.x - sprite.x) / s + (fx - 0.5) * w  (the
+    /// facing = +1 formula above unchanged).
+    glm::vec2 PivotPx(glm::vec2 frameSize, std::size_t frameIndex, int facing = 1) const {
         std::array<float, 2> pv{0.5F, 0.0F}; // no data: bottom-centre
         if (frameIndex < framePivots.size()) {
             pv = framePivots[frameIndex];
         }
-        return (feetOffsetPx - spriteOffsetPx) / DrawScale() +
-               glm::vec2{(pv[0] - 0.5F) * frameSize.x, (pv[1] - 0.5F) * frameSize.y};
+        const float f = facing < 0 ? -1.0F : 1.0F;
+        const float s = DrawScale();
+        return glm::vec2{(f * feetOffsetPx.x - spriteOffsetPx.x) / s + (pv[0] - 0.5F) * frameSize.x,
+                         (feetOffsetPx.y - spriteOffsetPx.y) / s + (pv[1] - 0.5F) * frameSize.y};
     }
 
     /// Set @p obj's scale and the pivot of the frame @p anim is about to draw. Call
     /// once per frame before the renderer draws (Animation advances only inside Draw,
-    /// so the current frame is stable until then).
-    void Apply(Util::GameObject &obj, const Util::Animation &anim) const {
+    /// so the current frame is stable until then). @p facing -1 mirrors the sprite in x.
+    void Apply(Util::GameObject &obj, const Util::Animation &anim, int facing = 1) const {
         const float s = DrawScale();
-        obj.m_Transform.scale = {s, s};
-        obj.SetPivot(PivotPx(anim.GetSize(), anim.GetCurrentFrameIndex()));
+        obj.m_Transform.scale = {facing < 0 ? -s : s, s};
+        obj.SetPivot(PivotPx(anim.GetSize(), anim.GetCurrentFrameIndex(), facing));
     }
 };
 

@@ -178,6 +178,82 @@ class TestBulletRefBoundary(unittest.TestCase):
         errors, _warnings = validate_data.run_checks(data)
         self.assertTrue(any("machine 'vending_machine_i'" in e for e in errors), errors)
 
+    # ---- SLICE 4 (characters): rig + held weapon data ------------------------------------------------
+    def test_hero_rig_is_required_and_pinned_to_the_prefab(self) -> None:
+        data = copy.deepcopy(self.data)
+        c01 = next(c for c in data["chars"]["roster"] if c["id"] == "c01")
+        self.assertEqual(c01["rig"]["hand"], [0.0, 0.5])
+        self.assertEqual(c01["rig"]["hand_layer"], 6)
+        self.assertEqual(c01["rig"]["shadow"]["sprite"], "shadow3.png")
+        self.assertEqual(c01["rig"]["ring"]["sprite"], "shadow_lock.png")
+        del c01["rig"]["hand_layer"]
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("c01: rig.hand_layer" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        c01 = next(c for c in data["chars"]["roster"] if c["id"] == "c01")
+        del c01["rig"]
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("c01: rig missing" in e for e in errors), errors)
+
+    def test_malformed_rig_node_is_an_error(self) -> None:
+        for mutate, needle in (
+            (lambda n: n.__setitem__("sprite", "no_such_sprite.png"), "not on disk"),
+            (lambda n: n.__setitem__("color", [1.0, 1.0, 1.0]), "color must be 4 finite numbers"),
+            (lambda n: n.__setitem__("color", [1.0, 1.0, 2.0, 1.0]), "color outside 0..1"),
+            (lambda n: n.__setitem__("scale", [0.0, 1.0]), "scale must be positive"),
+            (lambda n: n.__setitem__("offset", [float("nan"), 0.0]), "offset must be 2 finite numbers"),
+            (lambda n: n.__setitem__("enabled", "yes"), "enabled must be a bool"),
+        ):
+            data = copy.deepcopy(self.data)
+            slime = next(e for e in data["enemies"] if e["id"] == "e_slime01")
+            mutate(slime["rig"]["shadow"])
+            errors, _w = validate_data.run_checks(data)
+            self.assertTrue(any("e_slime01 rig.shadow" in e and needle in e for e in errors), (needle, errors))
+
+    def test_enemy_ring_tint_must_be_red_and_shadowless_list_is_bounded(self) -> None:
+        data = copy.deepcopy(self.data)
+        slime = next(e for e in data["enemies"] if e["id"] == "e_slime01")
+        slime["rig"]["ring"]["color"] = [0.2, 0.9, 0.3, 1.0]  # the hero green on an enemy
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("e_slime01" in e and "must be red" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        slime = next(e for e in data["enemies"] if e["id"] == "e_slime01")
+        del slime["rig"]["shadow"]  # not on the shadowless allow-list: must fail
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("e_slime01 rig.shadow" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        boss11 = next(e for e in data["enemies"] if e["id"] == "boss11")
+        self.assertNotIn("shadow", boss11["rig"])
+        boss11["rig"]["shadow"] = copy.deepcopy(next(e for e in data["enemies"] if e["id"] == "e_slime01")["rig"]["shadow"])
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("boss11" in e and "shadowless" in e for e in errors), errors)
+
+    def test_weapon_held_sprite_and_gun_point_are_required(self) -> None:
+        data = copy.deepcopy(self.data)
+        w0 = next(w for w in data["weapons"] if w["id"] == "weapon_000")
+        self.assertEqual(w0["held"]["gun_point"], [0.6, 0.15])
+        self.assertEqual(w0["held"]["pivot"], [0.0, 0.35])
+        del w0["held"]["gun_point"]
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("weapon_000: held.gun_point" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        w0 = next(w for w in data["weapons"] if w["id"] == "weapon_000")
+        w0["held"]["sprite"] = "weapons_20.png"  # differs from the icon
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("weapon_000: held sprite differs from icon" in e for e in errors), errors)
+        data = copy.deepcopy(self.data)
+        next(w for w in data["weapons"] if w["id"] == "weapon_000").pop("held")
+        errors, _w = validate_data.run_checks(data)
+        self.assertTrue(any("weapon_000: held missing" in e for e in errors), errors)
+
+    def test_actor_report_lists_the_species_without_clips(self) -> None:
+        lines = validate_data.actor_report(self.data)
+        text = "\n".join(lines)
+        self.assertIn("no run clip  (19)", text)
+        self.assertIn("no dead clip (4)", text)
+        self.assertIn("boss04, boss06, e_tentacle, e_tentacle_temp", text)
+        self.assertIn("sprite states named hit/hurt: 0", text)
+
 
 if __name__ == "__main__":
     unittest.main()

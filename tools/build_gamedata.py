@@ -301,7 +301,7 @@ def build_character_roster():
         if stats:
             # name: FAITHFUL @ i2 Character<N>_name_skin0 (English); id if unknown.
             entry = {"id": cid, "name": names.get(int(cid[1:]), cid), **stats,
-                     **prefab_geometry(f)}
+                     **prefab_geometry(f), **prefab_rig(f)}
             refs, ref_paths = _controller_skill_refs(text, idx)
             if refs:
                 entry["skill_refs"] = refs
@@ -602,6 +602,93 @@ def _enabled(body: str) -> bool:
     return not m or m.group(1) == "1"
 
 
+_GUID_IDX_CACHE = None
+
+
+def _guid_index_cached() -> dict:
+    """Process-wide cache of _guid_index() (one ~6.5k-file pass; the rig builders call it per prefab)."""
+    global _GUID_IDX_CACHE
+    if _GUID_IDX_CACHE is None:
+        _GUID_IDX_CACHE = _guid_index()
+    return _GUID_IDX_CACHE
+
+
+def _renderer_doc(docs, go):
+    """Body of the SpriteRenderer (class 212) on GameObject @p go, or None."""
+    for _fid, (cid, b) in docs.items():
+        if cid == 212:
+            m = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+            if m and m.group(1) == go:
+                return b
+    return None
+
+
+def _rig_sprite(docs, names, scale, father, root, pos, go) -> dict | None:
+    """One SpriteRenderer child as a rig node: {sprite, pivot, offset, scale, sort, color, enabled}.
+    offset/scale are root-space (child chain composed, |lossy scale|), the sprite is the png stem
+    under Resources/sprites, pivot the sprite asset's m_Pivot (fractions from the rect's bottom-left)."""
+    b = _renderer_doc(docs, go)
+    if b is None:
+        return None
+    gm = re.search(r"m_Sprite: \{fileID: 21300000, guid: ([0-9a-f]{32})", b)
+    path = _guid_index_cached().get(gm.group(1)) if gm else None
+    if path is None:
+        return None
+    ox, oy = _to_root(go, (0.0, 0.0), scale, father, pos, root)
+    sx, sy = _lossy(go, scale, father)
+    lay = re.search(r"m_SortingLayer: (-?\d+)", b)
+    ordr = re.search(r"m_SortingOrder: (-?\d+)", b)
+    col = re.search(r"m_Color: \{r: ([-0-9.eE+]+), g: ([-0-9.eE+]+), b: ([-0-9.eE+]+), a: ([-0-9.eE+]+)\}", b)
+    pv = _sprite_pivots().get(path.stem, (0.5, 0.0))
+    return {
+        "sprite": path.stem + ".png",
+        "pivot": [pv[0], pv[1]],
+        "offset": [round(ox, 4) + 0.0, round(oy, 4) + 0.0],
+        "scale": [round(abs(sx), 4), round(abs(sy), 4)],
+        "sort": [int(lay.group(1)) if lay else 0, int(ordr.group(1)) if ordr else 0],
+        "color": [round(float(col.group(i)), 6) for i in (1, 2, 3, 4)] if col else [1.0, 1.0, 1.0, 1.0],
+        "enabled": _enabled(b),
+    }
+
+
+def prefab_rig(path: Path) -> dict:
+    """SLICE 4: the character-presentation children of a hero / enemy / boss prefab.
+      rig.shadow = child `shadow`      (SpriteRenderer, e.g. shadow3 at (0,-0.05), layer 3 order 1)
+      rig.ring   = child `shadow_lock` (white ellipse outline shadow_lock.png; disabled in the prefab,
+                                        its m_Color is the tint: red on enemies, green on heroes)
+      rig.hand   = root-space position of the front hand mount `h1` (heroes: (0, 0.5)) and
+      rig.hand_layer = its RGHand.target_layer (c01: 6)
+    Absent children are absent keys; every number is FAITHFUL @ the prefab YAML."""
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    docs, names, scale, father, root, pos = _parse_prefab(text)
+    if root is None:
+        return {}
+    rig = {}
+    for key, child in (("shadow", "shadow"), ("ring", "shadow_lock")):
+        for g, n in names.items():
+            if n == child and father.get(g) == root:
+                node = _rig_sprite(docs, names, scale, father, root, pos, g)
+                if node is not None:
+                    rig[key] = node
+                break
+    for g, n in names.items():
+        if n == "h1":
+            hx, hy = _to_root(g, (0.0, 0.0), scale, father, pos, root)
+            rig["hand"] = [round(hx, 4) + 0.0, round(hy, 4) + 0.0]
+            # RGHand.target_layer on the mount (c01 h1: 6 = WallFont, ABOVE the body's layer 5; h2: 4, behind it).
+            # The port draws the held weapon on this layer (UNVERIFIED that RGHand applies it: SetUpWeapon is
+            # truncated; the ground-truth frames show the front gun over the body -- see HeldWeapon.hpp).
+            for _fid, (cid, b) in docs.items():
+                if cid == 114:
+                    mg = re.search(r"m_GameObject: \{fileID: (\d+)\}", b)
+                    tl = re.search(r"target_layer: (-?\d+)", b)
+                    if mg and mg.group(1) == g and tl:
+                        rig["hand_layer"] = int(tl.group(1))
+                        break
+            break
+    return {"rig": rig} if rig else {}
+
+
 def prefab_geometry(path: Path) -> dict:
     """{collider?, hurtbox?, body_scale?, sprite_offset} of a hero/enemy/boss prefab
     (see above); every offset is in root space."""
@@ -717,12 +804,16 @@ def attach_enemy_geometry(rows: list) -> list:
             missing.append(r["id"])
             continue
         g = prefab_geometry(p)
+        g.update(prefab_rig(p))
         r.update(g)
         n_col += "collider" in g
         n_hurt += "hurtbox" in g
         n_scaled += "body_scale" in g
+    n_sh = sum(1 for r in rows if "shadow" in r.get("rig", {}))
+    n_ring = sum(1 for r in rows if "ring" in r.get("rig", {}))
     print(f"  enemy geometry: {n_col}/{len(rows)} collider, {n_hurt}/{len(rows)} hurtbox, "
-          f"{n_scaled} body_scale!=1" + (f", no prefab: {missing}" if missing else ""))
+          f"{n_scaled} body_scale!=1, rig {n_sh} shadow / {n_ring} ring"
+          + (f", no prefab: {missing}" if missing else ""))
     return rows
 
 
@@ -770,6 +861,34 @@ def _prefab_sprite_png(prefab: Path, idx: dict, sprite_dir: Path) -> str:
     return name if (sprite_dir / name).is_file() else ""
 
 
+def weapon_held(path: Path) -> dict:
+    """SLICE 4: how a weapon prefab is HELD. `held` = the child `w` SpriteRenderer (the in-hand sprite:
+    png, pivot, root-space offset, |scale|, sorting key, tint) plus `gun_point` = the muzzle child's
+    root-space position (units; weapon_000: w at (0,0), gun_point (0.6, 0.15)). Absent for a prefab
+    without a `w` renderer. FAITHFUL @ the weapon prefab YAML."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return {}
+    docs, names, scale, father, root, pos = _parse_prefab(text)
+    if root is None:
+        return {}
+    held = None
+    for g, n in names.items():
+        if n == "w" and father.get(g) == root:
+            held = _rig_sprite(docs, names, scale, father, root, pos, g)
+            break
+    if held is None:
+        return {}
+    for g, n in names.items():
+        if n == "gun_point":
+            gx, gy = _to_root(g, (0.0, 0.0), scale, father, pos, root)
+            held["gun_point"] = [round(gx, 4) + 0.0, round(gy, 4) + 0.0]
+            break
+    held.pop("enabled", None)
+    return {"held": held}
+
+
 def build_weapon_table():
     """WEAPON RE-KEY: one entry PER PREFAB (194) from weapons.csv -- real per-item
     stats (the old table was 46 class templates; its Gun001 row was silently
@@ -794,6 +913,7 @@ def build_weapon_table():
             rec["weapon_speed"] = _csv_float(row.get("weapon_speed"), 1.0)
             # FAITHFUL @ <prefab>.prefab SpriteRenderer -> pickup icon.
             rec["icon"] = _prefab_sprite_png(wdir / f"{pid}.prefab", idx, sprite_dir)
+            rec.update(weapon_held(wdir / f"{pid}.prefab"))  # SLICE 4: held sprite + gun_point
             # FAITHFUL @ weapons.csv bullet -> bullet prefab -> its sprite.
             rec["bullet_prefab"], rec["bullet_sprite"] = "", ""
             m = _GUID_IN_REF_RE.search(row.get("bullet") or "")
@@ -804,7 +924,10 @@ def build_weapon_table():
             out.append(rec)
     n_icon = sum(1 for r in out if r["icon"])
     n_bs = sum(1 for r in out if r["bullet_sprite"])
-    print(f"  weapons: {len(out)} prefabs, {n_icon} icons, {n_bs} bullet sprites resolved")
+    n_held = sum(1 for r in out if r.get("held"))
+    n_gp = sum(1 for r in out if r.get("held", {}).get("gun_point"))
+    print(f"  weapons: {len(out)} prefabs, {n_icon} icons, {n_bs} bullet sprites resolved, "
+          f"{n_held} held sprites, {n_gp} gun_points")
     return out
 
 

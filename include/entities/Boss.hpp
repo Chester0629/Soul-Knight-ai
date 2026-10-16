@@ -14,6 +14,7 @@
 
 #include "combat/BossAI01.hpp"
 #include "combat/CombatStats.hpp"
+#include "entities/ActorVisual.hpp"
 #include "entities/SpriteAnchor.hpp"
 
 namespace Game {
@@ -54,14 +55,21 @@ public:
 
     /// Install the data-driven sprite anchor (see SpriteAnchor) and re-apply it.
     void SetAnchor(SpriteAnchor anchor) {
-        m_Anchor = std::move(anchor);
+        m_Vis.SetAnchor(std::move(anchor));
         SyncSprite();
     }
-    /// Apply scale + the current frame's pivot (called each frame before the draw).
-    void SyncSprite() { m_Anchor.Apply(*this, *m_Anim); }
+    /// Apply the clip, facing mirror, scale + pivot and the shadow / ring (called each frame before the draw).
+    void SyncSprite() { m_Vis.Sync(*this); }
+
+    /// SLICE 4: clip / facing / shadow + lock ring helper (the scene registers the run clip + rig).
+    ActorVisual &Visual() { return m_Vis; }
+    const ActorVisual &Visual() const { return m_Vis; }
+    /// Per-frame pose from the sim -- see Enemy::UpdatePose.
+    void UpdatePose(glm::vec2 position, float dtMs, float faceDx, bool locked);
 
 private:
-    SpriteAnchor m_Anchor;
+    ActorVisual m_Vis;
+    glm::vec2 m_PrevPos{0.0F, 0.0F};
     BossAI01 m_Boss;
     CombatStats m_Stats;
     /// LEGACY, unused by the live game (BossController owns boss movement). PORT CHOICE (T-55) px/s,

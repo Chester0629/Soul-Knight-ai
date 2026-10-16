@@ -9,6 +9,8 @@
 #include "combat/Buff.hpp"
 #include "combat/CharSkillC01.hpp"
 #include "combat/Damage.hpp"
+#include "game/ActorPose.hpp"
+#include "game/WorldScale.hpp"
 #include "sim/BodyMove.hpp"
 #include "sim/BrainFactory.hpp"
 #include "sim/CharSkillAdapters.hpp"
@@ -94,7 +96,18 @@ void Simulation::WakeByRoom() {
 }
 
 // Per-step helpers filled across Tasks 3-7.
+glm::vec2 Simulation::PlayerMuzzle(glm::vec2 playerPos, glm::vec2 aimDir, int facing) const {
+    if (!m_HasMuzzle) {
+        return playerPos;
+    }
+    const glm::vec2 hand = ActorPose::HandWorld(playerPos, m_HandRootPx, m_HandFeetPx, facing);
+    return ActorPose::WeaponPointWorld(hand, m_MuzzleLocalPx, aimDir, facing);
+}
+
 void Simulation::TickWeapon() {
+    // SLICE 4: the facing follows the aim side every step (ActorPose::ResolveFacing; a vertical aim keeps
+    // the last side), so the view and the muzzle below read one value.
+    m_PlayerFacing = ActorPose::ResolveFacing(m_PlayerFacing, m_Input.aimDir.x);
     // --- P3.3.b: C04's melee sword cut. RoleAtkMelee is a no-op default (all-false)
     // for every hero except C04, so this block is behaviourally invisible for the
     // rest of the roster -- suppressFire stays false and the normal weapon path
@@ -123,8 +136,10 @@ void Simulation::TickWeapon() {
         return;
     }
     const std::size_t before = m_FireIntents.size();
-    const int pulls =
-        m_Weapon->Tick(m_Input.firing, m_Input.playerPos, m_Input.aimDir, m_FireIntents);
+    // SLICE 4: the shot leaves the weapon's gun_point (hand mount + weapon pose), not the body centre.
+    // The direction stays the aim (+ the brain's scatter): only the ORIGIN moves; no RNG is drawn here.
+    const glm::vec2 muzzle = PlayerMuzzle(m_Input.playerPos, m_Input.aimDir, m_PlayerFacing);
+    const int pulls = m_Weapon->Tick(m_Input.firing, muzzle, m_Input.aimDir, m_FireIntents);
     const std::size_t shots = m_FireIntents.size() - before; // intents (pellets) added this step.
     // B1-P3: energy + the muzzle cue are PER-PULL, not per-intent -- a Fan pull is one
     // pull (one energy, one flash) regardless of how many pellets it spawned.
@@ -1092,6 +1107,12 @@ void Simulation::SetBoss(float baseShootCd, glm::vec2 spawn, int maxHp, int room
 void Simulation::EquipWeapon(const Game::WeaponDef &def, const std::string &weaponId,
                              int seed, const Game::GameData *data) {
     m_Weapon.emplace(BrainFactory::MakeWeapon(def, weaponId, seed, data)); // cold rebuild
+    // SLICE 4: the muzzle of the held weapon (weapon prefab child gun_point, units -> px).
+    m_HasMuzzle = def.held.present && def.held.hasGunPoint &&
+                  std::isfinite(def.held.gunPointX) && std::isfinite(def.held.gunPointY);
+    m_MuzzleLocalPx = m_HasMuzzle ? glm::vec2{Game::Scale::UnitsToPx(def.held.gunPointX),
+                                              Game::Scale::UnitsToPx(def.held.gunPointY)}
+                                  : glm::vec2{0.0F, 0.0F};
 }
 void Simulation::SetPlayerSkill(const std::string &charId, float skillCd, float inSkillTime,
                                 int atk, const Game::CharacterDef *def) {

@@ -101,6 +101,21 @@ public:
     /// prefab data. The default is the placeholder Sim::kPlayerBodyRadius circle.
     void SetPlayerGeom(const BodyGeom &geom) { m_PlayerGeom = geom; }
     const BodyGeom &PlayerGeom() const { return m_PlayerGeom; }
+    /// SLICE 4: the hero's front hand mount h1 (prefab-root space, px, root = the feet) and the
+    /// Position()-above-feet distance (BodyGeom::feetOffsetPx), so the bullet spawns at the muzzle
+    /// (gun_point) of the held weapon instead of the body centre. Never called (the default) = the
+    /// hand is the body centre. FAITHFUL @ Gun001$$Attack DISASM 0x3eb124 (bullet at gun_point).
+    void SetPlayerHand(glm::vec2 handRootPx, glm::vec2 feetOffsetPx) {
+        m_HandRootPx = handRootPx;
+        m_HandFeetPx = feetOffsetPx;
+    }
+    /// SLICE 4: the facing (+1 right / -1 left, ActorPose::ResolveFacing of the aim) after the last
+    /// Step: the single source of truth the view reads for the body flip and the weapon pose.
+    int PlayerFacing() const { return m_PlayerFacing; }
+    /// SLICE 4: the player weapon's muzzle in world px for @p playerPos / @p aimDir / @p facing
+    /// (ActorPose::WeaponPointWorld of the equipped weapon's gun_point from the hand). Without a
+    /// held gun_point (no weapon, or a prefab without one) it is @p playerPos -- the pre-slice origin.
+    glm::vec2 PlayerMuzzle(glm::vec2 playerPos, glm::vec2 aimDir, int facing) const;
     /// Build (or rebuild, cold) the player weapon from a def. "Gun016" -> HeatMinigun.
     /// @p data (P3.2), when non-null, resolves the weapon's bullet's buff-application
     /// trigger (BrainFactory::MakeWeapon) so ResolveHits() auto-applies it on a landed
@@ -294,6 +309,12 @@ private:
 
     Game::CombatStats m_PlayerStats{};
     BodyGeom m_PlayerGeom = BodyGeom::Fallback(kPlayerBodyRadius);
+    /// SLICE 4: hand mount / facing / muzzle of the equipped weapon (see SetPlayerHand).
+    glm::vec2 m_HandRootPx{0.0F, 0.0F};
+    glm::vec2 m_HandFeetPx{0.0F, 0.0F};
+    int m_PlayerFacing = 1;
+    bool m_HasMuzzle = false;
+    glm::vec2 m_MuzzleLocalPx{0.0F, 0.0F}; ///< gun_point in the weapon frame, px
     // --- P3.1: player buff state (the sim does not own the player's position, so
     // GameScene polls PlayerFrozen()/PlayerSpeedMul() to gate its own movement). ---
     Game::Combat::BuffList m_PlayerBuffs;

@@ -15,6 +15,7 @@
 #include "Core/Context.hpp"
 
 #include "game/FloorClear.hpp"
+#include "game/ActorPose.hpp"
 #include "game/WorldScale.hpp"
 #include "game/RenderLayout.hpp"
 #include "game/RunController.hpp"
@@ -164,6 +165,20 @@ void GameScene::OnEnter() {
                                              hero.bodyScale,
                                              {hero.spriteOffsetX, hero.spriteOffsetY},
                                              pg.bodyRadiusPx));
+        // SLICE 4: run / dead clips, ground shadow + the always-on green lock ring, and the hand mount
+        // (FAITHFUL @ c##.prefab: shadow / shadow_lock children, h1 + RGHand.target_layer). Without rig data
+        // (no prefab source) the hand is the body centre and nothing extra is drawn.
+        m_Player->Visual().BuildStateClips(m_Data, charId, root, m_Data.SpriteIntervalMs(charId, 80));
+        m_Player->Visual().BuildRig(*m_Player, hero.rig, root);
+        m_Player->Visual().SetRingVisible(true); // PORT CHOICE (T-69): the hero ring is always on
+        glm::vec2 handRootPx = pg.feetOffsetPx; // no data: the hand is the body centre
+        int handLayer = RenderLayout::kLayerWallFont;
+        if (hero.rig.hasHand) {
+            handRootPx = {Scale::UnitsToPx(hero.rig.handX), Scale::UnitsToPx(hero.rig.handY)};
+            handLayer = hero.rig.handLayer;
+        }
+        m_Player->SetHand(handRootPx, handLayer);
+        m_Sim->SetPlayerHand(handRootPx, pg.feetOffsetPx);
     }
 
     // --- Procedural floor: a MapManager random-walk lays out the rooms; each is
@@ -971,6 +986,12 @@ void GameScene::OnEnter() {
                         m_Data, bossPrefab, bossDef->body, bossDef->hurtbox, bossDef->bodyScale,
                         {bossDef->spriteOffsetX, bossDef->spriteOffsetY}, Sim::kBossBodyRadius));
                 }
+                if (bossDef != nullptr) {
+                    // SLICE 4: run clip + ground shadow + lock ring (bosses 06/07/10/12 ship no run clip).
+                    boss->Visual().BuildStateClips(m_Data, bossPrefab, root,
+                                                   m_Data.SpriteIntervalMs(bossPrefab, 150));
+                    boss->Visual().BuildRig(*boss, bossDef->rig, root);
+                }
                 boss->SetRoomId(roomIndex);
                 m_Bosses.push_back(boss);
                 m_Sim->SetBoss(2.0F, spawn, bossMaxHp, roomIndex,
@@ -1242,6 +1263,7 @@ void GameScene::OnEnter() {
     if (const WeaponDef *wdef = m_Data.FindWeapon(equipWeaponId)) {
         m_Sim->EquipWeapon(*wdef, equipWeaponId, m_FloorSeed + 5, &m_Data); // P3.2: bullet-buff wiring
         m_WeaponEnergyCost = WeaponEnergyCost(*wdef);
+        m_Player->SetHeldWeapon(wdef, root); // SLICE 4: the weapon in the hand
         // AUDIO: wdef->id is the RESOLVED prefab id (e.g. "weapon_000"), unlike
         // equipWeaponId which may still be a class id ("Gun001") -- audio.json
         // weapon_shoot is keyed by prefab id, same as the live pickup-equip path
@@ -1329,6 +1351,18 @@ void GameScene::OnEnter() {
                      spec.dx, spec.dy, spec.count);
         } else {
             LOG_WARN("SK_FORCE_FIRE rejected: {}", spec.error);
+        }
+    }
+    if (const char *fa = std::getenv("SK_FORCE_AIM")) {
+        const Game::ForceFireSpec spec = Game::ParseForceAim(fa);
+        if (spec.ok) {
+            m_ForceAimFrame = spec.frame;
+            m_ForceAimDir = glm::vec2{spec.ux, spec.uy};
+            m_ForceAimCount = spec.count;
+            LOG_INFO("SK_FORCE_AIM: from frame {} aim ({:.2f},{:.2f}) for {} frames", spec.frame, spec.dx,
+                     spec.dy, spec.count);
+        } else {
+            LOG_WARN("SK_FORCE_AIM rejected: {}", spec.error);
         }
     }
     if (const char *fd = std::getenv("SK_FORCE_DASH")) {
@@ -1637,8 +1671,28 @@ void GameScene::TracePositions() const {
     LOG_INFO("PosTrace: frame {} player ({:.1f},{:.1f}) r={:.1f} blocked={}", m_Frame,
              m_Player->Position().x, m_Player->Position().y, m_PlayerRadiusPx,
              BlocksAny(m_Player->Position(), m_PlayerRadiusPx) ? 1 : 0);
+    {
+        // SLICE 4: the hero pose as drawn -- facing, clip, ring tint, held weapon rotation / x-mirror, muzzle.
+        const Util::GameObject *wobj = m_Player->Held().Object().get();
+        const glm::vec4 tint = m_Player->Visual().RingTint();
+        LOG_INFO("PoseTrace: frame {} player facing {} clip {} aim ({:.3f},{:.3f}) ring {} tint ({:.3f},{:.3f},{:.3f}) "
+                 "shadow {} weapon {} rot {:.4f} scalex {:.2f} muzzle ({:.2f},{:.2f}) hand layer z {:.4f}",
+                 m_Frame, m_Player->Visual().Facing(), static_cast<int>(m_Player->Visual().Shown()),
+                 m_Player->Aim().x, m_Player->Aim().y, m_Player->Visual().RingVisible() ? 1 : 0, tint.r, tint.g,
+                 tint.b, m_Player->Visual().ShadowObject() != nullptr ? 1 : 0, m_Player->Held().Visible() ? 1 : 0,
+                 wobj != nullptr ? wobj->m_Transform.rotation : 0.0F,
+                 wobj != nullptr ? wobj->m_Transform.scale.x : 0.0F, m_Player->Muzzle().x, m_Player->Muzzle().y,
+                 m_Player->Held().Z());
+    }
     const std::vector<Sim::Simulation::EntityView> evs = m_Sim->EnemyViews();
     for (const Sim::Simulation::EntityView &ev : evs) {
+        if (ev.id < m_Enemies.size() && m_Enemies[ev.id] != nullptr) {
+            const ActorVisual &vis = m_Enemies[ev.id]->Visual();
+            LOG_INFO("PoseTrace: frame {} enemy {} {} facing {} clip {} ring {} shadow {}", m_Frame, ev.id,
+                     ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr ? m_EnemyDefs[ev.id]->id : "?",
+                     vis.Facing(), static_cast<int>(vis.Shown()), vis.RingVisible() ? 1 : 0,
+                     vis.ShadowObject() != nullptr ? 1 : 0);
+        }
         const float r = ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr
                             ? Sim::MakeBodyGeom(m_EnemyDefs[ev.id]->body, m_EnemyDefs[ev.id]->hurtbox,
                                                 Sim::kEnemyBodyRadius).bodyRadiusPx
@@ -1647,6 +1701,12 @@ void GameScene::TracePositions() const {
                  ev.id, ev.roomId,
                  ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr ? m_EnemyDefs[ev.id]->id : "?",
                  ev.pos.x, ev.pos.y, r, ev.alive ? 1 : 0, BlocksAny(ev.pos, r) ? 1 : 0);
+    }
+    if (!m_Bosses.empty() && m_Bosses[0] != nullptr) {
+        const ActorVisual &vis = m_Bosses[0]->Visual();
+        LOG_INFO("PoseTrace: frame {} boss {} facing {} clip {} ring {} shadow {}", m_Frame,
+                 m_BossDef != nullptr ? m_BossDef->id : "?", vis.Facing(), static_cast<int>(vis.Shown()),
+                 vis.RingVisible() ? 1 : 0, vis.ShadowObject() != nullptr ? 1 : 0);
     }
     if (m_Sim->HasBoss()) {
         const Sim::Simulation::EntityView bv = m_Sim->BossView();
@@ -1823,7 +1883,7 @@ void GameScene::ConsumeBulletImpacts() {
     }
 }
 
-void GameScene::SpawnCorpse(const EnemyDef &def, glm::vec2 pos) {
+void GameScene::SpawnCorpse(const EnemyDef &def, glm::vec2 pos, int facing) {
     const std::string root(RESOURCE_DIR);
     const std::string state = m_Data.DeadState(def.id);
     std::vector<std::string> frames =
@@ -1847,7 +1907,7 @@ void GameScene::SpawnCorpse(const EnemyDef &def, glm::vec2 pos) {
     obj->SetDrawable(anim);
     obj->SetZIndex(RenderLayout::kZCorpse);
     obj->m_Transform.translation = pos;
-    anchor.Apply(*obj, *anim);
+    anchor.Apply(*obj, *anim, facing); // SLICE 4: the body keeps the side it died facing
     m_Renderer.AddChild(obj);
     m_Corpses.push_back(obj);
     LOG_INFO("Corpse: {} left at ({:.0f},{:.0f}) state '{}' ({} frame(s))", def.id, pos.x, pos.y, state,
@@ -2134,11 +2194,26 @@ void GameScene::Update(float dtMs) {
         in.aimDir = m_ForceFireDir; // already a unit vector (ParseForceFire)
         in.firing = true;
     }
+    // SK_FORCE_AIM=K,dx,dy[,N] (slice 4 evidence, NO-OP unless set): aim along a fixed direction from frame K for
+    // N frames without firing. Applied after the other aim hooks; SK_FORCE_FIRE (above) wins while active.
+    if (m_ForceAimFrame >= 0 && m_Frame >= m_ForceAimFrame && m_Frame - m_ForceAimFrame < m_ForceAimCount &&
+        !(m_ForceFireFrame >= 0 && m_Frame >= m_ForceFireFrame && m_Frame - m_ForceFireFrame < m_ForceFireCount)) {
+        in.aimDir = m_ForceAimDir;
+    }
     in.playerAlive = !m_Player->Stats().IsDead();
     in.playerRoomId = playerRoomId;
 
     m_Sim->SetPlayerStats(m_Player->Stats());      // push current vitals in
     m_Sim->Advance(dtMs, in);                       // sim damages its player-stats copy
+    // SLICE 4: the hero pose for this frame -- the sim facing (one source of truth with the muzzle), the run
+    // clip while it moved, the ring tint by the skill-ready state, the held weapon on the aim.
+    {
+        const bool movedNow = m_PrevPlayerValid && ActorPose::IsMoving(resolved - m_PrevPlayerPos, dtMs);
+        const bool skillReady = m_Sim->PlayerSkill() == nullptr || m_Sim->PlayerSkill()->SkillReady();
+        m_Player->UpdatePose(in.aimDir, m_Sim->PlayerFacing(), movedNow, skillReady);
+        m_PrevPlayerPos = resolved;
+        m_PrevPlayerValid = true;
+    }
     // SK_TRACE_BULLETS test hook (env, NO-OP if unset): log every live player bullet's sim
     // position each frame ("BulletTrace: frame id x y" in px and cells), for the P3.0
     // speed-scale measurement. Read-only; not game logic.
@@ -2153,6 +2228,11 @@ void GameScene::Update(float dtMs) {
                          m_Frame, tb.id, tb.camp,
                          ti < m_Data.Bullets().size() ? m_Data.Bullets()[ti].id : std::string("none"),
                          tb.angleRad * 57.29578F, tb.pos.x, tb.pos.y);
+            }
+            if (tb.active && tb.camp == 0 && tb.id > m_LastSpawnLoggedId) {
+                m_LastSpawnLoggedId = tb.id;
+                LOG_INFO("BulletSpawn: frame {} id {} spawn ({:.2f},{:.2f}) player ({:.2f},{:.2f})", m_Frame, tb.id,
+                         tb.prevPos.x, tb.prevPos.y, resolved.x, resolved.y);
             }
             if (tb.active && tb.camp == 0) {
                 LOG_INFO("BulletTrace: frame {} id {} px=({:.2f},{:.2f}) cells=({:.3f},{:.3f}) player=({:.2f},{:.2f})",
@@ -2306,7 +2386,35 @@ void GameScene::Update(float dtMs) {
 
     // --- Sync enemy/boss render views from the sim (entities are never erased: null on death) ---
     const std::vector<Sim::Simulation::EntityView> eviews = m_Sim->EnemyViews();
-    for (const Sim::Simulation::EntityView &ev : eviews) {
+    // SLICE 4: the lock target (red ring) = the nearest living hostile within ActorPose::kLockRangePx of the hero
+    // (index eviews.size() = the boss). PORT CHOICE (T-71).
+    const bool hasBossView = !m_Bosses.empty() && m_Bosses[0] != nullptr && m_Sim->HasBoss();
+    const Sim::Simulation::EntityView bossView = hasBossView ? m_Sim->BossView() : Sim::Simulation::EntityView{};
+    const int lockIndex = ActorPose::PickLockTarget(
+        static_cast<int>(eviews.size()) + (hasBossView ? 1 : 0), resolved, ActorPose::kLockRangePx,
+        [&](int i) { return static_cast<std::size_t>(i) < eviews.size() ? eviews[static_cast<std::size_t>(i)].pos
+                                                                       : bossView.pos; },
+        [&](int i) {
+            const bool alive = static_cast<std::size_t>(i) < eviews.size() ? eviews[static_cast<std::size_t>(i)].alive
+                                                                           : bossView.alive;
+            // a hostile only counts while its view is still on screen (null = already a corpse)
+            if (static_cast<std::size_t>(i) < eviews.size()) {
+                const std::size_t id = eviews[static_cast<std::size_t>(i)].id;
+                return alive && id < m_Enemies.size() && m_Enemies[id] != nullptr;
+            }
+            return alive;
+        });
+    if (lockIndex != m_LastLockIndex) {
+        LOG_INFO("Lock: frame {} target {} -> {}", m_Frame, m_LastLockIndex, lockIndex);
+        m_LastLockIndex = lockIndex;
+    }
+    // Facing source (PORT CHOICE T-69): an awake hostile (the hero is in its room) faces the hero's side -- its
+    // target -- else the side of its heading; a zero x keeps the last side (ActorPose::ResolveFacing).
+    const auto faceDxOf = [&](const Sim::Simulation::EntityView &ev) {
+        return ActorPose::EnemyFaceDx(playerRoomId >= 0 && ev.roomId == playerRoomId, ev.pos, resolved, ev.facing);
+    };
+    for (std::size_t vi = 0; vi < eviews.size(); ++vi) {
+        const Sim::Simulation::EntityView &ev = eviews[vi];
         if (ev.id >= m_Enemies.size()) {
             continue;
         }
@@ -2314,25 +2422,33 @@ void GameScene::Update(float dtMs) {
         if (view == nullptr) {
             continue;
         }
-        view->m_Transform.translation = ev.pos;
-        view->SyncSprite(); // scale + this frame's pivot (feet anchored)
-        if (!ev.alive) {
+        if (ev.alive) {
+            view->UpdatePose(ev.pos, dtMs, faceDxOf(ev), static_cast<int>(vi) == lockIndex);
+        } else {
+            view->m_Transform.translation = ev.pos;
+            view->SyncSprite(); // scale + this frame's pivot (feet anchored)
+            const int diedFacing = view->Visual().Facing();
             m_Renderer.RemoveChild(view);
             view = nullptr;
             if (ev.id < m_EnemyDefs.size() && m_EnemyDefs[ev.id] != nullptr) {
-                SpawnCorpse(*m_EnemyDefs[ev.id], ev.pos); // P3.0c: the body stays on the floor
+                SpawnCorpse(*m_EnemyDefs[ev.id], ev.pos, diedFacing); // P3.0c: the body stays on the floor
             }
         }
     }
-    if (!m_Bosses.empty() && m_Bosses[0] != nullptr && m_Sim->HasBoss()) {
-        const Sim::Simulation::EntityView bv = m_Sim->BossView();
-        m_Bosses[0]->m_Transform.translation = bv.pos;
-        m_Bosses[0]->SyncSprite();
+    if (hasBossView) {
+        const Sim::Simulation::EntityView bv = bossView;
+        if (bv.alive) {
+            m_Bosses[0]->UpdatePose(bv.pos, dtMs, faceDxOf(bv), static_cast<int>(eviews.size()) == lockIndex);
+        } else {
+            m_Bosses[0]->m_Transform.translation = bv.pos;
+            m_Bosses[0]->SyncSprite();
+        }
         if (!bv.alive) {
+            const int diedFacing = m_Bosses[0]->Visual().Facing();
             m_Renderer.RemoveChild(m_Bosses[0]);
             m_Bosses[0] = nullptr;
             if (m_BossDef != nullptr) {
-                SpawnCorpse(*m_BossDef, bv.pos); // P3.0c: the boss body stays too
+                SpawnCorpse(*m_BossDef, bv.pos, diedFacing); // P3.0c: the boss body stays too
             }
             LOG_INFO("Boss defeated!");
             // M3b: RGChestBoss -- the boss's chest (chest_boss<NN>: tier + its
@@ -2438,6 +2554,7 @@ void GameScene::Update(float dtMs) {
             ++m_WeaponSwaps;
             m_Sim->EquipWeapon(*def, def->id, m_FloorSeed + 5 + m_WeaponSwaps, &m_Data); // P3.2
             m_WeaponEnergyCost = WeaponEnergyCost(*def);
+            m_Player->SetHeldWeapon(def, std::string(RESOURCE_DIR)); // SLICE 4: the weapon in the hand
             m_CurrentWeaponId = def->id; // keep the weapon-id carry vehicle in sync on every equip
             m_Renderer.RemoveChild(*it);
             it = m_Pickups.erase(it);
@@ -2642,6 +2759,9 @@ void GameScene::SpawnEnemy(const std::string &id, glm::vec2 at, int roomIndex, i
     enemy->SetAnchor(MakeSpriteAnchor(m_Data, rdef->id, rdef->body, rdef->hurtbox, rdef->bodyScale,
                                       {rdef->spriteOffsetX, rdef->spriteOffsetY},
                                       Sim::kEnemyBodyRadius));
+    // SLICE 4: run clip + ground shadow + lock ring (FAITHFUL @ the species prefab children).
+    enemy->Visual().BuildStateClips(m_Data, rdef->id, root, m_Data.SpriteIntervalMs(rdef->id, 120));
+    enemy->Visual().BuildRig(*enemy, rdef->rig, root);
     enemy->AI().SetSeed(seed);
     enemy->AI().SetKinematic(rdef->kinematic != 0);
     enemy->SetRoomId(roomIndex);
@@ -2873,7 +2993,18 @@ void GameScene::ConsumeSimEvents(glm::vec2 playerPos) {
         }
 
         if (e.name == "fire" || e.name == "attack") {
-            SpawnEffect({root + "/sprites/effect01.png"}, pos, 80.0F); // muzzle flash
+            // SLICE 4: the player flash sits at the held weapon gun_point (the original keeps the muzzle effect on
+            // the weapon's `gun_point` child); the effect sprite itself is still effect01 (the real flash is a
+            // particle burst that was not recovered).
+            const glm::vec2 flashPos = (isPlayer && e.name == "fire") ? m_Player->Muzzle() : pos;
+            if (isPlayer && e.name == "fire") {
+                const glm::vec2 simMuzzle = m_Sim->PlayerMuzzle(playerPos, m_Player->Aim(), m_Sim->PlayerFacing());
+                LOG_INFO("Muzzle: frame {} player ({:.2f},{:.2f}) aim ({:.3f},{:.3f}) facing {} sim ({:.2f},{:.2f}) "
+                         "view ({:.2f},{:.2f})",
+                         m_Frame, playerPos.x, playerPos.y, m_Player->Aim().x, m_Player->Aim().y,
+                         m_Sim->PlayerFacing(), simMuzzle.x, simMuzzle.y, flashPos.x, flashPos.y);
+            }
+            SpawnEffect({root + "/sprites/effect01.png"}, flashPos, 80.0F); // muzzle flash
             // AUDIO: "fire" is player-only (kPlayerViewId, see Simulation.cpp) so this
             // is always the player's own shot -- the equipped weapon's REAL audio_clip
             // (audio.json weapon_shoot, guid-resolved from RGWeapon.audio_clip).

@@ -527,3 +527,6 @@ __pycache__/
 
 # P3.0c: the full p30c_* logs are evidence (tools/p30c_check.py reads them); keep them tracked
 !docs/evidence/**/p30c_*.log
+
+# P2.19: the full p219_* logs are evidence (tools/p219_check.py reads them); keep them tracked
+!docs/evidence/**/p219_*.log
