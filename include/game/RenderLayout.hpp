@@ -135,6 +135,29 @@ inline RoomSpritePlacement PlaceRoomSprite(const GameData &data, const std::stri
     return out;
 }
 
+/// P2.20: the placement of a prefab SpriteRenderer child @p node (levels.json / room_props.json rig node:
+/// sprite, pivot, root-space offset, |lossy scale|, sorting key) under the room object whose cell
+/// centre is @p cellCentre. Same rule as PlaceRoomSprite, plus the node's own x offset, its y offset
+/// and its scale (the chest shadow is 1.2 wide); @c scale is the quad scale to use. @p dxUnits /
+/// @p dyUnits add to the node's offsets (a door piece's cell column, an animated bar height).
+struct RoomNodePlacement {
+    glm::vec2 translation{0.0F, 0.0F};
+    glm::vec2 scale{Scale::kSpriteScale, Scale::kSpriteScale};
+    float z = 0.0F;
+};
+inline RoomNodePlacement PlaceRoomNode(const RigNodeDef &node, glm::vec2 sizePx, glm::vec2 cellCentre,
+                                       float dxUnits = 0.0F, float dyUnits = 0.0F) {
+    const glm::vec2 cell = CellAnchor(cellCentre);
+    RoomNodePlacement out;
+    out.scale = {Scale::kSpriteScale * node.scaleX, Scale::kSpriteScale * node.scaleY};
+    const glm::vec2 anchor = cell + glm::vec2((node.offsetX + dxUnits) * Scale::kCellPx,
+                                              (node.offsetY + dyUnits) * Scale::kCellPx);
+    out.translation = anchor + glm::vec2((0.5F - node.pivotX) * sizePx.x * out.scale.x,
+                                         (0.5F - node.pivotY) * sizePx.y * out.scale.y);
+    out.z = RoomSortZ(node.sortLayer, node.sortOrder, cell.y);
+    return out;
+}
+
 /// Camera.backgroundColor: MapManager.camera_bg of the current level (levels.json
 /// `camera_bg`); black (the old behaviour) when there is no level table.
 inline glm::vec3 ClearColor(const LevelDef *level) {

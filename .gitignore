@@ -530,3 +530,6 @@ __pycache__/
 
 # P2.19: the full p219_* logs are evidence (tools/p219_check.py reads them); keep them tracked
 !docs/evidence/**/p219_*.log
+
+# P2.20: the full p220_* logs are evidence (tools/p220_check.py reads them); keep them tracked
+!docs/evidence/**/p220_*.log

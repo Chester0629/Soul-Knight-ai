@@ -109,6 +109,16 @@ inline constexpr int kHitRngSalt = 0x5170;
 /// future RGSword-collider recovery can replace it without hunting through
 /// Simulation.cpp.
 inline constexpr float kMeleeCutReachPx = 48.0F;
+
+/// FAITHFUL (P2.20 fix, R48): the player's hit protection. `RGController$$HurtHp` / `HurtArmor`
+/// (game_typed.c:50787-50860) end a damaging hit with the virtual StartHitTrigger(0.5f) (the 0x3f000000
+/// argument); `RGController$$StartHitTrigger` @ 0x5cc068 (DISASM 0x5cc068-0x5cc160) cancels the pending
+/// "EndHitTrigger", disables the hero's BoxCollider2D hurtbox while game_state == 1 (a room in battle),
+/// stores `can_hurt = false` (strb [r5,#0x60]) and `Invoke("EndHitTrigger", time)`; EndHitTrigger
+/// (0x5cc178) sets can_hurt = true. `RGController$$GetHurt` (game_typed.c:50703) returns without damage
+/// unless `awake && can_hurt`. So after an effective hit the hero cannot be hurt again for 0.5 s: a
+/// bullet or spike tick in that window finds no hurtbox (battle) or no can_hurt, and deals nothing.
+inline constexpr float kPlayerHitProtectMs = 500.0F;
 inline constexpr float kMeleeCutHalfAngleDeg = 60.0F;
 
 /// PORT CHOICE (T-40): pixels per Unity world unit. The P3.3.c skill bodies are

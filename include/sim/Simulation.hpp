@@ -158,6 +158,44 @@ public:
     /// The PLAYER's combined movement-speed multiplier this step (1.0 = no buff).
     float PlayerSpeedMul() const { return m_PlayerSpeedMul; }
 
+    /// P2.20: who a hazard box (a spike trap tick) struck.
+    struct HazardHit {
+        bool player = false;    ///< EFFECTIVE damage (PlayerHurt::Damaged): armor / hp really dropped
+        bool playerProtected = false; ///< the hurtbox overlapped but the 0.5 s hit protection swallowed the check
+        bool playerAbsorbed = false;  ///< the hurtbox overlapped and the C08 shield ate the hit (no armor / hp lost)
+        bool playerNoDamage = false;  ///< overlapped, not protected, not absorbed, yet nothing was lost (playerDamage <= 0)
+        int enemies = 0;      ///< live enemies that took enemyDamage
+        bool boss = false;    ///< the boss took enemyDamage
+    };
+    /// P2.20: FAITHFUL @ ObjectSting$$Update (DISASM 0x487d88-0x48812c): the trap's damage tick is a
+    /// BoxCast of the 1x1-unit box at (cell x, cell y + 0.5) against the Body_E / Body_P hurtboxes;
+    /// every enemy / boss touching it takes @p enemyDamage (the original passes damage / 2) when
+    /// @p hitEnemy, and the player takes @p playerDamage when @p hitPlayer and not @p playerImmune
+    /// (RGGameProcess.buff_immune_sting, +0x42, skips the whole player branch; the immunity itself is not
+    /// ported, T-77). PORT CHOICE (T-74): straight damage like a DoT tick (no crit roll, no repel, no RNG
+    /// draw), but the PLAYER branch goes through TryHurtPlayer, i.e. the 0.5 s hit protection (R48) applies; the hurt cue is emitted for each target. Enemy /
+    /// boss deaths are credited DeathSource::Other. Overlap is the static BodyGeom::HurtOverlapsBox
+    /// at the current positions (the box does not sweep). Call between Advance()s; uses the last
+    /// Advance()'s player input.
+    HazardHit ApplyHazardBox(glm::vec2 centre, glm::vec2 half, int playerDamage, int enemyDamage,
+                             bool hitPlayer, bool hitEnemy, bool playerImmune = false);
+
+    /// P2.20 (R49): what became of one hit aimed at the hero (TryHurtPlayer). Only Damaged is an effective hit.
+    enum class PlayerHurt {
+        Damaged,   ///< armor / hp really dropped; the 0.5 s protection starts when the hero lives
+        Protected, ///< swallowed by the 0.5 s hit protection (nothing applied)
+        Absorbed,  ///< the C08 shield ate it (ICharSkill::OnPlayerHurt absorbed); nothing lost, NO protection (INFERRED, T-77)
+        NoDamage   ///< reached GetHurt, nothing lost (damage <= 0); still starts the protection (INFERRED, T-77).
+                   ///< Reachable only from a zero-damage source (no shipped trap / bullet in the evidence cases)
+    };
+    /// P2.20 (R48): true while the hero's 0.5 s hit protection runs (RGController.can_hurt == false after an
+    /// effective hit, see kPlayerHitProtectMs). Bullets and hazard boxes deal nothing while it is true.
+    bool PlayerHitProtected() const { return m_HitProtection && m_PlayerHitProtectMs > 0.0F; }
+    float PlayerHitProtectMs() const { return m_PlayerHitProtectMs; }
+    /// TEST / EVIDENCE ONLY, default true: false reproduces the pre-R48 behaviour (every hit lands), so a
+    /// test can show which old values moved because of the protection and nothing else.
+    void SetHitProtectionEnabled(bool on) { m_HitProtection = on; }
+
     // --- drive -------------------------------------------------------------
     /// Run FixedClock.Advance(dtMs) fixed Step()s with @p in held constant. Returns step count.
     int Advance(float dtMs, const WorldInputs &in);
@@ -228,7 +266,13 @@ private:
     /// P3.3.b: route an incoming player hit through ICharSkill::OnPlayerHurt first
     /// (C08's shield absorb); apply the (possibly replaced) damage via
     /// Combat::ApplyToPlayer otherwise. @p hr.finalDamage is read/overwritten.
-    void ApplyDamageToPlayer(Game::Combat::HitResult hr);
+    /// @return true when the skill's OnPlayerHurt hook absorbed the hit (C08's shield).
+    bool ApplyDamageToPlayer(Game::Combat::HitResult hr);
+    /// P2.20 (R48/R49): the GetHurt gate -- Protected (nothing applied) while hit-protected; otherwise applies
+    /// @p hr through ApplyDamageToPlayer: Absorbed when the C08 shield ate it, Damaged when it really cost armor
+    /// / hp, NoDamage otherwise (both start the 0.5 s protection while the hero lives). Bullets and hazard boxes go
+    /// through here; DoT ticks (T-77) do not.
+    PlayerHurt TryHurtPlayer(Game::Combat::HitResult hr);
     /// P3.3.b: C04's melee sword cut -- deals @p damage to every live enemy/boss
     /// within kMeleeCutReachPx of the player and inside the kMeleeCutHalfAngleDeg
     /// forward arc of the current aim direction (see SimConfig.hpp T-36). Marks
@@ -320,6 +364,8 @@ private:
     Game::Combat::BuffList m_PlayerBuffs;
     float m_PlayerSpeedMul = 1.0F;
     bool m_PlayerFrozen = false;
+    float m_PlayerHitProtectMs = 0.0F; ///< remaining hit protection (see PlayerHitProtected)
+    bool m_HitProtection = true;       ///< test / evidence switch (SetHitProtectionEnabled)
     int m_PlayerArmorGranted = 0; ///< so the Armor buff's end can revert exactly this much.
     WorldInputs m_Input{};
     int m_PlayerShotsLastAdvance = 0;

@@ -1,0 +1,6 @@
+wrote compare_aim_up.png (1440x748)
+wrote compare_aim_left.png (1920x628)
+wrote compare_player_wall_hit.png (1440x700)
+wrote compare_enemy_bullet.png (1080x788)
+wrote compare_enemy_wall_hit.png (1785x653)
+wrote compare_corpse.png (1680x1248)

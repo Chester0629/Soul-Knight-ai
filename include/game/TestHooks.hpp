@@ -314,6 +314,74 @@ inline FrameListSpec ParseFrameList(const std::string &text) {
     return r;
 }
 
+/// Parsed SK_STING_STAND test hook (P2.20): "K,R" -- on frame K the hero is put on the middle trap cell of
+/// room R's sting01 group (the room must still be started by the normal StartRoom flow), so the damage
+/// ticks can be logged. NO-OP unless set; invalid -> the hook stays unset.
+struct StingStandSpec {
+    bool ok = false;
+    long frame = -1;
+    int room = -1;
+    std::string error;
+};
+
+/// Strict parse of SK_STING_STAND: exactly 2 fields, K a whole integer >= 0, R a whole integer >= 0.
+inline StingStandSpec ParseStingStand(const std::string &text) {
+    StingStandSpec r;
+    const std::vector<std::string> f = TestHooksDetail::SplitCommas(text);
+    if (f.size() != 2) {
+        r.error = "expected 2 comma-separated fields K,R";
+        return r;
+    }
+    long room = 0;
+    if (!TestHooksDetail::ParseWholeLong(f[0], r.frame) || r.frame < 0) {
+        r.error = "bad frame K";
+        r.frame = -1;
+        return r;
+    }
+    if (!TestHooksDetail::ParseWholeLong(f[1], room) || room < 0 || room > 2147483647L) {
+        r.error = "bad room R";
+        r.frame = -1;
+        return r;
+    }
+    r.room = static_cast<int>(room);
+    r.ok = true;
+    return r;
+}
+
+/// Parsed SK_CHEST_STAND test hook (P2.20): "K,D" -- on frame K the hero is put D px below the FIRST chest of
+/// the floor (D = 0 stands on it, which opens it; D > the chest's open range leaves it closed), so the closed
+/// and the opening chest can be photographed. NO-OP unless set; invalid -> the hook stays unset.
+struct ChestStandSpec {
+    bool ok = false;
+    long frame = -1;
+    float below = 0.0F;
+    std::string error;
+};
+
+/// Strict parse of SK_CHEST_STAND: exactly 2 fields, K a whole integer >= 0, D a whole-field finite float in
+/// [0, 4096].
+inline ChestStandSpec ParseChestStand(const std::string &text) {
+    ChestStandSpec r;
+    const std::vector<std::string> f = TestHooksDetail::SplitCommas(text);
+    if (f.size() != 2) {
+        r.error = "expected 2 comma-separated fields K,D";
+        return r;
+    }
+    if (!TestHooksDetail::ParseWholeLong(f[0], r.frame) || r.frame < 0) {
+        r.error = "bad frame K";
+        r.frame = -1;
+        return r;
+    }
+    if (!TestHooksDetail::ParseWholeFloat(f[1], r.below) || r.below < 0.0F) {
+        r.error = "bad distance D (need finite, 0 <= D <= 4096)";
+        r.frame = -1;
+        r.below = 0.0F;
+        return r;
+    }
+    r.ok = true;
+    return r;
+}
+
 } // namespace Game
 
 #endif /* GAME_TESTHOOKS_HPP */

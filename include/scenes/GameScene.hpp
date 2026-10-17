@@ -38,6 +38,7 @@
 #include "entities/WeaponPickup.hpp"
 #include "ui/Hud.hpp"
 #include "world/MapManager.hpp"
+#include "world/SpikeTrap.hpp"
 #include "world/RGBox.hpp"
 #include "world/RGRoomX.hpp"
 #include "world/Room.hpp"
@@ -203,6 +204,11 @@ private:
     /// SK_GATE_BESIDE=K test hook: put the player 64 px below the gate on frame K
     /// (outside the trigger) so the open gate can be screenshotted. NO-OP in play.
     long m_GateBesideFrame = -1;
+    /// SK_STING_STAND=K,R test hook (P2.20): hero onto the middle trap cell of room R on frame K. NO-OP in play.
+    long m_ChestStandFrame = -1; ///< SK_CHEST_STAND=K,D test hook (P2.20): hero D px below the first chest on frame K
+    float m_ChestStandBelow = 0.0F;
+    long m_StingStandFrame = -1;
+    int m_StingStandRoom = -1;
     /// B3: the reward-roll stream (RGEController.rg_random analog), seeded per floor.
     RGRandom m_RewardRng;
     /// Door-gap colliders per room (sealed while the room is locked).
@@ -212,11 +218,40 @@ private:
     /// the bar to +1 unit and enables it, door_open lowers and disables it).
     struct DoorPiece {
         int room = -1;
+        std::shared_ptr<Util::GameObject> base;   ///< P2.20: d1..d5 base, door02 (closed) / door03 (open)
         std::shared_ptr<Util::GameObject> bar;
         std::shared_ptr<Util::GameObject> shadow;
-        bool shown = false;
+        glm::vec2 cellCentre{0.0F, 0.0F};          ///< world centre of the piece's cell
+        bool shown = false;                        ///< legacy (no room_props.json) bar state
+        bool useClips = false;                     ///< P2.20: sampled from door_open / door_close2
+        bool logs = false;                         ///< the first piece of a room logs the room's door transitions
+        bool open = true;                          ///< Animator bool `open` (doors start open)
+        bool baseOpen = false;                     ///< the base currently shows door03
+        float animSec = 0.0F;                      ///< seconds since the last `open` change
+        float barY = 0.0F;                         ///< bar local y of the last pose (units)
     };
     std::vector<DoorPiece> m_DoorPieces;
+    /// P2.20: the spike traps of one room's obstacle skin (every sting01 cell of the room shares one
+    /// SpikeTrap: same prefab numbers, started by the same StartRoom, so their cycles coincide).
+    struct StingGroup {
+        StingGroup(int roomIndex, int obstacle, const StingDef &def)
+            : room(roomIndex), obstacleIndex(obstacle), offsetTime(def.offsetTime), showTime(def.showTime),
+              hideTime(def.hideTime), trap(def) {}
+        int room = -1;
+        int obstacleIndex = -1;
+        float offsetTime = 0.0F;                         ///< log only
+        float showTime = 0.0F;                           ///< log only
+        float hideTime = 0.0F;                           ///< log only
+        SpikeTrap trap;
+        std::vector<glm::vec2> cells;                    ///< world centres of the trap cells
+        std::vector<std::shared_ptr<Util::GameObject>> dings; ///< the spike sprites (visible while up)
+        bool wasUp = false;
+        int ticks = 0;         ///< hit checks (one per 0.3 s of an up phase)
+        int effectiveHits = 0;  ///< checks that cost the hero armor / hp (hit protection swallows the rest)
+    };
+    std::vector<StingGroup> m_StingGroups;
+    void TickStingTraps(float dtMs);
+    std::unordered_map<std::string, std::shared_ptr<Util::Image>> m_DoorImages; ///< door01 / door02 / door03
     /// SK_ROOM_TELEPORT="K,R" test hook: on frame K put the player in room R (its
     /// first spawn point) so a locked room can be screenshotted. NO-OP in play.
     long m_RoomTeleportFrame = -1;
@@ -240,6 +275,7 @@ private:
         int breakCoins = 0;                           ///< M3e minerals: copper coins dropped on break.
         bool alive = true;                            ///< false once broken (stops blocking).
         std::shared_ptr<Util::GameObject> top;        ///< w2 overlay (layer 6), hidden with `tile` on break.
+        std::shared_ptr<Util::GameObject> shadow;     ///< P2.20: the prefab's shadow child, hidden on break.
     };
     std::vector<ObstacleBox> m_RoomObstacles;
     /// Phase 3 (#3a): per-room lifecycle state machine -- the SINGLE authority for

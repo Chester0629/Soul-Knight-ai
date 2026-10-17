@@ -9,6 +9,7 @@ set(SRC_FILES
     data/LootTable.cpp
     world/RGMaze.cpp
     world/RoomGen.cpp
+    world/SpikeTrap.cpp
     world/MapManager.cpp
     combat/Damage.cpp
     combat/Buff.cpp
@@ -178,6 +179,7 @@ set(INCLUDE_FILES
     data/LootTable.hpp
     world/RGMaze.hpp
     world/RoomGen.hpp
+    world/SpikeTrap.hpp
     world/MapManager.hpp
     combat/Damage.hpp
     combat/BossAI01.hpp
@@ -358,6 +360,10 @@ set(INCLUDE_FILES
     # P2.17 render slice 1: room-sprite pivot + sorting-layer -> z + camera background
     game/RenderLayout.hpp
     game/ActorPose.hpp
+
+    # P2.20 room details: door animation + chest animation (pure sampling of the prefab clips)
+    game/DoorAnim.hpp
+    game/ChestAnim.hpp
 )
 
 set(TEST_FILES
@@ -593,4 +599,10 @@ set(TEST_FILES
     RoomBlockersTest.cpp
     BodyCollisionSimTest.cpp
     RoomConnectivityDiffTest.cpp
+
+    # P2.20 slice 5: floor variants + decorated walls (RoomGen draw order), spike trap timing + damage,
+    # door / chest clips, shadow + room-prop data
+    RoomDetailTest.cpp
+    SpikeTrapTest.cpp
+    RoomPropsTest.cpp
 )

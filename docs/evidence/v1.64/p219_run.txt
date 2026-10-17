@@ -1,0 +1,2 @@
+ [info] SK_FORCE_AIM: from frame 0 aim (-1.00,0.00) for 1000000000 frames
+ [info] PoseTrace: frame 30 player facing -1 clip 1 aim (-1.000,0.000) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot 0.0000 scalex -2.00 muzzle (-144.00,-59.20) hand layer z 6.1000

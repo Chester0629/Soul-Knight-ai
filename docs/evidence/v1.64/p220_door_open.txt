@@ -1,0 +1,6 @@
+ [info] RGRoomX: room 1 StartRoom -> Active (door_open=0, sealed)
+ [info] Door: room 1 frame 60 -> CLOSED (clip door_close2)
+ [info] Door: room 1 frame 62 base sprite door02 (bar on, shadow on)
+ [info] RGRoomX: room 1 cleared -> reward gate fired (room_type==1)
+ [info] Door: room 1 frame 190 -> OPEN (clip door_open)
+ [info] Door: room 1 frame 199 base sprite door03 (bar off, shadow off)

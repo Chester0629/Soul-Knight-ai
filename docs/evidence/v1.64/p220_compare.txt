@@ -1,0 +1,4 @@
+wrote compare_walls.png
+wrote compare_doors.png
+wrote compare_chest.png
+wrote compare_sting.png

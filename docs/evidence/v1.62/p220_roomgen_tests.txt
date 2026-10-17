@@ -1,0 +1,47 @@
+Running main() from D:\Projects\Soul Knight\Soul-Knight-ai\PTSD\lib\googletest\googletest\src\gtest_main.cc
+Note: Google Test filter = RoomDetailTest.*:RoomGenGoldenTest.*
+[==========] Running 16 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 7 tests from RoomGenGoldenTest
+[ RUN      ] RoomGenGoldenTest.G1_Max25x25_L3_AllDoors
+[       OK ] RoomGenGoldenTest.G1_Max25x25_L3_AllDoors (0 ms)
+[ RUN      ] RoomGenGoldenTest.G2_Min15x15_L1_NoDoors
+[       OK ] RoomGenGoldenTest.G2_Min15x15_L1_NoDoors (0 ms)
+[ RUN      ] RoomGenGoldenTest.G3_Asym21x15_L2_EastDoor
+[       OK ] RoomGenGoldenTest.G3_Asym21x15_L2_EastDoor (0 ms)
+[ RUN      ] RoomGenGoldenTest.G4_RandomRoom_Floor0
+[       OK ] RoomGenGoldenTest.G4_RandomRoom_Floor0 (0 ms)
+[ RUN      ] RoomGenGoldenTest.G5_Max25x25_L3_Seed2024
+[       OK ] RoomGenGoldenTest.G5_Max25x25_L3_Seed2024 (0 ms)
+[ RUN      ] RoomGenGoldenTest.LegacyDrawOrderReproducesTheOldGoldens
+[       OK ] RoomGenGoldenTest.LegacyDrawOrderReproducesTheOldGoldens (0 ms)
+[ RUN      ] RoomGenGoldenTest.DesignRoomGridsAreUnchangedByTheDrawOrderCorrection
+[       OK ] RoomGenGoldenTest.DesignRoomGridsAreUnchangedByTheDrawOrderCorrection (0 ms)
+[----------] 7 tests from RoomGenGoldenTest (1 ms total)
+
+[----------] 9 tests from RoomDetailTest
+[ RUN      ] RoomDetailTest.DrawCountIsTheOriginalPerStageTotal
+[       OK ] RoomDetailTest.DrawCountIsTheOriginalPerStageTotal (0 ms)
+[ RUN      ] RoomDetailTest.OldTwoDrawsPerCellWouldHaveGivenALargerTotal
+[       OK ] RoomDetailTest.OldTwoDrawsPerCellWouldHaveGivenALargerTotal (0 ms)
+[ RUN      ] RoomDetailTest.FloorVariantOfEveryCellMatchesTheOriginalMapping
+[       OK ] RoomDetailTest.FloorVariantOfEveryCellMatchesTheOriginalMapping (1 ms)
+[ RUN      ] RoomDetailTest.EdgeClassSelectsTheIndexSetAndTheBoundaryDraws
+[       OK ] RoomDetailTest.EdgeClassSelectsTheIndexSetAndTheBoundaryDraws (4 ms)
+[ RUN      ] RoomDetailTest.FloorVariantHistogramMatchesThe75_25Split
+P220 HIST cells=37500 edge12_n=18794 edge12_v1=4675 edge03_n=12517 edge03_v3=6254 edge4_n=6189 edge4_v4=1575
+[       OK ] RoomDetailTest.FloorVariantHistogramMatchesThe75_25Split (5 ms)
+[ RUN      ] RoomDetailTest.WallDecorationFollowsTheTwoRollRuleWithThreshold30
+[       OK ] RoomDetailTest.WallDecorationFollowsTheTwoRollRuleWithThreshold30 (0 ms)
+[ RUN      ] RoomDetailTest.DecoratedShareIs30Percent
+P220 WALLS rolled=16800 decorated=4972
+[       OK ] RoomDetailTest.DecoratedShareIs30Percent (10 ms)
+[ RUN      ] RoomDetailTest.BorderCellsWearTheRollOfTheirWorldColumnOrRow
+[       OK ] RoomDetailTest.BorderCellsWearTheRollOfTheirWorldColumnOrRow (0 ms)
+[ RUN      ] RoomDetailTest.DesignRoomsDrawTheSameFloorAndWallRolls
+[       OK ] RoomDetailTest.DesignRoomsDrawTheSameFloorAndWallRolls (0 ms)
+[----------] 9 tests from RoomDetailTest (22 ms total)
+
+[----------] Global test environment tear-down
+[==========] 16 tests from 2 test suites ran. (24 ms total)
+[  PASSED  ] 16 tests.

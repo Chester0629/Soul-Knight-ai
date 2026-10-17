@@ -169,6 +169,8 @@ def load_all_tables() -> dict:
     data["bullet_effects"] = json.loads(effects_path.read_text(encoding="utf-8")) if effects_path.exists() else None
     sprites_path = DATA / "sprites.json"  # optional like audio (AssetRipper-derived)
     data["sprites"] = json.loads(sprites_path.read_text(encoding="utf-8")) if sprites_path.exists() else None
+    props_path = DATA / "room_props.json"  # optional like audio (AssetRipper-derived); P2.20
+    data["room_props"] = json.loads(props_path.read_text(encoding="utf-8")) if props_path.exists() else None
     data["_load_errors"] = load_errors
     return data
 
@@ -788,6 +790,73 @@ def run_checks(data: dict) -> tuple[list[str], list[str]]:
         gp = held.get("gun_point")
         need(isinstance(gp, list) and len(gp) == 2 and all(isinstance(x, (int, float)) and math.isfinite(x) for x in gp),
              f"weapons.json {w.get('id')}: held.gun_point must be [x, y]")
+    # --- P2.20 (room details): wall_list [plain, decorated], prefab shadows, sting traps, doors, chests ---------
+    room_props = data.get("room_props")
+    for lv in levels or []:
+        lid = lv.get("id", "?")
+        walls = lv.get("walls", [])
+        need(len(walls) >= 2, f"level '{lid}': wall_list needs [plain, decorated] (CreateWall indexes wall_list[1])")
+        for w in walls:
+            sh = w.get("shadow")
+            need(isinstance(sh, dict), f"level '{lid}' wall '{w.get('prefab')}': shadow missing (run build_gamedata.py)")
+            if isinstance(sh, dict):
+                check_rig_node(sh, f"level '{lid}' wall '{w.get('prefab')}' shadow")
+                need(sh.get("sprite") == "shadow0.png", f"level '{lid}' wall '{w.get('prefab')}': wall shadow must be shadow0")
+                need(isinstance(sh.get("color"), list) and len(sh["color"]) == 4 and 0.0 < sh["color"][3] < 1.0,
+                     f"level '{lid}' wall '{w.get('prefab')}': shadow0 is drawn at alpha < 1 (m_Color 0.392157)")
+        for i, o in enumerate(lv.get("obstacles", [])):
+            sh = o.get("shadow")
+            if sh is not None:
+                check_rig_node(sh, f"level '{lid}' obstacle[{i}] shadow")
+            st = o.get("sting")
+            is_sting = str(o.get("prefab", "")).startswith("sting")
+            need((st is not None) == is_sting,
+                 f"level '{lid}' obstacle[{i}] '{o.get('prefab')}': sting block present iff the prefab is a sting prefab")
+            if isinstance(st, dict):
+                for key in ("damage", "offset_time", "show_time", "hide_time"):
+                    need(isinstance(st.get(key), (int, float)) and not isinstance(st.get(key), bool)
+                         and math.isfinite(st[key]) and st[key] >= 0,
+                         f"level '{lid}' obstacle[{i}] sting.{key} must be a finite number >= 0")
+                need(isinstance(st.get("show_time"), (int, float)) and st.get("show_time", 0) > 0
+                     and isinstance(st.get("hide_time"), (int, float)) and st.get("hide_time", 0) > 0,
+                     f"level '{lid}' obstacle[{i}] sting show_time / hide_time must be > 0")
+                need(isinstance(st.get("hit_player"), bool) and isinstance(st.get("hit_enemy"), bool),
+                     f"level '{lid}' obstacle[{i}] sting hit_player / hit_enemy must be bools")
+                check_rig_node(st.get("base"), f"level '{lid}' obstacle[{i}] sting.base")
+                check_rig_node(st.get("ding"), f"level '{lid}' obstacle[{i}] sting.ding")
+    for pn, sk in (boss_rooms or {}).get("prefabs", {}).items():
+        if sk.get("shadow") is not None:
+            check_rig_node(sk["shadow"], f"boss prefab '{pn}' shadow")
+    if levels is not None:
+        need(isinstance(room_props, dict), "room_props.json missing (run build_gamedata.py)")
+    if isinstance(room_props, dict):
+        door = room_props.get("door")
+        need(isinstance(door, dict), "room_props.json: door block missing")
+        if isinstance(door, dict):
+            for key in ("base", "bar", "shadow"):
+                check_rig_node(door.get(key), f"room_props door.{key}")
+            clips = door.get("clips") or {}
+            for which in ("open", "close"):
+                c = clips.get(which)
+                need(isinstance(c, dict) and c.get("stop", 0) > 0
+                     and all(isinstance(c.get(k), list) and c[k] for k in ("bar_y", "bar_enabled", "shadow_enabled", "base_sprite")),
+                     f"room_props door.clips.{which}: needs stop > 0 and non-empty bar_y / bar_enabled / shadow_enabled / base_sprite")
+            need(door.get("open_sprite") == "door03", "room_props door.open_sprite must be door03 (door_open.anim's last base sprite)")
+            need((SPRITE_DIR / f"{door.get('open_sprite')}.png").is_file(), "room_props door.open_sprite not on disk")
+        stings = room_props.get("sting") or {}
+        need("sting01" in stings, "room_props.json: sting block for sting01 missing")
+        chests = room_props.get("chests") or {}
+        for need_name in ("chest00", "chest01", "chest02", "chest_room_reward"):
+            need(need_name in chests, f"room_props.json: chest '{need_name}' missing")
+        for cn, c in chests.items():
+            layers = c.get("layers") or {}
+            need(sorted(layers) == ["box03", "box04", "box05", "box06"], f"room_props chest '{cn}': needs layers box03..box06")
+            for ln, node in layers.items():
+                check_rig_node(node, f"room_props chest '{cn}' {ln}")
+            check_rig_node(c.get("shadow"), f"room_props chest '{cn}' shadow")
+        co = room_props.get("chest_open") or {}
+        need(co.get("stop", 0) > 0 and all(isinstance(co.get(k), list) and co[k] for k in ("box03", "box04", "box05")),
+             "room_props.json: chest_open needs stop > 0 and box03 / box04 / box05 position keys")
     if bullets:
         n_bc = sum(1 for b in bullets if isinstance(b.get("collider"), dict))
         for b in bullets:

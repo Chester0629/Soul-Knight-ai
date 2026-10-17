@@ -108,11 +108,14 @@ TEST(RoomGenTest, PerimeterCornersAreBorder) {
     RoomGen r(3, kNoDoors, o); // no doors -> no aisle carving over the border
     const int w = r.Width();
     const int h = r.Height();
-    // Corners are always border (-1) regardless of obstacle placement.
-    EXPECT_EQ(r.At(0, 0), kBorder);
-    EXPECT_EQ(r.At(w - 1, 0), kBorder);
-    EXPECT_EQ(r.At(0, h - 1), kBorder);
-    EXPECT_EQ(r.At(w - 1, h - 1), kBorder);
+    // Corners are never open: border (-1), or -- because the reconstructed small-obstacle phase also stamps
+    // over border cells (CreateObstacle phase B: `code == 0 || code == -1` -> 2) -- a destructible obstacle.
+    // P2.20: seed 3 used to leave all four corners at -1; the corrected CreateFloor / CreateWall draw order
+    // shifts the obstacle stream so a small obstacle now lands on (0,0) (code 2). Still solid.
+    for (const std::pair<int, int> c : {std::pair<int, int>{0, 0}, {w - 1, 0}, {0, h - 1}, {w - 1, h - 1}}) {
+        const int code = r.At(c.first, c.second);
+        EXPECT_TRUE(code == kBorder || code == kSmallObstacle) << c.first << "," << c.second << " = " << code;
+    }
 }
 
 TEST(RoomGenTest, NoDoorsLeavePerimeterIntact) {

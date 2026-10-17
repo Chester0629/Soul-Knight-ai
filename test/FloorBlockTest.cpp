@@ -209,11 +209,14 @@ TEST(FloorBlockTest, Seam3_CorridorReachesBlockEdge) {
 // RoomGen::FloorList can hand back a cell trapped in an obstacle pocket; spawning
 // the player there (the start room) strands them, and it would fail a corridor
 // reachability test for the wrong reason. ConnectedFloorCells filters to the
-// door-connected main region. The known case: seed-3 room 0 (FloorBlock per-room
-// seed 3+1+0 = 4, doors -y and +y) -- its FloorList median is in such a pocket.
+// door-connected main region. The known case is a room (doors -y and +y) whose FloorList
+// median is in such a pocket. P2.20: the corrected CreateFloor / CreateWall draw order moved every
+// procedural layout, and the old case (per-room seed 4 = seed-3 room 0) no longer has a pocket
+// median; the smallest per-room seed that does (found by scanning 1..400 with the same entrances,
+// 15x15, levels 1/1, and the same assertions below) is 65 (connected 107 of 113 floor cells).
 TEST(FloorBlockTest, ConnectedFloorCellsReachCorridorMouths) {
-    const std::array<int, 4> ent = {0, 1, 0, 1}; // seed-3 room 0 entrances
-    const RoomGen rg = MakeRoom(ent, 4);          // per-room seed 3+1+0
+    const std::array<int, 4> ent = {0, 1, 0, 1}; // doors -y and +y
+    const RoomGen rg = MakeRoom(ent, 65);        // was 4 before P2.20
     const auto block = FloorBlock::Build(rg, ent);
     const auto connected = FloorBlock::ConnectedFloorCells(rg);
     ASSERT_FALSE(connected.empty());

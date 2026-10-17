@@ -1,0 +1,6 @@
+ [info] GameScene: hero c01 on floor 0
+ [info] TransferGate: open in room 4 at (-2624,-1312)
+ [info] TransferGate: entered -> next floor
+ [info] GameScene: hero c01 on floor 1
+ [info] TransferGate: open in room 4 at (2624,1312)
+ [info] TransferGate: entered -> next floor

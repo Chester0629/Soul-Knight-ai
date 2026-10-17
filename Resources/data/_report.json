@@ -15,6 +15,7 @@
     "shop_pots": 8,
     "shop_statues": 7,
     "tile_pivots": 162,
+    "room_props": 4,
     "pickups": 4,
     "audio_effects": 11,
     "audio_weapon_shoot": 193,

@@ -415,6 +415,23 @@ struct SortKey {
     int order = 0;
 };
 
+/// P2.20 FAITHFUL @ rgprefab/room/sting01.prefab's ObjectSting MonoBehaviour (+ its two
+/// SpriteRenderers): the spike trap's fields. `offet_time` (sic) is the delay before the first
+/// ShowSting after the room starts, show_time / hide_time the up / down durations; base is the
+/// root plate (objects1_0, tint (0.89,0.91,1)), ding the spike child (objects1_1) that
+/// show_sting.anim enables and hide_sting.anim disables.
+struct StingDef {
+    bool present = false;
+    int damage = 0;
+    float offsetTime = 0.0F;
+    float showTime = 0.0F;
+    float hideTime = 0.0F;
+    bool hitPlayer = false;
+    bool hitEnemy = false;
+    RigNodeDef base;
+    RigNodeDef ding;
+};
+
 /// MAP M1: one wall prefab of MapManager.wall_list -- its top tile + front face.
 struct LevelWallDef {
     std::string prefab;
@@ -423,6 +440,8 @@ struct LevelWallDef {
     float faceDy = 0.0F; ///< w2 child local y (units) -- 0 for walls
     SortKey topSort{4, 0};  ///< base sprite: layer 4 (Wall), under the characters
     SortKey faceSort{6, 0}; ///< w2 overlay: layer 6 (WallFont), OVER the characters
+    /// P2.20 FAITHFUL @ the prefab's `shadow` child (shadow0, alpha 0.392157, layer 3); !present = none.
+    RigNodeDef shadow;
 };
 
 /// MAP M1: one MapManager.obstacle_list[obj_index] entry (RGObjectSkin skin).
@@ -438,6 +457,11 @@ struct LevelObstacleDef {
     /// cell's bottom-centre), units. Empty = the prefab has no solid collider (decor such as
     /// obj11_02, or a trigger-only pad such as sting01 / speed_up).
     std::vector<ColliderDef> blockers;
+    /// P2.20 FAITHFUL @ the prefab's shadow child (box02 / cask_* shadow0 @ 0.39, brazier03 / signs01
+    /// shadow3); !present = the prefab has none (wall_tree1, sting01, speed pads ...).
+    RigNodeDef shadow;
+    /// P2.20: the prefab's ObjectSting component (sting01), !present for every other prefab.
+    StingDef sting;
 };
 
 /**
@@ -495,6 +519,67 @@ struct PrefabSkin {
     SortKey sort{4, 0};    ///< main sprite sorting layer/order
     SortKey altSort{6, 0}; ///< w2 overlay sorting layer/order
     std::vector<ColliderDef> blockers; ///< P2.18: solid body-blocking colliders (see LevelObstacleDef)
+    RigNodeDef shadow; ///< P2.20: the prefab's shadow child (see LevelObstacleDef::shadow)
+    StingDef sting;    ///< P2.20: ObjectSting (see LevelObstacleDef::sting)
+};
+
+/// One keyed value of a Unity clip curve: (time s, value). Float / bool curves are STEPPED (the value
+/// of the last key at or before t), position curves are interpolated.
+struct ClipKey1 {
+    float t = 0.0F;
+    float v = 0.0F;
+};
+struct ClipSpriteKey {
+    float t = 0.0F;
+    std::string sprite;
+};
+struct ClipKey2 {
+    float t = 0.0F;
+    float x = 0.0F;
+    float y = 0.0F;
+};
+
+/// P2.20 FAITHFUL @ rganim/door_open.anim / door_close2.anim (door_2.controller: bool `open`, default
+/// state door_open): what each piece d1..d5 does while the door opens / closes.
+struct DoorClipDef {
+    float stop = 0.0F;                      ///< m_StopTime
+    std::vector<ClipKey1> barY;             ///< `d` local y (units), interpolated
+    std::vector<ClipKey1> barEnabled;       ///< `d` SpriteRenderer.m_Enabled (stepped)
+    std::vector<ClipKey1> shadowEnabled;    ///< `shadow` SpriteRenderer.m_Enabled (stepped)
+    std::vector<ClipSpriteKey> baseSprite;  ///< d1..d5 m_Sprite (stepped): door02 <-> door03
+};
+struct DoorPropsDef {
+    bool present = false;
+    RigNodeDef base;   ///< d1: door02 (closed base), layer 4
+    RigNodeDef bar;    ///< d: door01, local (0,1), layer 6 order 3
+    RigNodeDef shadow; ///< shadow0 @ 0.39, layer 3 order 1
+    DoorClipDef open;
+    DoorClipDef close;
+    std::string openSprite; ///< the base sprite once open (door03)
+};
+
+/// P2.20 FAITHFUL @ res/item/chest*.prefab: the four layers + the shadow of one chest tier.
+struct ChestPropsDef {
+    RigNodeDef box03; ///< left lid half  (pivot (1,0)), layer 6 order 1
+    RigNodeDef box04; ///< right lid half (pivot (0,0)), layer 6 order 1
+    RigNodeDef box05; ///< interior (pivot (0.5,0), y -0.45), layer 4 order 0
+    RigNodeDef box06; ///< front panel (pivot (0.5,0)), layer 4 order 2
+    RigNodeDef shadow; ///< shadow1 @ 0.39, scale (1.2, 1)
+};
+/// P2.20 FAITHFUL @ rganim/chest_open.anim (1 s, 30 fps): box03 / box04 / box05 local-position keys.
+struct ChestOpenClipDef {
+    float stop = 0.0F;
+    std::vector<ClipKey2> box03;
+    std::vector<ClipKey2> box04;
+    std::vector<ClipKey2> box05;
+};
+
+/// P2.20: Resources/data/room_props.json -- doors, stings, chests (tools/build_gamedata.py).
+struct RoomPropsDef {
+    DoorPropsDef door;
+    std::map<std::string, StingDef> stings;
+    std::map<std::string, ChestPropsDef> chests;
+    ChestOpenClipDef chestOpen;
 };
 
 /// M3b: a boss's chest (res/item/chest_boss<NN>.prefab, RGChestBoss): its drop
@@ -712,6 +797,8 @@ public:
     const BossRoomDef *FindBossRoom(const std::string &id) const;
     /// MAP M3: draw / collision info of a room-object prefab; nullptr when unknown.
     const PrefabSkin *FindPrefabSkin(const std::string &prefab) const;
+    /// P2.20: doors / stings / chests from room_props.json (empty when the file is absent).
+    const RoomPropsDef &RoomProps() const { return m_RoomProps; }
     /// P2.17: Unity sprite pivot (fractions of the sprite rect from its bottom-left, y up)
     /// of room sprite @p stem (tile_pivots.json, FAITHFUL @ rgtexture m_Pivot). Stems
     /// without data use the 16x24 wall/floor convention {0.5, 0}.
@@ -783,6 +870,7 @@ private:
     std::vector<LevelDef> m_Levels;
     std::unordered_map<std::string, BossRoomDef> m_BossRooms;
     std::unordered_map<std::string, PrefabSkin> m_PrefabSkins;
+    RoomPropsDef m_RoomProps; ///< P2.20 room_props.json
     std::unordered_map<std::string, std::array<float, 2>> m_TilePivots; ///< P2.17 tile_pivots.json
     std::unordered_map<std::string, BossChestDef> m_BossChests;
     std::unordered_map<std::string, PotDef> m_Pots;

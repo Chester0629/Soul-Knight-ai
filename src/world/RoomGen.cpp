@@ -48,6 +48,7 @@ RoomGen::RoomGen(int seed, const std::array<int, 4> &entrance,
     // Phase 3 (design-room interior): capture the design-obstacle inputs. Default
     // (proceduralObstacles=true, empty designSolidCells) is byte-identical to the
     // pre-Phase-3 build, so every golden/procedural path is unchanged.
+    m_LegacyDrawOrder = options.legacyDrawOrder;
     m_ProceduralObstacles = options.proceduralObstacles;
     m_DesignSolidCells = options.designSolidCells;
 
@@ -61,18 +62,18 @@ RoomGen::RoomGen(int seed, const std::array<int, 4> &entrance,
         //    floorIndex%5==1 narrows the WIDTH roll to the first two entries;
         //    the height roll always uses the full table.
         if (options.floorIndex % 5 == 1) {
-            m_RoomWidth = SizeFromIndex(m_Rng.Range(0, 2));
+            m_RoomWidth = SizeFromIndex(Roll(0, 2));
         } else {
             m_RoomWidth =
-                SizeFromIndex(m_Rng.Range(0, static_cast<int>(kRoomSizes.size())));
+                SizeFromIndex(Roll(0, static_cast<int>(kRoomSizes.size())));
         }
         m_RoomHeight =
-            SizeFromIndex(m_Rng.Range(0, static_cast<int>(kRoomSizes.size())));
+            SizeFromIndex(Roll(0, static_cast<int>(kRoomSizes.size())));
 
         // Roll difficulty bands: baseLevel from size + Range(0,2) jitter / axis.
         const int baseLevel = ComputeBaseLevel(m_RoomWidth, m_RoomHeight);
-        m_WallLevel = m_Rng.Range(0, 2) + baseLevel;
-        m_ObstacleLevel = m_Rng.Range(0, 2) + baseLevel;
+        m_WallLevel = Roll(0, 2) + baseLevel;
+        m_ObstacleLevel = Roll(0, 2) + baseLevel;
     } else {
         m_RoomWidth = options.roomWidth;
         m_RoomHeight = options.roomHeight;
@@ -200,14 +201,31 @@ void RoomGen::CreateAisle() {
     }
 }
 
-// FAITHFUL: RGRoomX__CreateFloor @ rva 0x4FD3E4
+// Every draw goes through here so the per-room draw count is observable (RoomGenTest pins the
+// per-stage counts of the original: W*H noise + W*H variant + 2 per non-gap perimeter position).
+int RoomGen::Roll(int minInclusive, int maxExclusive) {
+    ++m_Draws;
+    return m_Rng.Range(minInclusive, maxExclusive);
+}
+
+// FAITHFUL: RGRoomX$$CreateFloor pass 3 (DISASM 0x50d8d0-0x50d9dc), see CreateFloor.
+int RoomGen::FloorVariantFromEdge(int edge) {
+    if (edge >= 1 && edge <= 2) {
+        return Roll(0, 4) > 2 ? 1 : 0;
+    }
+    if (edge <= 3) { // edge 0 or 3
+        return Roll(2, 4);
+    }
+    return Roll(0, 4) < 3 ? 5 : 4; // edge >= 4
+}
+
+// FAITHFUL: RGRoomX__CreateFloor @ rva 0x4FD3E4 (DISASM 0x50d3e4-0x50db6c)
 //
-// Three passes over the room_width x room_height grid. The decomp draws RNG only
-// in pass 1 (noise) and pass 3 (variant pick; INFERRED T-02 for the category
-// vs. always-on roll); the placed floor variant is a
-// visual-only choice (it does NOT write back into map[]), so for the pure grid
-// the observable effect is solely the RNG draws that advance the stream. We
-// reproduce the EXACT draw count and order so downstream stages stay in sync.
+// Three passes over the room_width x room_height grid, x outer / y inner:
+//   pass 1 (0x50d4b4): one Range(0,2) per cell -> noise
+//   pass 2 (0x50d544-0x50d83c): NO draw; classify each cell by its empty (==0) neighbours -> edge
+//   pass 3 (0x50d8d0-0x50d9dc): ONE draw per cell, chosen by edge -> floor_list index (see below)
+// The variant does not write back into map[]; the orchestrator draws floor_list[idx] at the cell.
 void RoomGen::CreateFloor() {
     const int w = m_RoomWidth;
     const int h = m_RoomHeight;
@@ -225,7 +243,7 @@ void RoomGen::CreateFloor() {
     // Pass 1 - random base noise (one Range(0,2) per cell).
     for (int x = 0; x < w; ++x) {
         for (int y = 0; y < h; ++y) {
-            noise[nIdx(x, y)] = m_Rng.Range(0, 2);
+            noise[nIdx(x, y)] = Roll(0, 2);
         }
     }
 
@@ -261,30 +279,29 @@ void RoomGen::CreateFloor() {
         }
     }
 
-    // Pass 3 - choose a floor variant from the classification. The decomp draws,
-    // per cell, in this exact conditional order (recovered from the branch
-    // structure; the chosen variant value is visual-only and never written back):
-    //   1) if edge in [1,2]   -> Range(0,4)
-    //   2) if edge >= 4       -> Range(0,4)
-    //   3) ALWAYS             -> Range(2,4)
-    // (1) and (2) are mutually exclusive, so each cell draws 1 or 2 values.
+    // Pass 3 - choose the floor variant. FAITHFUL: RGRoomX$$CreateFloor DISASM 0x50d8d0-0x50d9dc
+    // (tools/arm_disasm.py 0x50d3e4 0x50db6c). Exactly ONE draw per cell, in the same x-outer /
+    // y-inner order, chosen by the pass-2 classification `edge` (= the count the pass-2 loop wrote
+    // to its second array):
+    //   edge in [1,2] : cmp #1/#2 -> Range(0,4); idx = (roll > 2) ? 1 : 0     (0xd9d4-0xd9dc)
+    //   edge 0 or 3   : cmp #3 ble -> Range(2,4); idx = roll (2 or 3)          (0xd9a0-0xd9ac)
+    //   edge >= 4     : Range(0,4); idx = (roll < 3) ? 5 : 4                   (0xd984-0xd998)
+    // idx is then the MapManager.floor_list index (ldr [MapManager+0x5c] list, 0xda0c) the cell is
+    // Instantiated from, so the six variants f501..f506 all occur (the old port kept the raw 0..3
+    // and added an extra always-draw Range(2,4), which desynced every later stage).
     m_FloorVariant.assign(static_cast<std::size_t>(w) * static_cast<std::size_t>(h), 0);
     for (int x = 0; x < w; ++x) {
         for (int y = 0; y < h; ++y) {
-            const int cls = edge[nIdx(x, y)];
-            // MAP M1: keep the rolled value. Which of the two draws the original
-            // assigns to the cell is not recoverable from the branch structure;
-            // the port takes the classification draw when one was made, else the
-            // always-draw (2..3). Draw COUNT + ORDER are unchanged (stream fidelity).
-            int variant = -1;
-            if (cls >= 1 && cls <= 2) {
-                variant = m_Rng.Range(0, 4);
+            if (m_LegacyDrawOrder) {
+                // pre-P2.20 stream (see Options::legacyDrawOrder): classification draw + always-draw
+                const int cls = edge[nIdx(x, y)];
+                if ((cls >= 1 && cls <= 2) || cls >= 4) {
+                    (void)Roll(0, 4);
+                }
+                m_FloorVariant[nIdx(x, y)] = Roll(2, 4);
+                continue;
             }
-            if (cls >= 4) {
-                variant = m_Rng.Range(0, 4);
-            }
-            const int always = m_Rng.Range(2, 4);
-            m_FloorVariant[nIdx(x, y)] = variant >= 0 ? variant : always;
+            m_FloorVariant[nIdx(x, y)] = FloorVariantFromEdge(edge[nIdx(x, y)]);
         }
     }
 }
@@ -298,34 +315,117 @@ int RoomGen::FloorVariantAt(int x, int y) const {
     return i < m_FloorVariant.size() ? m_FloorVariant[i] : 0;
 }
 
-// FAITHFUL: RGRoomX__CreateWall @ rva 0x4FDB6C
+// FAITHFUL: RGRoomX__CreateWall @ rva 0x4FDB6C, DISASM 0x50db6c-0x50e20c
+// (python tools/arm_disasm.py 0x50db6c 0x50e210).
 //
-// Two perimeter loops. The decomp iterates WORLD coordinates and rolls one
-// Range(0,100) decoration check per placed wall tile, skipping the door-gap
-// window where the unsigned test `4 < (i - 0x12)` holds (i.e. world index in
-// [18,22] is skipped). The roll outcome is visual only; we reproduce the draw
-// count + skip window so the stream stays faithful.
+// Two perimeter loops over WORLD coordinates; the door-gap window is skipped with the unsigned
+// test `4 < (i - 0x12)` (0x50dc00 `sub r2,r8,#0x12; cmp r2,#5; blo`), i.e. world index in
+// [18,22] places nothing and draws nothing. Every other position draws TWO Range(0,100) values
+// back to back (0x50dc24 / 0x50dc54 for x; 0x50df58 / 0x50df88 for y); each is compared with
+// `cmp r0,#0x1e; movwlt rN,#1`, i.e. roll < 30 -> MapManager.wall_list[1] (the decorated wall,
+// e.g. wall504), else wall_list[0]:
+//   x loop, x = room_x_offset-1 .. room_x_offset+room_width (inclusive, corners included):
+//     roll A -> piece at (x, room_y_offset-1)             (south row)
+//     roll B -> piece at (x, room_y_offset+room_height)    (north row)
+//   y loop, y = room_y_offset .. room_y_offset+room_height-1:
+//     roll A -> piece at (room_x_offset-1, y)              (west column)
+//     roll B -> piece at (room_x_offset+room_width, y)     (east column)
+// (the piece positions are the Vector3 constructions + Transform.set_localPosition after each pair of rolls:
+// 0x50de24-0x50de48 (x, yoff-1), 0x50de9c-0x50dec0 (x, yoff+h), 0x50e150-0x50e174 (xoff-1, y),
+// 0x50e1c8-0x50e1e8 (xoff+w, y)).
 void RoomGen::CreateWall() {
-    // Horizontal walls: world x from room_x_offset-1 to room_x_offset+width.
     const int xStart = m_RoomXOffset - 1;
-    const int xEnd = m_RoomXOffset + m_RoomWidth + 1;
-    for (int x = xStart; x < xEnd; ++x) {
-        // Skip the door gap: world x in [18, 22].
-        if (x >= 18 && x <= 22) {
-            continue;
-        }
-        (void)m_Rng.Range(0, 100);
-    }
-
-    // Vertical walls: world y from room_y_offset to room_y_offset+height.
+    const int xEnd = m_RoomXOffset + m_RoomWidth + 1; // exclusive
     const int yStart = m_RoomYOffset;
-    const int yEnd = m_RoomYOffset + m_RoomHeight;
+    const int yEnd = m_RoomYOffset + m_RoomHeight; // exclusive
+    m_WallBaseX = xStart;
+    m_WallBaseY = yStart;
+    for (auto &side : m_WallDeco) {
+        side.clear();
+    }
+    m_WallDeco[static_cast<std::size_t>(WallSide::South)].assign(
+        static_cast<std::size_t>(xEnd - xStart), kWallNoRoll);
+    m_WallDeco[static_cast<std::size_t>(WallSide::North)].assign(
+        static_cast<std::size_t>(xEnd - xStart), kWallNoRoll);
+    m_WallDeco[static_cast<std::size_t>(WallSide::West)].assign(
+        static_cast<std::size_t>(yEnd - yStart), kWallNoRoll);
+    m_WallDeco[static_cast<std::size_t>(WallSide::East)].assign(
+        static_cast<std::size_t>(yEnd - yStart), kWallNoRoll);
+
+    if (m_LegacyDrawOrder) {
+        // pre-P2.20 stream (see Options::legacyDrawOrder): ONE discarded roll per non-gap position
+        for (int x = xStart; x < xEnd; ++x) {
+            if (x < kGapLo || x > kGapHi) {
+                (void)Roll(0, 100);
+            }
+        }
+        for (int y = yStart; y < yEnd; ++y) {
+            if (y < kGapLo || y > kGapHi) {
+                (void)Roll(0, 100);
+            }
+        }
+        return;
+    }
+    for (int x = xStart; x < xEnd; ++x) {
+        if (x >= kGapLo && x <= kGapHi) {
+            continue; // door-gap window: no piece, no draw
+        }
+        const std::size_t i = static_cast<std::size_t>(x - xStart);
+        m_WallDeco[static_cast<std::size_t>(WallSide::South)][i] = Roll(0, 100) < kWallDecoThreshold ? 1 : 0;
+        m_WallDeco[static_cast<std::size_t>(WallSide::North)][i] = Roll(0, 100) < kWallDecoThreshold ? 1 : 0;
+    }
     for (int y = yStart; y < yEnd; ++y) {
-        if (y >= 18 && y <= 22) {
+        if (y >= kGapLo && y <= kGapHi) {
             continue;
         }
-        (void)m_Rng.Range(0, 100);
+        const std::size_t i = static_cast<std::size_t>(y - yStart);
+        m_WallDeco[static_cast<std::size_t>(WallSide::West)][i] = Roll(0, 100) < kWallDecoThreshold ? 1 : 0;
+        m_WallDeco[static_cast<std::size_t>(WallSide::East)][i] = Roll(0, 100) < kWallDecoThreshold ? 1 : 0;
     }
+}
+
+bool RoomGen::WallPieceDecorated(WallSide side, int along) const {
+    const auto &v = m_WallDeco[static_cast<std::size_t>(side)];
+    const bool horizontal = side == WallSide::South || side == WallSide::North;
+    const int idx = along - (horizontal ? m_WallBaseX : m_WallBaseY);
+    if (idx < 0 || static_cast<std::size_t>(idx) >= v.size()) {
+        return false;
+    }
+    return v[static_cast<std::size_t>(idx)] == 1;
+}
+
+bool RoomGen::WallPieceRolled(WallSide side, int along) const {
+    const auto &v = m_WallDeco[static_cast<std::size_t>(side)];
+    const bool horizontal = side == WallSide::South || side == WallSide::North;
+    const int idx = along - (horizontal ? m_WallBaseX : m_WallBaseY);
+    if (idx < 0 || static_cast<std::size_t>(idx) >= v.size()) {
+        return false;
+    }
+    return v[static_cast<std::size_t>(idx)] != kWallNoRoll;
+}
+
+// PORT CHOICE (T-73): the port draws the wall ring INSIDE the room grid (the border cells,
+// code -1), while the original's ring stands one cell OUTSIDE it. A border cell therefore wears
+// the roll of the original piece in the same world column / row: south row y=0 and north row
+// y=H-1 use the x-loop rolls (corners included), the remaining west / east columns use the y-loop
+// rolls; the x-loop's two extra corner pieces (x = xoff-1, xoff+W) have no port cell.
+bool RoomGen::BorderCellDecorated(int x, int y) const {
+    if (x < 0 || y < 0 || x >= m_RoomWidth || y >= m_RoomHeight) {
+        return false;
+    }
+    if (y == 0) {
+        return WallPieceDecorated(WallSide::South, m_RoomXOffset + x);
+    }
+    if (y == m_RoomHeight - 1) {
+        return WallPieceDecorated(WallSide::North, m_RoomXOffset + x);
+    }
+    if (x == 0) {
+        return WallPieceDecorated(WallSide::West, m_RoomYOffset + y);
+    }
+    if (x == m_RoomWidth - 1) {
+        return WallPieceDecorated(WallSide::East, m_RoomYOffset + y);
+    }
+    return false;
 }
 
 // FAITHFUL: RGRoomX__IsWallIntersect @ rva 0x4FF158
@@ -418,22 +518,22 @@ void RoomGen::CreateObstacle() {
     int bigCount = 0;
     switch (m_WallLevel) {
     case 3:
-        bigCount = m_Rng.Range(10, 15);
+        bigCount = Roll(10, 15);
         break;
     case 2:
-        bigCount = m_Rng.Range(6, 10);
+        bigCount = Roll(6, 10);
         break;
     case 1:
-        bigCount = m_Rng.Range(3, 6);
+        bigCount = Roll(3, 6);
         break;
     default:
         bigCount = 0;
         break;
     }
     for (int n = 0; n < bigCount; ++n) {
-        const int roll = m_Rng.Range(0, 100);
-        const int rw = m_Rng.Range(1, 5);
-        const int rh = m_Rng.Range(1, 5);
+        const int roll = Roll(0, 100);
+        const int rw = Roll(1, 5);
+        const int rh = Roll(1, 5);
 
         int w = 1;
         int h = 1;
@@ -447,8 +547,8 @@ void RoomGen::CreateObstacle() {
             }
         }
 
-        const int px = m_Rng.Range(0, m_RoomWidth - w);
-        const int py = m_Rng.Range(0, m_RoomHeight - h);
+        const int px = Roll(0, m_RoomWidth - w);
+        const int py = Roll(0, m_RoomHeight - h);
 
         if (!IsWallIntersect(px, py, w, h)) {
             continue;
@@ -460,23 +560,23 @@ void RoomGen::CreateObstacle() {
     int smallCount = 0;
     switch (m_ObstacleLevel) {
     case 3:
-        smallCount = m_Rng.Range(7, 10);
+        smallCount = Roll(7, 10);
         break;
     case 2:
-        smallCount = m_Rng.Range(4, 7);
+        smallCount = Roll(4, 7);
         break;
     case 1:
-        smallCount = m_Rng.Range(1, 4);
+        smallCount = Roll(1, 4);
         break;
     default:
         smallCount = 0;
         break;
     }
     for (int n = 0; n < smallCount; ++n) {
-        const int w = m_Rng.Range(1, 4);
-        const int h = m_Rng.Range(1, 4);
-        const int px = m_Rng.Range(0, m_RoomWidth - w);
-        const int py = m_Rng.Range(0, m_RoomHeight - h);
+        const int w = Roll(1, 4);
+        const int h = Roll(1, 4);
+        const int px = Roll(0, m_RoomWidth - w);
+        const int py = Roll(0, m_RoomHeight - h);
 
         for (int x = px; x < px + w; ++x) {
             for (int y = py; y < py + h; ++y) {
@@ -497,8 +597,8 @@ void RoomGen::CreateObstacle() {
         for (int y = 0; y < m_RoomHeight; ++y) {
             const int code = Get(x, y);
             if (code == 2) {
-                if (m_Rng.Range(0, 100) < m_SpecialBoxRate) {
-                    (void)m_Rng.Range(2, 5);
+                if (Roll(0, 100) < m_SpecialBoxRate) {
+                    (void)Roll(2, 5);
                 }
             } else if (code == 0) {
                 m_FloorList.emplace_back(x, y);

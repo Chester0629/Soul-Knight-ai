@@ -1,0 +1,53 @@
+ [warning] config.json not found, using default configurations.
+ [info] OpenGL Info
+ [info]   Vendor: NVIDIA Corporation
+ [info]   Renderer: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2
+ [info]   Version: 4.1.0 NVIDIA 610.88
+ [info]   GLSL Version: 4.10 NVIDIA via Cg compiler
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 0
+ [info] Level B1 (1-1) biome 1-ice chest_level 1 map_long 3 pool 5 species
+ [info] Audio: bgm bgm_5Low.ogg
+ [info] Floor 0 rooms (design-pool=108): r1_43(15x21) r1_105(15x15) r1_50(15x21) r1_29(15x15) r1_102(15x15) r1_108(21x21) r1_60(15x21) 
+ [info] RoomDetail: room 0 15x15 floor variants 99 34 32 30 10 20 | ring walls plain 35 deco 7 (wall601)
+ [info] RoomDetail: room 1 15x15 floor variants 80 26 34 45 6 34 | ring walls plain 21 deco 14 (wall601)
+ [info] Bullet: e_yeti01 fires no RGBullet-family bullet (refs: effect_shock1) -> generic bullet_e_1 stands in (T-66)
+ [info] Spawn: e_miner03 room 1 moved (-160.0,-1376.0) -> (-160.0,-1440.0) (body r=19.2 did not fit)
+ [info] EnemyMaker: room 1 part spawned 3 (4 pending)
+ [info] EnemyMaker: room 1 (type 1) level 1 points 9 -> 7 planned, wave size 3
+ [info] RoomDetail: room 2 15x21 floor variants 133 46 42 59 7 28 | ring walls plain 37 deco 16 (wall601)
+ [info] Bullet: e_miner01 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_miner02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 2 part spawned 6 (9 pending)
+ [info] EnemyMaker: room 2 (type 1) level 2 points 17 -> 15 planned, wave size 6
+ [info] RoomDetail: room 3 11x11 floor variants 58 19 22 15 1 6 | ring walls plain 17 deco 2 (wall601)
+ [info] EnemyMaker: room 3 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 3: mineral room (6 ore nodes, hp 40, 10 coins each)
+ [info] RoomDetail: room 4 11x11 floor variants 35 12 27 26 10 11 | ring walls plain 26 deco 7 (wall601)
+ [info] EnemyMaker: room 4 (type 2) special prefab -> level 0, no spawns
+ [info] RoomDetail: room 5 21x21 floor variants 177 54 57 85 17 51 | ring walls plain 46 deco 13 (wall601)
+ [info] EnemyMaker: room 5 part spawned 9 (15 pending)
+ [info] EnemyMaker: room 5 (type 1) level 3 points 27 -> 24 planned, wave size 9
+ [info] RoomDetail: room 6 19x13 floor variants 85 29 42 50 18 23 | ring walls plain 40 deco 6 (wall601)
+ [info] EnemyMaker: room 6 (type 4) special prefab -> level 0, no spawns
+ [info] Shop: vending_machine_i at room 6 sells 'health_pot' for 10 coins
+ [info] Shop: water_dispenser at room 6 sells '' for 0 coins
+ [info] Shop: vending_machine_w at room 6 sells 'weapon_153' for 12 coins
+ [info] Floor 0 fresh start (template) hp=6 weapon='weapon_000' (seed=5)
+ [info] GameScene: SK_ZOOM override 1.5
+ [info] SpawnFilter: 36 of 1180 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 4 at (0,-3936)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 1 spawn point
+ [info] RGRoomX: room 1 StartRoom -> Active (door_open=0, sealed)
+ [info] Audio: sfx fx_door.wav
+ [info] Door: room 1 frame 60 -> CLOSED (clip door_close2)
+ [info] Lock: frame 60 target -1 -> 2
+ [info] Door: room 1 frame 62 base sprite door02 (bar on, shadow on)
+ [warning] OpenGL Severity: MEDIUM
+ [warning]  ID: 131154
+ [warning]  Source: API
+ [warning]  Type: PERFORMANCE
+ [warning]  Message: Pixel-path performance warning: Pixel transfer is synchronized with 3D rendering.

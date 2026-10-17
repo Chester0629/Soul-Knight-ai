@@ -1,0 +1,69 @@
+ok   HIST line present
+ok   HIST over 37500 cells (>= 10000)
+ok   HIST edge 1..2 -> index 1: 4675/18794 = 0.2487 vs 0.25 (+-0.0158)
+ok   HIST edge 0|3 -> index 3: 6254/12517 = 0.4996 vs 0.5 (+-0.0223)
+ok   HIST edge >= 4 -> index 4: 1575/6189 = 0.2545 vs 0.25 (+-0.0275)
+ok   WALLS line present
+ok   WALLS decorated share 4972/16800 = 0.2960 vs 0.30 (+-0.0177)
+ok   RoomDetailTest suite passed in the evidence run
+ok   p220_floor_b1.log: 7 RoomDetail lines
+ok   p220_floor_b1.log room 0: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 1: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 2: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 3: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 4: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 5: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log room 6: decorated prefab wall601 == wall_list[1] wall601
+ok   p220_floor_b1.log: variant counts sum to the cell total (1695 == 1695)
+ok   p220_floor_b1.log: all six floor variants occur [667, 220, 256, 310, 69, 173] (f505 / f506 included)
+ok   p220_floor_b1.log: decorated ring share 65/287 = 0.226 vs 0.30 (+-0.155; the ring is a design-room-shell sample: corners / door gaps / obstacle overwrites differ from the full draw)
+ok   p220_floor_b1.log: both wall prefabs appear in the ring (plain 222, decorated 65)
+ok   p220_floor_a1.log: 7 RoomDetail lines
+ok   p220_floor_a1.log room 0: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 1: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 2: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 3: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 4: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 5: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log room 6: decorated prefab wall504 == wall_list[1] wall504
+ok   p220_floor_a1.log: variant counts sum to the cell total (1263 == 1263)
+ok   p220_floor_a1.log: all six floor variants occur [488, 176, 201, 211, 41, 146] (f505 / f506 included)
+ok   p220_floor_a1.log: decorated ring share 55/231 = 0.238 vs 0.30 (+-0.171; the ring is a design-room-shell sample: corners / door gaps / obstacle overwrites differ from the full draw)
+ok   p220_floor_a1.log: both wall prefabs appear in the ring (plain 176, decorated 55)
+ok   door log has 4 transition events
+ok   closing plays door_close2
+ok   closed: base door02 with bar + shadow on (('base', 62, 'door02', 'on', 'on'))
+ok   door_close2 swaps the base after 2 frames (0.033 s = 2 frames at 20 ms)
+ok   opening plays door_open
+ok   open: base door03 with bar + shadow off (('base', 199, 'door03', 'off', 'off'))
+ok   door_open swaps the base after 9 frames (0.167 s = 9 frames at 20 ms)
+ok   timeline: 4 UP / 3 DOWN events (>= 3 cycles)
+ok   UP -> DOWN is 50 frames (1 s) each: [50, 50, 50]
+ok   DOWN -> UP is 100 frames (2 s) each: [100, 100, 100]
+ok   UP -> UP period is 150 frames (3 s) each: [150, 150, 150]
+ok   UP window 1 (frame 61): damage ticks at +[0, 15, 30, 45] frames (0.3 s = 15 frames)
+ok   UP window 2 (frame 211): damage ticks at +[0, 15, 30, 45] frames (0.3 s = 15 frames)
+ok   UP window 3 (frame 361): damage ticks at +[0, 15, 30, 45] frames (0.3 s = 15 frames)
+ok   no damage tick outside an UP window ([])
+ok   hero stands on a trap cell
+ok   stand: UP [61] / DOWN [111]
+ok   stand: 4 player hits (>= 4 in the first UP window)
+ok   tick frame 61: vitals 6hp+5armor -> 6hp+3armor loses 2 (== damage 2)
+ok   tick frame 76: vitals 6hp+3armor -> 6hp+1armor loses 2 (== damage 2)
+ok   tick frame 91: vitals 6hp+1armor -> 5hp+0armor loses 2 (== damage 2)
+ok   tick frame 106: vitals 5hp+0armor -> 3hp+0armor loses 2 (== damage 2)
+ok   tick frame 61 lies inside the UP window [61, 111)
+ok   tick frame 76 lies inside the UP window [61, 111)
+ok   tick frame 91 lies inside the UP window [61, 111)
+ok   tick frame 106 lies inside the UP window [61, 111)
+ok   the first tick is absorbed by armor (hp unchanged, armor -2)
+ok   no tick between DOWN and the next UP ([])
+ok   closed case: hero stands 64 px below the chest
+ok   closed case: the chest stays closed
+ok   closed chest: ONE lid run [(598, 681)] (lid colour (204, 204, 204))
+ok   open case: the four-layer chest opened
+ok   open chest: TWO lid runs [(431, 466), (575, 610)] with a 109 px gap (lids slid apart by 1 unit = 96 px at zoom 3)
+ok   bad SK_STING_STAND rejected
+ok   bad SK_CHEST_STAND rejected
+ok   rejected hooks never act
+P220 CHECK: OK

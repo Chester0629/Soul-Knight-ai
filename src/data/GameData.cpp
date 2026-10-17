@@ -76,6 +76,88 @@ RigNodeDef RigNodeFromJson(const json &j) {
     return n;
 }
 
+/// P2.20: an ObjectSting block ({damage, offset_time, show_time, hide_time, hit_player, hit_enemy, base,
+/// ding}); !present when absent / not an object. A malformed block (missing field) is rejected whole.
+StingDef StingFromJson(const json &j) {
+    StingDef d;
+    if (!j.is_object()) {
+        return d;
+    }
+    for (const char *key : {"damage", "offset_time", "show_time", "hide_time"}) {
+        auto it = j.find(key);
+        if (it == j.end() || !it->is_number()) {
+            return d;
+        }
+    }
+    d.damage = GetI(j, "damage");
+    d.offsetTime = GetF(j, "offset_time");
+    d.showTime = GetF(j, "show_time");
+    d.hideTime = GetF(j, "hide_time");
+    if (auto it = j.find("hit_player"); it != j.end() && it->is_boolean()) {
+        d.hitPlayer = it->get<bool>();
+    }
+    if (auto it = j.find("hit_enemy"); it != j.end() && it->is_boolean()) {
+        d.hitEnemy = it->get<bool>();
+    }
+    if (auto it = j.find("base"); it != j.end()) {
+        d.base = RigNodeFromJson(*it);
+    }
+    if (auto it = j.find("ding"); it != j.end()) {
+        d.ding = RigNodeFromJson(*it);
+    }
+    d.present = d.base.present && d.ding.present;
+    return d;
+}
+
+/// P2.20: `key` of @p j as [[t, v], ...] (float / bool curve keys); malformed entries are skipped.
+std::vector<ClipKey1> Keys1(const json &j, const char *key) {
+    std::vector<ClipKey1> out;
+    auto it = j.find(key);
+    if (it == j.end() || !it->is_array()) {
+        return out;
+    }
+    for (const json &k : *it) {
+        if (k.is_array() && k.size() >= 2 && k[0].is_number() && k[1].is_number()) {
+            out.push_back(ClipKey1{k[0].get<float>(), k[1].get<float>()});
+        }
+    }
+    return out;
+}
+
+/// P2.20: `key` of @p j as [[t, x, y], ...] (position curve keys).
+std::vector<ClipKey2> Keys2(const json &j, const char *key) {
+    std::vector<ClipKey2> out;
+    auto it = j.find(key);
+    if (it == j.end() || !it->is_array()) {
+        return out;
+    }
+    for (const json &k : *it) {
+        if (k.is_array() && k.size() >= 3 && k[0].is_number() && k[1].is_number() && k[2].is_number()) {
+            out.push_back(ClipKey2{k[0].get<float>(), k[1].get<float>(), k[2].get<float>()});
+        }
+    }
+    return out;
+}
+
+DoorClipDef DoorClipFromJson(const json &j) {
+    DoorClipDef c;
+    if (!j.is_object()) {
+        return c;
+    }
+    c.stop = GetF(j, "stop");
+    c.barY = Keys1(j, "bar_y");
+    c.barEnabled = Keys1(j, "bar_enabled");
+    c.shadowEnabled = Keys1(j, "shadow_enabled");
+    if (auto it = j.find("base_sprite"); it != j.end() && it->is_array()) {
+        for (const json &k : *it) {
+            if (k.is_array() && k.size() >= 2 && k[0].is_number() && k[1].is_string()) {
+                c.baseSprite.push_back(ClipSpriteKey{k[0].get<float>(), k[1].get<std::string>()});
+            }
+        }
+    }
+    return c;
+}
+
 /// SLICE 4: the `rig` object of an enemy / character row (absent -> an empty ActorRigDef).
 ActorRigDef RigFromJson(const json &row) {
     ActorRigDef r;
@@ -674,19 +756,31 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
             d.floors = strList(v, "floors");
             if (const auto ws = v.find("walls"); ws != v.end() && ws->is_array()) {
                 for (const json &w : *ws) {
-                    d.walls.push_back(LevelWallDef{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face"),
-                                                   GetF(w, "face_dy"),
-                                                   GetSort(w, "top_sort", SortKey{4, 0}),
-                                                   GetSort(w, "face_sort", SortKey{6, 0})});
+                    LevelWallDef wd{GetS(w, "prefab"), GetS(w, "top"), GetS(w, "face"),
+                                    GetF(w, "face_dy"),
+                                    GetSort(w, "top_sort", SortKey{4, 0}),
+                                    GetSort(w, "face_sort", SortKey{6, 0}),
+                                    RigNodeDef{}};
+                    if (auto sh = w.find("shadow"); sh != w.end()) {
+                        wd.shadow = RigNodeFromJson(*sh); // P2.20
+                    }
+                    d.walls.push_back(std::move(wd));
                 }
             }
             if (const auto os = v.find("obstacles"); os != v.end() && os->is_array()) {
                 for (const json &o : *os) {
-                    d.obstacles.push_back(LevelObstacleDef{GetS(o, "prefab"), GetS(o, "sprite"),
-                                                           GetS(o, "alt"), GetF(o, "alt_dy"),
-                                                           GetSort(o, "sort", SortKey{4, 0}),
-                                                           GetSort(o, "alt_sort", SortKey{6, 0}),
-                                                           GetColliderList(o, "blockers")});
+                    LevelObstacleDef od{GetS(o, "prefab"), GetS(o, "sprite"),
+                                        GetS(o, "alt"), GetF(o, "alt_dy"),
+                                        GetSort(o, "sort", SortKey{4, 0}),
+                                        GetSort(o, "alt_sort", SortKey{6, 0}),
+                                        GetColliderList(o, "blockers"), RigNodeDef{}, StingDef{}};
+                    if (auto sh = o.find("shadow"); sh != o.end()) {
+                        od.shadow = RigNodeFromJson(*sh); // P2.20
+                    }
+                    if (auto st = o.find("sting"); st != o.end()) {
+                        od.sting = StingFromJson(*st); // P2.20
+                    }
+                    d.obstacles.push_back(std::move(od));
                 }
             }
             if (const auto rs = v.find("rooms"); rs != v.end() && rs->is_object()) {
@@ -722,11 +816,18 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
         }
         if (const auto pf = bossRooms.find("prefabs"); pf != bossRooms.end() && pf->is_object()) {
             for (auto it = pf->begin(); it != pf->end(); ++it) {
-                m_PrefabSkins.emplace(it.key(), PrefabSkin{GetS(it.value(), "sprite"), GetS(it.value(), "alt"),
-                                                           GetF(it.value(), "alt_dy"), GetS(it.value(), "kind"),
-                                                           GetSort(it.value(), "sort", SortKey{4, 0}),
-                                                           GetSort(it.value(), "alt_sort", SortKey{6, 0}),
-                                                           GetColliderList(it.value(), "blockers")});
+                PrefabSkin sk{GetS(it.value(), "sprite"), GetS(it.value(), "alt"),
+                              GetF(it.value(), "alt_dy"), GetS(it.value(), "kind"),
+                              GetSort(it.value(), "sort", SortKey{4, 0}),
+                              GetSort(it.value(), "alt_sort", SortKey{6, 0}),
+                              GetColliderList(it.value(), "blockers"), RigNodeDef{}, StingDef{}};
+                if (auto sh = it.value().find("shadow"); sh != it.value().end()) {
+                    sk.shadow = RigNodeFromJson(*sh); // P2.20
+                }
+                if (auto st = it.value().find("sting"); st != it.value().end()) {
+                    sk.sting = StingFromJson(*st); // P2.20
+                }
+                m_PrefabSkins.emplace(it.key(), std::move(sk));
             }
         }
     }
@@ -741,6 +842,56 @@ bool GameData::LoadAll(const std::string &resourceRoot) {
                 m_TilePivots.emplace(it.key(), std::array<float, 2>{it.value()[0].get<float>(),
                                                                     it.value()[1].get<float>()});
             }
+        }
+    }
+
+    // P2.20: room_props.json -- door pieces / sting traps / chest prefabs (optional: absent leaves the
+    // scene on the pre-P2.20 static look, never flips `ok`).
+    m_RoomProps = RoomPropsDef{};
+    const json &roomProps = store.Load(dir + "room_props.json");
+    if (roomProps.is_object()) {
+        if (auto dj = roomProps.find("door"); dj != roomProps.end() && dj->is_object()) {
+            DoorPropsDef d;
+            d.base = RigNodeFromJson(dj->value("base", json::object()));
+            d.bar = RigNodeFromJson(dj->value("bar", json::object()));
+            d.shadow = RigNodeFromJson(dj->value("shadow", json::object()));
+            if (auto cl = dj->find("clips"); cl != dj->end() && cl->is_object()) {
+                d.open = DoorClipFromJson(cl->value("open", json::object()));
+                d.close = DoorClipFromJson(cl->value("close", json::object()));
+            }
+            d.openSprite = dj->value("open_sprite", std::string());
+            d.present = d.base.present && d.bar.present && d.shadow.present && !d.openSprite.empty() &&
+                        !d.open.barY.empty() && !d.close.barY.empty();
+            m_RoomProps.door = std::move(d);
+        }
+        if (auto sj = roomProps.find("sting"); sj != roomProps.end() && sj->is_object()) {
+            for (auto it = sj->begin(); it != sj->end(); ++it) {
+                StingDef st = StingFromJson(it.value());
+                if (st.present) {
+                    m_RoomProps.stings.emplace(it.key(), std::move(st));
+                }
+            }
+        }
+        if (auto cj = roomProps.find("chests"); cj != roomProps.end() && cj->is_object()) {
+            for (auto it = cj->begin(); it != cj->end(); ++it) {
+                const json layers = it.value().value("layers", json::object());
+                ChestPropsDef c;
+                c.box03 = RigNodeFromJson(layers.value("box03", json::object()));
+                c.box04 = RigNodeFromJson(layers.value("box04", json::object()));
+                c.box05 = RigNodeFromJson(layers.value("box05", json::object()));
+                c.box06 = RigNodeFromJson(layers.value("box06", json::object()));
+                c.shadow = RigNodeFromJson(it.value().value("shadow", json::object()));
+                if (c.box03.present && c.box04.present && c.box05.present && c.box06.present &&
+                    c.shadow.present) {
+                    m_RoomProps.chests.emplace(it.key(), std::move(c));
+                }
+            }
+        }
+        if (auto oj = roomProps.find("chest_open"); oj != roomProps.end() && oj->is_object()) {
+            m_RoomProps.chestOpen.stop = GetF(*oj, "stop");
+            m_RoomProps.chestOpen.box03 = Keys2(*oj, "box03");
+            m_RoomProps.chestOpen.box04 = Keys2(*oj, "box04");
+            m_RoomProps.chestOpen.box05 = Keys2(*oj, "box05");
         }
     }
 

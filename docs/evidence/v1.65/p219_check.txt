@@ -1,0 +1,154 @@
+ok   aim_r: PoseTrace line for frame 30 exists
+ok   aim_r: SK_FORCE_AIM drives the aim (1.0, 0.0)
+ok   aim_r: facing 1 == 1
+ok   aim_r: standing still plays the idle clip (clip 0)
+ok   aim_r: weapon / ring / shadow shown
+ok   aim_r: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_r: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_r: weapon rot 0.0000 scalex 2.0 match aim 0 deg / facing 1
+ok   aim_r: muzzle (19.2, -59.2) = hero (0.0,-64.0) + R(aim)(19.2, 1*4.8) = (19.20,-59.20)
+ok   aim_r: 736 weapon body pixels on screen
+ok   aim_r: weapon centroid (667.2,352.4) vs pose maths (667.7,352.5)
+ok   aim_r: skin patch +17.8 px from the axis is on the facing side (+1)
+ok   aim_r: 385 green ring pixels
+ok   aim_r: ring centroid (641,390) is centred under the hero (640,392)
+ok   aim_ur: PoseTrace line for frame 30 exists
+ok   aim_ur: SK_FORCE_AIM drives the aim (0.707, 0.707)
+ok   aim_ur: facing 1 == 1
+ok   aim_ur: standing still plays the idle clip (clip 0)
+ok   aim_ur: weapon / ring / shadow shown
+ok   aim_ur: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_ur: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_ur: weapon rot 0.7854 scalex 2.0 match aim 45 deg / facing 1
+ok   aim_ur: muzzle (10.18, -47.03) = hero (0.0,-64.0) + R(aim)(19.2, 1*4.8) = (10.18,-47.03)
+ok   aim_ur: 737 weapon body pixels on screen
+ok   aim_ur: weapon centroid (653.6,334.6) vs pose maths (654.3,335.1)
+ok   aim_ur: skin patch +22.6 px from the axis is on the facing side (+1)
+ok   aim_ur: 412 green ring pixels
+ok   aim_ur: ring centroid (641,389) is centred under the hero (640,392)
+ok   aim_u: PoseTrace line for frame 30 exists
+ok   aim_u: SK_FORCE_AIM drives the aim (0.0, 1.0)
+ok   aim_u: facing 1 == 1
+ok   aim_u: standing still plays the idle clip (clip 0)
+ok   aim_u: weapon / ring / shadow shown
+ok   aim_u: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_u: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_u: weapon rot 1.5708 scalex 2.0 match aim 90 deg / facing 1
+ok   aim_u: muzzle (-4.8, -44.8) = hero (0.0,-64.0) + R(aim)(19.2, 1*4.8) = (-4.80,-44.80)
+ok   aim_u: 736 weapon body pixels on screen
+ok   aim_u: weapon centroid (632.4,331.8) vs pose maths (632.5,332.3)
+ok   aim_u: skin patch +16.4 px from the axis is on the facing side (+1)
+ok   aim_u: 412 green ring pixels
+ok   aim_u: ring centroid (641,389) is centred under the hero (640,392)
+ok   aim_ul: PoseTrace line for frame 30 exists
+ok   aim_ul: SK_FORCE_AIM drives the aim (-0.707, 0.707)
+ok   aim_ul: facing -1 == -1
+ok   aim_ul: standing still plays the idle clip (clip 0)
+ok   aim_ul: weapon / ring / shadow shown
+ok   aim_ul: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_ul: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_ul: weapon rot -0.7854 scalex -2.0 match aim 135 deg / facing -1
+ok   aim_ul: muzzle (-10.18, -47.03) = hero (0.0,-64.0) + R(aim)(19.2, -1*4.8) = (-10.18,-47.03)
+ok   aim_ul: 729 weapon body pixels on screen
+ok   aim_ul: weapon centroid (625.3,334.4) vs pose maths (625.7,335.1)
+ok   aim_ul: and NOT where an un-mirrored sprite would be
+ok   aim_ul: skin patch -23.6 px from the axis is on the facing side (-1)
+ok   aim_ul: 412 green ring pixels
+ok   aim_ul: ring centroid (638,389) is centred under the hero (640,392)
+ok   aim_l: PoseTrace line for frame 30 exists
+ok   aim_l: SK_FORCE_AIM drives the aim (-1.0, 0.0)
+ok   aim_l: facing -1 == -1
+ok   aim_l: standing still plays the idle clip (clip 0)
+ok   aim_l: weapon / ring / shadow shown
+ok   aim_l: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_l: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_l: weapon rot 0.0000 scalex -2.0 match aim 180 deg / facing -1
+ok   aim_l: muzzle (-19.2, -59.2) = hero (0.0,-64.0) + R(aim)(19.2, -1*4.8) = (-19.20,-59.20)
+ok   aim_l: 736 weapon body pixels on screen
+ok   aim_l: weapon centroid (611.8,352.4) vs pose maths (612.3,352.5)
+ok   aim_l: and NOT where an un-mirrored sprite would be
+ok   aim_l: skin patch -17.1 px from the axis is on the facing side (-1)
+ok   aim_l: 412 green ring pixels
+ok   aim_l: ring centroid (638,389) is centred under the hero (640,392)
+ok   aim_dl: PoseTrace line for frame 30 exists
+ok   aim_dl: SK_FORCE_AIM drives the aim (-0.707, -0.707)
+ok   aim_dl: facing -1 == -1
+ok   aim_dl: standing still plays the idle clip (clip 0)
+ok   aim_dl: weapon / ring / shadow shown
+ok   aim_dl: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_dl: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_dl: weapon rot 0.7854 scalex -2.0 match aim -135 deg / facing -1
+ok   aim_dl: muzzle (-16.97, -74.18) = hero (0.0,-64.0) + R(aim)(19.2, -1*4.8) = (-16.97,-74.18)
+ok   aim_dl: 729 weapon body pixels on screen
+ok   aim_dl: weapon centroid (614.4,373.7) vs pose maths (615.1,374.3)
+ok   aim_dl: and NOT where an un-mirrored sprite would be
+ok   aim_dl: skin patch -17.4 px from the axis is on the facing side (-1)
+ok   aim_dl: 314 green ring pixels
+ok   aim_dl: ring centroid (649,390) is centred under the hero (640,392)
+ok   aim_d: PoseTrace line for frame 30 exists
+ok   aim_d: SK_FORCE_AIM drives the aim (0.0, -1.0)
+ok   aim_d: facing 1 == 1
+ok   aim_d: standing still plays the idle clip (clip 0)
+ok   aim_d: weapon / ring / shadow shown
+ok   aim_d: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_d: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_d: weapon rot -1.5708 scalex 2.0 match aim -90 deg / facing 1
+ok   aim_d: muzzle (4.8, -83.2) = hero (0.0,-64.0) + R(aim)(19.2, 1*4.8) = (4.80,-83.20)
+ok   aim_d: 736 weapon body pixels on screen
+ok   aim_d: weapon centroid (646.6,387.2) vs pose maths (647.5,387.7)
+ok   aim_d: skin patch +16.4 px from the axis is on the facing side (+1)
+ok   aim_d: 332 green ring pixels
+ok   aim_d: ring centroid (639,388) is centred under the hero (640,392)
+ok   aim_dr: PoseTrace line for frame 30 exists
+ok   aim_dr: SK_FORCE_AIM drives the aim (0.707, -0.707)
+ok   aim_dr: facing 1 == 1
+ok   aim_dr: standing still plays the idle clip (clip 0)
+ok   aim_dr: weapon / ring / shadow shown
+ok   aim_dr: ring tint (0.235, 0.914, 0.294) == (60,233,75)/255 (skill ready)
+ok   aim_dr: weapon z 6.1 = layer 6 order 1 (above the body's layer 5)
+ok   aim_dr: weapon rot -0.7854 scalex 2.0 match aim -45 deg / facing 1
+ok   aim_dr: muzzle (16.97, -74.18) = hero (0.0,-64.0) + R(aim)(19.2, 1*4.8) = (16.97,-74.18)
+ok   aim_dr: 737 weapon body pixels on screen
+ok   aim_dr: weapon centroid (664.4,373.6) vs pose maths (664.9,374.3)
+ok   aim_dr: skin patch +16.4 px from the axis is on the facing side (+1)
+ok   aim_dr: 314 green ring pixels
+ok   aim_dr: ring centroid (630,390) is centred under the hero (640,392)
+ok   run: PoseTrace line for frame 30 exists
+ok   run: walking plays the run clip (clip 1)
+ok   run: aiming left faces left (facing -1)
+ok   run: the same hero standing still plays the idle clip
+ok   run: the hero (green ring) is on screen in both shots
+ok   run: the armour pixels differ from the idle shot (571 px), a run frame is drawn
+ok   enemy: a `Lock:` line names a target
+ok   enemy: PoseTrace / PosTrace lines exist at frame 150
+ok   enemy: exactly one enemy shows the lock ring (got [0])
+ok   enemy: every enemy has its ground shadow
+ok   enemy: at least one moving enemy plays the run clip ([0, 1])
+ok   enemy: 3 enemies in the hero's room all face the hero's side (mismatches [])
+ok   enemy: 770 red ring pixels around the locked enemy's feet (64,554)
+ok   boss: PoseTrace boss line exists
+ok   boss boss08: ground shadow drawn
+ok   boss boss08: facing 1
+ok   muzzle_r: BulletSpawn line for the first bullet
+ok   muzzle_r: spawn offset (19.20,4.80) == (19.20,4.80) (gun_point (0.6,0.15) u at facing +1)
+ok   muzzle_r: Muzzle line (sim vs view)
+ok   muzzle_r: facing 1 == 1
+ok   muzzle_r: sim muzzle == view muzzle (flash / sprite)
+ok   muzzle_u: BulletSpawn line for the first bullet
+ok   muzzle_u: spawn offset (-4.80,19.20) == (-4.80,19.20) (gun_point (0.6,0.15) u at facing +1)
+ok   muzzle_u: Muzzle line (sim vs view)
+ok   muzzle_u: facing 1 == 1
+ok   muzzle_u: sim muzzle == view muzzle (flash / sprite)
+ok   muzzle_l: BulletSpawn line for the first bullet
+ok   muzzle_l: spawn offset (-19.20,4.80) == (-19.20,4.80) (gun_point (0.6,0.15) u at facing -1)
+ok   muzzle_l: Muzzle line (sim vs view)
+ok   muzzle_l: facing -1 == -1
+ok   muzzle_l: sim muzzle == view muzzle (flash / sprite)
+ok   muzzle_d: BulletSpawn line for the first bullet
+ok   muzzle_d: spawn offset (4.80,-19.20) == (4.80,-19.20) (gun_point (0.6,0.15) u at facing +1)
+ok   muzzle_d: Muzzle line (sim vs view)
+ok   muzzle_d: facing 1 == 1
+ok   muzzle_d: sim muzzle == view muzzle (flash / sprite)
+ok   bad hook: a malformed SK_FORCE_AIM is rejected
+ok   bad hook: nothing was forced
+P219 CHECK: OK

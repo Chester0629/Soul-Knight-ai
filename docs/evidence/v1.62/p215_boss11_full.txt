@@ -1,0 +1,27 @@
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (0,-3936)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (1312,2624)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (-1312,1312)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (-1312,-1312)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] Level F5 (3-5) biome 3-volcano chest_level 4 map_long 4 pool 10 species
+ [info] BossPool: biome 3-volcano -> boss11 (pool 1)
+ [info] GameScene: SK_ZOOM override 0.5
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (3936,-1312)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)

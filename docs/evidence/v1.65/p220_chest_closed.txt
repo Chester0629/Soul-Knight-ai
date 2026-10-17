@@ -1,0 +1,2 @@
+ [info] Chest: reward room 3 -> chest_room_reward (tier 1)
+ [info] GameScene: SK_CHEST_STAND -> 64 px below the chest at (1312,-1312) tier 1

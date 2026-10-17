@@ -1925,6 +1925,201 @@ def _prefab_blockers(path) -> list:
 
 
 
+def _prefab_shadow(path):
+    """P2.20: the ground shadow of a room-object prefab -- the first SpriteRenderer node whose sprite
+    stem starts with `shadow` (shadow0 under walls / boxes / doors, shadow1 under chests), as a
+    rig node {sprite, pivot, offset, scale, sort, color, enabled} in PREFAB-ROOT space (root = the
+    cell's bottom-centre; units). FAITHFUL @ the prefab YAML: wall601 / wall_bush1 / wall504 / box02
+    / cask_* / door_n d1..d5 all carry shadow0.png at m_Color alpha 0.392157 on sorting layer 3
+    (Sprites-Default material 10754 = ordinary alpha blending, so no multiply material is needed).
+    None when the prefab has no shadow child (wall_tree1, sting01, speed pads ...)."""
+    if path is None:
+        return None
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return None
+    docs, names, scale, father, root, pos = _parse_prefab(text)
+    if root is None:
+        return None
+    for g in names:
+        node = _rig_sprite(docs, names, scale, father, root, pos, g)
+        if node is not None and node["sprite"].startswith("shadow"):
+            return node
+    return None
+
+
+_STING_FIELDS = (("damage", int), ("offet_time", float), ("show_time", float), ("hide_time", float))
+
+
+def _prefab_sting(path):
+    """P2.20: the ObjectSting component of a room-object prefab (sting01), or None.
+    {damage, offset_time, show_time, hide_time, hit_player, hit_enemy, base, ding} -- the six scalar
+    fields are FAITHFUL @ the prefab's MonoBehaviour (`offet_time` is the original's spelling);
+    `base` is the root SpriteRenderer node (objects1_0, tint (0.89,0.91,1)) and `ding` the child
+    `ding` node (objects1_1, the spike; show_sting.anim enables it, hide_sting.anim disables it)."""
+    if path is None:
+        return None
+    guid = _class_guid("ObjectSting")
+    if guid is None:
+        return None
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return None
+    blk = _mono_block(text, guid)
+    if blk is None:
+        return None
+    out = {}
+    for key, ty in _STING_FIELDS:
+        v = _field(blk, key)
+        if v is None:
+            return None
+        out["offset_time" if key == "offet_time" else key] = ty(v)
+    for key in ("hit_player", "hit_enemy"):
+        v = _field(blk, key)
+        out[key] = bool(v) if v is not None else False
+    docs, names, scale, father, root, pos = _parse_prefab(text)
+    if root is None:
+        return None
+    base = _rig_sprite(docs, names, scale, father, root, pos, root)
+    ding = None
+    for g, n in names.items():
+        if n == "ding" and father.get(g) == root:
+            ding = _rig_sprite(docs, names, scale, father, root, pos, g)
+    if base is None or ding is None:
+        return None
+    out["base"] = base
+    out["ding"] = ding
+    return out
+
+
+def _anim_curves(anim_path: Path, idx: dict) -> dict:
+    """P2.20: {path|attribute: [[time, value], ...]} of the float / position / sprite curves of a
+    .anim clip (value = float, [x, y] for a position curve, or the sprite STEM for a PPtr curve),
+    plus "_stop" (m_StopTime) -- the keys the port samples door_open / door_close2 / chest_open from (step for
+    float / sprite curves, linear for positions: the clips' Hermite tangents are NOT kept, T-75)."""
+    text = anim_path.read_text(encoding="utf-8", errors="ignore")
+    out = {}
+    stop = re.search(r"m_StopTime: ([-0-9.eE+]+)", text)
+    out["_stop"] = float(stop.group(1)) if stop else 0.0
+    heads = list(re.finditer(r"(?m)^  (m_[A-Za-z]+):", text))
+    for hi, hm in enumerate(heads):
+        head = hm.group(1)
+        if head not in ("m_PositionCurves", "m_FloatCurves", "m_PPtrCurves"):
+            continue
+        end = heads[hi + 1].start() if hi + 1 < len(heads) else len(text)
+        sec = text[hm.end():end]
+        for blk in re.split(r"(?m)^  - (?=curve:)", sec)[1:]:
+            path_m = re.search(r"(?m)^    path: (\S*)", blk)
+            attr_m = re.search(r"(?m)^    attribute: (\S*)", blk)
+            keys = []
+            if head == "m_PositionCurves":
+                for t, x, y in re.findall(
+                        r"time: ([-0-9.eE+]+)\n\s+value: \{x: ([-0-9.eE+]+), y: ([-0-9.eE+]+)", blk):
+                    keys.append([round(float(t), 6), round(float(x), 6), round(float(y), 6)])
+                name = (path_m.group(1) if path_m else "") + "|position"
+            elif head == "m_FloatCurves":
+                for t, v in re.findall(r"time: ([-0-9.eE+]+)\n\s+value: ([-0-9.eE+]+)", blk):
+                    keys.append([round(float(t), 6), float(v)])
+                name = (path_m.group(1) if path_m else "") + "|" + (attr_m.group(1) if attr_m else "")
+            else:
+                for t, g in re.findall(
+                        r"time: ([-0-9.eE+]+)\n\s+value: \{fileID: 21300000, guid: ([0-9a-f]{32})", blk):
+                    pth = idx.get(g)
+                    keys.append([round(float(t), 6), pth.stem if pth is not None else g[:8]])
+                name = (path_m.group(1) if path_m else "") + "|sprite"
+            if keys and name not in out:
+                out[name] = keys
+    return out
+
+
+def build_room_props():
+    """Resources/data/room_props.json (P2.20): the door pieces, the sting01 trap and the chest
+    prefabs, all FAITHFUL @ the prefab / clip YAML.
+      door   -- rgprefab/room/room/door_n.prefab d1 (door02 base, shadow0 child, door01 bar child at
+                local (0,1)) and the rganim door_open / door_close2 clips driven by door_2.controller
+                (bool `open`; default state door_open)
+      sting  -- {prefab -> ObjectSting fields + base/ding nodes} for every room prefab carrying it
+      chests -- res/item/chest*.prefab layers box03..box06 + shadow, and the chest_open clip's
+                box03 / box04 / box05 position curves."""
+    if not EP_ASSETS.is_dir():
+        return None
+    idx = _guid_index()
+    by_name = {}
+    for p in EP_ASSETS.rglob("*.prefab"):
+        by_name.setdefault(p.stem, p)
+    props = {}
+    # --- doors ---
+    dp = by_name.get("door_n")
+    if dp is not None:
+        text = dp.read_text(encoding="utf-8", errors="ignore")
+        docs, names, scale, father, root, pos = _parse_prefab(text)
+        d1 = next((g for g, n in names.items() if n == "d1"), None)
+        kids = {names[g]: g for g, f in father.items() if f == d1 and g in names}
+        base = _rig_sprite(docs, names, scale, father, root, pos, d1) if d1 else None
+        bar = _rig_sprite(docs, names, scale, father, root, pos, kids["d"]) if "d" in kids else None
+        shadow = _rig_sprite(docs, names, scale, father, root, pos, kids["shadow"]) if "shadow" in kids else None
+        if base and bar and shadow:
+            # the d1 piece sits at x = -2 in the door prefab: store everything relative to its own cell
+            ox = base["offset"][0]
+            for nd in (base, bar, shadow):
+                nd["offset"] = [round(nd["offset"][0] - ox, 4) + 0.0, nd["offset"][1]]
+            clips = {}
+            for key, stem in (("open", "door_open"), ("close", "door_close2")):
+                cp = EP_ASSETS / "rganim" / (stem + ".anim")
+                if not cp.is_file():
+                    clips = None
+                    break
+                cv = _anim_curves(cp, idx)
+                clips[key] = {"stop": cv["_stop"],
+                              "bar_y": [[k[0], k[2]] for k in cv.get("d1/d|position", [])],
+                              "bar_enabled": cv.get("d1/d|m_Enabled", []),
+                              "shadow_enabled": cv.get("d1/shadow|m_Enabled", []),
+                              "base_sprite": cv.get("d1|sprite", [])}
+            if clips:
+                props["door"] = {"base": base, "bar": bar, "shadow": shadow, "clips": clips,
+                                 "open_sprite": clips["open"]["base_sprite"][-1][1]}
+    # --- stings ---
+    stings = {}
+    for name, path in sorted(by_name.items()):
+        if "rgprefab" not in path.parts:
+            continue
+        st = _prefab_sting(path)
+        if st is not None:
+            stings[name] = st
+    if stings:
+        props["sting"] = stings
+    # --- chests ---
+    chests = {}
+    cp = EP_ASSETS / "rganim" / "chest_open.anim"
+    for name, path in sorted(by_name.items()):
+        if not (name.startswith("chest") and "item" in path.parts) or name in ("chest_big", "chest_big_4"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        docs, names, scale, father, root, pos = _parse_prefab(text)
+        layers = {}
+        shadow = None
+        for g, n in names.items():
+            node = _rig_sprite(docs, names, scale, father, root, pos, g)
+            if node is None:
+                continue
+            if node["sprite"].startswith("shadow"):
+                shadow = node
+            elif n in ("box03", "box04", "box05", "box06"):
+                layers[n] = node
+        if len(layers) == 4 and shadow is not None:
+            chests[name] = {"layers": layers, "shadow": shadow}
+    if chests and cp.is_file():
+        cv = _anim_curves(cp, idx)
+        props["chests"] = chests
+        props["chest_open"] = {"stop": cv["_stop"],
+                               "box03": cv.get("box03|position", []),
+                               "box04": cv.get("box04|position", []),
+                               "box05": cv.get("box05|position", [])}
+    return props or None
+
+
 def build_level_table():
     """Returns the level list, or None when the AssetRipper source is absent."""
     if not MAP_MANAGER_DIR.is_dir():
@@ -1958,7 +2153,8 @@ def build_level_table():
                           "face_dy": _prefab_w2_dy(by_name.get(w)),
                           # sorting [layer, order] of the base and of the w2 overlay (layer 6 = above characters)
                           "top_sort": so[0] if so else [4, 0],
-                          "face_sort": so[1] if len(so) > 1 else [6, 0]})
+                          "face_sort": so[1] if len(so) > 1 else [6, 0],
+                          "shadow": _prefab_shadow(by_name.get(w))})
         obstacles = []
         for o in _mm_list(seg, "obstacle_list", idx):
             sp = _prefab_sprites(by_name.get(o), idx)
@@ -1968,7 +2164,9 @@ def build_level_table():
                               "alt_dy": _prefab_w2_dy(by_name.get(o)),
                               "sort": so[0] if so else [4, 0],
                               "alt_sort": so[1] if len(so) > 1 else [6, 0],
-                              "blockers": _prefab_blockers(by_name.get(o))})
+                              "blockers": _prefab_blockers(by_name.get(o)),
+                              "shadow": _prefab_shadow(by_name.get(o)),
+                              "sting": _prefab_sting(by_name.get(o))})
         floors = []
         for fl in _mm_list(seg, "floor_list", idx):
             sp = _prefab_sprites(by_name.get(fl), idx)
@@ -2086,7 +2284,9 @@ def build_boss_rooms():
                                  "alt_dy": _prefab_w2_dy(by_name.get(base)), "kind": _prefab_kind(base),
                                  "sort": so[0] if so else [4, 0],
                                  "alt_sort": so[1] if len(so) > 1 else [6, 0],
-                                 "blockers": _prefab_blockers(by_name.get(base))}
+                                 "blockers": _prefab_blockers(by_name.get(base)),
+                                 "shadow": _prefab_shadow(by_name.get(base)),
+                                 "sting": _prefab_sting(by_name.get(base))}
         objects.sort(key=lambda o: (o["x"], o["y"], o["p"]))
         rooms[f.stem] = {"w": w, "h": h, "objects": objects, "dropped_outside": dropped}
     return {"rooms": rooms, "prefabs": prefabs} if rooms else None
@@ -2687,6 +2887,10 @@ def main() -> int:
         tile_pivots = build_tile_pivots(levels, boss_rooms, shop)
         write("tile_pivots", tile_pivots)
         counts["tile_pivots"] = len(tile_pivots)
+    room_props = build_room_props()
+    if room_props is not None:
+        write("room_props", room_props)
+        counts["room_props"] = len(room_props)
     pickups = build_pickup_table()
     if pickups is not None:
         write("pickups", pickups)

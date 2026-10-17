@@ -1,0 +1,8 @@
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 skipped (no spawn points)
+ [info] Level A5 (1-5) biome 1-forest chest_level 2 map_long 4 pool 16 species
+ [info] BossRoom: room 3 uses r1_boss5 (21x21, 88 objects)
+ [info] GameScene: SK_ROOM_TELEPORT -> room 3 centre (no spawn points) at (-1312,-2624)
+ [info] GameScene: SK_ROOM_TELEPORT offset (0,-160)

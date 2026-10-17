@@ -1,0 +1,2 @@
+ [warning] SK_STING_STAND rejected: bad room R
+ [warning] SK_CHEST_STAND rejected: bad distance D (need finite, 0 <= D <= 4096)

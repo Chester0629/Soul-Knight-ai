@@ -3072,7 +3072,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "wall_tree1": {
       "sprite": "objects2_68",
@@ -3100,7 +3127,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     },
     "wall503": {
       "sprite": "w507",
@@ -3128,7 +3157,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "wall504": {
       "sprite": "w505",
@@ -3156,7 +3212,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj22_house": {
       "sprite": "",
@@ -3171,7 +3254,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "brazier03": {
       "sprite": "objects2_38",
@@ -3199,7 +3284,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow3.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.15
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj11_05": {
       "sprite": "objects2_48",
@@ -3227,7 +3339,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     },
     "obj22_06": {
       "sprite": "objects4_5",
@@ -3255,7 +3369,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     },
     "obj22_08": {
       "sprite": "objects4_24",
@@ -3283,7 +3399,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     },
     "box04": {
       "sprite": "objects4_2",
@@ -3311,7 +3429,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "wall603": {
       "sprite": "objects4_1",
@@ -3339,7 +3484,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "mineral_crystal": {
       "sprite": "objects1_80",
@@ -3354,7 +3526,34 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": {
+        "sprite": "shadow_lock.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          -0.1
+        ],
+        "scale": [
+          1.5,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          0.911765,
+          0.234645,
+          0.234645,
+          1.0
+        ],
+        "enabled": false
+      },
+      "sting": null
     },
     "obj22_07": {
       "sprite": "objects4_20",
@@ -3382,7 +3581,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     },
     "cask_red_3": {
       "sprite": "objects4_6",
@@ -3410,7 +3611,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj11_06": {
       "sprite": "objects4_22",
@@ -3438,7 +3666,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "box01": {
       "sprite": "box01",
@@ -3466,7 +3721,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "wall101": {
       "sprite": "w101",
@@ -3494,7 +3776,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "box_weapon": {
       "sprite": "objects1_3",
@@ -3522,7 +3831,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          -0.15,
+          0.0
+        ],
+        "scale": [
+          1.9,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "box_spell": {
       "sprite": "objects1_21",
@@ -3550,7 +3886,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          0.5
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "carpet": {
       "sprite": "",
@@ -3565,7 +3928,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "obj22_table": {
       "sprite": "",
@@ -3580,7 +3945,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "brazier01": {
       "sprite": "objects1_4",
@@ -3608,7 +3975,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj22_stone": {
       "sprite": "",
@@ -3623,7 +4017,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "rail": {
       "sprite": "",
@@ -3638,7 +4034,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "box03": {
       "sprite": "objects1_19",
@@ -3666,7 +4064,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "wall301": {
       "sprite": "w301",
@@ -3694,7 +4119,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "speed_up": {
       "sprite": "objects1_82",
@@ -3709,7 +4161,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "stone02": {
       "sprite": "",
@@ -3724,7 +4178,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "rail2": {
       "sprite": "",
@@ -3739,7 +4195,9 @@
         6,
         0
       ],
-      "blockers": []
+      "blockers": [],
+      "shadow": null,
+      "sting": null
     },
     "box05": {
       "sprite": "objects4_26",
@@ -3767,7 +4225,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow0.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj11_07": {
       "sprite": "objects4_38",
@@ -3795,7 +4280,34 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          3,
+          0
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      },
+      "sting": null
     },
     "obj22_10": {
       "sprite": "objects4_29",
@@ -3823,7 +4335,9 @@
           ],
           "trigger": false
         }
-      ]
+      ],
+      "shadow": null,
+      "sting": null
     }
   }
 }

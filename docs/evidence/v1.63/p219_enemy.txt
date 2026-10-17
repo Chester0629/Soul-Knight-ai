@@ -1,0 +1,40 @@
+ [info] Lock: frame 60 target -1 -> 2
+ [info] Lock: frame 109 target 2 -> 0
+ [info] PosTrace: frame 150 player (0.0,-1376.0) r=12.8 blocked=0
+ [info] PoseTrace: frame 150 player facing 1 clip 0 aim (1.000,0.000) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot 0.0000 scalex 2.00 muzzle (19.20,-1371.20) hand layer z 6.1000
+ [info] PoseTrace: frame 150 enemy 0 e_yeti01 facing 1 clip 1 ring 1 shadow 1
+ [info] PosTrace: frame 150 enemy 0 room 1 e_yeti01 (-192.0,-1424.6) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 1 e_yeti01 facing 1 clip 1 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 1 room 1 e_yeti01 (-85.4,-1151.2) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 2 e_miner03 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 2 room 1 e_miner03 (-187.9,-1500.1) r=19.2 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 3 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 3 room 2 e_miner01 (1120.0,-192.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 4 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 4 room 2 e_miner01 (1120.0,256.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 5 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 5 room 2 e_yeti01 (1152.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 6 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 6 room 2 e_yeti01 (1152.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 7 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 7 room 2 e_miner02 (1184.0,-128.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 8 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 8 room 2 e_miner01 (1184.0,160.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 9 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 9 room 5 e_yeti01 (1024.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 10 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 10 room 5 e_yeti01 (1024.0,-1120.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 11 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 11 room 5 e_yeti01 (1056.0,-1504.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 12 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 12 room 5 e_miner01 (1056.0,-1280.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 13 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 13 room 5 e_miner02 (1056.0,-1056.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 14 e_miner01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 14 room 5 e_miner01 (1088.0,-1440.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 15 e_yeti01 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 15 room 5 e_yeti01 (1088.0,-1216.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 16 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 16 room 5 e_miner02 (1120.0,-1600.0) r=12.8 alive=1 blocked=0
+ [info] PoseTrace: frame 150 enemy 17 e_miner02 facing 1 clip 0 ring 0 shadow 1
+ [info] PosTrace: frame 150 enemy 17 room 5 e_miner02 (1120.0,-1376.0) r=12.8 alive=1 blocked=0

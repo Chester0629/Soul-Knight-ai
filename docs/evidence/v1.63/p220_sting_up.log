@@ -1,0 +1,78 @@
+ [warning] config.json not found, using default configurations.
+ [info] OpenGL Info
+ [info]   Vendor: NVIDIA Corporation
+ [info]   Renderer: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2
+ [info]   Version: 4.1.0 NVIDIA 610.88
+ [info]   GLSL Version: 4.10 NVIDIA via Cg compiler
+ [warning] GameData: enemy e_snowman_temp missing collider: body -> hurtbox inscribed circle (T-52)
+ [info] GameData loaded: 194 weapons, 211 bullets, 146 enemies, 10 enemy_guns, 12 buffs, 108 room layouts, 108 design rooms
+ [info] LootTable loaded: 7 tiers from D:/Projects/Soul Knight/Soul-Knight-ai/Resources/data/droptables.json
+ [info] GameScene: hero c01 on floor 0
+ [info] Level A1 (1-1) biome 1-forest chest_level 1 map_long 3 pool 5 species
+ [info] Audio: bgm bgm_1Low.ogg
+ [info] Floor 0 rooms (design-pool=108): r1_19(15x15) r1_16(15x15) r1_102(15x15) r1_63(15x21) r1_81(21x15) r1_20(15x15) r1_40(15x15) 
+ [info] RoomDetail: room 0 15x15 floor variants 94 24 38 35 7 27 | ring walls plain 25 deco 10 (wall504)
+ [info] RoomDetail: room 1 15x15 floor variants 87 29 31 38 6 34 | ring walls plain 34 deco 8 (wall504)
+ [info] Sting: room 1 has 21 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] Bullet: e_boar01 fires no RGBullet-family bullet (refs: none) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_orc02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] EnemyMaker: room 1 part spawned 3 (5 pending)
+ [info] EnemyMaker: room 1 (type 1) level 1 points 8 -> 8 planned, wave size 3
+ [info] RoomDetail: room 2 15x15 floor variants 88 35 37 36 9 20 | ring walls plain 25 deco 9 (wall504)
+ [info] EnemyMaker: room 2 part spawned 3 (5 pending)
+ [info] EnemyMaker: room 2 (type 1) level 1 points 8 -> 8 planned, wave size 3
+ [info] RoomDetail: room 3 11x11 floor variants 47 17 21 19 4 13 | ring walls plain 15 deco 4 (wall504)
+ [info] EnemyMaker: room 3 (type 4) special prefab -> level 0, no spawns
+ [info] Chest: reward room 3 -> chest_room_reward (tier 1)
+ [info] RoomDetail: room 4 11x11 floor variants 49 14 21 26 3 8 | ring walls plain 26 deco 7 (wall504)
+ [info] EnemyMaker: room 4 (type 2) special prefab -> level 0, no spawns
+ [info] RoomDetail: room 5 15x15 floor variants 80 26 34 45 6 34 | ring walls plain 29 deco 13 (wall504)
+ [info] Sting: room 5 has 8 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] EnemyMaker: room 5 part spawned 3 (6 pending)
+ [info] EnemyMaker: room 5 (type 1) level 1 points 9 -> 9 planned, wave size 3
+ [info] RoomDetail: room 6 11x11 floor variants 43 31 19 12 6 10 | ring walls plain 22 deco 4 (wall504)
+ [info] EnemyMaker: room 6 (type 3) special prefab -> level 0, no spawns
+ [info] Event room 6: statue_01 (Knight) -- worship for 15 coins
+ [info] Floor 0 fresh start (template) hp=6 weapon='weapon_000' (seed=1)
+ [info] GameScene: SK_ZOOM override 2
+ [info] SpawnFilter: 31 of 812 connected floor cells removed from the spawn pools (inside a box / brazier / prop / wall collider for a 12.8 px body)
+ [info] GameScene: multi-room floor ready
+ [info] TransferGate: open in room 4 at (2624,-1312)
+ [info] GameScene: SK_STING_STAND -> room 1 trap cell (-1312,0) of 21
+ [info] RGRoomX: room 1 StartRoom -> Active (door_open=0, sealed)
+ [info] Sting: room 1 frame 60 started (21 cells, ShowSting in 0.0 s)
+ [info] Audio: sfx fx_door.wav
+ [info] Audio: bgm bgm_1High.ogg
+ [info] Door: room 1 frame 60 -> CLOSED (clip door_close2)
+ [info] Lock: frame 60 target -1 -> 2
+ [info] Sting: room 1 frame 61 UP (t=1.220s)
+ [info] Sting: room 1 frame 61 check 1 t=1.220s player HIT hp 6->6 armor 5->3 enemies hurt 0
+ [info] Audio: sfx fx_hit.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Reward: e_orc01 dropped 2 pickups (coins 1 energy 8)
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Reward: e_orc01 dropped 2 pickups (coins 1 energy 8)
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] Audio: sfx enermy_die3.wav
+ [info] EnemyMaker: room 1 part spawned 3 (2 pending)
+ [info] Door: room 1 frame 62 base sprite door02 (bar on, shadow on)
+ [info] Lock: frame 62 target 2 -> 11
+ [info] Corpse: e_orc01 left at (-1504,-96) state 'dead' (1 frame(s))
+ [info] Corpse: e_boar01 left at (-1504,128) state 'dead' (1 frame(s))
+ [info] Corpse: e_orc02 left at (-1472,0) state 'dead' (1 frame(s))
+ [info] Corpse: e_orc02 left at (-192,-1408) state 'dead' (1 frame(s))
+ [info] Corpse: e_orc01 left at (-160,-1440) state 'dead' (1 frame(s))
+ [info] Corpse: e_orc03 left at (-160,-1216) state 'dead' (1 frame(s))
+ [info] Corpse: e_boar01 left at (1120,-96) state 'dead' (1 frame(s))
+ [info] Corpse: e_boar01 left at (1152,-128) state 'dead' (1 frame(s))
+ [info] Corpse: e_orc03 left at (1152,96) state 'dead' (1 frame(s))
+ [warning] OpenGL Severity: MEDIUM
+ [warning]  ID: 131154
+ [warning]  Source: API
+ [warning]  Type: PERFORMANCE
+ [warning]  Message: Pixel-path performance warning: Pixel transfer is synchronized with 3D rendering.

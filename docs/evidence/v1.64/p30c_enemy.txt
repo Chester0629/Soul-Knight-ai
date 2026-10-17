@@ -1,0 +1,12 @@
+ [info] Bullet: e_yeti01 fires no RGBullet-family bullet (refs: effect_shock1) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_miner01 fires no RGBullet-family bullet (refs: sword_0) -> generic bullet_e_1 stands in (T-66)
+ [info] Bullet: e_miner02 fires no RGBullet-family bullet (refs: spear_1_5) -> generic bullet_e_1 stands in (T-66)
+ [info] BulletPose: frame 150 id 1 camp 1 prefab bullet_e_1 heading 14.2 deg px=(-185.8,-1423.1)
+ [info] BulletPose: frame 150 id 2 camp 1 prefab bullet_e_1 heading -69.2 deg px=(-83.1,-1157.1)
+ [info] BulletPose: frame 150 id 3 camp 1 prefab bullet_e_39 heading 33.4 deg px=(-182.6,-1496.5)
+ [info] BulletPose: frame 151 id 1 camp 1 prefab bullet_e_1 heading 14.2 deg px=(-179.6,-1421.5)
+ [info] BulletPose: frame 151 id 3 camp 1 prefab bullet_e_39 heading 33.4 deg px=(-177.2,-1493.0)
+ [info] BulletImpact: frame 151 wall bullet_e_1 camp 1 at (-81.3,-1161.8) heading -69.2 deg effect hit_red
+ [info] BulletPose: frame 152 id 1 camp 1 prefab bullet_e_1 heading 14.2 deg px=(-173.4,-1419.9)
+ [info] BulletPose: frame 152 id 3 camp 1 prefab bullet_e_39 heading 33.4 deg px=(-171.9,-1489.5)
+ [info] BulletPose: frame 153 id 1 camp 1 prefab bullet_e_1 heading 14.2 deg px=(-167.2,-1418.4)

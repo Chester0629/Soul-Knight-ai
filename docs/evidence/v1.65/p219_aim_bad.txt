@@ -1,0 +1,2 @@
+ [warning] SK_FORCE_AIM rejected: bad direction (need finite, non-zero, |v| <= 4096)
+ [info] PoseTrace: frame 30 player facing -1 clip 0 aim (-0.872,0.490) ring 1 tint (0.235,0.914,0.294) shadow 1 weapon 1 rot -0.5124 scalex -2.00 muzzle (-14.38,-50.40) hand layer z 6.1000

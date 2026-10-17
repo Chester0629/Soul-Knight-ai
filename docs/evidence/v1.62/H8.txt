@@ -1,0 +1,1 @@
+ [info] Statue: worshipped statue_05 (Elf) -> statue_index 5

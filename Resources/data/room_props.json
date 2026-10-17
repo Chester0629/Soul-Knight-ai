@@ -1,0 +1,2309 @@
+{
+  "door": {
+    "base": {
+      "sprite": "door02.png",
+      "pivot": [
+        0.5,
+        0.0
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "sort": [
+        4,
+        0
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true
+    },
+    "bar": {
+      "sprite": "door01.png",
+      "pivot": [
+        0.5,
+        0.0
+      ],
+      "offset": [
+        0.0,
+        1.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "sort": [
+        6,
+        3
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true
+    },
+    "shadow": {
+      "sprite": "shadow0.png",
+      "pivot": [
+        0.5,
+        0.3
+      ],
+      "offset": [
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "sort": [
+        3,
+        1
+      ],
+      "color": [
+        1.0,
+        1.0,
+        1.0,
+        0.392157
+      ],
+      "enabled": true
+    },
+    "clips": {
+      "open": {
+        "stop": 0.2,
+        "bar_y": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.133333,
+            0.1
+          ]
+        ],
+        "bar_enabled": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.166667,
+            0.0
+          ]
+        ],
+        "shadow_enabled": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.133333,
+            0.0
+          ]
+        ],
+        "base_sprite": [
+          [
+            0.0,
+            "door02"
+          ],
+          [
+            0.166667,
+            "door03"
+          ]
+        ]
+      },
+      "close": {
+        "stop": 0.16666667,
+        "bar_y": [
+          [
+            0.0,
+            0.1
+          ],
+          [
+            0.166667,
+            1.0
+          ]
+        ],
+        "bar_enabled": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.033333,
+            1.0
+          ]
+        ],
+        "shadow_enabled": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.033333,
+            1.0
+          ]
+        ],
+        "base_sprite": [
+          [
+            0.0,
+            "door03"
+          ],
+          [
+            0.033333,
+            "door02"
+          ]
+        ]
+      }
+    },
+    "open_sprite": "door03"
+  },
+  "sting": {
+    "sting01": {
+      "damage": 2,
+      "offset_time": 0.0,
+      "show_time": 1.0,
+      "hide_time": 2.0,
+      "hit_player": true,
+      "hit_enemy": true,
+      "base": {
+        "sprite": "objects1_0.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          2,
+          1
+        ],
+        "color": [
+          0.890196,
+          0.913725,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      },
+      "ding": {
+        "sprite": "objects1_1.png",
+        "pivot": [
+          0.5,
+          0.0
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "sort": [
+          4,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "enabled": true
+      }
+    }
+  },
+  "chests": {
+    "chest00": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_6.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_0.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_5.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_4.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest01": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_3.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_0.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_2.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_1.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest02": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss01": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss02": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss03": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss04": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss07": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss08": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss09": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss10": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss13": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_boss14": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_bossnian": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_13.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_10.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_12.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_11.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    },
+    "chest_room_reward": {
+      "layers": {
+        "box06": {
+          "sprite": "objects_common_9.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            2
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box05": {
+          "sprite": "objects_common_0.png",
+          "pivot": [
+            0.5,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            -0.45
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            4,
+            0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box04": {
+          "sprite": "objects_common_8.png",
+          "pivot": [
+            0.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        },
+        "box03": {
+          "sprite": "objects_common_7.png",
+          "pivot": [
+            1.0,
+            0.0
+          ],
+          "offset": [
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0
+          ],
+          "sort": [
+            6,
+            1
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "enabled": true
+        }
+      },
+      "shadow": {
+        "sprite": "shadow1.png",
+        "pivot": [
+          0.5,
+          0.3
+        ],
+        "offset": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.2,
+          1.0
+        ],
+        "sort": [
+          3,
+          1
+        ],
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          0.392157
+        ],
+        "enabled": true
+      }
+    }
+  },
+  "chest_open": {
+    "stop": 1.0,
+    "box03": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.233333,
+        -0.5,
+        0.0
+      ],
+      [
+        0.5,
+        -0.5,
+        0.1
+      ],
+      [
+        1.0,
+        -0.5,
+        0.1
+      ]
+    ],
+    "box04": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.233333,
+        0.5,
+        0.0
+      ],
+      [
+        0.5,
+        0.5,
+        0.1
+      ],
+      [
+        1.0,
+        0.5,
+        0.1
+      ]
+    ],
+    "box05": [
+      [
+        0.0,
+        0.0,
+        -0.5
+      ],
+      [
+        0.5,
+        0.0,
+        0.0
+      ],
+      [
+        1.0,
+        0.0,
+        0.0
+      ]
+    ]
+  }
+}

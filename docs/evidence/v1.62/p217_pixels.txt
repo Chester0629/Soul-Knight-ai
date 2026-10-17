@@ -1,0 +1,7 @@
+ok   AC1 bottom bush row starts at y=555 (expected 555; pre-fix 531)
+ok   AC3 A1 void colour (5, 31, 40) == camera_bg (5,31,40)
+ok   AC3 B1 void colour (7, 26, 49) == camera_bg (7,26,49)
+ok   AC4 seam dips >10 lum: vertical [], horizontal [] (pre-fix 13..30)
+ok   AC2 behind: bush overlay covers the hero's feet (0.88 of rect is bush, need > 0.6)
+ok   AC2 front: hero drawn over the wall base (0.00 of rect is bush, need < 0.05)
+P217 PIXELS: OK

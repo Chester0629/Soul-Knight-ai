@@ -204,10 +204,12 @@ check_png "$E/p215_graveyard.png"
 require_order p215_graveyard "Level D5" "BossPool: biome 2-graveyard -> boss0[34]" "SK_ROOM_TELEPORT -> room 3 centre"
 require p215_graveyard "SK_ROOM_TELEPORT offset \(0,-160\)"
 echo "=== P2.17 render slice 1: pivot (a), sorting layers (b), camera background (c), tile seams (d) ==="
-run_case p217_a1_room1 "Level A1|SK_ROOM_TELEPORT -> room 1" 6   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=60,1 SK_MAX_FRAMES=130 SK_SHOT="$E/p217_a1_room1.png"
+# P2.20: room 1 of A1 seed 1 is a spike room (21 sting01 cells) and the teleport lands the hero on one of them, so the hero
+# no longer survives to frame 130 (the shot would be the game-over screen); frame 70 shows the same camera and layout.
+run_case p217_a1_room1 "Level A1|SK_ROOM_TELEPORT -> room 1" 6   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=60,1 SK_MAX_FRAMES=70 SK_SHOT="$E/p217_a1_room1.png"
 check_png "$E/p217_a1_room1.png"
 require_order p217_a1_room1 "Level A1 \(1-1\) biome 1-forest" "SK_ROOM_TELEPORT -> room 1 spawn point"
-run_case p217_a1_room1_z06 "Level A1|SK_ZOOM override" 6   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=60,1 SK_ZOOM=0.6 SK_MAX_FRAMES=130 SK_SHOT="$E/p217_a1_room1_z06.png"
+run_case p217_a1_room1_z06 "Level A1|SK_ZOOM override" 6   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=60,1 SK_ZOOM=0.6 SK_MAX_FRAMES=70 SK_SHOT="$E/p217_a1_room1_z06.png"
 check_png "$E/p217_a1_room1_z06.png"
 run_case p217_wall_behind "Level A1|SK_ROOM_TELEPORT" 8   SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_ROOM_TELEPORT=30,4,0,-128 SK_ZOOM=3 SK_MAX_FRAMES=60 SK_SHOT="$E/p217_wall_behind.png"
 check_png "$E/p217_wall_behind.png"
@@ -327,9 +329,48 @@ python tools/p219_compare.py "$E" > "$E/p219_compare.txt" 2>&1 || fail "p219 com
 mkdir -p docs/evidence/p2.19 && cp "$E/compare_aim.png" "$E/compare_aim8.png" "$E/compare_run.png" "$E/compare_ring.png" docs/evidence/p2.19/ || fail "copy p219 compare sheets"
 python tools/validate_data.py --actor-report > "$E/actor_states.txt" 2>&1 || fail "actor state report"
 head -4 "$E/actor_states.txt"
+echo "=== P2.20 room-details slice: floor variants + decorated walls (RoomGen draw order), doors, spike traps, chests ==="
+# AC1/AC2: the RoomGen draw order and the statistics, from the gtest suite itself (60 rooms x 25x25 = 37500 cells)
+./build/Debug/SoulKnightTests.exe --gtest_filter='RoomDetailTest.*:RoomGenGoldenTest.*' > "$E/p220_roomgen_tests.txt" 2>&1 || fail "RoomDetailTest / RoomGenGoldenTest evidence run"
+grep -E "P220|PASSED|FAILED" "$E/p220_roomgen_tests.txt"
+# floor variants + wall pieces of two real floors (A1 forest: wall504, B1 ice: wall601 are wall_list[1])
+P220="SK_SEED=5 SK_SKIP_MENU=1 SK_MUTE=1 SK_DT_MS=20"
+run_case p220_floor_b1 "Level B1|RoomDetail:" 12 $P220 SK_ZOOM=1.5 SK_MAX_FRAMES=40 SK_SHOT="$E/p220_floor_b1.png"
+check_png "$E/p220_floor_b1.png"
+require p220_floor_b1 "Level B1 \(1-1\) biome 1-ice" "RoomDetail: room 0 15x15 floor variants"
+P220A1="SK_SEED=1 SK_SKIP_MENU=1 SK_MUTE=1 SK_DT_MS=20"
+run_case p220_floor_a1 "Level A1|RoomDetail:" 12 $P220A1 SK_MAX_FRAMES=3
+require p220_floor_a1 "Level A1 \(1-1\) biome 1-forest" "RoomDetail: room 0 .* \(wall504\)"
+# AC3: doors. Room 1 of B1 seed 5 starts (doors close: door02 + bar + shadow0), three forced waves, clears (doors open: door03)
+run_case p220_door_closed "Door:|StartRoom" 8 $P220 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=100 SK_FORCE_KILL_EVERY=45 SK_ZOOM=1.5 SK_MAX_FRAMES=90 SK_SHOT="$E/p220_door_closed.png"
+check_png "$E/p220_door_closed.png"
+run_case p220_door_open "Door:|StartRoom|cleared" 12 $P220 SK_ROOM_TELEPORT=60,1 SK_FORCE_KILL=100 SK_FORCE_KILL_EVERY=45 SK_ZOOM=1.5 SK_MAX_FRAMES=260 SK_SHOT="$E/p220_door_open.png"
+check_png "$E/p220_door_open.png"
+require_order p220_door_open "StartRoom -> Active" "Door: room 1 frame [0-9]+ -> CLOSED" "base sprite door02 \(bar on, shadow on\)" "cleared" "Door: room 1 frame [0-9]+ -> OPEN" "base sprite door03 \(bar off, shadow off\)"
+# AC4: spike traps (A1 seed 1: room 1 = 21 sting01 cells, room 5 = 8). Timeline from room 5's spawn point (off the traps);
+# damage with the hero ON a trap cell of room 1.
+run_case p220_sting_timeline "Sting:" 90 $P220A1 SK_ROOM_TELEPORT=60,5 SK_FORCE_KILL=62 SK_FORCE_KILL_EVERY=20 SK_MAX_FRAMES=520
+require p220_sting_timeline "Sting: room 5 has 8 trap cells" "Sting: room 5 frame [0-9]+ started" "Sting: room 5 frame [0-9]+ UP" "Sting: room 5 frame [0-9]+ DOWN" "Sting: room 5 frame [0-9]+ check 12 "
+run_case p220_sting_stand "Sting:|SK_STING_STAND|died" 40 $P220A1 SK_STING_STAND=60,1 SK_FORCE_KILL=62 SK_FORCE_KILL_EVERY=20 SK_ZOOM=2 SK_MAX_FRAMES=130 SK_SHOT="$E/p220_sting_down.png"
+check_png "$E/p220_sting_down.png"
+run_case p220_sting_up "Sting:|SK_STING_STAND" 12 $P220A1 SK_STING_STAND=60,1 SK_FORCE_KILL=62 SK_FORCE_KILL_EVERY=20 SK_ZOOM=2 SK_MAX_FRAMES=70 SK_SHOT="$E/p220_sting_up.png"
+check_png "$E/p220_sting_up.png"
+# AC5: chests (A1 seed 1: reward room 3, chest_room_reward). Closed (hero 64 px below), opening (hero 30 px below walks off).
+run_case p220_chest_closed "Chest:|SK_CHEST_STAND" 6 $P220A1 SK_CHEST_STAND=60,64 SK_ZOOM=3 SK_MAX_FRAMES=70 SK_SHOT="$E/p220_chest_closed.png"
+check_png "$E/p220_chest_closed.png"
+run_case p220_chest_open "Chest:|SK_CHEST_STAND" 8 $P220A1 SK_CHEST_STAND=60,30 SK_WALK_DIR=1,0 SK_ZOOM=3 SK_MAX_FRAMES=76 SK_SHOT="$E/p220_chest_open.png"
+check_png "$E/p220_chest_open.png"
+# negative: malformed evidence hooks are rejected and never act
+run_case p220_hooks_bad "rejected|SK_STING_STAND|SK_CHEST_STAND" 6 $P220A1 SK_STING_STAND=60,x SK_CHEST_STAND=60,nan SK_MAX_FRAMES=70
+require p220_hooks_bad "SK_STING_STAND rejected" "SK_CHEST_STAND rejected"
+python tools/p220_check.py "$E" > "$E/p220_check.txt" 2>&1 || fail "p220 assertions"
+tail -3 "$E/p220_check.txt"
+grep -q "P220 CHECK: OK" "$E/p220_check.txt" || fail "p220 assertions not OK"
+python tools/p220_compare.py "$E" > "$E/p220_compare.txt" 2>&1 || fail "p220 compare sheets"
+mkdir -p docs/evidence/p2.20 && cp "$E/compare_walls.png" "$E/compare_doors.png" "$E/compare_chest.png" "$E/compare_sting.png" docs/evidence/p2.20/ || fail "copy p220 compare sheets"
 git rev-parse --short HEAD | tee "$E/head.txt"
-# keep the FULL p30c_* and p219_* logs: tools/p30c_check.py / tools/p219_check.py (documented re-check commands) read them
-find "$E" -maxdepth 1 -name "*.log" ! -name "p30c_*.log" ! -name "p219_*.log" -delete
+# keep the FULL p30c_* / p219_* / p220_* logs: tools/p30c_check.py / p219_check.py / p220_check.py (documented re-check commands) read them
+find "$E" -maxdepth 1 -name "*.log" ! -name "p30c_*.log" ! -name "p219_*.log" ! -name "p220_*.log" -delete
 if [ "${#FAILS[@]}" -eq 0 ]; then
   echo "STATUS: OK (all steps passed) $(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$E/status.txt"
 else

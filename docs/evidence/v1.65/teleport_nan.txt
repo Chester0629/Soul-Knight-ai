@@ -1,0 +1,1 @@
+ [warning] SK_ROOM_TELEPORT rejected: bad offset (need finite number, |v| <= 4096)

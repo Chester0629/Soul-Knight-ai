@@ -62,6 +62,21 @@ struct BodyGeom {
         return (gap.x * gap.x + gap.y * gap.y) <= r * r;
     }
 
+    /// P2.20: true if the axis-aligned box (@p boxCentre, @p boxHalf) touches or overlaps this body's
+    /// hurtbox when the body stands at @p pos (inclusive boundary). The original's trap check is a
+    /// Physics2D.BoxCastNonAlloc of size (1,1) with a zero direction and distance 0 against the
+    /// Body_P / Body_E layers, i.e. exactly this static box-vs-collider overlap.
+    bool HurtOverlapsBox(glm::vec2 pos, glm::vec2 boxCentre, glm::vec2 boxHalf) const {
+        const glm::vec2 centre = pos + hurtOffsetPx;
+        const glm::vec2 d = centre - boxCentre;
+        if (hurtIsBox) {
+            return std::abs(d.x) <= hurtHalfPx.x + boxHalf.x && std::abs(d.y) <= hurtHalfPx.y + boxHalf.y;
+        }
+        const glm::vec2 nearest{std::clamp(d.x, -boxHalf.x, boxHalf.x), std::clamp(d.y, -boxHalf.y, boxHalf.y)};
+        const glm::vec2 gap = d - nearest;
+        return (gap.x * gap.x + gap.y * gap.y) <= hurtRadiusPx * hurtRadiusPx;
+    }
+
     /// SWEPT hit test over one fixed step (T-57). The body moves linearly from @p pos0 to
     /// @p pos1 while the circle centre moves linearly from @p c0 to @p c1 (radius @p r).
     /// Works on the RELATIVE motion rel(t) = (c0 + t (c1-c0)) - (pos0 + t (pos1-pos0) + hurtOffset)

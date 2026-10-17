@@ -1,0 +1,4 @@
+ [info] Chest: reward room 3 -> chest_room_reward (tier 1)
+ [info] GameScene: SK_CHEST_STAND -> 30 px below the chest at (1312,-1312) tier 1
+ [info] Chest: frame 60 opening chest_room_reward (4 layers: yes)
+ [info] Chest: opened -> weapon_098

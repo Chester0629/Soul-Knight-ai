@@ -1,0 +1,10 @@
+ [info] Sting: room 1 has 21 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] Sting: room 5 has 8 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] GameScene: SK_STING_STAND -> room 1 trap cell (-1312,0) of 21
+ [info] Sting: room 1 frame 60 started (21 cells, ShowSting in 0.0 s)
+ [info] Sting: room 1 frame 61 UP (t=1.220s)
+ [info] Sting: room 1 frame 61 check 1 t=1.220s player HIT hp 6->6 armor 5->3 enemies hurt 0
+ [info] Sting: room 1 frame 76 check 2 t=1.520s player PROTECTED hp 6->6 armor 3->3 enemies hurt 0
+ [info] Sting: room 1 frame 91 check 3 t=1.820s player HIT hp 6->6 armor 3->1 enemies hurt 4
+ [info] Sting: room 1 frame 106 check 4 t=2.120s player PROTECTED hp 6->6 armor 1->1 enemies hurt 0
+ [info] Sting: room 1 frame 111 DOWN (t=2.220s)

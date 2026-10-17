@@ -1,0 +1,8 @@
+ [info] Level A1 (1-1) biome 1-forest chest_level 1 map_long 3 pool 5 species
+ [info] RoomDetail: room 0 15x15 floor variants 94 24 38 35 7 27 | ring walls plain 25 deco 10 (wall504)
+ [info] RoomDetail: room 1 15x15 floor variants 87 29 31 38 6 34 | ring walls plain 34 deco 8 (wall504)
+ [info] RoomDetail: room 2 15x15 floor variants 88 35 37 36 9 20 | ring walls plain 25 deco 9 (wall504)
+ [info] RoomDetail: room 3 11x11 floor variants 47 17 21 19 4 13 | ring walls plain 15 deco 4 (wall504)
+ [info] RoomDetail: room 4 11x11 floor variants 49 14 21 26 3 8 | ring walls plain 26 deco 7 (wall504)
+ [info] RoomDetail: room 5 15x15 floor variants 80 26 34 45 6 34 | ring walls plain 29 deco 13 (wall504)
+ [info] RoomDetail: room 6 11x11 floor variants 43 31 19 12 6 10 | ring walls plain 22 deco 4 (wall504)

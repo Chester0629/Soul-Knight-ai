@@ -471,15 +471,96 @@ void Simulation::RollBulletBuff(const BulletState &b, std::uint32_t targetId, bo
 // (C08's shield absorb; every other hero's default is an exact pass-through --
 // absorbed=false, damageToApply==the raw finalDamage -- so this is behaviourally
 // invisible for them). @p hr is taken BY VALUE so the caller's copy is untouched.
-void Simulation::ApplyDamageToPlayer(Game::Combat::HitResult hr) {
+bool Simulation::ApplyDamageToPlayer(Game::Combat::HitResult hr) {
     if (m_Skill != nullptr) {
         const ICharSkill::HurtOutcome ho = m_Skill->OnPlayerHurt(hr.finalDamage, /*awake=*/true);
         if (ho.absorbed) {
-            return; // C08's shield ate it (or the silent !awake no-op) -- no HP/armor change.
+            return true; // C08's shield ate it (or the silent !awake no-op) -- no HP/armor change.
         }
         hr.finalDamage = ho.damageToApply;
     }
     Game::Combat::ApplyToPlayer(m_PlayerStats, hr, true);
+    return false;
+}
+
+// P2.20: spike-trap damage tick (see Simulation.hpp). PORT CHOICE (T-74): straight damage through the same
+// Damage.hpp split as a DoT tick (player armor-then-hp, C08's shield may absorb it, enemies straight hp) -- the
+// original's GetHurt(damage / 2) / GetHurt(damage) chain beyond the can_hurt gate is truncated in the export;
+// the player's 0.5 s hit protection is applied (TryHurtPlayer), enemies have none (RGEController.GetHurt gates on
+// awake / dead only).
+Simulation::HazardHit Simulation::ApplyHazardBox(glm::vec2 centre, glm::vec2 half, int playerDamage,
+                                                 int enemyDamage, bool hitPlayer, bool hitEnemy,
+                                                 bool playerImmune) {
+    HazardHit out;
+    if (hitEnemy && enemyDamage > 0) {
+        Game::Combat::HitResult hr;
+        hr.finalDamage = enemyDamage;
+        for (std::size_t ei = 0; ei < m_Enemies.size(); ++ei) {
+            auto &e = m_Enemies[ei];
+            if (e->State().dead || !e->State().geom.HurtOverlapsBox(e->State().pos, centre, half)) {
+                continue;
+            }
+            Game::Combat::ApplyToEnemy(e->MutableState().stats, hr, true);
+            e->MutableState().SetDeathSource(DeathSource::Other);
+            m_Events.push_back(
+                SimEvent{SimEventType::AnimTrigger, static_cast<std::uint32_t>(ei), "hurt"});
+            ++out.enemies;
+        }
+        if (m_Boss != nullptr && !m_Boss->State().dead &&
+            m_Boss->State().geom.HurtOverlapsBox(m_Boss->State().pos, centre, half)) {
+            Game::Combat::ApplyToEnemy(m_Boss->MutableState().stats, hr, true);
+            m_Boss->MutableState().SetDeathSource(DeathSource::Other);
+            m_Boss->OnHurt(m_Boss->State().stats.hp, m_Boss->State().stats.maxHp);
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kBossViewId, "hurt"});
+            out.boss = true;
+        }
+    }
+    if (hitPlayer && !playerImmune && m_Input.playerAlive &&
+        m_PlayerGeom.HurtOverlapsBox(m_Input.playerPos, centre, half)) {
+        Game::Combat::HitResult hr;
+        hr.finalDamage = playerDamage;
+        switch (TryHurtPlayer(hr)) { // R48/R49: only Damaged is an effective hit
+        case PlayerHurt::Damaged:
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"});
+            out.player = true;
+            break;
+        case PlayerHurt::Protected:
+            out.playerProtected = true;
+            break;
+        case PlayerHurt::Absorbed:
+            m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"});
+            out.playerAbsorbed = true;
+            break;
+        case PlayerHurt::NoDamage:
+            out.playerNoDamage = true;
+            break;
+        }
+    }
+    return out;
+}
+
+// P2.20 (R48/R49): the GetHurt gate (see Simulation.hpp). FAITHFUL: kPlayerHitProtectMs. A C08 shield absorb starts
+// NO protection: C08Controller$$GetHurt (game_typed.c:2231, DISASM 0x2674c0) with in_skill set only subtracts the
+// damage from shield_value and never reaches RGController.GetHurt (so neither `can_hurt` nor StartHitTrigger);
+// its tail past that subtraction is truncated, so "no protection" is INFERRED (T-77). The protection gate still comes
+// first: while the hurtbox is off (battle) nothing reaches the shield either. A bullet that finds the hero protected
+// flies on (battle: the hurtbox is disabled).
+Simulation::PlayerHurt Simulation::TryHurtPlayer(Game::Combat::HitResult hr) {
+    if (PlayerHitProtected()) {
+        return PlayerHurt::Protected;
+    }
+    const int hp0 = m_PlayerStats.hp;
+    const int armor0 = m_PlayerStats.armor;
+    if (ApplyDamageToPlayer(hr)) {
+        return PlayerHurt::Absorbed;
+    }
+    // INFERRED (T-77): a hit that reached GetHurt but cost nothing (damage <= 0) still starts the protection: HurtArmor
+    // (game_typed.c:50787) calls StartHitTrigger whenever `armor - damage >= 0`, HurtHp whenever hp stays > 0 -- GetHurt's
+    // routing between them is truncated, but neither branch asks for a loss.
+    if (m_PlayerStats.hp > 0) {
+        m_PlayerHitProtectMs = kPlayerHitProtectMs; // StartHitTrigger(0.5f)
+    }
+    return (m_PlayerStats.hp < hp0 || m_PlayerStats.armor < armor0) ? PlayerHurt::Damaged : PlayerHurt::NoDamage;
 }
 
 // P3.3.b: C04's melee sword cut (see SimConfig.hpp T-36 for the reach/arc port
@@ -937,7 +1018,8 @@ void Simulation::ResolveHits() {
                 }
             }
             float hitT = 0.0F; // hit time unused: one target, so no ordering needed.
-            if (m_Input.playerAlive &&
+            // R48: while the hero is hit-protected his hurtbox is off (battle) -- the bullet flies on.
+            if (m_Input.playerAlive && !PlayerHitProtected() &&
                 m_PlayerGeom.HurtSweepShapeBeforeWall(playerFrom, m_Input.playerPos, b.prevPos,
                                                       stepEnd, sw, tw, hitT)) {
                 Game::Combat::AttackerInput in;
@@ -946,7 +1028,7 @@ void Simulation::ResolveHits() {
                 in.repelInputMagnitude = b.repel * kRepelScale;
                 const Game::Combat::HitResult hr =
                     Game::Combat::ResolveHit(in, m_HitRng, Game::Combat::Defender::PLAYER);
-                ApplyDamageToPlayer(hr); // P3.3.b: C08's shield can absorb this hit.
+                TryHurtPlayer(hr); // P3.3.b: C08's shield can absorb this hit; R48: starts the 0.5 s protection.
                 m_Events.push_back(SimEvent{SimEventType::AnimTrigger, kPlayerViewId, "hurt"}); // A
                 // P3.2: enemy bullets never carry a buff today (EnemyGunDef has no
                 // bullet-prefab link into bullets.json's buff-carrying rows -- NOT
@@ -1024,6 +1106,9 @@ void Simulation::Cull() {
 }
 
 void Simulation::Step() {
+    if (m_PlayerHitProtectMs > 0.0F) {
+        m_PlayerHitProtectMs = std::max(0.0F, m_PlayerHitProtectMs - kFixedStepMs); // EndHitTrigger after 0.5 s
+    }
     const glm::vec2 target = m_Input.playerPos;
     for (auto &e : m_Enemies) {
         e->SetTarget(target);

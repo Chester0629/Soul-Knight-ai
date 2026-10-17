@@ -1,0 +1,7 @@
+ [info] GameScene: SK_ROOM_TELEPORT -> room 4 centre (no spawn points) at (2624,-1312)
+ [info] GameScene: SK_ROOM_TELEPORT offset (100,0)
+ [info] PosTrace: frame 5 player (2728.2,-1312.0) r=12.8 blocked=0
+ [info] Frame dt 5000 ms clamped to 160 ms (frame 6)
+ [info] PosTrace: frame 6 player (2750.3,-1312.0) r=12.8 blocked=0
+ [info] PosTrace: frame 7 player (2754.5,-1312.0) r=12.8 blocked=0
+ [info] PosTrace: frame 29 player (2754.5,-1312.0) r=12.8 blocked=0

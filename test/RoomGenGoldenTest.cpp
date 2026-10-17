@@ -105,7 +105,7 @@ void CheckGolden(const Golden &g, const RoomGen &r) {
 // g1: max size, max difficulty, all four doors -> exercises every stage + heavy
 //     obstacle placement. CONFIRMED-faithful stages.
 TEST(RoomGenGoldenTest, G1_Max25x25_L3_AllDoors) {
-    const Golden g{7129463644097436581ULL, 16380198186965041929ULL, 324,
+    const Golden g{17827765133073955725ULL, 9786982677524508282ULL, 372,
                    25, 25, 3, 3, 8, 8, 0};
     RoomGen r(12345, kAllDoors, ExplicitRoom(25, 25, 3, 3));
     CheckGolden(g, r);
@@ -113,7 +113,7 @@ TEST(RoomGenGoldenTest, G1_Max25x25_L3_AllDoors) {
 
 // g2: min size, min difficulty, no doors -> clean perimeter + sparse obstacles.
 TEST(RoomGenGoldenTest, G2_Min15x15_L1_NoDoors) {
-    const Golden g{6165510508371288133ULL, 8667849711382307197ULL, 105,
+    const Golden g{13439509807020576984ULL, 17256268805128924539ULL, 144,
                    15, 15, 1, 1, 13, 13, 0};
     RoomGen r(999, kNoDoors, ExplicitRoom(15, 15, 1, 1));
     CheckGolden(g, r);
@@ -122,7 +122,7 @@ TEST(RoomGenGoldenTest, G2_Min15x15_L1_NoDoors) {
 // g3: asymmetric w!=h + single east door -> catches x*height+y index bugs + door
 //     and wall interplay.
 TEST(RoomGenGoldenTest, G3_Asym21x15_L2_EastDoor) {
-    const Golden g{7326138852820820341ULL, 4329835637181939792ULL, 167,
+    const Golden g{9460080397215056851ULL, 4480351562846144310ULL, 157,
                    21, 15, 2, 2, 10, 13, 0};
     RoomGen r(7, kEastOnly, ExplicitRoom(21, 15, 2, 2));
     CheckGolden(g, r);
@@ -131,7 +131,7 @@ TEST(RoomGenGoldenTest, G3_Asym21x15_L2_EastDoor) {
 // g4: random-room path (size-roll + difficulty-roll). Pins the RECONSTRUCTED roll
 //     order; re-baseline this one if a captured real-game grid ever lands.
 TEST(RoomGenGoldenTest, G4_RandomRoom_Floor0) {
-    const Golden g{11808428556677858851ULL, 14488161160482090163ULL, 192,
+    const Golden g{4940461371857097314ULL, 9609022236786229126ULL, 225,
                    15, 25, 3, 2, 13, 8, 0};
     RoomGen::Options o;
     o.randomRoom = true;
@@ -142,10 +142,65 @@ TEST(RoomGenGoldenTest, G4_RandomRoom_Floor0) {
 
 // g5: a second max-size seed -> distinct grid; guards against seed-independent bugs.
 TEST(RoomGenGoldenTest, G5_Max25x25_L3_Seed2024) {
-    const Golden g{3994404615466042921ULL, 1370606586774510252ULL, 396,
+    const Golden g{9544859499978096612ULL, 13265871116507346365ULL, 365,
                    25, 25, 3, 3, 8, 8, 0};
     RoomGen r(2024, kAllDoors, ExplicitRoom(25, 25, 3, 3));
     CheckGolden(g, r);
+}
+
+// --- P2.20 attribution: the golden changes above are the draw-order correction and nothing else ----------
+// P2.20 corrected two stages to the original's draw sequence (CreateFloor pass 3: ONE draw per cell, was 1-2;
+// CreateWall: TWO rolls per perimeter position, was one). Every later stage (the obstacle phases) reads the
+// same stream, so every procedural-room golden moved. RoomGen::Options::legacyDrawOrder reproduces the old
+// sequence; with it set the PRE-P2.20 goldens (the values that used to sit in the tests above) come back
+// bit-for-bit, so nothing but those two stages changed. (itemised old -> new in docs/MASTER_PLAN.md P2.20)
+TEST(RoomGenGoldenTest, LegacyDrawOrderReproducesTheOldGoldens) {
+    {
+        const Golden g{7129463644097436581ULL, 16380198186965041929ULL, 324, 25, 25, 3, 3, 8, 8, 0};
+        RoomGen::Options o = ExplicitRoom(25, 25, 3, 3);
+        o.legacyDrawOrder = true;
+        CheckGolden(g, RoomGen(12345, kAllDoors, o)); // G1
+    }
+    {
+        const Golden g{6165510508371288133ULL, 8667849711382307197ULL, 105, 15, 15, 1, 1, 13, 13, 0};
+        RoomGen::Options o = ExplicitRoom(15, 15, 1, 1);
+        o.legacyDrawOrder = true;
+        CheckGolden(g, RoomGen(999, kNoDoors, o)); // G2
+    }
+    {
+        const Golden g{7326138852820820341ULL, 4329835637181939792ULL, 167, 21, 15, 2, 2, 10, 13, 0};
+        RoomGen::Options o = ExplicitRoom(21, 15, 2, 2);
+        o.legacyDrawOrder = true;
+        CheckGolden(g, RoomGen(7, kEastOnly, o)); // G3
+    }
+    {
+        const Golden g{11808428556677858851ULL, 14488161160482090163ULL, 192, 15, 25, 3, 2, 13, 8, 0};
+        RoomGen::Options o;
+        o.randomRoom = true;
+        o.floorIndex = 0;
+        o.legacyDrawOrder = true;
+        CheckGolden(g, RoomGen(12345, kAllDoors, o)); // G4
+    }
+    {
+        const Golden g{3994404615466042921ULL, 1370606586774510252ULL, 396, 25, 25, 3, 3, 8, 8, 0};
+        RoomGen::Options o = ExplicitRoom(25, 25, 3, 3);
+        o.legacyDrawOrder = true;
+        CheckGolden(g, RoomGen(2024, kAllDoors, o)); // G5
+    }
+}
+
+// The design-room path (proceduralObstacles = false) draws nothing after the walls, so its grid is a
+// function of the shell alone: the P2.20 correction does not move a single design-room cell.
+TEST(RoomGenGoldenTest, DesignRoomGridsAreUnchangedByTheDrawOrderCorrection) {
+    for (const int seed : {1, 2, 3, 99, 12345}) {
+        RoomGen::Options a = ExplicitRoom(15, 15, 1, 1);
+        a.proceduralObstacles = false;
+        a.designSolidCells = {{4, 4}, {4, 5}, {7, 7}};
+        RoomGen::Options b = a;
+        b.legacyDrawOrder = true;
+        EXPECT_EQ(RoomGen(seed, kAllDoors, a).Grid(), RoomGen(seed, kAllDoors, b).Grid()) << seed;
+        EXPECT_EQ(RoomGen(seed, kAllDoors, a).FloorList(), RoomGen(seed, kAllDoors, b).FloorList()) << seed;
+    }
 }
 
 // NOLINTEND(readability-magic-numbers)

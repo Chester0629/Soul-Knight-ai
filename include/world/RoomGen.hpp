@@ -91,6 +91,14 @@ public:
         /// builds, so a box blocks movement but never breaks door reachability
         /// (ConnectedFloorCells reads this grid; only obj_index-0 walls are barriers).
         std::vector<std::pair<int, int>> designSolidCells;
+
+        /// TEST / EVIDENCE ONLY (P2.20), default false: reproduce the PRE-P2.20 draw sequence of CreateFloor
+        /// pass 3 (1-2 draws per cell: a classification draw for edge in [1,2] or >= 4 plus an always-draw
+        /// Range(2,4)) and of CreateWall (ONE roll per position). It exists so RoomDetailTest can show that
+        /// the golden-grid changes of the P2.20 slice are caused by exactly that draw-order correction
+        /// and nothing else (the old goldens come back with this flag set). FloorVariantAt /
+        /// BorderCellDecorated carry no meaning in this mode.
+        bool legacyDrawOrder = false;
     };
 
     /**
@@ -145,11 +153,37 @@ public:
      *         ordering matches the original's x-major, y-minor scan.
      */
     const std::vector<std::pair<int, int>> &FloorList() const { return m_FloorList; }
-    /// MAP M1: the floor tile VARIANT CreateFloor's pass 3 rolled for a cell -- an
-    /// index into MapManager.floor_list (0..3). The draws were always reproduced
-    /// (stream fidelity); the value is now kept so the biome floor renders with its
-    /// real variety instead of one tile. Out of range -> 0.
+    /// The floor tile VARIANT CreateFloor's pass 3 chose for a cell -- an index into
+    /// MapManager.floor_list (0..5). FAITHFUL (P2.20, DISASM 0x50d8d0-0x50d9dc): one draw per cell,
+    /// edge in [1,2] -> 0/1 (75/25), edge 0 or 3 -> 2/3 (50/50), edge >= 4 -> 5/4 (75/25).
+    /// Out of range -> 0.
     int FloorVariantAt(int x, int y) const;
+
+    /// The four sides of the perimeter wall ring CreateWall builds.
+    enum class WallSide : int { South = 0, North = 1, West = 2, East = 3 };
+
+    /// CreateWall's decoration threshold: a piece whose Range(0,100) roll is below this wears
+    /// MapManager.wall_list[1] (DISASM `cmp r0,#0x1e`).
+    static constexpr int kWallDecoThreshold = 30;
+    /// The door-gap window in WORLD coordinates (18..22 inclusive): CreateWall places nothing and
+    /// draws nothing there (DISASM `sub r2,r8,#0x12; cmp r2,#5; blo`).
+    static constexpr int kGapLo = 18;
+    static constexpr int kGapHi = 22;
+
+    /// True when CreateWall rolled a value < kWallDecoThreshold for the perimeter piece of @p side
+    /// at WORLD column (South/North) or row (West/East) @p along. Pieces in the door-gap window
+    /// and out-of-range positions have no roll -> false.
+    bool WallPieceDecorated(WallSide side, int along) const;
+    /// True when CreateWall drew rolls for that piece (false in the gap window / out of range).
+    bool WallPieceRolled(WallSide side, int along) const;
+    /// PORT CHOICE (T-73): whether the port's border cell (x,y) wears the decorated wall -- the
+    /// roll of the original piece in the same world column / row (see RoomGen.cpp). Interior cells
+    /// and gap cells -> false.
+    bool BorderCellDecorated(int x, int y) const;
+
+    /// Number of RNG draws the build consumed so far (every Range call of the pipeline). The
+    /// original's per-stage counts are pinned in RoomGenTest.
+    long long DrawCount() const { return m_Draws; }
 
 private:
     // --- Faithful pipeline stages (named after the original methods). ----------
@@ -160,8 +194,12 @@ private:
     void CreateAisle();
     // FAITHFUL: RGRoomX__CreateFloor @ rva 0x4FD3E4 (3-pass noise/classify/variant)
     void CreateFloor();
-    // FAITHFUL: RGRoomX__CreateWall @ rva 0x4FDB6C (perimeter decoration rolls)
+    // FAITHFUL: RGRoomX__CreateWall @ rva 0x4FDB6C (two rolls per perimeter position; <30 -> wall_list[1])
     void CreateWall();
+    /// Counting wrapper over RGRandom::Range -- every pipeline draw goes through it.
+    int Roll(int minInclusive, int maxExclusive);
+    /// Pass-3 variant draw for a pass-2 classification (one Roll).
+    int FloorVariantFromEdge(int edge);
     // FAITHFUL: RGRoomX__CreateObstacle @ rva 0x4FE424 (big/small/render phases)
     void CreateObstacle();
     // FAITHFUL: RGRoomX__IsWallIntersect @ rva 0x4FF158 (footprint+1 margin clear)
@@ -182,7 +220,15 @@ private:
     std::array<int, 4> m_Entrance{}; ///< entrance[] @0x38.
     std::vector<int> m_Map;          ///< map @0x3C (flat, x*height+y).
     std::vector<std::pair<int, int>> m_FloorList; ///< floor_list @0x40.
-    std::vector<int> m_FloorVariant; ///< MAP M1: pass-3 variant per cell (x*height+y).
+    std::vector<int> m_FloorVariant; ///< pass-3 variant per cell (x*height+y), 0..5.
+    static constexpr signed char kWallNoRoll = -1;
+    /// CreateWall result per side: 1 decorated / 0 plain / kWallNoRoll (gap window). South/North are
+    /// indexed by world x - m_WallBaseX (x from room_x_offset-1), West/East by world y - m_WallBaseY.
+    std::array<std::vector<signed char>, 4> m_WallDeco;
+    int m_WallBaseX = 0;
+    int m_WallBaseY = 0;
+    long long m_Draws = 0;           ///< counted RNG draws.
+    bool m_LegacyDrawOrder = false;  ///< Options::legacyDrawOrder (test / evidence only).
     int m_RoomXOffset = 0;           ///< room_x_offset @0x70.
     int m_RoomYOffset = 0;           ///< room_y_offset @0x74.
     int m_SpecialBoxRate = 0;        ///< special_box_rate @0x78.

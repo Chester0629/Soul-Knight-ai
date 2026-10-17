@@ -1,0 +1,6 @@
+ [info] SK_FORCE_FIRE: from frame 0 aim (0.00,-1.00) for 40 frames
+ [info] BulletSpawn: frame 1 id 1 spawn (4.80,-83.20) player (0.00,-64.00)
+ [info] Muzzle: frame 1 player (0.00,-64.00) aim (0.000,-1.000) facing 1 sim (4.80,-83.20) view (4.80,-83.20)
+ [info] BulletSpawn: frame 9 id 2 spawn (4.80,-83.20) player (0.00,-64.00)
+ [info] Muzzle: frame 9 player (0.00,-64.00) aim (0.000,-1.000) facing 1 sim (4.80,-83.20) view (4.80,-83.20)
+ [info] BulletSpawn: frame 17 id 3 spawn (4.80,-83.20) player (0.00,-64.00)

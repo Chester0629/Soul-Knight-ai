@@ -1,0 +1,23 @@
+ [info] Sting: room 1 has 21 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] Sting: room 5 has 8 trap cells (obstacle 5, damage 2, up 1.0 s / down 2.0 s)
+ [info] Sting: room 5 frame 60 started (8 cells, ShowSting in 0.0 s)
+ [info] Sting: room 5 frame 61 UP (t=1.220s)
+ [info] Sting: room 5 frame 61 check 1 t=1.220s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 76 check 2 t=1.520s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 91 check 3 t=1.820s player - hp 6->6 armor 5->5 enemies hurt 3
+ [info] Sting: room 5 frame 106 check 4 t=2.120s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 111 DOWN (t=2.220s)
+ [info] Sting: room 5 frame 211 UP (t=4.220s)
+ [info] Sting: room 5 frame 211 check 5 t=4.220s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 226 check 6 t=4.520s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 241 check 7 t=4.820s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 256 check 8 t=5.120s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 261 DOWN (t=5.220s)
+ [info] Sting: room 5 frame 361 UP (t=7.220s)
+ [info] Sting: room 5 frame 361 check 9 t=7.220s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 376 check 10 t=7.520s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 391 check 11 t=7.820s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 406 check 12 t=8.120s player - hp 6->6 armor 5->5 enemies hurt 0
+ [info] Sting: room 5 frame 411 DOWN (t=8.220s)
+ [info] Sting: room 5 frame 511 UP (t=10.220s)
+ [info] Sting: room 5 frame 511 check 13 t=10.220s player - hp 6->6 armor 5->5 enemies hurt 0

@@ -3,7 +3,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdio>
 #include <cstring>
+#include <map>
 #include <cstdlib>
 #include <memory>
 #include <string>
@@ -25,6 +27,8 @@
 
 #include "world/FloorBlock.hpp"
 #include "world/RoomBlockers.hpp"
+#include "world/SpikeTrap.hpp"
+#include "game/DoorAnim.hpp"
 
 #include "sim/BodyGeom.hpp"
 #include "sim/BodyMove.hpp"
@@ -324,41 +328,70 @@ void GameScene::OnEnter() {
         floorImgs.push_back(roomImage(root + "/sprites/tiles/floor.png"));
         floorStems.push_back("floor");
     }
-    // MapManager.wall_list holds the basic wall + a decorated variant (CreateWall rolls
-    // Range(0,100) per tile; the threshold did not survive). Draw the basic wall:
-    // the prefab whose name ends in "1" (wall601, wall201, wall_bush1 ...), else [0].
-    const LevelWallDef *wallDef = nullptr;
-    if (m_Level != nullptr && !m_Level->walls.empty()) {
-        wallDef = &m_Level->walls[0];
-        for (const LevelWallDef &w : m_Level->walls) {
-            if (!w.prefab.empty() && w.prefab.back() == '1') {
-                wallDef = &w;
-                break;
-            }
-        }
-    }
-    const std::string wallTop = (wallDef != nullptr && !wallDef->top.empty())
-                                    ? "tiles/" + wallDef->top
-                                    : std::string("tiles/wall");
-    const std::string wallFace = (wallDef != nullptr && !wallDef->face.empty())
-                                     ? "tiles/" + wallDef->face
-                                     : wallTop;
-    auto wallImg = roomImage(root + "/sprites/" + wallTop + ".png");
-    auto wallFaceImg = roomImage(root + "/sprites/" + wallFace + ".png");
-    const std::string wallTopStem = wallTop.substr(wallTop.rfind('/') + 1); // "tiles/w601" -> "w601"
-    const std::string wallFaceStem = wallFace.substr(wallFace.rfind('/') + 1);
-    const float wallFaceDy = wallDef != nullptr ? wallDef->faceDy : 0.0F;
-    // FAITHFUL @ wall601.prefab: base on layer 4 (Wall), the w2 overlay on layer 6 (WallFont).
-    const SortKey wallTopSort = wallDef != nullptr ? wallDef->topSort : SortKey{4, 0};
-    const SortKey wallFaceSort = wallDef != nullptr ? wallDef->faceSort : SortKey{6, 2};
+    // MapManager.wall_list holds the plain wall [0] and the decorated variant [1]. FAITHFUL (P2.20,
+    // RGRoomX$$CreateWall DISASM 0x50dc24-0x50dc38 / 0x50df58-0x50df9c): every perimeter piece draws
+    // TWO Range(0,100) rolls and `roll < 30` selects wall_list[1] (wall504 / wall601 ...), otherwise
+    // wall_list[0] (RoomGen::BorderCellDecorated carries the rolls). This replaces the pre-P2.20
+    // heuristic "the prefab whose name ends in 1", which picked wall601 (the DECORATED dark crystal)
+    // as the only wall of the ice biome (wall_list = [wall602, wall601]).
+    struct WallSet {
+        const LevelWallDef *def = nullptr;
+        std::shared_ptr<Util::Image> top;
+        std::shared_ptr<Util::Image> face; ///< == top when the prefab has no w2 overlay
+        std::string topStem;
+        std::string faceStem;
+        float faceDy = 0.0F;
+        SortKey topSort{4, 0};  ///< FAITHFUL @ wall601.prefab: base on layer 4 (Wall) ...
+        SortKey faceSort{6, 2}; ///< ... the w2 overlay on layer 6 (WallFont)
+    };
+    const auto makeWallSet = [&](const LevelWallDef *def) {
+        WallSet w;
+        w.def = def;
+        const std::string top = (def != nullptr && !def->top.empty()) ? "tiles/" + def->top
+                                                                      : std::string("tiles/wall");
+        const std::string face = (def != nullptr && !def->face.empty()) ? "tiles/" + def->face : top;
+        w.top = roomImage(root + "/sprites/" + top + ".png");
+        w.face = face == top ? w.top : roomImage(root + "/sprites/" + face + ".png");
+        w.topStem = top.substr(top.rfind('/') + 1); // "tiles/w601" -> "w601"
+        w.faceStem = face.substr(face.rfind('/') + 1);
+        w.faceDy = def != nullptr ? def->faceDy : 0.0F;
+        w.topSort = def != nullptr ? def->topSort : SortKey{4, 0};
+        w.faceSort = def != nullptr ? def->faceSort : SortKey{6, 2};
+        return w;
+    };
+    const WallSet plainWall = makeWallSet(m_Level != nullptr && !m_Level->walls.empty() ? &m_Level->walls[0]
+                                                                                        : nullptr);
+    const bool haveDecoWall = m_Level != nullptr && m_Level->walls.size() > 1;
+    const WallSet decoWall = haveDecoWall ? makeWallSet(&m_Level->walls[1]) : plainWall;
     const glm::vec2 floorSz = floorImgs.front()->GetSize();
-    // M3d shadows (PORT CHOICE T-16): the original's wall/prop shadow0 is an OPAQUE
-    // black 16x24 block tinted by a multiply material the port has no equivalent
-    // for, so it is not drawn; shadow2 (the alpha ellipse from the character atlas, pivot (0.5,0))
-    // goes under props, boxes and door bars.
+    // P2.20 shadows (replaces PORT CHOICE T-16, whose premise -- shadow0 is an opaque multiply
+    // block -- was false): every shadow is the prefab's own `shadow` child -- shadow0 under walls /
+    // doors / boxes, shadow1 under chests, shadow3 under braziers -- drawn as an ordinary alpha-blended
+    // sprite at the child's m_Color (0.392157 alpha), on sorting layer 3. One tinted Image per
+    // (sprite, colour) because PTSD tints per Image.
+    std::map<std::string, std::shared_ptr<Util::Image>> shadowImages;
+    const auto shadowImageOf = [&](const RigNodeDef &node) {
+        char key[96];
+        std::snprintf(key, sizeof(key), "%s|%.4f|%.4f|%.4f|%.4f", node.sprite.c_str(), node.color[0],
+                      node.color[1], node.color[2], node.color[3]);
+        auto it = shadowImages.find(key);
+        if (it != shadowImages.end()) {
+            return it->second;
+        }
+        auto img = roomImage(root + "/sprites/" + node.sprite);
+        img->SetTint({node.color[0], node.color[1], node.color[2], node.color[3]});
+        shadowImages.emplace(key, img);
+        return img;
+    };
+    // The pre-P2.20 alpha ellipse, kept ONLY for the cases that have no prefab data (no levels.json,
+    // r_mineral ore, the shop's machines).
     auto shadowImg2 = roomImage(root + "/sprites/shadow2.png");
     auto doorBaseImg = roomImage(root + "/sprites/door02.png");
     auto doorBarImg = roomImage(root + "/sprites/door01.png");
+    // P2.20 FAITHFUL @ door_open.anim: once open the base is door03 (16x24, same pivot as door02).
+    const DoorPropsDef &doorProps = m_Data.RoomProps().door;
+    auto doorOpenImg = doorProps.present ? roomImage(root + "/sprites/" + doorProps.openSprite + ".png")
+                                         : doorBaseImg;
     // Design-obstacle sprites keyed by obj_index (RGObjectSkin -> obstacle_list).
     // MAP M1: from THIS level's obstacle_list; pre-M1 obj_N crops as fallback.
     std::array<std::shared_ptr<Util::Image>, 12> objImg{};
@@ -567,16 +600,61 @@ void GameScene::OnEnter() {
             }
             return sh;
         };
+        // P2.20: the prefab's own shadow child (shadow0 @ 0.39 under walls / boxes, shadow3 under a
+        // brazier ...) at the cell, layer 3; the floor-layer props that own none (sting01, pads, trees)
+        // pass an absent node and get no shadow. Returns the object (or null) so a caller can hide it.
+        const auto addNodeShadow = [&](const RigNodeDef &node, int cx, int cy,
+                                       float dxUnits = 0.0F) -> std::shared_ptr<Util::GameObject> {
+            if (!node.present || !node.enabled) {
+                return nullptr;
+            }
+            const auto img = shadowImageOf(node);
+            const RenderLayout::RoomNodePlacement pl = RenderLayout::PlaceRoomNode(
+                node, img->GetSize(),
+                Room::CellToWorld(cx, cy, rg.Width(), rg.Height(), kCellPx, origin), dxUnits);
+            auto obj = std::make_shared<Util::GameObject>();
+            obj->SetDrawable(img);
+            obj->m_Transform.scale = pl.scale;
+            obj->m_Transform.translation = pl.translation;
+            obj->SetZIndex(pl.z);
+            m_RoomTiles.push_back(obj);
+            m_Renderer.AddChild(obj);
+            return obj;
+        };
+        // One wall piece (a perimeter cell, a solid obstacle-ring cell): shadow, base, w2 overlay.
+        const auto addWallPiece = [&](const WallSet &w, int cx, int cy) {
+            if (w.def != nullptr) {
+                addNodeShadow(w.def->shadow, cx, cy);
+            }
+            addObjSprite(w.top, w.topStem, cx, cy, w.topSort);
+            if (w.face != w.top) {
+                addObjSprite(w.face, w.faceStem, cx, cy, w.faceSort, w.faceDy);
+            }
+        };
+        // P2.20 evidence counters (logged once per room below): the floor variant of every cell and the
+        // plain / decorated pieces of the room's ring (border cells that wear the perimeter wall).
+        std::array<int, 6> variantCount{};
+        int ringPlain = 0;
+        int ringDeco = 0;
         for (int x = 0; x < rg.Width(); ++x) {
             for (int y = 0; y < rg.Height(); ++y) {
+                {
+                    const int vv = rg.FloorVariantAt(x, y);
+                    ++variantCount[static_cast<std::size_t>(vv >= 0 && vv < 6 ? vv : 0)];
+                }
                 if (Room::IsSolidCell(rg.At(x, y))) {
                     // FAITHFUL @ wall601.prefab: the wall is a 16x24 sprite with pivot
                     // (0.5, 0) standing on its cell (collider 1x1 at +0.5) plus the w2
                     // face overlay at the same spot; a 16-px cell is 1 unit, so the
                     // wall rises 1.5 units. Draw both bottom-anchored at native aspect,
                     // sorted by y so a lower wall overdraws the one behind it.
-                    // ground under the wall (layer 2 Floor)
-                    addObjSprite(floorImgs[0], floorStems[0], x, y, SortKey{RenderLayout::kLayerFloor, 0});
+                    // ground under the wall (layer 2 Floor): the cell's rolled floor variant, as in the original
+                    // (CreateFloor tiles EVERY cell of the room grid, the wall ring stands on top of it).
+                    {
+                        const std::size_t gv = static_cast<std::size_t>(rg.FloorVariantAt(x, y));
+                        const std::size_t gfv = gv < floorImgs.size() ? gv : 0;
+                        addObjSprite(floorImgs[gfv], floorStems[gfv], x, y, SortKey{RenderLayout::kLayerFloor, 0});
+                    }
                     // A design-room obj_index-0 wall wears the level's obstacle_list[0]
                     // skin (wall603 ice crystals / wall_tree1 ...), not the perimeter wall.
                     const bool designWall = std::find(ropt.designSolidCells.begin(),
@@ -586,16 +664,21 @@ void GameScene::OnEnter() {
                         continue; // MAP M3: the boss-room object pass draws this wall's skin
                     }
                     if (designWall && objImg[0] != nullptr) {
+                        if (m_Level != nullptr && !m_Level->obstacles.empty()) {
+                            addNodeShadow(m_Level->obstacles[0].shadow, x, y); // P2.20 (wall_tree1: none)
+                        }
                         addObjSprite(objImg[0], objStem[0], x, y, objSort[0]);
                         if (objAltImg[0] != nullptr) {
                             addObjSprite(objAltImg[0], objAltStem[0], x, y, objAltSort[0], objAltDy[0]);
                         }
                         continue;
                     }
-                    addObjSprite(wallImg, wallTopStem, x, y, wallTopSort);
-                    if (wallFaceImg != wallImg) {
-                        addObjSprite(wallFaceImg, wallFaceStem, x, y, wallFaceSort, wallFaceDy);
+                    // FAITHFUL (P2.20): a perimeter piece whose CreateWall roll was < 30 is wall_list[1].
+                    const bool deco = haveDecoWall && rg.BorderCellDecorated(x, y);
+                    if (rg.At(x, y) == -1 && (x == 0 || y == 0 || x == rg.Width() - 1 || y == rg.Height() - 1)) {
+                        ++(deco ? ringDeco : ringPlain);
                     }
+                    addWallPiece(deco ? decoWall : plainWall, x, y);
                 } else {
                     // MAP M1: the floor variant RoomGen rolled for this cell. Floor
                     // sprites are 16 px wide but may be 24 px tall (castle f2xx: a raised
@@ -608,6 +691,10 @@ void GameScene::OnEnter() {
             }
         }
 
+        LOG_INFO("RoomDetail: room {} {}x{} floor variants {} {} {} {} {} {} | ring walls plain {} deco {} ({})",
+                 roomIndex, rg.Width(), rg.Height(), variantCount[0], variantCount[1], variantCount[2],
+                 variantCount[3], variantCount[4], variantCount[5], ringPlain, ringDeco,
+                 haveDecoWall ? decoWall.def->prefab : std::string("no wall_list[1]"));
         // Phase 4 design-obstacle VISUALS (+ unchanged Phase 3 collision). Renders
         // each obj_index's REAL sprite (RGObjectSkin -> obstacle_list[obj_index],
         // P4-RE) bottom-anchored at native aspect: pivot (0.5,0), pixelsToUnits 16,
@@ -635,7 +722,15 @@ void GameScene::OnEnter() {
                     objImg[oi] == nullptr) {
                     continue; // 0 is the grid wall; 9/10 unused -> null
                 }
-                addShadow(shadowImg2, "shadow2", o.x, o.y, objSort[oi]); // alpha ellipse under the prop
+                // P2.20 (replaces the pre-P2.20 shadow2 under EVERY prop): the prefab's own shadow child --
+                // shadow0 @ 0.39 under boxes / casks, shadow3 under a brazier, none under trees / spikes /
+                // speed pads. Without level data the legacy alpha ellipse is kept.
+                std::shared_ptr<Util::GameObject> propShadow;
+                if (m_Level != nullptr && oi < m_Level->obstacles.size()) {
+                    propShadow = addNodeShadow(m_Level->obstacles[oi].shadow, o.x, o.y);
+                } else {
+                    propShadow = addShadow(shadowImg2, "shadow2", o.x, o.y, objSort[oi]);
+                }
                 auto tile = addObjSprite(objImg[oi], objStem[oi], o.x, o.y, objSort[oi]);
                 std::shared_ptr<Util::GameObject> top;
                 if (objAltImg[oi] != nullptr) {
@@ -644,6 +739,36 @@ void GameScene::OnEnter() {
                     // on layer 6 (WallFont): drawn OVER a hero standing behind the crate.
                     top = addObjSprite(objAltImg[oi], objAltStem[oi], o.x, o.y, objAltSort[oi],
                                        objAltDy[oi]);
+                }
+                // P2.20 FAITHFUL @ sting01.prefab (ObjectSting): the plate (objects1_0, tint (0.89,0.91,1))
+                // is always drawn, the spike `ding` (objects1_1) only while the trap is up, and the trap
+                // hurts the player / enemies in its cell -- see SpikeTrap and TickStingTraps. All cells of
+                // one obstacle skin in one room share one timer set (every ObjectSting of a room is
+                // started by the same StartRoom and has the same prefab numbers, so their cycles coincide).
+                if (m_Level != nullptr && oi < m_Level->obstacles.size() && m_Level->obstacles[oi].sting.present) {
+                    const StingDef &sd = m_Level->obstacles[oi].sting;
+                    objImg[oi]->SetTint({sd.base.color[0], sd.base.color[1], sd.base.color[2], sd.base.color[3]});
+                    if (top != nullptr) {
+                        top->SetVisible(false); // hide_sting: the spike starts down
+                        if (objAltImg[oi] != nullptr) {
+                            objAltImg[oi]->SetTint({sd.ding.color[0], sd.ding.color[1], sd.ding.color[2], sd.ding.color[3]});
+                        }
+                    }
+                    StingGroup *grp = nullptr;
+                    for (StingGroup &g : m_StingGroups) {
+                        if (g.room == roomIndex && g.obstacleIndex == o.objIndex) {
+                            grp = &g;
+                            break;
+                        }
+                    }
+                    if (grp == nullptr) {
+                        m_StingGroups.emplace_back(roomIndex, o.objIndex, sd);
+                        grp = &m_StingGroups.back();
+                    }
+                    grp->cells.push_back(Room::CellToWorld(o.x, o.y, rg.Width(), rg.Height(), kCellPx, origin));
+                    if (top != nullptr) {
+                        grp->dings.push_back(top);
+                    }
                 }
 
                 // P2.18 (RC4): the collider is the PREFAB's own (levels.json obstacles[].blockers =
@@ -660,6 +785,7 @@ void GameScene::OnEnter() {
                     ob.collider = *blockCol;
                     ob.tile = tile;
                     ob.top = top;
+                    ob.shadow = propShadow;
                     ob.destructible = box; // boxes (1-4) break; braziers (11) permanent
                     if (box) {
                         ob.box.SetHp(kBoxHp);
@@ -667,6 +793,14 @@ void GameScene::OnEnter() {
                     }
                     m_RoomObstacles.push_back(std::move(ob));
                 }
+            }
+        }
+
+        for (const StingGroup &g : m_StingGroups) {
+            if (g.room == roomIndex) {
+                LOG_INFO("Sting: room {} has {} trap cells (obstacle {}, damage {}, up {:.1f} s / down {:.1f} s)", g.room,
+                         g.cells.size(), g.obstacleIndex, g.trap.Damage(), static_cast<double>(g.showTime),
+                         static_cast<double>(g.hideTime));
             }
         }
 
@@ -696,9 +830,9 @@ void GameScene::OnEnter() {
                     m_SkinCache.emplace(stem, img);
                     return img;
                 };
-                if (sk->kind != "pad") {
-                    addShadow(shadowImg2, "shadow2", o.x, o.y, sk->sort);
-                }
+                // P2.20: the prefab's own shadow child (obj22_10 / box_weapon shadow0 ... ; none where the
+                // prefab has none), replacing the pre-P2.20 shadow2 under every non-pad object.
+                const std::shared_ptr<Util::GameObject> objShadow = addNodeShadow(sk->shadow, o.x, o.y);
                 auto tile = addObjSprite(skinImg(sk->sprite), sk->sprite, o.x, o.y, sk->sort);
                 std::shared_ptr<Util::GameObject> top;
                 if (!sk->alt.empty()) {
@@ -717,6 +851,7 @@ void GameScene::OnEnter() {
                                                       : Util::Collider::MakeAABB(wpos, glm::vec2{kCellPx, kCellPx});
                     ob.tile = tile;
                     ob.top = top;
+                    ob.shadow = objShadow;
                     ob.destructible = sk->kind == "box";
                     if (ob.destructible) {
                         ob.box.SetHp(kBoxHp);
@@ -773,9 +908,22 @@ void GameScene::OnEnter() {
         const auto addCorridorWall = [&](int bx, int by) {
             addBlockSprite(floorImgs.front(), floorStems.front(), bx, by,
                            SortKey{RenderLayout::kLayerFloor, 0}); // ground under the wall
-            addBlockSprite(wallImg, wallTopStem, bx, by, wallTopSort);
-            if (wallFaceImg != wallImg) {
-                addBlockSprite(wallFaceImg, wallFaceStem, bx, by, wallFaceSort, wallFaceDy);
+            if (plainWall.def != nullptr && plainWall.def->shadow.present && plainWall.def->shadow.enabled) {
+                const RigNodeDef &sn = plainWall.def->shadow; // P2.20: the wall prefab's shadow0 @ 0.39
+                const auto simg = shadowImageOf(sn);
+                const RenderLayout::RoomNodePlacement spl =
+                    RenderLayout::PlaceRoomNode(sn, simg->GetSize(), blockToWorld(bx, by));
+                auto sh = std::make_shared<Util::GameObject>();
+                sh->SetDrawable(simg);
+                sh->m_Transform.scale = spl.scale;
+                sh->m_Transform.translation = spl.translation;
+                sh->SetZIndex(spl.z);
+                m_RoomTiles.push_back(sh);
+                m_Renderer.AddChild(sh);
+            }
+            addBlockSprite(plainWall.top, plainWall.topStem, bx, by, plainWall.topSort);
+            if (plainWall.face != plainWall.top) {
+                addBlockSprite(plainWall.face, plainWall.faceStem, bx, by, plainWall.faceSort, plainWall.faceDy);
             }
             m_Corridors.push_back(Util::Collider::MakeAABB(
                 blockToWorld(bx, by), glm::vec2{kCellPx, kCellPx}));
@@ -819,41 +967,65 @@ void GameScene::OnEnter() {
                 glm::vec2{kCellPx, kCellPx}));
         }
         m_RoomDoors.push_back(std::move(doors));
-        // M3d FAITHFUL doors @ r1_*.prefab aisle_*/door: five pieces (d1..d5) across
-        // the door band, each a door02 base with a door01 bar one unit up whose
-        // shadow + bar are enabled only while the doors are closed (door_close2 /
-        // door_open clips). Base always visible; bar shown while sealed.
+        // M3d FAITHFUL doors @ r1_*.prefab aisle_*/door: five pieces (d1..d5) across the door band.
+        // P2.20 FAITHFUL @ rgprefab/room/room/door_n.prefab + rganim/door_2.controller (bool `open`,
+        // default state door_open) + door_open.anim / door_close2.anim: each piece is a base (door02
+        // closed, door03 open -- door_open swaps the sprite at 0.167 s, door_close2 swaps it back at
+        // 0.033 s), a door01 bar `d` that rises from local y 0.1 to 1 while closing and sinks back while
+        // opening (disabled when open), and a shadow0 @ 0.39 child (enabled only while closed). The pose
+        // is sampled from the clips (game/DoorAnim.hpp), the state follows RGRoomX.door_open.
         for (const auto &c : FloorBlock::DoorSealCells(rg)) {
             if (rg.At(c.first, c.second) != -2) {
                 continue; // d1..d5 sit on the five aisle cells; the code-11 flanks are the frame
             }
-            // FAITHFUL @ door_n.prefab: base d1..d5 (door02) layer 4, shadow layer 3 order 1,
-            // bar `d` (door01) layer 6 order 3 at local (0, 1).
-            addObjSprite(doorBaseImg, "door02", c.first, c.second, SortKey{RenderLayout::kLayerWall, 0});
             DoorPiece piece;
             piece.room = roomIndex;
-            // Same PlaceRoomSprite path as every other room sprite; the two pieces start
-            // hidden (scale 0) and the door-state loop reveals them with kSpriteScale.
-            const glm::vec2 doorCell =
-                Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin);
-            const RenderLayout::RoomSpritePlacement shPl = RenderLayout::PlaceRoomSprite(
-                m_Data, "shadow2", shadowImg2->GetSize(), doorCell,
-                SortKey{RenderLayout::kLayerShadow, 1});
-            piece.shadow = std::make_shared<Util::GameObject>();
-            piece.shadow->SetDrawable(shadowImg2);
-            piece.shadow->m_Transform.scale = {0.0F, 0.0F};
-            piece.shadow->m_Transform.translation = shPl.translation;
-            piece.shadow->SetZIndex(shPl.z);
-            m_Renderer.AddChild(piece.shadow);
-            const RenderLayout::RoomSpritePlacement barPl = RenderLayout::PlaceRoomSprite(
-                m_Data, "door01", doorBarImg->GetSize(), doorCell,
-                SortKey{RenderLayout::kLayerWallFont, 3}, /*dyUnits=*/1.0F); // d at (0, 1)
-            piece.bar = std::make_shared<Util::GameObject>();
-            piece.bar->SetDrawable(doorBarImg);
-            piece.bar->m_Transform.scale = {0.0F, 0.0F}; // hidden: doors start open
-            piece.bar->m_Transform.translation = barPl.translation;
-            piece.bar->SetZIndex(barPl.z);
-            m_Renderer.AddChild(piece.bar);
+            piece.cellCentre = Room::CellToWorld(c.first, c.second, rg.Width(), rg.Height(), kCellPx, origin);
+            if (doorProps.present) {
+                // FAITHFUL @ door_n.prefab: base d1..d5 layer 4, shadow layer 3 order 1, bar `d` layer 6
+                // order 3 at local (0, 1). Initial state = the settled door_open pose (doors start open).
+                piece.base = addObjSprite(doorOpenImg, doorProps.openSprite, c.first, c.second,
+                                          SortKey{doorProps.base.sortLayer, doorProps.base.sortOrder});
+                piece.baseOpen = true;
+                piece.shadow = addNodeShadow(doorProps.shadow, c.first, c.second);
+                if (piece.shadow != nullptr) {
+                    piece.shadow->SetVisible(false);
+                }
+                piece.bar = std::make_shared<Util::GameObject>();
+                piece.bar->SetDrawable(doorBarImg);
+                piece.bar->m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
+                piece.bar->SetVisible(false);
+                m_Renderer.AddChild(piece.bar);
+                piece.animSec = doorProps.open.stop; // settled
+                piece.useClips = true;
+            } else {
+                // legacy (no room_props.json): door02 base always, bar + shadow2 shown while sealed
+                piece.base = addObjSprite(doorBaseImg, "door02", c.first, c.second,
+                                          SortKey{RenderLayout::kLayerWall, 0});
+                const RenderLayout::RoomSpritePlacement shPl = RenderLayout::PlaceRoomSprite(
+                    m_Data, "shadow2", shadowImg2->GetSize(), piece.cellCentre,
+                    SortKey{RenderLayout::kLayerShadow, 1});
+                piece.shadow = std::make_shared<Util::GameObject>();
+                piece.shadow->SetDrawable(shadowImg2);
+                piece.shadow->m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
+                piece.shadow->m_Transform.translation = shPl.translation;
+                piece.shadow->SetZIndex(shPl.z);
+                piece.shadow->SetVisible(false);
+                m_Renderer.AddChild(piece.shadow);
+                const RenderLayout::RoomSpritePlacement barPl = RenderLayout::PlaceRoomSprite(
+                    m_Data, "door01", doorBarImg->GetSize(), piece.cellCentre,
+                    SortKey{RenderLayout::kLayerWallFont, 3}, /*dyUnits=*/1.0F); // d at (0, 1)
+                piece.bar = std::make_shared<Util::GameObject>();
+                piece.bar->SetDrawable(doorBarImg);
+                piece.bar->m_Transform.scale = {Scale::kSpriteScale, Scale::kSpriteScale};
+                piece.bar->m_Transform.translation = barPl.translation;
+                piece.bar->SetZIndex(barPl.z);
+                piece.bar->SetVisible(false);
+                m_Renderer.AddChild(piece.bar);
+            }
+            // one piece per room logs its transitions (the five pieces of a door band change together)
+            piece.logs = std::none_of(m_DoorPieces.begin(), m_DoorPieces.end(),
+                                      [roomIndex](const DoorPiece &d) { return d.room == roomIndex; });
             m_DoorPieces.push_back(std::move(piece));
         }
 
@@ -1226,7 +1398,8 @@ void GameScene::OnEnter() {
             const glm::vec2 cpos = Room::CellToWorld(
                 cc.first, cc.second, rg.Width(), rg.Height(), kCellPx, origin);
             auto chest = std::make_shared<Chest>(
-                root, cpos, m_Level != nullptr ? m_Level->chestLevel : 1, Chest::Kind::RoomReward);
+                root, cpos, m_Level != nullptr ? m_Level->chestLevel : 1, Chest::Kind::RoomReward,
+                &m_Data.RoomProps());
             // NOT PORTED T-09: GetPot/GetCoin branches and ChestXmlReader; reward chests
             // only yield weapons until P1.9 resolves them.
             m_Chests.push_back(chest);
@@ -1338,6 +1511,28 @@ void GameScene::OnEnter() {
             m_RoomTeleportDy = spec.dy;
         } else {
             LOG_WARN("SK_ROOM_TELEPORT rejected: {}", spec.error);
+        }
+    }
+    // P2.20 evidence hook: SK_STING_STAND=K,R (strict parse, game/TestHooks.hpp): on frame K the hero stands on
+    // the middle trap cell of room R. Invalid -> the hook stays unset.
+    if (const char *ss = std::getenv("SK_STING_STAND")) {
+        const Game::StingStandSpec spec = Game::ParseStingStand(ss);
+        if (spec.ok) {
+            m_StingStandFrame = spec.frame;
+            m_StingStandRoom = spec.room;
+        } else {
+            LOG_WARN("SK_STING_STAND rejected: {}", spec.error);
+        }
+    }
+    // P2.20 evidence hook: SK_CHEST_STAND=K,D (strict parse, game/TestHooks.hpp): on frame K the hero stands D px
+    // below the first chest (D = 0 opens it). Invalid -> the hook stays unset.
+    if (const char *cs = std::getenv("SK_CHEST_STAND")) {
+        const Game::ChestStandSpec spec = Game::ParseChestStand(cs);
+        if (spec.ok) {
+            m_ChestStandFrame = spec.frame;
+            m_ChestStandBelow = spec.below;
+        } else {
+            LOG_WARN("SK_CHEST_STAND rejected: {}", spec.error);
         }
     }
     // P2.18 evidence hooks (strict parse; invalid -> the hook stays unset). NO-OP unless set.
@@ -1758,6 +1953,9 @@ void GameScene::DamageObstacle(glm::vec2 pos, float radius) {
             if (ob.top != nullptr) {
                 ob.top->SetVisible(false); // ... and its w2 lid (now drawn over the heroes, P2.17)
             }
+            if (ob.shadow != nullptr) {
+                ob.shadow->SetVisible(false); // ... and its ground shadow (P2.20)
+            }
             LOG_INFO("RGBox: design box broken at ({:.0f},{:.0f}) -> now passable",
                      pos.x, pos.y);
         }
@@ -1949,6 +2147,61 @@ bool GameScene::RoomHasLiveHostile(int roomId) const {
     return false;
 }
 
+// P2.20: advance every sting trap by one frame and apply its damage ticks. FAITHFUL @ ObjectSting$$Update:
+// when SpikeTrap::Advance reports Update's hit test, each cell of the group casts the 1x1-unit box at
+// (cell x, cell y + 0.5 unit) against the player's / enemies' hurtboxes; enemies take damage / 2, the
+// player the full damage (Simulation::ApplyHazardBox). The four ticks of an up phase are four hit CHECKS, not four
+// hits: an effective hit starts the hero's 0.5 s hit protection (kPlayerHitProtectMs, R48), so a hero standing on
+// a trap is hurt by ticks 1 and 3 only; adjacent cells of one tick cost one hit (T-74). RGGameProcess.buff_immune_sting
+// (set by RGGameProcess.SetBuff(index 7), game_typed.c:57371-57400) is NOT PORTED: the buff system gap T-77, so the
+// player is never immune.
+void GameScene::TickStingTraps(float dtMs) {
+    for (StingGroup &g : m_StingGroups) {
+        const bool hit = g.trap.Advance(static_cast<double>(dtMs));
+        const bool up = g.trap.Up();
+        if (up != g.wasUp) {
+            g.wasUp = up;
+            for (const auto &d : g.dings) {
+                d->SetVisible(up); // show_sting.anim enables `ding`, hide_sting.anim disables it
+            }
+            LOG_INFO("Sting: room {} frame {} {} (t={:.3f}s)", g.room, m_Frame, up ? "UP" : "DOWN",
+                     g.trap.NowMs() * 0.001);
+        }
+        if (!hit) {
+            continue;
+        }
+        ++g.ticks;
+        const CombatStats before = m_Sim->PlayerStats();
+        int hurtEnemies = 0;
+        bool hurtPlayer = false;    // EFFECTIVE damage on this tick (PlayerHurt::Damaged)
+        bool protectedPlayer = false; // overlapped, but the 0.5 s hit protection swallowed the check
+        bool absorbedPlayer = false;  // the C08 shield ate the hit (nothing lost)
+        bool noDamagePlayer = false;  // overlapped, nothing lost (damage <= 0)
+        for (const glm::vec2 &cell : g.cells) {
+            const Sim::Simulation::HazardHit r = m_Sim->ApplyHazardBox(
+                cell, glm::vec2{kCellPx * 0.5F, kCellPx * 0.5F}, g.trap.Damage(), g.trap.EnemyDamage(),
+                g.trap.HitPlayer(), g.trap.HitEnemy(), /*playerImmune=*/false);
+            hurtPlayer = hurtPlayer || r.player;
+            protectedPlayer = protectedPlayer || r.playerProtected;
+            absorbedPlayer = absorbedPlayer || r.playerAbsorbed;
+            noDamagePlayer = noDamagePlayer || r.playerNoDamage;
+            hurtEnemies += r.enemies + (r.boss ? 1 : 0);
+        }
+        const CombatStats &after = m_Sim->PlayerStats();
+        g.effectiveHits += hurtPlayer ? 1 : 0;
+        // `check` = every tick (a hit CHECK); player HIT = effective damage, ABSORBED = the C08 shield ate it,
+        // PROTECTED = overlapped inside the 0.5 s protection (no damage), NODAMAGE = overlapped with 0 damage,
+        // `-` = nobody in the boxes. Priority when several cells disagree: HIT > ABSORBED > NODAMAGE > PROTECTED.
+        LOG_INFO("Sting: room {} frame {} check {} t={:.3f}s player {} hp {}->{} armor {}->{} enemies hurt {}",
+                 g.room, m_Frame, g.ticks, g.trap.NowMs() * 0.001,
+                 hurtPlayer ? "HIT"
+                 : absorbedPlayer ? "ABSORBED"
+                 : noDamagePlayer ? "NODAMAGE"
+                 : protectedPlayer ? "PROTECTED" : "-", before.hp, after.hp, before.armor,
+                 after.armor, hurtEnemies);
+    }
+}
+
 void GameScene::Update(float dtMs) {
     if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         Core::Context::GetInstance()->SetExit(true);
@@ -2011,6 +2264,35 @@ void GameScene::Update(float dtMs) {
         } else {
             LOG_INFO("GameScene: SK_ROOM_TELEPORT -> room {} skipped (no spawn points)",
                      m_RoomTeleportRoom);
+        }
+    }
+    if (m_ChestStandFrame >= 0 && m_Frame == m_ChestStandFrame) {
+        if (!m_Chests.empty()) {
+            m_Player->m_Transform.translation = m_Chests.front()->Position() - glm::vec2(0.0F, m_ChestStandBelow);
+            m_Camera.SetPosition(m_Player->Position());
+            LOG_INFO("GameScene: SK_CHEST_STAND -> {:.0f} px below the chest at ({:.0f},{:.0f}) tier {}",
+                     m_ChestStandBelow, m_Chests.front()->Position().x, m_Chests.front()->Position().y,
+                     m_Chests.front()->Tier());
+        } else {
+            LOG_INFO("GameScene: SK_CHEST_STAND skipped (no chest on this floor)");
+        }
+    }
+    if (m_StingStandFrame >= 0 && m_Frame == m_StingStandFrame) {
+        // SK_STING_STAND: onto the middle trap cell of the room's first sting group
+        const StingGroup *target = nullptr;
+        for (const StingGroup &g : m_StingGroups) {
+            if (g.room == m_StingStandRoom) {
+                target = &g;
+                break;
+            }
+        }
+        if (target != nullptr && !target->cells.empty()) {
+            m_Player->m_Transform.translation = target->cells[target->cells.size() / 2];
+            m_Camera.SetPosition(m_Player->Position());
+            LOG_INFO("GameScene: SK_STING_STAND -> room {} trap cell ({:.0f},{:.0f}) of {}", m_StingStandRoom,
+                     m_Player->Position().x, m_Player->Position().y, target->cells.size());
+        } else {
+            LOG_INFO("GameScene: SK_STING_STAND -> room {} skipped (no trap cells)", m_StingStandRoom);
         }
     }
     if (m_GateBesideFrame >= 0 && m_Frame == m_GateBesideFrame) {
@@ -2205,6 +2487,7 @@ void GameScene::Update(float dtMs) {
 
     m_Sim->SetPlayerStats(m_Player->Stats());      // push current vitals in
     m_Sim->Advance(dtMs, in);                       // sim damages its player-stats copy
+    TickStingTraps(dtMs);                           // P2.20: spike cycle + damage ticks (before the hp pull-back)
     // SLICE 4: the hero pose for this frame -- the sim facing (one source of truth with the muzzle), the run
     // clip while it moved, the ring tint by the skill-ready state, the held weapon on the aim.
     {
@@ -2303,6 +2586,15 @@ void GameScene::Update(float dtMs) {
         m_RoomLife[static_cast<std::size_t>(playerRoomId)].StartRoom();
         LOG_INFO("RGRoomX: room {} StartRoom -> Active (door_open=0, sealed)",
                  playerRoomId);
+        // P2.20 FAITHFUL @ ObjectSting$$OnGameStateChange (DISASM 0x488414): StartRoom raises game_state 1
+        // and every sting of the room that has process == 1 runs Invoke("ShowSting", offet_time).
+        for (StingGroup &g : m_StingGroups) {
+            if (g.room == playerRoomId) {
+                g.trap.OnRoomStarted();
+                LOG_INFO("Sting: room {} frame {} started ({} cells, ShowSting in {:.1f} s)", g.room, m_Frame,
+                         g.cells.size(), static_cast<double>(g.offsetTime));
+            }
+        }
         // FAITHFUL: RGMusicManager effect_list[4] == fx_door.wav (door seal).
         m_Audio->PlaySfx(m_Data.FindEffectClip(4));
         // T-29: the show-up cue is NOT played here any more. FAITHFUL @
@@ -2360,15 +2652,65 @@ void GameScene::Update(float dtMs) {
         }
     }
 
-    // M3d: door bars follow RGRoomX.door_open (RGDoor.CloseDoor / OpenDoor).
-    for (DoorPiece &p : m_DoorPieces) {
-        const bool sealed = p.room >= 0 && static_cast<std::size_t>(p.room) < m_RoomLife.size() &&
-                            !m_RoomLife[static_cast<std::size_t>(p.room)].DoorOpen();
-        if (sealed != p.shown) {
-            p.shown = sealed;
-            const float sc = sealed ? Scale::kSpriteScale : 0.0F;
-            p.bar->m_Transform.scale = {sc, sc};
-            p.shadow->m_Transform.scale = {sc, sc};
+    // M3d: door pieces follow RGRoomX.door_open (RGDoor.CloseDoor / OpenDoor). P2.20: the Animator state
+    // `open` switches on a change and the matching clip (door_open / door_close2) is sampled by the
+    // time since the change -- base sprite door02 <-> door03, bar height, bar / shadow enabled.
+    {
+        const float dtSec = dtMs * 0.001F;
+        const DoorPropsDef &dp = m_Data.RoomProps().door;
+        const auto doorImgOf = [this](const std::string &stem) {
+            auto it = m_DoorImages.find(stem);
+            if (it != m_DoorImages.end()) {
+                return it->second;
+            }
+            auto img = std::make_shared<Util::Image>(std::string(RESOURCE_DIR) + "/sprites/" + stem + ".png",
+                                                     /*useAA=*/false);
+            m_DoorImages.emplace(stem, img);
+            return img;
+        };
+        for (DoorPiece &p : m_DoorPieces) {
+            const bool sealed = p.room >= 0 && static_cast<std::size_t>(p.room) < m_RoomLife.size() &&
+                                !m_RoomLife[static_cast<std::size_t>(p.room)].DoorOpen();
+            if (!p.useClips) {
+                if (sealed != p.shown) { // legacy: bar + shadow pop in and out
+                    p.shown = sealed;
+                    p.bar->SetVisible(sealed);
+                    p.shadow->SetVisible(sealed);
+                }
+                continue;
+            }
+            const bool opening = !sealed;
+            if (opening != p.open) {
+                p.open = opening;
+                p.animSec = 0.0F; // the Animator re-enters the other state from its start
+                if (p.logs) {
+                    LOG_INFO("Door: room {} frame {} -> {} (clip {})", p.room, m_Frame,
+                             opening ? "OPEN" : "CLOSED", opening ? "door_open" : "door_close2");
+                }
+            } else {
+                p.animSec += dtSec;
+            }
+            const DoorAnim::Pose pose = DoorAnim::Sample(dp, p.open, p.animSec);
+            if (pose.baseOpen != p.baseOpen) {
+                p.baseOpen = pose.baseOpen;
+                p.base->SetDrawable(doorImgOf(pose.baseOpen ? dp.openSprite : "door02"));
+                if (p.logs) {
+                    LOG_INFO("Door: room {} frame {} base sprite {} (bar {}, shadow {})", p.room, m_Frame,
+                             pose.baseOpen ? dp.openSprite : std::string("door02"), pose.barOn ? "on" : "off",
+                             pose.shadowOn ? "on" : "off");
+                }
+            }
+            p.bar->SetVisible(pose.barOn);
+            if (p.shadow != nullptr) {
+                p.shadow->SetVisible(pose.shadowOn);
+            }
+            if (pose.barOn) {
+                const RenderLayout::RoomNodePlacement bp = RenderLayout::PlaceRoomNode(
+                    dp.bar, doorImgOf("door01")->GetSize(), p.cellCentre, 0.0F, pose.barY - dp.bar.offsetY);
+                p.bar->m_Transform.translation = bp.translation;
+                p.bar->SetZIndex(bp.z);
+            }
+            p.barY = pose.barY;
         }
     }
 
@@ -2466,7 +2808,7 @@ void GameScene::Update(float dtMs) {
                     chestPos = m_GatePos + glm::vec2(0.0F, -2.0F * kCellPx);
                 }
                 auto chest = std::make_shared<Chest>(root, chestPos, bc != nullptr ? bc->level : 2,
-                                                     Chest::Kind::Boss);
+                                                     Chest::Kind::Boss, &m_Data.RoomProps());
                 if (bc != nullptr) {
                     chest->SetGuaranteed(bc->weapons);
                 }
@@ -2516,11 +2858,14 @@ void GameScene::Update(float dtMs) {
     // --- Chests: open on proximity, roll loot, drop a weapon pickup ---
     const glm::vec2 playerPos = resolved;
     for (auto &chest : m_Chests) {
+        chest->Update(dtMs); // P2.20: chest_open animation
         if (chest->Opened() ||
             glm::distance(playerPos, chest->Position()) > kChestOpenRange) {
             continue;
         }
         chest->Open();
+        LOG_INFO("Chest: frame {} opening {} (4 layers: {})", m_Frame, Chest::PrefabFor(chest->Tier(), chest->GetKind()),
+                 chest->HasRig() ? "yes" : "no");
         // FAITHFUL (T-35): audio.json ui_effects.chest_open, generated from
         // res/item/chest01.prefab RGChest.audio_clip -- a real rgsound/effect
         // clip that is NOT in RGMusicManager's 11-entry effect_list.

@@ -241,4 +241,44 @@ TEST(TraceFramesHookTest, ParsesStrictly) {
     EXPECT_FALSE(Game::ParseFrameList(many).ok) << "more than 32 frames";
 }
 
+TEST(StingStandHookTest, ParsesStrictly) {
+    const auto ok = Game::ParseStingStand("60,1");
+    ASSERT_TRUE(ok.ok);
+    EXPECT_EQ(ok.frame, 60);
+    EXPECT_EQ(ok.room, 1);
+    EXPECT_TRUE(Game::ParseStingStand("0,0").ok);
+    EXPECT_FALSE(Game::ParseStingStand("").ok);
+    EXPECT_FALSE(Game::ParseStingStand("60").ok);
+    EXPECT_FALSE(Game::ParseStingStand("60,1,2").ok) << "no offset form";
+    EXPECT_FALSE(Game::ParseStingStand("60,1,").ok);
+    EXPECT_FALSE(Game::ParseStingStand("-1,1").ok);
+    EXPECT_FALSE(Game::ParseStingStand("60,-1").ok);
+    EXPECT_FALSE(Game::ParseStingStand("60,x").ok);
+    EXPECT_FALSE(Game::ParseStingStand("6x,1").ok);
+    EXPECT_FALSE(Game::ParseStingStand("60,99999999999").ok) << "room overflow";
+    const auto bad = Game::ParseStingStand("60,x");
+    EXPECT_EQ(bad.frame, -1) << "a rejected spec carries no frame";
+}
+
+TEST(ChestStandHookTest, ParsesStrictly) {
+    const auto ok = Game::ParseChestStand("60,64");
+    ASSERT_TRUE(ok.ok);
+    EXPECT_EQ(ok.frame, 60);
+    EXPECT_FLOAT_EQ(ok.below, 64.0F);
+    EXPECT_TRUE(Game::ParseChestStand("0,0").ok);
+    EXPECT_TRUE(Game::ParseChestStand("5,4096").ok);
+    EXPECT_FALSE(Game::ParseChestStand("5,4097").ok);
+    EXPECT_FALSE(Game::ParseChestStand("").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60,1,2").ok);
+    EXPECT_FALSE(Game::ParseChestStand("-1,10").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60,-1").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60,nan").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60,inf").ok);
+    EXPECT_FALSE(Game::ParseChestStand("60,1x").ok);
+    const auto bad = Game::ParseChestStand("60,nan");
+    EXPECT_EQ(bad.frame, -1);
+    EXPECT_FLOAT_EQ(bad.below, 0.0F);
+}
+
 } // namespace
